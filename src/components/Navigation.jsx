@@ -1,8 +1,12 @@
 import Link from 'next/link';
 
-export default function Home() {
+/**
+ * @param {object} props
+ * @param {string} props.title
+ */
+export function Navigation({ title }) {
   return (
-    <main className="flex flex-col w-screen h-screen">
+    <header className="flex flex-row bg-red-500 items-center">
       <nav className="flex">
         <a className="border-2 m-2 p-2">
           <Link href="/shots">Shots</Link>
@@ -14,6 +18,9 @@ export default function Home() {
           <Link href="/rec">Recorder</Link>
         </a>
       </nav>
-    </main>
-  )
+      <h2 className="flex-1 mx-4 text-right">
+        {title}
+      </h2>
+    </header>
+  );
 }
