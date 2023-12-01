@@ -25,16 +25,13 @@ export default function Recorder({}) {
     }
   }, [recording, videoRef, setRecording]);
   return (
-    <div>
-      <h2>Recorder</h2>
-      <div className="flex flex-col items-center">
-        <video ref={videoRef} className="w-[60vmin] h-[60vmin]">
-          Video stream not available.
-        </video>
-        <div className="flex flex-col sticky bottom-0 w-full text-center">
-          <Button title="Record" className="flex-1 mx-0" onClick={() => setRecording(prev => !prev)}/>
-          <ShotTakeInfo/>
-        </div>
+    <div className="flex flex-col items-center">
+      <video ref={videoRef} className="w-[60vmin] h-[60vmin]">
+        Video stream not available.
+      </video>
+      <div className="flex flex-col sticky bottom-0 w-full text-center">
+        <Button title="Record" className="flex-1 mx-0" onClick={() => setRecording(prev => !prev)}/>
+        <ShotTakeInfo/>
       </div>
     </div>
   );
