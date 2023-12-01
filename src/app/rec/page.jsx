@@ -7,9 +7,9 @@ import { ShotTakeProvider } from '../../components/ShotContext';
 export default function Page() {
   return (
     <ShotTakeProvider>
-      <Navigation title="Recorder"/>
+      <Navigation title="Recorder" />
       <main className="flex flex-col w-screen h-screen">
-          <Recorder/>
+        <Recorder />
       </main>
     </ShotTakeProvider>
   );

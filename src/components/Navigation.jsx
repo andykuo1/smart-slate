@@ -20,9 +20,7 @@ export function Navigation({ title }) {
           <Link href="/rec">Recorder</Link>
         </a>
       </nav>
-      <h2 className="flex-1 mx-4 text-right">
-        {title}
-      </h2>
+      <h2 className="flex-1 mx-4 text-right">{title}</h2>
     </header>
   );
 }

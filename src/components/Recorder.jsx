@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+
 import Button from './Button';
 import ShotTakeInfo from './ShotTakeInfo';
 
@@ -10,7 +11,8 @@ export default function Recorder({}) {
   const videoRef = useRef(null);
   useEffect(() => {
     if (recording) {
-      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: true })
         .then((stream) => {
           let video = videoRef.current;
           video.srcObject = stream;
@@ -30,8 +32,12 @@ export default function Recorder({}) {
         Video stream not available.
       </video>
       <div className="flex flex-col sticky bottom-0 w-full text-center">
-        <Button title="Record" className="flex-1 mx-0" onClick={() => setRecording(prev => !prev)}/>
-        <ShotTakeInfo/>
+        <Button
+          title="Record"
+          className="flex-1 mx-0"
+          onClick={() => setRecording((prev) => !prev)}
+        />
+        <ShotTakeInfo />
       </div>
     </div>
   );

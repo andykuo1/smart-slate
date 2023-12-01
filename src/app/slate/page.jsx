@@ -7,9 +7,9 @@ import { ShotTakeProvider } from '../../components/ShotContext';
 export default function Page() {
   return (
     <ShotTakeProvider>
-      <Navigation title={"Slate"}/>
+      <Navigation title={'Slate'} />
       <main className="flex flex-col w-screen h-screen">
-        <Clapper/>
+        <Clapper />
       </main>
     </ShotTakeProvider>
   );

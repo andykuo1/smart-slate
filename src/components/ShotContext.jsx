@@ -20,12 +20,18 @@ export function ShotTakeProvider({ children }) {
         // Do nothin.
       }
     } else {
-      sessionStorage.setItem(SHOT_TAKE_SESSION_STORAGE_KEY, JSON.stringify(state));
+      sessionStorage.setItem(
+        SHOT_TAKE_SESSION_STORAGE_KEY,
+        JSON.stringify(state),
+      );
     }
   }, []);
 
   function updateState(state) {
-    sessionStorage.setItem(SHOT_TAKE_SESSION_STORAGE_KEY, JSON.stringify(state));
+    sessionStorage.setItem(
+      SHOT_TAKE_SESSION_STORAGE_KEY,
+      JSON.stringify(state),
+    );
     setState(state);
   }
 
@@ -34,9 +40,7 @@ export function ShotTakeProvider({ children }) {
     setState: updateState,
   };
   return (
-    <ShotTakeContext.Provider value={api}>
-      {children}
-    </ShotTakeContext.Provider>
+    <ShotTakeContext.Provider value={api}>{children}</ShotTakeContext.Provider>
   );
 }
 
