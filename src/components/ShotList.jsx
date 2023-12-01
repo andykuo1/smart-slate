@@ -1,32 +1,49 @@
 'use client';
 
-import Button from '../components/Button';
+import Button from './Button';
+import ShotTakeInfo from './ShotTakeInfo';
+import { useShotTake } from './ShotContext';
 
 export default function ShotList({}) {
   return (
     <div>
+      <ShotTakeInfo/>
       <div>
-        <Button title="Import" onClick={() => {}}/>
-        <Button title="Export" onClick={() => {}}/>
+        <Button title="Import" disabled={true} onClick={() => {}}/>
+        <Button title="Export" disabled={true} onClick={() => {}}/>
       </div>
       <div>
-        <ul>
-          <li>Scene A</li>
-          <li>Shot A.1</li>
-          <li>Shot A.2</li>
-          <li>Scene B</li>
-          <li>Shot B.1</li>
-          <li>Shot B.2</li>
+        <ul className="w-full flex flex-col items-center">
+          <SceneHeading scene={1}/>
+          <ShotButton scene={1} shot={1}/>
+          <ShotButton scene={1} shot={2}/>
+          <ShotButton scene={1} shot={3}/>
+          <ShotButton scene={1} shot={4}/>
+          <SceneHeading scene={2}/>
+          <ShotButton scene={2} shot={1}/>
         </ul>
       </div>
     </div>
   );
 }
 
-function Scene() {
-  
+function SceneHeading({ scene }) {
+  return (
+    <li className="flex w-full">
+      <h4 className="border-2 border-gray-600 m-2 p-2">
+        Scene {scene}
+      </h4>
+    </li>
+  );
 }
 
-function Shot() {
-
+function ShotButton({ scene, shot }) {
+  const { setState } = useShotTake();
+  return (
+    <li className="flex w-full">
+      <Button title={`Scene ${scene} / Shot ${shot}`}
+        className="flex-1"
+        onClick={() => setState({ scene, shot, take: 0 })}/>
+    </li>
+  );
 }

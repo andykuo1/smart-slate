@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Button from './Button';
+import ShotTakeInfo from './ShotTakeInfo';
 
 export default function Recorder({}) {
   const [recording, setRecording] = useState(false);
@@ -27,10 +28,13 @@ export default function Recorder({}) {
     <div>
       <h2>Recorder</h2>
       <div className="flex flex-col items-center">
-        <video ref={videoRef} className="w-[80vmin] h-[80vmin]">
+        <video ref={videoRef} className="w-[60vmin] h-[60vmin]">
           Video stream not available.
         </video>
-        <Button title="Record" onClick={() => setRecording(prev => !prev)}/>
+        <div className="flex flex-col sticky bottom-0 w-full text-center">
+          <Button title="Record" className="flex-1 mx-0" onClick={() => setRecording(prev => !prev)}/>
+          <ShotTakeInfo/>
+        </div>
       </div>
     </div>
   );
