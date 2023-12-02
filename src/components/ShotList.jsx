@@ -42,7 +42,7 @@ function ShotButton({ scene, shot }) {
       <Button
         title={`Scene ${scene} / Shot ${shot}`}
         className="flex-1"
-        onClick={() => setState({ scene, shot, take: 0 })}
+        onClick={() => setState({ scene, shot })}
       />
     </li>
   );

@@ -1,11 +1,13 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
+/** @type {import('react').Context<ReturnType<useShotTakeAPI>|null>} */
 const ShotTakeContext = createContext(null);
 
 const SHOT_TAKE_SESSION_STORAGE_KEY = 'currentShotTake';
 
-export function ShotTakeProvider({ children }) {
+function useShotTakeAPI() {
   const [state, setState] = useState({ scene: 0, shot: 0, take: 0 });
+
   useEffect(() => {
     let shotTakeString = sessionStorage.getItem(SHOT_TAKE_SESSION_STORAGE_KEY);
     if (shotTakeString) {
@@ -28,17 +30,41 @@ export function ShotTakeProvider({ children }) {
   }, []);
 
   function updateState(state) {
-    sessionStorage.setItem(
-      SHOT_TAKE_SESSION_STORAGE_KEY,
-      JSON.stringify(state),
-    );
-    setState(state);
+    setState((prev) => {
+      let next = { ...prev, ...state };
+      let shotTakeId = 'sst-' + state.scene + '.' + state.shot;
+      let result = sessionStorage.getItem(shotTakeId);
+      if (!result) {
+        result = 0;
+      }
+      next.take = result;
+      sessionStorage.setItem(
+        SHOT_TAKE_SESSION_STORAGE_KEY,
+        JSON.stringify(next),
+      );
+      return next;
+    });
   }
 
-  const api = {
+  /**
+   * @param {(state: { scene: number, shot: number, take: number }) => void} callback
+   */
+  function fetchState(callback) {
+    setState((prev) => {
+      callback(prev);
+      return prev;
+    });
+  }
+
+  return {
     state,
     setState: updateState,
+    getState: fetchState,
   };
+}
+
+export function ShotTakeProvider({ children }) {
+  const api = useShotTakeAPI();
   return (
     <ShotTakeContext.Provider value={api}>{children}</ShotTakeContext.Provider>
   );
@@ -47,7 +73,7 @@ export function ShotTakeProvider({ children }) {
 export function useShotTake() {
   let result = useContext(ShotTakeContext);
   if (!result) {
-    return result;
+    throw new Error('Mising ShotTakeContext Provider!');
   }
   return result;
 }
