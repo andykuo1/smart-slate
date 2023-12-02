@@ -48,7 +48,7 @@ export default function Recorder({}) {
 
   useEffect(() => {
     if (recording) {
-      alert(navigator.mediaDevices.getSupportedConstraints());
+      alert(JSON.stringify(navigator.mediaDevices.getSupportedConstraints()));
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: true })
         .then((stream) => {
@@ -59,7 +59,7 @@ export default function Recorder({}) {
           recorder.addEventListener('start', onRecorderStart);
           recorder.start();
         })
-        .catch(alert);
+        .catch(e => alert(JSON.stringify(e)));
     } else {
       if (recorderRef.current) {
         recorderRef.current.stop();
