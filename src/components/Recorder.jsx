@@ -72,10 +72,11 @@ export default function Recorder({}) {
 
   function onChange(e) {
     let file = e.target.files[0];
-    e.target.files.length = 0;
     let url = URL.createObjectURL(file);
     let fileName = getFileName(state);
     downloadURLImpl(fileName, url);
+    alert('Downloaded - ' + fileName);
+    e.target.value = null;
   }
 
   return (
