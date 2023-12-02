@@ -22,6 +22,10 @@ export default function Recorder({}) {
     let video = videoRef.current;
     video.srcObject = recorderRef.current.stream;
     video.play();
+    setRecording(true);
+  }
+
+  function doNextTake(state) {
     let nextTake = state.take + 1;
     let shotTakeId = 'sst-' + state.scene + '.' + state.shot;
     let result = sessionStorage.getItem(shotTakeId);
@@ -30,7 +34,6 @@ export default function Recorder({}) {
     }
     sessionStorage.setItem(shotTakeId, String(nextTake));
     setState({ ...state, take: nextTake });
-    setRecording(true);
   }
 
   function onRecorderStop() {
@@ -39,6 +42,7 @@ export default function Recorder({}) {
       let chunks = chunksRef.current;
       chunksRef.current = [];
       downloadFile(name, chunks);
+      doNextTake(state);
     });
   }
 
@@ -48,7 +52,7 @@ export default function Recorder({}) {
 
   useEffect(() => {
     if (!isMediaRecorderSupported()) {
-      alert('MediaRecorder is not supported!');
+      console.error('MediaRecorder is not supported!');
     }
     if (recording) {
       navigator.mediaDevices
@@ -77,6 +81,7 @@ export default function Recorder({}) {
     downloadURLImpl(fileName, url);
     alert('Downloaded - ' + fileName);
     e.target.value = null;
+    doNextTake(state);
   }
 
   return (
@@ -84,7 +89,12 @@ export default function Recorder({}) {
       <video ref={videoRef} className="w-[60vmin] h-[60vmin]">
         Video stream not available.
       </video>
-      <input type="file" accept="video/*" capture="environment" onChange={onChange}/>
+      <input
+        type="file"
+        accept="video/*"
+        capture="environment"
+        onChange={onChange}
+      />
       <div className="flex flex-col sticky bottom-0 w-full text-center">
         <Button
           title="Record"
@@ -98,7 +108,9 @@ export default function Recorder({}) {
 }
 
 function getFileName(shotTake) {
-  return `Untitled_Scene ${shotTake.scene}_Shot ${shotTake.shot}_Take ${shotTake.take}.mp4`;
+  return `Untitled_Scene ${shotTake.scene}_Shot ${shotTake.shot}_Take ${
+    Number(shotTake.take) + 1
+  }.mp4`;
 }
 
 function downloadFile(fileName, chunks) {
