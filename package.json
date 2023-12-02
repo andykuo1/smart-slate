@@ -1,6 +1,6 @@
 {
   "name": "smart-slate",
-  "version": "0.0.3a",
+  "version": "0.0.3",
   "private": true,
   "scripts": {
     "start": "next dev",

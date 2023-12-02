@@ -114,8 +114,7 @@ function isMediaRecorderSupported() {
     return false;
   }
   if (window.MediaRecorder.isTypeSupported) {
-    return window.MediaRecorder.isTypeSupported('audio/mp4')
-      && window.MediaRecorder.isTypeSupported('video/mp4');
+    return window.MediaRecorder.isTypeSupported('video/mp4');
   }
   return false;
 }
