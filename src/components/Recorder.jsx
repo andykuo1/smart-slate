@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { downloadURLImpl } from '../utils/Downloader';
+import { downloadURL, downloadURLImpl } from '../utils/Downloader';
 import Button from './Button';
 import { useShotTake } from './ShotContext';
 import ShotTakeInfo from './ShotTakeInfo';
@@ -70,12 +70,20 @@ export default function Recorder({}) {
     }
   }, [recording, videoRef, recorderRef]);
 
+  function onChange(e) {
+    let file = e.target.files[0];
+    e.target.files.length = 0;
+    let url = URL.createObjectURL(file);
+    let fileName = getFileName(state);
+    downloadURLImpl(fileName, url);
+  }
+
   return (
     <div className="flex flex-col items-center">
       <video ref={videoRef} className="w-[60vmin] h-[60vmin]">
         Video stream not available.
       </video>
-      <input type="file" accept="video/*" capture="user" />
+      <input type="file" accept="video/*" capture="environment" onChange={onChange}/>
       <div className="flex flex-col sticky bottom-0 w-full text-center">
         <Button
           title="Record"
