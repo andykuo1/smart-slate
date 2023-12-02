@@ -47,8 +47,10 @@ export default function Recorder({}) {
   }
 
   useEffect(() => {
+    if (!isMediaRecorderSupported()) {
+      alert('MediaRecorder is not supported!');
+    }
     if (recording) {
-      alert(JSON.stringify(navigator.mediaDevices.getSupportedConstraints()));
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: true })
         .then((stream) => {
@@ -73,6 +75,7 @@ export default function Recorder({}) {
       <video ref={videoRef} className="w-[60vmin] h-[60vmin]">
         Video stream not available.
       </video>
+      <input type="file" accept="video/*" capture="user" />
       <div className="flex flex-col sticky bottom-0 w-full text-center">
         <Button
           title="Record"
@@ -95,4 +98,15 @@ function downloadFile(fileName, chunks) {
   const blob = new Blob(chunks, { type: chunk.type || 'video/mp4' });
   const url = URL.createObjectURL(blob);
   downloadURLImpl(fileName, url);
+}
+
+function isMediaRecorderSupported() {
+  if (!window.MediaRecorder) {
+    return false;
+  }
+  if (window.MediaRecorder.isTypeSupported) {
+    return window.MediaRecorder.isTypeSupported('audio/mp4')
+      && window.MediaRecorder.isTypeSupported('video/mp4');
+  }
+  return false;
 }
