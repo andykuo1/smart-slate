@@ -59,7 +59,7 @@ export default function Recorder({}) {
           recorder.addEventListener('start', onRecorderStart);
           recorder.start();
         })
-        .catch(e => alert(JSON.stringify(e)));
+        .catch((e) => alert(JSON.stringify(e?.message || e)));
     } else {
       if (recorderRef.current) {
         recorderRef.current.stop();
