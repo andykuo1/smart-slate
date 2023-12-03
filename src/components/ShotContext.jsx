@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, useContext, useEffect, useState } from 'react';
 
 /** @type {import('react').Context<ReturnType<useShotTakeAPI>|null>} */
@@ -58,7 +60,8 @@ function useShotTakeAPI() {
 
   return {
     state,
-    setState: updateState,
+    setState: setState,
+    setStateImpl: setState,
     getState: fetchState,
   };
 }
