@@ -26,11 +26,13 @@ export default function Recorder({}) {
   }
 
   function doNextTake(state) {
-    let nextTake = state.take + 1;
+    let nextTake;
     let shotTakeId = 'sst-' + state.scene + '.' + state.shot;
     let result = sessionStorage.getItem(shotTakeId);
     if (result) {
       nextTake = Number(result) + 1;
+    } else {
+      nextTake = Number(state.take) + 1;
     }
     sessionStorage.setItem(shotTakeId, String(nextTake));
     setState({ ...state, take: nextTake });
