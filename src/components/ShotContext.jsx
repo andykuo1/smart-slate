@@ -5,7 +5,10 @@ import { createContext, useContext, useEffect, useState } from 'react';
 /** @type {import('react').Context<ReturnType<useShotTakeAPI>|null>} */
 const ShotTakeContext = createContext(null);
 
-const SHOT_TAKE_SESSION_STORAGE_KEY = 'currentShotTake';
+export const SHOT_TAKE_SESSION_STORAGE_KEY = 'currentShotTake';
+export function getShotTakeId(scene, shot) {
+  return `sst-${scene}.${shot}`;
+}
 
 function useShotTakeAPI() {
   const [state, setState] = useState({ scene: 0, shot: 0, take: 0 });
@@ -15,10 +18,13 @@ function useShotTakeAPI() {
     if (shotTakeString) {
       try {
         let result = JSON.parse(shotTakeString);
+        let take = sessionStorage.getItem(
+          getShotTakeId(result.scene, result.shot),
+        );
         setState({
           scene: result.scene || 0,
           shot: result.shot || 0,
-          take: result.take || 0,
+          take: take,
         });
       } catch (e) {
         // Do nothin.
@@ -31,38 +37,9 @@ function useShotTakeAPI() {
     }
   }, []);
 
-  function updateState(state) {
-    setState((prev) => {
-      let next = { ...prev, ...state };
-      let shotTakeId = 'sst-' + state.scene + '.' + state.shot;
-      let result = sessionStorage.getItem(shotTakeId);
-      if (!result) {
-        result = 0;
-      }
-      next.take = result;
-      sessionStorage.setItem(
-        SHOT_TAKE_SESSION_STORAGE_KEY,
-        JSON.stringify(next),
-      );
-      return next;
-    });
-  }
-
-  /**
-   * @param {(state: { scene: number, shot: number, take: number }) => void} callback
-   */
-  function fetchState(callback) {
-    setState((prev) => {
-      callback(prev);
-      return prev;
-    });
-  }
-
   return {
     state,
-    setState: setState,
     setStateImpl: setState,
-    getState: fetchState,
   };
 }
 

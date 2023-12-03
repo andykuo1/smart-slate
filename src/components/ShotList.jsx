@@ -1,7 +1,11 @@
 'use client';
 
 import Button from './Button';
-import { useShotTake } from './ShotContext';
+import {
+  SHOT_TAKE_SESSION_STORAGE_KEY,
+  getShotTakeId,
+  useShotTake,
+} from './ShotContext';
 import ShotTakeInfo from './ShotTakeInfo';
 
 export default function ShotList({}) {
@@ -36,13 +40,28 @@ function SceneHeading({ scene }) {
 }
 
 function ShotButton({ scene, shot }) {
-  const { setState } = useShotTake();
+  const { setStateImpl } = useShotTake();
   return (
     <li className="flex w-full">
       <Button
         title={`Scene ${scene} / Shot ${shot}`}
         className="flex-1"
-        onClick={() => setState({ scene, shot })}
+        onClick={() =>
+          setStateImpl((prev) => {
+            const shotTakeId = getShotTakeId(scene, shot);
+            const next = { ...prev, scene, shot };
+            let result = sessionStorage.getItem(shotTakeId);
+            if (!result) {
+              result = 0;
+            }
+            next.take = result;
+            sessionStorage.setItem(
+              SHOT_TAKE_SESSION_STORAGE_KEY,
+              JSON.stringify(next),
+            );
+            return next;
+          })
+        }
       />
     </li>
   );

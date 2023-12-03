@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { downloadURLImpl } from '../utils/Downloader';
 import Button from './Button';
-import { useShotTake } from './ShotContext';
+import { getShotTakeId, useShotTake } from './ShotContext';
 import ShotTakeInfo from './ShotTakeInfo';
 
 export default function Recorder({}) {
@@ -27,7 +27,7 @@ export default function Recorder({}) {
         alert('Downloaded - ' + fileName);
 
         const take = (Number(prev.take) || 0) + 1;
-        const shotTakeId = 'sst-' + prev.scene + '.' + prev.shot;
+        const shotTakeId = getShotTakeId(prev.scene, prev.shot);
         sessionStorage.setItem(shotTakeId, String(take));
         return {
           ...prev,
