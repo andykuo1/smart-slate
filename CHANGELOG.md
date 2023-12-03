@@ -1,3 +1,7 @@
+# 0.0.5
+
+- Update shot list UI with modifiers
+
 # 0.0.4
 
 - Update Take # to show UPCOMING take
