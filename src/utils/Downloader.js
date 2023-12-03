@@ -1,3 +1,5 @@
+'use client';
+
 export const FILE_TYPE_PNG = 'png';
 export const FILE_TYPE_JPG = 'jpg';
 export const FILE_TYPE_SVG = 'svg';

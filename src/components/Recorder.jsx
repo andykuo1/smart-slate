@@ -41,7 +41,9 @@ export default function Recorder({}) {
   const mediaRecorder = useMediaRecorder();
   return (
     <div className="flex flex-col items-center">
-      {window.MediaRecorder && mediaRecorder instanceof MediaRecorder ? (
+      {typeof window !== 'undefined' &&
+      window.MediaRecorder &&
+      mediaRecorder instanceof MediaRecorder ? (
         <BrowserMediaRecorder
           mediaRecorder={mediaRecorder}
           onChange={onChange}
