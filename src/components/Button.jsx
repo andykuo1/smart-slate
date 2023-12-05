@@ -5,7 +5,7 @@
  * @param {string} props.title
  * @param {string} [props.className]
  * @param {boolean} [props.disabled]
- * @param {import('react').MouseEventHandler} props.onClick
+ * @param {import('react').MouseEventHandler} [props.onClick]
  */
 export default function Button({
   title,

@@ -11,10 +11,12 @@ import { createShotTake } from './ShotTake';
 import ShotTakeInfo from './ShotTakeInfo';
 
 export default function ShotList() {
+  const { setShotList } = useShotList();
   return (
     <div>
       <ShotTakeInfo />
       <div>
+        <Button title="New" onClick={() => setShotList([])} />
         <Button title="Import" disabled={true} onClick={() => {}} />
         <Button title="Export" disabled={true} onClick={() => {}} />
       </div>
@@ -278,6 +280,7 @@ export function ShotListTakeNew({ sceneNum, shotNum, takeNum }) {
   const { setShotList } = useShotList();
   function onNewClick() {
     // TODO: Record!
+    window.open('/rec', '_self');
     setShotList((prev) => [
       ...prev,
       createShotTake(0, sceneNum, shotNum, takeNum),

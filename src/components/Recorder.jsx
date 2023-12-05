@@ -9,9 +9,12 @@ import ShotTakeInfo from './ShotTakeInfo';
 
 export default function Recorder({}) {
   const { setStateImpl } = useShotTake();
-  const downloadOnceRef = useRef();
+  const downloadOnceRef = useRef('');
 
   const onChange = useCallback(
+    /**
+     * @param {{ data: string }} e
+     */
     function onChange({ data }) {
       if (!data) {
         return;
@@ -72,12 +75,12 @@ function getFileName(shotTake) {
 
 /**
  * @param {object} props
- * @param {string} props.className
+ * @param {string} [props.className]
  * @param {(e: { data: string }) => void} props.onChange
  */
 export function InputMediaRecorder({ className, onChange }) {
   /** @type {import('react').RefObject<HTMLInputElement>} */
-  const inputRef = useRef();
+  const inputRef = useRef(null);
 
   const onInputChange = useCallback(
     function onInputChange(e) {
@@ -90,7 +93,10 @@ export function InputMediaRecorder({ className, onChange }) {
   );
 
   const onClick = useCallback(
-    function onClick() {
+    function onClick(e) {
+      if (!inputRef.current) {
+        return;
+      }
       inputRef.current.click();
       e.preventDefault();
       e.stopPropagation();
@@ -116,7 +122,9 @@ export function InputMediaRecorder({ className, onChange }) {
 
 /** @returns {MediaRecorder|null} */
 export function useMediaRecorder() {
-  const [mediaRecorder, setMediaRecorder] = useState(null);
+  const [mediaRecorder, setMediaRecorder] = useState(
+    /** @type {MediaRecorder|null} */ (null),
+  );
   const onceRef = useRef(false);
 
   useEffect(() => {
@@ -126,10 +134,7 @@ export function useMediaRecorder() {
     onceRef.current = true;
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        let result = new MediaRecorder(stream);
-        setMediaRecorder(result);
-      })
+      .then((stream) => setMediaRecorder(new MediaRecorder(stream)))
       .catch((e) => setMediaRecorder(e));
   }, []);
 
@@ -138,7 +143,7 @@ export function useMediaRecorder() {
 
 /**
  * @param {object} props
- * @param {string} props.className
+ * @param {string} [props.className]
  * @param {MediaRecorder} props.mediaRecorder
  * @param {(e: { data: string }) => void} props.onChange
  */
@@ -187,7 +192,7 @@ export function BrowserMediaRecorder({ className, mediaRecorder, onChange }) {
   );
 
   const onRecorderData = useCallback(
-    /** @type {EventListener} */
+    /** @param {{ data: Blob }} e */
     function onRecorderData(e) {
       const chunks = chunksRef.current;
       if (!chunks) {
@@ -222,6 +227,7 @@ export function BrowserMediaRecorder({ className, mediaRecorder, onChange }) {
   }, [mediaRecorder, onRecorderStart, onRecorderStop, onRecorderData]);
 
   const onClick = useCallback(
+    /** @param {MouseEvent} e */
     function onClick(e) {
       if (!mediaRecorder) {
         return;
@@ -236,6 +242,7 @@ export function BrowserMediaRecorder({ className, mediaRecorder, onChange }) {
   );
 
   const onStartClick = useCallback(
+    /** @param {MouseEvent} e */
     function onStopClick(e) {
       if (!mediaRecorder) {
         return;
@@ -251,6 +258,7 @@ export function BrowserMediaRecorder({ className, mediaRecorder, onChange }) {
   );
 
   const onStopClick = useCallback(
+    /** @param {MouseEvent} e */
     function onStopClick(e) {
       if (!mediaRecorder) {
         return;
