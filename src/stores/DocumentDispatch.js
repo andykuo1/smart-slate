@@ -1,3 +1,26 @@
+import { zi } from './ZustandImmerHelper';
+
+/** @typedef {ReturnType<createDispatch>} Dispatch */
+
+/**
+ * @param {import('zustand').StateCreator<any>} set
+ */
+export function createDispatch(set) {
+  return {
+    addDocument: zi(set, addDocument),
+    addScene: zi(set, addScene),
+    addShot: zi(set, addShot),
+    addTake: zi(set, addTake),
+
+    deleteDocument: zi(set, deleteDocument),
+    deleteScene: zi(set, deleteScene),
+    deleteShot: zi(set, deleteShot),
+    deleteTake: zi(set, deleteTake),
+
+    incrementDocumentRevisionNumber: zi(set, incrementDocumentRevisionNumber),
+  };
+}
+
 /**
  * @param {import('./DocumentStore').Store} store
  * @param {import('./DocumentStore').DocumentId} documentId
@@ -12,7 +35,7 @@ export function getDocumentById(store, documentId) {
  * @param {import('./DocumentStore').SceneId} sceneId
  */
 export function getSceneById(store, documentId, sceneId) {
-  return store.documents[documentId].scenes[sceneId];
+  return store.documents[documentId]?.scenes[sceneId];
 }
 
 /**
@@ -21,7 +44,7 @@ export function getSceneById(store, documentId, sceneId) {
  * @param {import('./DocumentStore').ShotId} shotId
  */
 export function getShotById(store, documentId, shotId) {
-  return store.documents[documentId].shots[shotId];
+  return store.documents[documentId]?.shots[shotId];
 }
 
 /**
@@ -30,7 +53,7 @@ export function getShotById(store, documentId, shotId) {
  * @param {import('./DocumentStore').TakeId} takeId
  */
 export function getTakeById(store, documentId, takeId) {
-  return store.documents[documentId].takes[takeId];
+  return store.documents[documentId]?.takes[takeId];
 }
 
 /**
@@ -39,8 +62,7 @@ export function getTakeById(store, documentId, takeId) {
  * @param {import('./DocumentStore').SceneId} sceneId
  */
 export function getSceneIndex(store, documentId, sceneId) {
-  let document = store.documents[documentId];
-  return document.sceneOrder.indexOf(sceneId);
+  return store?.documents[documentId]?.sceneOrder.indexOf(sceneId);
 }
 
 /**
@@ -50,8 +72,7 @@ export function getSceneIndex(store, documentId, sceneId) {
  * @param {import('./DocumentStore').ShotId} shotId
  */
 export function getShotIndex(store, documentId, sceneId, shotId) {
-  let scene = getSceneById(store, documentId, sceneId);
-  return scene.shotIds.indexOf(shotId);
+  return getSceneById(store, documentId, sceneId)?.shotIds.indexOf(shotId);
 }
 
 /**
@@ -61,8 +82,7 @@ export function getShotIndex(store, documentId, sceneId, shotId) {
  * @param {import('./DocumentStore').TakeId} takeId
  */
 export function getTakeIndex(store, documentId, shotId, takeId) {
-  let shot = getShotById(store, documentId, shotId);
-  return shot.takeIds.indexOf(takeId);
+  return getShotById(store, documentId, shotId)?.takeIds.indexOf(takeId);
 }
 
 /**
@@ -70,8 +90,7 @@ export function getTakeIndex(store, documentId, shotId, takeId) {
  * @param {import('./DocumentStore').DocumentId} documentId
  */
 export function getSceneIdsInOrder(store, documentId) {
-  let document = getDocumentById(store, documentId);
-  return document.sceneOrder;
+  return getDocumentById(store, documentId)?.sceneOrder;
 }
 
 /**
@@ -80,8 +99,7 @@ export function getSceneIdsInOrder(store, documentId) {
  * @param {import('./DocumentStore').SceneId} sceneId
  */
 export function getShotIdsInOrder(store, documentId, sceneId) {
-  let scene = getSceneById(store, documentId, sceneId);
-  return scene.shotIds;
+  return getSceneById(store, documentId, sceneId)?.shotIds;
 }
 
 /**
@@ -90,8 +108,7 @@ export function getShotIdsInOrder(store, documentId, sceneId) {
  * @param {import('./DocumentStore').ShotId} shotId
  */
 export function getTakeIdsInOrder(store, documentId, shotId) {
-  let shot = getShotById(store, documentId, shotId);
-  return shot.takeIds;
+  return getShotById(store, documentId, shotId)?.takeIds;
 }
 
 /**
@@ -118,7 +135,7 @@ export function addDocument(store, document) {
 export function addScene(store, documentId, scene) {
   let document = store.documents[documentId];
   document.scenes[scene.sceneId] = scene;
-  document.sceneOrder.push(scene);
+  document.sceneOrder.push(scene.sceneId);
   incrementDocumentRevisionNumber(document);
 }
 
@@ -171,8 +188,8 @@ export function deleteScene(store, documentId, sceneId) {
   // Remove shots from scene
   let oldShots = scene.shotIds;
   scene.shotIds = [];
-  for (let shot of oldShots) {
-    deleteShot(store, documentId, shot.shotId);
+  for (let shotId of oldShots) {
+    deleteShot(store, documentId, shotId);
   }
   // Remove from sceneOrder
   let i = document.sceneOrder.indexOf(sceneId);
@@ -192,9 +209,9 @@ export function deleteShot(store, documentId, shotId) {
   let shot = document.shots[shotId];
   // Remove takes from shot
   let oldTakes = shot.takeIds;
-  scene.takeIds = [];
-  for (let take of oldTakes) {
-    deleteTake(store, documentId, take.takeId);
+  shot.takeIds = [];
+  for (let takeId of oldTakes) {
+    deleteTake(store, documentId, takeId);
   }
   // Remove from any scene referencing this shot
   for (let { shotIds } of Object.values(document.scenes)) {
