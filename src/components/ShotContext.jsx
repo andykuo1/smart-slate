@@ -17,7 +17,7 @@ export function getShotTakeId(scene, shot) {
 }
 
 function useShotTakeAPI() {
-  const [state, setState] = useState({ scene: 0, shot: 0, take: 0 });
+  const [state, setState] = useState({ title: '', scene: 0, shot: 0, take: 0 });
   const loadOnceRef = useRef(false);
 
   useEffect(() => {
@@ -32,6 +32,7 @@ function useShotTakeAPI() {
       try {
         let result = JSON.parse(shotTakeString);
         setState({
+          title: result.title || 'Untitled',
           scene: result.scene || 0,
           shot: result.shot || 0,
           take: result.take || 0,
@@ -49,8 +50,8 @@ function useShotTakeAPI() {
   }, [state, setState]);
 
   return {
-    state,
-    setStateImpl: setState,
+    shotTake: state,
+    setShotTake: setState,
   };
 }
 

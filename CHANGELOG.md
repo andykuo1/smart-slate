@@ -1,3 +1,7 @@
+# 0.0.6
+
+- Update document title for save file.
+
 # 0.0.5
 
 - Update shot list UI

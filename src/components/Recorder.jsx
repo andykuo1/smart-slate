@@ -11,7 +11,7 @@ import ShotTakeInfo from './ShotTakeInfo';
 
 export default function Recorder({}) {
   const { setShotList } = useShotList();
-  const { state, setStateImpl } = useShotTake();
+  const { shotTake, setShotTake } = useShotTake();
   const downloadOnceRef = useRef('');
 
   const onChange = useCallback(
@@ -22,16 +22,16 @@ export default function Recorder({}) {
       if (!data) {
         return;
       }
-      const { scene, shot, take } = state;
+      const { scene, shot, take } = shotTake;
       setShotList((prev) => [...prev, createShotTake(0, scene, shot, take)]);
 
-      setStateImpl((prev) => {
+      setShotTake((prev) => {
         if (downloadOnceRef.current === data) {
           return;
         }
         downloadOnceRef.current = data;
 
-        const fileName = getFileName(prev);
+        const fileName = getFileName(prev.title, prev);
         downloadURLImpl(fileName, data);
         alert('Downloaded - ' + fileName);
 
@@ -44,7 +44,7 @@ export default function Recorder({}) {
         };
       });
     },
-    [state, setShotList, setStateImpl, downloadOnceRef],
+    [shotTake, setShotList, setShotTake, downloadOnceRef],
   );
 
   const mediaRecorder = useMediaRecorder();
@@ -73,10 +73,14 @@ export default function Recorder({}) {
   );
 }
 
-function getFileName(shotTake) {
-  return `Untitled_Scene ${shotTake.scene}_Shot ${shotTake.shot}_Take ${Number(
-    shotTake.take,
-  )}.mp4`;
+/**
+ * @param {string} title
+ * @param {Partial<import('./ShotTake').ShotTake>} shotTake
+ */
+function getFileName(title, shotTake) {
+  return `${title}_Scene ${shotTake.scene || 0}_Shot ${
+    shotTake.shot || 0
+  }_Take ${Number(shotTake.take) || 0}.mp4`;
 }
 
 /**

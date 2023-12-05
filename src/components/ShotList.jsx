@@ -1,5 +1,7 @@
 'use client';
 
+import { useCallback } from 'react';
+
 import Link from 'next/link';
 
 import Button from './Button';
@@ -28,6 +30,7 @@ export default function ShotList() {
 }
 
 export function ShotListDocument() {
+  const { shotTake, setShotTake } = useShotTake();
   const { shotList } = useShotList();
   /** @type {Array<number>} */
   let scenes = [];
@@ -39,6 +42,14 @@ export function ShotListDocument() {
     }
   }
 
+  const onTitleChange = useCallback(
+    function onTitleChange(e) {
+      const value = e.target.value;
+      setShotTake((prev) => ({ ...prev, title: value }));
+    },
+    [setShotTake],
+  );
+
   return (
     <div className="flex flex-col my-20">
       <label htmlFor="shotList" className="text-center text-2xl">
@@ -46,6 +57,8 @@ export function ShotListDocument() {
           type="text"
           className="bg-transparent text-center opacity-60 border-b-8 border-double border-neutral-700"
           placeholder="Untitled"
+          value={shotTake.title}
+          onChange={onTitleChange}
         />
       </label>
       <ul id="shotList">
@@ -239,10 +252,10 @@ export function ShotListTake({ sceneNum, shotNum, takeNum }) {
  * @returns {[boolean, import('react').MouseEventHandler]}
  */
 function useCurrentShotTake(sceneNum, shotNum, takeNum = undefined) {
-  const { state, setStateImpl } = useShotTake();
+  const { shotTake, setShotTake } = useShotTake();
   /** @type {import('react').MouseEventHandler} */
   function onClick(e) {
-    setStateImpl((prev) => {
+    setShotTake((prev) => {
       const shotTakeId = getShotTakeId(sceneNum, shotNum);
       const next = {
         ...prev,
@@ -262,9 +275,9 @@ function useCurrentShotTake(sceneNum, shotNum, takeNum = undefined) {
     });
   }
   const isActive =
-    sceneNum == state.scene &&
-    shotNum == state.shot &&
-    (typeof takeNum === 'undefined' || takeNum == state.take);
+    sceneNum == shotTake.scene &&
+    shotNum == shotTake.shot &&
+    (typeof takeNum === 'undefined' || takeNum == shotTake.take);
   return [isActive, onClick];
 }
 
@@ -275,14 +288,16 @@ function useCurrentShotTake(sceneNum, shotNum, takeNum = undefined) {
  * @param {number} props.takeNum
  */
 export function ShotListTakeNew({ sceneNum, shotNum, takeNum }) {
-  const { state, setStateImpl } = useShotTake();
+  const { shotTake, setShotTake } = useShotTake();
   const isActive =
-    sceneNum == state.scene && shotNum == state.shot && takeNum == state.take;
+    sceneNum == shotTake.scene &&
+    shotNum == shotTake.shot &&
+    takeNum == shotTake.take;
 
   const { setShotList } = useShotList();
 
   function onClick() {
-    setStateImpl((prev) => {
+    setShotTake((prev) => {
       const shotTakeId = getShotTakeId(sceneNum, shotNum);
       const next = { ...prev, scene: sceneNum, shot: shotNum, take: takeNum };
       let result = sessionStorage.getItem(shotTakeId) || takeNum;

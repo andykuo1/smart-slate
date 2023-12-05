@@ -1,10 +1,10 @@
 import { useShotTake } from '@/components/ShotContext';
 
 export default function ShotTakeInfo() {
-  const { state } = useShotTake();
-  const scene = state.scene > 0 ? Number(state.scene) : '--';
-  const shot = state.shot > 0 ? Number(state.shot) : '--';
-  const take = state.take > 0 ? Number(state.take) : '--';
+  const { shotTake } = useShotTake();
+  const scene = shotTake.scene > 0 ? Number(shotTake.scene) : '--';
+  const shot = shotTake.shot > 0 ? Number(shotTake.shot) : '--';
+  const take = shotTake.take > 0 ? Number(shotTake.take) : '--';
   return (
     <div className="sticky top-0 z-10 flex flex-row">
       <p className="flex flex-1 bg-black border-2 p-2 border-white text-white text-[4vh]">

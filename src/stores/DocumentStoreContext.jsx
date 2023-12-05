@@ -1,6 +1,9 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useState } from 'react';
 
-import { createStore } from './DocumentStore';
+import { VERSION } from '@/constants/PackageJSON';
+
+import { useAutoSave } from '../hooks/autosave';
+import { cloneStore, createStore } from './DocumentStore';
 
 const DocumentStoreContext = createContext(
   /** @type {ReturnType<useDocumentStoreContextValue>|null} */ (null),
@@ -10,24 +13,28 @@ const DOCUMENT_STORE_KEY = 'documentStore';
 
 function useDocumentStoreContextValue() {
   const [state, setState] = useState(createStore());
-  const loadOnceRef = useRef(false);
 
-  useEffect(() => {
-    if (loadOnceRef.current) {
-      return;
-    }
-    loadOnceRef.current = true;
+  const ser = useCallback(
+    /** @type {import('../hooks/autosave/UseAutoSave').SerializerFunction} */
+    function ser(dst) {
+      cloneStore(dst, state);
+      dst.metadata = {
+        timestamp: Date.now(),
+        version: VERSION,
+      };
+    },
+    [state, VERSION],
+  );
 
-    // Load from localStorage!
-    let store = loadStoreFromLocalStorage();
-    setState(store);
-  }, [loadOnceRef, setState]);
+  const der = useCallback(
+    /** @type {import('../hooks/autosave/UseAutoSave').DeserializerFunction} */
+    function der(src) {
+      setState(src);
+    },
+    [setState],
+  );
 
-  useEffect(() => {
-    // Save to localStorage on interval!
-    let handle = setInterval(() => saveStoreToLocalStorage(state), 1_000);
-    return () => clearInterval(handle);
-  }, [state]);
+  useAutoSave(DOCUMENT_STORE_KEY, ser, der);
 
   return {
     store: state,
@@ -54,20 +61,4 @@ export function useDocumentStore() {
     throw new Error('Missing DocumentStoreContext provider.');
   }
   return result;
-}
-
-function loadStoreFromLocalStorage() {
-  let item = localStorage.getItem(DOCUMENT_STORE_KEY);
-  if (!item) {
-    return createStore();
-  }
-  let json = JSON.parse(item);
-  return json;
-}
-
-/**
- * @param {object} store
- */
-function saveStoreToLocalStorage(store) {
-  localStorage.setItem(DOCUMENT_STORE_KEY, JSON.stringify(store));
 }
