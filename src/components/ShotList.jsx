@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 import Button from './Button';
 import {
   SHOT_TAKE_SESSION_STORAGE_KEY,
@@ -278,14 +280,6 @@ export function ShotListTakeNew({ sceneNum, shotNum, takeNum }) {
     sceneNum == state.scene && shotNum == state.shot && takeNum == state.take;
 
   const { setShotList } = useShotList();
-  function onNewClick() {
-    // TODO: Record!
-    window.open('/rec', '_self');
-    setShotList((prev) => [
-      ...prev,
-      createShotTake(0, sceneNum, shotNum, takeNum),
-    ]);
-  }
 
   function onClick() {
     setStateImpl((prev) => {
@@ -312,7 +306,7 @@ export function ShotListTakeNew({ sceneNum, shotNum, takeNum }) {
         className="flex-1 mx-2 px-2 bg-transparent opacity-60"
         placeholder="Notes"
       />
-      <button onClick={onNewClick}>Record</button>
+      <Link href="/rec">Record</Link>
     </ShotListItemContainer>
   );
 }

@@ -6,7 +6,7 @@ export default function ShotTakeInfo() {
   const shot = state.shot > 0 ? Number(state.shot) : '--';
   const take = state.take > 0 ? Number(state.take) : '--';
   return (
-    <div className="sticky top-0 flex flex-row">
+    <div className="sticky top-0 z-10 flex flex-row">
       <p className="flex flex-1 bg-black border-2 p-2 border-white text-white text-[4vh]">
         <span>Scene</span>
         <span className="flex-1 text-center">{scene}</span>

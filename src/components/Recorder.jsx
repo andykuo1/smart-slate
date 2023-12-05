@@ -5,10 +5,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { downloadURLImpl } from '../utils/Downloader';
 import Button from './Button';
 import { getShotTakeId, useShotTake } from './ShotContext';
+import { useShotList } from './ShotListContext';
+import { createShotTake } from './ShotTake';
 import ShotTakeInfo from './ShotTakeInfo';
 
 export default function Recorder({}) {
-  const { setStateImpl } = useShotTake();
+  const { setShotList } = useShotList();
+  const { state, setStateImpl } = useShotTake();
   const downloadOnceRef = useRef('');
 
   const onChange = useCallback(
@@ -19,6 +22,9 @@ export default function Recorder({}) {
       if (!data) {
         return;
       }
+      const { scene, shot, take } = state;
+      setShotList((prev) => [...prev, createShotTake(0, scene, shot, take)]);
+
       setStateImpl((prev) => {
         if (downloadOnceRef.current === data) {
           return;
@@ -38,7 +44,7 @@ export default function Recorder({}) {
         };
       });
     },
-    [setStateImpl, downloadOnceRef],
+    [state, setShotList, setStateImpl, downloadOnceRef],
   );
 
   const mediaRecorder = useMediaRecorder();
@@ -266,7 +272,6 @@ export function BrowserMediaRecorder({ className, mediaRecorder, onChange }) {
       mediaRecorder.stop();
       setOpen(false);
       setRecording(false);
-      window.open('/shots', '_self');
       e.preventDefault();
       e.stopPropagation();
       return false;
