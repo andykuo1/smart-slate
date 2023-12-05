@@ -68,9 +68,9 @@ export default function Recorder({}) {
 }
 
 function getFileName(shotTake) {
-  return `Untitled_Scene ${shotTake.scene}_Shot ${shotTake.shot}_Take ${
-    Number(shotTake.take) + 1
-  }.mp4`;
+  return `Untitled_Scene ${shotTake.scene}_Shot ${shotTake.shot}_Take ${Number(
+    shotTake.take,
+  )}.mp4`;
 }
 
 /**
@@ -266,6 +266,7 @@ export function BrowserMediaRecorder({ className, mediaRecorder, onChange }) {
       mediaRecorder.stop();
       setOpen(false);
       setRecording(false);
+      window.open('/shots', '_self');
       e.preventDefault();
       e.stopPropagation();
       return false;
