@@ -10,7 +10,20 @@ import { useShotList } from './ShotListContext';
 import { createShotTake } from './ShotTake';
 import ShotTakeInfo from './ShotTakeInfo';
 
-export default function ShotList({}) {
+export default function ShotList() {
+  return (
+    <div>
+      <ShotTakeInfo />
+      <div>
+        <Button title="Import" disabled={true} onClick={() => {}} />
+        <Button title="Export" disabled={true} onClick={() => {}} />
+      </div>
+      <ShotListDocument />
+    </div>
+  );
+}
+
+export function ShotListDocument() {
   const { shotList } = useShotList();
   /** @type {Array<number>} */
   let scenes = [];
@@ -21,16 +34,19 @@ export default function ShotList({}) {
       maxScene = Math.max(maxScene, scene);
     }
   }
+
   return (
-    <div>
-      <ShotTakeInfo />
-      <div>
-        <Button title="Import" disabled={true} onClick={() => {}} />
-        <Button title="Export" disabled={true} onClick={() => {}} />
-      </div>
-      <ul>
+    <div className="flex flex-col my-20">
+      <label htmlFor="shotList" className="text-center text-2xl">
+        <input
+          type="text"
+          className="bg-transparent text-center opacity-60 border-b-8 border-double border-neutral-700"
+          placeholder="Untitled"
+        />
+      </label>
+      <ul id="shotList">
         {scenes.map((scene) => (
-          <ShotListScene sceneNum={scene} />
+          <ShotListScene key={scene} sceneNum={scene} />
         ))}
         <ShotListSceneNew sceneNum={maxScene + 1} />
       </ul>
@@ -58,7 +74,7 @@ export function ShotListScene({ sceneNum }) {
     <>
       <ShotListSceneHeader sceneNum={sceneNum} />
       {shots.map((shot) => (
-        <ShotListShot sceneNum={sceneNum} shotNum={shot} />
+        <ShotListShot key={shot} sceneNum={sceneNum} shotNum={shot} />
       ))}
       <ShotListShotNew sceneNum={sceneNum} shotNum={maxShot + 1} />
     </>
@@ -89,12 +105,12 @@ function ShotListSceneNew({ sceneNum }) {
     setShotList((prev) => [...prev, createShotTake(0, sceneNum, 1, 0)]);
   }
   return (
-    <ShotListItemContainer className="flex items-center bg-transparent border-none p-0">
-      <button
-        className="flex-1 bg-gradient-to-l from-gray-600 to-transparent text-white p-2 text-right hover:from-gray-400"
-        onClick={onClick}>
-        + New Scene
+    <ShotListItemContainer className="flex items-center my-4 opacity-30 bg-transparent border-none">
+      <span className="flex-1 text-center mx-8 border-t-2 border-dotted" />
+      <button className="text-center" onClick={onClick}>
+        + New Scene +
       </button>
+      <span className="flex-1 text-center mx-8 border-t-2 border-dotted" />
     </ShotListItemContainer>
   );
 }
@@ -123,7 +139,12 @@ export function ShotListShot({ sceneNum, shotNum }) {
       <ShotListShotHeader sceneNum={sceneNum} shotNum={shotNum} />
       <ul className="ml-8">
         {takes.map((take) => (
-          <ShotListTake sceneNum={sceneNum} shotNum={shotNum} takeNum={take} />
+          <ShotListTake
+            key={take}
+            sceneNum={sceneNum}
+            shotNum={shotNum}
+            takeNum={take}
+          />
         ))}
         <ShotListTakeNew
           sceneNum={sceneNum}
@@ -155,8 +176,8 @@ function ShotListShotHeader({ sceneNum, shotNum }) {
       </div>
       <input
         type="text"
-        className="flex-1 mx-2 bg-transparent opacity-60"
-        placeholder="Notes"
+        className="flex-1 mx-2 px-2 bg-transparent opacity-60"
+        placeholder="Details"
       />
     </ShotListItemContainer>
   );
@@ -200,7 +221,7 @@ export function ShotListTake({ sceneNum, shotNum, takeNum }) {
       <span>Take {takeNum}</span>
       <input
         type="text"
-        className="flex-1 mx-2 bg-transparent opacity-60"
+        className="flex-1 mx-2 px-2 bg-transparent opacity-60"
         placeholder="Notes"
       />
     </ShotListItemContainer>
@@ -285,7 +306,7 @@ export function ShotListTakeNew({ sceneNum, shotNum, takeNum }) {
       <span className="opacity-60">Take {takeNum}</span>
       <input
         type="text"
-        className="flex-1 mx-2 bg-transparent opacity-60"
+        className="flex-1 mx-2 px-2 bg-transparent opacity-60"
         placeholder="Notes"
       />
       <button onClick={onNewClick}>Record</button>

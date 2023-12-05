@@ -1,31 +1,36 @@
 'use client';
 
-import { createContext, useContext, useState } from 'react';
-
-import { createShotTake } from './ShotTake';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
 const ShotListContext = createContext(
   /** @type {ReturnType<useShotListAPI>|null} */ (null),
 );
 
-const TEST_VALUES = [
-  createShotTake(0, 1, 1, 0),
-  createShotTake(0, 2, 1, 1),
-  createShotTake(0, 2, 1, 2),
-  createShotTake(0, 3, 1, 0),
-  createShotTake(0, 4, 1, 1),
-  createShotTake(0, 4, 2, 1),
-  createShotTake(0, 4, 3, 1),
-  createShotTake(0, 4, 4, 1),
-  createShotTake(0, 4, 4, 2),
-  createShotTake(0, 4, 4, 3),
-  createShotTake(0, 4, 4, 4),
-];
+const SHOT_LIST_LOCAL_STORAGE_KEY = 'storedShotList';
 
 function useShotListAPI() {
   const [shotList, setShotList] = useState(
-    /** @type {Array<import('./ShotTake').ShotTake>} */ (TEST_VALUES),
+    /** @type {Array<import('./ShotTake').ShotTake>} */ ([]),
   );
+  const loadOnceRef = useRef(false);
+
+  useEffect(() => {
+    if (!loadOnceRef.current) {
+      loadOnceRef.current = true;
+
+      let string = localStorage.getItem(SHOT_LIST_LOCAL_STORAGE_KEY);
+      if (!string) {
+        return;
+      }
+      let json = JSON.parse(string);
+      setShotList(json);
+      return;
+    }
+
+    let json = JSON.stringify(shotList);
+    localStorage.setItem(SHOT_LIST_LOCAL_STORAGE_KEY, json);
+  }, [shotList]);
+
   return {
     shotList,
     setShotList,

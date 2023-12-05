@@ -1,6 +1,7 @@
 # 0.0.5
 
-- Update shot list UI with modifiers
+- Update shot list UI
+- Add shot list that load/saves!
 
 # 0.0.4
 
