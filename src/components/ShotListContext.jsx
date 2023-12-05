@@ -29,7 +29,7 @@ function useShotListAPI() {
 
     let json = JSON.stringify(shotList);
     localStorage.setItem(SHOT_LIST_LOCAL_STORAGE_KEY, json);
-  }, [shotList]);
+  }, [shotList, setShotList]);
 
   return {
     shotList,

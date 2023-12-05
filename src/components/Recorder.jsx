@@ -147,34 +147,40 @@ export function BrowserMediaRecorder({ className, mediaRecorder, onChange }) {
   const [recording, setRecording] = useState(false);
 
   /** @type {import('react').RefObject<HTMLVideoElement>} */
-  const videoRef = useRef();
+  const videoRef = useRef(null);
   /** @type {import('react').RefObject<Array<Blob>>} */
   const chunksRef = useRef([]);
 
   const onRecorderStart = useCallback(
     function onRecorderStart() {
-      if (!videoRef.current) {
+      const video = videoRef.current;
+      if (!video) {
         return;
       }
-      videoRef.current.srcObject = mediaRecorder.stream;
-      videoRef.current.play();
+      video.srcObject = mediaRecorder.stream;
+      video.play();
     },
     [mediaRecorder, videoRef],
   );
 
   const onRecorderStop = useCallback(
     function onRecorderStop() {
-      if (!videoRef.current) {
+      const video = videoRef.current;
+      if (!video) {
         return;
       }
-      videoRef.current.pause();
-      videoRef.current.srcObject = null;
-      const chunks = chunksRef.current.slice();
-      const [firstChunk] = chunks;
+      video.pause();
+      video.srcObject = null;
+      const chunks = chunksRef.current;
+      if (!chunks) {
+        return;
+      }
+      let newChunks = chunks.slice();
+      const [firstChunk] = newChunks;
       const mimeType = firstChunk.type || mediaRecorder.mimeType || 'video/mp4';
-      const blob = new Blob(chunks, { type: mimeType });
+      const blob = new Blob(newChunks, { type: mimeType });
       const url = URL.createObjectURL(blob);
-      chunksRef.current.length = 0;
+      chunks.length = 0;
       onChange({ data: url });
     },
     [mediaRecorder, videoRef, chunksRef, onChange],
@@ -183,10 +189,11 @@ export function BrowserMediaRecorder({ className, mediaRecorder, onChange }) {
   const onRecorderData = useCallback(
     /** @type {EventListener} */
     function onRecorderData(e) {
-      if (!chunksRef.current) {
+      const chunks = chunksRef.current;
+      if (!chunks) {
         return;
       }
-      chunksRef.current.push(e.data);
+      chunks.push(e.data);
     },
     [chunksRef],
   );
@@ -198,14 +205,15 @@ export function BrowserMediaRecorder({ className, mediaRecorder, onChange }) {
     mediaRecorder.addEventListener('stop', onRecorderStop);
     mediaRecorder.addEventListener('dataavailable', onRecorderData);
     mediaRecorder.addEventListener('start', onRecorderStart);
-    if (videoRef.current) {
-      videoRef.current.srcObject = mediaRecorder.stream;
-      videoRef.current.play();
+    const video = videoRef.current;
+    if (video) {
+      video.srcObject = mediaRecorder.stream;
+      video.play();
     }
     return () => {
-      if (videoRef.current) {
-        videoRef.current.srcObject = null;
-        videoRef.current.pause();
+      if (video) {
+        video.srcObject = null;
+        video.pause();
       }
       mediaRecorder.removeEventListener('stop', onRecorderStop);
       mediaRecorder.removeEventListener('dataavailable', onRecorderData);
