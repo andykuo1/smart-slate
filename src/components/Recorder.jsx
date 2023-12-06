@@ -73,8 +73,7 @@ export default function Recorder({}) {
 function isMediaRecorderSupported(mediaRecorder) {
   return (
     typeof window !== 'undefined' &&
-    window.MediaRecorder &&
-    !(mediaRecorder instanceof Error) &&
+    typeof window.MediaRecorder !== 'undefined' &&
     mediaRecorder instanceof MediaRecorder
   );
 }
