@@ -33,7 +33,6 @@ export default function Recorder({}) {
 
         const fileName = getFileName(prev.title, prev);
         downloadURLImpl(fileName, data);
-        alert('Downloaded - ' + fileName);
 
         const take = (Number(prev.take) || 0) + 1;
         const shotTakeId = getShotTakeId(prev.scene, prev.shot);
@@ -52,7 +51,7 @@ export default function Recorder({}) {
     <div className="flex flex-col items-center">
       {isInputCaptureSupported() ? (
         <InputMediaRecorder onChange={onChange} />
-      ) : isMediaRecorderSupported() && !(mediaRecorder instanceof Error) ? (
+      ) : isMediaRecorderSupported(mediaRecorder) ? (
         <BrowserMediaRecorder
           mediaRecorder={mediaRecorder}
           onChange={onChange}
@@ -71,10 +70,11 @@ export default function Recorder({}) {
   );
 }
 
-function isMediaRecorderSupported() {
+function isMediaRecorderSupported(mediaRecorder) {
   return (
     typeof window !== 'undefined' &&
     window.MediaRecorder &&
+    !(mediaRecorder instanceof Error) &&
     mediaRecorder instanceof MediaRecorder
   );
 }

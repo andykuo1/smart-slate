@@ -294,8 +294,6 @@ export function ShotListTakeNew({ sceneNum, shotNum, takeNum }) {
     shotNum == shotTake.shot &&
     takeNum == shotTake.take;
 
-  const { setShotList } = useShotList();
-
   function onClick() {
     setShotTake((prev) => {
       const shotTakeId = getShotTakeId(sceneNum, shotNum);
