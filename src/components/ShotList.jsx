@@ -312,7 +312,9 @@ export function ShotListTakeNew({ sceneNum, shotNum, takeNum }) {
   return (
     <ShotListItemContainer
       className={
-        'flex -mt-[2px] px-2' + ' ' + (isActive && 'bg-white text-black')
+        'flex -mt-[2px] px-2 items-center' +
+        ' ' +
+        (isActive && 'bg-white text-black')
       }
       onClick={onClick}>
       <span className="opacity-60">Take {takeNum}</span>

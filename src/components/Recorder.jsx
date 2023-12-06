@@ -50,18 +50,16 @@ export default function Recorder({}) {
   const mediaRecorder = useMediaRecorder();
   return (
     <div className="flex flex-col items-center">
-      {typeof window !== 'undefined' &&
-      window.MediaRecorder &&
-      mediaRecorder instanceof MediaRecorder ? (
+      {isInputCaptureSupported() ? (
+        <InputMediaRecorder onChange={onChange} />
+      ) : isMediaRecorderSupported() && !(mediaRecorder instanceof Error) ? (
         <BrowserMediaRecorder
           mediaRecorder={mediaRecorder}
           onChange={onChange}
         />
-      ) : mediaRecorder instanceof Error ? (
-        <InputMediaRecorder onChange={onChange} />
       ) : (
         <Button
-          title="Record"
+          title="Record (unavailable)"
           className="disabled:opacity-30"
           disabled={true}
         />
@@ -70,6 +68,21 @@ export default function Recorder({}) {
         <ShotTakeInfo />
       </div>
     </div>
+  );
+}
+
+function isMediaRecorderSupported() {
+  return (
+    typeof window !== 'undefined' &&
+    window.MediaRecorder &&
+    mediaRecorder instanceof MediaRecorder
+  );
+}
+
+function isInputCaptureSupported() {
+  return (
+    typeof document !== 'undefined' &&
+    typeof document.createElement('input').capture !== 'undefined'
   );
 }
 

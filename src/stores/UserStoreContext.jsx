@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-import { createDispatch } from './UserDispatch';
-import { createStore } from './UserStore';
 import { getSceneIndex, getShotIndex, getTakeIndex } from './DocumentDispatch';
 import { useDocumentStore } from './DocumentStoreContext';
+import { createDispatch } from './UserDispatch';
+import { createStore } from './UserStore';
 
 export const LOCAL_STORAGE_KEY = 'userStore';
 
@@ -25,7 +25,7 @@ export const useUserStore = create(
 );
 
 export function useCursorSceneShotTakeNumbers() {
-  const cursor = useUserStore(ctx => ctx.cursor);
+  const cursor = useUserStore((ctx) => ctx.cursor);
   const sceneIndex = useDocumentStore((ctx) =>
     getSceneIndex(ctx, cursor.documentId, cursor.sceneId),
   );

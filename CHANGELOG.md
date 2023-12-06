@@ -1,6 +1,7 @@
 # 0.0.6
 
 - Update document title for save file.
+- Update prioritize capture input instead of MediaRecorder.
 
 # 0.0.5
 
