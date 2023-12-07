@@ -27,7 +27,7 @@ export default function Recorder({}) {
 
       setShotTake((prev) => {
         if (downloadOnceRef.current === data) {
-          return;
+          return prev;
         }
         downloadOnceRef.current = data;
 
@@ -70,6 +70,9 @@ export default function Recorder({}) {
   );
 }
 
+/**
+ * @param {MediaRecorder|null} mediaRecorder
+ */
 function isMediaRecorderSupported(mediaRecorder) {
   return (
     typeof window !== 'undefined' &&
@@ -104,16 +107,22 @@ export function InputMediaRecorder({ className, onChange }) {
   /** @type {import('react').RefObject<HTMLInputElement>} */
   const inputRef = useRef(null);
 
+  /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
   const onInputChange = useCallback(
     function onInputChange(e) {
-      const file = e.target.files[0];
+      const el = /** @type {HTMLInputElement} */ (e.target);
+      const file = el.files?.[0];
+      if (!file) {
+        return;
+      }
       const url = URL.createObjectURL(file);
-      e.target.value = null;
+      el.value = '';
       onChange({ data: url });
     },
     [onChange],
   );
 
+  /** @type {import('react').MouseEventHandler} */
   const onClick = useCallback(
     function onClick(e) {
       if (!inputRef.current) {
@@ -155,7 +164,12 @@ export function useMediaRecorder() {
     }
     onceRef.current = true;
     navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
+      .getUserMedia({
+        video: {
+          facingMode: 'environment'
+        },
+        audio: true,
+      })
       .then((stream) => setMediaRecorder(new MediaRecorder(stream)))
       .catch((e) => setMediaRecorder(e));
   }, []);
@@ -166,7 +180,7 @@ export function useMediaRecorder() {
 /**
  * @param {object} props
  * @param {string} [props.className]
- * @param {MediaRecorder} props.mediaRecorder
+ * @param {MediaRecorder|null} props.mediaRecorder
  * @param {(e: { data: string }) => void} props.onChange
  */
 export function BrowserMediaRecorder({ className, mediaRecorder, onChange }) {
@@ -184,6 +198,9 @@ export function BrowserMediaRecorder({ className, mediaRecorder, onChange }) {
       if (!video) {
         return;
       }
+      if (!mediaRecorder) {
+        return;
+      }
       video.srcObject = mediaRecorder.stream;
       video.play();
     },
@@ -194,6 +211,9 @@ export function BrowserMediaRecorder({ className, mediaRecorder, onChange }) {
     function onRecorderStop() {
       const video = videoRef.current;
       if (!video) {
+        return;
+      }
+      if (!mediaRecorder) {
         return;
       }
       video.pause();
@@ -248,8 +268,8 @@ export function BrowserMediaRecorder({ className, mediaRecorder, onChange }) {
     };
   }, [mediaRecorder, onRecorderStart, onRecorderStop, onRecorderData]);
 
+  /** @type {import('react').MouseEventHandler} */
   const onClick = useCallback(
-    /** @param {MouseEvent} e */
     function onClick(e) {
       if (!mediaRecorder) {
         return;
@@ -263,8 +283,8 @@ export function BrowserMediaRecorder({ className, mediaRecorder, onChange }) {
     [mediaRecorder, setOpen, setRecording],
   );
 
+  /** @type {import('react').MouseEventHandler} */
   const onStartClick = useCallback(
-    /** @param {MouseEvent} e */
     function onStopClick(e) {
       if (!mediaRecorder) {
         return;
@@ -279,8 +299,8 @@ export function BrowserMediaRecorder({ className, mediaRecorder, onChange }) {
     [mediaRecorder, setOpen, setRecording],
   );
 
+  /** @type {import('react').MouseEventHandler} */
   const onStopClick = useCallback(
-    /** @param {MouseEvent} e */
     function onStopClick(e) {
       if (!mediaRecorder) {
         return;

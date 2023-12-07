@@ -2,6 +2,7 @@
 
 - Update document title for save file.
 - Update prioritize capture input instead of MediaRecorder.
+- Prefer environment-facing camera.
 
 # 0.0.5
 
