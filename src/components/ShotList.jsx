@@ -191,11 +191,6 @@ function ShotListShotHeader({ sceneNum, shotNum }) {
         <span> / </span>
         <span>Shot {shotNum}</span>
       </div>
-      <input
-        type="text"
-        className="flex-1 mx-2 px-2 bg-transparent opacity-60"
-        placeholder="Details"
-      />
     </ShotListItemContainer>
   );
 }
@@ -236,11 +231,6 @@ export function ShotListTake({ sceneNum, shotNum, takeNum }) {
       }
       onClick={onClick}>
       <span>Take {takeNum}</span>
-      <input
-        type="text"
-        className="flex-1 mx-2 px-2 bg-transparent opacity-60"
-        placeholder="Notes"
-      />
     </ShotListItemContainer>
   );
 }
@@ -312,16 +302,14 @@ export function ShotListTakeNew({ sceneNum, shotNum, takeNum }) {
       className={
         'flex -mt-[2px] px-2 items-center' +
         ' ' +
-        (isActive && 'bg-white text-black')
+        (isActive
+          ? 'bg-white text-black'
+          : 'bg-gradient-to-r from-gray-600 to-transparent')
       }
       onClick={onClick}>
-      <span className="opacity-60">Take {takeNum}</span>
-      <input
-        type="text"
-        className="flex-1 mx-2 px-2 bg-transparent opacity-60"
-        placeholder="Notes"
-      />
-      <Link href="/rec">Record</Link>
+      <Link className="" href="/rec">
+        Record Take {takeNum}
+      </Link>
     </ShotListItemContainer>
   );
 }
