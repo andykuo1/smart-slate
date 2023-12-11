@@ -103,7 +103,7 @@ export default function RecorderPanel({ children, onChange }) {
         startRecording();
       }
     }
-  }, [recorder, setRecorderActive, startRecording]);
+  }, [recorder, setRecorderActive, startRecording, startCapturing]);
 
   return (
     <div className="relative flex flex-col items-center bg-black w-full h-full">
