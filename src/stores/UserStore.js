@@ -1,11 +1,13 @@
 /**
  * @typedef {ReturnType<createStore>} Store
  * @typedef {ReturnType<createCursor>} Cursor
+ * @typedef {ReturnType<createRecorder>} Recorder
  */
 
 export function createStore() {
   return {
     cursor: createCursor(),
+    recorder: createRecorder(),
   };
 }
 
@@ -19,5 +21,11 @@ export function createCursor() {
     shotId: '',
     /** @type {import('./DocumentStore').TakeId} */
     takeId: '',
+  };
+}
+
+export function createRecorder() {
+  return {
+    active: false,
   };
 }

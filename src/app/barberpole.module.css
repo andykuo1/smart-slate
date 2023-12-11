@@ -1,0 +1,21 @@
+/** SOURCE: https://css-tricks.com/books/fundamental-css-tactics/striped-barberpole-animation/ */
+.barberpole {
+  --barberpole-from: transparent;
+  --barberpole-to: #222;
+  --barberpole-speed: 30s;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--barberpole-from),
+    var(--barberpole-from) 1rem,
+    var(--barberpole-to) 1rem,
+    var(--barberpole-to) 2rem
+  );
+  background-size: 200% 200%;
+  animation: barberpole var(--barberpole-speed) linear infinite;
+}
+
+@keyframes barberpole {
+  100% {
+    background-position: 100% 100%;
+  }
+}

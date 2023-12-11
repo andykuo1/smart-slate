@@ -15,6 +15,7 @@
 
 - Change store to object version
 - Add shot types
+- Add new recorder
 
 # 0.0.6
 

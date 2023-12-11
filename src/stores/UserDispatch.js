@@ -8,6 +8,7 @@ import { zi } from './ZustandImmerHelper';
 export function createDispatch(set) {
   return {
     setUserCursor: zi(set, setUserCursor),
+    setRecorderActive: zi(set, setRecorderActive),
   };
 }
 
@@ -18,13 +19,7 @@ export function createDispatch(set) {
  * @param {import('./DocumentStore').ShotId} shotId
  * @param {import('./DocumentStore').TakeId} [takeId]
  */
-export function setUserCursor(
-  store,
-  documentId,
-  sceneId,
-  shotId,
-  takeId = undefined,
-) {
+function setUserCursor(store, documentId, sceneId, shotId, takeId = undefined) {
   let cursor = store.cursor;
   cursor.documentId = documentId;
   cursor.sceneId = sceneId;
@@ -32,4 +27,13 @@ export function setUserCursor(
   if (typeof takeId !== 'undefined') {
     cursor.takeId = takeId;
   }
+}
+
+/**
+ * @param {import('./UserStore').Store} store
+ * @param {boolean} active
+ */
+function setRecorderActive(store, active) {
+  let recorder = store.recorder;
+  recorder.active = active;
 }

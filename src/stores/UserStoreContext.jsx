@@ -6,7 +6,7 @@ import { useDocumentStore } from './DocumentStoreContext';
 import { createDispatch } from './UserDispatch';
 import { createStore } from './UserStore';
 
-export const LOCAL_STORAGE_KEY = 'userStore';
+export const SESSION_STORAGE_KEY = 'userStore';
 
 /** @typedef {import('./UserStore').Store & import('./UserDispatch').Dispatch} StoreAndDispatch */
 
@@ -19,8 +19,8 @@ export const useUserStore = create(
       ...createDispatch(set),
     }),
     {
-      name: LOCAL_STORAGE_KEY,
-      storage: createJSONStorage(() => localStorage),
+      name: SESSION_STORAGE_KEY,
+      storage: createJSONStorage(() => sessionStorage),
     },
   ),
 );
@@ -49,4 +49,12 @@ export function useCurrentSceneShotTakeNumbers() {
     getTakeIndex(ctx, cursor.documentId, cursor.shotId, cursor.takeId),
   );
   return [sceneIndex, shotIndex, takeIndex];
+}
+
+export function useCurrentRecorder() {
+  return useUserStore((ctx) => ctx.recorder);
+}
+
+export function useSetRecorderActive() {
+  return useUserStore((ctx) => ctx.setRecorderActive);
 }

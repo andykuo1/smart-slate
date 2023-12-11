@@ -1,4 +1,5 @@
 import { uuid } from '../utils/uuid';
+import ShotTypes, { ANY_SHOT } from './ShotTypes';
 
 /**
  * @typedef {ReturnType<createStore>} Store
@@ -169,4 +170,28 @@ export function cloneTake(out, take) {
   out.takeId = take.takeId;
   out.notes = take.notes;
   return /** @type {Take} */ (out);
+}
+
+/**
+ * @param {number} sceneNumber
+ * @param {number} shotNumber
+ * @param {number} takeNumber
+ * @param {ShotType} [shotType]
+ */
+export function toScenShotTakeType(
+  sceneNumber,
+  shotNumber,
+  takeNumber,
+  shotType,
+) {
+  return [
+    sceneNumber > 0 ? String(sceneNumber).padStart(2, '0') : '--',
+    shotNumber > 0
+      ? String.fromCharCode('A'.charCodeAt(0) + (shotNumber - 1))
+      : '--',
+    `#${takeNumber > 0 ? String(takeNumber).padStart(2, '0') : '--'}`,
+    typeof shotType !== 'undefined'
+      ? ShotTypes.getParamsByType(shotType).abbr
+      : ANY_SHOT.abbr,
+  ];
 }

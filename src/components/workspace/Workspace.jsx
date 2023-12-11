@@ -11,36 +11,93 @@ import {
 } from '@/stores/DocumentStoreContext';
 import {
   useCurrentDocumentId,
+  useCurrentRecorder,
+  useSetRecorderActive,
   useSetUserCursor,
 } from '@/stores/UserStoreContext';
 
+import VideoBooth from '../recorder/VideoBooth';
 import SceneListPanel from './SceneListPanel';
 import WelcomePanel from './WelcomePanel';
 
 export default function Workspace() {
   const documentId = useCurrentDocumentId();
+  const recorderActive = useCurrentRecorder()?.active || false;
+
+  if (!documentId) {
+    return <WelcomePanel />;
+  } else if (recorderActive) {
+    return (
+      <>
+        <DarkHomeButton />
+        <VideoBooth />
+      </>
+    );
+  } else {
+    return (
+      <>
+        <HomeButton />
+        <ProjectTitle documentId={documentId} />
+        <SceneListPanel documentId={documentId} />
+      </>
+    );
+  }
+}
+
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ */
+function DarkHomeButton({ className }) {
   const setUserCursor = useSetUserCursor();
+  const recorderActive = useCurrentRecorder()?.active || false;
+  const setRecorderActive = useSetRecorderActive();
 
   function onReturnHomeClick() {
-    setUserCursor('', '', '', '');
+    if (recorderActive) {
+      setRecorderActive(false);
+    } else {
+      setUserCursor('', '', '', '');
+    }
   }
 
   return (
-    <main className="flex flex-col w-screen h-screen text-black bg-white">
-      {!documentId ? (
-        <WelcomePanel />
-      ) : (
-        <>
-          <div className="fixed m-2">
-            <FancyButton title="Back" onClick={onReturnHomeClick}>
-              <BackIcon className="inline w-6 fill-current" />
-            </FancyButton>
-          </div>
-          <ProjectTitle documentId={documentId} />
-          <SceneListPanel documentId={documentId} />
-        </>
-      )}
-    </main>
+    <div className="fixed m-2 z-10">
+      <FancyButton
+        className="to-black text-white hover:to-gray-800"
+        title="Back"
+        onClick={onReturnHomeClick}>
+        <BackIcon className="inline w-6 fill-current" />
+      </FancyButton>
+    </div>
+  );
+}
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ */
+function HomeButton({ className }) {
+  const setUserCursor = useSetUserCursor();
+  const recorderActive = useCurrentRecorder()?.active || false;
+  const setRecorderActive = useSetRecorderActive();
+
+  function onReturnHomeClick() {
+    if (recorderActive) {
+      setRecorderActive(false);
+    } else {
+      setUserCursor('', '', '', '');
+    }
+  }
+
+  return (
+    <div className="fixed m-2 z-10">
+      <FancyButton
+        className={className}
+        title="Back"
+        onClick={onReturnHomeClick}>
+        <BackIcon className="inline w-6 fill-current" />
+      </FancyButton>
+    </div>
   );
 }
 

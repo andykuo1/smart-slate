@@ -1,6 +1,11 @@
 'use client';
 
-import { createScene, createShot } from '@/stores/DocumentStore';
+import BarberpoleStyle from '@/app/barberpole.module.css';
+import {
+  createScene,
+  createShot,
+  toScenShotTakeType,
+} from '@/stores/DocumentStore';
 import {
   useAddScene,
   useAddShot,
@@ -15,7 +20,11 @@ import {
   useShotType,
 } from '@/stores/DocumentStoreContext';
 import ShotTypes from '@/stores/ShotTypes';
-import { useCurrentCursor } from '@/stores/UserStoreContext';
+import {
+  useCurrentCursor,
+  useSetRecorderActive,
+  useSetUserCursor,
+} from '@/stores/UserStoreContext';
 
 /**
  * @param {object} props
@@ -110,22 +119,27 @@ function ShotHeader({ documentId, sceneId, shotId }) {
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
   const takeCount = useShotTakeCount(documentId, shotId);
   const currentCursor = useCurrentCursor();
+  const setUserCursor = useSetUserCursor();
+  const setRecorderActive = useSetRecorderActive();
   const isActive =
     currentCursor.documentId === documentId &&
     currentCursor.sceneId === sceneId &&
     currentCursor.shotId === shotId;
-  function onClick() {}
+  function onClick() {
+    setUserCursor(documentId, sceneId, shotId, '');
+    setRecorderActive(true);
+  }
   return (
     <li
       className={
         'flex flex-row border-b border-gray-300 w-full h-[5rem] pl-2 overflow-hidden' +
         ' ' +
-        (isActive && 'bg-black text-white')
+        (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
       }>
       <ScenShotTakeType
         scene={sceneNumber}
         shot={shotNumber}
-        take={takeCount}
+        take={takeCount > 0 ? takeCount + 1 : takeCount}
         type={() => (
           <ShotTypesSelector documentId={documentId} shotId={shotId} />
         )}
@@ -134,7 +148,7 @@ function ShotHeader({ documentId, sceneId, shotId }) {
         <button
           className={'mx-4 px-4 my-auto rounded-full bg-red-300 text-black'}
           onClick={onClick}>
-          + Record Take
+          {isActive ? 'Recording ...' : `+ Record #${takeCount + 1}`}
         </button>
         <ShotNotes className="flex-1" documentId={documentId} shotId={shotId} />
       </div>
@@ -194,29 +208,27 @@ function NewShotHeader({ documentId, sceneId }) {
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {number} props.scene
  * @param {number} props.shot
  * @param {number} props.take
  * @param {() => import('react').ReactNode} props.type
  */
-function ScenShotTakeType({ scene, shot, take, type }) {
+export function ScenShotTakeType({ className, scene, shot, take, type }) {
+  const [sceneString, shotString, takeString, _] = toScenShotTakeType(
+    scene,
+    shot,
+    take,
+  );
   return (
-    <table className="relative text-center group">
+    <table className={'relative text-center group' + ' ' + className}>
       <tr className="text-xl align-bottom scale-y-125 whitespace-nowrap">
-        <td className="font-mono text-right">
-          {scene > 0 ? String(scene).padStart(2, '0') : '--'}
-        </td>
-        <td className="font-mono text-left">
-          {shot > 0
-            ? String.fromCharCode('A'.charCodeAt(0) + (shot - 1))
-            : '--'}
-        </td>
-        <td className="font-mono px-2">
-          #{take > 0 ? String(take).padStart(2, '0') : '--'}
-        </td>
+        <td className="font-mono text-right">{sceneString}</td>
+        <td className="font-mono text-left">{shotString}</td>
+        <td className="font-mono px-2">{takeString}</td>
         <td className="font-mono">{type()}</td>
       </tr>
-      <tr className="text-xs text-black select-none transition-opacity opacity-0 group-hover:opacity-30 align-top">
+      <tr className="text-xs select-none transition-opacity opacity-0 group-hover:opacity-30 align-top">
         <th className="font-normal">scen</th>
         <th className="font-normal">shot</th>
         <th className="font-normal px-2">#take</th>
@@ -250,60 +262,11 @@ function ShotTypesSelector({ documentId, shotId }) {
       className="text-center bg-transparent"
       value={shotType}
       onChange={onShotTypeChange}>
-      {Object.values(ShotTypes).map((type) => (
+      {ShotTypes.params().map((type) => (
         <option key={type.value} title={type.name} value={type.value}>
           {type.abbr}
         </option>
       ))}
     </select>
-  );
-}
-
-/**
- * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').ShotId} props.shotId
- */
-function ShotTypesSelectSpinner({ documentId, shotId }) {
-  const shotType = useShotType(documentId, shotId);
-  const setShotType = useSetShotType(documentId, shotId);
-
-  /** @param {ShotTypes[keyof ShotTypes]} e */
-  function onShotTypeChange(e) {
-    setShotType(documentId, shotId, e.value);
-  }
-
-  return (
-    <div className="group relative h-full my-auto">
-      <div className="absolute top-0 bottom-[50%] left-0 right-0 bg-gradient-to-b from-white to-transparent pointer-events-none" />
-      <div className="absolute top-[50%] bottom-0 left-0 right-0 bg-gradient-to-t from-white to-transparent pointer-events-none" />
-      <div className="h-full overflow-y-auto px-4 snap-y snap-center scroll-smooth snap-mandatory">
-        <ul className="flex flex-col">
-          <li>
-            <br />
-          </li>
-          {Object.values(ShotTypes).map((type) => (
-            <li
-              className={
-                'text-center' +
-                ' ' +
-                (shotType === type.value
-                  ? 'opacity-100'
-                  : 'opacity-0 group-hover:opacity-100')
-              }>
-              <button
-                title={type.name}
-                className="w-full"
-                onClick={() => onShotTypeChange(type)}>
-                {type.abbr}
-              </button>
-            </li>
-          ))}
-          <li>
-            <br />
-          </li>
-        </ul>
-      </div>
-    </div>
   );
 }

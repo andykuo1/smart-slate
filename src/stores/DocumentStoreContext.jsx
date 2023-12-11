@@ -12,6 +12,7 @@ import {
   getShotIdsInOrder,
   getShotIndex,
   getTakeIdsInOrder,
+  getTakeIndex,
 } from './DocumentDispatch';
 import { createStore } from './DocumentStore';
 
@@ -114,6 +115,17 @@ export function useShotNumber(documentId, sceneId, shotId) {
 /**
  * @param {import('./DocumentStore').DocumentId} documentId
  * @param {import('./DocumentStore').ShotId} shotId
+ * @param {import('./DocumentStore').TakeId} takeId
+ */
+export function useTakeNumber(documentId, shotId, takeId) {
+  return useDocumentStore((ctx) =>
+    getTakeIndex(ctx, documentId, shotId, takeId),
+  );
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').ShotId} shotId
  */
 export function useShotType(documentId, shotId) {
   return (
@@ -136,6 +148,10 @@ export function useAddScene() {
 
 export function useAddShot() {
   return useDocumentStore((ctx) => ctx.addShot);
+}
+
+export function useAddTake() {
+  return useDocumentStore((ctx) => ctx.addTake);
 }
 
 /**

@@ -1,38 +1,56 @@
+/** @typedef {ReturnType<createShotTypeParams>} ShotTypeParams */
+
+/**
+ * @param {string} name
+ * @param {string} abbr
+ * @param {import('./DocumentStore').ShotType} value
+ */
+function createShotTypeParams(name, abbr, value) {
+  return {
+    name,
+    abbr,
+    value,
+  };
+}
+
+export const ANY_SHOT = createShotTypeParams('Any Shot', '--', '');
+export const WIDE_SHOT = createShotTypeParams('Wide Shot', 'WS', 'wide');
+export const MEDIUM_SHOT = createShotTypeParams('Medium Shot', 'MS', 'medium');
+export const CLOSE_UP = createShotTypeParams('Close Up', 'CU', 'closeup');
+export const FULL_SHOT = createShotTypeParams('Full Shot', 'FS', 'full');
+export const LONG_SHOT = createShotTypeParams('Long Shot', 'LS', 'long');
+
+const PARAMS = [
+  ANY_SHOT,
+  WIDE_SHOT,
+  MEDIUM_SHOT,
+  CLOSE_UP,
+  FULL_SHOT,
+  LONG_SHOT,
+];
+const VALUES = PARAMS.map((param) => param.value);
+const PARAM_BY_VALUES = PARAMS.reduce((prev, curr) => {
+  prev[curr.value] = curr;
+  return prev;
+}, /** @type {Record<import('./DocumentStore').ShotType, ShotTypeParams>} */ ({}));
+
+function values() {
+  return VALUES;
+}
+
+function params() {
+  return PARAMS;
+}
+
+/**
+ * @param {import('./DocumentStore').ShotType} value
+ */
+function getParamsByType(value) {
+  return PARAM_BY_VALUES[value];
+}
+
 export default {
-  ANY: {
-    name: 'Any Shot',
-    abbr: '--',
-    /** @type {import('./DocumentStore').ShotType} */
-    value: '',
-  },
-  WIDE_SHOT: {
-    name: 'Wide Shot',
-    abbr: 'WS',
-    /** @type {import('./DocumentStore').ShotType} */
-    value: 'wide',
-  },
-  MEDIUM_SHOT: {
-    name: 'Medium Shot',
-    abbr: 'MS',
-    /** @type {import('./DocumentStore').ShotType} */
-    value: 'medium',
-  },
-  CLOSE_UP: {
-    name: 'Close Up',
-    abbr: 'CU',
-    /** @type {import('./DocumentStore').ShotType} */
-    value: 'closeup',
-  },
-  FULL_SHOT: {
-    name: 'Full Shot',
-    abbr: 'FS',
-    /** @type {import('./DocumentStore').ShotType} */
-    value: 'full',
-  },
-  LONG_SHOT: {
-    name: 'Long Shot',
-    abbr: 'LS',
-    /** @type {import('./DocumentStore').ShotType} */
-    value: 'long',
-  },
+  values,
+  params,
+  getParamsByType,
 };
