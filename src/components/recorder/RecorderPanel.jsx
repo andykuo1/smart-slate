@@ -3,14 +3,18 @@ import { useCallback, useRef, useState } from 'react';
 import { useMediaRecorder } from './UseMediaRecorder';
 
 /**
+ * @callback MediaRecorderChangeEventHandler
+ * @param {object} e
+ * @param {import('./UseMediaRecorder').MediaRecorderStatus} e.status
+ * @param {string} e.data
+ */
+
+/**
  * @param {object} props
  * @param {import('react').ReactNode} [props.children]
- * @param {(url: string) => void} props.onChange
+ * @param {MediaRecorderChangeEventHandler} props.onChange
  */
 export default function RecorderPanel({ children, onChange }) {
-  const [status, setStatus] = useState(
-    /** @type {import('./UseMediaRecorder').MediaRecorderStatus} */ ('idle'),
-  );
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
   const onStart = useCallback(
     /** @param {MediaRecorder} mediaRecorder */
@@ -41,16 +45,16 @@ export default function RecorderPanel({ children, onChange }) {
         video.srcObject = null;
       }
       let url = URL.createObjectURL(blob);
-      onChange(url);
+      onChange({ status: 'stopped', data: url });
     },
     [videoRef, onChange],
   );
   const onStatus = useCallback(
     /** @param {import('./UseMediaRecorder').MediaRecorderStatus} status */
     function onStatus(status) {
-      setStatus(status);
+      onChange({ status, data: '' });
     },
-    [setStatus],
+    [onChange],
   );
   const { startRecording, stopRecording } = useMediaRecorder({
     blobOptions: {
@@ -85,9 +89,6 @@ export default function RecorderPanel({ children, onChange }) {
           Stop
         </button>
       </div>
-      <p className="absolute bottom-8 left-0 right-0 text-white text-center pointer-events-none">
-        Status: {JSON.stringify(status)}
-      </p>
       {children}
     </div>
   );
