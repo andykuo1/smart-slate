@@ -21,6 +21,7 @@ import {
 import VideoBooth from '../recorder/VideoBooth';
 import SceneListPanel from './SceneListPanel';
 import WelcomePanel from './WelcomePanel';
+import MadeWithLove from './MadeWithLove';
 
 export default function Workspace() {
   const documentId = useCurrentDocumentId();
@@ -56,6 +57,7 @@ export default function Workspace() {
         <ProjectTitle documentId={documentId} />
         <SceneListPanel documentId={documentId} />
       </div>
+      <MadeWithLove/>
     </>
   );
 }

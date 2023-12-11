@@ -31,7 +31,10 @@ export default function WelcomePanel() {
 
   return (
     <>
-      <div className="flex flex-row text-center mx-auto mt-auto">
+      <h1 className="text-center mx-auto mt-auto mb-10 text-9xl underline pointer-events-none whitespace-nowrap">
+        [🗒️🎬🎥]
+      </h1>
+      <div className="flex flex-row text-center mx-auto">
         <FancyButton
           title="New Project"
           className="mx-1 px-12"
