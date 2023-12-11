@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 /** @typedef {'idle'|'preparing_streams'|'ready'|'starting'|'recording'|'stopping'|'stopped'|Error} MediaRecorderStatus */
 

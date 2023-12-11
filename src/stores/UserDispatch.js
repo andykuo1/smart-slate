@@ -9,6 +9,7 @@ export function createDispatch(set) {
   return {
     setUserCursor: zi(set, setUserCursor),
     setRecorderActive: zi(set, setRecorderActive),
+    setRecorderStatus: zi(set, setRecorderStatus),
   };
 }
 
@@ -32,8 +33,19 @@ function setUserCursor(store, documentId, sceneId, shotId, takeId = undefined) {
 /**
  * @param {import('./UserStore').Store} store
  * @param {boolean} active
+ * @param {boolean} forceStart
  */
-function setRecorderActive(store, active) {
+function setRecorderActive(store, active, forceStart) {
   let recorder = store.recorder;
   recorder.active = active;
+  recorder.forceStart = forceStart;
+}
+
+/**
+ * @param {import('./UserStore').Store} store
+ * @param {string|Error} status
+ */
+function setRecorderStatus(store, status) {
+  let recorder = store.recorder;
+  recorder.status = status;
 }

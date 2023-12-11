@@ -1,7 +1,6 @@
 # Upcoming
 
 - Separate release versions
-- When you hit record, RECORD IT NOW!
 - Make it an installable app.
 - DaVinci Resolve tagging API
   - Save this metadata?
@@ -18,6 +17,7 @@
 - Add new recorder
 - Update horizontal scroller to scroll vertically
 - Add write updates to timestamp
+- Update record to start immediately
 
 # 0.0.6
 

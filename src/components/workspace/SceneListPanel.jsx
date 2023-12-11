@@ -127,7 +127,7 @@ function ShotHeader({ documentId, sceneId, shotId }) {
     currentCursor.shotId === shotId;
   function onClick() {
     setUserCursor(documentId, sceneId, shotId, '');
-    setRecorderActive(true);
+    setRecorderActive(true, true);
   }
   return (
     <li

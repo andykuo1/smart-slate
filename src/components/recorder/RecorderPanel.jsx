@@ -1,4 +1,11 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+
+import RecorderStatus from '@/stores/RecorderStatus';
+import {
+  useCurrentRecorder,
+  useSetRecorderActive,
+  useSetRecorderStatus,
+} from '@/stores/UserStoreContext';
 
 import { useMediaRecorder } from './UseMediaRecorder';
 
@@ -16,6 +23,10 @@ import { useMediaRecorder } from './UseMediaRecorder';
  */
 export default function RecorderPanel({ children, onChange }) {
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
+  const recorder = useCurrentRecorder();
+  const setRecorderActive = useSetRecorderActive();
+  const setRecorderStatus = useSetRecorderStatus();
+
   const onStart = useCallback(
     /** @param {MediaRecorder} mediaRecorder */
     function onStart(mediaRecorder) {
@@ -52,6 +63,7 @@ export default function RecorderPanel({ children, onChange }) {
   const onStatus = useCallback(
     /** @param {import('./UseMediaRecorder').MediaRecorderStatus} status */
     function onStatus(status) {
+      setRecorderStatus(status);
       onChange({ status, data: '' });
     },
     [onChange],
@@ -71,6 +83,13 @@ export default function RecorderPanel({ children, onChange }) {
     onStatus,
   });
 
+  useEffect(() => {
+    if (recorder.active && recorder.forceStart) {
+      setRecorderActive(true, false);
+      startRecording();
+    }
+  }, [recorder, setRecorderActive]);
+
   return (
     <div className="relative flex flex-col items-center bg-black w-full h-full">
       <div className="flex-1" />
@@ -78,18 +97,38 @@ export default function RecorderPanel({ children, onChange }) {
       <div className="flex-1" />
       <div className="absolute bottom-0 left-0 right-0 flex flex-row">
         <button
-          className="bg-red-500 p-4 py-6 m-2 rounded-full"
-          onClick={() => startRecording()}>
-          Start
+          className="bg-red-500 p-4 py-6 m-2 rounded-full disabled:opacity-30"
+          onClick={() => startRecording()}
+          disabled={
+            !recorder.active || !RecorderStatus.isDone(recorder.status)
+          }>
+          Another Take?
         </button>
         <div className="flex-1" />
         <button
-          className="bg-white p-4 py-6 m-2"
-          onClick={() => stopRecording()}>
-          Stop
+          className="bg-white p-4 m-2 disabled:opacity-30"
+          onClick={() => stopRecording()}
+          disabled={
+            !recorder.active || !RecorderStatus.isRecording(recorder.status)
+          }>
+          CUT!
         </button>
       </div>
       {children}
     </div>
   );
+}
+
+/**
+ * @param {string} value
+ */
+function isStartingOrRecording(value) {
+  return value === 'starting' || value === 'recording';
+}
+
+/**
+ * @param {string} value
+ */
+function isStopped(value) {
+  return value === 'stopped';
 }

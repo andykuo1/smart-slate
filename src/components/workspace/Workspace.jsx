@@ -9,9 +9,11 @@ import {
   useDocumentTitle,
   useSetDocumentTitle,
 } from '@/stores/DocumentStoreContext';
+import RecorderStatus from '@/stores/RecorderStatus';
 import {
   useCurrentDocumentId,
   useCurrentRecorder,
+  useRecorderStatus,
   useSetRecorderActive,
   useSetUserCursor,
 } from '@/stores/UserStoreContext';
@@ -22,7 +24,8 @@ import WelcomePanel from './WelcomePanel';
 
 export default function Workspace() {
   const documentId = useCurrentDocumentId();
-  const recorderActive = useCurrentRecorder()?.active || false;
+  const recorder = useCurrentRecorder();
+  const recorderStatus = useRecorderStatus();
 
   return (
     <>
@@ -38,16 +41,16 @@ export default function Workspace() {
         className={
           'absolute top-0 left-0 bottom-0 right-0 z-10 w-full h-full flex flex-col' +
           ' ' +
-          (documentId && recorderActive ? '' : 'hidden')
+          (documentId && recorder.active ? '' : 'hidden')
         }>
-        <DarkHomeButton />
+        <DarkHomeButton disabled={!RecorderStatus.isDone(recorderStatus)} />
         <VideoBooth />
       </div>
       <div
         className={
           'absolute top-0 left-0 bottom-0 right-0 z-0 w-full h-full flex flex-col' +
           ' ' +
-          (documentId && !recorderActive ? '' : 'hidden')
+          (documentId && !recorder.active ? '' : 'hidden')
         }>
         <HomeButton />
         <ProjectTitle documentId={documentId} />
@@ -60,15 +63,16 @@ export default function Workspace() {
 /**
  * @param {object} props
  * @param {string} [props.className]
+ * @param {boolean} [props.disabled]
  */
-function DarkHomeButton({ className }) {
+function DarkHomeButton({ className, disabled }) {
   const setUserCursor = useSetUserCursor();
   const recorderActive = useCurrentRecorder()?.active || false;
   const setRecorderActive = useSetRecorderActive();
 
   function onReturnHomeClick() {
     if (recorderActive) {
-      setRecorderActive(false);
+      setRecorderActive(false, false);
     } else {
       setUserCursor('', '', '', '');
     }
@@ -79,6 +83,7 @@ function DarkHomeButton({ className }) {
       <FancyButton
         className="to-black text-white hover:to-gray-800"
         title="Back"
+        disabled={disabled}
         onClick={onReturnHomeClick}>
         <BackIcon className="inline w-6 fill-current" />
       </FancyButton>
@@ -88,15 +93,16 @@ function DarkHomeButton({ className }) {
 /**
  * @param {object} props
  * @param {string} [props.className]
+ * @param {boolean} [props.disabled]
  */
-function HomeButton({ className }) {
+function HomeButton({ className, disabled }) {
   const setUserCursor = useSetUserCursor();
   const recorderActive = useCurrentRecorder()?.active || false;
   const setRecorderActive = useSetRecorderActive();
 
   function onReturnHomeClick() {
     if (recorderActive) {
-      setRecorderActive(false);
+      setRecorderActive(false, false);
     } else {
       setUserCursor('', '', '', '');
     }
@@ -106,7 +112,8 @@ function HomeButton({ className }) {
     <div className="fixed m-2 z-10">
       <FancyButton
         className={className}
-        title="Back"
+        title="Exit"
+        disabled={disabled}
         onClick={onReturnHomeClick}>
         <BackIcon className="inline w-6 fill-current" />
       </FancyButton>

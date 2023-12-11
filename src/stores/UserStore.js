@@ -3,6 +3,7 @@
  * @typedef {ReturnType<createCursor>} Cursor
  * @typedef {ReturnType<createRecorder>} Recorder
  */
+import { IDLE } from './RecorderStatus';
 
 export function createStore() {
   return {
@@ -26,6 +27,9 @@ export function createCursor() {
 
 export function createRecorder() {
   return {
+    /** @type {string|Error} */
+    status: IDLE,
     active: false,
+    forceStart: false,
   };
 }
