@@ -57,9 +57,11 @@ function isDone(status) {
   );
 }
 
-export default {
+const result = {
   values,
   isPreparing,
   isRecording,
   isDone,
 };
+
+export default result;

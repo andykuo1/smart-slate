@@ -66,7 +66,7 @@ export default function RecorderPanel({ children, onChange }) {
       setRecorderStatus(status);
       onChange({ status, data: '' });
     },
-    [onChange],
+    [setRecorderStatus, onChange],
   );
   const { startRecording, stopRecording } = useMediaRecorder({
     blobOptions: {
@@ -88,7 +88,7 @@ export default function RecorderPanel({ children, onChange }) {
       setRecorderActive(true, false);
       startRecording();
     }
-  }, [recorder, setRecorderActive]);
+  }, [recorder, setRecorderActive, startRecording]);
 
   return (
     <div className="relative flex flex-col items-center bg-black w-full h-full">

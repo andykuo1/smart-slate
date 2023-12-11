@@ -36,7 +36,9 @@ export function DeviceSelector({ onDeviceChange }) {
       {devices
         .filter((device) => device.kind === 'videoinput')
         .map((device, index) => (
-          <option value={device.deviceId}>Video Input {index}</option>
+          <option key={device.deviceId} value={device.deviceId}>
+            Video Input {index}
+          </option>
         ))}
     </select>
   );

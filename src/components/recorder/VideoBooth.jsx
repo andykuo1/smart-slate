@@ -53,7 +53,7 @@ export default function VideoBooth() {
       );
       downloadURLImpl(exportedFileName, data);
     },
-    [addTake, cursor, exportedFileName],
+    [addTake, cursor, exportedFileName, setUserCursor],
   );
 
   return (

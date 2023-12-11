@@ -84,7 +84,7 @@ export function useMediaRecorder({
         onStop(blob);
       }
     },
-    [onDataAvailableImpl, onErrorImpl, onStop, onStatus],
+    [blobOptions, onDataAvailableImpl, onErrorImpl, onStop, onStatus],
   );
 
   const onStartImpl = useCallback(
@@ -150,7 +150,13 @@ export function useMediaRecorder({
         onErrorImpl({ error: e });
       }
     },
-    [prepareRecording, onErrorImpl, onStartImpl, onStatus],
+    [
+      mediaRecorderOptions,
+      prepareRecording,
+      onErrorImpl,
+      onStartImpl,
+      onStatus,
+    ],
   );
 
   const stopRecording = useCallback(

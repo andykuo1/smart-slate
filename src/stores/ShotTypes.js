@@ -49,8 +49,10 @@ function getParamsByType(value) {
   return PARAM_BY_VALUES[value];
 }
 
-export default {
+const result = {
   values,
   params,
   getParamsByType,
 };
+
+export default result;

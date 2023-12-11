@@ -101,7 +101,12 @@ function SceneContent({ documentId, sceneId }) {
   return (
     <ul className="mx-8">
       {shotIds.map((shotId) => (
-        <ShotHeader documentId={documentId} sceneId={sceneId} shotId={shotId} />
+        <ShotHeader
+          key={shotId}
+          documentId={documentId}
+          sceneId={sceneId}
+          shotId={shotId}
+        />
       ))}
       <NewShotHeader documentId={documentId} sceneId={sceneId} />
     </ul>
