@@ -16,6 +16,8 @@
 - Change store to object version
 - Add shot types
 - Add new recorder
+- Update horizontal scroller to scroll vertically
+- Add write updates to timestamp
 
 # 0.0.6
 

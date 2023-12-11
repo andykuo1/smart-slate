@@ -130,6 +130,7 @@ export function getTakeIdsInOrder(store, documentId, shotId) {
  */
 function incrementDocumentRevisionNumber(document) {
   document.revisionNumber += 1;
+  document.lastUpdatedMillis = Date.now();
 }
 
 /**
@@ -273,6 +274,7 @@ function deleteTake(store, documentId, takeId) {
 function updateDocument(store, documentId, handler) {
   let document = store.documents[documentId];
   handler(document, documentId, store);
+  incrementDocumentRevisionNumber(document);
 }
 
 /**
@@ -283,6 +285,7 @@ function updateDocument(store, documentId, handler) {
 function setDocumentTitle(store, documentId, title) {
   let document = store.documents[documentId];
   document.documentTitle = title;
+  incrementDocumentRevisionNumber(document);
 }
 
 /**
@@ -303,6 +306,7 @@ function updateShot(store, documentId, shotId, handler) {
   let document = store.documents[documentId];
   let shot = document.shots[shotId];
   handler(shot, shotId, documentId, store);
+  incrementDocumentRevisionNumber(document);
 }
 
 /**
@@ -315,6 +319,7 @@ function setShotType(store, documentId, shotId, shotType) {
   let document = store.documents[documentId];
   let shot = document.shots[shotId];
   shot.shotType = shotType;
+  incrementDocumentRevisionNumber(document);
 }
 
 /**
@@ -327,4 +332,5 @@ function setShotDescription(store, documentId, shotId, description) {
   let document = store.documents[documentId];
   let shot = document.shots[shotId];
   shot.description = description;
+  incrementDocumentRevisionNumber(document);
 }
