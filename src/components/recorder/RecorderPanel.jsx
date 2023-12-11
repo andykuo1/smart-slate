@@ -85,6 +85,15 @@ export default function RecorderPanel({ children, onChange }) {
 
   const { inputRef, startCapturing } = useInputCapture();
 
+  const onInputCaptureChange = useCallback(
+    /** @type {MediaRecorderChangeEventHandler} */
+    function onInputCaptureChange(e) {
+      onChange(e);
+      setRecorderActive(false, false);
+    },
+    [onChange, setRecorderActive],
+  );
+
   useEffect(() => {
     if (recorder.active && recorder.forceStart) {
       setRecorderActive(true, false);
@@ -98,7 +107,7 @@ export default function RecorderPanel({ children, onChange }) {
 
   return (
     <div className="relative flex flex-col items-center bg-black w-full h-full">
-      <VideoInputCapture inputRef={inputRef} onChange={() => {}} />
+      <VideoInputCapture inputRef={inputRef} onChange={onInputCaptureChange} />
       <div className="flex-1" />
       <video className="w-full h-full bg-neutral-900" ref={videoRef} />
       <div className="flex-1" />

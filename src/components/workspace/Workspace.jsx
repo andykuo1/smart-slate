@@ -40,7 +40,10 @@ export default function Workspace() {
           ' ' +
           (documentId && recorder.active ? '' : 'hidden')
         }>
-        <DarkHomeButton disabled={!RecorderStatus.isDone(recorderStatus)} />
+        <DarkHomeButton
+          className="bg-black"
+          disabled={!RecorderStatus.isDone(recorderStatus)}
+        />
         <VideoBooth />
       </div>
       <div
