@@ -17,6 +17,13 @@ export function createDispatch(set) {
     deleteShot: zi(set, deleteShot),
     deleteTake: zi(set, deleteTake),
 
+    setDocumentTitle: zi(set, setDocumentTitle),
+    updateDocument: zi(set, updateDocument),
+
+    setShotType: zi(set, setShotType),
+    setShotDescription: zi(set, setShotDescription),
+    updateShot: zi(set, updateShot),
+
     incrementDocumentRevisionNumber: zi(set, incrementDocumentRevisionNumber),
   };
 }
@@ -26,7 +33,7 @@ export function createDispatch(set) {
  * @param {import('./DocumentStore').DocumentId} documentId
  */
 export function getDocumentById(store, documentId) {
-  return store.documents[documentId];
+  return store?.documents?.[documentId];
 }
 
 /**
@@ -35,7 +42,7 @@ export function getDocumentById(store, documentId) {
  * @param {import('./DocumentStore').SceneId} sceneId
  */
 export function getSceneById(store, documentId, sceneId) {
-  return store.documents[documentId]?.scenes[sceneId];
+  return store?.documents?.[documentId]?.scenes[sceneId];
 }
 
 /**
@@ -44,7 +51,7 @@ export function getSceneById(store, documentId, sceneId) {
  * @param {import('./DocumentStore').ShotId} shotId
  */
 export function getShotById(store, documentId, shotId) {
-  return store.documents[documentId]?.shots[shotId];
+  return store?.documents?.[documentId]?.shots[shotId];
 }
 
 /**
@@ -53,7 +60,7 @@ export function getShotById(store, documentId, shotId) {
  * @param {import('./DocumentStore').TakeId} takeId
  */
 export function getTakeById(store, documentId, takeId) {
-  return store.documents[documentId]?.takes[takeId];
+  return store?.documents?.[documentId]?.takes[takeId];
 }
 
 /**
@@ -62,7 +69,7 @@ export function getTakeById(store, documentId, takeId) {
  * @param {import('./DocumentStore').SceneId} sceneId
  */
 export function getSceneIndex(store, documentId, sceneId) {
-  return store?.documents[documentId]?.sceneOrder.indexOf(sceneId);
+  return store?.documents?.[documentId]?.sceneOrder.indexOf(sceneId) + 1;
 }
 
 /**
@@ -72,7 +79,7 @@ export function getSceneIndex(store, documentId, sceneId) {
  * @param {import('./DocumentStore').ShotId} shotId
  */
 export function getShotIndex(store, documentId, sceneId, shotId) {
-  return getSceneById(store, documentId, sceneId)?.shotIds.indexOf(shotId);
+  return getSceneById(store, documentId, sceneId)?.shotIds.indexOf(shotId) + 1;
 }
 
 /**
@@ -82,7 +89,14 @@ export function getShotIndex(store, documentId, sceneId, shotId) {
  * @param {import('./DocumentStore').TakeId} takeId
  */
 export function getTakeIndex(store, documentId, shotId, takeId) {
-  return getShotById(store, documentId, shotId)?.takeIds.indexOf(takeId);
+  return getShotById(store, documentId, shotId)?.takeIds.indexOf(takeId) + 1;
+}
+
+/**
+ * @param {import('./DocumentStore').Store} store
+ */
+export function getDocumentIds(store) {
+  return Object.keys(store.documents);
 }
 
 /**
@@ -90,7 +104,7 @@ export function getTakeIndex(store, documentId, shotId, takeId) {
  * @param {import('./DocumentStore').DocumentId} documentId
  */
 export function getSceneIdsInOrder(store, documentId) {
-  return getDocumentById(store, documentId)?.sceneOrder;
+  return getDocumentById(store, documentId)?.sceneOrder || [];
 }
 
 /**
@@ -99,7 +113,7 @@ export function getSceneIdsInOrder(store, documentId) {
  * @param {import('./DocumentStore').SceneId} sceneId
  */
 export function getShotIdsInOrder(store, documentId, sceneId) {
-  return getSceneById(store, documentId, sceneId)?.shotIds;
+  return getSceneById(store, documentId, sceneId)?.shotIds || [];
 }
 
 /**
@@ -108,13 +122,13 @@ export function getShotIdsInOrder(store, documentId, sceneId) {
  * @param {import('./DocumentStore').ShotId} shotId
  */
 export function getTakeIdsInOrder(store, documentId, shotId) {
-  return getShotById(store, documentId, shotId)?.takeIds;
+  return getShotById(store, documentId, shotId)?.takeIds || [];
 }
 
 /**
  * @param {import('./DocumentStore').Document} document
  */
-export function incrementDocumentRevisionNumber(document) {
+function incrementDocumentRevisionNumber(document) {
   document.revisionNumber += 1;
 }
 
@@ -122,7 +136,7 @@ export function incrementDocumentRevisionNumber(document) {
  * @param {import('./DocumentStore').Store} store
  * @param {import('./DocumentStore').Document} document
  */
-export function addDocument(store, document) {
+function addDocument(store, document) {
   store.documents[document.documentId] = document;
   incrementDocumentRevisionNumber(document);
 }
@@ -132,7 +146,7 @@ export function addDocument(store, document) {
  * @param {import('./DocumentStore').DocumentId} documentId
  * @param {import('./DocumentStore').Scene} scene
  */
-export function addScene(store, documentId, scene) {
+function addScene(store, documentId, scene) {
   let document = store.documents[documentId];
   document.scenes[scene.sceneId] = scene;
   document.sceneOrder.push(scene.sceneId);
@@ -145,7 +159,7 @@ export function addScene(store, documentId, scene) {
  * @param {import('./DocumentStore').SceneId} sceneId
  * @param {import('./DocumentStore').Shot} shot
  */
-export function addShot(store, documentId, sceneId, shot) {
+function addShot(store, documentId, sceneId, shot) {
   let document = store.documents[documentId];
   let scene = document.scenes[sceneId];
   document.shots[shot.shotId] = shot;
@@ -159,7 +173,7 @@ export function addShot(store, documentId, sceneId, shot) {
  * @param {import('./DocumentStore').ShotId} shotId
  * @param {import('./DocumentStore').Take} take
  */
-export function addTake(store, documentId, shotId, take) {
+function addTake(store, documentId, shotId, take) {
   let document = store.documents[documentId];
   let shot = document.shots[shotId];
   document.takes[take.takeId] = take;
@@ -171,7 +185,7 @@ export function addTake(store, documentId, shotId, take) {
  * @param {import('./DocumentStore').Store} store
  * @param {import('./DocumentStore').DocumentId} documentId
  */
-export function deleteDocument(store, documentId) {
+function deleteDocument(store, documentId) {
   let document = store.documents[documentId];
   delete store.documents[documentId];
   incrementDocumentRevisionNumber(document);
@@ -182,7 +196,7 @@ export function deleteDocument(store, documentId) {
  * @param {import('./DocumentStore').DocumentId} documentId
  * @param {import('./DocumentStore').SceneId} sceneId
  */
-export function deleteScene(store, documentId, sceneId) {
+function deleteScene(store, documentId, sceneId) {
   let document = store.documents[documentId];
   let scene = document.scenes[sceneId];
   // Remove shots from scene
@@ -204,7 +218,7 @@ export function deleteScene(store, documentId, sceneId) {
  * @param {import('./DocumentStore').DocumentId} documentId
  * @param {import('./DocumentStore').ShotId} shotId
  */
-export function deleteShot(store, documentId, shotId) {
+function deleteShot(store, documentId, shotId) {
   let document = store.documents[documentId];
   let shot = document.shots[shotId];
   // Remove takes from shot
@@ -230,7 +244,7 @@ export function deleteShot(store, documentId, shotId) {
  * @param {import('./DocumentStore').DocumentId} documentId
  * @param {import('./DocumentStore').TakeId} takeId
  */
-export function deleteTake(store, documentId, takeId) {
+function deleteTake(store, documentId, takeId) {
   let document = store.documents[documentId];
   // Remove from any shot referencing this take
   for (let { takeIds } of Object.values(document.shots)) {
@@ -242,4 +256,75 @@ export function deleteTake(store, documentId, takeId) {
   // Remove from document
   delete document.takes[takeId];
   incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @callback UpdateDocumentHandler
+ * @param {import('./DocumentStore').Document} document
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').Store} store
+ */
+
+/**
+ * @param {import('./DocumentStore').Store} store
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {UpdateDocumentHandler} handler
+ */
+function updateDocument(store, documentId, handler) {
+  let document = store.documents[documentId];
+  handler(document, documentId, store);
+}
+
+/**
+ * @param {import('./DocumentStore').Store} store
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {string} title
+ */
+function setDocumentTitle(store, documentId, title) {
+  let document = store.documents[documentId];
+  document.documentTitle = title;
+}
+
+/**
+ * @callback UpdateShotHandler
+ * @param {import('./DocumentStore').Shot} shot
+ * @param {import('./DocumentStore').ShotId} shotId
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').Store} store
+ */
+
+/**
+ * @param {import('./DocumentStore').Store} store
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').ShotId} shotId
+ * @param {UpdateShotHandler} handler
+ */
+function updateShot(store, documentId, shotId, handler) {
+  let document = store.documents[documentId];
+  let shot = document.shots[shotId];
+  handler(shot, shotId, documentId, store);
+}
+
+/**
+ * @param {import('./DocumentStore').Store} store
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').ShotId} shotId
+ * @param {import('./DocumentStore').ShotType} shotType
+ */
+function setShotType(store, documentId, shotId, shotType) {
+  let document = store.documents[documentId];
+  let shot = document.shots[shotId];
+  shot.shotType = shotType;
+}
+
+/**
+ * @param {import('./DocumentStore').Store} store
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').ShotId} shotId
+ * @param {string} description
+ */
+function setShotDescription(store, documentId, shotId, description) {
+  let document = store.documents[documentId];
+  let shot = document.shots[shotId];
+  shot.description = description;
 }

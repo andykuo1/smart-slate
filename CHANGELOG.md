@@ -1,3 +1,21 @@
+# Upcoming
+
+- Separate release versions
+- When you hit record, RECORD IT NOW!
+- Make it an installable app.
+- DaVinci Resolve tagging API
+  - Save this metadata?
+  - Or remove the input text boxes.
+- When stop recording, save it to `Camera Roll`.
+  - Save inside a folder?
+  - Save to Camera Roll for importing.
+- Timeline: December 18th.
+
+# 0.1.0
+
+- Change store to object version
+- Add shot types
+
 # 0.0.6
 
 - Update document title for save file.

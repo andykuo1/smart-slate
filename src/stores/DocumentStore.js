@@ -11,6 +11,8 @@ import { uuid } from '../utils/uuid';
  * @typedef {string} SceneId
  * @typedef {string} ShotId
  * @typedef {string} TakeId
+ *
+ * @typedef {'wide'|'medium'|'closeup'|'full'|'long'|''} ShotType
  */
 
 export function createStore() {
@@ -26,6 +28,8 @@ export function createStore() {
 export function createDocument(documentId = uuid()) {
   return {
     documentId,
+    documentTitle: '',
+    lastUpdatedMillis: 0,
     revisionNumber: 0,
     /** @type {Array<SceneId>} */
     sceneOrder: [],
@@ -44,7 +48,7 @@ export function createDocument(documentId = uuid()) {
 export function createScene(sceneId = uuid()) {
   return {
     sceneId,
-    title: '',
+    sceneName: '',
     /** @type {Array<ShotId>} */
     shotIds: [],
   };
@@ -56,6 +60,8 @@ export function createScene(sceneId = uuid()) {
 export function createShot(shotId = uuid()) {
   return {
     shotId,
+    /** @type {ShotType} */
+    shotType: '',
     description: '',
     /** @type {Array<TakeId>} */
     takeIds: [],
@@ -95,6 +101,7 @@ export function cloneStore(out, store) {
  */
 export function cloneDocument(out, document) {
   out.documentId = document.documentId;
+  out.documentTitle = document.documentTitle;
   out.revisionNumber = document.revisionNumber;
   out.sceneOrder = document.sceneOrder.slice();
 
@@ -136,7 +143,7 @@ export function cloneDocument(out, document) {
 export function cloneScene(out, scene) {
   out.sceneId = scene.sceneId;
   out.shotIds = scene.shotIds.slice();
-  out.title = scene.title;
+  out.sceneName = scene.sceneName;
   return /** @type {Scene} */ (out);
 }
 
@@ -147,6 +154,7 @@ export function cloneScene(out, scene) {
  */
 export function cloneShot(out, shot) {
   out.shotId = shot.shotId;
+  out.shotType = shot.shotType;
   out.description = shot.description;
   out.takeIds = shot.takeIds.slice();
   return /** @type {Shot} */ (out);

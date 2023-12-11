@@ -15,6 +15,7 @@ export const useUserStore = create(
   persist(
     (set) => ({
       ...createStore(),
+      // @ts-ignore
       ...createDispatch(set),
     }),
     {
@@ -24,7 +25,19 @@ export const useUserStore = create(
   ),
 );
 
-export function useCursorSceneShotTakeNumbers() {
+export function useCurrentDocumentId() {
+  return useUserStore((ctx) => ctx.cursor?.documentId);
+}
+
+export function useSetUserCursor() {
+  return useUserStore((ctx) => ctx.setUserCursor);
+}
+
+export function useCurrentCursor() {
+  return useUserStore((ctx) => ctx.cursor);
+}
+
+export function useCurrentSceneShotTakeNumbers() {
   const cursor = useUserStore((ctx) => ctx.cursor);
   const sceneIndex = useDocumentStore((ctx) =>
     getSceneIndex(ctx, cursor.documentId, cursor.sceneId),

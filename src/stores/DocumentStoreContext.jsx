@@ -1,7 +1,18 @@
+import { useShallow } from 'zustand/react/shallow';
+
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-import { createDispatch } from './DocumentDispatch';
+import {
+  createDispatch,
+  getDocumentIds,
+  getSceneIdsInOrder,
+  getSceneIndex,
+  getShotById,
+  getShotIdsInOrder,
+  getShotIndex,
+  getTakeIdsInOrder,
+} from './DocumentDispatch';
 import { createStore } from './DocumentStore';
 
 export const LOCAL_STORAGE_KEY = 'documentStore';
@@ -13,6 +24,7 @@ export const useDocumentStore = create(
   persist(
     (set) => ({
       ...createStore(),
+      // @ts-ignore
       ...createDispatch(set),
     }),
     {
@@ -21,3 +33,133 @@ export const useDocumentStore = create(
     },
   ),
 );
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ */
+export function useDocument(documentId) {
+  return useDocumentStore((ctx) => ctx.documents[documentId]);
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ */
+export function useDocumentTitle(documentId) {
+  return useDocumentStore((ctx) => ctx.documents?.[documentId]?.documentTitle);
+}
+
+export function useSetDocumentTitle() {
+  return useDocumentStore((ctx) => ctx.setDocumentTitle);
+}
+
+export function useDocumentIds() {
+  return useDocumentStore(useShallow((ctx) => getDocumentIds(ctx)));
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ */
+export function useDocumentLastUpdatedMillis(documentId) {
+  return useDocumentStore(
+    (ctx) => ctx.documents?.[documentId]?.lastUpdatedMillis,
+  );
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ */
+export function useSceneIds(documentId) {
+  return useDocumentStore(
+    useShallow((ctx) => getSceneIdsInOrder(ctx, documentId)),
+  );
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').SceneId} sceneId
+ */
+export function useShotIds(documentId, sceneId) {
+  return useDocumentStore((ctx) => getShotIdsInOrder(ctx, documentId, sceneId));
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').ShotId} shotId
+ */
+export function useTakeIds(documentId, shotId) {
+  return useDocumentStore(
+    useShallow((ctx) => getTakeIdsInOrder(ctx, documentId, shotId)),
+  );
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').SceneId} sceneId
+ */
+export function useSceneNumber(documentId, sceneId) {
+  return useDocumentStore((ctx) => getSceneIndex(ctx, documentId, sceneId));
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').SceneId} sceneId
+ * @param {import('./DocumentStore').ShotId} shotId
+ */
+export function useShotNumber(documentId, sceneId, shotId) {
+  return useDocumentStore((ctx) =>
+    getShotIndex(ctx, documentId, sceneId, shotId),
+  );
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').ShotId} shotId
+ */
+export function useShotType(documentId, shotId) {
+  return (
+    useDocumentStore((ctx) => getShotById(ctx, documentId, shotId)?.shotType) ||
+    ''
+  );
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').ShotId} shotId
+ */
+export function useSetShotType(documentId, shotId) {
+  return useDocumentStore((ctx) => ctx.setShotType);
+}
+
+export function useAddScene() {
+  return useDocumentStore((ctx) => ctx.addScene);
+}
+
+export function useAddShot() {
+  return useDocumentStore((ctx) => ctx.addShot);
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').ShotId} shotId
+ */
+export function useShotTakeCount(documentId, shotId) {
+  return useDocumentStore(
+    (ctx) =>
+      Object.keys(getShotById(ctx, documentId, shotId)?.takeIds || {}).length ||
+      0,
+  );
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').ShotId} shotId
+ */
+export function useShotDescription(documentId, shotId) {
+  return useDocumentStore(
+    (ctx) => getShotById(ctx, documentId, shotId)?.description,
+  );
+}
+
+export function useSetShotDescription() {
+  return useDocumentStore((ctx) => ctx.setShotDescription);
+}
