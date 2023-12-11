@@ -24,24 +24,37 @@ export default function Workspace() {
   const documentId = useCurrentDocumentId();
   const recorderActive = useCurrentRecorder()?.active || false;
 
-  if (!documentId) {
-    return <WelcomePanel />;
-  } else if (recorderActive) {
-    return (
-      <>
+  return (
+    <>
+      <div
+        className={
+          'absolute top-0 left-0 bottom-0 right-0 z-20 w-full h-full flex flex-col' +
+          ' ' +
+          (documentId ? 'hidden' : '')
+        }>
+        <WelcomePanel />
+      </div>
+      <div
+        className={
+          'absolute top-0 left-0 bottom-0 right-0 z-10 w-full h-full flex flex-col' +
+          ' ' +
+          (documentId && recorderActive ? '' : 'hidden')
+        }>
         <DarkHomeButton />
         <VideoBooth />
-      </>
-    );
-  } else {
-    return (
-      <>
+      </div>
+      <div
+        className={
+          'absolute top-0 left-0 bottom-0 right-0 z-0 w-full h-full flex flex-col' +
+          ' ' +
+          (documentId && !recorderActive ? '' : 'hidden')
+        }>
         <HomeButton />
         <ProjectTitle documentId={documentId} />
         <SceneListPanel documentId={documentId} />
-      </>
-    );
-  }
+      </div>
+    </>
+  );
 }
 
 /**

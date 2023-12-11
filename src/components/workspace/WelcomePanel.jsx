@@ -4,6 +4,7 @@ import AddIcon from '@material-symbols/svg-400/rounded/add-fill.svg';
 import UploadIcon from '@material-symbols/svg-400/rounded/upload-fill.svg';
 
 import FancyButton from '@/components/lib/FancyButton';
+import HorizontallyScrollableDiv from '@/components/lib/HorizontallyScrollableDiv';
 import { createDocument } from '@/stores/DocumentStore';
 import {
   useDocumentIds,
@@ -68,9 +69,9 @@ function SavedProjectView({ className }) {
         className="mx-auto my-2 text-gray-400">
         Or open an existing project...
       </label>
-      <div
+      <HorizontallyScrollableDiv
         className={
-          'w-[60%] max-w-[60%] rounded-xl bg-black border-x-8 border-y-4 border-black overflow-x-auto overflow-y-hidden' +
+          'w-[60%] max-w-[60%] rounded-xl bg-black border-x-8 border-y-4 border-black' +
           ' ' +
           className
         }>
@@ -85,7 +86,7 @@ function SavedProjectView({ className }) {
             |
           </div>
         </ul>
-      </div>
+      </HorizontallyScrollableDiv>
     </>
   );
 }
