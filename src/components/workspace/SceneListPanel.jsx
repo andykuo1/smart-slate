@@ -1,6 +1,8 @@
 'use client';
 
 import BarberpoleStyle from '@/app/barberpole.module.css';
+import RecordButton from '@/components/lib/RecordButton';
+import { choosePlaceholderRandomly } from '@/constants/PlaceholderText';
 import {
   createScene,
   createShot,
@@ -11,9 +13,7 @@ import {
   useAddShot,
   useSceneIds,
   useSceneNumber,
-  useSetShotDescription,
   useSetShotType,
-  useShotDescription,
   useShotIds,
   useShotNumber,
   useShotTakeCount,
@@ -26,6 +26,9 @@ import {
   useSetUserCursor,
 } from '@/stores/UserStoreContext';
 
+import SceneProjectTitle from './SceneProjectTitle';
+import { ShotNotes } from './SceneShotEntry';
+
 /**
  * @param {object} props
  * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
@@ -33,15 +36,18 @@ import {
 export default function SceneList({ documentId }) {
   const sceneIds = useSceneIds(documentId);
   return (
-    <ul className="w-full h-full overflow-x-hidden overflow-y-auto">
-      {sceneIds.map((sceneId) => (
-        <>
-          <SceneHeader documentId={documentId} sceneId={sceneId} />
-          <SceneContent documentId={documentId} sceneId={sceneId} />
-        </>
-      ))}
-      <NewSceneHeader documentId={documentId} />
-    </ul>
+    <div className="w-full h-full overflow-x-hidden overflow-y-auto py-20">
+      <SceneProjectTitle documentId={documentId} />
+      <ul>
+        {sceneIds.map((sceneId) => (
+          <>
+            <SceneHeader documentId={documentId} sceneId={sceneId} />
+            <SceneContent documentId={documentId} sceneId={sceneId} />
+          </>
+        ))}
+        <NewSceneHeader documentId={documentId} />
+      </ul>
+    </div>
   );
 }
 
@@ -137,53 +143,32 @@ function ShotHeader({ documentId, sceneId, shotId }) {
   return (
     <li
       className={
-        'flex flex-row border-b border-gray-300 w-full h-[5rem] pl-2 overflow-hidden' +
+        'flex flex-row border-b border-gray-300 w-full h-[5rem] overflow-x-auto' +
+        ' ' +
+        'snap-x snap-mandatory overscroll-x-none' +
         ' ' +
         (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
       }>
-      <ScenShotTakeType
-        scene={sceneNumber}
-        shot={shotNumber}
-        take={takeCount > 0 ? takeCount + 1 : takeCount}
-        type={() => (
-          <ShotTypesSelector documentId={documentId} shotId={shotId} />
-        )}
-      />
-      <div className="flex-1 flex flex-row">
-        <button
-          className={'mx-4 px-4 my-auto rounded-full bg-red-300 text-black'}
-          onClick={onClick}>
-          {isActive ? 'Recording ...' : `+ Record #${takeCount + 1}`}
-        </button>
+      <div className="w-full flex-shrink-0 flex flex-row snap-start">
+        <ScenShotTakeType
+          scene={sceneNumber}
+          shot={shotNumber}
+          take={takeCount > 0 ? takeCount + 1 : takeCount}
+          type={() => (
+            <ShotTypesSelector documentId={documentId} shotId={shotId} />
+          )}
+        />
+        <div className="group w-full h-full flex flex-row items-center text-center">
+          <RecordButton onClick={onClick} />
+          <div className="flex-1 opacity-30 text-xs">
+            {choosePlaceholderRandomly(shotId)}
+          </div>
+        </div>
+      </div>
+      <div className="w-full flex-shrink-0 flex flex-row snap-start">
         <ShotNotes className="flex-1" documentId={documentId} shotId={shotId} />
       </div>
     </li>
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} [props.className]
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').ShotId} props.shotId
- */
-function ShotNotes({ className, documentId, shotId }) {
-  const description = useShotDescription(documentId, shotId);
-  const setShotDescription = useSetShotDescription();
-
-  /** @type {import('react').ChangeEventHandler<HTMLTextAreaElement>} */
-  function onChange(e) {
-    let el = e.target;
-    setShotDescription(documentId, shotId, el.value);
-  }
-
-  return (
-    <textarea
-      className={'resize-none m-1 p-2 bg-transparent' + ' ' + className}
-      value={description}
-      onChange={onChange}
-      placeholder="Additional notes..."
-    />
   );
 }
 

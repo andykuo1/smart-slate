@@ -5,10 +5,6 @@ import { useCallback } from 'react';
 import BackIcon from '@material-symbols/svg-400/rounded/arrow_back-fill.svg';
 
 import FancyButton from '@/components/lib/FancyButton';
-import {
-  useDocumentTitle,
-  useSetDocumentTitle,
-} from '@/stores/DocumentStoreContext';
 import RecorderStatus from '@/stores/RecorderStatus';
 import {
   useCurrentDocumentId,
@@ -53,8 +49,7 @@ export default function Workspace() {
           ' ' +
           (documentId && !recorder.active ? '' : 'hidden')
         }>
-        <HomeButton />
-        <ProjectTitle documentId={documentId} />
+        <HomeButton className="bg-white" />
         <SceneListPanel documentId={documentId} />
       </div>
       <MadeWithLove />
@@ -120,41 +115,5 @@ function HomeButton({ className, disabled }) {
         <BackIcon className="inline w-6 fill-current" />
       </FancyButton>
     </div>
-  );
-}
-
-/**
- * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- */
-function ProjectTitle({ documentId }) {
-  const documentTitle = useDocumentTitle(documentId);
-  const setDocumentTitle = useSetDocumentTitle();
-  const onDocumentTitleChange = useCallback(
-    /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
-    function onTitleChange(e) {
-      let el = e.target;
-      setDocumentTitle(documentId, el.value);
-    },
-    [documentId, setDocumentTitle],
-  );
-
-  return (
-    <h2 className="flex flex-col text-center my-2">
-      <div className="flex-1 flex flex-row">
-        <div className="flex-1" />
-        <input
-          className="text-center text-2xl"
-          value={documentTitle}
-          placeholder="Untitled"
-          onChange={onDocumentTitleChange}
-        />
-        <div className="flex-1" />
-      </div>
-      <label className="text-xs opacity-30">
-        <span>ID: </span>
-        <output>{documentId}</output>
-      </label>
-    </h2>
   );
 }

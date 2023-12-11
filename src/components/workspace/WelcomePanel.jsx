@@ -14,6 +14,8 @@ import {
 } from '@/stores/DocumentStoreContext';
 import { useSetUserCursor } from '@/stores/UserStoreContext';
 
+import AppTitle from './AppTitle';
+
 export default function WelcomePanel() {
   const addDocument = useDocumentStore((ctx) => ctx.addDocument);
   const setUserCursor = useSetUserCursor();
@@ -31,9 +33,7 @@ export default function WelcomePanel() {
 
   return (
     <>
-      <h1 className="text-center mx-auto mt-auto mb-10 text-9xl underline pointer-events-none whitespace-nowrap">
-        [🗒️🎬🎥]
-      </h1>
+      <AppTitle />
       <div className="flex flex-row text-center mx-auto">
         <FancyButton
           title="New Project"

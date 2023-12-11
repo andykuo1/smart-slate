@@ -18,6 +18,8 @@
 - Update horizontal scroller to scroll vertically
 - Add write updates to timestamp
 - Update record to start immediately
+- Add some fun placeholder text (for now)
+- Fallback to input capture if MediaRecorder is unavailable
 
 # 0.0.6
 
