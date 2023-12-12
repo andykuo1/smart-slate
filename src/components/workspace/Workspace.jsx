@@ -19,7 +19,6 @@ export default function Workspace() {
   const documentId = useCurrentDocumentId();
   const recorder = useCurrentRecorder();
   const recorderStatus = useRecorderStatus();
-
   return (
     <>
       <div
