@@ -215,7 +215,7 @@ export function ScenShotTakeType({ className, scene, shot, take, type }) {
       <tr className="text-xl align-bottom scale-y-125 whitespace-nowrap">
         <td className="font-mono text-right">{sceneString}</td>
         <td className="font-mono text-left">{shotString}</td>
-        <td className="font-mono px-2">{takeString}</td>
+        <td className="font-mono px-2">#{takeString}</td>
         <td className="font-mono">{type()}</td>
       </tr>
       <tr className="text-xs select-none transition-opacity opacity-0 group-hover:opacity-30 align-top">

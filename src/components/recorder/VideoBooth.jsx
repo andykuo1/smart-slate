@@ -9,14 +9,9 @@ import {
   useShotNumber,
   useShotTakeCount,
   useShotType,
-  useTakeNumber,
 } from '@/stores/DocumentStoreContext';
 import { ANY_SHOT } from '@/stores/ShotTypes';
-import {
-  useCurrentCursor,
-  useCurrentRecorder,
-  useSetUserCursor,
-} from '@/stores/UserStoreContext';
+import { useCurrentCursor, useSetUserCursor } from '@/stores/UserStoreContext';
 import { downloadURLImpl } from '@/utils/Downloader';
 
 import RecorderPanel from './RecorderPanel';
@@ -124,7 +119,7 @@ export function useNextAvailableExportedFileName() {
     shotType,
   );
   return (
-    `${documentTitle}_${scen}${shot}${take}` +
+    `${documentTitle}_S${scen}${shot}_T${take}` +
     (shotType !== ANY_SHOT.value ? `_${type}` : '')
   );
 }

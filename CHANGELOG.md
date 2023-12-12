@@ -10,6 +10,10 @@
   - Save to Camera Roll for importing.
 - Timeline: December 18th.
 
+# 0.1.1
+
+- Change file names to use project name
+
 # 0.1.0
 
 - Change store to object version
