@@ -76,9 +76,9 @@ function ShotHeader({ documentId, sceneId, shotId }) {
   return (
     <li
       className={
-        'flex flex-row border-b border-gray-300 w-full h-[5rem] overflow-x-auto overflow-y-hidden' +
+        'flex flex-row border-b border-gray-300 w-full h-[5rem]' +
         ' ' +
-        'snap-x snap-mandatory overscroll-x-none' +
+        'overflow-x-auto overflow-y-hidden snap-x snap-mandatory overscroll-x-none' +
         ' ' +
         (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
       }>

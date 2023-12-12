@@ -15,7 +15,8 @@ export default function TakeList({ documentId, sceneId, shotId }) {
   const takeIds = useTakeIds(documentId, shotId);
   return (
     <ul className="mx-8">
-      {takeIds.map((takeId) => (
+      <NewTake documentId={documentId} shotId={shotId} />
+      {takeIds.toReversed().map((takeId) => (
         <>
           <TakeHeader
             key={takeId}
@@ -26,7 +27,6 @@ export default function TakeList({ documentId, sceneId, shotId }) {
           />
         </>
       ))}
-      <NewTake documentId={documentId} shotId={shotId} />
     </ul>
   );
 }
@@ -42,17 +42,11 @@ function TakeHeader({ documentId, sceneId, shotId, takeId }) {
   const takeNumber = useTakeNumber(documentId, shotId, takeId);
   const take = useTake(documentId, takeId);
   return (
-    <li className="flex flex-row">
-      <p className="whitespace-nowrap mr-4">Take {takeNumber}</p>
-      <div className="flex-1" />
-      <p className="opacity-30 whitespace-nowrap overflow-x-auto mr-4">
-        {take.exportedFileName || '--'}
-      </p>
-      <div className="flex-1" />
-      <p className="opacity-30 whitespace-nowrap mr-4">
-        {new Date(take.lastExportedMillis).toLocaleString()}
-      </p>
-    </li>
+    <TakeLayout
+      takeNumber={takeNumber}
+      timestamp={take.lastExportedMillis}
+      fileName={take.exportedFileName || '--'}
+    />
   );
 }
 
@@ -63,15 +57,38 @@ function TakeHeader({ documentId, sceneId, shotId, takeId }) {
  */
 function NewTake({ documentId, shotId }) {
   const takeNumber = useShotTakeCount(documentId, shotId) + 1;
+  return <TakeLayout takeNumber={takeNumber} timestamp={0} fileName="--" />;
+}
+
+/**
+ * @param {object} props
+ * @param {number} props.takeNumber
+ * @param {number} props.timestamp
+ * @param {string} props.fileName
+ */
+function TakeLayout({ takeNumber, timestamp, fileName }) {
+  const isPending = timestamp <= 0;
   return (
-    <li className="flex flex-row opacity-30">
-      <p>Take {takeNumber}</p>
-      <div className="flex-1" />
-      <p className="opacity-30 whitespace-nowrap overflow-x-hidden mr-4">
-        Awaiting recording...
-      </p>
-      <div className="flex-1" />
-      <p className="opacity-30 whitespace-nowrap mr-4">Now</p>
+    <li
+      className={
+        'flex flex-row w-full' +
+        ' ' +
+        'overflow-x-auto overflow-y-hidden snap-x snap-mandatory overscroll-x-none'
+      }>
+      <div className="w-full flex-shrink-0 flex flex-row snap-start">
+        <p className={isPending ? 'opacity-30' : 'whitespace-nowrap'}>
+          Take {takeNumber}
+        </p>
+        <div className="flex-1" />
+        <p className="opacity-30 whitespace-nowrap">
+          {isPending ? '--' : new Date(timestamp).toLocaleString()}
+        </p>
+      </div>
+      <div className="w-full flex-shrink-0 flex flex-row snap-start">
+        <p className="flex-1 opacity-30 overflow-x-auto text-center">
+          {fileName}
+        </p>
+      </div>
     </li>
   );
 }
