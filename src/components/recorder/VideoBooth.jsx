@@ -108,8 +108,11 @@ function DateTime() {
 export function useNextAvailableExportedFileName() {
   const { documentId, sceneId, shotId } = useCurrentCursor();
   const documentTitle = useDocumentTitle(documentId) || 'Untitled';
+  // TODO: What if documentTitle changes? Should we use this hash?
+  /*
   const documentName =
     documentTitle.charAt(0).toUpperCase() + documentId.substring(0, 4);
+  */
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
   const takeNumber = useShotTakeCount(documentId, shotId) + 1;
@@ -121,7 +124,7 @@ export function useNextAvailableExportedFileName() {
     shotType,
   );
   return (
-    `${documentName}_${scen}${shot}${take}` +
+    `${documentTitle}_${scen}${shot}${take}` +
     (shotType !== ANY_SHOT.value ? `_${type}` : '')
   );
 }
