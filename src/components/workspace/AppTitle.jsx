@@ -8,7 +8,7 @@ export default function AppTitle() {
         ' ' +
         'mb-4 lg:mb-20'
       }>
-      [🗒️🎬🎥]
+      &nbsp;[🗒️🎬🎥]&nbsp;
     </h1>
   );
 }
