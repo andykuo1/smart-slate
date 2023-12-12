@@ -1,24 +1,17 @@
-'use client';
-
 import BarberpoleStyle from '@/app/barberpole.module.css';
-import RecordButton from '@/components/lib/RecordButton';
 import { choosePlaceholderRandomly } from '@/constants/PlaceholderText';
+import { createShot, toScenShotTakeType } from '@/stores/DocumentStore';
 import {
-  createScene,
-  createShot,
-  toScenShotTakeType,
-} from '@/stores/DocumentStore';
-import {
-  useAddScene,
   useAddShot,
-  useSceneIds,
   useSceneNumber,
+  useSetShotDescription,
   useSetShotType,
-  useShotIds,
+  useShotDescription,
   useShotNumber,
   useShotTakeCount,
   useShotType,
 } from '@/stores/DocumentStoreContext';
+import { useShotIds } from '@/stores/DocumentStoreContext';
 import ShotTypes from '@/stores/ShotTypes';
 import {
   useCurrentCursor,
@@ -26,95 +19,35 @@ import {
   useSetUserCursor,
 } from '@/stores/UserStoreContext';
 
-import SceneProjectTitle from './SceneProjectTitle';
-import { ShotNotes } from './SceneShotEntry';
-
-/**
- * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- */
-export default function SceneList({ documentId }) {
-  const sceneIds = useSceneIds(documentId);
-  return (
-    <div className="w-full h-full overflow-x-hidden overflow-y-auto py-20">
-      <SceneProjectTitle documentId={documentId} />
-      <ul>
-        {sceneIds.map((sceneId) => (
-          <>
-            <SceneHeader documentId={documentId} sceneId={sceneId} />
-            <SceneContent documentId={documentId} sceneId={sceneId} />
-          </>
-        ))}
-        <NewSceneHeader documentId={documentId} />
-      </ul>
-    </div>
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} props.documentId
- * @param {string} props.sceneId
- */
-function SceneHeader({ documentId, sceneId }) {
-  const sceneNumber = useSceneNumber(documentId, sceneId);
-  return (
-    <li className="flex flex-row items-center mt-8">
-      <SceneNumber sceneNumber={sceneNumber} />
-      <span className="flex-1 text-center border-t-2 border-dotted border-black" />
-      <SceneNumber sceneNumber={sceneNumber} />
-    </li>
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} props.documentId
- */
-function NewSceneHeader({ documentId }) {
-  const addScene = useAddScene();
-  function onClick() {
-    let newScene = createScene();
-    addScene(documentId, newScene);
-  }
-  return (
-    <li className="flex flex-row items-center px-4 my-8">
-      <span className="flex-1 text-center border-t-2 border-dotted border-black" />
-      <button className="mx-4" onClick={onClick}>
-        + New Scene
-      </button>
-      <span className="flex-1 text-center border-t-2 border-dotted border-black" />
-    </li>
-  );
-}
-
-/**
- * @param {object} props
- * @param {number} props.sceneNumber
- */
-function SceneNumber({ sceneNumber }) {
-  const result = sceneNumber < 0 ? '??' : String(sceneNumber).padStart(2, '0');
-  return <span className="mx-4 font-mono">SCENE {result}</span>;
-}
+import RecordButton from '../lib/RecordButton';
+import TakeList from './TakeList';
 
 /**
  * @param {object} props
  * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
  */
-function SceneContent({ documentId, sceneId }) {
+export default function ShotList({ documentId, sceneId }) {
   const shotIds = useShotIds(documentId, sceneId);
   return (
     <ul className="mx-8">
       {shotIds.map((shotId) => (
-        <ShotHeader
-          key={shotId}
-          documentId={documentId}
-          sceneId={sceneId}
-          shotId={shotId}
-        />
+        <>
+          <ShotHeader
+            key={shotId}
+            documentId={documentId}
+            sceneId={sceneId}
+            shotId={shotId}
+          />
+          <TakeList
+            key={shotId}
+            documentId={documentId}
+            sceneId={sceneId}
+            shotId={shotId}
+          />
+        </>
       ))}
-      <NewShotHeader documentId={documentId} sceneId={sceneId} />
+      <NewShot documentId={documentId} sceneId={sceneId} />
     </ul>
   );
 }
@@ -177,7 +110,7 @@ function ShotHeader({ documentId, sceneId, shotId }) {
  * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
  */
-function NewShotHeader({ documentId, sceneId }) {
+function NewShot({ documentId, sceneId }) {
   const addShot = useAddShot();
 
   function onClick() {
@@ -199,12 +132,42 @@ function NewShotHeader({ documentId, sceneId }) {
 /**
  * @param {object} props
  * @param {string} [props.className]
+ * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/DocumentStore').ShotId} props.shotId
+ */
+function ShotNotes({ className, documentId, shotId }) {
+  const description = useShotDescription(documentId, shotId);
+  const setShotDescription = useSetShotDescription();
+
+  /** @type {import('react').ChangeEventHandler<HTMLTextAreaElement>} */
+  function onChange(e) {
+    let el = e.target;
+    setShotDescription(documentId, shotId, el.value);
+  }
+
+  return (
+    <textarea
+      className={
+        'resize-none m-1 p-2 bg-transparent overflow-x-hidden overflow-y-auto' +
+        ' ' +
+        className
+      }
+      value={description}
+      onChange={onChange}
+      placeholder="Additional notes..."
+    />
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {string} [props.className]
  * @param {number} props.scene
  * @param {number} props.shot
  * @param {number} props.take
  * @param {() => import('react').ReactNode} props.type
  */
-export function ScenShotTakeType({ className, scene, shot, take, type }) {
+function ScenShotTakeType({ className, scene, shot, take, type }) {
   const [sceneString, shotString, takeString, _] = toScenShotTakeType(
     scene,
     shot,
@@ -213,15 +176,15 @@ export function ScenShotTakeType({ className, scene, shot, take, type }) {
   return (
     <table className={'relative text-center group' + ' ' + className}>
       <tr className="text-xl align-bottom scale-y-125 whitespace-nowrap">
-        <td className="font-mono text-right">{sceneString}</td>
+        <td className="font-mono text-right">S{sceneString}</td>
         <td className="font-mono text-left">{shotString}</td>
-        <td className="font-mono px-2">#{takeString}</td>
+        <td className="font-mono px-2">T{takeString}</td>
         <td className="font-mono">{type()}</td>
       </tr>
       <tr className="text-xs select-none transition-opacity opacity-0 group-hover:opacity-30 align-top">
-        <th className="font-normal">scen</th>
+        <th className="font-normal">scene</th>
         <th className="font-normal">shot</th>
-        <th className="font-normal px-2">#take</th>
+        <th className="font-normal px-2">take</th>
         <th className="font-normal">type</th>
       </tr>
     </table>

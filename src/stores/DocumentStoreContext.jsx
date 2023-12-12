@@ -11,6 +11,7 @@ import {
   getShotById,
   getShotIdsInOrder,
   getShotIndex,
+  getTakeById,
   getTakeIdsInOrder,
   getTakeIndex,
 } from './DocumentDispatch';
@@ -178,4 +179,12 @@ export function useShotDescription(documentId, shotId) {
 
 export function useSetShotDescription() {
   return useDocumentStore((ctx) => ctx.setShotDescription);
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').TakeId} takeId
+ */
+export function useTake(documentId, takeId) {
+  return useDocumentStore((ctx) => getTakeById(ctx, documentId, takeId));
 }

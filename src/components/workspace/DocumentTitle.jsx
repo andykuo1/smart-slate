@@ -9,7 +9,7 @@ import {
  * @param {object} props
  * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
  */
-export default function SceneProjectTitle({ documentId }) {
+export default function DocumentTitle({ documentId }) {
   const documentTitle = useDocumentTitle(documentId);
   const setDocumentTitle = useSetDocumentTitle();
   const onDocumentTitleChange = useCallback(
