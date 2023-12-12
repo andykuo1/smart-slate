@@ -97,7 +97,7 @@ export default function RecorderPanel({ children, onChange }) {
   useEffect(() => {
     if (recorder.active && recorder.forceStart) {
       setRecorderActive(true, false);
-      if (isInputCaptureSupported() || !isMediaRecorderSupported()) {
+      if (isInputCaptureSupported()) {
         startCapturing();
       } else {
         startRecording();
