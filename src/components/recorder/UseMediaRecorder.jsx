@@ -175,25 +175,14 @@ export function useMediaRecorder({
   );
 
   useEffect(() => {
-    if (!window.MediaRecorder) {
-      throw new Error(
-        'MediaRecorder is not supported. Please update to the latest version of your browser.',
-      );
-    }
-    if (typeof mediaStreamConstraints?.video === 'object') {
-      validateMediaRecorderConstraints(mediaStreamConstraints.video);
-    }
-    if (typeof mediaStreamConstraints?.audio === 'object') {
-      validateMediaRecorderConstraints(mediaStreamConstraints.audio);
-    }
-    if (
-      mediaRecorderOptions &&
-      mediaRecorderOptions.mimeType &&
-      !MediaRecorder.isTypeSupported(mediaRecorderOptions.mimeType)
-    ) {
-      throw new Error(
-        `MIME type '${mediaRecorderOptions.mimeType}' is not supported by this browser.`,
-      );
+    try {
+      tryValidateMediaRecorderFeatures(mediaRecorderOptions, mediaStreamConstraints);
+    } catch (e) {
+      if (onStatus) {
+        onStatus(new Error('Failed MediaRecorder feature validation', { cause: e }));
+      } else {
+        throw e;
+      }
     }
   }, [mediaStreamConstraints, mediaRecorderOptions, onStatus]);
 
@@ -205,9 +194,36 @@ export function useMediaRecorder({
 }
 
 /**
+ * @param {MediaRecorderOptions} mediaRecorderOptions 
+ * @param {MediaStreamConstraints} mediaStreamConstraints 
+ */
+export function tryValidateMediaRecorderFeatures(mediaRecorderOptions, mediaStreamConstraints) {
+  if (!window.MediaRecorder) {
+    throw new Error(
+      'MediaRecorder is not supported. Please update to the latest version of your browser.',
+    );
+  }
+  if (typeof mediaStreamConstraints?.video === 'object') {
+    tryValidateMediaRecorderConstraints(mediaStreamConstraints.video);
+  }
+  if (typeof mediaStreamConstraints?.audio === 'object') {
+    tryValidateMediaRecorderConstraints(mediaStreamConstraints.audio);
+  }
+  if (
+    mediaRecorderOptions &&
+    mediaRecorderOptions.mimeType &&
+    !MediaRecorder.isTypeSupported(mediaRecorderOptions.mimeType)
+  ) {
+    throw new Error(
+      `MIME type '${mediaRecorderOptions.mimeType}' is not supported by this browser.`,
+    );
+  }
+}
+
+/**
  * @param {Partial<MediaTrackConstraints>} constraints
  */
-export function validateMediaRecorderConstraints(constraints) {
+function tryValidateMediaRecorderConstraints(constraints) {
   const supportedConstraints =
     navigator.mediaDevices?.getSupportedConstraints();
   if (!supportedConstraints) {
@@ -230,5 +246,4 @@ export function validateMediaRecorderConstraints(constraints) {
       )}.`,
     );
   }
-  return true;
 }

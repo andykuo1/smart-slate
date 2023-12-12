@@ -7,7 +7,7 @@ import {
   useSetRecorderStatus,
 } from '@/stores/UserStoreContext';
 
-import { useMediaRecorder } from './UseMediaRecorder';
+import { tryValidateMediaRecorderFeatures, useMediaRecorder } from './UseMediaRecorder';
 
 /**
  * @callback MediaRecorderChangeEventHandler
@@ -15,6 +15,20 @@ import { useMediaRecorder } from './UseMediaRecorder';
  * @param {import('./UseMediaRecorder').MediaRecorderStatus} e.status
  * @param {string} e.data
  */
+
+/** @type {MediaRecorderOptions} */
+const MEDIA_RECORDER_OPTIONS = {};
+/** @type {MediaStreamConstraints} */
+const MEDIA_STREAM_CONSTRAINTS = {
+  video: {
+    facingMode: 'environment',
+  },
+  audio: true,
+};
+/** @type {BlobPropertyBag} */
+const MEDIA_BLOB_OPTIONS = {
+  type: 'video/mp4',
+};
 
 /**
  * @param {object} props
@@ -68,16 +82,11 @@ export default function RecorderPanel({ children, onChange }) {
     },
     [setRecorderStatus, onChange],
   );
+
   const { startRecording, stopRecording } = useMediaRecorder({
-    blobOptions: {
-      type: 'video/mp4',
-    },
-    mediaStreamConstraints: {
-      video: {
-        facingMode: 'environment',
-      },
-      audio: true,
-    },
+    mediaRecorderOptions: MEDIA_RECORDER_OPTIONS,
+    blobOptions: MEDIA_BLOB_OPTIONS,
+    mediaStreamConstraints: MEDIA_STREAM_CONSTRAINTS,
     onStart,
     onStop,
     onStatus,
@@ -97,10 +106,10 @@ export default function RecorderPanel({ children, onChange }) {
   useEffect(() => {
     if (recorder.active && recorder.forceStart) {
       setRecorderActive(true, false);
-      if (isInputCaptureSupported()) {
-        startCapturing();
-      } else {
+      if (isMediaRecorderSupported(MEDIA_RECORDER_OPTIONS, MEDIA_STREAM_CONSTRAINTS)) {
         startRecording();
+      } else {
+        startCapturing();
       }
     }
   }, [recorder, setRecorderActive, startRecording, startCapturing]);
@@ -156,10 +165,17 @@ function isInputCaptureSupported() {
   );
 }
 
-function isMediaRecorderSupported() {
-  return (
-    typeof window !== 'undefined' && typeof window.MediaRecorder !== 'undefined'
-  );
+/**
+ * @param {MediaRecorderOptions} mediaRecorderOptions 
+ * @param {MediaStreamConstraints} mediaStreamConstraints
+ */
+function isMediaRecorderSupported(mediaRecorderOptions, mediaStreamConstraints) {
+  try {
+    tryValidateMediaRecorderFeatures(mediaRecorderOptions, mediaStreamConstraints);
+  } catch {
+    return false;
+  }
+  return true;
 }
 
 /**
