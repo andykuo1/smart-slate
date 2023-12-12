@@ -70,7 +70,7 @@ export default function RecorderPanel({ children, onChange }) {
   );
   const { startRecording, stopRecording } = useMediaRecorder({
     blobOptions: {
-      type: 'video/webm',
+      type: 'video/mp4',
     },
     mediaStreamConstraints: {
       video: {
