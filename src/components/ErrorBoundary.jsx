@@ -17,7 +17,17 @@ export default class ErrorBoundary extends React.Component {
   static getDerivedStateFromError(error) {
     // Update state so the next render will show the fallback UI
 
-    return { error: error.toString() + ' | ' + error.name + ' => ' + error.message + ' => ' + error.stack, hasError: true };
+    return {
+      error:
+        error.toString() +
+        ' | ' +
+        error.name +
+        ' => ' +
+        error.message +
+        ' => ' +
+        error.stack,
+      hasError: true,
+    };
   }
 
   /**
@@ -37,11 +47,9 @@ export default class ErrorBoundary extends React.Component {
       // You can render any custom fallback UI
       return (
         <div className="fixed left-0 right-0 top-0 bottom-0 z-50 bg-white text-black text-center flex flex-col items-center overflow-y-auto">
-          <div className="flex-1"/>
+          <div className="flex-1" />
           <h2>Oops, there is an error!</h2>
-          <p>
-            {this.state.error}
-          </p>
+          <p>{this.state.error}</p>
           <button
             type="button"
             onClick={() => {
@@ -50,7 +58,7 @@ export default class ErrorBoundary extends React.Component {
             }}>
             Try again?
           </button>
-          <div className="flex-1"/>
+          <div className="flex-1" />
         </div>
       );
     }

@@ -176,10 +176,15 @@ export function useMediaRecorder({
 
   useEffect(() => {
     try {
-      tryValidateMediaRecorderFeatures(mediaRecorderOptions, mediaStreamConstraints);
+      tryValidateMediaRecorderFeatures(
+        mediaRecorderOptions,
+        mediaStreamConstraints,
+      );
     } catch (e) {
       if (onStatus) {
-        onStatus(new Error('Failed MediaRecorder feature validation', { cause: e }));
+        onStatus(
+          new Error('Failed MediaRecorder feature validation', { cause: e }),
+        );
       } else {
         throw e;
       }
@@ -194,10 +199,13 @@ export function useMediaRecorder({
 }
 
 /**
- * @param {MediaRecorderOptions} mediaRecorderOptions 
- * @param {MediaStreamConstraints} mediaStreamConstraints 
+ * @param {MediaRecorderOptions} mediaRecorderOptions
+ * @param {MediaStreamConstraints} mediaStreamConstraints
  */
-export function tryValidateMediaRecorderFeatures(mediaRecorderOptions, mediaStreamConstraints) {
+export function tryValidateMediaRecorderFeatures(
+  mediaRecorderOptions,
+  mediaStreamConstraints,
+) {
   if (!window.MediaRecorder) {
     throw new Error(
       'MediaRecorder is not supported. Please update to the latest version of your browser.',

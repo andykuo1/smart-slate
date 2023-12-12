@@ -7,7 +7,10 @@ import {
   useSetRecorderStatus,
 } from '@/stores/UserStoreContext';
 
-import { tryValidateMediaRecorderFeatures, useMediaRecorder } from './UseMediaRecorder';
+import {
+  tryValidateMediaRecorderFeatures,
+  useMediaRecorder,
+} from './UseMediaRecorder';
 
 /**
  * @callback MediaRecorderChangeEventHandler
@@ -106,7 +109,12 @@ export default function RecorderPanel({ children, onChange }) {
   useEffect(() => {
     if (recorder.active && recorder.forceStart) {
       setRecorderActive(true, false);
-      if (isMediaRecorderSupported(MEDIA_RECORDER_OPTIONS, MEDIA_STREAM_CONSTRAINTS)) {
+      if (
+        isMediaRecorderSupported(
+          MEDIA_RECORDER_OPTIONS,
+          MEDIA_STREAM_CONSTRAINTS,
+        )
+      ) {
         startRecording();
       } else {
         startCapturing();
@@ -166,12 +174,18 @@ function isInputCaptureSupported() {
 }
 
 /**
- * @param {MediaRecorderOptions} mediaRecorderOptions 
+ * @param {MediaRecorderOptions} mediaRecorderOptions
  * @param {MediaStreamConstraints} mediaStreamConstraints
  */
-function isMediaRecorderSupported(mediaRecorderOptions, mediaStreamConstraints) {
+function isMediaRecorderSupported(
+  mediaRecorderOptions,
+  mediaStreamConstraints,
+) {
   try {
-    tryValidateMediaRecorderFeatures(mediaRecorderOptions, mediaStreamConstraints);
+    tryValidateMediaRecorderFeatures(
+      mediaRecorderOptions,
+      mediaStreamConstraints,
+    );
   } catch {
     return false;
   }
