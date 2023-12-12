@@ -45,7 +45,9 @@ function TakeHeader({ documentId, sceneId, shotId, takeId }) {
     <li className="flex flex-row">
       <p className="whitespace-nowrap mr-4">Take {takeNumber}</p>
       <div className="flex-1" />
-      <p className="opacity-30 whitespace-nowrap overflow-x-auto mr-4">{take.exportedFileName || '--'}</p>
+      <p className="opacity-30 whitespace-nowrap overflow-x-auto mr-4">
+        {take.exportedFileName || '--'}
+      </p>
       <div className="flex-1" />
       <p className="opacity-30 whitespace-nowrap mr-4">
         {new Date(take.lastExportedMillis).toLocaleString()}
@@ -65,7 +67,9 @@ function NewTake({ documentId, shotId }) {
     <li className="flex flex-row opacity-30">
       <p>Take {takeNumber}</p>
       <div className="flex-1" />
-      <p className="opacity-30 whitespace-nowrap overflow-x-hidden mr-4">Awaiting recording...</p>
+      <p className="opacity-30 whitespace-nowrap overflow-x-hidden mr-4">
+        Awaiting recording...
+      </p>
       <div className="flex-1" />
       <p className="opacity-30 whitespace-nowrap mr-4">Now</p>
     </li>

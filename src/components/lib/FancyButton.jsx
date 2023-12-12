@@ -1,6 +1,6 @@
 /**
  * @param {object} props
- * @param {string} props.title
+ * @param {string} [props.title]
  * @param {import('react').MouseEventHandler<HTMLButtonElement>} [props.onClick]
  * @param {string} [props.className]
  * @param {boolean} [props.disabled]
@@ -8,7 +8,7 @@
  * @param {import('react').ReactNode} [props.children]
  */
 export default function FancyButton({
-  title,
+  title = '',
   onClick,
   className,
   label = title,
@@ -35,7 +35,7 @@ export default function FancyButton({
       }>
       <span className="flex-1" />
       {children}
-      <span className="mx-1">{label}</span>
+      {label && <span className="mx-1">{label}</span>}
       <span className="flex-1" />
     </button>
   );
