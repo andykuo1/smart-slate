@@ -3,6 +3,7 @@
 import { useCallback } from 'react';
 
 import BackIcon from '@material-symbols/svg-400/rounded/arrow_back-fill.svg';
+import ExportIcon from '@material-symbols/svg-400/rounded/export_notes-fill.svg';
 
 import FancyButton from '@/components/lib/FancyButton';
 import RecorderStatus from '@/stores/RecorderStatus';
@@ -52,6 +53,11 @@ export default function Workspace() {
           ' ' +
           (documentId && !recorder.active ? '' : 'hidden')
         }>
+        <div className="fixed m-2 z-10 right-0">
+          <FancyButton className="bg-white" title="Export">
+            <ExportIcon className="inline w-6 fill-current" />
+          </FancyButton>
+        </div>
         <HomeButton className="bg-white" />
         <SceneListPanel documentId={documentId} />
       </div>

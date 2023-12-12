@@ -3,7 +3,9 @@ import {
   useShotDescription,
 } from '@/stores/DocumentStoreContext';
 
-export default function SceneShotEntry() {}
+export default function SceneShotEntry() {
+  return null;
+}
 
 /**
  * @param {object} props
