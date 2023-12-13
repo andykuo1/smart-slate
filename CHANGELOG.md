@@ -15,6 +15,7 @@
 - Change file names to use project name
 - Add GoogleDrive sync
 - Change to `.webm` video format
+- Add take list
 
 # 0.1.0
 

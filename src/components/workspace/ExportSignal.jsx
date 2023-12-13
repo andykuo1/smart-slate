@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 
 import { useInterval } from '@/lib/UseInterval';
-import { useGAPITokenHandler } from '@/lib/googleapi/GoogleAPIContext';
+import { useGAPITokenHandler } from '@/lib/googleapi';
 
 export default function ExportSignal() {
   const [dest, setDest] = useState('local');

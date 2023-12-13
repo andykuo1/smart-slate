@@ -26,7 +26,7 @@ export default function DocumentTitle({ documentId }) {
       <div className="flex-1 flex flex-row underline">
         <div className="flex-1" />
         <input
-          className="text-center text-2xl"
+          className="text-center text-2xl bg-transparent"
           value={documentTitle}
           placeholder="Untitled"
           onChange={onDocumentTitleChange}

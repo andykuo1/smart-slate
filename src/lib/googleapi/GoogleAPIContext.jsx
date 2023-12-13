@@ -1,26 +1,17 @@
 import {
   GoogleOAuthProvider,
   googleLogout,
-  hasGrantedAllScopesGoogle,
   useGoogleLogin,
 } from '@react-oauth/google';
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { createContext, useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   getGoogleAPI,
-  hasGoogleAPI,
   initializeGoogleAPI,
   initializeGoogleAPIClient,
 } from './GoogleAPI';
 
-const GoogleAPIContext = createContext(
+export const GoogleAPIContext = createContext(
   /** @type {ReturnType<createGoogleAPI>|null} */ (null),
 );
 
@@ -122,49 +113,4 @@ function GoogleAPILoginProvider({ apiKey, scopes, children }) {
       {children}
     </GoogleAPIContext.Provider>
   );
-}
-
-function useGoogleAPI() {
-  const result = useContext(GoogleAPIContext);
-  if (!result) {
-    throw new Error('Missing GoogleAPIProvider.');
-  }
-  return result;
-}
-
-export function useGAPILogin() {
-  const { login } = useGoogleAPI();
-  return login;
-}
-
-export function useGAPILogout() {
-  const { logout } = useGoogleAPI();
-  return logout;
-}
-
-export function useGAPITokenHandler() {
-  const { scopes, tokenRef } = useGoogleAPI();
-  const tokenHandler = useCallback(
-    /** @param {(token: import('@react-oauth/google').TokenResponse) => void} callback */
-    function _tokenHandler(callback) {
-      let token = tokenRef.current;
-      if (!token || scopes.length <= 0) {
-        console.log('Checked GAPI access...no token or scopes');
-        return false;
-      }
-      if (!hasGoogleAPI()) {
-        console.log('Checked GAPI access...no GAPI');
-        return false;
-      }
-      // @ts-ignore
-      if (!hasGrantedAllScopesGoogle(token, ...scopes)) {
-        console.log('Checked GAPI access...no granted scopes');
-        return false;
-      }
-      callback(token);
-      return true;
-    },
-    [tokenRef, scopes],
-  );
-  return tokenHandler;
 }

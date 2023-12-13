@@ -10,7 +10,7 @@ import MenuIcon from '@material-symbols/svg-400/rounded/menu.svg';
 
 import Codecs from '@/constants/Codecs';
 import FancyButton from '@/lib/FancyButton';
-import { useGAPILogin, useGAPILogout } from '@/lib/googleapi/GoogleAPIContext';
+import { useGAPILogin, useGAPILogout } from '@/lib/googleapi';
 import { useDocumentStore } from '@/stores/DocumentStoreContext';
 import {
   useCurrentRecorder,

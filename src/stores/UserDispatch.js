@@ -3,7 +3,7 @@ import { zi } from './ZustandImmerHelper';
 /** @typedef {ReturnType<createDispatch>} Dispatch */
 
 /**
- * @param {import('zustand').StateCreator<?>} set
+ * @param {import('zustand').StoreApi<any>['setState']} set
  */
 export function createDispatch(set) {
   return {

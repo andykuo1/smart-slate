@@ -1,3 +1,5 @@
+import { Fragment } from 'react';
+
 import { createScene, createShot } from '@/stores/DocumentStore';
 import {
   useAddScene,
@@ -20,18 +22,10 @@ export default function SceneList({ documentId }) {
       <DocumentTitle documentId={documentId} />
       <ul>
         {sceneIds.map((sceneId) => (
-          <>
-            <SceneHeader
-              key={`scene-${sceneId}`}
-              documentId={documentId}
-              sceneId={sceneId}
-            />
-            <ShotList
-              key={`${sceneId}.shots`}
-              documentId={documentId}
-              sceneId={sceneId}
-            />
-          </>
+          <Fragment key={`scene-${sceneId}`}>
+            <SceneHeader documentId={documentId} sceneId={sceneId} />
+            <ShotList documentId={documentId} sceneId={sceneId} />
+          </Fragment>
         ))}
         <NewScene documentId={documentId} />
       </ul>

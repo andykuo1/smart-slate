@@ -9,7 +9,7 @@ import {
 
 import {
   getMediaRecorderSupportedMimeType,
-  tryValidateMediaRecorderFeatures,
+  isMediaRecorderSupported,
   useMediaRecorder,
 } from './UseMediaRecorder';
 
@@ -66,8 +66,7 @@ export default function RecorderPanel({ children, onChange }) {
       let video = videoRef.current;
       video.srcObject = mediaRecorder.stream;
       let videoTrackSettings = mediaRecorder.stream
-        .getVideoTracks()
-        .at(0)
+        .getVideoTracks()?.[0]
         ?.getSettings();
       if (videoTrackSettings) {
         video.width = videoTrackSettings.width || 0;
@@ -176,32 +175,6 @@ function useInputCapture() {
     inputRef,
     startCapturing,
   };
-}
-
-function isInputCaptureSupported() {
-  return (
-    typeof document !== 'undefined' &&
-    typeof document.createElement('input').capture !== 'undefined'
-  );
-}
-
-/**
- * @param {MediaRecorderOptions} mediaRecorderOptions
- * @param {MediaStreamConstraints} mediaStreamConstraints
- */
-function isMediaRecorderSupported(
-  mediaRecorderOptions,
-  mediaStreamConstraints,
-) {
-  try {
-    tryValidateMediaRecorderFeatures(
-      mediaRecorderOptions,
-      mediaStreamConstraints,
-    );
-  } catch {
-    return false;
-  }
-  return true;
 }
 
 /**

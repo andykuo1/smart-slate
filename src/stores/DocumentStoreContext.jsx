@@ -26,7 +26,6 @@ export const useDocumentStore = create(
   persist(
     (set) => ({
       ...createStore(),
-      // @ts-ignore
       ...createDispatch(set),
     }),
     {
@@ -47,7 +46,9 @@ export function useDocument(documentId) {
  * @param {import('./DocumentStore').DocumentId} documentId
  */
 export function useDocumentTitle(documentId) {
-  return useDocumentStore((ctx) => ctx.documents?.[documentId]?.documentTitle);
+  return useDocumentStore(
+    (ctx) => ctx.documents?.[documentId]?.documentTitle || '',
+  );
 }
 
 export function useSetDocumentTitle() {
@@ -63,7 +64,7 @@ export function useDocumentIds() {
  */
 export function useDocumentLastUpdatedMillis(documentId) {
   return useDocumentStore(
-    (ctx) => ctx.documents?.[documentId]?.lastUpdatedMillis,
+    (ctx) => ctx.documents?.[documentId]?.lastUpdatedMillis || 0,
   );
 }
 
@@ -135,11 +136,7 @@ export function useShotType(documentId, shotId) {
   );
 }
 
-/**
- * @param {import('./DocumentStore').DocumentId} documentId
- * @param {import('./DocumentStore').ShotId} shotId
- */
-export function useSetShotType(documentId, shotId) {
+export function useSetShotType() {
   return useDocumentStore((ctx) => ctx.setShotType);
 }
 

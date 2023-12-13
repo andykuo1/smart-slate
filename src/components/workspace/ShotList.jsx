@@ -1,3 +1,5 @@
+import { Fragment } from 'react';
+
 import BarberpoleStyle from '@/app/barberpole.module.css';
 import { choosePlaceholderRandomly } from '@/constants/PlaceholderText';
 import RecordButton from '@/lib/RecordButton';
@@ -32,20 +34,14 @@ export default function ShotList({ documentId, sceneId }) {
   return (
     <ul className="mx-8">
       {shotIds.map((shotId) => (
-        <>
+        <Fragment key={`shot-${shotId}`}>
           <ShotHeader
-            key={`shot-${shotId}`}
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
           />
-          <TakeList
-            key={`${shotId}.takes`}
-            documentId={documentId}
-            sceneId={sceneId}
-            shotId={shotId}
-          />
-        </>
+          <TakeList documentId={documentId} sceneId={sceneId} shotId={shotId} />
+        </Fragment>
       ))}
       <NewShot documentId={documentId} sceneId={sceneId} />
     </ul>
@@ -83,7 +79,7 @@ function ShotHeader({ documentId, sceneId, shotId }) {
         ' ' +
         (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
       }>
-      <div className="w-full flex-shrink-0 flex flex-row snap-start overflow-hidden">
+      <div className="w-full flex-shrink-0 flex flex-row snap-start overflow-hidden px-4">
         <ScenShotTakeType
           scene={sceneNumber}
           shot={shotNumber}
@@ -168,28 +164,37 @@ function ShotNotes({ className, documentId, shotId }) {
  * @param {number} props.scene
  * @param {number} props.shot
  * @param {number} props.take
- * @param {() => import('react').ReactNode} props.type
+ * @param {() => import('react').ReactNode} [props.type]
  */
-function ScenShotTakeType({ className, scene, shot, take, type }) {
+function ScenShotTakeType({ className, scene, shot, take, type = undefined }) {
   const [sceneString, shotString, takeString, _] = toScenShotTakeType(
     scene,
     shot,
     take,
   );
   return (
-    <table className={'relative text-center group' + ' ' + className}>
-      <tr className="text-xl align-bottom scale-y-125 whitespace-nowrap">
-        <td className="font-mono text-right">S{sceneString}</td>
-        <td className="font-mono text-left">{shotString}</td>
-        <td className="font-mono px-2">T{takeString}</td>
-        <td className="font-mono">{type()}</td>
-      </tr>
-      <tr className="text-xs select-none transition-opacity opacity-0 group-hover:opacity-30 align-top">
-        <th className="font-normal">scene</th>
-        <th className="font-normal">shot</th>
-        <th className="font-normal px-2">take</th>
-        <th className="font-normal">type</th>
-      </tr>
+    <table
+      className={
+        'relative text-center group flex flex-col items-center my-auto' +
+        ' ' +
+        className
+      }>
+      <tbody className="flex-1 w-full h-full flex">
+        <tr className="flex-1 text-xl scale-y-125 whitespace-nowrap self-center">
+          <td className="font-mono text-right">S{sceneString}</td>
+          <td className="font-mono text-left">{shotString}</td>
+          <td className="font-mono px-2">T{takeString}</td>
+          <td className="font-mono">{type && type()}</td>
+        </tr>
+      </tbody>
+      <tfoot className="absolute -bottom-4 w-full flex">
+        <tr className="flex-1 text-xs select-none transition-opacity opacity-0 group-hover:opacity-30">
+          <th className="font-normal">scene</th>
+          <th className="font-normal">shot</th>
+          <th className="font-normal px-2">take</th>
+          <th className="font-normal">type</th>
+        </tr>
+      </tfoot>
     </table>
   );
 }
@@ -201,7 +206,7 @@ function ScenShotTakeType({ className, scene, shot, take, type }) {
  */
 function ShotTypesSelector({ documentId, shotId }) {
   const shotType = useShotType(documentId, shotId);
-  const setShotType = useSetShotType(documentId, shotId);
+  const setShotType = useSetShotType();
 
   /** @type {import('react').ChangeEventHandler<HTMLSelectElement>} */
   function onShotTypeChange(e) {

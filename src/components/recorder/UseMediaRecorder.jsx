@@ -41,8 +41,7 @@ export function useMediaRecorder({
   const onErrorImpl = useCallback(
     /** @param {Event|{ error: any }} e */
     function onErrorImpl(e) {
-      // @ts-ignore
-      let error = e?.error || e;
+      let error = e instanceof Event ? e : e?.error;
       if (!(error instanceof Error)) {
         error = new Error(error);
       }
@@ -182,9 +181,7 @@ export function useMediaRecorder({
       );
     } catch (e) {
       if (onStatus) {
-        onStatus(
-          new Error('Failed MediaRecorder feature validation', { cause: e }),
-        );
+        onStatus(/** @type {Error} */ (e));
       } else {
         throw e;
       }
@@ -292,4 +289,30 @@ export function getVideoFileExtensionByMIMEType(mimeType) {
     default:
       return '';
   }
+}
+
+export function isInputCaptureSupported() {
+  return (
+    typeof document !== 'undefined' &&
+    typeof document.createElement('input').capture !== 'undefined'
+  );
+}
+
+/**
+ * @param {MediaRecorderOptions} mediaRecorderOptions
+ * @param {MediaStreamConstraints} mediaStreamConstraints
+ */
+export function isMediaRecorderSupported(
+  mediaRecorderOptions,
+  mediaStreamConstraints,
+) {
+  try {
+    tryValidateMediaRecorderFeatures(
+      mediaRecorderOptions,
+      mediaStreamConstraints,
+    );
+  } catch {
+    return false;
+  }
+  return true;
 }

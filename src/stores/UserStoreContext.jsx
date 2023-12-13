@@ -15,7 +15,6 @@ export const useUserStore = create(
   persist(
     (set) => ({
       ...createStore(),
-      // @ts-ignore
       ...createDispatch(set),
     }),
     {

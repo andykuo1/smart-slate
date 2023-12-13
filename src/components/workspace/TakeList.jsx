@@ -1,3 +1,5 @@
+import { Fragment } from 'react';
+
 import {
   useShotTakeCount,
   useTake,
@@ -16,15 +18,20 @@ export default function TakeList({ documentId, sceneId, shotId }) {
   return (
     <ul className="mx-8">
       <NewTake documentId={documentId} shotId={shotId} />
-      {takeIds.toReversed().map((takeId) => (
-        <TakeHeader
-          key={`take-${takeId}`}
-          documentId={documentId}
-          sceneId={sceneId}
-          shotId={shotId}
-          takeId={takeId}
-        />
-      ))}
+      {takeIds
+        .slice()
+        .reverse()
+        .map((takeId) => (
+          <Fragment key={`take-${takeId}`}>
+            <TakeHeader
+              key={`take-${takeId}`}
+              documentId={documentId}
+              sceneId={sceneId}
+              shotId={shotId}
+              takeId={takeId}
+            />
+          </Fragment>
+        ))}
     </ul>
   );
 }
