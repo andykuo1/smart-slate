@@ -4,6 +4,8 @@ name: Deploy Vite.js to Pages
 on:
   # Runs on pushes targeting the default branch
   push:
+    # NOTE: GitHub Pages is env protected. So this won't work.
+    # branches: ['main', 'release/**']
     branches: ['main']
 
   # Allows you to run this workflow manually from the Actions tab
@@ -28,6 +30,9 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+      - name: Get branch name
+        run: echo "BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: get_branch
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up Node
@@ -37,8 +42,16 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm install
+      - name: Configure base path
+        id: configure_base_path
+        run: |
+          if [[ '${{steps.get_branch.outputs.BRANCH}}' == 'main' ]]; then \
+          echo "BASE_PATH=/${{github.event.repository.name}}/" >> $GITHUB_OUTPUT; \
+          else \
+          echo "BASE_PATH=/${{github.event.repository.name}}/${{steps.get_branch.outputs.BRANCH}}/" >> $GITHUB_OUTPUT; \
+          fi
       - name: Build
-        run: npm run build -- --base=/${{github.event.repository.name}}/
+        run: npm run build -- --base=${{steps.configure_base_path.outputs.BASE_PATH}}
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
