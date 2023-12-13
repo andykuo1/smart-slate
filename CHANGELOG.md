@@ -5,17 +5,16 @@
 - DaVinci Resolve tagging API
   - Save this metadata?
   - Or remove the input text boxes.
-- When stop recording, save it to `Camera Roll`.
-  - Save inside a folder?
-  - Save to Camera Roll for importing.
 - Timeline: December 18th.
 
 # 0.1.1
 
-- Change file names to use project name
 - Add GoogleDrive sync
-- Change to `.webm` video format
 - Add take list
+
+- Change file names to use project name
+- Change to `.webm` video format
+- Change to use `vitejs`
 
 # 0.1.0
 
