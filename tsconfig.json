@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",
+    // NOTE: This is always activated for @vitejs/plugin-react-swc
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
