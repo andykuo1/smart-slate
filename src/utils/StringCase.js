@@ -9,3 +9,14 @@ export function camelToSnakeCase(str) {
     })
     .toLowerCase();
 }
+
+/**
+ * @param {string} str
+ */
+export function wordToSnakeCase(str) {
+  return str
+    .replace(/\s+/g, function (_, a, b) {
+      return a + (b && '_' + b);
+    })
+    .toLowerCase();
+}

@@ -3,8 +3,8 @@ import { useCallback } from 'react';
 import AddIcon from '@material-symbols/svg-400/rounded/add-fill.svg';
 import UploadIcon from '@material-symbols/svg-400/rounded/upload-fill.svg';
 
-import FancyButton from '@/components/lib/FancyButton';
-import HorizontallyScrollableDiv from '@/components/lib/HorizontallyScrollableDiv';
+import FancyButton from '@/lib/FancyButton';
+import HorizontallyScrollableDiv from '@/lib/HorizontallyScrollableDiv';
 import { createDocument } from '@/stores/DocumentStore';
 import {
   useDocumentIds,

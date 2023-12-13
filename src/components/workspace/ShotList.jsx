@@ -1,5 +1,6 @@
 import BarberpoleStyle from '@/app/barberpole.module.css';
 import { choosePlaceholderRandomly } from '@/constants/PlaceholderText';
+import RecordButton from '@/lib/RecordButton';
 import { createShot, toScenShotTakeType } from '@/stores/DocumentStore';
 import {
   useAddShot,
@@ -19,7 +20,6 @@ import {
   useSetUserCursor,
 } from '@/stores/UserStoreContext';
 
-import RecordButton from '../lib/RecordButton';
 import TakeList from './TakeList';
 
 /**
@@ -82,7 +82,7 @@ function ShotHeader({ documentId, sceneId, shotId }) {
         ' ' +
         (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
       }>
-      <div className="w-full flex-shrink-0 flex flex-row snap-start">
+      <div className="w-full flex-shrink-0 flex flex-row snap-start overflow-hidden">
         <ScenShotTakeType
           scene={sceneNumber}
           shot={shotNumber}
@@ -98,7 +98,7 @@ function ShotHeader({ documentId, sceneId, shotId }) {
           </div>
         </div>
       </div>
-      <div className="w-full flex-shrink-0 flex flex-row snap-start">
+      <div className="w-full flex-shrink-0 flex flex-row snap-start overflow-hidden">
         <ShotNotes className="flex-1" documentId={documentId} shotId={shotId} />
       </div>
     </li>

@@ -5,6 +5,7 @@ import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
 import ExportIcon from '@material-symbols/svg-400/rounded/export_notes-fill.svg';
 import MenuIcon from '@material-symbols/svg-400/rounded/menu.svg';
 
+import FancyButton from '@/lib/FancyButton';
 import { useDocumentStore } from '@/stores/DocumentStoreContext';
 import {
   useCurrentRecorder,
@@ -12,7 +13,6 @@ import {
   useSetUserCursor,
 } from '@/stores/UserStoreContext';
 
-import FancyButton from '../lib/FancyButton';
 import SceneList from './SceneList';
 
 /**

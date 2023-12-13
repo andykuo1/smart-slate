@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { useAnimationFrame } from '@/hooks/animationframe';
+import { useAnimationFrame } from '@/lib/animationframe';
 import { createTake, toScenShotTakeType } from '@/stores/DocumentStore';
 import {
   useAddTake,

@@ -1,6 +1,6 @@
 import BackIcon from '@material-symbols/svg-400/rounded/arrow_back-fill.svg';
 
-import FancyButton from '@/components/lib/FancyButton';
+import FancyButton from '@/lib/FancyButton';
 import RecorderStatus from '@/stores/RecorderStatus';
 import {
   useCurrentDocumentId,
