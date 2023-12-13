@@ -17,15 +17,13 @@ export default function TakeList({ documentId, sceneId, shotId }) {
     <ul className="mx-8">
       <NewTake documentId={documentId} shotId={shotId} />
       {takeIds.toReversed().map((takeId) => (
-        <>
-          <TakeHeader
-            key={takeId}
-            documentId={documentId}
-            sceneId={sceneId}
-            shotId={shotId}
-            takeId={takeId}
-          />
-        </>
+        <TakeHeader
+          key={`take-${takeId}`}
+          documentId={documentId}
+          sceneId={sceneId}
+          shotId={shotId}
+          takeId={takeId}
+        />
       ))}
     </ul>
   );

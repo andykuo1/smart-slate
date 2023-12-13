@@ -1,6 +1,8 @@
 import { useCallback, useState } from 'react';
 
 import { useAnimationFrame } from '@/lib/animationframe';
+import { useGAPITokenHandler } from '@/lib/googleapi/GoogleAPIContext';
+import { uploadFile } from '@/lib/googleapi/UploadFile';
 import { createTake, toScenShotTakeType } from '@/stores/DocumentStore';
 import {
   useAddTake,
@@ -16,6 +18,7 @@ import { useCurrentCursor, useSetUserCursor } from '@/stores/UserStoreContext';
 import { downloadURLImpl } from '@/utils/Downloader';
 
 import RecorderPanel from './RecorderPanel';
+import { getVideoFileExtensionByMIMEType } from './UseMediaRecorder';
 
 export default function VideoBooth() {
   const cursor = useCurrentCursor();
@@ -23,6 +26,7 @@ export default function VideoBooth() {
   const addTake = useAddTake();
   const takeCount = useShotTakeCount(cursor.documentId, cursor.shotId);
   const exportedFileName = useNextAvailableExportedFileName();
+  const tokenHandler = useGAPITokenHandler();
 
   const [status, setStatus] = useState(
     /** @type {import('./UseMediaRecorder').MediaRecorderStatus} */ ('idle'),
@@ -32,7 +36,7 @@ export default function VideoBooth() {
     /**
      * @param {object} e
      * @param {import('./UseMediaRecorder').MediaRecorderStatus} e.status
-     * @param {string} e.data
+     * @param {Blob|null} e.data
      */
     function onChange({ status, data }) {
       setStatus(status);
@@ -49,9 +53,31 @@ export default function VideoBooth() {
         cursor.shotId,
         newTake.takeId,
       );
-      downloadURLImpl(exportedFileName, data);
+      const ext = getVideoFileExtensionByMIMEType(data.type);
+      const exportedFileNameWithExt = `${exportedFileName}${ext}`;
+      if (
+        !tokenHandler((token) => {
+          uploadFile(
+            token.access_token,
+            exportedFileNameWithExt,
+            data.type,
+            data,
+          )
+            .then(() => {
+              console.log('Upload file - ' + exportedFileNameWithExt);
+            })
+            .catch(() => {
+              console.error(
+                'Failed to upload file - ' + exportedFileNameWithExt,
+              );
+            });
+        })
+      ) {
+        const dataURL = URL.createObjectURL(data);
+        downloadURLImpl(exportedFileName, dataURL);
+      }
     },
-    [addTake, cursor, exportedFileName, setUserCursor],
+    [addTake, cursor, exportedFileName, setUserCursor, tokenHandler],
   );
 
   return (

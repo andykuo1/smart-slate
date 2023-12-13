@@ -13,6 +13,8 @@
 # 0.1.1
 
 - Change file names to use project name
+- Add GoogleDrive sync
+- Change to `.webm` video format
 
 # 0.1.0
 

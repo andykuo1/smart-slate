@@ -22,11 +22,15 @@ export default function SceneList({ documentId }) {
         {sceneIds.map((sceneId) => (
           <>
             <SceneHeader
-              key={sceneId}
+              key={`scene-${sceneId}`}
               documentId={documentId}
               sceneId={sceneId}
             />
-            <ShotList key={sceneId} documentId={documentId} sceneId={sceneId} />
+            <ShotList
+              key={`${sceneId}.shots`}
+              documentId={documentId}
+              sceneId={sceneId}
+            />
           </>
         ))}
         <NewScene documentId={documentId} />

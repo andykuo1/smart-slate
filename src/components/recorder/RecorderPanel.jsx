@@ -17,7 +17,7 @@ import {
  * @callback MediaRecorderChangeEventHandler
  * @param {object} e
  * @param {import('./UseMediaRecorder').MediaRecorderStatus} e.status
- * @param {string} e.data
+ * @param {Blob|null} e.data
  */
 
 const MEDIA_RECORDER_POSSIBLE_MIME_TYPES = [
@@ -26,9 +26,9 @@ const MEDIA_RECORDER_POSSIBLE_MIME_TYPES = [
   'video/webm',
   'video/quicktime',
 ];
-const MEDIA_RECORDER_SUPPORTED_MIME_TYPE = getMediaRecorderSupportedMimeType(
-  MEDIA_RECORDER_POSSIBLE_MIME_TYPES,
-);
+const MEDIA_RECORDER_SUPPORTED_MIME_TYPE =
+  getMediaRecorderSupportedMimeType(MEDIA_RECORDER_POSSIBLE_MIME_TYPES) ||
+  MEDIA_RECORDER_POSSIBLE_MIME_TYPES[0];
 
 /** @type {MediaRecorderOptions} */
 const MEDIA_RECORDER_OPTIONS = {
@@ -85,8 +85,7 @@ export default function RecorderPanel({ children, onChange }) {
         video.pause();
         video.srcObject = null;
       }
-      let url = URL.createObjectURL(blob);
-      onChange({ status: 'stopped', data: url });
+      onChange({ status: 'stopped', data: blob });
     },
     [videoRef, onChange],
   );
@@ -94,7 +93,7 @@ export default function RecorderPanel({ children, onChange }) {
     /** @param {import('./UseMediaRecorder').MediaRecorderStatus} status */
     function onStatus(status) {
       setRecorderStatus(status);
-      onChange({ status, data: '' });
+      onChange({ status, data: null });
     },
     [setRecorderStatus, onChange],
   );
@@ -208,7 +207,7 @@ function isMediaRecorderSupported(
 /**
  * @param {object} props
  * @param {import('react').RefObject<HTMLInputElement>} props.inputRef
- * @param {Function} props.onChange
+ * @param {MediaRecorderChangeEventHandler} props.onChange
  */
 function VideoInputCapture({ inputRef, onChange }) {
   const onChangeImpl = useCallback(
@@ -219,9 +218,8 @@ function VideoInputCapture({ inputRef, onChange }) {
       if (!file) {
         return;
       }
-      const url = URL.createObjectURL(file);
       el.value = '';
-      onChange({ status: 'stopped', data: url });
+      onChange({ status: 'stopped', data: file });
     },
     [onChange],
   );

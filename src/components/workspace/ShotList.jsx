@@ -34,13 +34,13 @@ export default function ShotList({ documentId, sceneId }) {
       {shotIds.map((shotId) => (
         <>
           <ShotHeader
-            key={shotId}
+            key={`shot-${shotId}`}
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
           />
           <TakeList
-            key={shotId}
+            key={`${shotId}.takes`}
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
