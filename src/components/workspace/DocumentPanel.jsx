@@ -4,9 +4,11 @@ import AddToDriveIcon from '@material-symbols/svg-400/rounded/add_to_drive.svg';
 import BackIcon from '@material-symbols/svg-400/rounded/arrow_back-fill.svg';
 import CloudOffIcon from '@material-symbols/svg-400/rounded/cloud_off.svg';
 import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
+import DeviceInfoIcon from '@material-symbols/svg-400/rounded/device_unknown.svg';
 import ExportIcon from '@material-symbols/svg-400/rounded/export_notes-fill.svg';
 import MenuIcon from '@material-symbols/svg-400/rounded/menu.svg';
 
+import Codecs from '@/constants/Codecs';
 import FancyButton from '@/lib/FancyButton';
 import { useGAPILogin, useGAPILogout } from '@/lib/googleapi/GoogleAPIContext';
 import { useDocumentStore } from '@/stores/DocumentStoreContext';
@@ -51,6 +53,13 @@ export default function DocumentPanel({ documentId }) {
     logout();
   }
 
+  function onDeviceInfo() {
+    const result = `${navigator.userAgent}\n\n${Codecs.join('\n')}`;
+    navigator.clipboard
+      .writeText(result)
+      .then(() => window.alert('Copied device info to clipboard!'));
+  }
+
   return (
     <>
       <div className="fixed m-2 z-10 right-0 flex flex-row">
@@ -77,6 +86,12 @@ export default function DocumentPanel({ documentId }) {
             title="Desync"
             onClick={onDesync}>
             <CloudOffIcon className="inline w-6 fill-current" />
+          </FancyButton>
+          <FancyButton
+            className="bg-white ml-2"
+            title="Info"
+            onClick={onDeviceInfo}>
+            <DeviceInfoIcon className="inline w-6 fill-current" />
           </FancyButton>
         </div>
         <ExportSignal />

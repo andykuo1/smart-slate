@@ -94,7 +94,7 @@ function GoogleAPILoginProvider({ apiKey, scopes, children }) {
   const logout = useCallback(() => {
     googleLogout();
     tokenRef.current = null;
-  }, [tokenRef, googleLogout]);
+  }, [tokenRef]);
 
   useEffect(() => {
     (async () => {
@@ -164,7 +164,7 @@ export function useGAPITokenHandler() {
       callback(token);
       return true;
     },
-    [tokenRef, scopes, hasGrantedAllScopesGoogle],
+    [tokenRef, scopes],
   );
   return tokenHandler;
 }
