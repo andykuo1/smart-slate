@@ -255,3 +255,20 @@ function tryValidateMediaRecorderConstraints(constraints) {
     );
   }
 }
+
+/**
+ * @param {Array<string>} possibleTypes
+ */
+export function getMediaRecorderSupportedMimeType(possibleTypes) {
+  if (typeof window.MediaRecorder === 'undefined') {
+    return '';
+  }
+
+  for (let type of possibleTypes) {
+    if (MediaRecorder.isTypeSupported(type)) {
+      return type;
+    }
+  }
+
+  return '';
+}

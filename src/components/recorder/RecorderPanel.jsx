@@ -8,6 +8,7 @@ import {
 } from '@/stores/UserStoreContext';
 
 import {
+  getMediaRecorderSupportedMimeType,
   tryValidateMediaRecorderFeatures,
   useMediaRecorder,
 } from './UseMediaRecorder';
@@ -19,8 +20,20 @@ import {
  * @param {string} e.data
  */
 
+const MEDIA_RECORDER_POSSIBLE_MIME_TYPES = [
+  'video/mp4',
+  'video/ogg',
+  'video/webm',
+  'video/quicktime',
+];
+const MEDIA_RECORDER_SUPPORTED_MIME_TYPE = getMediaRecorderSupportedMimeType(
+  MEDIA_RECORDER_POSSIBLE_MIME_TYPES,
+);
+
 /** @type {MediaRecorderOptions} */
-const MEDIA_RECORDER_OPTIONS = {};
+const MEDIA_RECORDER_OPTIONS = {
+  mimeType: MEDIA_RECORDER_SUPPORTED_MIME_TYPE,
+};
 /** @type {MediaStreamConstraints} */
 const MEDIA_STREAM_CONSTRAINTS = {
   video: {
@@ -30,7 +43,7 @@ const MEDIA_STREAM_CONSTRAINTS = {
 };
 /** @type {BlobPropertyBag} */
 const MEDIA_BLOB_OPTIONS = {
-  type: 'video/mp4',
+  type: MEDIA_RECORDER_SUPPORTED_MIME_TYPE,
 };
 
 /**

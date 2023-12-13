@@ -90,6 +90,10 @@ export function downloadURL(filename, url) {
   document.body.removeChild(element);
 }
 
+/**
+ * @param {string} filename
+ * @param {string} url
+ */
 export function downloadURLImpl(filename, url) {
   const element = document.createElement('a');
   element.setAttribute('href', url);

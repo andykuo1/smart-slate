@@ -69,6 +69,7 @@ function ShotHeader({ documentId, sceneId, shotId }) {
     currentCursor.documentId === documentId &&
     currentCursor.sceneId === sceneId &&
     currentCursor.shotId === shotId;
+  const isFirst = sceneNumber <= 1 && shotNumber <= 1;
   function onClick() {
     setUserCursor(documentId, sceneId, shotId, '');
     setRecorderActive(true, true);
@@ -94,7 +95,9 @@ function ShotHeader({ documentId, sceneId, shotId }) {
         <div className="group w-full h-full flex flex-row items-center text-center">
           <RecordButton onClick={onClick} />
           <div className="flex-1 opacity-30 text-xs">
-            {choosePlaceholderRandomly(shotId)}
+            {isFirst
+              ? '<-- Tap the ◉ to record'
+              : choosePlaceholderRandomly(shotId)}
           </div>
         </div>
       </div>
