@@ -10,6 +10,7 @@
 # 0.1.2
 
 - Add fullscreen while recording
+- Add PWA support
 
 # 0.1.1
 
