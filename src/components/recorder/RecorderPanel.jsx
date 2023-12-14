@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import BackIcon from '@material-symbols/svg-400/rounded/arrow_back-fill.svg';
 
@@ -64,6 +65,7 @@ export default function RecorderPanel({ children, onChange }) {
     useFullscreen();
   const setRecorderActive = useSetRecorderActive();
   const setRecorderStatus = useSetRecorderStatus();
+  const navigate = useNavigate();
 
   const onStart = useCallback(
     /** @param {MediaRecorder} mediaRecorder */
@@ -122,6 +124,7 @@ export default function RecorderPanel({ children, onChange }) {
       onChange(e);
       setRecorderActive(false, false);
       exitFullscreen();
+      navigate('/edit');
     },
     [onChange, setRecorderActive],
   );
@@ -189,12 +192,16 @@ function DarkHomeButton({ className, disabled }) {
   const recorderActive = useCurrentRecorder()?.active || false;
   const setRecorderActive = useSetRecorderActive();
   const { exitFullscreen } = useFullscreen();
+  const navigate = useNavigate();
 
   function onReturnHomeClick() {
     if (recorderActive) {
       setRecorderActive(false, false);
+      navigate('/edit');
     } else {
+      // NOTE: This goes all the way to root.
       setUserCursor('', '', '', '');
+      navigate('/');
     }
     exitFullscreen();
   }

@@ -16,7 +16,7 @@ export default function App() {
         clientId={GAPI_CLIENT_ID}
         scopes={[GAPI_DRIVE_FILE_SCOPE]}>
         <FullscreenProvider>
-          <main className="relative w-screen h-screen text-black bg-transparent overflow-hidden">
+          <main className="w-full h-full">
             <Workspace />
           </main>
         </FullscreenProvider>

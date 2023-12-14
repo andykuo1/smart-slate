@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import BarberpoleStyle from '@/app/barberpole.module.css';
 import { choosePlaceholderRandomly } from '@/constants/PlaceholderText';
@@ -61,6 +62,7 @@ function ShotHeader({ documentId, sceneId, shotId }) {
   const currentCursor = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
   const setRecorderActive = useSetRecorderActive();
+  const navigate = useNavigate();
   const isActive =
     currentCursor.documentId === documentId &&
     currentCursor.sceneId === sceneId &&
@@ -69,6 +71,7 @@ function ShotHeader({ documentId, sceneId, shotId }) {
   function onClick() {
     setUserCursor(documentId, sceneId, shotId, '');
     setRecorderActive(true, true);
+    navigate(`/rec?doc=${documentId}&shot=${shotId}`);
   }
   return (
     <li

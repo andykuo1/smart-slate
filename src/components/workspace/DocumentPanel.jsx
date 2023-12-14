@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import AddToDriveIcon from '@material-symbols/svg-400/rounded/add_to_drive.svg';
 import BackIcon from '@material-symbols/svg-400/rounded/arrow_back-fill.svg';
@@ -29,6 +30,7 @@ export default function DocumentPanel({ documentId }) {
   const setUserCursor = useSetUserCursor();
   const deleteDocument = useDocumentStore((ctx) => ctx.deleteDocument);
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const login = useGAPILogin();
   const logout = useGAPILogout();
@@ -42,6 +44,7 @@ export default function DocumentPanel({ documentId }) {
       setMenuOpen(false);
       setUserCursor('', '', '');
       deleteDocument(documentId);
+      navigate('/');
     }
   }
 
@@ -114,6 +117,7 @@ function HomeButton({ className, disabled }) {
   const setUserCursor = useSetUserCursor();
   const recorderActive = useCurrentRecorder()?.active || false;
   const setRecorderActive = useSetRecorderActive();
+  const navigate = useNavigate();
 
   function onReturnHomeClick() {
     if (recorderActive) {
@@ -121,10 +125,11 @@ function HomeButton({ className, disabled }) {
     } else {
       setUserCursor('', '', '', '');
     }
+    navigate('/');
   }
 
   return (
-    <div className="fixed m-2 z-10">
+    <div className="fixed left-0 top-0 m-2 z-10">
       <FancyButton
         className={className}
         title="Exit"

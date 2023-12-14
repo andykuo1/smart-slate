@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '@material-symbols/svg-400/rounded/add-fill.svg';
 import UploadIcon from '@material-symbols/svg-400/rounded/upload-fill.svg';
@@ -19,6 +20,7 @@ import AppTitle from './AppTitle';
 export default function WelcomePanel() {
   const addDocument = useDocumentStore((ctx) => ctx.addDocument);
   const setUserCursor = useSetUserCursor();
+  const navigate = useNavigate();
 
   const onNewProjectClick = useCallback(
     function onNewProjectClick() {
@@ -27,6 +29,7 @@ export default function WelcomePanel() {
       newDocument.lastUpdatedMillis = Date.now();
       addDocument(newDocument);
       setUserCursor(newDocument.documentId, '', '', '');
+      navigate(`/edit?doc=${newDocument.documentId}`);
     },
     [addDocument, setUserCursor],
   );
@@ -102,10 +105,12 @@ function SavedProjectItem({ documentId }) {
   const title = useDocumentTitle(documentId);
   const millis = useDocumentLastUpdatedMillis(documentId);
   const setUserCursor = useSetUserCursor();
+  const navigate = useNavigate();
 
   const onClick = useCallback(
     function onClick() {
       setUserCursor(documentId, '', '', '');
+      navigate(`/edit?doc=${documentId}`);
     },
     [documentId, setUserCursor],
   );

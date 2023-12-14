@@ -21,7 +21,8 @@ export default defineConfig({
       injectRegister: 'inline',
       registerType: 'autoUpdate',
       devOptions: {
-        enabled: true,
+        /* NOTE: Enable this to test PWA features. */
+        enabled: false,
       },
       manifest: {
         name: 'EagleStudio SmartSlate',
