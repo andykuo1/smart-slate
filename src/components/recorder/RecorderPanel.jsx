@@ -126,7 +126,7 @@ export default function RecorderPanel({ children, onChange }) {
       exitFullscreen();
       navigate('/edit');
     },
-    [onChange, setRecorderActive],
+    [onChange, setRecorderActive, exitFullscreen],
   );
 
   useEffect(() => {
@@ -144,7 +144,13 @@ export default function RecorderPanel({ children, onChange }) {
       }
       enterFullscreen();
     }
-  }, [recorder, setRecorderActive, startRecording, startCapturing]);
+  }, [
+    recorder,
+    setRecorderActive,
+    startRecording,
+    startCapturing,
+    enterFullscreen,
+  ]);
 
   return (
     <div

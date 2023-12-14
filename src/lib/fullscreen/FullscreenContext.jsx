@@ -20,11 +20,16 @@ function useFullscreenAPI() {
   );
 
   const enterFullscreen = useCallback(() => {
-    (fullscreenTargetRef.current || document.body)?.requestFullscreen();
+    let target = fullscreenTargetRef.current || document.body;
+    if (isRequestFullscreenSupported(target)) {
+      target.requestFullscreen();
+    }
   }, []);
 
   const exitFullscreen = useCallback(() => {
-    document.exitFullscreen();
+    if (isExitFullscreenSupported(document)) {
+      document.exitFullscreen();
+    }
   }, []);
 
   useEffect(() => {
@@ -60,4 +65,18 @@ export function useFullscreen() {
     throw new Error('Missing <FullscreenProvider/>');
   }
   return result;
+}
+
+/**
+ * @param {HTMLElement} targetElement
+ */
+export function isRequestFullscreenSupported(targetElement) {
+  return typeof targetElement?.['requestFullscreen'] !== 'undefined';
+}
+
+/**
+ * @param {Document} targetElement
+ */
+export function isExitFullscreenSupported(targetElement) {
+  return typeof targetElement?.['exitFullscreen'] !== 'undefined';
 }
