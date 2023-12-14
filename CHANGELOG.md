@@ -1,11 +1,11 @@
 # Upcoming
 
-- Separate release versions
-- Make it an installable app.
-- DaVinci Resolve tagging API
-  - Save this metadata?
-  - Or remove the input text boxes.
-- Timeline: December 18th.
+- Flag color? Marker color?
+- Export shot list to CSV?
+
+# 0.1.3
+
+- Add popover for install help
 
 # 0.1.2
 
