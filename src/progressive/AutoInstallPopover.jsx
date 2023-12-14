@@ -20,7 +20,7 @@ import SquareAndArrowUp from './sf-square-and-arrow-up.svg';
 export default function AutoInstallPopover() {
   return (
     <PopoverProvider>
-      <PopoverAutoDisclosureOnApple />
+      <PopoverAutoDisclosure />
       <PopoverAnchor className="fixed top-0 right-0" />
       <Popover className={Style.popover}>
         <PopoverArrow className={Style.arrow} />
@@ -144,10 +144,9 @@ function PopoverContentAndroid() {
   );
 }
 
-function PopoverAutoDisclosureOnApple() {
+function PopoverAutoDisclosure() {
   const store = usePopoverContext();
   useEffect(() => {
-    store?.show();
     if (!isStandaloneMode()) {
       store?.show();
     }
