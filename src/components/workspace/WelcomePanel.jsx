@@ -29,7 +29,7 @@ export default function WelcomePanel() {
       newDocument.lastUpdatedMillis = Date.now();
       addDocument(newDocument);
       setUserCursor(newDocument.documentId, '', '', '');
-      navigate(`/edit?doc=${newDocument.documentId}`);
+      navigate(`/edit`);
     },
     [addDocument, setUserCursor],
   );
@@ -110,7 +110,7 @@ function SavedProjectItem({ documentId }) {
   const onClick = useCallback(
     function onClick() {
       setUserCursor(documentId, '', '', '');
-      navigate(`/edit?doc=${documentId}`);
+      navigate(`/edit`);
     },
     [documentId, setUserCursor],
   );

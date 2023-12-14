@@ -71,7 +71,7 @@ function ShotHeader({ documentId, sceneId, shotId }) {
   function onClick() {
     setUserCursor(documentId, sceneId, shotId, '');
     setRecorderActive(true, true);
-    navigate(`/rec?doc=${documentId}&shot=${shotId}`);
+    navigate(`/rec`);
   }
   return (
     <li
