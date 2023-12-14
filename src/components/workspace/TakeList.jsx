@@ -49,7 +49,7 @@ function TakeHeader({ documentId, sceneId, shotId, takeId }) {
   return (
     <TakeLayout
       takeNumber={takeNumber}
-      timestamp={take.lastExportedMillis}
+      timestamp={take.exportedMillis}
       fileName={take.exportedFileName || '--'}
     />
   );
