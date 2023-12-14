@@ -2,6 +2,7 @@ import { hasGrantedAllScopesGoogle } from '@react-oauth/google';
 import { useCallback, useContext } from 'react';
 
 import { hasGoogleAPI } from './GoogleAPI';
+import { getGoogleAPICachedTokenResponse } from './GoogleAPICachedTokenResponse';
 import { GoogleAPIContext } from './GoogleAPIContext';
 
 function useGoogleAPI() {
@@ -23,11 +24,11 @@ export function useGAPILogout() {
 }
 
 export function useGAPITokenHandler() {
-  const { scopes, tokenRef } = useGoogleAPI();
+  const { scopes } = useGoogleAPI();
   const tokenHandler = useCallback(
     /** @param {(token: import('@react-oauth/google').TokenResponse) => void} callback */
     function _tokenHandler(callback) {
-      let token = tokenRef.current;
+      let token = getGoogleAPICachedTokenResponse();
       if (!token || scopes.length <= 0) {
         console.log('Checked GAPI access...no token or scopes');
         return false;
@@ -44,7 +45,7 @@ export function useGAPITokenHandler() {
       callback(token);
       return true;
     },
-    [tokenRef, scopes],
+    [scopes],
   );
   return tokenHandler;
 }

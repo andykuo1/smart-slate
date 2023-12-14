@@ -1,10 +1,15 @@
 import { useCallback, useEffect, useRef } from 'react';
 
+import BackIcon from '@material-symbols/svg-400/rounded/arrow_back-fill.svg';
+
+import FancyButton from '@/lib/FancyButton';
+import { useFullscreen } from '@/lib/fullscreen';
 import RecorderStatus from '@/stores/RecorderStatus';
 import {
   useCurrentRecorder,
   useSetRecorderActive,
   useSetRecorderStatus,
+  useSetUserCursor,
 } from '@/stores/UserStoreContext';
 
 import {
@@ -12,6 +17,7 @@ import {
   isMediaRecorderSupported,
   useMediaRecorder,
 } from './UseMediaRecorder';
+import { VideoInputCapture, useInputCapture } from './VideoInputCapture';
 
 /**
  * @callback MediaRecorderChangeEventHandler
@@ -54,6 +60,8 @@ const MEDIA_BLOB_OPTIONS = {
 export default function RecorderPanel({ children, onChange }) {
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
   const recorder = useCurrentRecorder();
+  const { enterFullscreen, exitFullscreen, fullscreenTargetRef } =
+    useFullscreen();
   const setRecorderActive = useSetRecorderActive();
   const setRecorderStatus = useSetRecorderStatus();
 
@@ -113,6 +121,7 @@ export default function RecorderPanel({ children, onChange }) {
     function onInputCaptureChange(e) {
       onChange(e);
       setRecorderActive(false, false);
+      exitFullscreen();
     },
     [onChange, setRecorderActive],
   );
@@ -130,15 +139,22 @@ export default function RecorderPanel({ children, onChange }) {
       } else {
         startCapturing();
       }
+      enterFullscreen();
     }
   }, [recorder, setRecorderActive, startRecording, startCapturing]);
 
   return (
-    <div className="relative flex flex-col items-center bg-black w-full h-full">
+    <div
+      ref={fullscreenTargetRef}
+      className="relative flex flex-col items-center bg-black w-full h-full">
       <VideoInputCapture inputRef={inputRef} onChange={onInputCaptureChange} />
       <div className="flex-1" />
       <video className="w-full h-full bg-neutral-900" ref={videoRef} />
       <div className="flex-1" />
+      <DarkHomeButton
+        className="absolute top-0 left-0"
+        disabled={!recorder.active || !RecorderStatus.isDone(recorder.status)}
+      />
       <div className="absolute bottom-0 left-0 right-0 flex flex-row">
         <button
           className="bg-red-500 p-4 py-6 m-2 rounded-full disabled:opacity-30"
@@ -163,48 +179,35 @@ export default function RecorderPanel({ children, onChange }) {
   );
 }
 
-function useInputCapture() {
-  const inputRef = useRef(/** @type {HTMLInputElement|null} */ (null));
-  const startCapturing = useCallback(
-    function startCapturing() {
-      inputRef.current?.click();
-    },
-    [inputRef],
-  );
-  return {
-    inputRef,
-    startCapturing,
-  };
-}
-
 /**
  * @param {object} props
- * @param {import('react').RefObject<HTMLInputElement>} props.inputRef
- * @param {MediaRecorderChangeEventHandler} props.onChange
+ * @param {string} [props.className]
+ * @param {boolean} [props.disabled]
  */
-function VideoInputCapture({ inputRef, onChange }) {
-  const onChangeImpl = useCallback(
-    /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
-    function _onChangeImpl(e) {
-      const el = /** @type {HTMLInputElement} */ (e.target);
-      const file = el.files?.[0];
-      if (!file) {
-        return;
-      }
-      el.value = '';
-      onChange({ status: 'stopped', data: file });
-    },
-    [onChange],
-  );
+function DarkHomeButton({ className, disabled }) {
+  const setUserCursor = useSetUserCursor();
+  const recorderActive = useCurrentRecorder()?.active || false;
+  const setRecorderActive = useSetRecorderActive();
+  const { exitFullscreen } = useFullscreen();
+
+  function onReturnHomeClick() {
+    if (recorderActive) {
+      setRecorderActive(false, false);
+    } else {
+      setUserCursor('', '', '', '');
+    }
+    exitFullscreen();
+  }
 
   return (
-    <input
-      ref={inputRef}
-      className="hidden"
-      type="file"
-      accept="video/*"
-      capture="environment"
-      onChange={onChangeImpl}
-    />
+    <div className={'fixed m-2 z-10' + ' ' + className}>
+      <FancyButton
+        className="to-gray-900 text-white enabled:hover:to-gray-800"
+        title="Back"
+        disabled={disabled}
+        onClick={onReturnHomeClick}>
+        <BackIcon className="inline w-6 fill-current" />
+      </FancyButton>
+    </div>
   );
 }

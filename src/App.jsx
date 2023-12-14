@@ -1,5 +1,6 @@
 import ErrorBoundary from '@/components/ErrorBoundary';
 import Workspace from '@/components/workspace/Workspace';
+import { FullscreenProvider } from '@/lib/fullscreen';
 import {
   GAPI_API_KEY,
   GAPI_CLIENT_ID,
@@ -14,9 +15,11 @@ export default function App() {
         apiKey={GAPI_API_KEY}
         clientId={GAPI_CLIENT_ID}
         scopes={[GAPI_DRIVE_FILE_SCOPE]}>
-        <main className="relative w-screen h-screen text-black bg-transparent overflow-hidden">
-          <Workspace />
-        </main>
+        <FullscreenProvider>
+          <main className="relative w-screen h-screen text-black bg-transparent overflow-hidden">
+            <Workspace />
+          </main>
+        </FullscreenProvider>
       </GoogleAPIProvider>
     </ErrorBoundary>
   );

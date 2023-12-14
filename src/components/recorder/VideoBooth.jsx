@@ -37,7 +37,7 @@ export default function VideoBooth() {
       }
       let newTake = createTake();
       newTake.exportedFileName = exportedFileName;
-      newTake.lastExportedMillis = Date.now();
+      newTake.exportedMillis = Date.now();
       addTake(cursor.documentId, cursor.shotId, newTake);
       setUserCursor(
         cursor.documentId,

@@ -3,13 +3,14 @@ import {
   googleLogout,
   useGoogleLogin,
 } from '@react-oauth/google';
-import { createContext, useCallback, useEffect, useRef, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 
 import {
   getGoogleAPI,
   initializeGoogleAPI,
   initializeGoogleAPIClient,
 } from './GoogleAPI';
+import { setGoogleAPICachedTokenResponse } from './GoogleAPICachedTokenResponse';
 
 export const GoogleAPIContext = createContext(
   /** @type {ReturnType<createGoogleAPI>|null} */ (null),
@@ -19,23 +20,14 @@ export const GoogleAPIContext = createContext(
  * @param {Array<string>} scopes
  * @param {() => void} login
  * @param {() => void} logout
- * @param {import('react').RefObject<import('@react-oauth/google').TokenResponse|null>} tokenRef
  * @param {boolean} gapiLoaded
  * @param {boolean} gsiLoaded
  */
-function createGoogleAPI(
-  scopes,
-  login,
-  logout,
-  tokenRef,
-  gapiLoaded,
-  gsiLoaded,
-) {
+function createGoogleAPI(scopes, login, logout, gapiLoaded, gsiLoaded) {
   return {
     scopes,
     login,
     logout,
-    tokenRef,
     status: Boolean(gapiLoaded && gsiLoaded),
   };
 }
@@ -66,26 +58,23 @@ export function GoogleAPIProvider({ apiKey, clientId, scopes, children }) {
 function GoogleAPILoginProvider({ apiKey, scopes, children }) {
   const [gapiLoaded, setGAPILoaded] = useState(false);
   const [gsiLoaded, setGSILoaded] = useState(false);
-  const tokenRef = useRef(
-    /** @type {import('@react-oauth/google').TokenResponse|null} */ (null),
-  );
 
   const login = useGoogleLogin({
     scope: scopes.join(' '),
     onSuccess(tokenResponse) {
-      tokenRef.current = tokenResponse;
+      setGoogleAPICachedTokenResponse(tokenResponse);
       setGSILoaded(true);
     },
     onError(errorResponse) {
-      tokenRef.current = null;
+      setGoogleAPICachedTokenResponse(null);
       console.error(errorResponse);
     },
   });
 
   const logout = useCallback(() => {
     googleLogout();
-    tokenRef.current = null;
-  }, [tokenRef]);
+    setGoogleAPICachedTokenResponse(null);
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -100,14 +89,7 @@ function GoogleAPILoginProvider({ apiKey, scopes, children }) {
     })();
   }, [apiKey]);
 
-  const value = createGoogleAPI(
-    scopes,
-    login,
-    logout,
-    tokenRef,
-    gapiLoaded,
-    gsiLoaded,
-  );
+  const value = createGoogleAPI(scopes, login, logout, gapiLoaded, gsiLoaded);
   return (
     <GoogleAPIContext.Provider value={value}>
       {children}

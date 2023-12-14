@@ -7,6 +7,10 @@
   - Or remove the input text boxes.
 - Timeline: December 18th.
 
+# 0.1.2
+
+- Add fullscreen while recording
+
 # 0.1.1
 
 - Add GoogleDrive sync
