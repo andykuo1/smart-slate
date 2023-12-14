@@ -9,7 +9,7 @@ const FullscreenContext = createContext(
 );
 
 function useFullscreenAPI() {
-  const fullscreenTargetRef = useRef(/** @type {any} */ (document.body));
+  const fullscreenTargetRef = useRef(/** @type {any} */ (null));
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const onFullscreenChange = useCallback(
@@ -20,7 +20,7 @@ function useFullscreenAPI() {
   );
 
   const enterFullscreen = useCallback(() => {
-    (fullscreenTargetRef.current || document.body).requestFullscreen();
+    (fullscreenTargetRef.current || document.body)?.requestFullscreen();
   }, []);
 
   const exitFullscreen = useCallback(() => {
