@@ -1,4 +1,5 @@
-import { uuid } from '../utils/uuid';
+import { uuid } from '@/utils/uuid';
+
 import ShotTypes, { ANY_SHOT } from './ShotTypes';
 
 /**
@@ -75,9 +76,9 @@ export function createShot(shotId = uuid()) {
 export function createTake(takeId = uuid()) {
   return {
     takeId,
-    exportedFileName: '',
-    lastExportedMillis: 0,
     notes: '',
+    exportedMillis: 0,
+    exportedFileName: '',
   };
 }
 
@@ -170,9 +171,9 @@ export function cloneShot(out, shot) {
  */
 export function cloneTake(out, take) {
   out.takeId = take.takeId;
-  out.exportedFileName = take.exportedFileName;
-  out.lastExportedMillis = take.lastExportedMillis;
   out.notes = take.notes;
+  out.exportedMillis = take.exportedMillis;
+  out.exportedFileName = take.exportedFileName;
   return /** @type {Take} */ (out);
 }
 
