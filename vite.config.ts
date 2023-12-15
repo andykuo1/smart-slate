@@ -17,8 +17,9 @@ export default defineConfig({
     }),
     tsconfigPaths(),
     VitePWA({
+      selfDestroying: true,
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
-      injectRegister: 'inline',
+      injectRegister: 'auto',
       registerType: 'autoUpdate',
       devOptions: {
         /* NOTE: Enable this to test PWA features. */
