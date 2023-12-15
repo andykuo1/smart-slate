@@ -17,7 +17,10 @@ export default defineConfig({
     }),
     tsconfigPaths(),
     VitePWA({
+      /*
+      // NOTE: Use this to nuke everything :)
       selfDestroying: true,
+      */
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       injectRegister: 'auto',
       registerType: 'autoUpdate',
