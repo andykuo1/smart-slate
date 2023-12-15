@@ -9,6 +9,7 @@
 - Add changelog button
 - Change `<input capture>` behavior
 - Add exit on cut for `MediaRecorder`
+- Add app update prompt for new versions
 
 # 0.1.2
 
