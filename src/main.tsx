@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
+import '@/progressive/ServiceWorkerInstall';
+
 import { PACKAGE_NAME } from './constants/PackageJSON';
 import './index.css';
 import Providers from './providers';

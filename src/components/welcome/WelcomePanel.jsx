@@ -63,18 +63,14 @@ function SavedProjectView({ className }) {
   const documentIds = useDocumentIds();
   if (documentIds.length <= 0) {
     return (
-      <label
-        htmlFor="existingProjectList"
-        className={'mx-auto my-2 text-gray-400' + ' ' + className}>
+      <label className={'mx-auto my-2 text-gray-400' + ' ' + className}>
         Pick one to get started!
       </label>
     );
   }
   return (
     <>
-      <label
-        htmlFor="existingProjectList"
-        className="mx-auto my-2 text-gray-400">
+      <label className="mx-auto my-2 text-gray-400">
         Or open an existing project...
       </label>
       <HorizontallyScrollableDiv
@@ -83,7 +79,7 @@ function SavedProjectView({ className }) {
           ' ' +
           className
         }>
-        <ul id="existingProjectList" className={'flex flex-row'}>
+        <ul className={'flex flex-row'}>
           <div className="flex-1 min-w-[2rem] text-white text-right my-auto">
             |
           </div>
