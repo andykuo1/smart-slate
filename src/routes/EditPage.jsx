@@ -4,7 +4,7 @@ import { useCurrentDocumentId } from '@/stores/UserStoreContext';
 export default function EditPage() {
   const documentId = useCurrentDocumentId();
   return (
-    <main className="w-full h-full flex flex-col items-center">
+    <main className="w-full h-full flex flex-col items-center bg-white">
       <DocumentPanel documentId={documentId} />
     </main>
   );

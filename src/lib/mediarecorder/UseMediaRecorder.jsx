@@ -1,6 +1,13 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-/** @typedef {'idle'|'preparing_streams'|'ready'|'starting'|'recording'|'stopping'|'stopped'|Error} MediaRecorderStatus */
+import {
+  MEDIA_RECORDER_OPTIONS,
+  MEDIA_STREAM_CONSTRAINTS,
+} from '@/components/recorder/RecorderPanel';
+
+import { useMediaRecorderV2 } from '.';
+
+/** @typedef {'idle'|'preparing_streams'|'ready'|'starting'|'started'|'recording'|'stopping'|'stopped'|Error} MediaRecorderStatus */
 
 /**
  * @param {object} props
@@ -24,6 +31,7 @@ export function useMediaRecorder({
   const blobParts = useRef(/** @type {Array<Blob>} */ ([]));
   const mediaStream = useRef(/** @type {MediaStream|null} */ (null));
   const mediaRecorder = useRef(/** @type {MediaRecorder|null} */ (null));
+  const { handleChange } = useMediaRecorderV2();
 
   const onDataAvailableImpl = useCallback(
     /** @param {BlobEvent} e */
@@ -82,8 +90,16 @@ export function useMediaRecorder({
       if (onStop) {
         onStop(blob);
       }
+      handleChange({ status: 'stopped', data: blob });
     },
-    [blobOptions, onDataAvailableImpl, onErrorImpl, onStop, onStatus],
+    [
+      blobOptions,
+      onDataAvailableImpl,
+      onErrorImpl,
+      onStop,
+      onStatus,
+      handleChange,
+    ],
   );
 
   const onStartImpl = useCallback(
@@ -101,8 +117,16 @@ export function useMediaRecorder({
       if (onStart && mr) {
         onStart(mr);
       }
+      handleChange({ status: 'started', data: null });
     },
-    [onStopImpl, onDataAvailableImpl, onErrorImpl, onStart, onStatus],
+    [
+      onStopImpl,
+      onDataAvailableImpl,
+      onErrorImpl,
+      onStart,
+      onStatus,
+      handleChange,
+    ],
   );
 
   const prepareRecording = useCallback(
@@ -174,6 +198,14 @@ export function useMediaRecorder({
   );
 
   useEffect(() => {
+    if (
+      !isMediaRecorderSupported(
+        MEDIA_RECORDER_OPTIONS,
+        MEDIA_STREAM_CONSTRAINTS,
+      )
+    ) {
+      return;
+    }
     try {
       tryValidateMediaRecorderFeatures(
         mediaRecorderOptions,

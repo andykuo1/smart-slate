@@ -5,7 +5,7 @@
   margin: auto;
   display: flex;
   height: fit-content;
-  max-height: calc(100vh - 2 * 0.75rem);
+  max-height: calc(80vh - 2 * 0.75rem);
   flex-direction: column;
   overflow: auto;
   border-radius: 0.75rem;

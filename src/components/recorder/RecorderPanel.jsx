@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import BackIcon from '@material-symbols/svg-400/rounded/arrow_back-fill.svg';
@@ -9,7 +9,7 @@ import {
   getMediaRecorderSupportedMimeType,
   isMediaRecorderSupported,
   useMediaRecorder,
-} from '@/lib/mediarecorder/UseMediaRecorder';
+} from '@/lib/mediarecorder';
 import RecorderStatus from '@/stores/RecorderStatus';
 import {
   useCurrentRecorder,
@@ -17,8 +17,6 @@ import {
   useSetRecorderStatus,
   useSetUserCursor,
 } from '@/stores/UserStoreContext';
-
-import { VideoInputCapture, useInputCapture } from './VideoInputCapture';
 
 /**
  * @callback MediaRecorderChangeEventHandler
@@ -38,11 +36,11 @@ const MEDIA_RECORDER_SUPPORTED_MIME_TYPE =
   MEDIA_RECORDER_POSSIBLE_MIME_TYPES[0];
 
 /** @type {MediaRecorderOptions} */
-const MEDIA_RECORDER_OPTIONS = {
+export const MEDIA_RECORDER_OPTIONS = {
   mimeType: MEDIA_RECORDER_SUPPORTED_MIME_TYPE,
 };
 /** @type {MediaStreamConstraints} */
-const MEDIA_STREAM_CONSTRAINTS = {
+export const MEDIA_STREAM_CONSTRAINTS = {
   video: {
     facingMode: 'environment',
   },
@@ -61,10 +59,9 @@ const MEDIA_BLOB_OPTIONS = {
 export default function RecorderPanel({ children, onChange }) {
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
   const recorder = useCurrentRecorder();
-  const { exitFullscreen, fullscreenTargetRef } = useFullscreen();
   const setRecorderActive = useSetRecorderActive();
   const setRecorderStatus = useSetRecorderStatus();
-  const navigate = useNavigate();
+  const [mediaRecorderAvailable, setMediaRecorderAvailable] = useState(false);
 
   const onStart = useCallback(
     /** @param {MediaRecorder} mediaRecorder */
@@ -115,19 +112,6 @@ export default function RecorderPanel({ children, onChange }) {
     onStatus,
   });
 
-  const { inputRef, startCapturing } = useInputCapture();
-
-  const onInputCaptureChange = useCallback(
-    /** @type {MediaRecorderChangeEventHandler} */
-    function onInputCaptureChange(e) {
-      onChange(e);
-      setRecorderActive(false, false);
-      exitFullscreen();
-      navigate('/edit');
-    },
-    [onChange, setRecorderActive, exitFullscreen],
-  );
-
   useEffect(() => {
     if (recorder.active && recorder.forceStart) {
       setRecorderActive(true, false);
@@ -137,24 +121,23 @@ export default function RecorderPanel({ children, onChange }) {
           MEDIA_STREAM_CONSTRAINTS,
         )
       ) {
+        setMediaRecorderAvailable(true);
         startRecording();
-      } else {
-        startCapturing();
       }
     }
-  }, [recorder, setRecorderActive, startRecording, startCapturing]);
+  }, [recorder, setRecorderActive, startRecording]);
 
   return (
-    <div
-      ref={fullscreenTargetRef}
-      className="relative flex flex-col items-center bg-black w-full h-full">
-      <VideoInputCapture inputRef={inputRef} onChange={onInputCaptureChange} />
+    <div className="relative flex flex-col items-center bg-black w-full h-full">
       <div className="flex-1" />
       <video className="w-full h-full bg-neutral-900" ref={videoRef} />
       <div className="flex-1" />
       <DarkHomeButton
         className="absolute top-0 left-0"
-        disabled={!recorder.active || !RecorderStatus.isDone(recorder.status)}
+        disabled={
+          mediaRecorderAvailable &&
+          (!recorder.active || !RecorderStatus.isDone(recorder.status))
+        }
       />
       <div className="absolute bottom-0 left-0 right-0 flex flex-row">
         <button

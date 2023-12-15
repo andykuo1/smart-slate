@@ -1,19 +1,19 @@
-/** @type {import('@/components/recorder/UseMediaRecorder').MediaRecorderStatus} */
+/** @type {import('@/lib/mediarecorder/UseMediaRecorder').MediaRecorderStatus} */
 export const IDLE = 'idle';
-/** @type {import('@/components/recorder/UseMediaRecorder').MediaRecorderStatus} */
+/** @type {import('@/lib/mediarecorder/UseMediaRecorder').MediaRecorderStatus} */
 export const PREPARING_STREAMS = 'preparing_streams';
-/** @type {import('@/components/recorder/UseMediaRecorder').MediaRecorderStatus} */
+/** @type {import('@/lib/mediarecorder/UseMediaRecorder').MediaRecorderStatus} */
 export const READY = 'ready';
-/** @type {import('@/components/recorder/UseMediaRecorder').MediaRecorderStatus} */
+/** @type {import('@/lib/mediarecorder/UseMediaRecorder').MediaRecorderStatus} */
 export const STARTING = 'starting';
-/** @type {import('@/components/recorder/UseMediaRecorder').MediaRecorderStatus} */
+/** @type {import('@/lib/mediarecorder/UseMediaRecorder').MediaRecorderStatus} */
 export const RECORDING = 'recording';
-/** @type {import('@/components/recorder/UseMediaRecorder').MediaRecorderStatus} */
+/** @type {import('@/lib/mediarecorder/UseMediaRecorder').MediaRecorderStatus} */
 export const STOPPING = 'stopping';
-/** @type {import('@/components/recorder/UseMediaRecorder').MediaRecorderStatus} */
+/** @type {import('@/lib/mediarecorder/UseMediaRecorder').MediaRecorderStatus} */
 export const STOPPED = 'stopped';
 
-/** @type {Array<import('@/components/recorder/UseMediaRecorder').MediaRecorderStatus>} */
+/** @type {Array<import('@/lib/mediarecorder/UseMediaRecorder').MediaRecorderStatus>} */
 const VALUES = [
   IDLE,
   PREPARING_STREAMS,

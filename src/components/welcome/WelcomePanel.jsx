@@ -32,7 +32,7 @@ export default function WelcomePanel() {
       setUserCursor(newDocument.documentId, '', '', '');
       navigate('/edit');
     },
-    [addDocument, setUserCursor],
+    [addDocument, setUserCursor, navigate],
   );
 
   return (
@@ -114,7 +114,7 @@ function SavedProjectItem({ documentId }) {
       setUserCursor(documentId, '', '', '');
       navigate('/edit');
     },
-    [documentId, setUserCursor],
+    [documentId, setUserCursor, navigate],
   );
 
   const titleWithPlaceholder = title || 'Untitled';

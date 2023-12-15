@@ -24,9 +24,9 @@ export const LOCAL_STORAGE_KEY = 'documentStore';
 /** @type {import('zustand').UseBoundStore<import('zustand').StoreApi<StoreAndDispatch>>} */
 export const useDocumentStore = create(
   persist(
-    (set) => ({
+    (set, get) => ({
       ...createStore(),
-      ...createDispatch(set),
+      ...createDispatch(set, get),
     }),
     {
       name: LOCAL_STORAGE_KEY,

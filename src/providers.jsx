@@ -6,6 +6,9 @@ import {
   GoogleAPIProvider,
 } from '@/lib/googleapi';
 
+import { InputCaptureProvider } from './lib/inputcapture';
+import { MediaRecorderProvider } from './lib/mediarecorder';
+
 /**
  * @param {object} props
  * @param {import('react').ReactNode} props.children
@@ -16,7 +19,11 @@ export default function Providers({ children }) {
       apiKey={GAPI_API_KEY}
       clientId={GAPI_CLIENT_ID}
       scopes={[GAPI_DRIVE_FILE_SCOPE]}>
-      <FullscreenProvider>{children}</FullscreenProvider>
+      <InputCaptureProvider>
+        <MediaRecorderProvider>
+          <FullscreenProvider>{children}</FullscreenProvider>
+        </MediaRecorderProvider>
+      </InputCaptureProvider>
     </GoogleAPIProvider>
   );
 }

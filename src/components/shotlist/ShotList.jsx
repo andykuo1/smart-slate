@@ -1,10 +1,15 @@
-import { Fragment } from 'react';
+import { Fragment, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import BarberpoleStyle from '@/app/barberpole.module.css';
 import { choosePlaceholderRandomly } from '@/constants/PlaceholderText';
 import RecordButton from '@/lib/RecordButton';
 import { useFullscreen } from '@/lib/fullscreen';
+import { useInputCaptureV2 } from '@/lib/inputcapture';
+import {
+  isMediaRecorderSupported,
+  useMediaRecorderV2,
+} from '@/lib/mediarecorder';
 import { createShot, toScenShotTakeType } from '@/stores/DocumentStore';
 import {
   useAddShot,
@@ -24,6 +29,11 @@ import {
   useSetUserCursor,
 } from '@/stores/UserStoreContext';
 
+import {
+  MEDIA_RECORDER_OPTIONS,
+  MEDIA_STREAM_CONSTRAINTS,
+} from '../recorder/RecorderPanel';
+import { useTakeExporter } from '../recorder/UseTakeExporter';
 import TakeList from './TakeList';
 
 /**
@@ -64,18 +74,64 @@ function ShotHeader({ documentId, sceneId, shotId }) {
   const setUserCursor = useSetUserCursor();
   const setRecorderActive = useSetRecorderActive();
   const { enterFullscreen } = useFullscreen();
+  const { startCapturing } = useInputCaptureV2();
+  const { startRecording } = useMediaRecorderV2();
+  const exportTake = useTakeExporter();
   const navigate = useNavigate();
   const isActive =
     currentCursor.documentId === documentId &&
     currentCursor.sceneId === sceneId &&
     currentCursor.shotId === shotId;
   const isFirst = sceneNumber <= 1 && shotNumber <= 1;
-  function onClick() {
-    setUserCursor(documentId, sceneId, shotId, '');
-    setRecorderActive(true, true);
-    enterFullscreen();
-    navigate('/rec');
-  }
+
+  const onRecord = useCallback(
+    function onRecord() {
+      setUserCursor(documentId, sceneId, shotId, '');
+      if (
+        isMediaRecorderSupported(
+          MEDIA_RECORDER_OPTIONS,
+          MEDIA_STREAM_CONSTRAINTS,
+        )
+      ) {
+        setRecorderActive(true, true);
+        enterFullscreen();
+        navigate('/rec');
+        startRecording(({ status, data }) => {
+          if (!data) {
+            return;
+          }
+          if (status === 'stopped') {
+            const takeId = exportTake(data, documentId, sceneId, shotId);
+            setUserCursor(documentId, sceneId, shotId, takeId);
+          }
+        });
+      } else {
+        setRecorderActive(false, false);
+        startCapturing(({ status, data }) => {
+          if (!data) {
+            return;
+          }
+          if (status === 'stopped') {
+            const takeId = exportTake(data, documentId, sceneId, shotId);
+            setUserCursor(documentId, sceneId, shotId, takeId);
+          }
+        });
+      }
+    },
+    [
+      documentId,
+      sceneId,
+      shotId,
+      setUserCursor,
+      setRecorderActive,
+      exportTake,
+      startRecording,
+      startCapturing,
+      enterFullscreen,
+      navigate,
+    ],
+  );
+
   return (
     <li
       className={
@@ -95,10 +151,10 @@ function ShotHeader({ documentId, sceneId, shotId }) {
           )}
         />
         <div className="group w-full h-full flex flex-row items-center text-center">
-          <RecordButton onClick={onClick} />
+          <RecordButton onClick={onRecord} />
           <div className="flex-1 opacity-30 text-xs">
             {isFirst
-              ? '<-- Tap the ◉ to record'
+              ? '<- Tap the ◉ to record'
               : choosePlaceholderRandomly(shotId)}
           </div>
         </div>

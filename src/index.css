@@ -7,8 +7,6 @@
   line-height: 1.5;
 
   color-scheme: light dark;
-  color: black;
-  background-color: white;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -34,8 +32,13 @@ body,
   height: 100%;
 }
 
+body {
+  color: black;
+  background-color: white;
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  body {
     /** TODO: Always be on the light-side... for now.*/
     color: black;
     background-color: white;

@@ -4,8 +4,9 @@ import { zi } from './ZustandImmerHelper';
 
 /**
  * @param {import('zustand').StoreApi<any>['setState']} set
+ * @param {import('zustand').StoreApi<any>['getState']} get
  */
-export function createDispatch(set) {
+export function createDispatch(set, get) {
   return {
     addDocument: zi(set, addDocument),
     addScene: zi(set, addScene),
@@ -25,6 +26,9 @@ export function createDispatch(set) {
     updateShot: zi(set, updateShot),
 
     incrementDocumentRevisionNumber: zi(set, incrementDocumentRevisionNumber),
+
+    /** @type {() => import('./DocumentStore').Store} */
+    UNSAFE_getStore: get,
   };
 }
 
