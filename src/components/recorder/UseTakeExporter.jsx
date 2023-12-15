@@ -90,7 +90,7 @@ function getExportedTakeName(store, documentId, sceneId, shotId) {
   const shot = getShotById(store, documentId, shotId);
   const sceneNumber = getSceneIndex(store, documentId, sceneId) + 1;
   const shotNumber = getShotIndex(store, documentId, sceneId, shotId) + 1;
-  const takeNumber = shot.takeIds.length;
+  const takeNumber = shot.takeIds.length + 1;
   const shotType = shot.shotType;
   const [SCENE, SHOT, TAKE, TYPE] = toScenShotTakeType(
     sceneNumber,
