@@ -22,7 +22,11 @@ import {
   useShotType,
 } from '@/stores/DocumentStoreContext';
 import { useShotIds } from '@/stores/DocumentStoreContext';
-import ShotTypes from '@/stores/ShotTypes';
+import ShotTypes, {
+  CLOSE_UP,
+  MEDIUM_SHOT,
+  WIDE_SHOT,
+} from '@/stores/ShotTypes';
 import {
   useCurrentCursor,
   useSetRecorderActive,
@@ -44,7 +48,7 @@ import TakeList from './TakeList';
 export default function ShotList({ documentId, sceneId }) {
   const shotIds = useShotIds(documentId, sceneId);
   return (
-    <ul className="mx-8">
+    <ul className="mx-4">
       {shotIds.map((shotId) => (
         <Fragment key={`shot-${shotId}`}>
           <ShotHeader
@@ -141,18 +145,16 @@ function ShotHeader({ documentId, sceneId, shotId }) {
         ' ' +
         (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
       }>
-      <div className="w-full flex-shrink-0 flex flex-row snap-start overflow-hidden px-4">
+      <div className="w-full flex-shrink-0 flex flex-row snap-start overflow-hidden">
+        <ShotTypesSelector documentId={documentId} shotId={shotId} />
+        <RecordButton onClick={onRecord} />
         <ScenShotTakeType
           scene={sceneNumber}
           shot={shotNumber}
           take={takeCount > 0 ? takeCount + 1 : takeCount}
-          type={() => (
-            <ShotTypesSelector documentId={documentId} shotId={shotId} />
-          )}
         />
         <div className="group w-full h-full flex flex-row items-center text-center">
-          <RecordButton onClick={onRecord} />
-          <div className="flex-1 opacity-30 text-xs">
+          <div className="flex-1 opacity-30 text-xs invisible sm:visible">
             {isFirst
               ? '<- Tap the ◉ to record'
               : choosePlaceholderRandomly(shotId)}
@@ -246,7 +248,6 @@ function ScenShotTakeType({ className, scene, shot, take, type = undefined }) {
           <td className="font-mono text-right">S{sceneString}</td>
           <td className="font-mono text-left">{shotString}</td>
           <td className="font-mono px-2">T{takeString}</td>
-          <td className="font-mono">{type && type()}</td>
         </tr>
       </tbody>
       <tfoot className="absolute -bottom-4 w-full flex">
@@ -254,7 +255,6 @@ function ScenShotTakeType({ className, scene, shot, take, type = undefined }) {
           <th className="font-normal">scene</th>
           <th className="font-normal">shot</th>
           <th className="font-normal px-2">take</th>
-          <th className="font-normal">type</th>
         </tr>
       </tfoot>
     </table>
@@ -270,26 +270,74 @@ function ShotTypesSelector({ documentId, shotId }) {
   const shotType = useShotType(documentId, shotId);
   const setShotType = useSetShotType();
 
-  /** @type {import('react').ChangeEventHandler<HTMLSelectElement>} */
-  function onShotTypeChange(e) {
-    let el = e.target;
-    setShotType(
-      documentId,
-      shotId,
-      /** @type {import('@/stores/DocumentStore').ShotType} */ (el.value),
-    );
-  }
-
   return (
-    <select
-      className="text-center bg-transparent"
-      value={shotType}
-      onChange={onShotTypeChange}>
-      {ShotTypes.params().map((type) => (
-        <option key={type.value} title={type.name} value={type.value}>
-          {type.abbr}
-        </option>
-      ))}
-    </select>
+    <div className="flex flex-row items-center ml-2">
+      <ShotTypeButton
+        shotType={WIDE_SHOT.value}
+        className={
+          '' + (shotType === WIDE_SHOT.value && 'border-red-400 bg-red-300')
+        }
+        onClick={() => setShotType(documentId, shotId, WIDE_SHOT.value)}
+      />
+      <span>|</span>
+      <ShotTypeButton
+        shotType={MEDIUM_SHOT.value}
+        className={
+          '' +
+          (shotType === MEDIUM_SHOT.value && 'border-green-400 bg-green-300')
+        }
+        onClick={() => setShotType(documentId, shotId, MEDIUM_SHOT.value)}
+      />
+      <span>|</span>
+      <ShotTypeButton
+        shotType={CLOSE_UP.value}
+        className={
+          '' + (shotType === CLOSE_UP.value && 'border-blue-400 bg-blue-300')
+        }
+        onClick={() => setShotType(documentId, shotId, CLOSE_UP.value)}
+      />
+      <span>|</span>
+      <ShotTypeButton />
+    </div>
   );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/DocumentStore').ShotType} [props.shotType]
+ * @param {string} [props.className]
+ * @param {import('react').MouseEventHandler} [props.onClick]
+ */
+function ShotTypeButton({ shotType, className, onClick }) {
+  const params = shotType
+    ? ShotTypes.getParamsByType(shotType)
+    : {
+        name: 'Special',
+        abbr: 'X',
+      };
+  return (
+    <button
+      className={'border-b-2 p-2 disabled:opacity-30' + ' ' + className}
+      title={params.name}
+      onClick={onClick}
+      disabled={!onClick}>
+      {params.abbr[0]}
+    </button>
+  );
+}
+
+/**
+ * @param {import('@/stores/DocumentStore').ShotType} shotType
+ */
+export function getShotTypeColor(shotType) {
+  switch (shotType) {
+    case CLOSE_UP.value:
+      return 'bg-blue-300';
+    case MEDIUM_SHOT.value:
+      return 'bg-green-300';
+    case WIDE_SHOT.value:
+      return 'bg-red-300';
+    default:
+      return '';
+  }
 }

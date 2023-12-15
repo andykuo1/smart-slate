@@ -7,6 +7,8 @@ import {
   useTakeNumber,
 } from '@/stores/DocumentStoreContext';
 
+import { getShotTypeColor } from './ShotList';
+
 /**
  * @param {object} props
  * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
@@ -48,9 +50,10 @@ function TakeHeader({ documentId, sceneId, shotId, takeId }) {
   const take = useTake(documentId, takeId);
   return (
     <TakeLayout
-      takeNumber={takeNumber}
+      title={`Take ${takeNumber}`}
       timestamp={take.exportedMillis}
       fileName={take.exportedFileName || '--'}
+      className={getShotTypeColor(take.exportedShotType)}
     />
   );
 }
@@ -62,27 +65,32 @@ function TakeHeader({ documentId, sceneId, shotId, takeId }) {
  */
 function NewTake({ documentId, shotId }) {
   const takeNumber = useShotTakeCount(documentId, shotId) + 1;
-  return <TakeLayout takeNumber={takeNumber} timestamp={0} fileName="--" />;
+  return (
+    <TakeLayout title={`Take ${takeNumber}`} timestamp={0} fileName="--" />
+  );
 }
 
 /**
  * @param {object} props
- * @param {number} props.takeNumber
+ * @param {string} props.title
  * @param {number} props.timestamp
  * @param {string} props.fileName
+ * @param {string} [props.className]
  */
-function TakeLayout({ takeNumber, timestamp, fileName }) {
+function TakeLayout({ title, timestamp, fileName, className }) {
   const isPending = timestamp <= 0;
   return (
     <li
       className={
         'flex flex-row w-full' +
         ' ' +
-        'overflow-x-auto overflow-y-hidden snap-x snap-mandatory overscroll-x-none'
+        'overflow-x-auto overflow-y-hidden snap-x snap-mandatory overscroll-x-none' +
+        ' ' +
+        className
       }>
       <div className="w-full flex-shrink-0 flex flex-row snap-start">
         <p className={isPending ? 'opacity-30' : 'whitespace-nowrap'}>
-          Take {takeNumber}
+          {title}
         </p>
         <div className="flex-1" />
         <p className="opacity-30 whitespace-nowrap">

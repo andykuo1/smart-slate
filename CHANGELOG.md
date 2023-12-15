@@ -2,6 +2,12 @@
 
 - Flag color? Marker color?
 - Export shot list to CSV?
+- Consider using proper color-blind mode
+
+# 0.1.4
+
+- Change shot type selector to switch group
+- Add colors for takes with shot types
 
 # 0.1.3
 

@@ -79,6 +79,8 @@ export function createTake(takeId = uuid()) {
     notes: '',
     exportedMillis: 0,
     exportedFileName: '',
+    /** @type {ShotType} */
+    exportedShotType: '',
   };
 }
 
@@ -174,6 +176,7 @@ export function cloneTake(out, take) {
   out.notes = take.notes;
   out.exportedMillis = take.exportedMillis;
   out.exportedFileName = take.exportedFileName;
+  out.exportedShotType = take.exportedShotType;
   return /** @type {Take} */ (out);
 }
 

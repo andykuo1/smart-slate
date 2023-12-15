@@ -40,6 +40,11 @@ export function useTakeExporter() {
       let newTake = createTake();
       newTake.exportedFileName = exportedFileNameWithExt;
       newTake.exportedMillis = Date.now();
+      newTake.exportedShotType = getShotById(
+        store,
+        documentId,
+        shotId,
+      ).shotType;
       addTake(documentId, shotId, newTake);
 
       if (
