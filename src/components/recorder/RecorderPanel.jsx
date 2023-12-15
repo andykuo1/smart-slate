@@ -1,9 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import BackIcon from '@material-symbols/svg-400/rounded/arrow_back-fill.svg';
-
-import FancyButton from '@/lib/FancyButton';
 import { useFullscreen } from '@/lib/fullscreen';
 import {
   getMediaRecorderSupportedMimeType,
@@ -15,7 +12,6 @@ import {
   useCurrentRecorder,
   useSetRecorderActive,
   useSetRecorderStatus,
-  useSetUserCursor,
 } from '@/stores/UserStoreContext';
 
 /**
@@ -61,7 +57,8 @@ export default function RecorderPanel({ children, onChange }) {
   const recorder = useCurrentRecorder();
   const setRecorderActive = useSetRecorderActive();
   const setRecorderStatus = useSetRecorderStatus();
-  const [mediaRecorderAvailable, setMediaRecorderAvailable] = useState(false);
+  const navigate = useNavigate();
+  const { exitFullscreen } = useFullscreen();
 
   const onStart = useCallback(
     /** @param {MediaRecorder} mediaRecorder */
@@ -91,8 +88,11 @@ export default function RecorderPanel({ children, onChange }) {
         video.srcObject = null;
       }
       onChange({ status: 'stopped', data: blob });
+      setRecorderActive(false, false);
+      navigate('/edit');
+      exitFullscreen();
     },
-    [videoRef, onChange],
+    [videoRef, onChange, exitFullscreen, navigate, setRecorderActive],
   );
   const onStatus = useCallback(
     /** @param {import('@/lib/mediarecorder/UseMediaRecorder').MediaRecorderStatus} status */
@@ -121,7 +121,6 @@ export default function RecorderPanel({ children, onChange }) {
           MEDIA_STREAM_CONSTRAINTS,
         )
       ) {
-        setMediaRecorderAvailable(true);
         startRecording();
       }
     }
@@ -132,13 +131,6 @@ export default function RecorderPanel({ children, onChange }) {
       <div className="flex-1" />
       <video className="w-full h-full bg-neutral-900" ref={videoRef} />
       <div className="flex-1" />
-      <DarkHomeButton
-        className="absolute top-0 left-0"
-        disabled={
-          mediaRecorderAvailable &&
-          (!recorder.active || !RecorderStatus.isDone(recorder.status))
-        }
-      />
       <div className="absolute bottom-0 left-0 right-0 flex flex-row">
         <button
           className="bg-red-500 p-4 py-6 m-2 rounded-full disabled:opacity-30"
@@ -159,43 +151,6 @@ export default function RecorderPanel({ children, onChange }) {
         </button>
       </div>
       {children}
-    </div>
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} [props.className]
- * @param {boolean} [props.disabled]
- */
-function DarkHomeButton({ className, disabled }) {
-  const setUserCursor = useSetUserCursor();
-  const recorderActive = useCurrentRecorder()?.active || false;
-  const setRecorderActive = useSetRecorderActive();
-  const { exitFullscreen } = useFullscreen();
-  const navigate = useNavigate();
-
-  function onReturnHomeClick() {
-    if (recorderActive) {
-      setRecorderActive(false, false);
-      navigate('/edit');
-    } else {
-      // NOTE: This goes all the way to root.
-      setUserCursor('', '', '', '');
-      navigate('/');
-    }
-    exitFullscreen();
-  }
-
-  return (
-    <div className={'fixed m-2 z-10' + ' ' + className}>
-      <FancyButton
-        className="to-gray-900 text-white enabled:hover:to-gray-800"
-        title="Back"
-        disabled={disabled}
-        onClick={onReturnHomeClick}>
-        <BackIcon className="inline w-6 fill-current" />
-      </FancyButton>
     </div>
   );
 }

@@ -8,6 +8,7 @@
 - Add popover for install help
 - Add changelog button
 - Change `<input capture>` behavior
+- Add exit on cut for `MediaRecorder`
 
 # 0.1.2
 
