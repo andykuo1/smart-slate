@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react';
 import { useAnimationFrame } from '@/lib/animationframe';
 import { useGAPITokenHandler } from '@/lib/googleapi';
 import { uploadFile } from '@/lib/googleapi/UploadFile';
+import { getVideoFileExtensionByMIMEType } from '@/lib/mediarecorder/UseMediaRecorder';
 import { createTake } from '@/stores/DocumentStore';
 import { useAddTake, useShotTakeCount } from '@/stores/DocumentStoreContext';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/UserStoreContext';
@@ -10,7 +11,6 @@ import { downloadURLImpl } from '@/utils/Downloader';
 
 import { useNextAvailableExportedFileName } from './ExportedFileName';
 import RecorderPanel from './RecorderPanel';
-import { getVideoFileExtensionByMIMEType } from './UseMediaRecorder';
 
 export default function VideoBooth() {
   const cursor = useCurrentCursor();
@@ -21,13 +21,15 @@ export default function VideoBooth() {
   const tokenHandler = useGAPITokenHandler();
 
   const [status, setStatus] = useState(
-    /** @type {import('./UseMediaRecorder').MediaRecorderStatus} */ ('idle'),
+    /** @type {import('@/lib/mediarecorder/UseMediaRecorder').MediaRecorderStatus} */ (
+      'idle'
+    ),
   );
 
   const onChange = useCallback(
     /**
      * @param {object} e
-     * @param {import('./UseMediaRecorder').MediaRecorderStatus} e.status
+     * @param {import('@/lib/mediarecorder/UseMediaRecorder').MediaRecorderStatus} e.status
      * @param {Blob|null} e.data
      */
     function onChange({ status, data }) {

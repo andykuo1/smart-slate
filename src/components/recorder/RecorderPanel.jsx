@@ -5,6 +5,11 @@ import BackIcon from '@material-symbols/svg-400/rounded/arrow_back-fill.svg';
 
 import FancyButton from '@/lib/FancyButton';
 import { useFullscreen } from '@/lib/fullscreen';
+import {
+  getMediaRecorderSupportedMimeType,
+  isMediaRecorderSupported,
+  useMediaRecorder,
+} from '@/lib/mediarecorder/UseMediaRecorder';
 import RecorderStatus from '@/stores/RecorderStatus';
 import {
   useCurrentRecorder,
@@ -13,17 +18,12 @@ import {
   useSetUserCursor,
 } from '@/stores/UserStoreContext';
 
-import {
-  getMediaRecorderSupportedMimeType,
-  isMediaRecorderSupported,
-  useMediaRecorder,
-} from './UseMediaRecorder';
 import { VideoInputCapture, useInputCapture } from './VideoInputCapture';
 
 /**
  * @callback MediaRecorderChangeEventHandler
  * @param {object} e
- * @param {import('./UseMediaRecorder').MediaRecorderStatus} e.status
+ * @param {import('@/lib/mediarecorder/UseMediaRecorder').MediaRecorderStatus} e.status
  * @param {Blob|null} e.data
  */
 
@@ -61,8 +61,7 @@ const MEDIA_BLOB_OPTIONS = {
 export default function RecorderPanel({ children, onChange }) {
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
   const recorder = useCurrentRecorder();
-  const { enterFullscreen, exitFullscreen, fullscreenTargetRef } =
-    useFullscreen();
+  const { exitFullscreen, fullscreenTargetRef } = useFullscreen();
   const setRecorderActive = useSetRecorderActive();
   const setRecorderStatus = useSetRecorderStatus();
   const navigate = useNavigate();
@@ -99,7 +98,7 @@ export default function RecorderPanel({ children, onChange }) {
     [videoRef, onChange],
   );
   const onStatus = useCallback(
-    /** @param {import('./UseMediaRecorder').MediaRecorderStatus} status */
+    /** @param {import('@/lib/mediarecorder/UseMediaRecorder').MediaRecorderStatus} status */
     function onStatus(status) {
       setRecorderStatus(status);
       onChange({ status, data: null });
@@ -142,15 +141,8 @@ export default function RecorderPanel({ children, onChange }) {
       } else {
         startCapturing();
       }
-      enterFullscreen();
     }
-  }, [
-    recorder,
-    setRecorderActive,
-    startRecording,
-    startCapturing,
-    enterFullscreen,
-  ]);
+  }, [recorder, setRecorderActive, startRecording, startCapturing]);
 
   return (
     <div

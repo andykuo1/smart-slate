@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import BarberpoleStyle from '@/app/barberpole.module.css';
 import { choosePlaceholderRandomly } from '@/constants/PlaceholderText';
 import RecordButton from '@/lib/RecordButton';
+import { useFullscreen } from '@/lib/fullscreen';
 import { createShot, toScenShotTakeType } from '@/stores/DocumentStore';
 import {
   useAddShot,
@@ -62,6 +63,7 @@ function ShotHeader({ documentId, sceneId, shotId }) {
   const currentCursor = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
   const setRecorderActive = useSetRecorderActive();
+  const { enterFullscreen } = useFullscreen();
   const navigate = useNavigate();
   const isActive =
     currentCursor.documentId === documentId &&
@@ -71,7 +73,8 @@ function ShotHeader({ documentId, sceneId, shotId }) {
   function onClick() {
     setUserCursor(documentId, sceneId, shotId, '');
     setRecorderActive(true, true);
-    navigate(`/rec`);
+    enterFullscreen();
+    navigate('/rec');
   }
   return (
     <li

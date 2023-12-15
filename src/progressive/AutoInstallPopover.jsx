@@ -43,31 +43,29 @@ function PopoverContentUnknown() {
     <>
       <PopoverHeading>Install on your device</PopoverHeading>
       <PopoverDescription>
-        <p>
+        <span className="block">
           You have a fancy device-- <b>we didn't recognize it!</b>
-        </p>
+        </span>
         <br />
-        <p>
+        <span className="block">
           You can install this app on:
-          <ul>
-            <li>
-              -{' '}
-              <InstallDesktopIcon className="inline-block fill-white w-6 h-6 mx-1" />{' '}
-              Desktop
-            </li>
-            <li>
-              -{' '}
-              <InstallMobileIcon className="inline-block fill-white w-6 h-6 mx-1" />{' '}
-              Mobile
-            </li>
-            <li>
-              - Or even iOS (in{' '}
-              <SquareAndArrowUp className="inline-block mx-1" /> Share)
-            </li>
-          </ul>
-        </p>
+          <span className="block">
+            -{' '}
+            <InstallDesktopIcon className="inline-block fill-white w-6 h-6 mx-1" />{' '}
+            Desktop
+          </span>
+          <span className="block">
+            -{' '}
+            <InstallMobileIcon className="inline-block fill-white w-6 h-6 mx-1" />{' '}
+            Mobile
+          </span>
+          <span className="block">
+            - Or even iOS (in <SquareAndArrowUp className="inline-block mx-1" />{' '}
+            Share)
+          </span>
+        </span>
         <br />
-        <p>🎉 Happy filming!</p>
+        <span className="block">🎉 Happy filming!</span>
       </PopoverDescription>
     </>
   );
@@ -78,19 +76,19 @@ function PopoverContentDesktop() {
     <>
       <PopoverHeading>Install on your desktop</PopoverHeading>
       <PopoverDescription>
-        <div>
+        <span className="block">
           <span className="mx-2">1.</span>
           Click{' '}
           <InstallDesktopIcon className="inline-block fill-white w-6 h-6 mx-1" />
-        </div>
-        <div>
+        </span>
+        <span className="block">
           <span className="mx-2">2.</span>
           Select <span className="border rounded-full px-2">Install</span>
-        </div>
-        <div>
+        </span>
+        <span className="block">
           <span className="mx-2">3.</span>
           🎉 Happy filming!
-        </div>
+        </span>
       </PopoverDescription>
     </>
   );
@@ -101,18 +99,18 @@ function PopoverContentApple() {
     <>
       <PopoverHeading>Install on your iPhone</PopoverHeading>
       <PopoverDescription>
-        <div>
+        <span className="block">
           <span className="mx-2">1.</span>
           Tap <SquareAndArrowUp className="inline-block mx-1" /> Share and
-        </div>
-        <div>
+        </span>
+        <span className="block">
           <span className="mx-2">2.</span>
           Pick <PlusSquare className="inline-block mx-1" /> Add to Home Screen
-        </div>
-        <div>
+        </span>
+        <span className="block">
           <span className="mx-2">3.</span>
           🎉 Happy filming!
-        </div>
+        </span>
       </PopoverDescription>
     </>
   );
@@ -123,22 +121,22 @@ function PopoverContentAndroid() {
     <>
       <PopoverHeading>Install on your Android device</PopoverHeading>
       <PopoverDescription>
-        <div>
+        <span className="block">
           <span className="mx-2">1.</span>
           Open{' '}
           <MoreVertIcon className="inline-block fill-white w-6 h-6 -mx-1" />{' '}
           Menu
-        </div>
-        <div>
+        </span>
+        <span className="block">
           <span className="mx-2">2.</span>
           Pick{' '}
           <InstallMobileIcon className="inline-block fill-white w-6 h-6 mx-1" />{' '}
           Install app
-        </div>
-        <div>
+        </span>
+        <span className="block">
           <span className="mx-2">3.</span>
           🎉 Happy filming!
-        </div>
+        </span>
       </PopoverDescription>
     </>
   );

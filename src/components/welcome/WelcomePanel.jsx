@@ -15,6 +15,7 @@ import {
 } from '@/stores/DocumentStoreContext';
 import { useSetUserCursor } from '@/stores/UserStoreContext';
 
+import ChangelogPanel from '../changelog/ChangelogPanel';
 import AppTitle from './AppTitle';
 
 export default function WelcomePanel() {
@@ -29,7 +30,7 @@ export default function WelcomePanel() {
       newDocument.lastUpdatedMillis = Date.now();
       addDocument(newDocument);
       setUserCursor(newDocument.documentId, '', '', '');
-      navigate(`/edit`);
+      navigate('/edit');
     },
     [addDocument, setUserCursor],
   );
@@ -47,6 +48,7 @@ export default function WelcomePanel() {
         <FancyButton title="Import" className="mx-1 px-12">
           <UploadIcon className="inline w-6 fill-current" />
         </FancyButton>
+        <ChangelogPanel />
       </div>
       <SavedProjectView className="mx-auto mb-auto" />
     </>
@@ -110,7 +112,7 @@ function SavedProjectItem({ documentId }) {
   const onClick = useCallback(
     function onClick() {
       setUserCursor(documentId, '', '', '');
-      navigate(`/edit`);
+      navigate('/edit');
     },
     [documentId, setUserCursor],
   );
