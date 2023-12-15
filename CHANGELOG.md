@@ -7,6 +7,7 @@
 
 - Add popover for install help
 - Add changelog button
+- Change `<input capture>` behavior
 
 # 0.1.2
 
