@@ -3,6 +3,13 @@
 - Flag color? Marker color?
 - Export shot list to CSV?
 - Consider using proper color-blind mode
+- Add proper signals for offline mode
+- Add proper signals for cloud syncs
+- Add a view for synced videos?
+- Add a snapshot thumbnail (uploadable or sketched)
+- Add a video preview?
+- Add a color marker that can be exported in CSV.
+- Can I add a folder to google drive?
 
 # 0.1.4
 

@@ -104,7 +104,7 @@ function getExportedTakeName(store, documentId, sceneId, shotId) {
     shotType,
   );
   return (
-    `${documentTitle}_S${SCENE}${SHOT}_T${TAKE}` +
+    `${documentTitle}_${SCENE}${SHOT}_${TAKE}` +
     (shotType !== ANY_SHOT.value ? `_${TYPE}` : '')
   );
 }
