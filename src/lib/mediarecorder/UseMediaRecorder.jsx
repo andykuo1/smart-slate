@@ -5,7 +5,7 @@ import {
   MEDIA_STREAM_CONSTRAINTS,
 } from '@/components/recorder/RecorderPanel';
 
-import { useMediaRecorderV2 } from '.';
+import { useMediaRecorderV2 } from './MediaRecorderContext';
 
 /** @typedef {'idle'|'preparing_streams'|'ready'|'starting'|'started'|'recording'|'stopping'|'stopped'|Error} MediaRecorderStatus */
 
@@ -68,9 +68,8 @@ export function useMediaRecorder({
       mr?.removeEventListener('dataavailable', onDataAvailableImpl);
       mr?.removeEventListener('error', onErrorImpl);
 
-      let ms = mediaStream.current;
-      mediaStream.current = null;
-      ms?.getTracks().forEach((track) => track.stop());
+      let ms = mr?.stream || null;
+      stopMediaStream(ms);
 
       const blobs = blobParts.current;
       let blob;
@@ -184,11 +183,10 @@ export function useMediaRecorder({
 
   const stopRecording = useCallback(
     function stopRecording() {
-      if (!mediaRecorder.current) {
+      let mr = mediaRecorder.current;
+      if (!mr) {
         return;
       }
-      let mr = mediaRecorder.current;
-      mediaRecorder.current = null;
       if (onStatus) {
         onStatus('stopping');
       }
@@ -347,4 +345,14 @@ export function isMediaRecorderSupported(
     return false;
   }
   return true;
+}
+
+/**
+ * @param {MediaStream|null} stream
+ */
+function stopMediaStream(stream) {
+  stream?.getTracks().forEach((track) => {
+    track.enabled = false;
+    track.stop();
+  });
 }
