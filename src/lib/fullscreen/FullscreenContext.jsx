@@ -27,7 +27,7 @@ function useFullscreenAPI() {
   }, []);
 
   const exitFullscreen = useCallback(() => {
-    if (isExitFullscreenSupported(document) && !document.fullscreenElement) {
+    if (isExitFullscreenSupported(document) && document.fullscreenElement) {
       document.exitFullscreen();
     }
   }, []);
