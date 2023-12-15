@@ -6,6 +6,7 @@
 # 0.1.3
 
 - Add popover for install help
+- Add changelog button
 
 # 0.1.2
 

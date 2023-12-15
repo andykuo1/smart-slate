@@ -71,12 +71,12 @@ export function useFullscreen() {
  * @param {HTMLElement} targetElement
  */
 export function isRequestFullscreenSupported(targetElement) {
-  return typeof targetElement?.['requestFullscreen'] !== 'undefined';
+  return typeof targetElement?.['requestFullscreen'] === 'function';
 }
 
 /**
  * @param {Document} targetElement
  */
 export function isExitFullscreenSupported(targetElement) {
-  return typeof targetElement?.['exitFullscreen'] !== 'undefined';
+  return typeof targetElement?.['exitFullscreen'] === 'function';
 }

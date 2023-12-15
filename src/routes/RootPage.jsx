@@ -1,5 +1,5 @@
-import MadeWithLove from '@/components/workspace/MadeWithLove';
-import WelcomePanel from '@/components/workspace/WelcomePanel';
+import MadeWithLove from '@/components/welcome/MadeWithLove';
+import WelcomePanel from '@/components/welcome/WelcomePanel';
 import AutoInstallPopover from '@/progressive/AutoInstallPopover';
 
 export default function RootPage() {
