@@ -64,8 +64,9 @@ import ShotName from './ShotName';
  * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/DocumentStore').ShotId} props.shotId
+ * @param {import('react').ReactNode} [props.children]
  */
-export function ShotEntry({ documentId, sceneId, shotId }) {
+export function ShotEntry({ documentId, sceneId, shotId, children }) {
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
   const currentCursor = useCurrentCursor();
@@ -77,35 +78,42 @@ export function ShotEntry({ documentId, sceneId, shotId }) {
   const shotRecorder = useShotRecorder(documentId, sceneId, shotId);
 
   return (
-    <li
-      className={
-        'flex flex-row border-b border-gray-300 w-full h-[4rem]' +
-        ' ' +
-        'overflow-x-auto overflow-y-hidden snap-x snap-mandatory overscroll-x-none' +
-        ' ' +
-        (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
-      }>
-      <div className="w-full flex-shrink-0 flex flex-row snap-start overflow-hidden">
-        <ShotTypesSelector documentId={documentId} shotId={shotId} />
-        <RecordButton onClick={shotRecorder} />
-        <ShotName
-          documentId={documentId}
-          sceneId={sceneId}
-          shotId={shotId}
-          editable={true}
-        />
-        <div className="group w-full h-full flex flex-row items-center text-center">
-          <div className="flex-1 opacity-30 text-xs hidden sm:block">
-            {isFirst
-              ? '<- Tap the ◉ to record'
-              : choosePlaceholderRandomly(shotId)}
+    <li className="flex flex-col items-center">
+      <div
+        className={
+          'flex flex-row border-b border-gray-300 w-full h-[4rem]' +
+          ' ' +
+          'overflow-x-auto overflow-y-hidden snap-x snap-mandatory overscroll-x-none' +
+          ' ' +
+          (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
+        }>
+        <div className="w-full flex-shrink-0 flex flex-row snap-start overflow-hidden">
+          <ShotTypesSelector documentId={documentId} shotId={shotId} />
+          <RecordButton onClick={shotRecorder} />
+          <ShotName
+            documentId={documentId}
+            sceneId={sceneId}
+            shotId={shotId}
+            editable={true}
+          />
+          <div className="group w-full h-full flex flex-row items-center text-center">
+            <div className="flex-1 opacity-30 text-xs hidden sm:block">
+              {isFirst
+                ? '<- Tap the ◉ to record'
+                : choosePlaceholderRandomly(shotId)}
+            </div>
           </div>
         </div>
+        <div className="w-full flex-shrink-0 flex flex-row snap-start overflow-hidden">
+          <ShotThumbnailEditor documentId={documentId} shotId={shotId} />
+          <ShotNotes
+            className="flex-1"
+            documentId={documentId}
+            shotId={shotId}
+          />
+        </div>
       </div>
-      <div className="w-full flex-shrink-0 flex flex-row snap-start overflow-hidden">
-        <ShotThumbnailEditor documentId={documentId} shotId={shotId} />
-        <ShotNotes className="flex-1" documentId={documentId} shotId={shotId} />
-      </div>
+      <div className="flex-1 w-full">{children}</div>
     </li>
   );
 }

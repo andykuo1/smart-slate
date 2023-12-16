@@ -23,7 +23,7 @@ export default function TakeList({ documentId, sceneId, shotId }) {
   }, [handleToken, setCloudExportable]);
 
   return (
-    <ul>
+    <ul title="Take list">
       <NewTake documentId={documentId} shotId={shotId} />
       {takeIds
         .slice()

@@ -27,3 +27,8 @@ dist-ssr
 # tsconfig
 tsconfig.tsbuildinfo
 dev-dist
+
+# cypress
+cypress/videos
+cypress/screenshots
+cypress/downloads

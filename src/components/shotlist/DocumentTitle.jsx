@@ -27,6 +27,7 @@ export default function DocumentTitle({ documentId }) {
         <div className="flex-1" />
         <input
           className="text-center text-2xl bg-transparent"
+          title="Project title"
           value={documentTitle}
           placeholder="Untitled"
           onChange={onDocumentTitleChange}

@@ -20,11 +20,12 @@ export default function SceneList({ documentId }) {
   return (
     <div className="w-full h-full overflow-x-hidden overflow-y-auto py-20">
       <DocumentTitle documentId={documentId} />
-      <ul>
+      <ul title="Scene list">
         {sceneIds.map((sceneId) => (
           <Fragment key={`scene-${sceneId}`}>
-            <SceneHeader documentId={documentId} sceneId={sceneId} />
-            <ShotList documentId={documentId} sceneId={sceneId} />
+            <SceneHeader documentId={documentId} sceneId={sceneId}>
+              <ShotList documentId={documentId} sceneId={sceneId} />
+            </SceneHeader>
           </Fragment>
         ))}
         <NewScene documentId={documentId} />
@@ -37,14 +38,18 @@ export default function SceneList({ documentId }) {
  * @param {object} props
  * @param {string} props.documentId
  * @param {string} props.sceneId
+ * @param {import('react').ReactNode} [props.children]
  */
-function SceneHeader({ documentId, sceneId }) {
+function SceneHeader({ documentId, sceneId, children }) {
   const sceneNumber = useSceneNumber(documentId, sceneId);
   return (
-    <li className="flex flex-row items-center mt-8">
-      <SceneNumber sceneNumber={sceneNumber} />
-      <span className="flex-1 text-center border-t-2 border-dotted border-black" />
-      <SceneNumber sceneNumber={sceneNumber} />
+    <li className="flex flex-col items-center mt-8">
+      <div className="flex flex-row items-center w-full">
+        <SceneNumber sceneNumber={sceneNumber} />
+        <span className="flex-1 text-center border-t-2 border-dotted border-black" />
+        <SceneNumber sceneNumber={sceneNumber} />
+      </div>
+      <div className="flex-1 w-full">{children}</div>
     </li>
   );
 }

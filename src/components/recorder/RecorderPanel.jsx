@@ -75,7 +75,7 @@ export default function RecorderPanel({ children, onChange }) {
         video.width = videoTrackSettings.width || 0;
         video.height = videoTrackSettings.height || 0;
       }
-      video.play();
+      video.play().catch((e) => console.error(e));
     },
     [videoRef],
   );
@@ -84,7 +84,9 @@ export default function RecorderPanel({ children, onChange }) {
     function onStop(blob) {
       if (videoRef.current) {
         let video = videoRef.current;
-        video.pause();
+        if (!video.paused) {
+          video.pause();
+        }
         video.srcObject = null;
       }
       onChange({ status: 'stopped', data: blob });
@@ -143,6 +145,7 @@ export default function RecorderPanel({ children, onChange }) {
         <div className="flex-1" />
         <button
           className="bg-white p-4 m-2 disabled:opacity-30"
+          title="Cut"
           onClick={() => stopRecording()}
           disabled={
             !recorder.active || !RecorderStatus.isRecording(recorder.status)

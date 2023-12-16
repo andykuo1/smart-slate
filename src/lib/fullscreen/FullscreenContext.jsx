@@ -9,7 +9,7 @@ const FullscreenContext = createContext(
 );
 
 function useFullscreenAPI() {
-  const fullscreenTargetRef = useRef(/** @type {any} */ (null));
+  const fullscreenTargetRef = useRef(/** @type {Element|null} */ (null));
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const onFullscreenChange = useCallback(
@@ -22,7 +22,7 @@ function useFullscreenAPI() {
   const enterFullscreen = useCallback(() => {
     let target = fullscreenTargetRef.current || document.body;
     if (isRequestFullscreenSupported(target)) {
-      target.requestFullscreen();
+      target.requestFullscreen().catch((e) => console.error(e));
     }
   }, []);
 
@@ -68,7 +68,7 @@ export function useFullscreen() {
 }
 
 /**
- * @param {HTMLElement} targetElement
+ * @param {Element} targetElement
  */
 export function isRequestFullscreenSupported(targetElement) {
   return typeof targetElement?.['requestFullscreen'] === 'function';
