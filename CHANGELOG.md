@@ -9,6 +9,10 @@
 - Add a color marker that can be exported in CSV.
 - Can I add a folder to google drive?
 
+# 0.1.5
+
+- Add e2e testing with cypress
+
 # 0.1.4
 
 - Change shot type selector to switch group

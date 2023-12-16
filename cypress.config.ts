@@ -4,12 +4,14 @@ import fs from 'fs';
 import path from 'path';
 import url from 'url';
 
+import PackageJSON from './package.json';
+
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 export default defineConfig({
   e2e: {
     // NOTE: Port is dependent on the hosted dev server
-    baseUrl: 'http://localhost:8080/smart-slate/',
+    baseUrl: `http://localhost:8080/${PackageJSON.name}/`,
     // NOTE: By default it's 1 min, which is a bit long for our use case.
     pageLoadTimeout: 10000,
     setupNodeEvents(on, config) {
