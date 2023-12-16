@@ -1,3 +1,6 @@
+// TODO: Use IndexedDB to store a lot of stuff
+// https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB
+
 /** @type  {Record<import('./DocumentStore').TakeId, Blob>} */
 const cache = {};
 const metadata = {
