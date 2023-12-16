@@ -26,6 +26,8 @@ export function createDispatch(set, get) {
     setShotThumbnail: zi(set, setShotThumbnail),
     updateShot: zi(set, updateShot),
 
+    setTakeExportedGoogleDriveFileId: zi(set, setTakeExportedGoogleDriveFileId),
+
     incrementDocumentRevisionNumber: zi(set, incrementDocumentRevisionNumber),
 
     /** @type {() => import('./DocumentStore').Store} */
@@ -350,5 +352,18 @@ function setShotThumbnail(store, documentId, shotId, thumbnailUrl) {
   let document = store.documents[documentId];
   let shot = document.shots[shotId];
   shot.thumbnail = thumbnailUrl;
+  incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('./DocumentStore').Store} store
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').TakeId} takeId
+ * @param {string} fileId
+ */
+function setTakeExportedGoogleDriveFileId(store, documentId, takeId, fileId) {
+  let document = store.documents[documentId];
+  let take = document.takes[takeId];
+  take.exportedGoogleDriveFileId = fileId;
   incrementDocumentRevisionNumber(document);
 }

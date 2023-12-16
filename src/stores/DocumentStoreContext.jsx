@@ -199,3 +199,7 @@ export function useShotThumbnail(documentId, shotId) {
 export function useSetShotThumbnail() {
   return useDocumentStore((ctx) => ctx.setShotThumbnail);
 }
+
+export function useSetTakeExportedGoogleDriveFileId() {
+  return useDocumentStore((ctx) => ctx.setTakeExportedGoogleDriveFileId);
+}

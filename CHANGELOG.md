@@ -4,7 +4,6 @@
 - Export shot list to CSV?
 - Consider using proper color-blind mode
 - Add proper signals for offline mode
-- Add proper signals for cloud syncs
 - Add a view for synced videos?
 - Add a video preview?
 - Add a color marker that can be exported in CSV.
@@ -15,6 +14,8 @@
 - Change shot type selector to switch group
 - Add colors for takes with shot types
 - Add customizable thumbnail for takes
+- Add cloud sync signal
+- Add temporary video cache
 
 # 0.1.3
 

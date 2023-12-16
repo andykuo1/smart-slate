@@ -9,13 +9,19 @@ import {
   getShotIndex,
 } from '@/stores/DocumentDispatch';
 import { createTake, toScenShotTakeType } from '@/stores/DocumentStore';
-import { useDocumentStore } from '@/stores/DocumentStoreContext';
+import {
+  useDocumentStore,
+  useSetTakeExportedGoogleDriveFileId,
+} from '@/stores/DocumentStoreContext';
 import { ANY_SHOT } from '@/stores/ShotTypes';
+import { cacheVideoBlob } from '@/stores/VideoCache';
 import { downloadURLImpl } from '@/utils/Downloader';
 
 export function useTakeExporter() {
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const addTake = useDocumentStore((ctx) => ctx.addTake);
+  const setTakeExportedGoogleDriveFileId =
+    useSetTakeExportedGoogleDriveFileId();
   const handleToken = useGAPITokenHandler();
 
   const exportTake = useCallback(
@@ -24,9 +30,12 @@ export function useTakeExporter() {
      * @param {import('@/stores/DocumentStore').DocumentId} documentId
      * @param {import('@/stores/DocumentStore').SceneId} sceneId
      * @param {import('@/stores/DocumentStore').ShotId} shotId
+     * @param {object} [opts]
+     * @param {boolean} [opts.uploadOnly]
+     * @param {import('@/stores/DocumentStore').TakeId} [opts.targetTakeId]
      * @returns {import('@/stores/DocumentStore').TakeId}
      */
-    function exportTake(data, documentId, sceneId, shotId) {
+    function exportTake(data, documentId, sceneId, shotId, opts = {}) {
       const store = UNSAFE_getStore();
       const ext = getVideoFileExtensionByMIMEType(data.type);
       const exportedTakeName = getExportedTakeName(
@@ -45,7 +54,11 @@ export function useTakeExporter() {
         documentId,
         shotId,
       ).shotType;
+      if (opts?.targetTakeId) {
+        newTake.takeId = opts.targetTakeId;
+      }
       addTake(documentId, shotId, newTake);
+      const takeId = newTake.takeId;
 
       if (
         // Upload it.
@@ -56,7 +69,8 @@ export function useTakeExporter() {
             data.type,
             data,
           )
-            .then(() => {
+            .then((fileId) => {
+              setTakeExportedGoogleDriveFileId(documentId, takeId, fileId);
               console.log('Upload file - ' + exportedFileNameWithExt);
             })
             .catch(() => {
@@ -66,9 +80,14 @@ export function useTakeExporter() {
             });
         })
       ) {
-        // Download it.
-        const dataURL = URL.createObjectURL(data);
-        downloadURLImpl(exportedFileNameWithExt, dataURL);
+        if (!opts?.uploadOnly) {
+          // Download it.
+          const dataURL = URL.createObjectURL(data);
+          downloadURLImpl(exportedFileNameWithExt, dataURL);
+          URL.revokeObjectURL(dataURL);
+        }
+        // Cache it.
+        cacheVideoBlob(takeId, data);
       }
       return newTake.takeId;
     },
@@ -93,8 +112,8 @@ function getExportedTakeName(store, documentId, sceneId, shotId) {
     documentTitle.charAt(0).toUpperCase() + documentId.substring(0, 4);
   */
   const shot = getShotById(store, documentId, shotId);
-  const sceneNumber = getSceneIndex(store, documentId, sceneId) + 1;
-  const shotNumber = getShotIndex(store, documentId, sceneId, shotId) + 1;
+  const sceneNumber = getSceneIndex(store, documentId, sceneId);
+  const shotNumber = getShotIndex(store, documentId, sceneId, shotId);
   const takeNumber = shot.takeIds.length + 1;
   const shotType = shot.shotType;
   const [SCENE, SHOT, TAKE, TYPE] = toScenShotTakeType(

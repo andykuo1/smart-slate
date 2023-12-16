@@ -83,6 +83,7 @@ export function createTake(takeId = uuid()) {
     exportedFileName: '',
     /** @type {ShotType} */
     exportedShotType: '',
+    exportedGoogleDriveFileId: '',
   };
 }
 
@@ -179,6 +180,7 @@ export function cloneTake(out, take) {
   out.exportedMillis = take.exportedMillis;
   out.exportedFileName = take.exportedFileName;
   out.exportedShotType = take.exportedShotType;
+  out.exportedGoogleDriveFileId = take.exportedGoogleDriveFileId;
   return /** @type {Take} */ (out);
 }
 

@@ -1,9 +1,18 @@
+import { useCallback, useState } from 'react';
+
+import CachedIcon from '@material-symbols/svg-400/rounded/cached.svg';
+import CloudDoneIcon from '@material-symbols/svg-400/rounded/cloud_done.svg';
+import CloudUploadIcon from '@material-symbols/svg-400/rounded/cloud_upload-fill.svg';
+
+import { useInterval } from '@/lib/UseInterval';
 import {
   useShotTakeCount,
   useTake,
   useTakeNumber,
 } from '@/stores/DocumentStoreContext';
+import { getVideoBlob, hasVideoBlob } from '@/stores/VideoCache';
 
+import { useTakeExporter } from '../recorder/UseTakeExporter';
 import { getShotTypeColor } from './ShotEntry';
 
 /**
@@ -12,16 +21,46 @@ import { getShotTypeColor } from './ShotEntry';
  * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/DocumentStore').ShotId} props.shotId
  * @param {import('@/stores/DocumentStore').TakeId} props.takeId
+ * @param {boolean} props.cloudExportable
  */
-export function TakeEntry({ documentId, sceneId, shotId, takeId }) {
+export function TakeEntry({
+  documentId,
+  sceneId,
+  shotId,
+  takeId,
+  cloudExportable,
+}) {
   const takeNumber = useTakeNumber(documentId, shotId, takeId);
   const take = useTake(documentId, takeId);
+  const exportTake = useTakeExporter();
+  const [isCached, setIsCached] = useState(false);
+
+  function onCloudClick() {
+    const blob = getVideoBlob(takeId);
+    if (blob) {
+      exportTake(blob, documentId, sceneId, shotId, { uploadOnly: true });
+    }
+  }
+
+  const onInterval = useCallback(
+    function _onInterval() {
+      setIsCached(hasVideoBlob(takeId));
+    },
+    [setIsCached, takeId],
+  );
+
+  useInterval(onInterval, 5_000);
+
   return (
     <TakeLayout
       title={`Take ${takeNumber}`}
       timestamp={take.exportedMillis}
       fileName={take.exportedFileName || '--'}
       className={getShotTypeColor(take.exportedShotType)}
+      isCloudExported={!!take.exportedGoogleDriveFileId}
+      isCloudExportable={cloudExportable}
+      isCached={isCached}
+      onCloudClick={onCloudClick}
     />
   );
 }
@@ -44,8 +83,21 @@ export function NewTake({ documentId, shotId }) {
  * @param {number} props.timestamp
  * @param {string} props.fileName
  * @param {string} [props.className]
+ * @param {boolean} [props.isCloudExported]
+ * @param {boolean} [props.isCloudExportable]
+ * @param {boolean} [props.isCached]
+ * @param {import('react').MouseEventHandler<HTMLButtonElement>} [props.onCloudClick]
  */
-function TakeLayout({ title, timestamp, fileName, className }) {
+function TakeLayout({
+  title,
+  timestamp,
+  fileName,
+  className,
+  isCloudExported,
+  isCloudExportable,
+  isCached,
+  onCloudClick,
+}) {
   const isPending = timestamp <= 0;
   return (
     <li
@@ -60,6 +112,18 @@ function TakeLayout({ title, timestamp, fileName, className }) {
         <p className={isPending ? 'opacity-30' : 'whitespace-nowrap'}>
           {title}
         </p>
+        <button
+          className="flex flex-row px-2"
+          onClick={onCloudClick}
+          disabled={isCloudExported || !isCloudExportable || !isCached}>
+          {isCloudExported ? (
+            <CloudDoneIcon className="w-6 h-6 fill-current" />
+          ) : isCloudExportable && isCached ? (
+            <CloudUploadIcon className="w-6 h-6 fill-current" />
+          ) : (
+            isCached && <CachedIcon className="w-6 h-6 fill-current" />
+          )}
+        </button>
         <div className="flex-1" />
         <p className="opacity-30 whitespace-nowrap">
           {isPending ? '--' : new Date(timestamp).toLocaleString()}

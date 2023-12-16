@@ -147,6 +147,7 @@ function buildMultiPartRequestBody(
  * @param {string|Blob} data
  * @param {object} [opts]
  * @param {Array<string>} [opts.parentFolderIds]
+ * @returns {Promise<string>}
  */
 export async function uploadFile(
   accessToken,
