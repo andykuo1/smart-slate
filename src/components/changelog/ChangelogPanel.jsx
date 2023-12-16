@@ -9,8 +9,9 @@ import { useState } from 'react';
 
 import InfoIcon from '@material-symbols/svg-400/rounded/info.svg';
 
+import DialogStyle from '@/styles/Dialog.module.css';
+
 import CHANGELOG from '../../../CHANGELOG.md?raw';
-import Style from './ChangelogPanel.module.css';
 
 export default function ChangelogPanel() {
   const [open, setOpen] = useState(false);
@@ -20,7 +21,7 @@ export default function ChangelogPanel() {
         <InfoIcon className="w-6 h-6 opacity-30" />
       </Button>
       <Dialog
-        className={Style.dialog}
+        className={DialogStyle.dialog}
         open={open}
         onClose={() => setOpen(false)}>
         <DialogDismiss className="text-xl text-left">{'<-'} Back</DialogDismiss>

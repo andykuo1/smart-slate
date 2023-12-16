@@ -6,7 +6,6 @@
 - Add proper signals for offline mode
 - Add proper signals for cloud syncs
 - Add a view for synced videos?
-- Add a snapshot thumbnail (uploadable or sketched)
 - Add a video preview?
 - Add a color marker that can be exported in CSV.
 - Can I add a folder to google drive?
@@ -15,6 +14,7 @@
 
 - Change shot type selector to switch group
 - Add colors for takes with shot types
+- Add customizable thumbnail for takes
 
 # 0.1.3
 

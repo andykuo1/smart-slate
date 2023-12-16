@@ -8,8 +8,7 @@
   border-width: 1px;
   border-style: solid;
   padding: 1rem;
-}
-.popover {
+
   border-color: hsl(204 3% 26%);
   background-color: hsl(204 3% 18%);
   color: hsl(204 20% 100%);

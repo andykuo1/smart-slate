@@ -23,6 +23,7 @@ export function createDispatch(set, get) {
 
     setShotType: zi(set, setShotType),
     setShotDescription: zi(set, setShotDescription),
+    setShotThumbnail: zi(set, setShotThumbnail),
     updateShot: zi(set, updateShot),
 
     incrementDocumentRevisionNumber: zi(set, incrementDocumentRevisionNumber),
@@ -336,5 +337,18 @@ function setShotDescription(store, documentId, shotId, description) {
   let document = store.documents[documentId];
   let shot = document.shots[shotId];
   shot.description = description;
+  incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('./DocumentStore').Store} store
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').ShotId} shotId
+ * @param {string} thumbnailUrl
+ */
+function setShotThumbnail(store, documentId, shotId, thumbnailUrl) {
+  let document = store.documents[documentId];
+  let shot = document.shots[shotId];
+  shot.thumbnail = thumbnailUrl;
   incrementDocumentRevisionNumber(document);
 }

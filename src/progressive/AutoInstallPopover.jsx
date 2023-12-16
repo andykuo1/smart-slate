@@ -12,7 +12,8 @@ import { useEffect } from 'react';
 import InstallDesktopIcon from '@material-symbols/svg-400/rounded/install_desktop.svg';
 import InstallMobileIcon from '@material-symbols/svg-400/rounded/install_mobile.svg';
 
-import Style from './AutoInstallPopover.module.css';
+import PopoverStyle from '@/styles/Popover.module.css';
+
 import MoreVertIcon from './material-more-vert.svg';
 import PlusSquare from './sf-plus-square.svg';
 import SquareAndArrowUp from './sf-square-and-arrow-up.svg';
@@ -22,8 +23,8 @@ export default function AutoInstallPopover() {
     <PopoverProvider>
       <PopoverAutoDisclosure />
       <PopoverAnchor className="fixed top-0 right-0" />
-      <Popover className={Style.popover}>
-        <PopoverArrow className={Style.arrow} />
+      <Popover className={PopoverStyle.popover}>
+        <PopoverArrow className={PopoverStyle.arrow} />
         {isAppleMobileDevice() ? (
           <PopoverContentApple />
         ) : isAndroidMobileDevice() ? (

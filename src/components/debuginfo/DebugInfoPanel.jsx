@@ -12,9 +12,9 @@ import DeviceInfoIcon from '@material-symbols/svg-400/rounded/device_unknown.svg
 
 import Codecs from '@/constants/Codecs';
 import FancyButton from '@/lib/FancyButton';
+import DialogStyle from '@/styles/Dialog.module.css';
 
 import { MarkdownContent } from '../changelog/ChangelogPanel';
-import Style from './DebugInfoPanel.module.css';
 
 export default function DebugInfoPanel() {
   const [open, setOpen] = useState(false);
@@ -38,7 +38,7 @@ export default function DebugInfoPanel() {
         <DeviceInfoIcon className="inline-block w-6" /> Info
       </FancyButton>
       <Dialog
-        className={Style.dialog}
+        className={DialogStyle.dialog}
         open={open}
         onClose={() => setOpen(false)}>
         <div className="flex flex-row">

@@ -15,18 +15,27 @@ import ShotTypes from '@/stores/ShotTypes';
  * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/DocumentStore').ShotId} props.shotId
  * @param {import('@/stores/DocumentStore').TakeId} [props.takeId]
+ * @param {boolean} [props.editable]
  */
-export default function ShotName({ documentId, sceneId, shotId, takeId = '' }) {
+export default function ShotName({
+  documentId,
+  sceneId,
+  shotId,
+  takeId = '',
+  editable = false,
+}) {
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
+  const shotType = useShotType(documentId, shotId);
   const takeCount = useShotTakeCount(documentId, shotId);
   const takeIndex = useTakeNumber(documentId, shotId, takeId);
   const takeNumber = takeId ? takeIndex : takeCount + 1;
 
-  const [SCENE, SHOT, TAKE, _] = toScenShotTakeType(
+  const [SCENE, SHOT, TAKE, TYPE] = toScenShotTakeType(
     sceneNumber,
     shotNumber,
     takeNumber,
+    shotType,
   );
 
   return (
@@ -34,7 +43,13 @@ export default function ShotName({ documentId, sceneId, shotId, takeId = '' }) {
       scene={() => SCENE}
       shot={() => SHOT}
       take={() => TAKE}
-      type={() => <ShotTypesMore documentId={documentId} shotId={shotId} />}
+      type={() =>
+        editable ? (
+          <ShotTypesMore documentId={documentId} shotId={shotId} />
+        ) : (
+          TYPE
+        )
+      }
     />
   );
 }
@@ -65,7 +80,7 @@ function ShotNameLayout({ className, scene, shot, take, type = undefined }) {
           <td className="font-mono">{type?.()}</td>
         </tr>
       </tbody>
-      <tfoot className="absolute -bottom-4 w-full flex">
+      <tfoot className="absolute -bottom-3 w-full flex">
         <tr className="flex-1 text-xs select-none transition-opacity opacity-0 group-hover:opacity-30">
           <th className="font-normal">scene</th>
           <th className="font-normal">shot</th>
@@ -98,7 +113,7 @@ function ShotTypesMore({ documentId, shotId }) {
 
   return (
     <select
-      className="text-center bg-transparent"
+      className="text-center bg-transparent -mx-1"
       value={shotType}
       onChange={onShotTypeChange}>
       {ShotTypes.params().map((type) => (

@@ -185,3 +185,17 @@ export function useSetShotDescription() {
 export function useTake(documentId, takeId) {
   return useDocumentStore((ctx) => getTakeById(ctx, documentId, takeId));
 }
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').ShotId} shotId
+ */
+export function useShotThumbnail(documentId, shotId) {
+  return useDocumentStore(
+    (ctx) => getShotById(ctx, documentId, shotId)?.thumbnail || '',
+  );
+}
+
+export function useSetShotThumbnail() {
+  return useDocumentStore((ctx) => ctx.setShotThumbnail);
+}
