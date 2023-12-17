@@ -12,6 +12,8 @@
 # 0.1.5
 
 - Add e2e testing with cypress
+- Fix resolution to highest possible
+- Reapprove GAPI permissions for sub-pages
 
 # 0.1.4
 

@@ -39,6 +39,8 @@ export const MEDIA_RECORDER_OPTIONS = {
 export const MEDIA_STREAM_CONSTRAINTS = {
   video: {
     facingMode: 'environment',
+    width: { ideal: 7680 },
+    height: { ideal: 4320 },
   },
   audio: true,
 };
