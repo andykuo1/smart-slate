@@ -9,26 +9,37 @@
 - Add a color marker that can be exported in CSV.
 - Can I add a folder to google drive?
 
+[x] Add a photo camera option for thumbnail
+[] Quick nav tree for scenes/shots/takes.
+[] Add a shot screen (basically the slate)
+[] Move thumbnail to as identifier instead of name
+[] Scene/Shot/Take info while recording is useful.
+[] Google login at the front?
+[] Cache to local storage first and download later?
+[] Screenplay imports!
+
 # 0.1.5
 
 - Add e2e testing with cypress
+- Re-approve GAPI permissions for sub-pages
 - Fix resolution to highest possible
-- Reapprove GAPI permissions for sub-pages
 
 # 0.1.4
 
-- Change shot type selector to switch group
 - Add colors for takes with shot types
 - Add customizable thumbnail for takes
 - Add cloud sync signal
 - Add temporary video cache
 
+- Change shot type selector to switch group
+
 # 0.1.3
 
 - Add popover for install help
 - Add changelog button
-- Change `<input capture>` behavior
 - Add exit on cut for `MediaRecorder`
+
+- Change `<input capture>` behavior
 - Change ServiceWorker to auto update
 
 # 0.1.2
@@ -47,13 +58,14 @@
 
 # 0.1.0
 
-- Change store to object version
 - Add shot types
 - Add new recorder
-- Update horizontal scroller to scroll vertically
 - Add write updates to timestamp
-- Update record to start immediately
 - Add some fun placeholder text (for now)
+
+- Change store to object version
+- Update horizontal scroller to scroll vertically
+- Update record to start immediately
 - Fallback to input capture if MediaRecorder is unavailable
 
 # 0.0.6
@@ -64,8 +76,8 @@
 
 # 0.0.5
 
-- Update shot list UI
 - Add shot list that load/saves!
+- Update shot list UI
 
 # 0.0.4
 
