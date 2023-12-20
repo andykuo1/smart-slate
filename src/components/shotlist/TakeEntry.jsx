@@ -5,6 +5,7 @@ import CloudDoneIcon from '@material-symbols/svg-400/rounded/cloud_done.svg';
 import CloudUploadIcon from '@material-symbols/svg-400/rounded/cloud_upload-fill.svg';
 
 import { useInterval } from '@/lib/UseInterval';
+import { useTakeExporter } from '@/serdes/UseTakeExporter';
 import {
   useShotTakeCount,
   useTake,
@@ -12,7 +13,6 @@ import {
 } from '@/stores/DocumentStoreContext';
 import { getVideoBlob, hasVideoBlob } from '@/stores/VideoCache';
 
-import { useTakeExporter } from '../recorder/UseTakeExporter';
 import BoxDrawingCharacter from './BoxDrawingCharacter';
 import { getShotTypeColor } from './ShotEntry';
 

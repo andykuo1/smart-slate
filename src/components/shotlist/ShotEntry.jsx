@@ -14,6 +14,7 @@ import {
   isMediaRecorderSupported,
   useMediaRecorderV2,
 } from '@/lib/mediarecorder';
+import { useTakeExporter } from '@/serdes/UseTakeExporter';
 import { createShot } from '@/stores/DocumentStore';
 import {
   useAddShot,
@@ -41,7 +42,6 @@ import {
   MEDIA_RECORDER_OPTIONS,
   MEDIA_STREAM_CONSTRAINTS,
 } from '../recorder/RecorderPanel';
-import { useTakeExporter } from '../recorder/UseTakeExporter';
 import BoxDrawingCharacter from './BoxDrawingCharacter';
 import ShotName from './ShotName';
 import ShotThumbnail from './ShotThumbnail';

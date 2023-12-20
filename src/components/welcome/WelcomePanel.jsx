@@ -2,8 +2,8 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '@material-symbols/svg-400/rounded/add-fill.svg';
-import UploadIcon from '@material-symbols/svg-400/rounded/upload-fill.svg';
 
+import ImportProjectButton from '@/buttons/ImportProjectButton';
 import FancyButton from '@/lib/FancyButton';
 import HorizontallyScrollableDiv from '@/lib/HorizontallyScrollableDiv';
 import { createDocument } from '@/stores/DocumentStore';
@@ -45,9 +45,7 @@ export default function WelcomePanel() {
           onClick={onNewProjectClick}>
           <AddIcon className="inline w-6 fill-current" />
         </FancyButton>
-        <FancyButton title="Import" className="mx-1 px-12">
-          <UploadIcon className="inline w-6 fill-current" />
-        </FancyButton>
+        <ImportProjectButton />
         <ChangelogPanel />
       </div>
       <SavedProjectView className="mx-auto mb-auto" />

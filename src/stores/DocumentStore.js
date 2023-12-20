@@ -6,6 +6,7 @@ import ShotTypes, { ANY_SHOT } from './ShotTypes';
  * @typedef {ReturnType<createStore>} Store
  * @typedef {ReturnType<createDocument>} Document
  * @typedef {ReturnType<createScene>} Scene
+ * @typedef {ReturnType<createBlock>} Block
  * @typedef {ReturnType<createShot>} Shot
  * @typedef {ReturnType<createTake>} Take
  *
@@ -13,6 +14,7 @@ import ShotTypes, { ANY_SHOT } from './ShotTypes';
  * @typedef {string} SceneId
  * @typedef {string} ShotId
  * @typedef {string} TakeId
+ * @typedef {string} BlockId
  *
  * @typedef {'wide'|'medium'|'closeup'|'full'|'long'|''} ShotType
  */
@@ -37,6 +39,8 @@ export function createDocument(documentId = uuid()) {
     sceneOrder: [],
     /** @type {Record<SceneId, Scene>} */
     scenes: {},
+    /** @type {Record<BlockId, Block>} */
+    blocks: {},
     /** @type {Record<ShotId, Shot>} */
     shots: {},
     /** @type {Record<TakeId, Take>} */
@@ -51,6 +55,21 @@ export function createScene(sceneId = uuid()) {
   return {
     sceneId,
     sceneName: '',
+    /** @type {Array<ShotId>} */
+    shotIds: [],
+    /** @type {Array<BlockId>} */
+    blockIds: [],
+  };
+}
+
+/**
+ * @param {BlockId} blockId
+ */
+export function createBlock(blockId = uuid()) {
+  return {
+    blockId,
+    /** @type {string} */
+    content: '',
     /** @type {Array<ShotId>} */
     shotIds: [],
   };
@@ -124,6 +143,15 @@ export function cloneDocument(out, document) {
   }
   out.scenes = outScenes;
 
+  let outBlocks = out.blocks || {};
+  for (let block of Object.values(document.blocks)) {
+    let blockId = block.blockId;
+    let outBlock = outBlocks[blockId] || createBlock(blockId);
+    let newBlock = cloneBlock(outBlock, block);
+    outBlocks[blockId] = newBlock;
+  }
+  out.blocks = outBlocks;
+
   let outShots = out.shots || {};
   for (let shot of Object.values(document.shots)) {
     let shotId = shot.shotId;
@@ -153,8 +181,21 @@ export function cloneDocument(out, document) {
 export function cloneScene(out, scene) {
   out.sceneId = scene.sceneId;
   out.shotIds = scene.shotIds.slice();
+  out.blockIds = scene.blockIds.slice();
   out.sceneName = scene.sceneName;
   return /** @type {Scene} */ (out);
+}
+
+/**
+ * @param {Partial<Block>} out
+ * @param {Block} block
+ * @returns {Block}
+ */
+export function cloneBlock(out, block) {
+  out.blockId = block.blockId;
+  out.shotIds = block.shotIds.slice();
+  out.content = block.content;
+  return /** @type {Block} */ (out);
 }
 
 /**

@@ -157,6 +157,10 @@ export function useSetShotType() {
   return useDocumentStore((ctx) => ctx.setShotType);
 }
 
+export function useAddDocument() {
+  return useDocumentStore((ctx) => ctx.addDocument);
+}
+
 export function useAddScene() {
   return useDocumentStore((ctx) => ctx.addScene);
 }

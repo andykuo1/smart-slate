@@ -11,6 +11,7 @@ import CameraPage from './routes/CameraPage';
 import EditPage from './routes/EditPage';
 import ErrorPage from './routes/ErrorPage';
 import RootPage from './routes/RootPage';
+import ViewPage from './routes/ViewPage';
 
 const router = createBrowserRouter(
   [
@@ -26,6 +27,10 @@ const router = createBrowserRouter(
     {
       path: '/edit',
       element: <EditPage />,
+    },
+    {
+      path: '/view',
+      element: <ViewPage />,
     },
   ],
   { basename: `/${PACKAGE_NAME}` },

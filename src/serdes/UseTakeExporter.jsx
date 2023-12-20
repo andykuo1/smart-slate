@@ -22,7 +22,7 @@ import { ANY_SHOT } from '@/stores/ShotTypes';
 import { cacheVideoBlob } from '@/stores/VideoCache';
 import { downloadURLImpl } from '@/utils/Downloader';
 
-import { captureVideoSnapshot } from './VideoSnapshot';
+import { captureVideoSnapshot } from '../components/recorder/VideoSnapshot';
 
 export function useTakeExporter() {
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
