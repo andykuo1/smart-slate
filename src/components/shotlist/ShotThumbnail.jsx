@@ -14,10 +14,6 @@ import { useCallback, useRef } from 'react';
 import AddPhotoAltIcon from '@material-symbols/svg-400/rounded/add_photo_alternate.svg';
 
 import { drawElementToCanvasWithRespectToAspectRatio } from '@/components/recorder/VideoSnapshot';
-import {
-  MAX_THUMBNAIL_HEIGHT,
-  MAX_THUMBNAIL_WIDTH,
-} from '@/constants/Resolutions';
 import { isInputCaptureSupported } from '@/lib/mediarecorder';
 import {
   useSetShotThumbnail,
@@ -25,6 +21,10 @@ import {
 } from '@/stores/DocumentStoreContext';
 import PopoverStyle from '@/styles/Popover.module.css';
 import TabStyle from '@/styles/Tab.module.css';
+import {
+  MAX_THUMBNAIL_HEIGHT,
+  MAX_THUMBNAIL_WIDTH,
+} from '@/values/Resolutions';
 
 /**
  * @param {object} props

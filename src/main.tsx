@@ -4,7 +4,6 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import '@/progressive/ServiceWorkerInstall';
 
-import { PACKAGE_NAME } from './constants/PackageJSON';
 import './index.css';
 import Providers from './providers';
 import CameraPage from './routes/CameraPage';
@@ -12,6 +11,7 @@ import EditPage from './routes/EditPage';
 import ErrorPage from './routes/ErrorPage';
 import RootPage from './routes/RootPage';
 import ViewPage from './routes/ViewPage';
+import { PACKAGE_NAME } from './values/PackageJSON';
 
 const router = createBrowserRouter(
   [

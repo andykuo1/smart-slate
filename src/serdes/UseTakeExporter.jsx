@@ -1,9 +1,5 @@
 import { useCallback } from 'react';
 
-import {
-  MAX_THUMBNAIL_HEIGHT,
-  MAX_THUMBNAIL_WIDTH,
-} from '@/constants/Resolutions';
 import { uploadFile, useGAPITokenHandler } from '@/lib/googleapi';
 import { getVideoFileExtensionByMIMEType } from '@/lib/mediarecorder';
 import {
@@ -21,6 +17,10 @@ import {
 import { ANY_SHOT } from '@/stores/ShotTypes';
 import { cacheVideoBlob } from '@/stores/VideoCache';
 import { downloadURLImpl } from '@/utils/Downloader';
+import {
+  MAX_THUMBNAIL_HEIGHT,
+  MAX_THUMBNAIL_WIDTH,
+} from '@/values/Resolutions';
 
 import { captureVideoSnapshot } from '../components/recorder/VideoSnapshot';
 

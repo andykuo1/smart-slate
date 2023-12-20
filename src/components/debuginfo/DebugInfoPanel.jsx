@@ -10,9 +10,9 @@ import { useEffect, useState } from 'react';
 import ContentCopy from '@material-symbols/svg-400/rounded/content_copy.svg';
 import DeviceInfoIcon from '@material-symbols/svg-400/rounded/device_unknown.svg';
 
-import Codecs from '@/constants/Codecs';
 import FancyButton from '@/lib/FancyButton';
 import DialogStyle from '@/styles/Dialog.module.css';
+import Codecs from '@/values/Codecs';
 
 import { MarkdownContent } from '../changelog/ChangelogPanel';
 

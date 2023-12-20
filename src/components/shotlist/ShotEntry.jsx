@@ -6,10 +6,9 @@ import NaturePeopleIcon from '@material-symbols/svg-400/rounded/nature_people-fi
 import PersonIcon from '@material-symbols/svg-400/rounded/person-fill.svg';
 import StarsIcon from '@material-symbols/svg-400/rounded/stars-fill.svg';
 
-import { choosePlaceholderRandomly } from '@/constants/PlaceholderText';
 import RecordButton from '@/lib/RecordButton';
 import { useFullscreen } from '@/lib/fullscreen';
-import { useInputCaptureV2 } from '@/lib/inputcapture';
+import { useInputCapture } from '@/lib/inputcapture';
 import {
   isMediaRecorderSupported,
   useMediaRecorderV2,
@@ -37,12 +36,14 @@ import {
   useSetUserCursor,
 } from '@/stores/UserStoreContext';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
-
+import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 import {
   MEDIA_RECORDER_OPTIONS,
   MEDIA_STREAM_CONSTRAINTS,
-} from '../recorder/RecorderPanel';
+} from '@/values/RecorderValues';
+
 import BoxDrawingCharacter from './BoxDrawingCharacter';
+import { getShotTypeColor } from './ShotColors';
 import ShotThumbnail from './ShotThumbnail';
 
 /**
@@ -117,7 +118,7 @@ function useShotRecorder(documentId, sceneId, shotId) {
   const setUserCursor = useSetUserCursor();
   const setRecorderActive = useSetRecorderActive();
   const { enterFullscreen } = useFullscreen();
-  const { startCapturing } = useInputCaptureV2();
+  const { startCapturing } = useInputCapture();
   const { startRecording } = useMediaRecorderV2();
   const exportTake = useTakeExporter();
   const navigate = useNavigate();
@@ -295,7 +296,7 @@ function MoreShotTypeSelector({ className, documentId, shotId }) {
     <select
       ref={selectRef}
       className={
-        'text-center bg-transparent rounded' +
+        'text-center bg-transparent rounded ml-2' +
         ' ' +
         (isActive && getShotTypeColor(shotType) + ' ' + className)
       }
@@ -352,21 +353,5 @@ function ShotTypeIcon({ className, shotType }) {
       return <NaturePeopleIcon className={className} />;
     default:
       return <StarsIcon className={className} />;
-  }
-}
-
-/**
- * @param {import('@/stores/DocumentStore').ShotType} [shotType]
- */
-export function getShotTypeColor(shotType) {
-  switch (shotType) {
-    case CLOSE_UP.value:
-      return 'bg-blue-300';
-    case MEDIUM_SHOT.value:
-      return 'bg-green-300';
-    case WIDE_SHOT.value:
-      return 'bg-red-300';
-    default:
-      return 'bg-yellow-300';
   }
 }

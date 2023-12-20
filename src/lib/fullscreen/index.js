@@ -1,1 +1,2 @@
-export * from './FullscreenContext';
+export * from './UseFullscreen';
+export * from './FullscreenProvider';

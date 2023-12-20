@@ -2,9 +2,9 @@ import { useCallback } from 'react';
 
 import UploadIcon from '@material-symbols/svg-400/rounded/upload-fill.svg';
 
-import { NOOP, RETHROW } from '@/constants/Functions';
 import FancyButton from '@/lib/FancyButton';
 import { useProjectImport } from '@/serdes/UseProjectImport';
+import { NOOP, RETHROW } from '@/values/Functions';
 
 import { useSingleFileInput } from './UseSingleFileInput';
 

@@ -1,4 +1,4 @@
-import { PACKAGE_VERSION } from '@/constants/PackageJSON';
+import { PACKAGE_VERSION } from '@/values/PackageJSON';
 
 export default function MadeWithLove() {
   return (

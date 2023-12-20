@@ -3,9 +3,9 @@ import { useCallback, useEffect, useRef } from 'react';
 import {
   MEDIA_RECORDER_OPTIONS,
   MEDIA_STREAM_CONSTRAINTS,
-} from '@/components/recorder/RecorderPanel';
+} from '@/values/RecorderValues';
 
-import { useMediaRecorderV2 } from './MediaRecorderContext';
+import { useMediaRecorderV2 } from './UseMediaRecorderV2';
 
 /** @typedef {'idle'|'preparing_streams'|'ready'|'starting'|'started'|'recording'|'stopping'|'stopped'|Error} MediaRecorderStatus */
 
