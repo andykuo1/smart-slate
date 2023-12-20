@@ -14,7 +14,7 @@ import {
   useMediaRecorderV2,
 } from '@/lib/mediarecorder';
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
-import { createShot, shotNumberToChar } from '@/stores/DocumentStore';
+import { createShot } from '@/stores/DocumentStore';
 import {
   useAddShot,
   useSceneNumber,
@@ -69,7 +69,7 @@ export function ShotEntry({ documentId, sceneId, shotId, children }) {
     <li className="flex flex-col items-center">
       <div
         className={
-          'flex flex-row border-b border-gray-300 w-full h-[4rem]' +
+          'flex flex-row border-b border-gray-300 w-full h-[6rem]' +
           ' ' +
           'overflow-x-auto overflow-y-hidden snap-x snap-mandatory overscroll-x-none' +
           ' ' +
@@ -81,13 +81,17 @@ export function ShotEntry({ documentId, sceneId, shotId, children }) {
             start={false}
             end={shotNumber >= shotCount}
           />
-          <span className="whitespace-nowrap my-auto mx-2">
-            {sceneNumber}
-            {shotNumberToChar(shotNumber)}
-          </span>
-          <ShotTypesSelector documentId={documentId} shotId={shotId} />
-          <RecordButton onClick={shotRecorder} />
-          <div className="group w-full h-full flex flex-row items-center text-center">
+          <ShotThumbnail
+            className="ml-2"
+            documentId={documentId}
+            sceneId={sceneId}
+            shotId={shotId}
+          />
+          <div className="flex flex-row items-center">
+            <div className="flex-1 flex flex-row">
+              <ShotTypesSelector documentId={documentId} shotId={shotId} />
+              <RecordButton onClick={shotRecorder} />
+            </div>
             <div className="flex-1 opacity-30 text-xs hidden sm:block">
               {isFirst
                 ? '<- Tap the ◉ to record'
@@ -96,7 +100,6 @@ export function ShotEntry({ documentId, sceneId, shotId, children }) {
           </div>
         </div>
         <div className="w-full flex-shrink-0 flex flex-row snap-start overflow-hidden">
-          <ShotThumbnail documentId={documentId} shotId={shotId} />
           <ShotNotes
             className="flex-1"
             documentId={documentId}
@@ -230,15 +233,16 @@ function ShotNotes({ className, documentId, shotId }) {
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/DocumentStore').ShotId} props.shotId
  */
-function ShotTypesSelector({ documentId, shotId }) {
+function ShotTypesSelector({ className, documentId, shotId }) {
   const shotType = useShotType(documentId, shotId);
   const setShotType = useSetShotType();
 
   return (
-    <div className="flex flex-row items-center">
+    <div className={'flex flex-row items-center' + ' ' + className}>
       <ShotTypeButton
         shotType={WIDE_SHOT.value}
         onClick={() => setShotType(documentId, shotId, WIDE_SHOT.value)}
@@ -322,7 +326,7 @@ function ShotTypeButton({ shotType, className, onClick, isActive = false }) {
   return (
     <button
       className={
-        'px-2 rounded' +
+        'px-1 rounded' +
         ' ' +
         (isActive && getShotTypeColor(shotType)) +
         ' ' +

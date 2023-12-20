@@ -15,8 +15,11 @@ import AddPhotoAltIcon from '@material-symbols/svg-400/rounded/add_photo_alterna
 
 import { drawElementToCanvasWithRespectToAspectRatio } from '@/components/recorder/VideoSnapshot';
 import { isInputCaptureSupported } from '@/lib/mediarecorder';
+import { shotNumberToChar } from '@/stores/DocumentStore';
 import {
+  useSceneNumber,
   useSetShotThumbnail,
+  useShotNumber,
   useShotThumbnail,
 } from '@/stores/DocumentStoreContext';
 import PopoverStyle from '@/styles/Popover.module.css';
@@ -30,16 +33,27 @@ import {
  * @param {object} props
  * @param {string} [props.className]
  * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/DocumentStore').ShotId} props.shotId
  */
-export default function ShotThumbnail({ className, documentId, shotId }) {
+export default function ShotThumbnail({
+  className,
+  documentId,
+  sceneId,
+  shotId,
+}) {
+  const sceneNumber = useSceneNumber(documentId, sceneId);
+  const shotNumber = useShotNumber(documentId, sceneId, shotId);
+  const sceneShotString = `${sceneNumber}${shotNumberToChar(shotNumber)}`;
+
   return (
     <div className={'relative flex items-center' + ' ' + className}>
       <PopoverProvider>
         <ShotThumbnailImage
-          className={'flex-1 max-w-sm bg-gray-300' + ' ' + `w-[128px] h-[72px]`}
+          className={'flex-1 bg-gray-300'}
           documentId={documentId}
           shotId={shotId}
+          alt={sceneShotString}
         />
         <PopoverDisclosure className="absolute left-0 top-0 bottom-0 right-0" />
         <Popover className={PopoverStyle.popover} modal={true}>
@@ -230,25 +244,30 @@ function ThumbnailOptionCamera({ documentId, shotId }) {
 
 /**
  * @param {object} props
- * @param {string} props.className
+ * @param {string} [props.className]
+ * @param {string} props.alt
  * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/DocumentStore').ShotId} props.shotId
  */
-function ShotThumbnailImage({ className, documentId, shotId }) {
+function ShotThumbnailImage({ className, alt, documentId, shotId }) {
   const thumbnail = useShotThumbnail(documentId, shotId);
-  if (thumbnail) {
-    return (
-      <img
-        className={'object-contain m-auto' + ' ' + className}
-        src={thumbnail}
-        alt={'A reference image for this shot'}
-      />
-    );
-  } else {
-    return (
-      <AddPhotoAltIcon className={'fill-gray-400 m-auto' + ' ' + className} />
-    );
-  }
+  return (
+    <div
+      className={
+        'relative max-w-sm w-[128px] h-[72px] overflow-hidden flex items-center' +
+        ' ' +
+        className
+      }>
+      {thumbnail ? (
+        <img className="flex-1 object-contain" src={thumbnail} alt={alt} />
+      ) : (
+        <AddPhotoAltIcon className="flex-1 fill-gray-400" />
+      )}
+      <p className="absolute right-2 bottom-0 text-right [text-shadow:_-1px_-1px_2px_white,_-1px_1px_2px_white,_1px_1px_2px_white,_1px_-1px_2px_white]">
+        {alt}
+      </p>
+    </div>
+  );
 }
 
 /**
