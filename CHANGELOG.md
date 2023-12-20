@@ -42,11 +42,13 @@ x. previs storyboard :D
 - sdfasdf
 
 - Login once.
-- Scene/Shot/Take metadata is in there.
+- Scene/Shot/Take metadata is in da vinci, we should check.
 
 EXPORT TO PDF with all the storyboard, image to filename.
 
 flag marker for in-content. comments?
+
+# 0.1.6
 
 - Add a photo camera option for thumbnail
 - Add nav guidelines to shots and takes
