@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useFullscreen } from '@/lib/fullscreen';
@@ -56,6 +56,7 @@ const MEDIA_BLOB_OPTIONS = {
  */
 export default function RecorderPanel({ children, onChange }) {
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
+  const [muted, setMuted] = useState(true); // Consider allowing sound when with headphones
   const recorder = useCurrentRecorder();
   const setRecorderActive = useSetRecorderActive();
   const setRecorderStatus = useSetRecorderStatus();
@@ -133,7 +134,11 @@ export default function RecorderPanel({ children, onChange }) {
   return (
     <div className="relative flex flex-col items-center bg-black w-full h-full">
       <div className="flex-1" />
-      <video className="w-full h-full bg-neutral-900" ref={videoRef} />
+      <video
+        className="w-full h-full bg-neutral-900"
+        ref={videoRef}
+        muted={muted}
+      />
       <div className="flex-1" />
       <div className="absolute bottom-0 left-0 right-0 flex flex-row">
         <button
