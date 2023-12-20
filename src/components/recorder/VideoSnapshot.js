@@ -27,7 +27,7 @@ export async function captureVideoSnapshot(
         : Number.isFinite(lastSeekableRangeStart)
           ? lastSeekableRangeStart
           : 0;
-      const seekToSeconds = timestampSeconds;
+      const seekToSeconds = timestampSeconds || lastSeekableRange;
       // NOTE: Delay seeking, otherwise Safari won't fire event.
       setTimeout(() => {
         // Start seeking!

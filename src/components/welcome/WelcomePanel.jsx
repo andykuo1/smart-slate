@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import ProfileIcon from '@material-symbols/svg-400/rounded/account_circle.svg';
 import AddIcon from '@material-symbols/svg-400/rounded/add-fill.svg';
 
 import ImportProjectButton from '@/buttons/ImportProjectButton';
@@ -35,10 +36,21 @@ export default function WelcomePanel() {
     [addDocument, setUserCursor, navigate],
   );
 
+  const onProfileClick = useCallback(function onProfileClick() {
+    // TODO: Login/Logout and show the account picture!
+  }, []);
+
   return (
     <>
       <AppTitle />
       <div className="flex flex-row text-center mx-auto">
+        <FancyButton
+          title="Profile"
+          className="absolute top-2 left-2 mx-1 px-12"
+          onClick={onProfileClick}
+          disabled={true}>
+          <ProfileIcon className="inline w-6 fill-current" />
+        </FancyButton>
         <FancyButton
           title="New Project"
           className="mx-1 px-12"

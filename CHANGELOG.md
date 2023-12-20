@@ -9,30 +9,20 @@
 - Add a color marker that can be exported in CSV.
 - Can I add a folder to google drive?
 
-1. Visual Tree structure (vertical minimap?)
-2. Add a scene heading
 3. Sketch upload / Create a storyboard.
 4. sync options to login once only.
 5. Slate screen
 6. Screenplay imports
 
-[x] Add a photo camera option for thumbnail
-[x] Change video to muted while recording
-[x] Add nav guidelines to shots and takes
-[x] Add editable scene heading
-[x] Change shot name shorter for display
 [] Add a shot screen (basically the slate)
 [] Move thumbnail to as identifier instead of name
 [] Scene/Shot/Take info while recording is useful.
 [] - Put the thumbnail THERE!
-[] Google login at the front?
 [] Cache to local storage first and download later?
 [] Screenplay imports!
 [] rearrange the shot order (but keep takes in there)
 
-- all that before editing (done in the app).
 - create a storyboard of existing shots
-
 - review takes - it is its own editor
 - MOVE the THUMBNAIL WITHIN the scene
   - SUGGESTION: putting it all in the script itself.
@@ -58,15 +48,12 @@ EXPORT TO PDF with all the storyboard, image to filename.
 
 flag marker for in-content. comments?
 
-1. It gets really confusing when we have many shots and takes-- which belongs where?
-2. Take a photo/sketch for a shot.
-3. When I am taking a shot, I really don't care about other shots-- it just adds to the confusion.
-4. Thumbnails next to the record button after I take them. File name or take name is kinda irrelevant at the time of recording the take.
-5. What scene, take, or even picture of the sketch/thumbnail byt he side that I have uploaded. What am I recording?
-6. When I am taking takes, I sometimes capture takes that are visually different than what I described. This can be confusing to fix after. (this is part of intelligence that would come later possibly)
-7. ???
-8. It asks me what to do with the file, which is too many clicks. I just want to record each take.
-9. I want scene headings with context, not just numbers. Or at least a way to add scene descriptions since. Maybe importing a screenplay?
+- Add a photo camera option for thumbnail
+- Add nav guidelines to shots and takes
+- Add editable scene heading
+
+- Change video to muted while recording
+- Change shot name shorter for display
 
 # 0.1.5
 
