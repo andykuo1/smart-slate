@@ -10,7 +10,6 @@ export const GAPI_DRIVE_ABOUT_URI =
  * @param {string} accessToken
  * @param {object} [opts]
  * @param {Array<string>} [opts.parentFolderIds]
- * @returns {Promise<string>}
  */
 export async function getUserInfo(accessToken, opts = {}) {
   const result = await getGoogleAPI().client.drive.about.get({

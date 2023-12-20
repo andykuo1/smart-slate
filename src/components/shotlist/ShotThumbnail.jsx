@@ -104,7 +104,7 @@ function ThumbnailOptionUpload({ documentId, shotId }) {
         canvasRef,
       ).then((uri) => setShotThumbnail(documentId, shotId, uri));
     },
-    [setShotThumbnail],
+    [documentId, shotId, setShotThumbnail],
   );
 
   return (
@@ -202,7 +202,7 @@ function ThumbnailOptionCamera({ documentId, shotId }) {
         canvasRef,
       ).then((uri) => setShotThumbnail(documentId, shotId, uri));
     },
-    [],
+    [documentId, shotId, setShotThumbnail],
   );
 
   return (

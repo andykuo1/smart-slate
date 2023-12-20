@@ -28,7 +28,7 @@ export default function ImportProjectButton({
         .then(onSuccess)
         .catch(onError);
     },
-    [onSuccess, onError],
+    [importProject, onSuccess, onError],
   );
 
   const [render, click] = useSingleFileInput('*.fountain,*.txt', onFile);

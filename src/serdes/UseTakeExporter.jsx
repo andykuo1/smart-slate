@@ -107,7 +107,13 @@ export function useTakeExporter() {
       }
       return takeId;
     },
-    [UNSAFE_getStore, addTake, handleToken],
+    [
+      UNSAFE_getStore,
+      addTake,
+      handleToken,
+      setTakeExportedGoogleDriveFileId,
+      setTakePreviewImage,
+    ],
   );
 
   return exportTake;

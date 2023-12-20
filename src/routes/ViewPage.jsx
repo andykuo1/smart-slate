@@ -1,5 +1,4 @@
 import Screenplay from '@/components/screenplay/Screenplay';
-import { useCurrentDocumentId } from '@/stores/UserStoreContext';
 
 export default function ViewPage() {
   return (
