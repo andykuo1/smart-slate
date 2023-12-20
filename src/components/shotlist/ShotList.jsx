@@ -13,7 +13,7 @@ import TakeList from './TakeList';
 export default function ShotList({ documentId, sceneId }) {
   const shotIds = useShotIds(documentId, sceneId);
   return (
-    <ul title="Shot list" className="mx-4">
+    <ul title="Shot list">
       {shotIds.map((shotId) => (
         <Fragment key={`shot-${shotId}`}>
           <ShotEntry documentId={documentId} sceneId={sceneId} shotId={shotId}>

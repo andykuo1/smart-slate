@@ -19,7 +19,8 @@
 [x] Add a photo camera option for thumbnail
 [x] Change video to muted while recording
 [x] Add nav guidelines to shots and takes
-[] Quick nav tree for scenes/shots/takes.
+[x] Add editable scene heading
+[x] Change shot name shorter for display
 [] Add a shot screen (basically the slate)
 [] Move thumbnail to as identifier instead of name
 [] Scene/Shot/Take info while recording is useful.

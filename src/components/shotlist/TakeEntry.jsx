@@ -14,7 +14,6 @@ import {
 import { getVideoBlob, hasVideoBlob } from '@/stores/VideoCache';
 
 import BoxDrawingCharacter from './BoxDrawingCharacter';
-import { getShotTypeColor } from './ShotEntry';
 
 /**
  * @param {object} props
@@ -57,7 +56,6 @@ export function TakeEntry({
       title={`Take ${takeNumber}`}
       timestamp={take.exportedMillis}
       fileName={take.exportedFileName || '--'}
-      className={getShotTypeColor(take.exportedShotType)}
       firstTake={false}
       lastTake={takeNumber === 1}
       isCloudExported={!!take.exportedGoogleDriveFileId}

@@ -241,12 +241,17 @@ export function toScenShotTakeType(
 ) {
   return [
     `S${sceneNumber > 0 ? String(sceneNumber).padStart(2, '0') : '--'}`,
-    shotNumber > 0
-      ? String.fromCharCode('A'.charCodeAt(0) + (shotNumber - 1))
-      : '--',
+    shotNumber > 0 ? shotNumberToChar(shotNumber) : '--',
     `T${takeNumber > 0 ? String(takeNumber).padStart(2, '0') : '--'}`,
     typeof shotType !== 'undefined'
       ? ShotTypes.getParamsByType(shotType).abbr
       : ANY_SHOT.abbr,
   ];
+}
+
+/**
+ * @param {number} shotNumber
+ */
+export function shotNumberToChar(shotNumber) {
+  return String.fromCharCode('A'.charCodeAt(0) + (shotNumber - 1));
 }

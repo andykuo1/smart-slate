@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import FaceIcon from '@material-symbols/svg-400/rounded/face-fill.svg';
@@ -15,7 +15,7 @@ import {
   useMediaRecorderV2,
 } from '@/lib/mediarecorder';
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
-import { createShot } from '@/stores/DocumentStore';
+import { createShot, shotNumberToChar } from '@/stores/DocumentStore';
 import {
   useAddShot,
   useSceneNumber,
@@ -43,7 +43,6 @@ import {
   MEDIA_STREAM_CONSTRAINTS,
 } from '../recorder/RecorderPanel';
 import BoxDrawingCharacter from './BoxDrawingCharacter';
-import ShotName from './ShotName';
 import ShotThumbnail from './ShotThumbnail';
 
 /**
@@ -81,14 +80,12 @@ export function ShotEntry({ documentId, sceneId, shotId, children }) {
             start={false}
             end={shotNumber >= shotCount}
           />
+          <span className="whitespace-nowrap my-auto mx-2">
+            {sceneNumber}
+            {shotNumberToChar(shotNumber)}
+          </span>
           <ShotTypesSelector documentId={documentId} shotId={shotId} />
           <RecordButton onClick={shotRecorder} />
-          <ShotName
-            documentId={documentId}
-            sceneId={sceneId}
-            shotId={shotId}
-            editable={true}
-          />
           <div className="group w-full h-full flex flex-row items-center text-center">
             <div className="flex-1 opacity-30 text-xs hidden sm:block">
               {isFirst
@@ -259,15 +256,57 @@ function ShotTypesSelector({ documentId, shotId }) {
         isActive={shotType === CLOSE_UP.value}
       />
       <span>|</span>
-      <ShotTypeButton
-        isActive={
-          !!shotType &&
-          shotType !== WIDE_SHOT.value &&
-          shotType !== MEDIUM_SHOT.value &&
-          shotType !== CLOSE_UP.value
-        }
-      />
+      <MoreShotTypeSelector documentId={documentId} shotId={shotId} />
     </div>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/DocumentStore').ShotId} props.shotId
+ */
+function MoreShotTypeSelector({ className, documentId, shotId }) {
+  const selectRef = useRef(/** @type {HTMLSelectElement|null} */ (null));
+  const shotType = useShotType(documentId, shotId);
+  const setShotType = useSetShotType();
+
+  /** @type {import('react').ChangeEventHandler<HTMLSelectElement>} */
+  const onShotTypeChange = useCallback(
+    function onShotTypeChange(e) {
+      let el = e.target;
+      setShotType(
+        documentId,
+        shotId,
+        /** @type {import('@/stores/DocumentStore').ShotType} */ (el.value),
+      );
+    },
+    [documentId, shotId, setShotType],
+  );
+
+  const isActive =
+    !!shotType &&
+    shotType !== WIDE_SHOT.value &&
+    shotType !== MEDIUM_SHOT.value &&
+    shotType !== CLOSE_UP.value;
+
+  return (
+    <select
+      ref={selectRef}
+      className={
+        'text-center bg-transparent rounded' +
+        ' ' +
+        (isActive && getShotTypeColor(shotType) + ' ' + className)
+      }
+      value={shotType}
+      onChange={onShotTypeChange}>
+      {ShotTypes.params().map((type) => (
+        <option key={type.value} title={type.name} value={type.value}>
+          {type.abbr}
+        </option>
+      ))}
+    </select>
   );
 }
 
@@ -282,7 +321,7 @@ function ShotTypeButton({ shotType, className, onClick, isActive = false }) {
   return (
     <button
       className={
-        'px-0 sm:px-2 rounded' +
+        'px-2 rounded' +
         ' ' +
         (isActive && getShotTypeColor(shotType)) +
         ' ' +
