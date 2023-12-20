@@ -52,12 +52,12 @@ export function fountainTokensToDocument(tokens) {
       currentScene = addScene();
       if (token.type === 'scene_heading') {
         // There is a title! And this is the first!
-        currentScene.sceneName = text;
+        currentScene.sceneHeading = text;
         // ... and now skip this token.
         continue;
       } else {
         // There's an no-title scene at the beginning! ... keep it.
-        currentScene.sceneName = 'UNNAMED';
+        currentScene.sceneHeading = 'UNNAMED';
         // ... and now process the token.
       }
     }
@@ -65,7 +65,7 @@ export function fountainTokensToDocument(tokens) {
       case 'scene_heading':
         // ... the next scene.
         currentScene = addScene();
-        currentScene.sceneName = text;
+        currentScene.sceneHeading = text;
         break;
       case 'action':
         currentBlock = addBlock(currentScene);

@@ -4,8 +4,10 @@ import { createScene, createShot } from '@/stores/DocumentStore';
 import {
   useAddScene,
   useAddShot,
+  useSceneHeading,
   useSceneIds,
   useSceneNumber,
+  useSetSceneHeading,
 } from '@/stores/DocumentStoreContext';
 
 import DocumentTitle from './DocumentTitle';
@@ -44,9 +46,12 @@ function SceneHeader({ documentId, sceneId, children }) {
   const sceneNumber = useSceneNumber(documentId, sceneId);
   return (
     <li className="flex flex-col items-center mt-8">
-      <div className="flex flex-row items-center w-full">
-        <SceneNumber sceneNumber={sceneNumber} />
-        <span className="flex-1 text-center border-t-2 border-dotted border-black" />
+      <div className="relative flex flex-row items-center w-full border-b-2 border-dotted border-black">
+        <SceneHeading
+          className="flex-1 mx-2"
+          documentId={documentId}
+          sceneId={sceneId}
+        />
         <SceneNumber sceneNumber={sceneNumber} />
       </div>
       <div className="flex-1 w-full">{children}</div>
@@ -81,9 +86,35 @@ function NewScene({ documentId }) {
 
 /**
  * @param {object} props
+ * @param {string} props.className
+ * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
+ */
+function SceneHeading({ className, documentId, sceneId }) {
+  const sceneHeading = useSceneHeading(documentId, sceneId);
+  const setSceneHeading = useSetSceneHeading();
+  /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
+  function onChange(e) {
+    const el = e.target;
+    setSceneHeading(documentId, sceneId, el.value.toUpperCase());
+  }
+  return (
+    <input
+      className={'bg-transparent px-2 text-xl' + ' ' + className}
+      type="text"
+      placeholder="INT/EXT. SCENE - DAY"
+      value={sceneHeading}
+      onChange={onChange}
+      autoCapitalize="characters"
+    />
+  );
+}
+
+/**
+ * @param {object} props
  * @param {number} props.sceneNumber
  */
 function SceneNumber({ sceneNumber }) {
   const result = sceneNumber < 0 ? '??' : String(sceneNumber).padStart(2, '0');
-  return <span className="mx-4 font-mono">SCENE {result}</span>;
+  return <span className="mx-4 font-mono opacity-30">SCENE {result}</span>;
 }

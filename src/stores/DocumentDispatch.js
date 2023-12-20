@@ -21,6 +21,8 @@ export function createDispatch(set, get) {
     setDocumentTitle: zi(set, setDocumentTitle),
     updateDocument: zi(set, updateDocument),
 
+    setSceneHeading: zi(set, setSceneHeading),
+
     setShotType: zi(set, setShotType),
     setShotDescription: zi(set, setShotDescription),
     setShotThumbnail: zi(set, setShotThumbnail),
@@ -293,6 +295,19 @@ function updateDocument(store, documentId, handler) {
 function setDocumentTitle(store, documentId, title) {
   let document = store.documents[documentId];
   document.documentTitle = title;
+  incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('./DocumentStore').Store} store
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').SceneId} sceneId
+ * @param {string} heading
+ */
+function setSceneHeading(store, documentId, sceneId, heading) {
+  let document = store.documents[documentId];
+  let scene = document.scenes[sceneId];
+  scene.sceneHeading = heading;
   incrementDocumentRevisionNumber(document);
 }
 

@@ -6,6 +6,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import {
   createDispatch,
   getDocumentIds,
+  getSceneById,
   getSceneIdsInOrder,
   getSceneIndex,
   getShotById,
@@ -227,4 +228,18 @@ export function useSetTakeExportedGoogleDriveFileId() {
 
 export function useSetTakePreviewImage() {
   return useDocumentStore((ctx) => ctx.setTakePreviewImage);
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').SceneId} sceneId
+ */
+export function useSceneHeading(documentId, sceneId) {
+  return useDocumentStore(
+    (ctx) => getSceneById(ctx, documentId, sceneId).sceneHeading,
+  );
+}
+
+export function useSetSceneHeading() {
+  return useDocumentStore((ctx) => ctx.setSceneHeading);
 }
