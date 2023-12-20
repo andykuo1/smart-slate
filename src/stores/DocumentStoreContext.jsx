@@ -127,6 +127,23 @@ export function useTakeNumber(documentId, shotId, takeId) {
 
 /**
  * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').SceneId} sceneId
+ */
+export function useSceneShotCount(documentId, sceneId) {
+  return useDocumentStore(
+    (ctx) => getShotIdsInOrder(ctx, documentId, sceneId).length,
+  );
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ */
+export function useDocumentSceneCount(documentId) {
+  return useDocumentStore((ctx) => getSceneIdsInOrder(ctx, documentId).length);
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
  * @param {import('./DocumentStore').ShotId} shotId
  */
 export function useShotType(documentId, shotId) {
@@ -202,4 +219,8 @@ export function useSetShotThumbnail() {
 
 export function useSetTakeExportedGoogleDriveFileId() {
   return useDocumentStore((ctx) => ctx.setTakeExportedGoogleDriveFileId);
+}
+
+export function useSetTakePreviewImage() {
+  return useDocumentStore((ctx) => ctx.setTakePreviewImage);
 }

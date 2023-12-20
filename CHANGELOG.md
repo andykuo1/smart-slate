@@ -10,6 +10,8 @@
 - Can I add a folder to google drive?
 
 [x] Add a photo camera option for thumbnail
+[x] Change video to muted while recording
+[x] Add nav guidelines to shots and takes
 [] Quick nav tree for scenes/shots/takes.
 [] Add a shot screen (basically the slate)
 [] Move thumbnail to as identifier instead of name

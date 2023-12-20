@@ -79,6 +79,7 @@ export function createTake(takeId = uuid()) {
   return {
     takeId,
     notes: '',
+    previewImage: '',
     exportedMillis: 0,
     exportedFileName: '',
     /** @type {ShotType} */
@@ -177,6 +178,7 @@ export function cloneShot(out, shot) {
 export function cloneTake(out, take) {
   out.takeId = take.takeId;
   out.notes = take.notes;
+  out.previewImage = take.previewImage;
   out.exportedMillis = take.exportedMillis;
   out.exportedFileName = take.exportedFileName;
   out.exportedShotType = take.exportedShotType;

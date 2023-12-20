@@ -13,6 +13,11 @@ import { useCallback, useRef } from 'react';
 
 import AddPhotoAltIcon from '@material-symbols/svg-400/rounded/add_photo_alternate.svg';
 
+import { drawElementToCanvasWithRespectToAspectRatio } from '@/components/recorder/VideoSnapshot';
+import {
+  MAX_THUMBNAIL_HEIGHT,
+  MAX_THUMBNAIL_WIDTH,
+} from '@/constants/Resolutions';
 import { isInputCaptureSupported } from '@/lib/mediarecorder';
 import {
   useSetShotThumbnail,
@@ -20,9 +25,6 @@ import {
 } from '@/stores/DocumentStoreContext';
 import PopoverStyle from '@/styles/Popover.module.css';
 import TabStyle from '@/styles/Tab.module.css';
-
-const MAX_THUMBNAIL_WIDTH = 256;
-const MAX_THUMBNAIL_HEIGHT = 144;
 
 /**
  * @param {object} props
@@ -267,26 +269,12 @@ async function blobToDataURI(blob, maxWidth, maxHeight, canvasRef) {
     const img = new Image();
     img.addEventListener('load', () => {
       URL.revokeObjectURL(url);
-
-      const w = img.width;
-      const h = img.height;
-      const hr = maxWidth / w;
-      const wr = maxHeight / h;
-      const ratio = Math.min(hr, wr);
-
-      const dx = (maxWidth - w * ratio) / 2;
-      const dy = (maxHeight - h * ratio) / 2;
-      canvas.width = maxWidth;
-      canvas.height = maxHeight;
-
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        reject(new Error('No valid canvas 2d context.'));
-        return;
-      }
-      ctx.clearRect(0, 0, maxWidth, maxHeight);
-      ctx.drawImage(img, 0, 0, w, h, dx, dy, w * ratio, h * ratio);
-
+      drawElementToCanvasWithRespectToAspectRatio(
+        canvas,
+        img,
+        maxWidth,
+        maxHeight,
+      );
       const uri = canvas.toDataURL('image/png', 0.5);
       resolve(uri);
     });

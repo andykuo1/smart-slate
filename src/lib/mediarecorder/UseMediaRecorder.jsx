@@ -351,8 +351,11 @@ export function isMediaRecorderSupported(
  * @param {MediaStream|null} stream
  */
 function stopMediaStream(stream) {
-  stream?.getTracks().forEach((track) => {
+  if (!stream) {
+    throw new Error('Missing stream.');
+  }
+  for (let track of stream.getTracks()) {
     track.enabled = false;
     track.stop();
-  });
+  }
 }

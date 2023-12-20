@@ -1,5 +1,9 @@
 import { useCallback } from 'react';
 
+import {
+  MAX_THUMBNAIL_HEIGHT,
+  MAX_THUMBNAIL_WIDTH,
+} from '@/constants/Resolutions';
 import { uploadFile, useGAPITokenHandler } from '@/lib/googleapi';
 import { getVideoFileExtensionByMIMEType } from '@/lib/mediarecorder';
 import {
@@ -12,16 +16,20 @@ import { createTake, toScenShotTakeType } from '@/stores/DocumentStore';
 import {
   useDocumentStore,
   useSetTakeExportedGoogleDriveFileId,
+  useSetTakePreviewImage,
 } from '@/stores/DocumentStoreContext';
 import { ANY_SHOT } from '@/stores/ShotTypes';
 import { cacheVideoBlob } from '@/stores/VideoCache';
 import { downloadURLImpl } from '@/utils/Downloader';
+
+import { captureVideoSnapshot } from './VideoSnapshot';
 
 export function useTakeExporter() {
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const addTake = useDocumentStore((ctx) => ctx.addTake);
   const setTakeExportedGoogleDriveFileId =
     useSetTakeExportedGoogleDriveFileId();
+  const setTakePreviewImage = useSetTakePreviewImage();
   const handleToken = useGAPITokenHandler();
 
   const exportTake = useCallback(
@@ -60,6 +68,14 @@ export function useTakeExporter() {
       addTake(documentId, shotId, newTake);
       const takeId = newTake.takeId;
 
+      // Process the video.
+      captureVideoSnapshot(
+        data,
+        0.5,
+        MAX_THUMBNAIL_WIDTH,
+        MAX_THUMBNAIL_HEIGHT,
+      ).then((url) => setTakePreviewImage(documentId, takeId, url));
+
       if (
         // Upload it.
         !handleToken((token) => {
@@ -89,7 +105,7 @@ export function useTakeExporter() {
         // Cache it.
         cacheVideoBlob(takeId, data);
       }
-      return newTake.takeId;
+      return takeId;
     },
     [UNSAFE_getStore, addTake, handleToken],
   );

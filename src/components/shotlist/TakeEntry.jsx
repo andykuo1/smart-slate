@@ -13,6 +13,7 @@ import {
 import { getVideoBlob, hasVideoBlob } from '@/stores/VideoCache';
 
 import { useTakeExporter } from '../recorder/UseTakeExporter';
+import BoxDrawingCharacter from './BoxDrawingCharacter';
 import { getShotTypeColor } from './ShotEntry';
 
 /**
@@ -57,6 +58,8 @@ export function TakeEntry({
       timestamp={take.exportedMillis}
       fileName={take.exportedFileName || '--'}
       className={getShotTypeColor(take.exportedShotType)}
+      firstTake={false}
+      lastTake={takeNumber === 1}
       isCloudExported={!!take.exportedGoogleDriveFileId}
       isCloudExportable={cloudExportable}
       isCached={isCached}
@@ -71,9 +74,16 @@ export function TakeEntry({
  * @param {import('@/stores/DocumentStore').ShotId} props.shotId
  */
 export function NewTake({ documentId, shotId }) {
-  const takeNumber = useShotTakeCount(documentId, shotId) + 1;
+  const takeCount = useShotTakeCount(documentId, shotId);
+  const takeNumber = takeCount + 1;
   return (
-    <TakeLayout title={`Take ${takeNumber}`} timestamp={0} fileName="--" />
+    <TakeLayout
+      title={`Take ${takeNumber}`}
+      timestamp={0}
+      fileName="--"
+      firstTake={false}
+      lastTake={takeNumber === 1}
+    />
   );
 }
 
@@ -82,6 +92,8 @@ export function NewTake({ documentId, shotId }) {
  * @param {string} props.title
  * @param {number} props.timestamp
  * @param {string} props.fileName
+ * @param {boolean} props.firstTake
+ * @param {boolean} props.lastTake
  * @param {string} [props.className]
  * @param {boolean} [props.isCloudExported]
  * @param {boolean} [props.isCloudExportable]
@@ -93,6 +105,8 @@ function TakeLayout({
   timestamp,
   fileName,
   className,
+  firstTake,
+  lastTake,
   isCloudExported,
   isCloudExportable,
   isCached,
@@ -109,8 +123,14 @@ function TakeLayout({
         className
       }>
       <div className="w-full flex-shrink-0 flex flex-row snap-start">
-        <p className={isPending ? 'opacity-30' : 'whitespace-nowrap'}>
-          {title}
+        <BoxDrawingCharacter
+          className="ml-4 mr-2"
+          depth={1}
+          start={firstTake}
+          end={lastTake}
+        />
+        <p className="whitespace-nowrap flex flex-row">
+          <span className={isPending ? 'opacity-30' : ''}>{title}</span>
         </p>
         <button
           className="flex flex-row px-2"

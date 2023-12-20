@@ -10,7 +10,7 @@ export default function RecordButton({ className, disabled, onClick }) {
       className={
         'group mx-2 my-auto' +
         ' ' +
-        'text-3xl text-red-400 disabled:text-gray-300' +
+        'text-4xl text-red-400 disabled:text-gray-300' +
         ' ' +
         className
       }

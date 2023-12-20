@@ -56,7 +56,7 @@ const MEDIA_BLOB_OPTIONS = {
  */
 export default function RecorderPanel({ children, onChange }) {
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
-  const [muted, setMuted] = useState(true); // Consider allowing sound when with headphones
+  const [muted, _] = useState(true); // Consider allowing sound when with headphones
   const recorder = useCurrentRecorder();
   const setRecorderActive = useSetRecorderActive();
   const setRecorderStatus = useSetRecorderStatus();
@@ -82,6 +82,7 @@ export default function RecorderPanel({ children, onChange }) {
     },
     [videoRef],
   );
+
   const onStop = useCallback(
     /** @param {Blob} blob */
     function onStop(blob) {
@@ -99,6 +100,7 @@ export default function RecorderPanel({ children, onChange }) {
     },
     [videoRef, onChange, exitFullscreen, navigate, setRecorderActive],
   );
+
   const onStatus = useCallback(
     /** @param {import('@/lib/mediarecorder/UseMediaRecorder').MediaRecorderStatus} status */
     function onStatus(status) {

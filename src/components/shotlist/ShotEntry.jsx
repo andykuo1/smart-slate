@@ -18,6 +18,7 @@ import { createShot } from '@/stores/DocumentStore';
 import {
   useAddShot,
   useSceneNumber,
+  useSceneShotCount,
   useSetShotDescription,
   useSetShotType,
   useShotDescription,
@@ -41,6 +42,7 @@ import {
   MEDIA_STREAM_CONSTRAINTS,
 } from '../recorder/RecorderPanel';
 import { useTakeExporter } from '../recorder/UseTakeExporter';
+import BoxDrawingCharacter from './BoxDrawingCharacter';
 import ShotName from './ShotName';
 import ShotThumbnail from './ShotThumbnail';
 
@@ -54,6 +56,7 @@ import ShotThumbnail from './ShotThumbnail';
 export function ShotEntry({ documentId, sceneId, shotId, children }) {
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
+  const shotCount = useSceneShotCount(documentId, sceneId);
   const currentCursor = useCurrentCursor();
   const isActive =
     currentCursor.documentId === documentId &&
@@ -73,6 +76,11 @@ export function ShotEntry({ documentId, sceneId, shotId, children }) {
           (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
         }>
         <div className="w-full flex-shrink-0 flex flex-row snap-start overflow-hidden">
+          <BoxDrawingCharacter
+            depth={0}
+            start={false}
+            end={shotNumber >= shotCount}
+          />
           <ShotTypesSelector documentId={documentId} shotId={shotId} />
           <RecordButton onClick={shotRecorder} />
           <ShotName
