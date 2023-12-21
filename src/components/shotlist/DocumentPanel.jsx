@@ -14,6 +14,8 @@ import { useGAPILogin, useGAPILogout } from '@/lib/googleapi';
 import { useDocumentStore } from '@/stores/DocumentStoreContext';
 import {
   useCurrentRecorder,
+  usePreferNativeRecorder,
+  useSetPreferNativeRecorder,
   useSetRecorderActive,
   useSetUserCursor,
 } from '@/stores/UserStoreContext';
@@ -30,6 +32,8 @@ export default function DocumentPanel({ documentId }) {
   const deleteDocument = useDocumentStore((ctx) => ctx.deleteDocument);
   const [isMenuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const preferNativeRecorder = usePreferNativeRecorder();
+  const setPreferNativeRecorder = useSetPreferNativeRecorder();
 
   const login = useGAPILogin();
   const logout = useGAPILogout();
@@ -83,6 +87,15 @@ export default function DocumentPanel({ documentId }) {
             <CloudOffIcon className="inline w-6 fill-current" />
           </FancyButton>
           <DebugInfoPanel />
+          <FancyButton
+            className="bg-white ml-2"
+            title={
+              preferNativeRecorder
+                ? 'Prefer Custom Recorder'
+                : 'Prefer Native Recorder'
+            }
+            onClick={() => setPreferNativeRecorder(!preferNativeRecorder)}
+          />
         </div>
         <ExportSignal />
         <FancyButton className="bg-white ml-2" onClick={onMenu}>

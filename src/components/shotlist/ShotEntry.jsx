@@ -32,6 +32,7 @@ import ShotTypes, {
 } from '@/stores/ShotTypes';
 import {
   useCurrentCursor,
+  usePreferNativeRecorder,
   useSetRecorderActive,
   useSetUserCursor,
 } from '@/stores/UserStoreContext';
@@ -125,6 +126,7 @@ function useShotRecorder(documentId, sceneId, shotId) {
   const { startRecording } = useMediaRecorderV2();
   const exportTake = useTakeExporter();
   const navigate = useNavigate();
+  const preferNativeRecorder = usePreferNativeRecorder();
 
   const onRecord = useCallback(
     function onRecord() {
@@ -133,7 +135,8 @@ function useShotRecorder(documentId, sceneId, shotId) {
         isMediaRecorderSupported(
           MEDIA_RECORDER_OPTIONS,
           MEDIA_STREAM_CONSTRAINTS,
-        )
+        ) &&
+        !preferNativeRecorder
       ) {
         setRecorderActive(true, true);
         enterFullscreen();

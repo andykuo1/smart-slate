@@ -65,3 +65,11 @@ export function useSetRecorderStatus() {
 export function useRecorderStatus() {
   return useUserStore((ctx) => ctx.recorder.status);
 }
+
+export function useSetPreferNativeRecorder() {
+  return useUserStore((ctx) => ctx.setPreferNativeRecorder);
+}
+
+export function usePreferNativeRecorder() {
+  return useUserStore((ctx) => ctx.settings.preferNativeRecorder);
+}

@@ -10,6 +10,7 @@ export function createDispatch(set) {
     setUserCursor: zi(set, setUserCursor),
     setRecorderActive: zi(set, setRecorderActive),
     setRecorderStatus: zi(set, setRecorderStatus),
+    setPreferNativeRecorder: zi(set, setPreferNativeRecorder),
   };
 }
 
@@ -48,4 +49,13 @@ function setRecorderActive(store, active, forceStart) {
 function setRecorderStatus(store, status) {
   let recorder = store.recorder;
   recorder.status = status;
+}
+
+/**
+ * @param {import('./UserStore').Store} store
+ * @param {boolean} enabled
+ */
+function setPreferNativeRecorder(store, enabled) {
+  let settings = store.settings;
+  settings.preferNativeRecorder = enabled;
 }

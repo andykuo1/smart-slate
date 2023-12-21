@@ -2,6 +2,7 @@
  * @typedef {ReturnType<createStore>} Store
  * @typedef {ReturnType<createCursor>} Cursor
  * @typedef {ReturnType<createRecorder>} Recorder
+ * @typedef {ReturnType<createSettings>} Settings
  */
 import { IDLE } from './RecorderStatus';
 
@@ -9,6 +10,7 @@ export function createStore() {
   return {
     cursor: createCursor(),
     recorder: createRecorder(),
+    settings: createSettings(),
   };
 }
 
@@ -31,5 +33,11 @@ export function createRecorder() {
     status: IDLE,
     active: false,
     forceStart: false,
+  };
+}
+
+export function createSettings() {
+  return {
+    preferNativeRecorder: false,
   };
 }

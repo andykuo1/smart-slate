@@ -48,6 +48,8 @@ EXPORT TO PDF with all the storyboard, image to filename.
 
 flag marker for in-content. comments?
 
+- Add prefer-native-recorder settings
+
 # 0.1.6
 
 - Add a photo camera option for thumbnail
