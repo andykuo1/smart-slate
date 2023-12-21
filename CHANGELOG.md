@@ -11,11 +11,8 @@
 
 3. Sketch upload / Create a storyboard.
 4. sync options to login once only.
-5. Slate screen
-6. Screenplay imports
+5. Screenplay imports
 
-[] Add a shot screen (basically the slate)
-[] Move thumbnail to as identifier instead of name
 [] Scene/Shot/Take info while recording is useful.
 [] - Put the thumbnail THERE!
 [] Cache to local storage first and download later?
@@ -27,13 +24,9 @@
 - MOVE the THUMBNAIL WITHIN the scene
   - SUGGESTION: putting it all in the script itself.
 
-x. previs storyboard :D
+x. pre-vis storyboard :D
 
-- sound? narration
-
-- option to hide scene text => is good!
-
-  - option to hide OTHER shots
+- FOCUS -> SCENE -> SHOT -> TAKE
 
 - // SCREEN DOOR
 - CU sdflaskdjf
@@ -49,6 +42,7 @@ flag marker for in-content. comments?
 
 - Add prefer-native-recorder settings
 - Add prefer-muted-while-recording settings
+- Add shot focus view
 
 # 0.1.6
 
