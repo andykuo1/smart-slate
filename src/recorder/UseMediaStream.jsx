@@ -7,6 +7,27 @@ import { useCallback, useRef } from 'react';
 export function useMediaStream(videoRef) {
   const ref = useRef(/** @type {MediaStream|null} */ (null));
 
+  const dead = useCallback(
+    async function dead() {
+      // Remove stream from output video
+      if (videoRef.current && videoRef.current.srcObject) {
+        let video = videoRef.current;
+        video.pause();
+        video.srcObject = null;
+      }
+
+      if (ref.current) {
+        let mediaStream = ref.current;
+        for (let track of mediaStream.getTracks()) {
+          track.enabled = false;
+          track.stop();
+        }
+        ref.current = null;
+      }
+    },
+    [ref, videoRef],
+  );
+
   const init = useCallback(
     /**
      * @param {MediaStreamConstraints} constraints
@@ -28,28 +49,7 @@ export function useMediaStream(videoRef) {
       }
       return mediaStream;
     },
-    [ref, videoRef],
-  );
-
-  const dead = useCallback(
-    async function dead() {
-      // Remove stream from output video
-      if (videoRef.current && videoRef.current.srcObject) {
-        let video = videoRef.current;
-        video.pause();
-        video.srcObject = null;
-      }
-
-      if (ref.current) {
-        let mediaStream = ref.current;
-        for (let track of mediaStream.getTracks()) {
-          track.enabled = false;
-          track.stop();
-        }
-        ref.current = null;
-      }
-    },
-    [ref, videoRef],
+    [ref, videoRef, dead],
   );
 
   return [ref, init, dead];

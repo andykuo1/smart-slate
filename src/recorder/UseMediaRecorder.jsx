@@ -38,41 +38,6 @@ export function useMediaRecorder(mediaStreamRef, onComplete) {
     [],
   );
 
-  const start = useCallback(
-    /** @param {MediaRecorderOptions} options */
-    async function start(options) {
-      if (ref.current) {
-        await stop({});
-      }
-      if (!mediaStreamRef.current) {
-        throw new Error('Missing media stream for recorder.');
-      }
-      const mediaStream = mediaStreamRef.current;
-      const mediaRecorder = new MediaRecorder(mediaStream, options);
-      ref.current = mediaRecorder;
-      return new Promise((resolve, reject) => {
-        /** @param {MediaRecorderEventMap['start']} e */
-        function onMediaRecorderStart(e) {
-          const mediaRecorder = /** @type {MediaRecorder} */ (e.target);
-          mediaRecorder.removeEventListener('error', reject);
-          mediaRecorder.removeEventListener('start', onMediaRecorderStart);
-          // Listen for future errors!
-          mediaRecorder.addEventListener('error', onMediaRecorderError);
-          // Listen for future data!
-          mediaRecorder.addEventListener(
-            'dataavailable',
-            onMediaRecorderDataAvailable,
-          );
-          resolve(mediaRecorder);
-        }
-        mediaRecorder.addEventListener('start', onMediaRecorderStart);
-        mediaRecorder.addEventListener('error', reject);
-        mediaRecorder.start();
-      });
-    },
-    [ref, mediaStreamRef, onMediaRecorderDataAvailable, onMediaRecorderError],
-  );
-
   const stop = useCallback(
     /** @param {BlobPropertyBag} dataOptions */
     async function stop(dataOptions) {
@@ -114,6 +79,47 @@ export function useMediaRecorder(mediaStreamRef, onComplete) {
       onComplete,
       onMediaRecorderDataAvailable,
       onMediaRecorderError,
+    ],
+  );
+
+  const start = useCallback(
+    /** @param {MediaRecorderOptions} options */
+    async function start(options) {
+      if (ref.current) {
+        await stop({});
+      }
+      if (!mediaStreamRef.current) {
+        throw new Error('Missing media stream for recorder.');
+      }
+      const mediaStream = mediaStreamRef.current;
+      const mediaRecorder = new MediaRecorder(mediaStream, options);
+      ref.current = mediaRecorder;
+      return new Promise((resolve, reject) => {
+        /** @param {MediaRecorderEventMap['start']} e */
+        function onMediaRecorderStart(e) {
+          const mediaRecorder = /** @type {MediaRecorder} */ (e.target);
+          mediaRecorder.removeEventListener('error', reject);
+          mediaRecorder.removeEventListener('start', onMediaRecorderStart);
+          // Listen for future errors!
+          mediaRecorder.addEventListener('error', onMediaRecorderError);
+          // Listen for future data!
+          mediaRecorder.addEventListener(
+            'dataavailable',
+            onMediaRecorderDataAvailable,
+          );
+          resolve(mediaRecorder);
+        }
+        mediaRecorder.addEventListener('start', onMediaRecorderStart);
+        mediaRecorder.addEventListener('error', reject);
+        mediaRecorder.start();
+      });
+    },
+    [
+      ref,
+      mediaStreamRef,
+      onMediaRecorderDataAvailable,
+      onMediaRecorderError,
+      stop,
     ],
   );
 

@@ -45,7 +45,14 @@ export function useRecorderV2(
         console.error(e);
       }
     },
-    [initMediaStream, setIsPrepared, startMediaRecorder, setIsRecording],
+    [
+      mediaStreamConstraints,
+      mediaRecorderOptions,
+      initMediaStream,
+      setIsPrepared,
+      startMediaRecorder,
+      setIsRecording,
+    ],
   );
 
   const onStop = useCallback(
@@ -66,7 +73,13 @@ export function useRecorderV2(
         console.error(e);
       }
     },
-    [stopMediaRecorder, setIsRecording, deadMediaStream, setIsPrepared],
+    [
+      mediaBlobOptions,
+      stopMediaRecorder,
+      setIsRecording,
+      deadMediaStream,
+      setIsPrepared,
+    ],
   );
 
   return {

@@ -43,7 +43,7 @@ export default function MediaRecorderBooth() {
       const takeId = exportTake(blob, documentId, sceneId, shotId);
       setUserCursor(documentId, sceneId, shotId, takeId);
     },
-    [exportTake, setUserCursor, navigate, exitFullscreen],
+    [documentId, sceneId, shotId, exportTake, setUserCursor],
   );
 
   const { onStart, onStop, isPrepared, isRecording } = useRecorderV2(
@@ -58,6 +58,8 @@ export default function MediaRecorderBooth() {
     if (!isPrepared) {
       onStart({ record: false });
     }
+    // TODO: Only run this once?
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
