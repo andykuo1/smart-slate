@@ -31,7 +31,6 @@ x. previs storyboard :D
 
 - sound? narration
 
-- missing scene heading?
 - option to hide scene text => is good!
 
   - option to hide OTHER shots
@@ -49,6 +48,7 @@ EXPORT TO PDF with all the storyboard, image to filename.
 flag marker for in-content. comments?
 
 - Add prefer-native-recorder settings
+- Add prefer-muted-while-recording settings
 
 # 0.1.6
 

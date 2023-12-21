@@ -73,3 +73,11 @@ export function useSetPreferNativeRecorder() {
 export function usePreferNativeRecorder() {
   return useUserStore((ctx) => ctx.settings.preferNativeRecorder);
 }
+
+export function useSetPreferMutedWhileRecording() {
+  return useUserStore((ctx) => ctx.setPreferMutedWhileRecording);
+}
+
+export function usePreferMutedWhileRecording() {
+  return useUserStore((ctx) => ctx.settings.preferMutedWhileRecording);
+}

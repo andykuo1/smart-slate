@@ -13,6 +13,7 @@ import MenuStyle from '@/styles/Menu.module.css';
 import DeleteProjectMenuItem from './settings/DeleteProjectMenuItem';
 import EnableCloudSyncMenuItem from './settings/EnableCloudSyncMenuItem';
 import NerdInfoMenuItem from './settings/NerdInfoMenuItem';
+import PreferMutedWhileRecordingMenuItem from './settings/PreferMutedWhileRecordingMenuItem';
 import PreferNativeRecorderMenuItem from './settings/PreferNativeRecorderMenuItem';
 
 /**
@@ -30,6 +31,7 @@ export default function SettingsButton({ className }) {
         <DeleteProjectMenuItem />
         <EnableCloudSyncMenuItem />
         <PreferNativeRecorderMenuItem />
+        <PreferMutedWhileRecordingMenuItem />
         <NerdInfoMenuItem />
       </Menu>
     </MenuProvider>

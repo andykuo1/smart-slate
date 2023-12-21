@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useFullscreen } from '@/lib/fullscreen';
@@ -9,6 +9,7 @@ import {
 import RecorderStatus from '@/stores/RecorderStatus';
 import {
   useCurrentRecorder,
+  usePreferMutedWhileRecording,
   useSetRecorderActive,
   useSetRecorderStatus,
 } from '@/stores/UserStoreContext';
@@ -33,7 +34,7 @@ import {
  */
 export default function RecorderPanel({ children, onChange }) {
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
-  const [muted, _] = useState(true); // Consider allowing sound when with headphones
+  const preferMutedWhileRecording = usePreferMutedWhileRecording();
   const recorder = useCurrentRecorder();
   const setRecorderActive = useSetRecorderActive();
   const setRecorderStatus = useSetRecorderStatus();
@@ -116,7 +117,7 @@ export default function RecorderPanel({ children, onChange }) {
       <video
         className="w-full h-full bg-neutral-900"
         ref={videoRef}
-        muted={muted}
+        muted={preferMutedWhileRecording}
       />
       <div className="flex-1" />
       <div className="absolute bottom-0 left-0 right-0 flex flex-row">

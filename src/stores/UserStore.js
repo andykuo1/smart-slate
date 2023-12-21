@@ -39,5 +39,6 @@ export function createRecorder() {
 export function createSettings() {
   return {
     preferNativeRecorder: false,
+    preferMutedWhileRecording: true,
   };
 }
