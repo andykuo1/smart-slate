@@ -13,8 +13,6 @@
 4. sync options to login once only.
 5. Screenplay imports
 
-[] Scene/Shot/Take info while recording is useful.
-[] - Put the thumbnail THERE!
 [] Cache to local storage first and download later?
 [] Screenplay imports!
 [] rearrange the shot order (but keep takes in there)
@@ -40,9 +38,14 @@ EXPORT TO PDF with all the storyboard, image to filename.
 
 flag marker for in-content. comments?
 
+# 0.1.7
+
 - Add prefer-native-recorder settings
 - Add prefer-muted-while-recording settings
+- Add enable-thumbnail-reference settings
 - Add shot focus view
+- Add thumbnail reference in recording booth
+- Add more info to recording booth
 
 # 0.1.6
 

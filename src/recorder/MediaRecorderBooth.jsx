@@ -189,22 +189,22 @@ function RecordingSignal({ active }) {
  */
 function RecordAndCutButton({ className, canCut, canRec, onClick }) {
   return (
-    <div className={'flex flex-row items-center mx-2' + ' ' + className}>
+    <button
+      className={'flex flex-row items-center mx-2' + ' ' + className}
+      onClick={onClick}>
       <span
         className={
           'text-xl text-white' + ' ' + (canCut ? 'opacity-100' : 'opacity-30')
         }>
         cut
       </span>
-      <button className="mx-2 text-3xl text-red-400" onClick={onClick}>
-        ◉
-      </button>
+      <span className="mx-2 text-3xl text-red-400">◉</span>
       <span
         className={
           'text-xl text-red-400' + ' ' + (canRec ? 'opacity-100' : 'opacity-30')
         }>
         rec
       </span>
-    </div>
+    </button>
   );
 }
