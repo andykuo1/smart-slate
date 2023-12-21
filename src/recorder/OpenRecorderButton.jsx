@@ -22,28 +22,24 @@ import {
  * @param {import('@/stores/DocumentStore').ShotId} props.shotId
  * @param {string} [props.className]
  * @param {boolean} [props.disabled]
+ * @param {import('react').ReactNode} props.children
  */
-export default function RecordButton({
+export default function OpenRecorderButton({
   documentId,
   sceneId,
   shotId,
   className,
   disabled,
+  children,
 }) {
   const shotRecorder = useShotRecorder(documentId, sceneId, shotId);
   return (
     <button
-      className={
-        'group mx-2 my-auto' +
-        ' ' +
-        'text-4xl text-red-400 disabled:text-gray-300' +
-        ' ' +
-        className
-      }
+      className={className}
       title="Record"
       disabled={disabled}
       onClick={shotRecorder}>
-      ◉
+      {children}
     </button>
   );
 }

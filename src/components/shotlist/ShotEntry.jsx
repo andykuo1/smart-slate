@@ -5,7 +5,7 @@ import NaturePeopleIcon from '@material-symbols/svg-400/rounded/nature_people-fi
 import PersonIcon from '@material-symbols/svg-400/rounded/person-fill.svg';
 import StarsIcon from '@material-symbols/svg-400/rounded/stars-fill.svg';
 
-import RecordButton from '@/components/recorder/RecordButton';
+import OpenRecorderButton from '@/recorder/OpenRecorderButton';
 import { createShot } from '@/stores/DocumentStore';
 import {
   useAddShot,
@@ -80,11 +80,17 @@ export function ShotEntry({ documentId, sceneId, shotId, children }) {
                 shotId={shotId}
               />
               <div className="flex flex-col">
-                <RecordButton
+                <OpenRecorderButton
+                  className={
+                    'group mx-2 my-auto' +
+                    ' ' +
+                    'text-4xl text-red-400 disabled:text-gray-300'
+                  }
                   documentId={documentId}
                   sceneId={sceneId}
-                  shotId={shotId}
-                />
+                  shotId={shotId}>
+                  ◉
+                </OpenRecorderButton>
                 <button
                   className={
                     'rounded px-2 m-2 whitespace-nowrap' +
