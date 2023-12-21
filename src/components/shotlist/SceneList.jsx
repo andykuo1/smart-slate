@@ -9,6 +9,7 @@ import {
   useSceneNumber,
   useSetSceneHeading,
 } from '@/stores/DocumentStoreContext';
+import { useCurrentCursor } from '@/stores/UserStoreContext';
 
 import DocumentTitle from './DocumentTitle';
 import ShotList from './ShotList';
@@ -18,19 +19,26 @@ import ShotList from './ShotList';
  * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
  */
 export default function SceneList({ documentId }) {
+  const userCursor = useCurrentCursor();
+  const activeShotId = userCursor.shotId;
+  const activeSceneId = userCursor.sceneId;
+  const hasActiveShot = Boolean(activeShotId);
   const sceneIds = useSceneIds(documentId);
   return (
     <div className="w-full h-full overflow-x-hidden overflow-y-auto py-20">
       <DocumentTitle documentId={documentId} />
       <ul title="Scene list">
-        {sceneIds.map((sceneId) => (
-          <Fragment key={`scene-${sceneId}`}>
-            <SceneHeader documentId={documentId} sceneId={sceneId}>
-              <ShotList documentId={documentId} sceneId={sceneId} />
-            </SceneHeader>
-          </Fragment>
-        ))}
-        <NewScene documentId={documentId} />
+        {sceneIds.map(
+          (sceneId) =>
+            (!hasActiveShot || sceneId === activeSceneId) && (
+              <Fragment key={`scene-${sceneId}`}>
+                <SceneHeader documentId={documentId} sceneId={sceneId}>
+                  <ShotList documentId={documentId} sceneId={sceneId} />
+                </SceneHeader>
+              </Fragment>
+            ),
+        )}
+        {!hasActiveShot && <NewScene documentId={documentId} />}
       </ul>
     </div>
   );

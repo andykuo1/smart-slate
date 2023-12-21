@@ -59,6 +59,7 @@ export function ShotEntry({ documentId, sceneId, shotId, children }) {
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
   const shotCount = useSceneShotCount(documentId, sceneId);
   const currentCursor = useCurrentCursor();
+  const setUserCursor = useSetUserCursor();
   const isActive =
     currentCursor.documentId === documentId &&
     currentCursor.sceneId === sceneId &&
@@ -90,8 +91,29 @@ export function ShotEntry({ documentId, sceneId, shotId, children }) {
           />
           <div className="flex flex-row items-center">
             <div className="flex-1 flex flex-row">
-              <ShotTypesSelector documentId={documentId} shotId={shotId} />
-              <RecordButton onClick={shotRecorder} />
+              <ShotTypesSelector
+                className="ml-2"
+                documentId={documentId}
+                shotId={shotId}
+              />
+              <div className="flex flex-col">
+                <RecordButton onClick={shotRecorder} />
+                <button
+                  className={
+                    'rounded px-2 m-2 whitespace-nowrap' +
+                    ' ' +
+                    (isActive ? 'bg-gray-600' : 'bg-gray-300')
+                  }
+                  onClick={() => {
+                    if (isActive) {
+                      setUserCursor(documentId, sceneId, '');
+                    } else {
+                      setUserCursor(documentId, sceneId, shotId);
+                    }
+                  }}>
+                  {isActive ? 'unready?' : 'focus?'}
+                </button>
+              </div>
             </div>
             <div className="flex-1 opacity-30 text-xs hidden sm:block">
               {isFirst
@@ -247,24 +269,23 @@ function ShotTypesSelector({ className, documentId, shotId }) {
 
   return (
     <div className={'flex flex-row items-center' + ' ' + className}>
-      <ShotTypeButton
-        shotType={WIDE_SHOT.value}
-        onClick={() => setShotType(documentId, shotId, WIDE_SHOT.value)}
-        isActive={shotType === WIDE_SHOT.value}
-      />
-      <span>|</span>
-      <ShotTypeButton
-        shotType={MEDIUM_SHOT.value}
-        onClick={() => setShotType(documentId, shotId, MEDIUM_SHOT.value)}
-        isActive={shotType === MEDIUM_SHOT.value}
-      />
-      <span>|</span>
-      <ShotTypeButton
-        shotType={CLOSE_UP.value}
-        onClick={() => setShotType(documentId, shotId, CLOSE_UP.value)}
-        isActive={shotType === CLOSE_UP.value}
-      />
-      <span>|</span>
+      <div className="flex flex-col items-center">
+        <ShotTypeButton
+          shotType={WIDE_SHOT.value}
+          onClick={() => setShotType(documentId, shotId, WIDE_SHOT.value)}
+          isActive={shotType === WIDE_SHOT.value}
+        />
+        <ShotTypeButton
+          shotType={MEDIUM_SHOT.value}
+          onClick={() => setShotType(documentId, shotId, MEDIUM_SHOT.value)}
+          isActive={shotType === MEDIUM_SHOT.value}
+        />
+        <ShotTypeButton
+          shotType={CLOSE_UP.value}
+          onClick={() => setShotType(documentId, shotId, CLOSE_UP.value)}
+          isActive={shotType === CLOSE_UP.value}
+        />
+      </div>
       <MoreShotTypeSelector documentId={documentId} shotId={shotId} />
     </div>
   );
@@ -304,7 +325,7 @@ function MoreShotTypeSelector({ className, documentId, shotId }) {
     <select
       ref={selectRef}
       className={
-        'text-center bg-transparent rounded ml-2' +
+        'text-center bg-transparent rounded' +
         ' ' +
         (isActive && getShotTypeColor(shotType) + ' ' + className)
       }
