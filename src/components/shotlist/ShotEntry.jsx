@@ -174,6 +174,7 @@ function useShotRecorder(documentId, sceneId, shotId) {
       startCapturing,
       enterFullscreen,
       navigate,
+      preferNativeRecorder,
     ],
   );
 

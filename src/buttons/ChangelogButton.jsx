@@ -11,9 +11,10 @@ import InfoIcon from '@material-symbols/svg-400/rounded/info.svg';
 
 import DialogStyle from '@/styles/Dialog.module.css';
 
-import CHANGELOG from '../../../CHANGELOG.md?raw';
+import CHANGELOG from '../../CHANGELOG.md?raw';
+import MarkdownArea from './MarkdownArea';
 
-export default function ChangelogPanel() {
+export default function ChangelogButton() {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -31,24 +32,8 @@ export default function ChangelogPanel() {
         <DialogDescription className="text-gray-400 text-center">
           A list of what has changed since the beginning!
         </DialogDescription>
-        <MarkdownContent textContent={CHANGELOG} />
+        <MarkdownArea value={CHANGELOG} />
       </Dialog>
     </>
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} props.textContent
- */
-export function MarkdownContent({ textContent }) {
-  return textContent.split('\n').map((text, i) =>
-    text && text.startsWith('#') ? (
-      <h3 key={`${i}:${text}`} className="text-xl my-4">
-        {text}
-      </h3>
-    ) : (
-      <p key={`${i}:${text}`}>{text}</p>
-    ),
   );
 }

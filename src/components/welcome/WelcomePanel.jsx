@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import ProfileIcon from '@material-symbols/svg-400/rounded/account_circle.svg';
 import AddIcon from '@material-symbols/svg-400/rounded/add-fill.svg';
 
+import ChangelogButton from '@/buttons/ChangelogButton';
 import ImportProjectButton from '@/buttons/ImportProjectButton';
 import FancyButton from '@/lib/FancyButton';
 import HorizontallyScrollableDiv from '@/lib/HorizontallyScrollableDiv';
@@ -16,7 +17,6 @@ import {
 } from '@/stores/DocumentStoreContext';
 import { useSetUserCursor } from '@/stores/UserStoreContext';
 
-import ChangelogPanel from '../changelog/ChangelogPanel';
 import AppTitle from './AppTitle';
 
 export default function WelcomePanel() {
@@ -58,7 +58,7 @@ export default function WelcomePanel() {
           <AddIcon className="inline w-6 fill-current" />
         </FancyButton>
         <ImportProjectButton />
-        <ChangelogPanel />
+        <ChangelogButton />
       </div>
       <SavedProjectView className="mx-auto mb-auto" />
     </>

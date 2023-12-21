@@ -4,19 +4,20 @@ import {
   DialogDescription,
   DialogDismiss,
   DialogHeading,
+  MenuItem,
 } from '@ariakit/react';
 import { useEffect, useState } from 'react';
 
 import ContentCopy from '@material-symbols/svg-400/rounded/content_copy.svg';
 import DeviceInfoIcon from '@material-symbols/svg-400/rounded/device_unknown.svg';
 
-import FancyButton from '@/lib/FancyButton';
 import DialogStyle from '@/styles/Dialog.module.css';
+import MenuStyle from '@/styles/Menu.module.css';
 import Codecs from '@/values/Codecs';
 
-import { MarkdownContent } from '../changelog/ChangelogPanel';
+import MarkdownArea from '../MarkdownArea';
 
-export default function DebugInfoPanel() {
+export default function NerdInfoMenuItem() {
   const [open, setOpen] = useState(false);
   const [nerdInfo, setNerdInfo] = useState('');
 
@@ -32,11 +33,12 @@ export default function DebugInfoPanel() {
       .writeText(result)
       .then(() => window.alert('Copied device info to clipboard!'));
   }
+
   return (
     <>
-      <FancyButton className="bg-white ml-2" onClick={() => setOpen(true)}>
-        <DeviceInfoIcon className="inline-block w-6" /> Info
-      </FancyButton>
+      <MenuItem className={MenuStyle.menuItem} onClick={() => setOpen(true)}>
+        <DeviceInfoIcon className="h-full" /> Show Nerd Info
+      </MenuItem>
       <Dialog
         className={DialogStyle.dialog}
         open={open}
@@ -56,7 +58,7 @@ export default function DebugInfoPanel() {
         <DialogDescription className="text-gray-400 text-center">
           Share this with your fellow nerd :3
         </DialogDescription>
-        <MarkdownContent textContent={nerdInfo} />
+        <MarkdownArea value={nerdInfo} />
       </Dialog>
     </>
   );
