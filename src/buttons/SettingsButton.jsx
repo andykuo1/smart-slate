@@ -12,6 +12,7 @@ import MenuStyle from '@/styles/Menu.module.css';
 
 import DeleteProjectMenuItem from './settings/DeleteProjectMenuItem';
 import EnableCloudSyncMenuItem from './settings/EnableCloudSyncMenuItem';
+import EnableThumbnailWhileRecordingMenuItem from './settings/EnableThumbnailWhileRecordingMenuItem';
 import NerdInfoMenuItem from './settings/NerdInfoMenuItem';
 import PreferMutedWhileRecordingMenuItem from './settings/PreferMutedWhileRecordingMenuItem';
 import PreferNativeRecorderMenuItem from './settings/PreferNativeRecorderMenuItem';
@@ -23,7 +24,8 @@ import PreferNativeRecorderMenuItem from './settings/PreferNativeRecorderMenuIte
 export default function SettingsButton({ className }) {
   return (
     <MenuProvider>
-      <MenuButton className={ButtonStyle.button + ' ' + className}>
+      <MenuButton
+        className={ButtonStyle.button + ' ' + 'm-2' + ' ' + className}>
         <SettingsIcon className="h-full" />
         <MenuButtonArrow />
       </MenuButton>
@@ -32,6 +34,7 @@ export default function SettingsButton({ className }) {
         <EnableCloudSyncMenuItem />
         <PreferNativeRecorderMenuItem />
         <PreferMutedWhileRecordingMenuItem />
+        <EnableThumbnailWhileRecordingMenuItem />
         <NerdInfoMenuItem />
       </Menu>
     </MenuProvider>

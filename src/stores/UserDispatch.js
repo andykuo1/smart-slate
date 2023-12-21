@@ -9,10 +9,10 @@ export function createDispatch(set) {
   return {
     setUserCursor: zi(set, setUserCursor),
     setRecorderActive: zi(set, setRecorderActive),
-    setRecorderStatus: zi(set, setRecorderStatus),
 
     setPreferNativeRecorder: zi(set, setPreferNativeRecorder),
     setPreferMutedWhileRecording: zi(set, setPreferMutedWhileRecording),
+    setEnableThumbnailWhileRecording: zi(set, setEnableThumbnailWhileRecording),
   };
 }
 
@@ -46,15 +46,6 @@ function setRecorderActive(store, active, forceStart) {
 
 /**
  * @param {import('./UserStore').Store} store
- * @param {string|Error} status
- */
-function setRecorderStatus(store, status) {
-  let recorder = store.recorder;
-  recorder.status = status;
-}
-
-/**
- * @param {import('./UserStore').Store} store
  * @param {boolean} enabled
  */
 function setPreferNativeRecorder(store, enabled) {
@@ -69,4 +60,13 @@ function setPreferNativeRecorder(store, enabled) {
 function setPreferMutedWhileRecording(store, enabled) {
   let settings = store.settings;
   settings.preferMutedWhileRecording = enabled;
+}
+
+/**
+ * @param {import('./UserStore').Store} store
+ * @param {boolean} enabled
+ */
+function setEnableThumbnailWhileRecording(store, enabled) {
+  let settings = store.settings;
+  settings.enableThumbnailWhileRecording = enabled;
 }

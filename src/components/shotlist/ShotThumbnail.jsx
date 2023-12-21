@@ -14,7 +14,7 @@ import { useCallback, useRef } from 'react';
 import AddPhotoAltIcon from '@material-symbols/svg-400/rounded/add_photo_alternate.svg';
 
 import { drawElementToCanvasWithRespectToAspectRatio } from '@/components/recorder/VideoSnapshot';
-import { isInputCaptureSupported } from '@/lib/mediarecorder';
+import { isInputCaptureSupported } from '@/recorder/MediaRecorderSupport';
 import { shotNumberToChar } from '@/stores/DocumentStore';
 import {
   useSceneNumber,
@@ -35,12 +35,14 @@ import {
  * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/DocumentStore').ShotId} props.shotId
+ * @param {boolean} [props.editable]
  */
 export default function ShotThumbnail({
   className,
   documentId,
   sceneId,
   shotId,
+  editable = false,
 }) {
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
@@ -55,7 +57,10 @@ export default function ShotThumbnail({
           shotId={shotId}
           alt={sceneShotString}
         />
-        <PopoverDisclosure className="absolute left-0 top-0 bottom-0 right-0" />
+        <PopoverDisclosure
+          className="absolute left-0 top-0 bottom-0 right-0"
+          disabled={!editable}
+        />
         <Popover className={PopoverStyle.popover} modal={true}>
           <PopoverArrow className={PopoverStyle.arrow} />
           <TabProvider>

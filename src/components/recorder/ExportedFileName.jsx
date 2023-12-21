@@ -34,7 +34,7 @@ export function useExportedFileName(documentId, sceneId, shotId, takeId) {
     shotType,
   );
   return (
-    `${documentTitle}_S${scen}${shot}_T${take}` +
+    `${documentTitle}_${scen}${shot}_${take}` +
     (shotType !== ANY_SHOT.value ? `_${type}` : '')
   );
 }
@@ -58,7 +58,7 @@ export function useNextAvailableExportedFileName() {
     shotType,
   );
   return (
-    `${documentTitle}_S${scen}${shot}_T${take}` +
+    `${documentTitle}_${scen}${shot}_${take}` +
     (shotType !== ANY_SHOT.value ? `_${type}` : '')
   );
 }

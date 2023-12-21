@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { uploadFile, useGAPITokenHandler } from '@/lib/googleapi';
-import { getVideoFileExtensionByMIMEType } from '@/lib/mediarecorder';
+import { getVideoFileExtensionByMIMEType } from '@/recorder/MediaRecorderSupport';
 import {
   getDocumentById,
   getSceneIndex,

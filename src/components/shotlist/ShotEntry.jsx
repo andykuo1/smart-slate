@@ -1,19 +1,11 @@
 import { useCallback, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import FaceIcon from '@material-symbols/svg-400/rounded/face-fill.svg';
 import NaturePeopleIcon from '@material-symbols/svg-400/rounded/nature_people-fill.svg';
 import PersonIcon from '@material-symbols/svg-400/rounded/person-fill.svg';
 import StarsIcon from '@material-symbols/svg-400/rounded/stars-fill.svg';
 
-import RecordButton from '@/lib/RecordButton';
-import { useFullscreen } from '@/lib/fullscreen';
-import { useInputCapture } from '@/lib/inputcapture';
-import {
-  isMediaRecorderSupported,
-  useMediaRecorderV2,
-} from '@/lib/mediarecorder';
-import { useTakeExporter } from '@/serdes/UseTakeExporter';
+import RecordButton from '@/components/recorder/RecordButton';
 import { createShot } from '@/stores/DocumentStore';
 import {
   useAddShot,
@@ -30,18 +22,9 @@ import ShotTypes, {
   MEDIUM_SHOT,
   WIDE_SHOT,
 } from '@/stores/ShotTypes';
-import {
-  useCurrentCursor,
-  usePreferNativeRecorder,
-  useSetRecorderActive,
-  useSetUserCursor,
-} from '@/stores/UserStoreContext';
+import { useCurrentCursor, useSetUserCursor } from '@/stores/UserStoreContext';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
-import {
-  MEDIA_RECORDER_OPTIONS,
-  MEDIA_STREAM_CONSTRAINTS,
-} from '@/values/RecorderValues';
 
 import BoxDrawingCharacter from './BoxDrawingCharacter';
 import { getShotTypeColor } from './ShotColors';
@@ -65,7 +48,6 @@ export function ShotEntry({ documentId, sceneId, shotId, children }) {
     currentCursor.sceneId === sceneId &&
     currentCursor.shotId === shotId;
   const isFirst = sceneNumber <= 1 && shotNumber <= 1;
-  const shotRecorder = useShotRecorder(documentId, sceneId, shotId);
 
   return (
     <li className="flex flex-col items-center">
@@ -88,6 +70,7 @@ export function ShotEntry({ documentId, sceneId, shotId, children }) {
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
+            editable={true}
           />
           <div className="flex flex-row items-center">
             <div className="flex-1 flex flex-row">
@@ -97,7 +80,11 @@ export function ShotEntry({ documentId, sceneId, shotId, children }) {
                 shotId={shotId}
               />
               <div className="flex flex-col">
-                <RecordButton onClick={shotRecorder} />
+                <RecordButton
+                  documentId={documentId}
+                  sceneId={sceneId}
+                  shotId={shotId}
+                />
                 <button
                   className={
                     'rounded px-2 m-2 whitespace-nowrap' +
@@ -111,7 +98,7 @@ export function ShotEntry({ documentId, sceneId, shotId, children }) {
                       setUserCursor(documentId, sceneId, shotId);
                     }
                   }}>
-                  {isActive ? 'unready?' : 'focus?'}
+                  {isActive ? 'unfocus?' : 'focus?'}
                 </button>
               </div>
             </div>
@@ -133,74 +120,6 @@ export function ShotEntry({ documentId, sceneId, shotId, children }) {
       <div className="flex-1 w-full">{children}</div>
     </li>
   );
-}
-
-/**
- * @param {import('@/stores/DocumentStore').DocumentId} documentId
- * @param {import('@/stores/DocumentStore').SceneId} sceneId
- * @param {import('@/stores/DocumentStore').ShotId} shotId
- */
-function useShotRecorder(documentId, sceneId, shotId) {
-  const setUserCursor = useSetUserCursor();
-  const setRecorderActive = useSetRecorderActive();
-  const { enterFullscreen } = useFullscreen();
-  const { startCapturing } = useInputCapture();
-  const { startRecording } = useMediaRecorderV2();
-  const exportTake = useTakeExporter();
-  const navigate = useNavigate();
-  const preferNativeRecorder = usePreferNativeRecorder();
-
-  const onRecord = useCallback(
-    function onRecord() {
-      setUserCursor(documentId, sceneId, shotId, '');
-      if (
-        isMediaRecorderSupported(
-          MEDIA_RECORDER_OPTIONS,
-          MEDIA_STREAM_CONSTRAINTS,
-        ) &&
-        !preferNativeRecorder
-      ) {
-        setRecorderActive(true, true);
-        enterFullscreen();
-        navigate('/rec');
-        startRecording(({ status, data }) => {
-          if (!data) {
-            return;
-          }
-          if (status === 'stopped') {
-            const takeId = exportTake(data, documentId, sceneId, shotId);
-            setUserCursor(documentId, sceneId, shotId, takeId);
-          }
-        });
-      } else {
-        setRecorderActive(false, false);
-        startCapturing(({ status, data }) => {
-          if (!data) {
-            return;
-          }
-          if (status === 'stopped') {
-            const takeId = exportTake(data, documentId, sceneId, shotId);
-            setUserCursor(documentId, sceneId, shotId, takeId);
-          }
-        });
-      }
-    },
-    [
-      documentId,
-      sceneId,
-      shotId,
-      setUserCursor,
-      setRecorderActive,
-      exportTake,
-      startRecording,
-      startCapturing,
-      enterFullscreen,
-      navigate,
-      preferNativeRecorder,
-    ],
-  );
-
-  return onRecord;
 }
 
 /**

@@ -236,7 +236,7 @@ export function useSetTakePreviewImage() {
  */
 export function useSceneHeading(documentId, sceneId) {
   return useDocumentStore(
-    (ctx) => getSceneById(ctx, documentId, sceneId).sceneHeading,
+    (ctx) => getSceneById(ctx, documentId, sceneId)?.sceneHeading,
   );
 }
 

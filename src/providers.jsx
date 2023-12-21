@@ -7,7 +7,6 @@ import {
 } from '@/lib/googleapi';
 
 import { InputCaptureProvider } from './lib/inputcapture';
-import { MediaRecorderProvider } from './lib/mediarecorder';
 
 /**
  * @param {object} props
@@ -20,9 +19,7 @@ export default function Providers({ children }) {
       clientId={GAPI_CLIENT_ID}
       scopes={[GAPI_DRIVE_FILE_SCOPE]}>
       <InputCaptureProvider>
-        <MediaRecorderProvider>
-          <FullscreenProvider>{children}</FullscreenProvider>
-        </MediaRecorderProvider>
+        <FullscreenProvider>{children}</FullscreenProvider>
       </InputCaptureProvider>
     </GoogleAPIProvider>
   );

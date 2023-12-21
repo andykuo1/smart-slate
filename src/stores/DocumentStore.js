@@ -253,5 +253,8 @@ export function toScenShotTakeType(
  * @param {number} shotNumber
  */
 export function shotNumberToChar(shotNumber) {
+  if (!Number.isFinite(shotNumber)) {
+    return '--';
+  }
   return String.fromCharCode('A'.charCodeAt(0) + (shotNumber - 1));
 }

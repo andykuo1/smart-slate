@@ -4,7 +4,6 @@
  * @typedef {ReturnType<createRecorder>} Recorder
  * @typedef {ReturnType<createSettings>} Settings
  */
-import { IDLE } from './RecorderStatus';
 
 export function createStore() {
   return {
@@ -29,8 +28,6 @@ export function createCursor() {
 
 export function createRecorder() {
   return {
-    /** @type {string|Error} */
-    status: IDLE,
     active: false,
     forceStart: false,
   };
@@ -40,5 +37,6 @@ export function createSettings() {
   return {
     preferNativeRecorder: false,
     preferMutedWhileRecording: true,
+    enableThumbnailWhileRecording: true,
   };
 }

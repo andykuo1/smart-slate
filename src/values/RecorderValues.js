@@ -1,4 +1,4 @@
-import { getMediaRecorderSupportedMimeType } from '@/lib/mediarecorder';
+import { getMediaRecorderSupportedMimeType } from '@/recorder/MediaRecorderSupport';
 
 const MEDIA_RECORDER_POSSIBLE_MIME_TYPES = [
   'video/mp4',
