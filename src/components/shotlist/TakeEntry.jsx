@@ -4,6 +4,7 @@ import CachedIcon from '@material-symbols/svg-400/rounded/cached.svg';
 import CloudDoneIcon from '@material-symbols/svg-400/rounded/cloud_done.svg';
 import CloudUploadIcon from '@material-symbols/svg-400/rounded/cloud_upload-fill.svg';
 
+import ImageWithCaption from '@/lib/ImageWithCaption';
 import { useInterval } from '@/lib/UseInterval';
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
 import {
@@ -53,11 +54,12 @@ export function TakeEntry({
 
   return (
     <TakeLayout
-      title={`Take ${takeNumber}`}
+      title={`T${takeNumber}`}
       timestamp={take.exportedMillis}
       fileName={take.exportedFileName || '--'}
       firstTake={false}
       lastTake={takeNumber === 1}
+      thumbnailSrc={take.previewImage}
       isCloudExported={!!take.exportedGoogleDriveFileId}
       isCloudExportable={cloudExportable}
       isCached={isCached}
@@ -76,11 +78,12 @@ export function NewTake({ documentId, shotId }) {
   const takeNumber = takeCount + 1;
   return (
     <TakeLayout
-      title={`Take ${takeNumber}`}
+      title={`T${takeNumber}`}
       timestamp={0}
       fileName="--"
       firstTake={false}
       lastTake={takeNumber === 1}
+      thumbnailSrc=""
     />
   );
 }
@@ -92,6 +95,7 @@ export function NewTake({ documentId, shotId }) {
  * @param {string} props.fileName
  * @param {boolean} props.firstTake
  * @param {boolean} props.lastTake
+ * @param {string} props.thumbnailSrc
  * @param {string} [props.className]
  * @param {boolean} [props.isCloudExported]
  * @param {boolean} [props.isCloudExportable]
@@ -105,6 +109,7 @@ function TakeLayout({
   className,
   firstTake,
   lastTake,
+  thumbnailSrc,
   isCloudExported,
   isCloudExportable,
   isCached,
@@ -127,9 +132,17 @@ function TakeLayout({
           start={firstTake}
           end={lastTake}
         />
-        <p className="whitespace-nowrap flex flex-row">
-          <span className={isPending ? 'opacity-30' : ''}>{title}</span>
-        </p>
+        <ImageWithCaption
+          className={
+            'border border-white' +
+            ' ' +
+            (isPending ? 'opacity-30' : '') +
+            ' ' +
+            `w-32 h-[4.5rem]`
+          }
+          src={thumbnailSrc}
+          alt={title}
+        />
         <button
           className="flex flex-row px-2"
           onClick={onCloudClick}

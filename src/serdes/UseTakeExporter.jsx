@@ -73,7 +73,7 @@ export function useTakeExporter() {
       // Process the video.
       captureVideoSnapshot(
         data,
-        0.5,
+        0.1,
         MAX_THUMBNAIL_WIDTH,
         MAX_THUMBNAIL_HEIGHT,
       ).then((url) => setTakePreviewImage(documentId, takeId, url));

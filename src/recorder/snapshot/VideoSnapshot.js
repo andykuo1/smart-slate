@@ -17,37 +17,22 @@ export async function captureVideoSnapshot(
     video.addEventListener('error', reject);
     video.addEventListener('loadedmetadata', () => {
       URL.revokeObjectURL(url);
-      const lastSeekableRangeIndex = video.seekable.length - 1;
-      const lastSeekableRangeStart = video.seekable.start(
-        lastSeekableRangeIndex,
-      );
-      const lastSeekableRangeEnd = video.seekable.end(lastSeekableRangeIndex);
-      const lastSeekableRange = Number.isFinite(lastSeekableRangeEnd)
-        ? lastSeekableRangeEnd
-        : Number.isFinite(lastSeekableRangeStart)
-          ? lastSeekableRangeStart
-          : 0;
-      const seekToSeconds = timestampSeconds || lastSeekableRange;
+      // Start seeking!
+      video.addEventListener('seeked', () => {
+        const canvas = document.createElement('canvas');
+        drawElementToCanvasWithRespectToAspectRatio(
+          canvas,
+          video,
+          video.videoWidth || video.width,
+          video.videoHeight || video.height,
+          width,
+          height,
+        );
+        const result = canvas.toDataURL('image/png', 0.5);
+        resolve(result);
+      });
       // NOTE: Delay seeking, otherwise Safari won't fire event.
-      setTimeout(() => {
-        // Start seeking!
-        video.addEventListener('seeking', () => {
-          console.log('SEEKING', video.currentTime);
-        });
-        video.addEventListener('seeked', () => {
-          console.log('SEEKED');
-          const canvas = document.createElement('canvas');
-          drawElementToCanvasWithRespectToAspectRatio(
-            canvas,
-            video,
-            width,
-            height,
-          );
-          const result = canvas.toDataURL('image/png', 0.5);
-          resolve(result);
-        });
-        video.currentTime = seekToSeconds;
-      }, 200);
+      setTimeout(() => (video.currentTime = timestampSeconds), 100);
     });
     video.load();
   });
@@ -56,17 +41,21 @@ export async function captureVideoSnapshot(
 /**
  * @param {HTMLCanvasElement} canvas
  * @param {HTMLImageElement|HTMLVideoElement} element
+ * @param {number} elementWidth
+ * @param {number} elementHeight
  * @param {number} toWidth
  * @param {number} toHeight
  */
 export function drawElementToCanvasWithRespectToAspectRatio(
   canvas,
   element,
+  elementWidth,
+  elementHeight,
   toWidth,
   toHeight,
 ) {
-  const w = element.width;
-  const h = element.height;
+  const w = elementWidth;
+  const h = elementHeight;
   const hr = toWidth / w;
   const wr = toHeight / h;
   const ratio = Math.min(hr, wr);
@@ -80,6 +69,17 @@ export function drawElementToCanvasWithRespectToAspectRatio(
   if (!ctx) {
     return;
   }
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(element, 0, 0, w, h, dx, dy, w * ratio, h * ratio);
+  ctx.drawImage(
+    element,
+    0,
+    0,
+    elementWidth,
+    elementHeight,
+    dx,
+    dy,
+    w * ratio,
+    h * ratio,
+  );
 }

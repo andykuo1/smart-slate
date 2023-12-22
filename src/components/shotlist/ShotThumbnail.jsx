@@ -11,8 +11,7 @@ import {
 } from '@ariakit/react';
 import { useCallback, useRef } from 'react';
 
-import AddPhotoAltIcon from '@material-symbols/svg-400/rounded/add_photo_alternate.svg';
-
+import ImageWithCaption from '@/lib/ImageWithCaption';
 import { isInputCaptureSupported } from '@/recorder/MediaRecorderSupport';
 import { drawElementToCanvasWithRespectToAspectRatio } from '@/recorder/snapshot/VideoSnapshot';
 import { shotNumberToChar } from '@/stores/DocumentStore';
@@ -257,21 +256,12 @@ function ThumbnailOptionCamera({ documentId, shotId }) {
 function ShotThumbnailImage({ className, alt, documentId, shotId }) {
   const thumbnail = useShotThumbnail(documentId, shotId);
   return (
-    <div
-      className={
-        'relative max-w-sm w-[128px] h-[72px] overflow-hidden flex items-center' +
-        ' ' +
-        className
-      }>
-      {thumbnail ? (
-        <img className="flex-1 object-contain" src={thumbnail} alt={alt} />
-      ) : (
-        <AddPhotoAltIcon className="flex-1 fill-gray-400" />
-      )}
-      <p className="absolute right-2 bottom-0 text-right [text-shadow:_-1px_-1px_2px_white,_-1px_1px_2px_white,_1px_1px_2px_white,_1px_-1px_2px_white]">
-        {alt}
-      </p>
-    </div>
+    <ImageWithCaption
+      src={thumbnail}
+      alt={alt}
+      className={'max-w-sm w-[128px] h-[72px]' + ' ' + className}
+      usage="add"
+    />
   );
 }
 
@@ -296,6 +286,8 @@ async function blobToDataURI(blob, maxWidth, maxHeight, canvasRef) {
       drawElementToCanvasWithRespectToAspectRatio(
         canvas,
         img,
+        img.width,
+        img.height,
         maxWidth,
         maxHeight,
       );

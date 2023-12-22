@@ -37,8 +37,10 @@ EXPORT TO PDF with all the storyboard, image to filename.
 flag marker for in-content. comments?
 
 - Add profile button to project page
+- Add preview image for take
 - Change user settings to save to localStorage
 - Change MediaRecorder setup to start on root
+- Change ideal resolution to be 16:9
 
 # 0.1.7
 
