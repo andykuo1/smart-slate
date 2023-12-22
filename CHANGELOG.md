@@ -36,6 +36,12 @@ EXPORT TO PDF with all the storyboard, image to filename.
 
 flag marker for in-content. comments?
 
+- Add marker for best/bad take
+- Only show preview for best/last take
+- reoreder takes
+
+# 0.1.8
+
 - Add profile button to project page
 - Add preview image for take
 - Change user settings to save to localStorage
