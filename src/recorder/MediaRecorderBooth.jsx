@@ -1,10 +1,8 @@
-import { useCallback, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useContext, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import ShotThumbnail from '@/components/shotlist/ShotThumbnail';
 import { useFullscreen } from '@/lib/fullscreen';
-import { useRecorderV2 } from '@/recorder/UseRecorderV2';
-import { useTakeExporter } from '@/serdes/UseTakeExporter';
 import { shotNumberToChar } from '@/stores/DocumentStore';
 import {
   useSceneHeading,
@@ -14,16 +12,11 @@ import {
 import {
   useCurrentCursor,
   usePreferMutedWhileRecording,
-  useSetUserCursor,
   useUserStore,
 } from '@/stores/UserStoreContext';
 import '@/values/RecorderValues';
-import {
-  MEDIA_BLOB_OPTIONS,
-  MEDIA_RECORDER_OPTIONS,
-  MEDIA_STREAM_CONSTRAINTS,
-} from '@/values/RecorderValues';
 
+import { MediaRecorderContext } from './MediaRecorderContext';
 import VideoRecorderBoothLayout from './VideoRecorderBoothLayout';
 
 export default function MediaRecorderBooth() {
@@ -31,36 +24,21 @@ export default function MediaRecorderBooth() {
   const takeCount = useShotTakeCount(documentId, shotId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
   const sceneHeading = useSceneHeading(documentId, sceneId);
-  const setUserCursor = useSetUserCursor();
-  const exportTake = useTakeExporter();
   const navigate = useNavigate();
   const { exitFullscreen } = useFullscreen();
-  const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
 
-  /** @type {import('@/recorder/UseMediaRecorder').MediaRecorderCompleteCallback} */
-  const onComplete = useCallback(
-    function _onComplete(blob, mediaRecorder) {
-      const takeId = exportTake(blob, documentId, sceneId, shotId);
-      setUserCursor(documentId, sceneId, shotId, takeId);
-    },
-    [documentId, sceneId, shotId, exportTake, setUserCursor],
-  );
+  const { videoRef, onStart, onStop, isPrepared, isRecording } =
+    useContext(MediaRecorderContext);
 
-  const { onStart, onStop, isPrepared, isRecording } = useRecorderV2(
-    videoRef,
-    MEDIA_STREAM_CONSTRAINTS,
-    MEDIA_RECORDER_OPTIONS,
-    MEDIA_BLOB_OPTIONS,
-    onComplete,
-  );
+  const location = useLocation();
 
   useEffect(() => {
-    if (!isPrepared) {
+    if (location.pathname.endsWith('/rec')) {
       onStart({ record: false });
+    } else {
+      onStop({ exit: true });
     }
-    // TODO: Only run this once?
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [location, onStart, onStop]);
 
   return (
     <VideoRecorderBoothLayout
