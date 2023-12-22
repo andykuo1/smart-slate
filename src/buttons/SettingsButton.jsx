@@ -10,6 +10,7 @@ import SettingsIcon from '@material-symbols/svg-400/rounded/settings-fill.svg';
 import ButtonStyle from '@/styles/Button.module.css';
 import MenuStyle from '@/styles/Menu.module.css';
 
+import ClearVideoCacheMenuItem from './settings/ClearVideoCacheMenuItem';
 import DeleteProjectMenuItem from './settings/DeleteProjectMenuItem';
 import EnableDriveSyncMenuItem from './settings/EnableDriveSyncMenuItem';
 import EnableThumbnailWhileRecordingMenuItem from './settings/EnableThumbnailWhileRecordingMenuItem';
@@ -35,6 +36,7 @@ export default function SettingsButton({ className }) {
         <PreferMutedWhileRecordingMenuItem />
         <EnableThumbnailWhileRecordingMenuItem />
         <EnableDriveSyncMenuItem />
+        <ClearVideoCacheMenuItem />
         <NerdInfoMenuItem />
       </Menu>
     </MenuProvider>

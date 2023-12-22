@@ -12,7 +12,6 @@ export default function HorizontallyScrollableDiv({ className, children }) {
     /** @type {import('react').WheelEventHandler} */
     function onWheel(event) {
       event.currentTarget.scrollLeft += event.deltaY + event.deltaX;
-      event.preventDefault();
       event.stopPropagation();
     },
     [],

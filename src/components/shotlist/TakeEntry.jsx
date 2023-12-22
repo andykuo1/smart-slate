@@ -12,7 +12,7 @@ import {
   useTake,
   useTakeNumber,
 } from '@/stores/DocumentStoreContext';
-import { getVideoBlob, hasVideoBlob } from '@/stores/VideoCache';
+import { getVideoBlob } from '@/stores/VideoCache';
 
 import BoxDrawingCharacter from './BoxDrawingCharacter';
 
@@ -37,15 +37,18 @@ export function TakeEntry({
   const [isCached, setIsCached] = useState(false);
 
   function onCloudClick() {
-    const blob = getVideoBlob(takeId);
-    if (blob) {
-      exportTake(blob, documentId, sceneId, shotId, { uploadOnly: true });
-    }
+    getVideoBlob(takeId).then((blob) => {
+      if (blob) {
+        exportTake(blob, documentId, sceneId, shotId, { uploadOnly: true });
+      }
+    });
   }
 
   const onInterval = useCallback(
     function _onInterval() {
-      setIsCached(hasVideoBlob(takeId));
+      getVideoBlob(takeId).then((blob) => {
+        setIsCached(Boolean(blob));
+      });
     },
     [setIsCached, takeId],
   );

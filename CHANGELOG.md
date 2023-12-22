@@ -38,7 +38,9 @@ flag marker for in-content. comments?
 
 - Add marker for best/bad take
 - Only show preview for best/last take
-- reoreder takes
+- reassign takes
+
+- Add IndexedDB video cache
 
 # 0.1.8
 
