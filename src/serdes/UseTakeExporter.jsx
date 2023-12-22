@@ -14,6 +14,7 @@ import {
   useSetTakeExportedGoogleDriveFileId,
   useSetTakePreviewImage,
 } from '@/stores/DocumentStoreContext';
+import { useSettingsStore } from '@/stores/SettingsStoreContext';
 import { ANY_SHOT } from '@/stores/ShotTypes';
 import { cacheVideoBlob } from '@/stores/VideoCache';
 import { downloadURLImpl } from '@/utils/Downloader';
@@ -30,6 +31,7 @@ export function useTakeExporter() {
   const setTakeExportedGoogleDriveFileId =
     useSetTakeExportedGoogleDriveFileId();
   const setTakePreviewImage = useSetTakePreviewImage();
+  const enableDriveSync = useSettingsStore((ctx) => ctx.user.enableDriveSync);
   const handleToken = useGAPITokenHandler();
 
   const exportTake = useCallback(
@@ -76,9 +78,11 @@ export function useTakeExporter() {
         MAX_THUMBNAIL_HEIGHT,
       ).then((url) => setTakePreviewImage(documentId, takeId, url));
 
-      if (
+      let shouldSave = true;
+      let shouldCache = true;
+      if (shouldSave && enableDriveSync) {
         // Upload it.
-        !handleToken((token) => {
+        shouldSave = handleToken((token) => {
           uploadFile(
             token.access_token,
             exportedFileNameWithExt,
@@ -94,20 +98,25 @@ export function useTakeExporter() {
                 'Failed to upload file - ' + exportedFileNameWithExt,
               );
             });
-        })
-      ) {
-        if (!opts?.uploadOnly) {
-          // Download it.
-          const dataURL = URL.createObjectURL(data);
-          downloadURLImpl(exportedFileNameWithExt, dataURL);
-          URL.revokeObjectURL(dataURL);
-        }
+        });
+        shouldCache = shouldSave;
+      }
+      if (shouldSave && !opts?.uploadOnly) {
+        // Download it.
+        const dataURL = URL.createObjectURL(data);
+        downloadURLImpl(exportedFileNameWithExt, dataURL);
+        URL.revokeObjectURL(dataURL);
+        shouldSave = false;
+      }
+      if (shouldCache) {
         // Cache it.
         cacheVideoBlob(takeId, data);
+        shouldCache = false;
       }
       return takeId;
     },
     [
+      enableDriveSync,
       UNSAFE_getStore,
       addTake,
       handleToken,

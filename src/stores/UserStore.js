@@ -2,14 +2,12 @@
  * @typedef {ReturnType<createStore>} Store
  * @typedef {ReturnType<createCursor>} Cursor
  * @typedef {ReturnType<createRecorder>} Recorder
- * @typedef {ReturnType<createSettings>} Settings
  */
 
 export function createStore() {
   return {
     cursor: createCursor(),
     recorder: createRecorder(),
-    settings: createSettings(),
   };
 }
 
@@ -30,13 +28,5 @@ export function createRecorder() {
   return {
     active: false,
     forceStart: false,
-  };
-}
-
-export function createSettings() {
-  return {
-    preferNativeRecorder: false,
-    preferMutedWhileRecording: true,
-    enableThumbnailWhileRecording: true,
   };
 }

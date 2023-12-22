@@ -9,11 +9,8 @@ import {
   useShotNumber,
   useShotTakeCount,
 } from '@/stores/DocumentStoreContext';
-import {
-  useCurrentCursor,
-  usePreferMutedWhileRecording,
-  useUserStore,
-} from '@/stores/UserStoreContext';
+import { useSettingsStore } from '@/stores/SettingsStoreContext';
+import { useCurrentCursor } from '@/stores/UserStoreContext';
 import '@/values/RecorderValues';
 
 import { MediaRecorderContext } from './MediaRecorderContext';
@@ -117,9 +114,11 @@ function BackButton({ className, onClick }) {
  * @param {import('@/stores/DocumentStore').ShotId} props.shotId
  */
 function VideoFrame({ className, videoRef, documentId, sceneId, shotId }) {
-  const preferMutedWhileRecording = usePreferMutedWhileRecording();
-  const enableThumbnailWhileRecording = useUserStore(
-    (ctx) => ctx.settings.enableThumbnailWhileRecording,
+  const preferMutedWhileRecording = useSettingsStore(
+    (ctx) => ctx.user.preferMutedWhileRecording,
+  );
+  const enableThumbnailWhileRecording = useSettingsStore(
+    (ctx) => ctx.user.enableThumbnailWhileRecording,
   );
 
   return (

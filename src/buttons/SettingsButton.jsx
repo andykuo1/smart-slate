@@ -11,7 +11,7 @@ import ButtonStyle from '@/styles/Button.module.css';
 import MenuStyle from '@/styles/Menu.module.css';
 
 import DeleteProjectMenuItem from './settings/DeleteProjectMenuItem';
-import EnableCloudSyncMenuItem from './settings/EnableCloudSyncMenuItem';
+import EnableDriveSyncMenuItem from './settings/EnableDriveSyncMenuItem';
 import EnableThumbnailWhileRecordingMenuItem from './settings/EnableThumbnailWhileRecordingMenuItem';
 import NerdInfoMenuItem from './settings/NerdInfoMenuItem';
 import PreferMutedWhileRecordingMenuItem from './settings/PreferMutedWhileRecordingMenuItem';
@@ -31,10 +31,10 @@ export default function SettingsButton({ className }) {
       </MenuButton>
       <Menu gutter={8} className={MenuStyle.menu}>
         <DeleteProjectMenuItem />
-        <EnableCloudSyncMenuItem />
         <PreferNativeRecorderMenuItem />
         <PreferMutedWhileRecordingMenuItem />
         <EnableThumbnailWhileRecordingMenuItem />
+        <EnableDriveSyncMenuItem />
         <NerdInfoMenuItem />
       </Menu>
     </MenuProvider>

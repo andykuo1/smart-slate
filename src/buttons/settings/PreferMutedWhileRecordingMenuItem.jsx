@@ -3,22 +3,21 @@ import { MenuItem } from '@ariakit/react';
 import ToggleOff from '@material-symbols/svg-400/rounded/toggle_off.svg';
 import ToggleOn from '@material-symbols/svg-400/rounded/toggle_on-fill.svg';
 
-import {
-  usePreferMutedWhileRecording,
-  useSetPreferMutedWhileRecording,
-} from '@/stores/UserStoreContext';
+import { useSettingsStore } from '@/stores/SettingsStoreContext';
 import MenuStyle from '@/styles/Menu.module.css';
 
 export default function MutedRecordingMenuItem() {
-  const preferMutedWhileRecording = usePreferMutedWhileRecording();
-  const setPreferMutedWhileRecording = useSetPreferMutedWhileRecording();
+  const enabled = useSettingsStore((ctx) => ctx.user.preferMutedWhileRecording);
+  const setEnabled = useSettingsStore(
+    (ctx) => ctx.setPreferMutedWhileRecording,
+  );
 
   return (
     <MenuItem
       className={MenuStyle.menuItem + ' ' + 'flex flex-row fill-current'}
       hideOnClick={false}
-      onClick={() => setPreferMutedWhileRecording(!preferMutedWhileRecording)}>
-      {!preferMutedWhileRecording ? (
+      onClick={() => setEnabled(!enabled)}>
+      {!enabled ? (
         <ToggleOn className="h-full" />
       ) : (
         <ToggleOff className="h-full" />

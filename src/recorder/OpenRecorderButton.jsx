@@ -5,8 +5,8 @@ import { useFullscreen } from '@/lib/fullscreen';
 import { useInputCapture } from '@/lib/inputcapture';
 import { isMediaRecorderSupported } from '@/recorder/MediaRecorderSupport';
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
+import { useSettingsStore } from '@/stores/SettingsStoreContext';
 import {
-  usePreferNativeRecorder,
   useSetRecorderActive,
   useSetUserCursor,
 } from '@/stores/UserStoreContext';
@@ -51,7 +51,9 @@ export default function OpenRecorderButton({
  */
 function useShotRecorder(documentId, sceneId, shotId) {
   const setUserCursor = useSetUserCursor();
-  const preferNativeRecorder = usePreferNativeRecorder();
+  const preferNativeRecorder = useSettingsStore(
+    (ctx) => ctx.user.preferNativeRecorder,
+  );
 
   const mediaRecorderHandler = useMediaRecorderHandler();
   const inputCaptureHandler = useInputCaptureHandler();

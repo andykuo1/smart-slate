@@ -3,14 +3,14 @@ import { MenuItem } from '@ariakit/react';
 import ToggleOff from '@material-symbols/svg-400/rounded/toggle_off.svg';
 import ToggleOn from '@material-symbols/svg-400/rounded/toggle_on-fill.svg';
 
-import { useUserStore } from '@/stores/UserStoreContext';
+import { useSettingsStore } from '@/stores/SettingsStoreContext';
 import MenuStyle from '@/styles/Menu.module.css';
 
 export default function EnableThumbnailWhileRecording() {
-  const enableThumbnailWhileRecording = useUserStore(
-    (ctx) => ctx.settings.enableThumbnailWhileRecording,
+  const enableThumbnailWhileRecording = useSettingsStore(
+    (ctx) => ctx.user.enableThumbnailWhileRecording,
   );
-  const setEnableThumbnailWhileRecording = useUserStore(
+  const setEnableThumbnailWhileRecording = useSettingsStore(
     (ctx) => ctx.setEnableThumbnailWhileRecording,
   );
 

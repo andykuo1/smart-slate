@@ -10,8 +10,7 @@
 - Can I add a folder to google drive?
 
 3. Sketch upload / Create a storyboard.
-4. sync options to login once only.
-5. Screenplay imports
+4. Screenplay imports
 
 [] Cache to local storage first and download later?
 [] Screenplay imports!
@@ -31,12 +30,15 @@ x. pre-vis storyboard :D
 - /// DICKSTEEL
 - sdfasdf
 
-- Login once.
 - Scene/Shot/Take metadata is in da vinci, we should check.
 
 EXPORT TO PDF with all the storyboard, image to filename.
 
 flag marker for in-content. comments?
+
+- Add profile button to project page
+- Change user settings to save to localStorage
+- Change MediaRecorder setup to start on root
 
 # 0.1.7
 

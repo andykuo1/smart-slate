@@ -57,19 +57,3 @@ export function useCurrentRecorder() {
 export function useSetRecorderActive() {
   return useUserStore((ctx) => ctx.setRecorderActive);
 }
-
-export function useSetPreferNativeRecorder() {
-  return useUserStore((ctx) => ctx.setPreferNativeRecorder);
-}
-
-export function usePreferNativeRecorder() {
-  return useUserStore((ctx) => ctx.settings.preferNativeRecorder);
-}
-
-export function useSetPreferMutedWhileRecording() {
-  return useUserStore((ctx) => ctx.setPreferMutedWhileRecording);
-}
-
-export function usePreferMutedWhileRecording() {
-  return useUserStore((ctx) => ctx.settings.preferMutedWhileRecording);
-}
