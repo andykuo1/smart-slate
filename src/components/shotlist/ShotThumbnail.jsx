@@ -13,8 +13,8 @@ import { useCallback, useRef } from 'react';
 
 import AddPhotoAltIcon from '@material-symbols/svg-400/rounded/add_photo_alternate.svg';
 
-import { drawElementToCanvasWithRespectToAspectRatio } from '@/components/recorder/VideoSnapshot';
 import { isInputCaptureSupported } from '@/recorder/MediaRecorderSupport';
+import { drawElementToCanvasWithRespectToAspectRatio } from '@/recorder/snapshot/VideoSnapshot';
 import { shotNumberToChar } from '@/stores/DocumentStore';
 import {
   useSceneNumber,

@@ -23,7 +23,7 @@ import {
   MAX_THUMBNAIL_WIDTH,
 } from '@/values/Resolutions';
 
-import { captureVideoSnapshot } from '../components/recorder/VideoSnapshot';
+import { captureVideoSnapshot } from '../recorder/snapshot/VideoSnapshot';
 
 export function useTakeExporter() {
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);

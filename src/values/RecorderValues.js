@@ -21,6 +21,7 @@ export const MEDIA_STREAM_CONSTRAINTS = {
     facingMode: 'environment',
     width: { ideal: 7680 },
     height: { ideal: 4320 },
+    aspectRatio: { ideal: 16 / 9 },
   },
   audio: true,
 };
