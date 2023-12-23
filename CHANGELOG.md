@@ -41,6 +41,8 @@ flag marker for in-content. comments?
 - reassign takes
 - proper check with cloud if uploaded
 
+- Add take rating
+- Add inline view for take list
 - Add take options
 - Add IndexedDB video cache
 

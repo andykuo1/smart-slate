@@ -56,6 +56,8 @@ export function TakeEntry({
 
   return (
     <TakeLayout
+      documentId={documentId}
+      takeId={takeId}
       className={className}
       title={`T${takeNumber}`}
       timestamp={take.exportedMillis}
@@ -83,6 +85,8 @@ export function NewTake({ documentId, shotId, viewMode }) {
   const takeNumber = takeCount + 1;
   return (
     <TakeLayout
+      documentId={documentId}
+      takeId=""
       title={`T${takeNumber}`}
       timestamp={0}
       fileName="--"

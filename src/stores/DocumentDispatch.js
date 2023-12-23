@@ -30,6 +30,7 @@ export function createDispatch(set, get) {
 
     setTakeExportedGoogleDriveFileId: zi(set, setTakeExportedGoogleDriveFileId),
     setTakePreviewImage: zi(set, setTakePreviewImage),
+    setTakeRating: zi(set, setTakeRating),
 
     incrementDocumentRevisionNumber: zi(set, incrementDocumentRevisionNumber),
 
@@ -394,5 +395,18 @@ function setTakePreviewImage(store, documentId, takeId, previewImage) {
   let document = store.documents[documentId];
   let take = document.takes[takeId];
   take.previewImage = previewImage;
+  incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('./DocumentStore').Store} store
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').TakeId} takeId
+ * @param {number} rating
+ */
+function setTakeRating(store, documentId, takeId, rating) {
+  let document = store.documents[documentId];
+  let take = document.takes[takeId];
+  take.rating = rating;
   incrementDocumentRevisionNumber(document);
 }

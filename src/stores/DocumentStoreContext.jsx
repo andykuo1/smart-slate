@@ -243,3 +243,17 @@ export function useSceneHeading(documentId, sceneId) {
 export function useSetSceneHeading() {
   return useDocumentStore((ctx) => ctx.setSceneHeading);
 }
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').TakeId} takeId
+ */
+export function useTakeRating(documentId, takeId) {
+  return useDocumentStore(
+    (ctx) => getTakeById(ctx, documentId, takeId)?.rating || 0,
+  );
+}
+
+export function useSetTakeRating() {
+  return useDocumentStore((ctx) => ctx.setTakeRating);
+}

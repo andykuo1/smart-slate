@@ -1,8 +1,10 @@
 import CachedIcon from '@material-symbols/svg-400/rounded/cached.svg';
 import CloudDoneIcon from '@material-symbols/svg-400/rounded/cloud_done.svg';
 import CloudUploadIcon from '@material-symbols/svg-400/rounded/cloud_upload-fill.svg';
+import StarIcon from '@material-symbols/svg-400/rounded/star-fill.svg';
 
 import HorizontallySnappableDiv from '@/lib/HorizontallySnappableDiv';
+import { useTakeRating } from '@/stores/DocumentStoreContext';
 
 import BoxDrawingCharacter from '../shotlist/BoxDrawingCharacter';
 import TakeOptions from './TakeOptions';
@@ -10,6 +12,8 @@ import TakePreview from './TakePreview';
 
 /**
  * @param {object} props
+ * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/DocumentStore').TakeId} props.takeId
  * @param {string} props.title
  * @param {number} props.timestamp
  * @param {string} props.fileName
@@ -24,6 +28,8 @@ import TakePreview from './TakePreview';
  * @param {import('react').MouseEventHandler<HTMLButtonElement>} [props.onCloudClick]
  */
 export default function TakeLayout({
+  documentId,
+  takeId,
   title,
   timestamp,
   fileName,
@@ -37,7 +43,10 @@ export default function TakeLayout({
   isCached,
   onCloudClick,
 }) {
+  const rating = useTakeRating(documentId, takeId);
   const isPending = timestamp <= 0;
+  const isGood = rating > 0;
+  const isBad = rating < 0;
   const showListDecorations = viewMode === 'list';
   const listDecorationStyle = getListDecorationStyleByViewMode(viewMode);
   return (
@@ -56,12 +65,21 @@ export default function TakeLayout({
           start={firstTake}
           end={lastTake}
         />
-        <TakeOptions showButton={showListDecorations}>
+        <TakeOptions
+          documentId={documentId}
+          takeId={takeId}
+          showButton={showListDecorations}
+          disabled={!takeId}>
           <TakePreview
-            className={isPending ? 'opacity-30' : ''}
+            className={
+              (isBad ? 'grayscale' : '') + ' ' + (isPending ? 'opacity-30' : '')
+            }
             previewImage={previewImage}
             title={title}
           />
+          {isGood && (
+            <StarIcon className="absolute top-0 left-0 w-6 h-6 fill-yellow-500 pointer-events-none" />
+          )}
         </TakeOptions>
       </div>
       <HorizontallySnappableDiv>
