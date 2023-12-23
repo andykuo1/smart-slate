@@ -28,8 +28,8 @@ import BarberpoleStyle from '@/styles/Barberpole.module.css';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 
 import BoxDrawingCharacter from '../shotlist/BoxDrawingCharacter';
-import { getShotTypeColor } from '../shotlist/ShotColors';
-import ShotThumbnail from '../shotlist/ShotThumbnail';
+import { getShotTypeColor } from './ShotColors';
+import ShotThumbnail from './ShotThumbnail';
 
 /**
  * @param {object} props

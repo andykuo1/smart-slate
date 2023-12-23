@@ -10,7 +10,7 @@ import {
   useSetUserCursor,
 } from '@/stores/UserStoreContext';
 
-import SceneList from './SceneList';
+import SceneList from '../scenes/SceneList';
 
 /**
  * @param {object} props

@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import ShotThumbnail from '@/components/shotlist/ShotThumbnail';
+import ShotThumbnail from '@/components/shots/ShotThumbnail';
 import { useFullscreen } from '@/lib/fullscreen';
 import { shotNumberToChar } from '@/stores/DocumentStore';
 import {

@@ -3,8 +3,8 @@ import { Fragment } from 'react';
 import { useShotIds } from '@/stores/DocumentStoreContext';
 import { useCurrentCursor } from '@/stores/UserStoreContext';
 
-import { NewShot, ShotEntry } from '../shots/ShotEntry';
 import TakeList from '../takes/TakeList';
+import { NewShot, ShotEntry } from './ShotEntry';
 
 /**
  * @param {object} props

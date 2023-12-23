@@ -11,8 +11,8 @@ import {
 } from '@/stores/DocumentStoreContext';
 import { useCurrentCursor } from '@/stores/UserStoreContext';
 
-import DocumentTitle from './DocumentTitle';
-import ShotList from './ShotList';
+import DocumentTitle from '../shotlist/DocumentTitle';
+import ShotList from '../shots/ShotList';
 
 /**
  * @param {object} props
