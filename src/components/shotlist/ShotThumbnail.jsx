@@ -45,7 +45,10 @@ export default function ShotThumbnail({
 }) {
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
-  const sceneShotString = `${sceneNumber}${shotNumberToChar(shotNumber)}`;
+  const sceneShotString =
+    sceneNumber <= 0 || shotNumber <= 0
+      ? '--'
+      : `${sceneNumber}${shotNumberToChar(shotNumber)}`;
 
   return (
     <div className={'relative flex items-center' + ' ' + className}>

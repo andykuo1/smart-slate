@@ -5,6 +5,7 @@ import NaturePeopleIcon from '@material-symbols/svg-400/rounded/nature_people-fi
 import PersonIcon from '@material-symbols/svg-400/rounded/person-fill.svg';
 import StarsIcon from '@material-symbols/svg-400/rounded/stars-fill.svg';
 
+import HorizontallySnappableDiv from '@/lib/HorizontallySnappableDiv';
 import OpenRecorderButton from '@/recorder/OpenRecorderButton';
 import { createShot } from '@/stores/DocumentStore';
 import {
@@ -26,9 +27,9 @@ import { useCurrentCursor, useSetUserCursor } from '@/stores/UserStoreContext';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 
-import BoxDrawingCharacter from './BoxDrawingCharacter';
-import { getShotTypeColor } from './ShotColors';
-import ShotThumbnail from './ShotThumbnail';
+import BoxDrawingCharacter from '../shotlist/BoxDrawingCharacter';
+import { getShotTypeColor } from '../shotlist/ShotColors';
+import ShotThumbnail from '../shotlist/ShotThumbnail';
 
 /**
  * @param {object} props
@@ -51,15 +52,13 @@ export function ShotEntry({ documentId, sceneId, shotId, children }) {
 
   return (
     <li className="flex flex-col items-center">
-      <div
+      <HorizontallySnappableDiv
         className={
-          'flex flex-row border-b border-gray-300 w-full h-[6rem]' +
-          ' ' +
-          'overflow-x-auto overflow-y-hidden snap-x snap-mandatory overscroll-x-none' +
+          'z-10 h-[6rem] border-b border-gray-300 shadow' +
           ' ' +
           (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
         }>
-        <div className="w-full flex-shrink-0 flex flex-row snap-start overflow-hidden">
+        <>
           <BoxDrawingCharacter
             depth={0}
             start={false}
@@ -114,15 +113,15 @@ export function ShotEntry({ documentId, sceneId, shotId, children }) {
                 : choosePlaceholderRandomly(shotId)}
             </div>
           </div>
-        </div>
-        <div className="w-full flex-shrink-0 flex flex-row snap-start overflow-hidden">
+        </>
+        <>
           <ShotNotes
             className="flex-1"
             documentId={documentId}
             shotId={shotId}
           />
-        </div>
-      </div>
+        </>
+      </HorizontallySnappableDiv>
       <div className="flex-1 w-full">{children}</div>
     </li>
   );
@@ -142,7 +141,7 @@ export function NewShot({ documentId, sceneId }) {
   }
 
   return (
-    <li className="flex flex-row">
+    <li className="flex flex-row w-[50%] ml-auto">
       <button
         className="flex-1 text-right bg-gradient-to-l from-gray-300 to-transparent px-4 py-2 my-2 rounded-full"
         onClick={onClick}>

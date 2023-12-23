@@ -19,7 +19,7 @@ import SceneList from './SceneList';
 export default function DocumentPanel({ documentId }) {
   return (
     <>
-      <SettingsButton className="fixed top-2 right-2" />
+      <SettingsButton className="fixed top-2 right-2 z-20" />
       <HomeButton className="bg-white" />
       <SceneList documentId={documentId} />
     </>
@@ -47,7 +47,7 @@ function HomeButton({ className, disabled }) {
   }
 
   return (
-    <div className="fixed left-0 top-0 m-2 z-10">
+    <div className="fixed left-0 top-0 m-2 z-20">
       <FancyButton
         className={className}
         title="Exit"
