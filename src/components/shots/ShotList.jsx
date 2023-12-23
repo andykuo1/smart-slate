@@ -30,6 +30,7 @@ export default function ShotList({ documentId, sceneId }) {
                   documentId={documentId}
                   sceneId={sceneId}
                   shotId={shotId}
+                  viewMode={hasActiveShot ? 'list' : 'inline'}
                 />
               </ShotEntry>
             </Fragment>

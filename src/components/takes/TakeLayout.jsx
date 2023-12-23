@@ -16,6 +16,7 @@ import TakePreview from './TakePreview';
  * @param {boolean} props.firstTake
  * @param {boolean} props.lastTake
  * @param {string} props.previewImage
+ * @param {'list'|'inline'} props.viewMode
  * @param {string} [props.className]
  * @param {boolean} [props.isCloudExported]
  * @param {boolean} [props.isCloudExportable]
@@ -30,22 +31,32 @@ export default function TakeLayout({
   firstTake,
   lastTake,
   previewImage,
+  viewMode,
   isCloudExported,
   isCloudExportable,
   isCached,
   onCloudClick,
 }) {
   const isPending = timestamp <= 0;
+  const showListDecorations = viewMode === 'list';
+  const listDecorationStyle = getListDecorationStyleByViewMode(viewMode);
   return (
-    <li className={'flex flex-row w-full bg-gray-100' + ' ' + className}>
+    <li
+      className={
+        'flex flex-row bg-gray-100' +
+        ' ' +
+        getListItemStyleByViewMode(viewMode) +
+        ' ' +
+        className
+      }>
       <div className="flex flex-row bg-gray-200">
         <BoxDrawingCharacter
-          className="mx-2"
+          className={'mx-2' + ' ' + listDecorationStyle}
           depth={1}
           start={firstTake}
           end={lastTake}
         />
-        <TakeOptions>
+        <TakeOptions showButton={showListDecorations}>
           <TakePreview
             className={isPending ? 'opacity-30' : ''}
             previewImage={previewImage}
@@ -55,7 +66,7 @@ export default function TakeLayout({
       </div>
       <HorizontallySnappableDiv>
         {/* PANEL 1 */}
-        <>
+        <div className={'flex-1 flex flex-row' + ' ' + listDecorationStyle}>
           <button
             className="flex flex-row px-2"
             onClick={onCloudClick}
@@ -72,14 +83,42 @@ export default function TakeLayout({
           <p className="opacity-30 whitespace-nowrap">
             {isPending ? '--' : new Date(timestamp).toLocaleString()}
           </p>
-        </>
+        </div>
         {/* PANEL 2 */}
-        <>
+        <div className={'flex-1 flex flex-row' + ' ' + listDecorationStyle}>
           <p className="flex-1 opacity-30 overflow-x-auto text-center">
             {fileName}
           </p>
-        </>
+        </div>
       </HorizontallySnappableDiv>
     </li>
   );
+}
+
+/**
+ * @param {string} viewMode
+ */
+function getListItemStyleByViewMode(viewMode) {
+  switch (viewMode) {
+    case 'list':
+      return 'w-full';
+    case 'inline':
+      return '';
+    default:
+      throw new Error('Unknown view mode - ' + viewMode);
+  }
+}
+
+/**
+ * @param {string} viewMode
+ */
+function getListDecorationStyleByViewMode(viewMode) {
+  switch (viewMode) {
+    case 'list':
+      return '';
+    case 'inline':
+      return 'hidden';
+    default:
+      throw new Error('Unknown view mode - ' + viewMode);
+  }
 }

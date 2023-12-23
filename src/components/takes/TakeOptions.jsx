@@ -8,13 +8,18 @@ import MenuStyle from '@/styles/Menu.module.css';
  * @param {object} props
  * @param {string} [props.className]
  * @param {import('react').ReactNode} [props.children]
+ * @param {boolean} [props.showButton]
  */
-export default function TakeOptions({ className, children }) {
+export default function TakeOptions({
+  className,
+  children,
+  showButton = true,
+}) {
   return (
     <MenuProvider>
       <MenuButton className={'flex flex-row items-center' + ' ' + className}>
         {children}
-        <MoreVertIcon className="w-6 h-6" />
+        {showButton && <MoreVertIcon className="w-6 h-6" />}
       </MenuButton>
       <Menu className={MenuStyle.menu}>
         <MenuItem className={MenuStyle.menuItem}>Reassign</MenuItem>

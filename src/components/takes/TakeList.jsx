@@ -10,8 +10,9 @@ import { NewTake, TakeEntry } from './TakeEntry';
  * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/DocumentStore').ShotId} props.shotId
+ * @param {'list'|'inline'} props.viewMode
  */
-export default function TakeList({ documentId, sceneId, shotId }) {
+export default function TakeList({ documentId, sceneId, shotId, viewMode }) {
   const takeIds = useTakeIds(documentId, shotId);
   const [cloudExportable, setCloudExportable] = useState(false);
   const handleToken = useGAPITokenHandler();
@@ -23,8 +24,8 @@ export default function TakeList({ documentId, sceneId, shotId }) {
   }, [handleToken, setCloudExportable]);
 
   return (
-    <ul title="Take list">
-      <NewTake documentId={documentId} shotId={shotId} />
+    <ul title="Take list" className={getUnorderedListStyleByViewMode(viewMode)}>
+      <NewTake documentId={documentId} shotId={shotId} viewMode={viewMode} />
       {takeIds
         .slice()
         .reverse()
@@ -36,9 +37,24 @@ export default function TakeList({ documentId, sceneId, shotId }) {
               shotId={shotId}
               takeId={takeId}
               cloudExportable={cloudExportable}
+              viewMode={viewMode}
             />
           </Fragment>
         ))}
     </ul>
   );
+}
+
+/**
+ * @param {string} viewMode
+ */
+function getUnorderedListStyleByViewMode(viewMode) {
+  switch (viewMode) {
+    case 'list':
+      return 'flex flex-col';
+    case 'inline':
+      return 'flex flex-row overflow-x-auto';
+    default:
+      throw new Error('Unknown view mode - ' + viewMode);
+  }
 }

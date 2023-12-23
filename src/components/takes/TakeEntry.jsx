@@ -13,18 +13,22 @@ import TakeLayout from './TakeLayout';
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/DocumentStore').ShotId} props.shotId
  * @param {import('@/stores/DocumentStore').TakeId} props.takeId
  * @param {boolean} props.cloudExportable
+ * @param {'list'|'inline'} props.viewMode
  */
 export function TakeEntry({
+  className,
   documentId,
   sceneId,
   shotId,
   takeId,
   cloudExportable,
+  viewMode,
 }) {
   const takeNumber = useTakeNumber(documentId, shotId, takeId);
   const take = useTake(documentId, takeId);
@@ -52,12 +56,14 @@ export function TakeEntry({
 
   return (
     <TakeLayout
+      className={className}
       title={`T${takeNumber}`}
       timestamp={take.exportedMillis}
       fileName={take.exportedFileName || '--'}
       firstTake={false}
       lastTake={takeNumber === 1}
       previewImage={take.previewImage}
+      viewMode={viewMode}
       isCloudExported={!!take.exportedGoogleDriveFileId}
       isCloudExportable={cloudExportable}
       isCached={isCached}
@@ -70,8 +76,9 @@ export function TakeEntry({
  * @param {object} props
  * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/DocumentStore').ShotId} props.shotId
+ * @param {'list'|'inline'} props.viewMode
  */
-export function NewTake({ documentId, shotId }) {
+export function NewTake({ documentId, shotId, viewMode }) {
   const takeCount = useShotTakeCount(documentId, shotId);
   const takeNumber = takeCount + 1;
   return (
@@ -82,6 +89,7 @@ export function NewTake({ documentId, shotId }) {
       firstTake={false}
       lastTake={takeNumber === 1}
       previewImage=""
+      viewMode={viewMode}
     />
   );
 }
