@@ -65,7 +65,7 @@ function useShotRecorder(documentId, sceneId, shotId) {
       if (
         isMediaRecorderSupported(
           MEDIA_RECORDER_OPTIONS,
-          MEDIA_STREAM_CONSTRAINTS,
+          MEDIA_STREAM_CONSTRAINTS[0],
         ) &&
         !preferNativeRecorder
       ) {
