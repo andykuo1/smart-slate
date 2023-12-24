@@ -6,8 +6,6 @@ import { openIndexedDB } from '@/stores/IndexedDBHelper';
 const VIDEO_CACHE_STORE_NAME = 'videoCache';
 const DATABASE_REF = { current: /** @type {IDBDatabase|null} */ (null) };
 
-initVideoCache();
-
 export async function initVideoCache() {
   if (DATABASE_REF.current) {
     return;
@@ -108,7 +106,7 @@ export async function getVideoBlob(takeId) {
 export async function deleteVideoBlob(takeId) {
   return new Promise((resolve, reject) => {
     const db = getDatabase();
-    const t = db.transaction(VIDEO_CACHE_STORE_NAME);
+    const t = db.transaction(VIDEO_CACHE_STORE_NAME, 'readwrite');
     const store = t.objectStore(VIDEO_CACHE_STORE_NAME);
     const request = store.delete(takeId);
     request.addEventListener('error', reject);

@@ -1,9 +1,9 @@
 import { MenuItem } from '@ariakit/react';
-import { useEffect, useState } from 'react';
 
 import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
 
-import { deleteVideoBlob, getVideoBlob } from '@/recorder/cache/VideoCache';
+import { useCachedVideoBlob } from '@/recorder/cache/UseCachedVideoBlob';
+import { deleteVideoBlob } from '@/recorder/cache/VideoCache';
 import { getTakeById } from '@/stores/DocumentDispatch';
 import {
   useDocumentStore,
@@ -13,17 +13,13 @@ import {
 import MenuStyle from '@/styles/Menu.module.css';
 import { formatBytes } from '@/utils/StringFormat';
 
-import { useForceRefreshOnMenuOpen } from './MenuItemHelper';
-
 /**
  * @param {object} props
  * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/DocumentStore').TakeId} props.takeId
  */
 export default function TakeCacheMenuItem({ documentId, takeId }) {
-  // NOTE: It is important that cache checks are done sparingly (only when needed)
-  const menuOpen = useForceRefreshOnMenuOpen();
-  const [cached, setCached] = useState(false);
+  const videoBlob = useCachedVideoBlob(documentId, takeId);
   const idbKey = useTakeExportedIDBKey(documentId, takeId);
 
   const size = useDocumentStore(
@@ -32,7 +28,7 @@ export default function TakeCacheMenuItem({ documentId, takeId }) {
   const setIDBKey = useSetTakeExportedIDBKey();
 
   async function onDeleteClick() {
-    if (!idbKey || !cached) {
+    if (!idbKey || !videoBlob) {
       return;
     }
     // TODO: This doesn't complete on mobile?
@@ -40,25 +36,13 @@ export default function TakeCacheMenuItem({ documentId, takeId }) {
     setIDBKey(documentId, takeId, '');
   }
 
-  useEffect(() => {
-    getVideoBlob(takeId)
-      .then((result) => {
-        if (result) {
-          setCached(true);
-        } else {
-          setCached(false);
-        }
-      })
-      .catch(() => setCached(false));
-  }, [menuOpen, takeId]);
-
   return (
     <div className="flex flex-row">
       <MenuItem
         className={MenuStyle.menuItem + ' ' + 'flex-1'}
         hideOnClick={false}
-        disabled={!cached}>
-        {cached ? (
+        disabled={!videoBlob}>
+        {videoBlob ? (
           <>
             <span>Cache</span>
             <output className="font-mono text-sm">
@@ -73,7 +57,7 @@ export default function TakeCacheMenuItem({ documentId, takeId }) {
         className={MenuStyle.menuItem}
         hideOnClick={false}
         onClick={onDeleteClick}
-        disabled={!cached}>
+        disabled={!videoBlob}>
         <DeleteIcon className="w-6 h-6 fill-current" />
       </MenuItem>
     </div>

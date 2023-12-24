@@ -12,6 +12,7 @@ import {
 } from '@/stores/DocumentStoreContext';
 import { useSettingsStore } from '@/stores/SettingsStoreContext';
 import { useCurrentCursor } from '@/stores/UserStoreContext';
+import { formatHourMinSecTime } from '@/utils/StringFormat';
 import '@/values/RecorderValues';
 
 import { MediaRecorderContext } from './MediaRecorderContext';
@@ -166,6 +167,7 @@ function VideoFrame({
 function RecordingTime({ className, active }) {
   const [startTime, setStartTime] = useState(-1);
   const [timeString, setTimeString] = useState('');
+
   useEffect(() => {
     if (active && startTime < 0) {
       setStartTime(Date.now());
@@ -177,12 +179,12 @@ function RecordingTime({ className, active }) {
   const onAnimationFrame = useCallback(
     function _onAnimationFrame() {
       if (startTime > 0) {
-        const duration = Date.now() - startTime;
-        setTimeString(getTimeString(duration));
+        setTimeString(formatHourMinSecTime(Date.now() - startTime));
       }
     },
     [startTime],
   );
+
   useAnimationFrame(onAnimationFrame);
   return (
     <output
@@ -195,22 +197,6 @@ function RecordingTime({ className, active }) {
       }>
       {startTime > 0 ? timeString : '00:00:00'}
     </output>
-  );
-}
-
-/**
- * @param {number} durationMillis
- */
-function getTimeString(durationMillis) {
-  const seconds = Math.floor((durationMillis / 1000) % 60);
-  const minutes = Math.floor((durationMillis / (1000 * 60)) % 60);
-  const hours = Math.floor((durationMillis / (1000 * 60 * 60)) % 24);
-  return (
-    String(hours).padStart(2, '0') +
-    ':' +
-    String(minutes).padStart(2, '0') +
-    ':' +
-    String(seconds).padStart(2, '0')
   );
 }
 

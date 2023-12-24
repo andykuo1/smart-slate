@@ -8,6 +8,7 @@ import {
 
 import { InputCaptureProvider } from './lib/inputcapture';
 import { MediaRecorderProvider } from './recorder';
+import { VideoCacheProvider } from './recorder/cache';
 
 /**
  * @param {object} props
@@ -19,11 +20,13 @@ export default function Providers({ children }) {
       apiKey={GAPI_API_KEY}
       clientId={GAPI_CLIENT_ID}
       scopes={[GAPI_DRIVE_FILE_SCOPE]}>
-      <InputCaptureProvider>
-        <MediaRecorderProvider>
-          <FullscreenProvider>{children}</FullscreenProvider>
-        </MediaRecorderProvider>
-      </InputCaptureProvider>
+      <VideoCacheProvider>
+        <InputCaptureProvider>
+          <MediaRecorderProvider>
+            <FullscreenProvider>{children}</FullscreenProvider>
+          </MediaRecorderProvider>
+        </InputCaptureProvider>
+      </VideoCacheProvider>
     </GoogleAPIProvider>
   );
 }

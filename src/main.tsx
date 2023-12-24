@@ -23,14 +23,17 @@ const router = createBrowserRouter(
     {
       path: '/rec',
       element: <CameraPage />,
+      errorElement: <ErrorPage />,
     },
     {
       path: '/edit',
       element: <EditPage />,
+      errorElement: <ErrorPage />,
     },
     {
       path: '/view',
       element: <ViewPage />,
+      errorElement: <ErrorPage />,
     },
   ],
   { basename: `/${PACKAGE_NAME}` },

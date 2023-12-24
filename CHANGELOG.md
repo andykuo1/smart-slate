@@ -39,6 +39,7 @@ flag marker for in-content. comments?
 - Add autocomplete for scene heading
 - Add fallback contraints for media stream
 - Fix support for video snapshot on mobile
+- Fix delete cache per take missing write permissions
 
 # 0.1.9
 
