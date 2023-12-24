@@ -17,6 +17,7 @@ import EnableThumbnailWhileRecordingMenuItem from './settings/EnableThumbnailWhi
 import NerdInfoMenuItem from './settings/NerdInfoMenuItem';
 import PreferMutedWhileRecordingMenuItem from './settings/PreferMutedWhileRecordingMenuItem';
 import PreferNativeRecorderMenuItem from './settings/PreferNativeRecorderMenuItem';
+import PreferPersistedMediaStreamMenuItem from './settings/PreferPersistedMediaStreamMenuItem';
 
 /**
  * @param {object} props
@@ -34,6 +35,7 @@ export default function SettingsButton({ className }) {
         <DeleteProjectMenuItem />
         <PreferNativeRecorderMenuItem />
         <PreferMutedWhileRecordingMenuItem />
+        <PreferPersistedMediaStreamMenuItem />
         <EnableThumbnailWhileRecordingMenuItem />
         <EnableDriveSyncMenuItem />
         <ClearVideoCacheMenuItem />

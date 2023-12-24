@@ -62,6 +62,53 @@ export function useTakeDownloader() {
   return downloadTake;
 }
 
+export function useTakeGoogleDriveUploader() {
+  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
+  const setTakeExportedGoogleDriveFileId = useDocumentStore(
+    (ctx) => ctx.setTakeExportedGoogleDriveFileId,
+  );
+  const handleToken = useGAPITokenHandler();
+
+  const uploadTake = useCallback(
+    /**
+     * @param {import('@/stores/DocumentStore').DocumentId} documentId
+     * @param {import('@/stores/DocumentStore').SceneId} sceneId
+     * @param {import('@/stores/DocumentStore').ShotId} shotId
+     * @param {import('@/stores/DocumentStore').TakeId} takeId
+     */
+    async function _uploadTake(documentId, sceneId, shotId, takeId) {
+      const store = UNSAFE_getStore();
+      const data = await getVideoBlob(takeId);
+      if (!data) {
+        return;
+      }
+      const ext = getVideoFileExtensionByMIMEType(data.type);
+      const exportedTakeName = getExportedTakeName(
+        store,
+        documentId,
+        sceneId,
+        shotId,
+      );
+      const exportedFileNameWithExt = `${exportedTakeName}${ext}`;
+
+      // Upload it.
+      handleToken((token) => {
+        uploadFile(token.access_token, exportedFileNameWithExt, data.type, data)
+          .then((fileId) => {
+            setTakeExportedGoogleDriveFileId(documentId, takeId, fileId);
+            console.log('Upload file - ' + exportedFileNameWithExt);
+          })
+          .catch(() => {
+            console.error('Failed to upload file - ' + exportedFileNameWithExt);
+          });
+      });
+    },
+    [UNSAFE_getStore, handleToken],
+  );
+
+  return uploadTake;
+}
+
 export function useTakeExporter() {
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const addTake = useDocumentStore((ctx) => ctx.addTake);

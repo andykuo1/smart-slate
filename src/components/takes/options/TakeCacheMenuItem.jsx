@@ -53,7 +53,7 @@ export default function TakeCacheMenuItem({ documentId, takeId }) {
   return (
     <div className="flex flex-row">
       <MenuItem
-        className={MenuStyle.menuItem}
+        className={MenuStyle.menuItem + ' ' + 'flex-1'}
         hideOnClick={false}
         disabled={!cached}>
         {cached ? (

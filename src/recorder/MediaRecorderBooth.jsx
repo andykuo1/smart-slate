@@ -21,6 +21,9 @@ export default function MediaRecorderBooth() {
   const takeCount = useShotTakeCount(documentId, shotId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
   const sceneHeading = useSceneHeading(documentId, sceneId);
+  const preferPersistedMediaStream = useSettingsStore(
+    (ctx) => ctx.user.preferPersistedMediaStream,
+  );
   const navigate = useNavigate();
   const { exitFullscreen } = useFullscreen();
 
@@ -33,9 +36,9 @@ export default function MediaRecorderBooth() {
     if (location.pathname.endsWith('/rec')) {
       onStart({ record: false });
     } else {
-      onStop({ exit: true });
+      onStop({ exit: !preferPersistedMediaStream });
     }
-  }, [location, onStart, onStop]);
+  }, [preferPersistedMediaStream, location, onStart, onStop]);
 
   return (
     <VideoRecorderBoothLayout
@@ -65,7 +68,7 @@ export default function MediaRecorderBooth() {
         <>
           <BackButton
             onClick={() => {
-              onStop({ exit: true }).then(() => {
+              onStop({ exit: !preferPersistedMediaStream }).then(() => {
                 exitFullscreen();
                 navigate('/edit');
               });

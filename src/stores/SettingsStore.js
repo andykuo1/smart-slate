@@ -15,5 +15,6 @@ export function createSettings() {
     preferMutedWhileRecording: true,
     enableThumbnailWhileRecording: true,
     enableDriveSync: false,
+    preferPersistedMediaStream: false,
   };
 }

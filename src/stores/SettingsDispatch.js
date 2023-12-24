@@ -11,6 +11,7 @@ export function createDispatch(set) {
     setPreferMutedWhileRecording: zi(set, setPreferMutedWhileRecording),
     setEnableThumbnailWhileRecording: zi(set, setEnableThumbnailWhileRecording),
     setEnableDriveSync: zi(set, setEnableDriveSync),
+    setPreferPersistedMediaStream: zi(set, setPreferPersistedMediaStream),
   };
 }
 
@@ -48,4 +49,13 @@ function setEnableThumbnailWhileRecording(store, enabled) {
 function setEnableDriveSync(store, enabled) {
   let settings = store.user;
   settings.enableDriveSync = enabled;
+}
+
+/**
+ * @param {import('./SettingsStore').Store} store
+ * @param {boolean} enabled
+ */
+function setPreferPersistedMediaStream(store, enabled) {
+  let settings = store.user;
+  settings.preferPersistedMediaStream = enabled;
 }

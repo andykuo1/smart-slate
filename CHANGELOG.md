@@ -36,9 +36,9 @@ EXPORT TO PDF with all the storyboard, image to filename.
 flag marker for in-content. comments?
 
 - reassign takes
-- proper check with cloud if uploaded
 
-- Add take download option
+- Add prefer-persisted-media-stream settings
+- Add take export to download/google drive option
 - Add storage quota and size info per take
 - Add take rating
 - Add inline view for take list

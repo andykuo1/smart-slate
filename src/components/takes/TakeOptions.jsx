@@ -1,4 +1,4 @@
-import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
+import { Menu, MenuButton, MenuProvider } from '@ariakit/react';
 
 import MoreVertIcon from '@material-symbols/svg-400/rounded/more_vert.svg';
 
@@ -7,6 +7,7 @@ import MenuStyle from '@/styles/Menu.module.css';
 import TakeCacheMenuItem from './options/TakeCacheMenuItem';
 import TakeExportMenuItem from './options/TakeExportMenuItem';
 import TakeRatingMenuItem from './options/TakeRatingMenuItem';
+import TakeReassignMenuItem from './options/TakeReassignMenuItem';
 
 /**
  * @param {object} props
@@ -46,9 +47,12 @@ export default function TakeOptions({
           shotId={shotId}
           takeId={takeId}
         />
-        <MenuItem className={MenuStyle.menuItem} disabled={true}>
-          Upload
-        </MenuItem>
+        <TakeReassignMenuItem
+          documentId={documentId}
+          sceneId={sceneId}
+          shotId={shotId}
+          takeId={takeId}
+        />
       </Menu>
     </MenuProvider>
   );
