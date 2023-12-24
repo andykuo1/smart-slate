@@ -65,7 +65,7 @@ export default function TakeCacheMenuItem({
     if (!handleToken((token) => setGoogleDriveConnected(Boolean(token)))) {
       setGoogleDriveConnected(false);
     }
-  }, [menuOpen]);
+  }, [menuOpen, handleToken, takeId]);
 
   return (
     <div className="flex flex-row">

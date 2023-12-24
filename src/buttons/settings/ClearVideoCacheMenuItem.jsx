@@ -42,7 +42,7 @@ function VideoCacheUsageProgress({ className }) {
     });
   }, []);
   useInterval(onInterval, 10_000);
-  useEffect(onInterval, []);
+  useEffect(onInterval, [onInterval]);
 
   const percent =
     (quota > 0 ? Math.max(Number(usage / quota), 0.01).toFixed(2) : '--') + '%';

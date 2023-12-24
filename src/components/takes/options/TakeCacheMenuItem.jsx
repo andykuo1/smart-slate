@@ -48,7 +48,7 @@ export default function TakeCacheMenuItem({ documentId, takeId }) {
         }
       })
       .catch(() => setCached(false));
-  }, [menuOpen]);
+  }, [menuOpen, takeId]);
 
   return (
     <div className="flex flex-row">

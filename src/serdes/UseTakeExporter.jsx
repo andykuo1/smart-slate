@@ -103,7 +103,7 @@ export function useTakeGoogleDriveUploader() {
           });
       });
     },
-    [UNSAFE_getStore, handleToken],
+    [UNSAFE_getStore, handleToken, setTakeExportedGoogleDriveFileId],
   );
 
   return uploadTake;
@@ -115,7 +115,7 @@ export function useTakeExporter() {
   const setTakeExportedGoogleDriveFileId =
     useSetTakeExportedGoogleDriveFileId();
   const setTakePreviewImage = useSetTakePreviewImage();
-  const setTakeExportedIDBFileId = useSetTakeExportedIDBKey();
+  const setTakeExportedIDBKey = useSetTakeExportedIDBKey();
   const enableDriveSync = useSettingsStore((ctx) => ctx.user.enableDriveSync);
   const handleToken = useGAPITokenHandler();
 
@@ -158,7 +158,7 @@ export function useTakeExporter() {
 
       // Always cache it-- just in case.
       cacheVideoBlob(takeId, data).then((key) =>
-        setTakeExportedIDBFileId(documentId, takeId, key),
+        setTakeExportedIDBKey(documentId, takeId, key),
       );
 
       // Process the video.
@@ -205,6 +205,7 @@ export function useTakeExporter() {
       addTake,
       handleToken,
       setTakeExportedGoogleDriveFileId,
+      setTakeExportedIDBKey,
       setTakePreviewImage,
     ],
   );

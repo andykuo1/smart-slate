@@ -6,7 +6,7 @@ import ToggleOn from '@material-symbols/svg-400/rounded/toggle_on-fill.svg';
 import { useSettingsStore } from '@/stores/SettingsStoreContext';
 import MenuStyle from '@/styles/Menu.module.css';
 
-export default function preferPersistedMediaStreamMenuItem() {
+export default function PreferPersistedMediaStreamMenuItem() {
   const enabled = useSettingsStore(
     (ctx) => ctx.user.preferPersistedMediaStream,
   );
