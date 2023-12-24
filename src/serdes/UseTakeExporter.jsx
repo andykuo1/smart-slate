@@ -12,11 +12,12 @@ import { createTake, toScenShotTakeType } from '@/stores/DocumentStore';
 import {
   useDocumentStore,
   useSetTakeExportedGoogleDriveFileId,
+  useSetTakeExportedIDBKey,
   useSetTakePreviewImage,
 } from '@/stores/DocumentStoreContext';
 import { useSettingsStore } from '@/stores/SettingsStoreContext';
 import { ANY_SHOT } from '@/stores/ShotTypes';
-import { cacheVideoBlob } from '@/stores/VideoCache';
+import { cacheVideoBlob, getVideoBlob } from '@/stores/VideoCache';
 import { downloadURLImpl } from '@/utils/Downloader';
 import {
   MAX_THUMBNAIL_HEIGHT,
@@ -25,12 +26,49 @@ import {
 
 import { captureVideoSnapshot } from '../recorder/snapshot/VideoSnapshot';
 
+export function useTakeDownloader() {
+  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
+
+  const downloadTake = useCallback(
+    /**
+     * @param {import('@/stores/DocumentStore').DocumentId} documentId
+     * @param {import('@/stores/DocumentStore').SceneId} sceneId
+     * @param {import('@/stores/DocumentStore').ShotId} shotId
+     * @param {import('@/stores/DocumentStore').TakeId} takeId
+     */
+    async function _downloadTake(documentId, sceneId, shotId, takeId) {
+      const store = UNSAFE_getStore();
+      const data = await getVideoBlob(takeId);
+      if (!data) {
+        return;
+      }
+      const ext = getVideoFileExtensionByMIMEType(data.type);
+      const exportedTakeName = getExportedTakeName(
+        store,
+        documentId,
+        sceneId,
+        shotId,
+      );
+      const exportedFileNameWithExt = `${exportedTakeName}${ext}`;
+
+      // Download it.
+      const dataURL = URL.createObjectURL(data);
+      downloadURLImpl(exportedFileNameWithExt, dataURL);
+      URL.revokeObjectURL(dataURL);
+    },
+    [UNSAFE_getStore],
+  );
+
+  return downloadTake;
+}
+
 export function useTakeExporter() {
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const addTake = useDocumentStore((ctx) => ctx.addTake);
   const setTakeExportedGoogleDriveFileId =
     useSetTakeExportedGoogleDriveFileId();
   const setTakePreviewImage = useSetTakePreviewImage();
+  const setTakeExportedIDBFileId = useSetTakeExportedIDBKey();
   const enableDriveSync = useSettingsStore((ctx) => ctx.user.enableDriveSync);
   const handleToken = useGAPITokenHandler();
 
@@ -64,11 +102,17 @@ export function useTakeExporter() {
         documentId,
         shotId,
       ).shotType;
+      newTake.exportedSize = data.size;
       if (opts?.targetTakeId) {
         newTake.takeId = opts.targetTakeId;
       }
       addTake(documentId, shotId, newTake);
       const takeId = newTake.takeId;
+
+      // Always cache it-- just in case.
+      cacheVideoBlob(takeId, data).then((key) =>
+        setTakeExportedIDBFileId(documentId, takeId, key),
+      );
 
       // Process the video.
       captureVideoSnapshot(
@@ -79,7 +123,6 @@ export function useTakeExporter() {
       ).then((url) => setTakePreviewImage(documentId, takeId, url));
 
       let shouldSave = true;
-      let shouldCache = true;
       if (shouldSave && enableDriveSync) {
         // Upload it.
         shouldSave = handleToken((token) => {
@@ -99,7 +142,6 @@ export function useTakeExporter() {
               );
             });
         });
-        shouldCache = shouldSave;
       }
       if (shouldSave && !opts?.uploadOnly) {
         // Download it.
@@ -107,11 +149,6 @@ export function useTakeExporter() {
         downloadURLImpl(exportedFileNameWithExt, dataURL);
         URL.revokeObjectURL(dataURL);
         shouldSave = false;
-      }
-      if (shouldCache) {
-        // Cache it.
-        cacheVideoBlob(takeId, data);
-        shouldCache = false;
       }
       return takeId;
     },

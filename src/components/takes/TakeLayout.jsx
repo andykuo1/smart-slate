@@ -13,6 +13,8 @@ import TakePreview from './TakePreview';
 /**
  * @param {object} props
  * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/DocumentStore').ShotId} props.shotId
  * @param {import('@/stores/DocumentStore').TakeId} props.takeId
  * @param {string} props.title
  * @param {number} props.timestamp
@@ -29,6 +31,8 @@ import TakePreview from './TakePreview';
  */
 export default function TakeLayout({
   documentId,
+  sceneId,
+  shotId,
   takeId,
   title,
   timestamp,
@@ -67,6 +71,8 @@ export default function TakeLayout({
         />
         <TakeOptions
           documentId={documentId}
+          sceneId={sceneId}
+          shotId={shotId}
           takeId={takeId}
           showButton={showListDecorations}
           disabled={!takeId}>

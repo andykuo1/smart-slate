@@ -57,6 +57,8 @@ export function TakeEntry({
   return (
     <TakeLayout
       documentId={documentId}
+      sceneId={sceneId}
+      shotId={shotId}
       takeId={takeId}
       className={className}
       title={`T${takeNumber}`}
@@ -66,7 +68,7 @@ export function TakeEntry({
       lastTake={takeNumber === 1}
       previewImage={take.previewImage}
       viewMode={viewMode}
-      isCloudExported={!!take.exportedGoogleDriveFileId}
+      isCloudExported={!!take.exportedGDriveFileId}
       isCloudExportable={cloudExportable}
       isCached={isCached}
       onCloudClick={onCloudClick}
@@ -86,6 +88,8 @@ export function NewTake({ documentId, shotId, viewMode }) {
   return (
     <TakeLayout
       documentId={documentId}
+      sceneId=""
+      shotId=""
       takeId=""
       title={`T${takeNumber}`}
       timestamp={0}

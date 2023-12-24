@@ -5,7 +5,6 @@
 - Consider using proper color-blind mode
 - Add proper signals for offline mode
 - Add a view for synced videos?
-- Add a video preview?
 - Add a color marker that can be exported in CSV.
 - Can I add a folder to google drive?
 
@@ -36,11 +35,11 @@ EXPORT TO PDF with all the storyboard, image to filename.
 
 flag marker for in-content. comments?
 
-- Add marker for best/bad take
-- Only show preview for best/last take
 - reassign takes
 - proper check with cloud if uploaded
 
+- Add take download option
+- Add storage quota and size info per take
 - Add take rating
 - Add inline view for take list
 - Add take options

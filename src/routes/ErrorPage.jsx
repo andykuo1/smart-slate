@@ -2,7 +2,9 @@ import { useRouteError } from 'react-router-dom';
 
 export default function ErrorPage() {
   const error = useRouteError();
-  console.error(error);
+  if (error) {
+    console.error(error);
+  }
   return (
     <div className="flex flex-col items-center justify-center w-full h-full gap-10 bg-white">
       <h1 className="text-6xl font-bold">Jinkies! :(</h1>

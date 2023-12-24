@@ -29,6 +29,7 @@ export function createDispatch(set, get) {
     updateShot: zi(set, updateShot),
 
     setTakeExportedGoogleDriveFileId: zi(set, setTakeExportedGoogleDriveFileId),
+    setTakeExportedIDBKey: zi(set, setTakeExportedIDBKey),
     setTakePreviewImage: zi(set, setTakePreviewImage),
     setTakeRating: zi(set, setTakeRating),
 
@@ -381,7 +382,7 @@ function setShotThumbnail(store, documentId, shotId, thumbnailUrl) {
 function setTakeExportedGoogleDriveFileId(store, documentId, takeId, fileId) {
   let document = store.documents[documentId];
   let take = document.takes[takeId];
-  take.exportedGoogleDriveFileId = fileId;
+  take.exportedGDriveFileId = fileId;
   incrementDocumentRevisionNumber(document);
 }
 
@@ -408,5 +409,18 @@ function setTakeRating(store, documentId, takeId, rating) {
   let document = store.documents[documentId];
   let take = document.takes[takeId];
   take.rating = rating;
+  incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('./DocumentStore').Store} store
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').TakeId} takeId
+ * @param {string} idbKey
+ */
+function setTakeExportedIDBKey(store, documentId, takeId, idbKey) {
+  let document = store.documents[documentId];
+  let take = document.takes[takeId];
+  take.exportedIDBKey = idbKey;
   incrementDocumentRevisionNumber(document);
 }

@@ -24,7 +24,11 @@ export default function TakeList({ documentId, sceneId, shotId, viewMode }) {
   }, [handleToken, setCloudExportable]);
 
   return (
-    <ul title="Take list" className={getUnorderedListStyleByViewMode(viewMode)}>
+    <ul
+      title="Take list"
+      className={
+        'bg-gray-100' + ' ' + getUnorderedListStyleByViewMode(viewMode)
+      }>
       <NewTake documentId={documentId} shotId={shotId} viewMode={viewMode} />
       {takeIds
         .slice()

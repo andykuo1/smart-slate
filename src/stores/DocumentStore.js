@@ -100,11 +100,13 @@ export function createTake(takeId = uuid()) {
     notes: '',
     rating: 0,
     previewImage: '',
+    exportedSize: 0,
     exportedMillis: 0,
     exportedFileName: '',
     /** @type {ShotType} */
     exportedShotType: '',
-    exportedGoogleDriveFileId: '',
+    exportedGDriveFileId: '',
+    exportedIDBKey: '',
   };
 }
 
@@ -222,10 +224,12 @@ export function cloneTake(out, take) {
   out.notes = take.notes;
   out.rating = take.rating;
   out.previewImage = take.previewImage;
+  out.exportedSize = take.exportedSize;
   out.exportedMillis = take.exportedMillis;
   out.exportedFileName = take.exportedFileName;
   out.exportedShotType = take.exportedShotType;
-  out.exportedGoogleDriveFileId = take.exportedGoogleDriveFileId;
+  out.exportedGDriveFileId = take.exportedGDriveFileId;
+  out.exportedIDBKey = take.exportedIDBKey;
   return /** @type {Take} */ (out);
 }
 

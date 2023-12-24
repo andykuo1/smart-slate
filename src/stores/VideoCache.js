@@ -35,21 +35,6 @@ function getDatabase() {
 }
 
 /**
- * @param {import('./DocumentStore').TakeId} takeId
- * @param {Blob} blob
- */
-export async function cacheVideo(takeId, blob) {
-  await storeBlob(
-    () =>
-      getDatabase()
-        .transaction([VIDEO_CACHE_STORE_NAME], 'readwrite')
-        .objectStore(VIDEO_CACHE_STORE_NAME),
-    blob,
-    takeId,
-  );
-}
-
-/**
  * @param {() => IDBObjectStore} getStore
  * @param {Blob} blob
  * @param {string} key
@@ -100,6 +85,7 @@ export async function cacheVideoBlob(takeId, blob) {
     blob,
     takeId,
   );
+  return takeId;
 }
 
 /**
@@ -113,5 +99,19 @@ export async function getVideoBlob(takeId) {
     const request = store.get(takeId);
     request.addEventListener('error', reject);
     request.addEventListener('success', () => resolve(request.result));
+  });
+}
+
+/**
+ * @param {import('./DocumentStore').TakeId} takeId
+ */
+export async function deleteVideoBlob(takeId) {
+  return new Promise((resolve, reject) => {
+    const db = getDatabase();
+    const t = db.transaction(VIDEO_CACHE_STORE_NAME);
+    const store = t.objectStore(VIDEO_CACHE_STORE_NAME);
+    const request = store.delete(takeId);
+    request.addEventListener('error', reject);
+    request.addEventListener('success', resolve);
   });
 }
