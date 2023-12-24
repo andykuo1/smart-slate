@@ -36,6 +36,9 @@ function VideoCacheUsageProgress({ className }) {
   const [usage, setUsage] = useState(0);
   const [quota, setQuota] = useState(0);
   const onInterval = useCallback(function _onInterval() {
+    if (typeof window === 'undefined' || !window.navigator?.storage) {
+      return;
+    }
     navigator.storage.estimate().then((result) => {
       setUsage(Number(result.usage));
       setQuota(Number(result.quota));

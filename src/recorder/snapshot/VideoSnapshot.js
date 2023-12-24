@@ -14,7 +14,7 @@ export async function captureVideoSnapshot(
     const video = document.createElement('video');
     const url = URL.createObjectURL(videoBlob);
     video.setAttribute('src', url);
-    video.addEventListener('error', reject);
+    video.addEventListener('error', (e) => reject(e.error));
     video.addEventListener('loadedmetadata', () => {
       URL.revokeObjectURL(url);
       // Start seeking!

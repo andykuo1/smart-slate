@@ -32,10 +32,12 @@ export default function TakeCacheMenuItem({ documentId, takeId }) {
   const setIDBKey = useSetTakeExportedIDBKey();
 
   async function onDeleteClick() {
-    if (idbKey && cached) {
-      await deleteVideoBlob(idbKey);
-      setIDBKey(documentId, takeId, '');
+    if (!idbKey || !cached) {
+      return;
     }
+    // TODO: This doesn't complete on mobile?
+    await deleteVideoBlob(idbKey);
+    setIDBKey(documentId, takeId, '');
   }
 
   useEffect(() => {
@@ -69,6 +71,7 @@ export default function TakeCacheMenuItem({ documentId, takeId }) {
       </MenuItem>
       <MenuItem
         className={MenuStyle.menuItem}
+        hideOnClick={false}
         onClick={onDeleteClick}
         disabled={!cached}>
         <DeleteIcon className="w-6 h-6 fill-current" />
