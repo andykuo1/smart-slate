@@ -3,15 +3,12 @@
 - Flag color? Marker color?
 - Export shot list to CSV?
 - Consider using proper color-blind mode
-- Add proper signals for offline mode
 - Add a view for synced videos?
 - Add a color marker that can be exported in CSV.
 - Can I add a folder to google drive?
 
-3. Sketch upload / Create a storyboard.
 4. Screenplay imports
 
-[] Cache to local storage first and download later?
 [] Screenplay imports!
 [] rearrange the shot order (but keep takes in there)
 
@@ -36,6 +33,8 @@ EXPORT TO PDF with all the storyboard, image to filename.
 flag marker for in-content. comments?
 
 - reassign takes
+
+- Add fallback contraints for media stream
 
 # 0.1.9
 

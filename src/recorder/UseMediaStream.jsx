@@ -2,7 +2,7 @@ import { useCallback, useRef } from 'react';
 
 /**
  * @param {import('react').RefObject<HTMLVideoElement|null>} videoRef
- * @returns {[import('react').RefObject<MediaStream|null>, (constraints: MediaStreamConstraints) => Promise<MediaStream>, () => Promise<void>]}
+ * @returns {[import('react').RefObject<MediaStream|null>, (constraints: MediaStreamConstraints|Array<MediaStreamConstraints>) => Promise<MediaStream>, () => Promise<void>]}
  */
 export function useMediaStream(videoRef) {
   const ref = useRef(/** @type {MediaStream|null} */ (null));
@@ -30,15 +30,28 @@ export function useMediaStream(videoRef) {
 
   const init = useCallback(
     /**
-     * @param {MediaStreamConstraints} constraints
+     * @param {MediaStreamConstraints|Array<MediaStreamConstraints>} constraints
      */
     async function init(constraints) {
       if (ref.current) {
         await dead();
       }
 
-      let mediaStream =
-        await window.navigator.mediaDevices.getUserMedia(constraints);
+      const mediaDevices = window.navigator.mediaDevices;
+      if (!Array.isArray(constraints)) {
+        constraints = [constraints];
+      }
+      let mediaStream = null;
+      for (let constraint of constraints) {
+        try {
+          mediaStream = await mediaDevices.getUserMedia(constraint);
+        } catch {
+          // Failed this contraint, try the next one.
+        }
+      }
+      if (!mediaStream) {
+        throw new Error('Cannot initialize MediaStream with contraints.');
+      }
       ref.current = mediaStream;
 
       // Add stream to output video

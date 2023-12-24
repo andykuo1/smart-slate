@@ -5,7 +5,7 @@ import { useMediaStream } from './UseMediaStream';
 
 /**
  * @param {import('react').RefObject<HTMLVideoElement|null>} videoRef
- * @param {MediaStreamConstraints} mediaStreamConstraints
+ * @param {MediaStreamConstraints|Array<MediaStreamConstraints>} mediaStreamConstraints
  * @param {MediaRecorderOptions} mediaRecorderOptions
  * @param {BlobPropertyBag} mediaBlobOptions
  * @param {import('./UseMediaRecorder').MediaRecorderCompleteCallback} onComplete
