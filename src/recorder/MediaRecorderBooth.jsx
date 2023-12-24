@@ -1,7 +1,8 @@
-import { useContext, useEffect } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import ShotThumbnail from '@/components/shots/ShotThumbnail';
+import { useAnimationFrame } from '@/lib/animationframe';
 import { useFullscreen } from '@/lib/fullscreen';
 import { shotNumberToChar } from '@/stores/DocumentStore';
 import {
@@ -51,7 +52,6 @@ export default function MediaRecorderBooth() {
           <span>Shot {shotNumberToChar(shotNumber)}</span>
           <span className="flex flex-row items-center mx-2">
             Take #{takeCount + 1}
-            <RecordingSignal active={isPrepared && isRecording} />
           </span>
         </>
       )}
@@ -62,6 +62,7 @@ export default function MediaRecorderBooth() {
           documentId={documentId}
           sceneId={sceneId}
           shotId={shotId}
+          active={isPrepared && isRecording}
         />
       )}
       bottom={() => (
@@ -115,8 +116,16 @@ function BackButton({ className, onClick }) {
  * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/DocumentStore').ShotId} props.shotId
+ * @param {boolean} props.active
  */
-function VideoFrame({ className, videoRef, documentId, sceneId, shotId }) {
+function VideoFrame({
+  className,
+  videoRef,
+  documentId,
+  sceneId,
+  shotId,
+  active,
+}) {
   const preferMutedWhileRecording = useSettingsStore(
     (ctx) => ctx.user.preferMutedWhileRecording,
   );
@@ -142,23 +151,66 @@ function VideoFrame({ className, videoRef, documentId, sceneId, shotId }) {
           />
         </div>
       )}
+      <div className="absolute right-0 bottom-0">
+        <RecordingTime active={active} />
+      </div>
     </>
   );
 }
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {boolean} props.active
  */
-function RecordingSignal({ active }) {
-  return (
-    <div
-      className={
-        'inline-block mx-2 w-[1rem] h-[1rem] rounded-full border-2' +
-        ' ' +
-        (active ? 'bg-red-500 border-red-500' : 'bg-black border-white')
+function RecordingTime({ className, active }) {
+  const [startTime, setStartTime] = useState(-1);
+  const [timeString, setTimeString] = useState('');
+  useEffect(() => {
+    if (active && startTime < 0) {
+      setStartTime(Date.now());
+    } else if (!active) {
+      setStartTime(-1);
+    }
+  }, [active]);
+
+  const onAnimationFrame = useCallback(
+    function _onAnimationFrame() {
+      if (startTime > 0) {
+        const duration = Date.now() - startTime;
+        setTimeString(getTimeString(duration));
       }
-    />
+    },
+    [startTime],
+  );
+  useAnimationFrame(onAnimationFrame);
+  return (
+    <output
+      className={
+        'rounded p-1 font-mono transition-colors' +
+        ' ' +
+        (active ? 'bg-red-400' : 'bg-black') +
+        ' ' +
+        className
+      }>
+      {startTime > 0 ? timeString : '00:00:00'}
+    </output>
+  );
+}
+
+/**
+ * @param {number} durationMillis
+ */
+function getTimeString(durationMillis) {
+  const seconds = Math.floor((durationMillis / 1000) % 60);
+  const minutes = Math.floor((durationMillis / (1000 * 60)) % 60);
+  const hours = Math.floor((durationMillis / (1000 * 60 * 60)) % 24);
+  return (
+    String(hours).padStart(2, '0') +
+    ':' +
+    String(minutes).padStart(2, '0') +
+    ':' +
+    String(seconds).padStart(2, '0')
   );
 }
 
