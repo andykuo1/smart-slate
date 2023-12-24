@@ -34,6 +34,7 @@ flag marker for in-content. comments?
 
 - reassign takes
 
+- Add autocomplete for scene heading
 - Add fallback contraints for media stream
 
 # 0.1.9

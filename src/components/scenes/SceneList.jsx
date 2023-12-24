@@ -107,14 +107,21 @@ function SceneHeading({ className, documentId, sceneId }) {
     setSceneHeading(documentId, sceneId, el.value.toUpperCase());
   }
   return (
-    <input
-      className={'bg-transparent px-2 text-xl' + ' ' + className}
-      type="text"
-      placeholder="INT/EXT. SCENE - DAY"
-      value={sceneHeading}
-      onChange={onChange}
-      autoCapitalize="characters"
-    />
+    <>
+      <input
+        className={'bg-transparent px-2 text-xl' + ' ' + className}
+        type="text"
+        list="sceneHeading"
+        placeholder="INT/EXT. SCENE - DAY"
+        value={sceneHeading}
+        onChange={onChange}
+        autoCapitalize="characters"
+      />
+      <datalist id="sceneHeading">
+        <option value="INT. " />
+        <option value="EXT. " />
+      </datalist>
+    </>
   );
 }
 
