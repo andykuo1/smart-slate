@@ -2,6 +2,7 @@ import { Menu, MenuButton, MenuProvider } from '@ariakit/react';
 
 import MoreVertIcon from '@material-symbols/svg-400/rounded/more_vert.svg';
 
+import { useVideoSnapshot } from '@/recorder/snapshot/UseVideoSnapshot';
 import MenuStyle from '@/styles/Menu.module.css';
 
 import TakeCacheMenuItem from './options/TakeCacheMenuItem';
@@ -30,10 +31,12 @@ export default function TakeOptions({
   showButton = true,
   disabled = false,
 }) {
+  const [_, click] = useVideoSnapshot(documentId, takeId);
   return (
     <MenuProvider>
       <MenuButton
         className={'relative flex flex-row items-center' + ' ' + className}
+        onClick={click}
         disabled={disabled}>
         {children}
         {showButton && <MoreVertIcon className="w-6 h-6" />}

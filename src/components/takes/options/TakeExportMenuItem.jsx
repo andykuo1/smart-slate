@@ -5,12 +5,12 @@ import AddToDriveIcon from '@material-symbols/svg-400/rounded/add_to_drive.svg';
 import DownloadIcon from '@material-symbols/svg-400/rounded/download.svg';
 
 import { useGAPITokenHandler } from '@/lib/googleapi';
+import { getVideoBlob } from '@/recorder/cache/VideoCache';
 import {
   useTakeDownloader,
   useTakeGoogleDriveUploader,
 } from '@/serdes/UseTakeExporter';
 import { useTakeExportedIDBKey } from '@/stores/DocumentStoreContext';
-import { getVideoBlob } from '@/stores/VideoCache';
 import MenuStyle from '@/styles/Menu.module.css';
 
 import { useForceRefreshOnMenuOpen } from './MenuItemHelper';

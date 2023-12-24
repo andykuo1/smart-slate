@@ -34,8 +34,10 @@ flag marker for in-content. comments?
 
 - reassign takes
 
+- Add take preview on take click
 - Add autocomplete for scene heading
 - Add fallback contraints for media stream
+- Fix support for video snapshot on mobile
 
 # 0.1.9
 

@@ -1,23 +1,40 @@
 /**
+ * https://webkit.org/blog/6784/new-video-policies-for-ios/
+ *
  * @param {Blob} videoBlob
- * @param {number} timestampSeconds
+ * @param {number} seekToSeconds
  * @param {number} width
  * @param {number} height
  */
 export async function captureVideoSnapshot(
   videoBlob,
-  timestampSeconds,
+  seekToSeconds,
   width,
   height,
 ) {
+  const video = document.createElement('video');
+  try {
+    // NOTE: We can use srcObject, but it's not universally supported yet.
+    //  So we are sticking to the old way :)
+    video.srcObject = videoBlob;
+  } catch {
+    video.src = URL.createObjectURL(videoBlob);
+  }
+  // NOTE: This needs to be called DIRECTLY in a user-gesture callback
+  //  for mobile support :)
+  video.load();
+
   return new Promise((resolve, reject) => {
-    const video = document.createElement('video');
-    const url = URL.createObjectURL(videoBlob);
-    video.setAttribute('src', url);
-    video.addEventListener('error', (e) => reject(e.error));
-    video.addEventListener('loadedmetadata', () => {
-      URL.revokeObjectURL(url);
-      // Start seeking!
+    video.addEventListener('error', (e) => {
+      if (video.src) {
+        URL.revokeObjectURL(video.src);
+      }
+      reject(e.error);
+    });
+    video.addEventListener('loadeddata', () => {
+      if (video.src) {
+        URL.revokeObjectURL(video.src);
+      }
       video.addEventListener('seeked', () => {
         const canvas = document.createElement('canvas');
         drawElementToCanvasWithRespectToAspectRatio(
@@ -31,10 +48,9 @@ export async function captureVideoSnapshot(
         const result = canvas.toDataURL('image/png', 0.5);
         resolve(result);
       });
-      // NOTE: Delay seeking, otherwise Safari won't fire event.
-      setTimeout(() => (video.currentTime = timestampSeconds), 100);
+      // Start seeking!
+      video.currentTime = seekToSeconds;
     });
-    video.load();
   });
 }
 

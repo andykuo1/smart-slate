@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
 
 import { useInterval } from '@/lib/UseInterval';
-import { clearVideoCache } from '@/stores/VideoCache';
+import { clearVideoCache } from '@/recorder/cache/VideoCache';
 import MenuStyle from '@/styles/Menu.module.css';
 import { formatBytes } from '@/utils/StringFormat';
 

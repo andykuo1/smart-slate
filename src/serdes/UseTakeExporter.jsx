@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 
 import { uploadFile, useGAPITokenHandler } from '@/lib/googleapi';
 import { getVideoFileExtensionByMIMEType } from '@/recorder/MediaRecorderSupport';
+import { cacheVideoBlob, getVideoBlob } from '@/recorder/cache/VideoCache';
 import {
   getDocumentById,
   getSceneIndex,
@@ -17,7 +18,6 @@ import {
 } from '@/stores/DocumentStoreContext';
 import { useSettingsStore } from '@/stores/SettingsStoreContext';
 import { ANY_SHOT } from '@/stores/ShotTypes';
-import { cacheVideoBlob, getVideoBlob } from '@/stores/VideoCache';
 import { downloadURLImpl } from '@/utils/Downloader';
 import {
   MAX_THUMBNAIL_HEIGHT,
@@ -161,7 +161,7 @@ export function useTakeExporter() {
         setTakeExportedIDBKey(documentId, takeId, key),
       );
 
-      // Process the video.
+      // Try to capture the video snapshot.
       captureVideoSnapshot(
         data,
         0.1,

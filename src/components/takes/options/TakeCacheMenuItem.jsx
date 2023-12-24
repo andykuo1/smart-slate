@@ -3,13 +3,13 @@ import { useEffect, useState } from 'react';
 
 import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
 
+import { deleteVideoBlob, getVideoBlob } from '@/recorder/cache/VideoCache';
 import { getTakeById } from '@/stores/DocumentDispatch';
 import {
   useDocumentStore,
   useSetTakeExportedIDBKey,
   useTakeExportedIDBKey,
 } from '@/stores/DocumentStoreContext';
-import { deleteVideoBlob, getVideoBlob } from '@/stores/VideoCache';
 import MenuStyle from '@/styles/Menu.module.css';
 import { formatBytes } from '@/utils/StringFormat';
 
