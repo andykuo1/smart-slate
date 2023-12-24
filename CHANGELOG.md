@@ -37,6 +37,8 @@ flag marker for in-content. comments?
 
 - reassign takes
 
+# 0.1.9
+
 - Add prefer-persisted-media-stream settings
 - Add take export to download/google drive option
 - Add storage quota and size info per take
