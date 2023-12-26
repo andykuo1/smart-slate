@@ -6,13 +6,13 @@ import ThumbDownIcon from '@material-symbols/svg-400/rounded/thumb_down.svg';
 import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg';
 import ThumbUpIcon from '@material-symbols/svg-400/rounded/thumb_up.svg';
 
-import { useSetTakeRating, useTakeRating } from '@/stores/DocumentStoreContext';
+import { useSetTakeRating, useTakeRating } from '@/stores/document';
 import MenuStyle from '@/styles/Menu.module.css';
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').TakeId} props.takeId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
  */
 export default function TakeRatingMenuItem({ documentId, takeId }) {
   const rating = useTakeRating(documentId, takeId);

@@ -4,7 +4,7 @@ import CloudUploadIcon from '@material-symbols/svg-400/rounded/cloud_upload-fill
 import StarIcon from '@material-symbols/svg-400/rounded/star-fill.svg';
 
 import HorizontallySnappableDiv from '@/lib/HorizontallySnappableDiv';
-import { useTakeRating } from '@/stores/DocumentStoreContext';
+import { useTakeRating } from '@/stores/document';
 
 import BoxDrawingCharacter from '../shotlist/BoxDrawingCharacter';
 import TakeOptions from './TakeOptions';
@@ -12,10 +12,10 @@ import TakePreview from './TakePreview';
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
- * @param {import('@/stores/DocumentStore').ShotId} props.shotId
- * @param {import('@/stores/DocumentStore').TakeId} props.takeId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
  * @param {string} props.title
  * @param {number} props.timestamp
  * @param {string} props.fileName

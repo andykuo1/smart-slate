@@ -1,10 +1,6 @@
 import { useShallow } from 'zustand/react/shallow';
 
-import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware';
-
 import {
-  createDispatch,
   getDocumentIds,
   getSceneById,
   getSceneIdsInOrder,
@@ -15,45 +11,20 @@ import {
   getTakeById,
   getTakeIdsInOrder,
   getTakeIndex,
-} from './DocumentDispatch';
-import { createStore } from './DocumentStore';
-
-export const LOCAL_STORAGE_KEY = 'documentStore';
-
-/** @typedef {import('./DocumentStore').Store & import('./DocumentDispatch').Dispatch} StoreAndDispatch */
-
-/** @type {import('zustand').UseBoundStore<import('zustand').StoreApi<StoreAndDispatch>>} */
-export const useDocumentStore = create(
-  persist(
-    (set, get) => ({
-      ...createStore(),
-      ...createDispatch(set, get),
-    }),
-    {
-      name: LOCAL_STORAGE_KEY,
-      storage: createJSONStorage(() => localStorage),
-    },
-  ),
-);
+} from './DocumentStoreHelper';
+import { useDocumentStore } from './UseDocumentStore';
 
 /**
  * @param {import('./DocumentStore').DocumentId} documentId
- */
-export function useDocument(documentId) {
-  return useDocumentStore((ctx) => ctx.documents[documentId]);
-}
-
-/**
- * @param {import('./DocumentStore').DocumentId} documentId
+ * @returns {[string, import('./DocumentDispatch').Dispatch['setDocumentTitle']]}
  */
 export function useDocumentTitle(documentId) {
   return useDocumentStore(
-    (ctx) => ctx.documents?.[documentId]?.documentTitle || '',
+    useShallow((ctx) => [
+      ctx.documents?.[documentId]?.documentTitle || '',
+      ctx.setDocumentTitle,
+    ]),
   );
-}
-
-export function useSetDocumentTitle() {
-  return useDocumentStore((ctx) => ctx.setDocumentTitle);
 }
 
 export function useDocumentIds() {

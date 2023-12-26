@@ -7,7 +7,11 @@ import StarsIcon from '@material-symbols/svg-400/rounded/stars-fill.svg';
 
 import HorizontallySnappableDiv from '@/lib/HorizontallySnappableDiv';
 import OpenRecorderButton from '@/recorder/OpenRecorderButton';
-import { createShot } from '@/stores/DocumentStore';
+import ShotTypes, {
+  CLOSE_UP,
+  MEDIUM_SHOT,
+  WIDE_SHOT,
+} from '@/stores/ShotTypes';
 import {
   useAddShot,
   useSceneNumber,
@@ -17,13 +21,9 @@ import {
   useShotDescription,
   useShotNumber,
   useShotType,
-} from '@/stores/DocumentStoreContext';
-import ShotTypes, {
-  CLOSE_UP,
-  MEDIUM_SHOT,
-  WIDE_SHOT,
-} from '@/stores/ShotTypes';
-import { useCurrentCursor, useSetUserCursor } from '@/stores/UserStoreContext';
+} from '@/stores/document';
+import { createShot } from '@/stores/document/DocumentStore';
+import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 
@@ -33,9 +33,9 @@ import ShotThumbnail from './ShotThumbnail';
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
- * @param {import('@/stores/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {import('react').ReactNode} [props.children]
  */
 export function ShotEntry({ documentId, sceneId, shotId, children }) {
@@ -129,8 +129,8 @@ export function ShotEntry({ documentId, sceneId, shotId, children }) {
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  */
 export function NewShot({ documentId, sceneId }) {
   const addShot = useAddShot();
@@ -154,8 +154,8 @@ export function NewShot({ documentId, sceneId }) {
 /**
  * @param {object} props
  * @param {string} [props.className]
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  */
 function ShotNotes({ className, documentId, shotId }) {
   const description = useShotDescription(documentId, shotId);
@@ -184,8 +184,8 @@ function ShotNotes({ className, documentId, shotId }) {
 /**
  * @param {object} props
  * @param {string} [props.className]
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  */
 function ShotTypesSelector({ className, documentId, shotId }) {
   const shotType = useShotType(documentId, shotId);
@@ -218,8 +218,8 @@ function ShotTypesSelector({ className, documentId, shotId }) {
 /**
  * @param {object} props
  * @param {string} [props.className]
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  */
 function MoreShotTypeSelector({ className, documentId, shotId }) {
   const selectRef = useRef(/** @type {HTMLSelectElement|null} */ (null));
@@ -233,7 +233,9 @@ function MoreShotTypeSelector({ className, documentId, shotId }) {
       setShotType(
         documentId,
         shotId,
-        /** @type {import('@/stores/DocumentStore').ShotType} */ (el.value),
+        /** @type {import('@/stores/document/DocumentStore').ShotType} */ (
+          el.value
+        ),
       );
     },
     [documentId, shotId, setShotType],
@@ -266,7 +268,7 @@ function MoreShotTypeSelector({ className, documentId, shotId }) {
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').ShotType} [props.shotType]
+ * @param {import('@/stores/document/DocumentStore').ShotType} [props.shotType]
  * @param {string} [props.className]
  * @param {import('react').MouseEventHandler} [props.onClick]
  * @param {boolean} [props.isActive]
@@ -294,7 +296,7 @@ function ShotTypeButton({ shotType, className, onClick, isActive = false }) {
 /**
  * @param {object} props
  * @param {string} [props.className]
- * @param {import('@/stores/DocumentStore').ShotType} [props.shotType]
+ * @param {import('@/stores/document/DocumentStore').ShotType} [props.shotType]
  */
 function ShotTypeIcon({ className, shotType }) {
   switch (shotType) {

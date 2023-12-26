@@ -1,4 +1,4 @@
-import { toScenShotTakeType } from '@/stores/DocumentStore';
+import ShotTypes from '@/stores/ShotTypes';
 import {
   useSceneNumber,
   useSetShotType,
@@ -6,15 +6,15 @@ import {
   useShotTakeCount,
   useShotType,
   useTakeNumber,
-} from '@/stores/DocumentStoreContext';
-import ShotTypes from '@/stores/ShotTypes';
+} from '@/stores/document';
+import { toScenShotTakeType } from '@/stores/document/DocumentStore';
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
- * @param {import('@/stores/DocumentStore').ShotId} props.shotId
- * @param {import('@/stores/DocumentStore').TakeId} [props.takeId]
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').TakeId} [props.takeId]
  * @param {boolean} [props.editable]
  */
 export default function ShotName({
@@ -94,8 +94,8 @@ function ShotNameLayout({ className, scene, shot, take, type = undefined }) {
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  */
 function ShotTypesMore({ documentId, shotId }) {
   const shotType = useShotType(documentId, shotId);
@@ -107,7 +107,9 @@ function ShotTypesMore({ documentId, shotId }) {
     setShotType(
       documentId,
       shotId,
-      /** @type {import('@/stores/DocumentStore').ShotType} */ (el.value),
+      /** @type {import('@/stores/document/DocumentStore').ShotType} */ (
+        el.value
+      ),
     );
   }
 

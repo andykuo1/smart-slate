@@ -1,4 +1,4 @@
-import { zi } from './ZustandImmerHelper';
+import { zi } from '@/stores/ZustandImmerHelper';
 
 /** @typedef {ReturnType<createDispatch>} Dispatch */
 
@@ -19,7 +19,7 @@ export function createDispatch(set) {
  * @param {import('./SettingsStore').Store} store
  * @param {boolean} enabled
  */
-function setPreferNativeRecorder(store, enabled) {
+export function setPreferNativeRecorder(store, enabled) {
   let settings = store.user;
   settings.preferNativeRecorder = enabled;
 }
@@ -28,7 +28,7 @@ function setPreferNativeRecorder(store, enabled) {
  * @param {import('./SettingsStore').Store} store
  * @param {boolean} enabled
  */
-function setPreferMutedWhileRecording(store, enabled) {
+export function setPreferMutedWhileRecording(store, enabled) {
   let settings = store.user;
   settings.preferMutedWhileRecording = enabled;
 }
@@ -37,7 +37,7 @@ function setPreferMutedWhileRecording(store, enabled) {
  * @param {import('./SettingsStore').Store} store
  * @param {boolean} enabled
  */
-function setEnableThumbnailWhileRecording(store, enabled) {
+export function setEnableThumbnailWhileRecording(store, enabled) {
   let settings = store.user;
   settings.enableThumbnailWhileRecording = enabled;
 }
@@ -46,7 +46,7 @@ function setEnableThumbnailWhileRecording(store, enabled) {
  * @param {import('./SettingsStore').Store} store
  * @param {boolean} enabled
  */
-function setEnableDriveSync(store, enabled) {
+export function setEnableDriveSync(store, enabled) {
   let settings = store.user;
   settings.enableDriveSync = enabled;
 }
@@ -55,7 +55,7 @@ function setEnableDriveSync(store, enabled) {
  * @param {import('./SettingsStore').Store} store
  * @param {boolean} enabled
  */
-function setPreferPersistedMediaStream(store, enabled) {
+export function setPreferPersistedMediaStream(store, enabled) {
   let settings = store.user;
   settings.preferPersistedMediaStream = enabled;
 }

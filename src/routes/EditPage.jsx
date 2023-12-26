@@ -1,5 +1,5 @@
 import DocumentPanel from '@/components/shotlist/DocumentPanel';
-import { useCurrentDocumentId } from '@/stores/UserStoreContext';
+import { useCurrentDocumentId } from '@/stores/user';
 
 export default function EditPage() {
   const documentId = useCurrentDocumentId();

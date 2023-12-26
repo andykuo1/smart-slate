@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
-import { useCurrentCursor, useSetUserCursor } from '@/stores/UserStoreContext';
+import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import {
   MEDIA_BLOB_OPTIONS,
   MEDIA_RECORDER_OPTIONS,

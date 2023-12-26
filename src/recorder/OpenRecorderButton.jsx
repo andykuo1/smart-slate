@@ -5,11 +5,8 @@ import { useFullscreen } from '@/lib/fullscreen';
 import { useInputCapture } from '@/lib/inputcapture';
 import { isMediaRecorderSupported } from '@/recorder/MediaRecorderSupport';
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
-import { useSettingsStore } from '@/stores/SettingsStoreContext';
-import {
-  useSetRecorderActive,
-  useSetUserCursor,
-} from '@/stores/UserStoreContext';
+import { useSettingsStore } from '@/stores/settings';
+import { useSetRecorderActive, useSetUserCursor } from '@/stores/user';
 import {
   MEDIA_RECORDER_OPTIONS,
   MEDIA_STREAM_CONSTRAINTS,
@@ -17,9 +14,9 @@ import {
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
- * @param {import('@/stores/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {string} [props.className]
  * @param {boolean} [props.disabled]
  * @param {import('react').ReactNode} props.children
@@ -45,9 +42,9 @@ export default function OpenRecorderButton({
 }
 
 /**
- * @param {import('@/stores/DocumentStore').DocumentId} documentId
- * @param {import('@/stores/DocumentStore').SceneId} sceneId
- * @param {import('@/stores/DocumentStore').ShotId} shotId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
  */
 function useShotRecorder(documentId, sceneId, shotId) {
   const setUserCursor = useSetUserCursor();
@@ -96,9 +93,9 @@ function useMediaRecorderHandler() {
 
   return useCallback(
     /**
-     * @param {import('@/stores/DocumentStore').DocumentId} documentId
-     * @param {import('@/stores/DocumentStore').SceneId} sceneId
-     * @param {import('@/stores/DocumentStore').ShotId} shotId
+     * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+     * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+     * @param {import('@/stores/document/DocumentStore').ShotId} shotId
      */
     function callMediaRecorderHandler(documentId, sceneId, shotId) {
       setRecorderActive(true, true);
@@ -118,9 +115,9 @@ function useInputCaptureHandler() {
 
   return useCallback(
     /**
-     * @param {import('@/stores/DocumentStore').DocumentId} documentId
-     * @param {import('@/stores/DocumentStore').SceneId} sceneId
-     * @param {import('@/stores/DocumentStore').ShotId} shotId
+     * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+     * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+     * @param {import('@/stores/document/DocumentStore').ShotId} shotId
      */
     function callInputCaptureHandler(documentId, sceneId, shotId) {
       setRecorderActive(false, false);

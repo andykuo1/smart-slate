@@ -1,7 +1,7 @@
 import { CLOSE_UP, MEDIUM_SHOT, WIDE_SHOT } from '@/stores/ShotTypes';
 
 /**
- * @param {import('@/stores/DocumentStore').ShotType} [shotType]
+ * @param {import('@/stores/document/DocumentStore').ShotType} [shotType]
  */
 export function getShotTypeColor(shotType) {
   switch (shotType) {

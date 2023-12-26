@@ -8,14 +8,14 @@ import ImportProjectButton from '@/buttons/ImportProjectButton';
 import ProfileButton from '@/buttons/ProfileButton';
 import FancyButton from '@/lib/FancyButton';
 import HorizontallyScrollableDiv from '@/lib/HorizontallyScrollableDiv';
-import { createDocument } from '@/stores/DocumentStore';
 import {
   useDocumentIds,
   useDocumentLastUpdatedMillis,
   useDocumentStore,
-  useDocumentTitle,
-} from '@/stores/DocumentStoreContext';
-import { useSetUserCursor } from '@/stores/UserStoreContext';
+} from '@/stores/document';
+import { getDocumentById } from '@/stores/document';
+import { createDocument } from '@/stores/document/DocumentStore';
+import { useSetUserCursor } from '@/stores/user';
 
 import AppTitle from './AppTitle';
 
@@ -97,10 +97,12 @@ function SavedProjectView({ className }) {
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  */
 function SavedProjectItem({ documentId }) {
-  const title = useDocumentTitle(documentId);
+  const title = useDocumentStore(
+    (ctx) => getDocumentById(ctx, documentId)?.documentTitle,
+  );
   const millis = useDocumentLastUpdatedMillis(documentId);
   const setUserCursor = useSetUserCursor();
   const navigate = useNavigate();

@@ -13,13 +13,13 @@ export function createStore() {
 
 export function createCursor() {
   return {
-    /** @type {import('./DocumentStore').DocumentId} */
+    /** @type {import('@/stores/document/DocumentStore').DocumentId} */
     documentId: '',
-    /** @type {import('./DocumentStore').SceneId} */
+    /** @type {import('@/stores/document/DocumentStore').SceneId} */
     sceneId: '',
-    /** @type {import('./DocumentStore').ShotId} */
+    /** @type {import('@/stores/document/DocumentStore').ShotId} */
     shotId: '',
-    /** @type {import('./DocumentStore').TakeId} */
+    /** @type {import('@/stores/document/DocumentStore').TakeId} */
     takeId: '',
   };
 }

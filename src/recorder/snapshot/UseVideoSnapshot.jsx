@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 
-import { getTakeById } from '@/stores/DocumentDispatch';
-import { useDocumentStore } from '@/stores/DocumentStoreContext';
+import { getTakeById, useDocumentStore } from '@/stores/document';
 import {
   MAX_THUMBNAIL_HEIGHT,
   MAX_THUMBNAIL_WIDTH,
@@ -11,8 +10,8 @@ import { useCachedVideoBlob } from '../cache/UseCachedVideoBlob';
 import { captureVideoSnapshot } from './VideoSnapshot';
 
 /**
- * @param {import('@/stores/DocumentStore').DocumentId} documentId
- * @param {import('@/stores/DocumentStore').TakeId} takeId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
  * @returns {[boolean, import('react').MouseEventHandler<HTMLButtonElement>]}
  */
 export function useVideoSnapshot(documentId, takeId) {
@@ -37,7 +36,7 @@ export function useVideoSnapshot(documentId, takeId) {
         MAX_THUMBNAIL_HEIGHT,
       ).then((url) => setTakePreviewImage(documentId, takeId, url));
     },
-    [videoBlob, takePreviewImage, documentId, takeId],
+    [videoBlob, takePreviewImage, documentId, takeId, setTakePreviewImage],
   );
 
   return [Boolean(videoBlob), click];

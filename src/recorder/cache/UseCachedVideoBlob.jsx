@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 
-import { getTakeById } from '@/stores/DocumentDispatch';
-import { useDocumentStore } from '@/stores/DocumentStoreContext';
+import { getTakeById, useDocumentStore } from '@/stores/document';
 
 import { useVideoCache } from './UseVideoCache';
 import { getVideoBlob } from './VideoCache';
 
 /**
- * @param {import('@/stores/DocumentStore').DocumentId} documentId
- * @param {import('@/stores/DocumentStore').TakeId} takeId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
  * @returns {Blob|null}
  */
 export function useCachedVideoBlob(documentId, takeId) {

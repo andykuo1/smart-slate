@@ -1,15 +1,15 @@
 import { Fragment, useEffect, useState } from 'react';
 
 import { useGAPITokenHandler } from '@/lib/googleapi';
-import { useTakeIds } from '@/stores/DocumentStoreContext';
+import { useTakeIds } from '@/stores/document';
 
 import { NewTake, TakeEntry } from './TakeEntry';
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
- * @param {import('@/stores/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {'list'|'inline'} props.viewMode
  */
 export default function TakeList({ documentId, sceneId, shotId, viewMode }) {

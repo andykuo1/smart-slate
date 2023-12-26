@@ -2,11 +2,11 @@ import {
   createBlock,
   createDocument,
   createScene,
-} from '@/stores/DocumentStore';
+} from '@/stores/document/DocumentStore';
 
 /**
  * @param {Array<import('fountain-js').Token>} tokens
- * @returns {import('@/stores/DocumentStore').Document}
+ * @returns {import('@/stores/document/DocumentStore').Document}
  */
 export function fountainTokensToDocument(tokens) {
   let result = createDocument();
@@ -19,7 +19,7 @@ export function fountainTokensToDocument(tokens) {
   }
 
   /**
-   * @param {import('@/stores/DocumentStore').Scene} scene
+   * @param {import('@/stores/document/DocumentStore').Scene} scene
    */
   function addBlock(scene) {
     let b = createBlock();

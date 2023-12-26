@@ -14,13 +14,13 @@ import { useCallback, useRef } from 'react';
 import ImageWithCaption from '@/lib/ImageWithCaption';
 import { isInputCaptureSupported } from '@/recorder/MediaRecorderSupport';
 import { drawElementToCanvasWithRespectToAspectRatio } from '@/recorder/snapshot/VideoSnapshot';
-import { shotNumberToChar } from '@/stores/DocumentStore';
 import {
   useSceneNumber,
   useSetShotThumbnail,
   useShotNumber,
   useShotThumbnail,
-} from '@/stores/DocumentStoreContext';
+} from '@/stores/document';
+import { shotNumberToChar } from '@/stores/document/DocumentStore';
 import PopoverStyle from '@/styles/Popover.module.css';
 import TabStyle from '@/styles/Tab.module.css';
 import {
@@ -31,9 +31,9 @@ import {
 /**
  * @param {object} props
  * @param {string} [props.className]
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
- * @param {import('@/stores/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {boolean} [props.editable]
  */
 export default function ShotThumbnail({
@@ -253,8 +253,8 @@ function ThumbnailOptionCamera({ documentId, shotId }) {
  * @param {object} props
  * @param {string} [props.className]
  * @param {string} props.alt
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  */
 function ShotThumbnailImage({ className, alt, documentId, shotId }) {
   const thumbnail = useShotThumbnail(documentId, shotId);

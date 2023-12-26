@@ -1,6 +1,5 @@
 import { Fragment } from 'react';
 
-import { createScene, createShot } from '@/stores/DocumentStore';
 import {
   useAddScene,
   useAddShot,
@@ -8,15 +7,16 @@ import {
   useSceneIds,
   useSceneNumber,
   useSetSceneHeading,
-} from '@/stores/DocumentStoreContext';
-import { useCurrentCursor } from '@/stores/UserStoreContext';
+} from '@/stores/document';
+import { createScene, createShot } from '@/stores/document/DocumentStore';
+import { useCurrentCursor } from '@/stores/user';
 
 import DocumentTitle from '../shotlist/DocumentTitle';
 import ShotList from '../shots/ShotList';
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  */
 export default function SceneList({ documentId }) {
   const userCursor = useCurrentCursor();
@@ -95,8 +95,8 @@ function NewScene({ documentId }) {
 /**
  * @param {object} props
  * @param {string} props.className
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  */
 function SceneHeading({ className, documentId, sceneId }) {
   const sceneHeading = useSceneHeading(documentId, sceneId);

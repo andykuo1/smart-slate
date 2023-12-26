@@ -3,21 +3,24 @@ import { useCallback } from 'react';
 import { uploadFile, useGAPITokenHandler } from '@/lib/googleapi';
 import { getVideoFileExtensionByMIMEType } from '@/recorder/MediaRecorderSupport';
 import { cacheVideoBlob, getVideoBlob } from '@/recorder/cache/VideoCache';
-import {
-  getDocumentById,
-  getSceneIndex,
-  getShotById,
-  getShotIndex,
-} from '@/stores/DocumentDispatch';
-import { createTake, toScenShotTakeType } from '@/stores/DocumentStore';
+import { ANY_SHOT } from '@/stores/ShotTypes';
 import {
   useDocumentStore,
   useSetTakeExportedGoogleDriveFileId,
   useSetTakeExportedIDBKey,
   useSetTakePreviewImage,
-} from '@/stores/DocumentStoreContext';
-import { useSettingsStore } from '@/stores/SettingsStoreContext';
-import { ANY_SHOT } from '@/stores/ShotTypes';
+} from '@/stores/document';
+import {
+  getDocumentById,
+  getSceneIndex,
+  getShotById,
+  getShotIndex,
+} from '@/stores/document';
+import {
+  createTake,
+  toScenShotTakeType,
+} from '@/stores/document/DocumentStore';
+import { useSettingsStore } from '@/stores/settings';
 import { downloadURLImpl } from '@/utils/Downloader';
 import {
   MAX_THUMBNAIL_HEIGHT,
@@ -31,10 +34,10 @@ export function useTakeDownloader() {
 
   const downloadTake = useCallback(
     /**
-     * @param {import('@/stores/DocumentStore').DocumentId} documentId
-     * @param {import('@/stores/DocumentStore').SceneId} sceneId
-     * @param {import('@/stores/DocumentStore').ShotId} shotId
-     * @param {import('@/stores/DocumentStore').TakeId} takeId
+     * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+     * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+     * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+     * @param {import('@/stores/document/DocumentStore').TakeId} takeId
      */
     async function _downloadTake(documentId, sceneId, shotId, takeId) {
       const store = UNSAFE_getStore();
@@ -71,10 +74,10 @@ export function useTakeGoogleDriveUploader() {
 
   const uploadTake = useCallback(
     /**
-     * @param {import('@/stores/DocumentStore').DocumentId} documentId
-     * @param {import('@/stores/DocumentStore').SceneId} sceneId
-     * @param {import('@/stores/DocumentStore').ShotId} shotId
-     * @param {import('@/stores/DocumentStore').TakeId} takeId
+     * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+     * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+     * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+     * @param {import('@/stores/document/DocumentStore').TakeId} takeId
      */
     async function _uploadTake(documentId, sceneId, shotId, takeId) {
       const store = UNSAFE_getStore();
@@ -122,13 +125,13 @@ export function useTakeExporter() {
   const exportTake = useCallback(
     /**
      * @param {Blob} data
-     * @param {import('@/stores/DocumentStore').DocumentId} documentId
-     * @param {import('@/stores/DocumentStore').SceneId} sceneId
-     * @param {import('@/stores/DocumentStore').ShotId} shotId
+     * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+     * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+     * @param {import('@/stores/document/DocumentStore').ShotId} shotId
      * @param {object} [opts]
      * @param {boolean} [opts.uploadOnly]
-     * @param {import('@/stores/DocumentStore').TakeId} [opts.targetTakeId]
-     * @returns {import('@/stores/DocumentStore').TakeId}
+     * @param {import('@/stores/document/DocumentStore').TakeId} [opts.targetTakeId]
+     * @returns {import('@/stores/document/DocumentStore').TakeId}
      */
     function exportTake(data, documentId, sceneId, shotId, opts = {}) {
       const store = UNSAFE_getStore();
@@ -214,10 +217,10 @@ export function useTakeExporter() {
 }
 
 /**
- * @param {import('@/stores/DocumentStore').Store} store
- * @param {import('@/stores/DocumentStore').DocumentId} documentId
- * @param {import('@/stores/DocumentStore').SceneId} sceneId
- * @param {import('@/stores/DocumentStore').ShotId} shotId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
  */
 function getExportedTakeName(store, documentId, sceneId, shotId) {
   const document = getDocumentById(store, documentId);

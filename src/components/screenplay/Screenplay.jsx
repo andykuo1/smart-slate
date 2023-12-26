@@ -32,9 +32,9 @@ export default function Screenplay() {
 /**
  *
  * @param {object} props
- * @param {import('@/stores/DocumentStore').Document} props.document
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').Document} props.document
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  */
 function SceneBlock({ document, documentId, sceneId }) {
   const scene = document.scenes[sceneId];
@@ -63,9 +63,9 @@ function SceneBlock({ document, documentId, sceneId }) {
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
- * @param {import('@/stores/DocumentStore').Document} props.document
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').Document} props.document
  */
 function HeadingBlock({ documentId, sceneId, document }) {
   const scene = document.scenes[sceneId];
@@ -80,9 +80,9 @@ function HeadingBlock({ documentId, sceneId, document }) {
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').BlockId} props.blockId
- * @param {import('@/stores/DocumentStore').Block} props.block
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
+ * @param {import('@/stores/document/DocumentStore').Block} props.block
  * @param {number} props.blockNumber
  */
 function Block({ documentId, blockId, block, blockNumber }) {

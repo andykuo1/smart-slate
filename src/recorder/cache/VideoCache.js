@@ -71,7 +71,7 @@ async function storeBlob(getStore, blob, key) {
 }
 
 /**
- * @param {import('../../stores/DocumentStore').TakeId} takeId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
  * @param {Blob} blob
  */
 export async function cacheVideoBlob(takeId, blob) {
@@ -87,7 +87,7 @@ export async function cacheVideoBlob(takeId, blob) {
 }
 
 /**
- * @param {import('../../stores/DocumentStore').TakeId} takeId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
  */
 export async function getVideoBlob(takeId) {
   return new Promise((resolve, reject) => {
@@ -101,7 +101,7 @@ export async function getVideoBlob(takeId) {
 }
 
 /**
- * @param {import('../../stores/DocumentStore').TakeId} takeId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
  */
 export async function deleteVideoBlob(takeId) {
   return new Promise((resolve, reject) => {

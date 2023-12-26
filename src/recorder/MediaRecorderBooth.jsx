@@ -4,14 +4,14 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import ShotThumbnail from '@/components/shots/ShotThumbnail';
 import { useAnimationFrame } from '@/lib/animationframe';
 import { useFullscreen } from '@/lib/fullscreen';
-import { shotNumberToChar } from '@/stores/DocumentStore';
 import {
   useSceneHeading,
   useShotNumber,
   useShotTakeCount,
-} from '@/stores/DocumentStoreContext';
-import { useSettingsStore } from '@/stores/SettingsStoreContext';
-import { useCurrentCursor } from '@/stores/UserStoreContext';
+} from '@/stores/document';
+import { shotNumberToChar } from '@/stores/document/DocumentStore';
+import { useSettingsStore } from '@/stores/settings';
+import { useCurrentCursor } from '@/stores/user';
 import { formatHourMinSecTime } from '@/utils/StringFormat';
 import '@/values/RecorderValues';
 
@@ -114,9 +114,9 @@ function BackButton({ className, onClick }) {
  * @param {object} props
  * @param {string} [props.className]
  * @param {import('react').MutableRefObject<HTMLVideoElement|null>} props.videoRef
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
- * @param {import('@/stores/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {boolean} props.active
  */
 function VideoFrame({
@@ -174,7 +174,7 @@ function RecordingTime({ className, active }) {
     } else if (!active) {
       setStartTime(-1);
     }
-  }, [active]);
+  }, [active, startTime]);
 
   const onAnimationFrame = useCallback(
     function _onAnimationFrame() {

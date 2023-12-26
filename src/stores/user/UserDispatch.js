@@ -1,4 +1,4 @@
-import { zi } from './ZustandImmerHelper';
+import { zi } from '../ZustandImmerHelper';
 
 /** @typedef {ReturnType<createDispatch>} Dispatch */
 
@@ -14,10 +14,10 @@ export function createDispatch(set) {
 
 /**
  * @param {import('./UserStore').Store} store
- * @param {import('./DocumentStore').DocumentId} documentId
- * @param {import('./DocumentStore').SceneId} sceneId
- * @param {import('./DocumentStore').ShotId} shotId
- * @param {import('./DocumentStore').TakeId} [takeId]
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ * @param {import('@/stores/document/DocumentStore').TakeId} [takeId]
  */
 function setUserCursor(store, documentId, sceneId, shotId, takeId = undefined) {
   let cursor = store.cursor;

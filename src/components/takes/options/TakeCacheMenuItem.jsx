@@ -4,19 +4,19 @@ import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
 
 import { useCachedVideoBlob } from '@/recorder/cache/UseCachedVideoBlob';
 import { deleteVideoBlob } from '@/recorder/cache/VideoCache';
-import { getTakeById } from '@/stores/DocumentDispatch';
 import {
   useDocumentStore,
   useSetTakeExportedIDBKey,
   useTakeExportedIDBKey,
-} from '@/stores/DocumentStoreContext';
+} from '@/stores/document';
+import { getTakeById } from '@/stores/document';
 import MenuStyle from '@/styles/Menu.module.css';
 import { formatBytes } from '@/utils/StringFormat';
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').TakeId} props.takeId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
  */
 export default function TakeCacheMenuItem({ documentId, takeId }) {
   const videoBlob = useCachedVideoBlob(documentId, takeId);

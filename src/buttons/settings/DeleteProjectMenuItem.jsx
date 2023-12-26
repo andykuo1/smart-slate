@@ -4,11 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
 
-import { useDocumentStore } from '@/stores/DocumentStoreContext';
-import {
-  useCurrentDocumentId,
-  useSetUserCursor,
-} from '@/stores/UserStoreContext';
+import { useDocumentStore } from '@/stores/document';
+import { useCurrentDocumentId, useSetUserCursor } from '@/stores/user';
 import MenuStyle from '@/styles/Menu.module.css';
 
 export default function DeleteProjectMenuItem() {

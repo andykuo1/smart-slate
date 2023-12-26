@@ -12,10 +12,10 @@ import TakeReassignMenuItem from './options/TakeReassignMenuItem';
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
- * @param {import('@/stores/DocumentStore').ShotId} props.shotId
- * @param {import('@/stores/DocumentStore').TakeId} props.takeId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
  * @param {string} [props.className]
  * @param {import('react').ReactNode} [props.children]
  * @param {boolean} [props.showButton]

@@ -65,7 +65,35 @@ export default function NerdInfoMenuItem() {
 }
 
 function getNerdInfo() {
-  return `# User Agent\n\n${
-    navigator.userAgent
-  }\n\n# Supported Codecs\n\n${Codecs.join('\n')}`;
+  return `# User Agent\n\n${navigator.userAgent}\n\n${isMediaRecorderSupported(
+    'video/mp4',
+  )}\n\n${isMediaStreamSupported('')}\n\n# Supported Codecs\n\n${Codecs.join(
+    '\n',
+  )}`;
+}
+
+/**
+ * @param {string} mimeType
+ */
+function isMediaRecorderSupported(mimeType) {
+  if (!window.MediaRecorder) {
+    return false;
+  }
+  if (!MediaRecorder.isTypeSupported) {
+    return mimeType.startsWith('audio/mp4') || mimeType.startsWith('video/mp4');
+  }
+  return MediaRecorder.isTypeSupported(mimeType);
+}
+
+/**
+ * @param {string} mimeType
+ */
+function isMediaStreamSupported(mimeType) {
+  if (!window.MediaStream) {
+    return false;
+  }
+  if (!window.navigator.mediaDevices) {
+    return false;
+  }
+  return true;
 }

@@ -2,12 +2,12 @@ import { useCallback } from 'react';
 
 import { Fountain } from 'fountain-js';
 
-import { useAddDocument } from '@/stores/DocumentStoreContext';
+import { useAddDocument } from '@/stores/document';
 
 import { fountainTokensToDocument } from './FountainToDocumentParser';
 
 /**
- * @param {import('@/stores/DocumentStore').DocumentId} [documentId]
+ * @param {import('@/stores/document/DocumentStore').DocumentId} [documentId]
  */
 export function useProjectImport(documentId = undefined) {
   const addDocument = useAddDocument();

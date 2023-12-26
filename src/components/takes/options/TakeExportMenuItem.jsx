@@ -10,15 +10,15 @@ import {
   useTakeDownloader,
   useTakeGoogleDriveUploader,
 } from '@/serdes/UseTakeExporter';
-import { useTakeExportedIDBKey } from '@/stores/DocumentStoreContext';
+import { useTakeExportedIDBKey } from '@/stores/document';
 import MenuStyle from '@/styles/Menu.module.css';
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
- * @param {import('@/stores/DocumentStore').ShotId} props.shotId
- * @param {import('@/stores/DocumentStore').TakeId} props.takeId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
  */
 export default function TakeCacheMenuItem({
   documentId,

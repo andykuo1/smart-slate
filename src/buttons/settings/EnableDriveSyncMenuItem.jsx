@@ -7,7 +7,7 @@ import ToggleOn from '@material-symbols/svg-400/rounded/toggle_on-fill.svg';
 
 import { useInterval } from '@/lib/UseInterval';
 import { useGAPITokenHandler } from '@/lib/googleapi';
-import { useSettingsStore } from '@/stores/SettingsStoreContext';
+import { useSettingsStore } from '@/stores/settings';
 import MenuStyle from '@/styles/Menu.module.css';
 
 export default function EnableThumbnailWhileRecording() {

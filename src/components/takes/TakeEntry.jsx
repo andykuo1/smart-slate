@@ -3,21 +3,17 @@ import { useCallback, useState } from 'react';
 import { useInterval } from '@/lib/UseInterval';
 import { getVideoBlob } from '@/recorder/cache/VideoCache';
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
-import {
-  useShotTakeCount,
-  useTake,
-  useTakeNumber,
-} from '@/stores/DocumentStoreContext';
+import { useShotTakeCount, useTake, useTakeNumber } from '@/stores/document';
 
 import TakeLayout from './TakeLayout';
 
 /**
  * @param {object} props
  * @param {string} [props.className]
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').SceneId} props.sceneId
- * @param {import('@/stores/DocumentStore').ShotId} props.shotId
- * @param {import('@/stores/DocumentStore').TakeId} props.takeId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
  * @param {boolean} props.cloudExportable
  * @param {'list'|'inline'} props.viewMode
  */
@@ -78,8 +74,8 @@ export function TakeEntry({
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {'list'|'inline'} props.viewMode
  */
 export function NewTake({ documentId, shotId, viewMode }) {

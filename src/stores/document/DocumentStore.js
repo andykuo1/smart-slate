@@ -1,6 +1,6 @@
 import { uuid } from '@/utils/uuid';
 
-import ShotTypes, { ANY_SHOT } from './ShotTypes';
+import ShotTypes, { ANY_SHOT } from '../ShotTypes';
 
 /**
  * @typedef {ReturnType<createStore>} Store

@@ -1,5 +1,6 @@
 import react from '@vitejs/plugin-react-swc';
 
+import basicSSL from '@vitejs/plugin-basic-ssl';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import svgr from 'vite-plugin-svgr';
@@ -16,6 +17,7 @@ export default defineConfig({
       include: '**/*.svg',
     }),
     tsconfigPaths(),
+    basicSSL(),
     VitePWA({
       /*
       // NOTE: Use this to nuke everything :)

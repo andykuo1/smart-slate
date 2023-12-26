@@ -1,17 +1,13 @@
 import { useCallback } from 'react';
 
-import {
-  useDocumentTitle,
-  useSetDocumentTitle,
-} from '@/stores/DocumentStoreContext';
+import { useDocumentTitle } from '@/stores/document';
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  */
 export default function DocumentTitle({ documentId }) {
-  const documentTitle = useDocumentTitle(documentId);
-  const setDocumentTitle = useSetDocumentTitle();
+  const [documentTitle, setDocumentTitle] = useDocumentTitle(documentId);
   const onDocumentTitleChange = useCallback(
     /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
     function onTitleChange(e) {

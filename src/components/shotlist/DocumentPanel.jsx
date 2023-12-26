@@ -8,13 +8,13 @@ import {
   useCurrentRecorder,
   useSetRecorderActive,
   useSetUserCursor,
-} from '@/stores/UserStoreContext';
+} from '@/stores/user';
 
 import SceneList from '../scenes/SceneList';
 
 /**
  * @param {object} props
- * @param {import('@/stores/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  */
 export default function DocumentPanel({ documentId }) {
   return (
