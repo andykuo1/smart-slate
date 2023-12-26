@@ -1,4 +1,3 @@
-import { getFirstSceneBlockId } from '.';
 import { zi } from '../ZustandImmerHelper';
 import {
   createDispatchDocuments,
@@ -74,12 +73,11 @@ export function addBlock(store, documentId, sceneId, block) {
 /**
  * @param {import('./DocumentStore').Store} store
  * @param {import('./DocumentStore').DocumentId} documentId
- * @param {import('./DocumentStore').SceneId} sceneId
+ * @param {import('./DocumentStore').BlockId} blockId
  * @param {import('./DocumentStore').Shot} shot
  */
-export function addShot(store, documentId, sceneId, shot) {
+export function addShot(store, documentId, blockId, shot) {
   let document = store.documents[documentId];
-  const blockId = getFirstSceneBlockId(store, documentId, sceneId);
   let block = document.blocks[blockId];
   document.shots[shot.shotId] = shot;
   block.shotIds.push(shot.shotId);

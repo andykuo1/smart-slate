@@ -35,10 +35,11 @@ import ShotThumbnail from './ShotThumbnail';
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {import('react').ReactNode} [props.children]
  */
-export function ShotEntry({ documentId, sceneId, shotId, children }) {
+export function ShotEntry({ documentId, sceneId, blockId, shotId, children }) {
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
   const shotCount = useSceneShotCount(documentId, sceneId);
@@ -130,14 +131,14 @@ export function ShotEntry({ documentId, sceneId, shotId, children }) {
 /**
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  */
-export function NewShot({ documentId, sceneId }) {
+export function NewShot({ documentId, blockId }) {
   const addShot = useAddShot();
 
   function onClick() {
     let newShot = createShot();
-    addShot(documentId, sceneId, newShot);
+    addShot(documentId, blockId, newShot);
   }
 
   return (

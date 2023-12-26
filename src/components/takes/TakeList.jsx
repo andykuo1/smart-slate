@@ -9,10 +9,17 @@ import { NewTake, TakeEntry } from './TakeEntry';
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {'list'|'inline'} props.viewMode
  */
-export default function TakeList({ documentId, sceneId, shotId, viewMode }) {
+export default function TakeList({
+  documentId,
+  sceneId,
+  blockId,
+  shotId,
+  viewMode,
+}) {
   const takeIds = useTakeIds(documentId, shotId);
   const [cloudExportable, setCloudExportable] = useState(false);
   const handleToken = useGAPITokenHandler();
