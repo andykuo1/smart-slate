@@ -18,6 +18,15 @@ export function getSceneById(store, documentId, sceneId) {
 /**
  * @param {import('./DocumentStore').Store} store
  * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').BlockId} blockId
+ */
+export function getBlockById(store, documentId, blockId) {
+  return store?.documents?.[documentId]?.blocks[blockId];
+}
+
+/**
+ * @param {import('./DocumentStore').Store} store
+ * @param {import('./DocumentStore').DocumentId} documentId
  * @param {import('./DocumentStore').ShotId} shotId
  */
 export function getShotById(store, documentId, shotId) {
@@ -46,10 +55,22 @@ export function getSceneIndex(store, documentId, sceneId) {
  * @param {import('./DocumentStore').Store} store
  * @param {import('./DocumentStore').DocumentId} documentId
  * @param {import('./DocumentStore').SceneId} sceneId
+ * @param {import('./DocumentStore').BlockId} blockId
+ */
+export function getBlockIndex(store, documentId, sceneId, blockId) {
+  return (
+    getSceneById(store, documentId, sceneId)?.blockIds.indexOf(blockId) + 1
+  );
+}
+
+/**
+ * @param {import('./DocumentStore').Store} store
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').BlockId} blockId
  * @param {import('./DocumentStore').ShotId} shotId
  */
-export function getShotIndex(store, documentId, sceneId, shotId) {
-  return getSceneById(store, documentId, sceneId)?.shotIds.indexOf(shotId) + 1;
+export function getShotIndex(store, documentId, blockId, shotId) {
+  return getBlockById(store, documentId, blockId)?.shotIds.indexOf(shotId) + 1;
 }
 
 /**
@@ -82,8 +103,17 @@ export function getSceneIdsInOrder(store, documentId) {
  * @param {import('./DocumentStore').DocumentId} documentId
  * @param {import('./DocumentStore').SceneId} sceneId
  */
-export function getShotIdsInOrder(store, documentId, sceneId) {
-  return getSceneById(store, documentId, sceneId)?.shotIds || [];
+export function getBlockIdsInOrder(store, documentId, sceneId) {
+  return getSceneById(store, documentId, sceneId)?.blockIds || [];
+}
+
+/**
+ * @param {import('./DocumentStore').Store} store
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').BlockId} blockId
+ */
+export function getShotIdsInOrder(store, documentId, blockId) {
+  return getBlockById(store, documentId, blockId)?.shotIds || [];
 }
 
 /**
@@ -93,4 +123,13 @@ export function getShotIdsInOrder(store, documentId, sceneId) {
  */
 export function getTakeIdsInOrder(store, documentId, shotId) {
   return getShotById(store, documentId, shotId)?.takeIds || [];
+}
+
+/**
+ * @param {import('./DocumentStore').Store} store
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').SceneId} sceneId
+ */
+export function getFirstSceneBlockId(store, documentId, sceneId) {
+  return getSceneById(store, documentId, sceneId).blockIds[0] || '';
 }

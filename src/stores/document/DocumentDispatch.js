@@ -1,3 +1,4 @@
+import { getFirstSceneBlockId } from '.';
 import { zi } from '../ZustandImmerHelper';
 import {
   createDispatchDocuments,
@@ -19,11 +20,13 @@ export function createDispatch(set, get) {
 
     addDocument: zi(set, addDocument),
     addScene: zi(set, addScene),
+    addBlock: zi(set, addBlock),
     addShot: zi(set, addShot),
     addTake: zi(set, addTake),
 
     deleteDocument: zi(set, deleteDocument),
     deleteScene: zi(set, deleteScene),
+    deleteBlock: zi(set, deleteBlock),
     deleteShot: zi(set, deleteShot),
     deleteTake: zi(set, deleteTake),
 
@@ -58,13 +61,28 @@ export function addScene(store, documentId, scene) {
  * @param {import('./DocumentStore').Store} store
  * @param {import('./DocumentStore').DocumentId} documentId
  * @param {import('./DocumentStore').SceneId} sceneId
+ * @param {import('./DocumentStore').Block} block
+ */
+export function addBlock(store, documentId, sceneId, block) {
+  let document = store.documents[documentId];
+  let scene = document.scenes[sceneId];
+  document.blocks[block.blockId] = block;
+  scene.blockIds.push(block.blockId);
+  incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('./DocumentStore').Store} store
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').SceneId} sceneId
  * @param {import('./DocumentStore').Shot} shot
  */
 export function addShot(store, documentId, sceneId, shot) {
   let document = store.documents[documentId];
-  let scene = document.scenes[sceneId];
+  const blockId = getFirstSceneBlockId(store, documentId, sceneId);
+  let block = document.blocks[blockId];
   document.shots[shot.shotId] = shot;
-  scene.shotIds.push(shot.shotId);
+  block.shotIds.push(shot.shotId);
   incrementDocumentRevisionNumber(document);
 }
 
@@ -100,17 +118,43 @@ export function deleteDocument(store, documentId) {
 export function deleteScene(store, documentId, sceneId) {
   let document = store.documents[documentId];
   let scene = document.scenes[sceneId];
-  // Remove shots from scene
-  let oldShots = scene.shotIds;
-  scene.shotIds = [];
-  for (let shotId of oldShots) {
-    deleteShot(store, documentId, shotId);
+  // Remove blocks from scene
+  let oldBlocks = scene.blockIds;
+  scene.blockIds = [];
+  for (let blockId of oldBlocks) {
+    deleteBlock(store, documentId, blockId);
   }
   // Remove from sceneOrder
   let i = document.sceneOrder.indexOf(sceneId);
   document.sceneOrder.splice(i, 1);
   // Remove from document
   delete document.scenes[sceneId];
+  incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('./DocumentStore').Store} store
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').BlockId} blockId
+ */
+export function deleteBlock(store, documentId, blockId) {
+  let document = store.documents[documentId];
+  let block = document.blocks[blockId];
+  // Remove shots from block
+  let oldShots = block.shotIds;
+  block.shotIds = [];
+  for (let shotId of oldShots) {
+    deleteShot(store, documentId, shotId);
+  }
+  // Remove from any scene referencing this block
+  for (let { blockIds } of Object.values(document.scenes)) {
+    let i = blockIds.indexOf(blockId);
+    if (i >= 0) {
+      blockIds.splice(i, 1);
+    }
+  }
+  // Remove from document
+  delete document.blocks[blockId];
   incrementDocumentRevisionNumber(document);
 }
 
@@ -128,8 +172,8 @@ export function deleteShot(store, documentId, shotId) {
   for (let takeId of oldTakes) {
     deleteTake(store, documentId, takeId);
   }
-  // Remove from any scene referencing this shot
-  for (let { shotIds } of Object.values(document.scenes)) {
+  // Remove from any block referencing this shot
+  for (let { shotIds } of Object.values(document.blocks)) {
     let i = shotIds.indexOf(shotId);
     if (i >= 0) {
       shotIds.splice(i, 1);

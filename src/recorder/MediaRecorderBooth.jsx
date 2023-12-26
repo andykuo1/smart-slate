@@ -22,7 +22,7 @@ export default function MediaRecorderBooth() {
   const { documentId, sceneId, shotId } = useCurrentCursor();
   const takeCount = useShotTakeCount(documentId, shotId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
-  const sceneHeading = useSceneHeading(documentId, sceneId);
+  const [sceneHeading] = useSceneHeading(documentId, sceneId);
   const preferPersistedMediaStream = useSettingsStore(
     (ctx) => ctx.user.preferPersistedMediaStream,
   );

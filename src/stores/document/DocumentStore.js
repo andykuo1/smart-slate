@@ -55,8 +55,6 @@ export function createScene(sceneId = uuid()) {
   return {
     sceneId,
     sceneHeading: '',
-    /** @type {Array<ShotId>} */
-    shotIds: [],
     /** @type {Array<BlockId>} */
     blockIds: [],
   };
@@ -183,7 +181,6 @@ export function cloneDocument(out, document) {
  */
 export function cloneScene(out, scene) {
   out.sceneId = scene.sceneId;
-  out.shotIds = scene.shotIds.slice();
   out.blockIds = scene.blockIds.slice();
   out.sceneHeading = scene.sceneHeading;
   return /** @type {Scene} */ (out);

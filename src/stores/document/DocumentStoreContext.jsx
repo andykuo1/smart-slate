@@ -2,6 +2,7 @@ import { useShallow } from 'zustand/react/shallow';
 
 import {
   getDocumentIds,
+  getFirstSceneBlockId,
   getSceneById,
   getSceneIdsInOrder,
   getSceneIndex,
@@ -54,7 +55,13 @@ export function useSceneIds(documentId) {
  * @param {import('./DocumentStore').SceneId} sceneId
  */
 export function useShotIds(documentId, sceneId) {
-  return useDocumentStore((ctx) => getShotIdsInOrder(ctx, documentId, sceneId));
+  return useDocumentStore((ctx) =>
+    getShotIdsInOrder(
+      ctx,
+      documentId,
+      getFirstSceneBlockId(ctx, documentId, sceneId),
+    ),
+  );
 }
 
 /**
@@ -82,7 +89,12 @@ export function useSceneNumber(documentId, sceneId) {
  */
 export function useShotNumber(documentId, sceneId, shotId) {
   return useDocumentStore((ctx) =>
-    getShotIndex(ctx, documentId, sceneId, shotId),
+    getShotIndex(
+      ctx,
+      documentId,
+      getFirstSceneBlockId(ctx, documentId, sceneId),
+      shotId,
+    ),
   );
 }
 
@@ -102,9 +114,21 @@ export function useTakeNumber(documentId, shotId, takeId) {
  * @param {import('./DocumentStore').SceneId} sceneId
  */
 export function useSceneShotCount(documentId, sceneId) {
-  return useDocumentStore(
-    (ctx) => getShotIdsInOrder(ctx, documentId, sceneId).length,
+  return useDocumentStore((ctx) =>
+    getSceneById(ctx, documentId, sceneId).blockIds.reduce(
+      (prev, blockId) =>
+        prev + getShotIdsInOrder(ctx, documentId, blockId)?.length || 0,
+      0,
+    ),
   );
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').BlockId} blockId
+ */
+export function useBlockShotCount(documentId, blockId) {
+  return useDocumentStore((ctx) => getShotIdsInOrder(ctx, documentId, blockId));
 }
 
 /**
@@ -143,6 +167,10 @@ export function useAddShot() {
 
 export function useAddTake() {
   return useDocumentStore((ctx) => ctx.addTake);
+}
+
+export function useAddBlock() {
+  return useDocumentStore((ctx) => ctx.addBlock);
 }
 
 /**
@@ -204,10 +232,14 @@ export function useSetTakePreviewImage() {
 /**
  * @param {import('./DocumentStore').DocumentId} documentId
  * @param {import('./DocumentStore').SceneId} sceneId
+ * @returns {[string, import('./DocumentDispatch').Dispatch['setSceneHeading']]}
  */
 export function useSceneHeading(documentId, sceneId) {
   return useDocumentStore(
-    (ctx) => getSceneById(ctx, documentId, sceneId)?.sceneHeading,
+    useShallow((ctx) => [
+      getSceneById(ctx, documentId, sceneId)?.sceneHeading,
+      ctx.setSceneHeading,
+    ]),
   );
 }
 

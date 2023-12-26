@@ -1,18 +1,21 @@
 import { Fragment } from 'react';
 
 import {
+  useAddBlock,
   useAddScene,
   useAddShot,
-  useSceneHeading,
   useSceneIds,
-  useSceneNumber,
-  useSetSceneHeading,
 } from '@/stores/document';
-import { createScene, createShot } from '@/stores/document/DocumentStore';
+import {
+  createBlock,
+  createScene,
+  createShot,
+} from '@/stores/document/DocumentStore';
 import { useCurrentCursor } from '@/stores/user';
 
 import DocumentTitle from '../shotlist/DocumentTitle';
 import ShotList from '../shots/ShotList';
+import SceneHeading from './SceneHeading';
 
 /**
  * @param {object} props
@@ -51,17 +54,9 @@ export default function SceneList({ documentId }) {
  * @param {import('react').ReactNode} [props.children]
  */
 function SceneHeader({ documentId, sceneId, children }) {
-  const sceneNumber = useSceneNumber(documentId, sceneId);
   return (
     <li className="flex flex-col items-center mt-8">
-      <div className="relative flex flex-row items-center w-full border-b-2 border-dotted border-black">
-        <SceneHeading
-          className="flex-1 mx-2"
-          documentId={documentId}
-          sceneId={sceneId}
-        />
-        <SceneNumber sceneNumber={sceneNumber} />
-      </div>
+      <SceneHeading documentId={documentId} sceneId={sceneId} />
       <div className="flex-1 w-full">{children}</div>
     </li>
   );
@@ -73,12 +68,15 @@ function SceneHeader({ documentId, sceneId, children }) {
  */
 function NewScene({ documentId }) {
   const addScene = useAddScene();
+  const addBlock = useAddBlock();
   const addShot = useAddShot();
 
   function onClick() {
     let newScene = createScene();
+    let newBlock = createBlock();
     let newShot = createShot();
     addScene(documentId, newScene);
+    addBlock(documentId, newScene.sceneId, newBlock);
     addShot(documentId, newScene.sceneId, newShot);
   }
   return (
@@ -90,46 +88,4 @@ function NewScene({ documentId }) {
       <span className="flex-1 text-center border-t-2 border-dotted border-black" />
     </li>
   );
-}
-
-/**
- * @param {object} props
- * @param {string} props.className
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
- */
-function SceneHeading({ className, documentId, sceneId }) {
-  const sceneHeading = useSceneHeading(documentId, sceneId);
-  const setSceneHeading = useSetSceneHeading();
-  /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
-  function onChange(e) {
-    const el = e.target;
-    setSceneHeading(documentId, sceneId, el.value.toUpperCase());
-  }
-  return (
-    <>
-      <input
-        className={'bg-transparent px-2 text-xl' + ' ' + className}
-        type="text"
-        list="sceneHeading"
-        placeholder="INT/EXT. SCENE - DAY"
-        value={sceneHeading}
-        onChange={onChange}
-        autoCapitalize="characters"
-      />
-      <datalist id="sceneHeading">
-        <option value="INT. " />
-        <option value="EXT. " />
-      </datalist>
-    </>
-  );
-}
-
-/**
- * @param {object} props
- * @param {number} props.sceneNumber
- */
-function SceneNumber({ sceneNumber }) {
-  const result = sceneNumber < 0 ? '??' : String(sceneNumber).padStart(2, '0');
-  return <span className="mx-4 font-mono opacity-30">SCENE {result}</span>;
 }
