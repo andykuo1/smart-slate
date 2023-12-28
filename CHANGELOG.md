@@ -7,9 +7,6 @@
 - Add a color marker that can be exported in CSV.
 - Can I add a folder to google drive?
 
-4. Screenplay imports
-
-[] Screenplay imports!
 [] rearrange the shot order (but keep takes in there)
 
 - create a storyboard of existing shots
@@ -34,10 +31,58 @@ flag marker for in-content. comments?
 
 - reassign takes
 
+## Collapsible Design
+
+- Text left-aligned
+- Shotlist right-aligned?
+
+SCREENPLAY => Text editing
+STORYBOARD => Node editing
+SHOTLIST => List editing
+TAKELIST => Sub-shotlist
+
+```
+SCREENPLAY       -> STORYBOARD  -> SHOTLIST  -> TAKEVIEW
+^- Text document ^- Thumbnails? ^- shot list ^- take list? (context-full)
+|                |              |            |
+| Vertical sticky notes in margins           |
+                 |              |            |
+                 | captions below thumbnails (sequencing)
+                                |            |
+                                | list of shots (details in cells)
+                                             |
+                                             | full context? (partial preview)
+```
+
+```
+There is something amiss in Marde.
+---- [ + ] -----------------------
+Other text goes here.
+```
+
+->
+
+```
+---- [ + ] -- [ ? ] -- [ + ] ----
+---- [ + ] -- [ - ] -- [ - ] ----
+---- [ - ] -- [ + ] -- [ + ] ----
+```
+
+->
+
+```
+
+```
+
+# 0.1.10
+
+- Add editable scene action text
+- Add fountain script imports
 - Add recording duration time
 - Add take preview on take click
 - Add autocomplete for scene heading
 - Add fallback contraints for media stream
+
 - Fix support for video snapshot on mobile
 - Fix delete cache per take missing write permissions
 
@@ -55,6 +100,7 @@ flag marker for in-content. comments?
 
 - Add profile button to project page
 - Add preview image for take
+
 - Change user settings to save to localStorage
 - Change MediaRecorder setup to start on root
 - Change ideal resolution to be 16:9

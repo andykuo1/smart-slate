@@ -11,11 +11,17 @@ import { getBlockById, useDocumentStore } from '@/stores/document';
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  * @param {boolean} [props.editable]
  */
-export default function BlockContent({ documentId, blockId, editable = true }) {
+export default function BlockContent({
+  className,
+  documentId,
+  blockId,
+  editable = true,
+}) {
   const blockContentType = useDocumentStore(
     (ctx) => getBlockById(ctx, documentId, blockId)?.contentType,
   );
@@ -50,7 +56,7 @@ export default function BlockContent({ documentId, blockId, editable = true }) {
   }
 
   return (
-    <div className="relative m-2">
+    <div className={'relative m-2' + ' ' + className}>
       <LexicalComposer initialConfig={initialConfig}>
         <PlainTextPlugin
           contentEditable={<ContentEditable className="p-2" />}
