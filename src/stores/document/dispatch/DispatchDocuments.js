@@ -11,6 +11,8 @@ export function createDispatchDocuments(set, get) {
 
     setSceneHeading: zi(set, setSceneHeading),
 
+    setBlockContent: zi(set, setBlockContent),
+
     incrementDocumentRevisionNumber: zi(set, incrementDocumentRevisionNumber),
   };
 }
@@ -54,6 +56,27 @@ export function setSceneHeading(store, documentId, sceneId, heading) {
   let document = store.documents[documentId];
   let scene = document.scenes[sceneId];
   scene.sceneHeading = heading;
+  incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('../DocumentStore').Store} store
+ * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('../DocumentStore').BlockId} blockId
+ * @param {import('../DocumentStore').BlockContentType} contentType
+ * @param {string} content
+ */
+export function setBlockContent(
+  store,
+  documentId,
+  blockId,
+  contentType,
+  content,
+) {
+  let document = store.documents[documentId];
+  let block = document.blocks[blockId];
+  block.contentType = contentType;
+  block.content = content;
   incrementDocumentRevisionNumber(document);
 }
 

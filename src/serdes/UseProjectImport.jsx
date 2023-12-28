@@ -4,7 +4,7 @@ import { Fountain } from 'fountain-js';
 
 import { useAddDocument } from '@/stores/document';
 
-import { fountainTokensToDocument } from './FountainToDocumentParser';
+import { fountainTokensToDocumentByScene } from './FountainToDocumentParser';
 
 /**
  * @param {import('@/stores/document/DocumentStore').DocumentId} [documentId]
@@ -18,20 +18,20 @@ export function useProjectImport(documentId = undefined) {
      */
     function _importProject(type, data) {
       switch (type) {
-        case 'fountain-text':
-          {
-            const fountain = new Fountain();
-            const { tokens } = fountain.parse(data, true);
-            let document = fountainTokensToDocument(tokens);
-            if (documentId) {
-              document.documentId = documentId;
-            }
-            addDocument(document);
+        case 'fountain-text': {
+          const fountain = new Fountain();
+          const { tokens } = fountain.parse(data, true);
+          let document = fountainTokensToDocumentByScene(tokens);
+          if (documentId) {
+            document.documentId = documentId;
           }
-          break;
+          addDocument(document);
+          return document.documentId;
+        }
         case 'json':
-          break;
+        // TODO: Implement this in the future.
         default:
+          throw new Error('Unsupported import type.');
       }
     },
     [documentId, addDocument],

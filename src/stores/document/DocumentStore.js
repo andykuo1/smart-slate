@@ -17,6 +17,7 @@ import ShotTypes, { ANY_SHOT } from '../ShotTypes';
  * @typedef {string} BlockId
  *
  * @typedef {'wide'|'medium'|'closeup'|'full'|'long'|''} ShotType
+ * @typedef {'string'|'lexical'} BlockContentType
  */
 
 export function createStore() {
@@ -66,6 +67,8 @@ export function createScene(sceneId = uuid()) {
 export function createBlock(blockId = uuid()) {
   return {
     blockId,
+    /** @type {BlockContentType} */
+    contentType: 'string',
     /** @type {string} */
     content: '',
     /** @type {Array<ShotId>} */
@@ -194,6 +197,7 @@ export function cloneScene(out, scene) {
 export function cloneBlock(out, block) {
   out.blockId = block.blockId;
   out.shotIds = block.shotIds.slice();
+  out.contentType = block.contentType;
   out.content = block.content;
   return /** @type {Block} */ (out);
 }

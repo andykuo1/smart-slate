@@ -1,23 +1,35 @@
-import { getBlockById, useDocumentStore } from '@/stores/document';
-
 import ShotList from '../shots/ShotList';
+import BlockContent from './BlockContent';
 
 /**
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
+ * @param {boolean} [props.editable]
  */
-export default function BlockEntry({ documentId, sceneId, blockId }) {
-  const content = useDocumentStore(
-    (ctx) => getBlockById(ctx, documentId, blockId)?.content,
-  );
+export default function BlockEntry({
+  documentId,
+  sceneId,
+  blockId,
+  editable = true,
+}) {
   return (
-    <>
-      <p className="p-2">{content || 'No Text'}</p>
+    <div>
+      <BlockContent
+        documentId={documentId}
+        blockId={blockId}
+        editable={editable}
+      />
       <fieldset>
-        <ShotList documentId={documentId} sceneId={sceneId} blockId={blockId} />
+        <legend className="hidden">Shot list</legend>
+        <ShotList
+          documentId={documentId}
+          sceneId={sceneId}
+          blockId={blockId}
+          editable={editable}
+        />
       </fieldset>
-    </>
+    </div>
   );
 }

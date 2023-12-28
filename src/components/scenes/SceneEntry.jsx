@@ -22,10 +22,11 @@ export default function SceneEntry({ documentId, sceneId }) {
     return null;
   }
   return (
-    <section>
+    <section className="flex flex-col mt-20">
       <SceneHeading documentId={documentId} sceneId={sceneId} />
-      {blockIds.map((blockId) => (
+      {blockIds.map((blockId, index, array) => (
         <BlockEntry
+          key={blockId}
           documentId={documentId}
           sceneId={sceneId}
           blockId={blockId}

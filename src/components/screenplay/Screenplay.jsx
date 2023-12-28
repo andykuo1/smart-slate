@@ -99,7 +99,7 @@ function Block({ documentId, blockId, block, blockNumber }) {
       onClick={onClick}>
       <div className="flex-1">
         {block.content.split('\n').map((text) => (
-          <p>{text}</p>
+          <p key={text}>{text}</p>
         ))}
       </div>
       {opened && (

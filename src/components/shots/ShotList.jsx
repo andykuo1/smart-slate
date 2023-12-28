@@ -11,8 +11,14 @@ import { NewShot, ShotEntry } from './ShotEntry';
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
+ * @param {boolean} [props.editable]
  */
-export default function ShotList({ documentId, sceneId, blockId }) {
+export default function ShotList({
+  documentId,
+  sceneId,
+  blockId,
+  editable = true,
+}) {
   const userCursor = useCurrentCursor();
   const activeShotId = userCursor.shotId;
   const hasActiveShot = Boolean(activeShotId);
@@ -39,7 +45,9 @@ export default function ShotList({ documentId, sceneId, blockId }) {
             </Fragment>
           ),
       )}
-      {!hasActiveShot && <NewShot documentId={documentId} blockId={blockId} />}
+      {editable && !hasActiveShot && (
+        <NewShot documentId={documentId} blockId={blockId} />
+      )}
     </ul>
   );
 }

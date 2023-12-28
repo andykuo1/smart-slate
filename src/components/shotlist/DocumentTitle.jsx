@@ -19,16 +19,14 @@ export default function DocumentTitle({ documentId }) {
 
   return (
     <h2 className="flex flex-col text-center my-2">
-      <div className="flex-1 flex flex-row underline">
-        <div className="flex-1" />
+      <div className="flex-1 flex flex-row underline mx-2">
         <input
-          className="text-center text-2xl bg-transparent"
+          className="flex-1 text-center text-2xl bg-transparent"
           title="Project title"
           value={documentTitle}
           placeholder="Untitled"
           onChange={onDocumentTitleChange}
         />
-        <div className="flex-1" />
       </div>
       <label className="text-xs opacity-30">
         <span>ID: </span>

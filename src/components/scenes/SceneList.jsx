@@ -14,7 +14,7 @@ export default function SceneList({ documentId }) {
     <article className="w-full h-full overflow-x-hidden overflow-y-auto py-20">
       <DocumentTitle documentId={documentId} />
       {sceneIds.map((sceneId) => (
-        <SceneEntry documentId={documentId} sceneId={sceneId} />
+        <SceneEntry key={sceneId} documentId={documentId} sceneId={sceneId} />
       ))}
       <NewSceneEntry documentId={documentId} />
     </article>
