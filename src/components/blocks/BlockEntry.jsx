@@ -32,17 +32,21 @@ export default function BlockEntry({
           editable={editable}
         />
         {!open && (
-          <div className="absolute top-0 bottom-0 left-0 right-0 bg-gradient-to-t from-white to-transparent" />
+          <button
+            className="absolute top-0 bottom-0 left-0 right-0 bg-gradient-to-t from-white to-transparent"
+            onClick={() => setOpen(true)}>
+            <span className="absolute bottom-0 left-0 right-0">
+              <ExpandMoreIcon className="mx-auto w-6 h-6 fill-current" />
+            </span>
+          </button>
         )}
       </div>
       <fieldset>
-        <button className="w-full" onClick={() => setOpen(!open)}>
-          {open ? (
+        {open && (
+          <button className="w-full" onClick={() => setOpen(false)}>
             <ExpandLessIcon className="mx-auto w-6 h-6 fill-current" />
-          ) : (
-            <ExpandMoreIcon className="mx-auto w-6 h-6 fill-current" />
-          )}
-        </button>
+          </button>
+        )}
         <legend className="hidden">Shot list</legend>
         <ShotList
           documentId={documentId}

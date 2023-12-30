@@ -4,7 +4,8 @@ import { useShotIds } from '@/stores/document';
 import { useCurrentCursor } from '@/stores/user';
 
 import TakeList from '../takes/TakeList';
-import { NewShot, ShotEntry } from './ShotEntry';
+import NewShotEntry from './NewShotEntry';
+import { ShotEntry } from './ShotEntry';
 
 /**
  * @param {object} props
@@ -46,7 +47,7 @@ export default function ShotList({
           ),
       )}
       {editable && !hasActiveShot && (
-        <NewShot documentId={documentId} blockId={blockId} />
+        <NewShotEntry documentId={documentId} blockId={blockId} />
       )}
     </ul>
   );
