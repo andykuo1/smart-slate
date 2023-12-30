@@ -8,6 +8,7 @@ import PhotoIcon from '@material-symbols/svg-400/rounded/photo.svg';
  * @param {string} [props.className]
  * @param {'add'} [props.usage]
  * @param {import('react').ReactNode} [props.children]
+ * @param {import('react').FC<any>} [props.Icon]
  */
 export default function ImageWithCaption({
   className,
@@ -15,8 +16,8 @@ export default function ImageWithCaption({
   alt,
   usage,
   children,
+  Icon = getIconByUsage(usage),
 }) {
-  const Icon = getIconByUsage(usage);
   return (
     <figure
       className={
@@ -29,7 +30,7 @@ export default function ImageWithCaption({
       ) : (
         <Icon className="flex-1 fill-gray-400" />
       )}
-      <figcaption className="absolute right-2 bottom-0 text-right [text-shadow:_-1px_-1px_2px_white,_-1px_1px_2px_white,_1px_1px_2px_white,_1px_-1px_2px_white]">
+      <figcaption className="absolute right-2 bottom-0 text-right font-mono [text-shadow:_-1px_-1px_2px_white,_-1px_1px_2px_white,_1px_1px_2px_white,_1px_-1px_2px_white]">
         {alt}
       </figcaption>
       {children}

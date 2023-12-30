@@ -29,7 +29,8 @@ export function useProjectImport(documentId = undefined) {
           return document.documentId;
         }
         case 'json':
-        // TODO: Implement this in the future.
+          // TODO: Implement this in the future.
+          break;
         default:
           throw new Error('Unsupported import type.');
       }

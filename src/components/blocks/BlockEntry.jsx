@@ -3,6 +3,8 @@ import { useState } from 'react';
 import ExpandLessIcon from '@material-symbols/svg-400/rounded/expand_less.svg';
 import ExpandMoreIcon from '@material-symbols/svg-400/rounded/expand_more.svg';
 
+import { useCurrentCursor } from '@/stores/user';
+
 import ShotList from '../shots/ShotList';
 import BlockContent from './BlockContent';
 
@@ -20,6 +22,7 @@ export default function BlockEntry({
   editable = true,
 }) {
   const [open, setOpen] = useState(false);
+  const hasActiveShot = Boolean(useCurrentCursor()?.shotId);
   return (
     <div>
       <div
@@ -53,6 +56,7 @@ export default function BlockEntry({
           sceneId={sceneId}
           blockId={blockId}
           editable={editable}
+          collapsed={open && !hasActiveShot}
         />
       </fieldset>
     </div>

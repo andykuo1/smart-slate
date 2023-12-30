@@ -71,11 +71,13 @@ Other text goes here.
 ->
 
 ```
-
+???
 ```
 
 # 0.1.10
 
+- Add storyboard view
+- Add shot type thumbnail for default
 - Add editable scene action text
 - Add fountain script imports
 - Add recording duration time

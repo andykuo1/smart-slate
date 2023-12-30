@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useRef } from 'react';
 
 import FaceIcon from '@material-symbols/svg-400/rounded/face-fill.svg';
 import NaturePeopleIcon from '@material-symbols/svg-400/rounded/nature_people-fill.svg';
@@ -10,40 +10,49 @@ import ShotTypes, {
   MEDIUM_SHOT,
   WIDE_SHOT,
 } from '@/stores/ShotTypes';
-import { useSetShotType, useShotType } from '@/stores/document';
 
 import { getShotTypeColor } from './ShotColors';
 
 /**
  * @param {object} props
  * @param {string} [props.className]
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ * @param {import('react').ChangeEventHandler<any>} props.onChange
+ * @param {import('@/stores/document/DocumentStore').ShotType} [props.activeShotType]
+ * @param {boolean} [props.showMore]
  */
-export function ShotTypesSelector({ className, documentId, shotId }) {
-  const shotType = useShotType(documentId, shotId);
-  const setShotType = useSetShotType();
-
+export function ShotTypeSelector({
+  className,
+  onChange,
+  activeShotType = '',
+  showMore = true,
+}) {
   return (
-    <div className={'flex flex-row items-center' + ' ' + className}>
-      <div className="flex flex-col items-center">
-        <ShotTypeButton
-          shotType={WIDE_SHOT.value}
-          onClick={() => setShotType(documentId, shotId, WIDE_SHOT.value)}
-          isActive={shotType === WIDE_SHOT.value}
+    <div className={className}>
+      <ShotTypeButton
+        className="flex-1"
+        shotType={WIDE_SHOT.value}
+        onClick={onChange}
+        isActive={activeShotType === WIDE_SHOT.value}
+      />
+      <ShotTypeButton
+        className="flex-1"
+        shotType={MEDIUM_SHOT.value}
+        onClick={onChange}
+        isActive={activeShotType === MEDIUM_SHOT.value}
+      />
+      <ShotTypeButton
+        className="flex-1"
+        shotType={CLOSE_UP.value}
+        onClick={onChange}
+        isActive={activeShotType === CLOSE_UP.value}
+      />
+      {showMore && (
+        <MoreShotTypeSelector
+          className="flex-1"
+          activeShotType={activeShotType}
+          onChange={onChange}
         />
-        <ShotTypeButton
-          shotType={MEDIUM_SHOT.value}
-          onClick={() => setShotType(documentId, shotId, MEDIUM_SHOT.value)}
-          isActive={shotType === MEDIUM_SHOT.value}
-        />
-        <ShotTypeButton
-          shotType={CLOSE_UP.value}
-          onClick={() => setShotType(documentId, shotId, CLOSE_UP.value)}
-          isActive={shotType === CLOSE_UP.value}
-        />
-      </div>
-      <MoreShotTypeSelector documentId={documentId} shotId={shotId} />
+      )}
     </div>
   );
 }
@@ -51,34 +60,17 @@ export function ShotTypesSelector({ className, documentId, shotId }) {
 /**
  * @param {object} props
  * @param {string} [props.className]
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').ShotType} props.activeShotType
+ * @param {import('react').ChangeEventHandler<any>} props.onChange
  */
-export function MoreShotTypeSelector({ className, documentId, shotId }) {
+export function MoreShotTypeSelector({ className, activeShotType, onChange }) {
   const selectRef = useRef(/** @type {HTMLSelectElement|null} */ (null));
-  const shotType = useShotType(documentId, shotId);
-  const setShotType = useSetShotType();
-
-  /** @type {import('react').ChangeEventHandler<HTMLSelectElement>} */
-  const onShotTypeChange = useCallback(
-    function onShotTypeChange(e) {
-      let el = e.target;
-      setShotType(
-        documentId,
-        shotId,
-        /** @type {import('@/stores/document/DocumentStore').ShotType} */ (
-          el.value
-        ),
-      );
-    },
-    [documentId, shotId, setShotType],
-  );
 
   const isActive =
-    !!shotType &&
-    shotType !== WIDE_SHOT.value &&
-    shotType !== MEDIUM_SHOT.value &&
-    shotType !== CLOSE_UP.value;
+    !!activeShotType &&
+    activeShotType !== WIDE_SHOT.value &&
+    activeShotType !== MEDIUM_SHOT.value &&
+    activeShotType !== CLOSE_UP.value;
 
   return (
     <select
@@ -86,10 +78,12 @@ export function MoreShotTypeSelector({ className, documentId, shotId }) {
       className={
         'text-center bg-transparent rounded' +
         ' ' +
-        (isActive && getShotTypeColor(shotType) + ' ' + className)
+        (isActive && getShotTypeColor(activeShotType)) +
+        ' ' +
+        className
       }
-      value={shotType}
-      onChange={onShotTypeChange}>
+      value={activeShotType}
+      onChange={onChange}>
       {ShotTypes.params().map((type) => (
         <option key={type.value} title={type.name} value={type.value}>
           {type.abbr}
@@ -124,9 +118,13 @@ export function ShotTypeButton({
       title={
         (shotType && ShotTypes.getParamsByType(shotType)?.name) || 'Special'
       }
+      value={shotType}
       onClick={onClick}
       disabled={!onClick}>
-      <ShotTypeIcon shotType={shotType} className="w-6 h-6 fill-current" />
+      <ShotTypeIcon
+        shotType={shotType}
+        className="w-6 h-6 fill-current pointer-events-none"
+      />
     </button>
   );
 }
@@ -146,5 +144,23 @@ export function ShotTypeIcon({ className, shotType }) {
       return <NaturePeopleIcon className={className} />;
     default:
       return <StarsIcon className={className} />;
+  }
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').ShotType} shotType
+ */
+export function getShotTypeIcon(shotType) {
+  switch (shotType) {
+    case CLOSE_UP.value:
+      return FaceIcon;
+    case MEDIUM_SHOT.value:
+      return PersonIcon;
+    case WIDE_SHOT.value:
+      return NaturePeopleIcon;
+    case '':
+      return undefined;
+    default:
+      return StarsIcon;
   }
 }
