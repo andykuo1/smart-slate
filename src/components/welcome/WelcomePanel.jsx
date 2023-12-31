@@ -6,8 +6,8 @@ import AddIcon from '@material-symbols/svg-400/rounded/add-fill.svg';
 import ChangelogButton from '@/buttons/ChangelogButton';
 import ImportProjectButton from '@/buttons/ImportProjectButton';
 import ProfileButton from '@/buttons/ProfileButton';
-import FancyButton from '@/lib/FancyButton';
-import HorizontallyScrollableDiv from '@/lib/HorizontallyScrollableDiv';
+import FancyButton from '@/libs/FancyButton';
+import HorizontallyScrollableDiv from '@/libs/HorizontallyScrollableDiv';
 import {
   useDocumentIds,
   useDocumentLastUpdatedMillis,

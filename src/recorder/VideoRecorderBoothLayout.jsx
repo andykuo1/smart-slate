@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
 
-import { useAnimationFrame } from '@/lib/animationframe';
+import { useAnimationFrame } from '@/libs/animationframe';
 
 /**
  * @callback VideoLayoutCenterRenderProp

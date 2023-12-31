@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { uploadFile, useGAPITokenHandler } from '@/lib/googleapi';
+import { uploadFile, useGAPITokenHandler } from '@/libs/googleapi';
 import { getVideoFileExtensionByMIMEType } from '@/recorder/MediaRecorderSupport';
 import { cacheVideoBlob, getVideoBlob } from '@/recorder/cache/VideoCache';
 import { ANY_SHOT } from '@/stores/ShotTypes';

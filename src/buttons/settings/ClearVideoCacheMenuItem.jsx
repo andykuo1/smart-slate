@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
 
-import { useInterval } from '@/lib/UseInterval';
+import { useInterval } from '@/libs/UseInterval';
 import { clearVideoCache } from '@/recorder/cache/VideoCache';
 import MenuStyle from '@/styles/Menu.module.css';
 import { formatBytes } from '@/utils/StringFormat';

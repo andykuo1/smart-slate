@@ -12,7 +12,7 @@ import LinkIcon from '@material-symbols/svg-400/rounded/link.svg';
 import PhotoCameraIcon from '@material-symbols/svg-400/rounded/photo_camera.svg';
 import UploadIcon from '@material-symbols/svg-400/rounded/upload.svg';
 
-import ImageWithCaption from '@/lib/ImageWithCaption';
+import ImageWithCaption from '@/libs/ImageWithCaption';
 import { isInputCaptureSupported } from '@/recorder/MediaRecorderSupport';
 import {
   useSceneNumber,

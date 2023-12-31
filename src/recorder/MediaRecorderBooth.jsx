@@ -2,8 +2,8 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import ShotThumbnail from '@/components/shots/ShotThumbnail';
-import { useAnimationFrame } from '@/lib/animationframe';
-import { useFullscreen } from '@/lib/fullscreen';
+import { useAnimationFrame } from '@/libs/animationframe';
+import { useFullscreen } from '@/libs/fullscreen';
 import {
   useSceneHeading,
   useShotNumber,

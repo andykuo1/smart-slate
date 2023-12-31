@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { useInterval } from '@/lib/UseInterval';
+import { useInterval } from '@/libs/UseInterval';
 import { getVideoBlob } from '@/recorder/cache/VideoCache';
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
 import { useShotTakeCount, useTake, useTakeNumber } from '@/stores/document';

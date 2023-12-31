@@ -10,6 +10,7 @@ export function createDispatchShots(set, get) {
     setShotType: zi(set, setShotType),
     setShotDescription: zi(set, setShotDescription),
     setShotThumbnail: zi(set, setShotThumbnail),
+    moveShot: zi(set, moveShot),
     updateShot: zi(set, updateShot),
   };
 }
@@ -72,4 +73,32 @@ export function setShotThumbnail(store, documentId, shotId, thumbnailUrl) {
   let shot = document.shots[shotId];
   shot.thumbnail = thumbnailUrl;
   incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('../DocumentStore').Store} store
+ * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('../DocumentStore').BlockId} blockId
+ * @param {import('../DocumentStore').ShotId} shotId
+ * @param {import('../DocumentStore').ShotId} targetId
+ * @param {boolean} [before]
+ */
+export function moveShot(
+  store,
+  documentId,
+  blockId,
+  shotId,
+  targetId,
+  before = false,
+) {
+  const document = store.documents[documentId];
+  const block = document.blocks[blockId];
+  const shotIndex = block.shotIds.indexOf(shotId);
+  const targetIndex = block.shotIds.indexOf(targetId);
+  block.shotIds.splice(shotIndex, 1);
+  if (before) {
+    block.shotIds.splice(targetIndex - 1, 0, shotId);
+  } else {
+    block.shotIds.splice(targetIndex, 0, shotId);
+  }
 }

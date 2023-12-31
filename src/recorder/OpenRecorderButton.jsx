@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useFullscreen } from '@/lib/fullscreen';
-import { useInputCapture } from '@/lib/inputcapture';
+import { useFullscreen } from '@/libs/fullscreen';
+import { useInputCapture } from '@/libs/inputcapture';
 import { isMediaRecorderSupported } from '@/recorder/MediaRecorderSupport';
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
 import { useSettingsStore } from '@/stores/settings';

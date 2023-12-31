@@ -1,4 +1,4 @@
-import ImageWithCaption from '@/lib/ImageWithCaption';
+import ImageWithCaption from '@/libs/ImageWithCaption';
 
 /**
  * @param {object} props

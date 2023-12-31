@@ -1,3 +1,8 @@
+import { useRef } from 'react';
+
+import ArrowForwardIcon from '@material-symbols/svg-400/rounded/arrow_forward.svg';
+
+import { useDraggable, useDraggableTarget } from '@/libs/draggable';
 import OpenRecorderButton from '@/recorder/OpenRecorderButton';
 import {
   useSceneNumber,
@@ -28,6 +33,7 @@ export function ShotEntry({
   children,
   collapsed,
 }) {
+  const containerRef = useRef(/** @type {HTMLLIElement|null} */ (null));
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
   const shotCount = useSceneShotCount(documentId, sceneId);
@@ -38,9 +44,22 @@ export function ShotEntry({
     currentCursor.sceneId === sceneId &&
     currentCursor.shotId === shotId;
   const isFirst = sceneNumber <= 1 && shotNumber <= 1;
+  const draggedShotId = useDraggableTarget();
+  const { onMouseDown, onMouseEnter, onMouseLeave } = useDraggable(
+    shotId,
+    containerRef,
+  );
 
   return (
-    <li className="flex flex-col items-center">
+    <li
+      className={
+        'flex flex-col items-center mx-auto' +
+        ' ' +
+        (draggedShotId === shotId ? 'opacity-30' : '')
+      }
+      ref={containerRef}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}>
       <div
         className={
           'flex w-full h-[6rem] z-10 border-b border-gray-300 shadow' +
@@ -48,9 +67,17 @@ export function ShotEntry({
           (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
         }>
         <BoxDrawingCharacter
+          className="cursor-grab"
           depth={0}
           start={false}
           end={shotNumber >= shotCount}
+          containerProps={
+            collapsed
+              ? {
+                  onMouseDown,
+                }
+              : {}
+          }
         />
         <ShotThumbnail
           className="ml-2"
@@ -91,6 +118,7 @@ export function ShotEntry({
                 </button>
               </div>
             )}
+            {collapsed && <ArrowForwardIcon className="w-6 h-6" />}
           </div>
           {!collapsed && (
             <div className="flex-1 opacity-30 text-xs hidden sm:block">

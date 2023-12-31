@@ -3,7 +3,7 @@ import CloudDoneIcon from '@material-symbols/svg-400/rounded/cloud_done.svg';
 import CloudUploadIcon from '@material-symbols/svg-400/rounded/cloud_upload-fill.svg';
 import StarIcon from '@material-symbols/svg-400/rounded/star-fill.svg';
 
-import HorizontallySnappableDiv from '@/lib/HorizontallySnappableDiv';
+import HorizontallySnappableDiv from '@/libs/HorizontallySnappableDiv';
 import { useTakeRating } from '@/stores/document';
 
 import BoxDrawingCharacter from '../shotlist/BoxDrawingCharacter';

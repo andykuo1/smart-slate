@@ -5,16 +5,19 @@
  * @param {boolean} props.end
  * @param {number} props.depth
  * @param {string} [props.className]
- * @returns
+ * @param {object} [props.containerProps]
  */
 export default function BoxDrawingCharacter({
   start = false,
   end = false,
   depth = 0,
   className = '',
+  containerProps = {},
 }) {
   return (
-    <span className={'font-mono text-2xl my-auto' + ' ' + className}>
+    <span
+      className={'font-mono text-2xl my-auto select-none' + ' ' + className}
+      {...containerProps}>
       {getCharacter(depth === 0, !start || !end, end)}
     </span>
   );

@@ -5,8 +5,8 @@ import AddToDriveIcon from '@material-symbols/svg-400/rounded/add_to_drive.svg';
 import ToggleOff from '@material-symbols/svg-400/rounded/toggle_off.svg';
 import ToggleOn from '@material-symbols/svg-400/rounded/toggle_on-fill.svg';
 
-import { useInterval } from '@/lib/UseInterval';
-import { useGAPITokenHandler } from '@/lib/googleapi';
+import { useInterval } from '@/libs/UseInterval';
+import { useGAPITokenHandler } from '@/libs/googleapi';
 import { useSettingsStore } from '@/stores/settings';
 import MenuStyle from '@/styles/Menu.module.css';
 

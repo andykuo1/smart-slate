@@ -1,12 +1,12 @@
-import { FullscreenProvider } from '@/lib/fullscreen';
+import { FullscreenProvider } from '@/libs/fullscreen';
 import {
   GAPI_API_KEY,
   GAPI_CLIENT_ID,
   GAPI_DRIVE_FILE_SCOPE,
   GoogleAPIProvider,
-} from '@/lib/googleapi';
+} from '@/libs/googleapi';
 
-import { InputCaptureProvider } from './lib/inputcapture';
+import { InputCaptureProvider } from './libs/inputcapture';
 import { MediaRecorderProvider } from './recorder';
 import { VideoCacheProvider } from './recorder/cache';
 

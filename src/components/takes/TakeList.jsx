@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from 'react';
 
-import { useGAPITokenHandler } from '@/lib/googleapi';
+import { useGAPITokenHandler } from '@/libs/googleapi';
 import { useTakeIds } from '@/stores/document';
 
 import { NewTake, TakeEntry } from './TakeEntry';

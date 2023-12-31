@@ -2,13 +2,13 @@ import { useCallback, useEffect, useState } from 'react';
 
 import ProfileIcon from '@material-symbols/svg-400/rounded/account_circle.svg';
 
-import FancyButton from '@/lib/FancyButton';
-import { useInterval } from '@/lib/UseInterval';
+import FancyButton from '@/libs/FancyButton';
+import { useInterval } from '@/libs/UseInterval';
 import {
   useGAPILogin,
   useGAPILogout,
   useGAPITokenHandler,
-} from '@/lib/googleapi';
+} from '@/libs/googleapi';
 
 export default function ProfileButton() {
   const [loggedIn, setLoggedIn] = useState('');

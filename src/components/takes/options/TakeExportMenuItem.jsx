@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import AddToDriveIcon from '@material-symbols/svg-400/rounded/add_to_drive.svg';
 import DownloadIcon from '@material-symbols/svg-400/rounded/download.svg';
 
-import { useGAPITokenHandler } from '@/lib/googleapi';
+import { useGAPITokenHandler } from '@/libs/googleapi';
 import { useCachedVideoBlob } from '@/recorder/cache';
 import {
   useTakeDownloader,

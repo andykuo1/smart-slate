@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import BackIcon from '@material-symbols/svg-400/rounded/arrow_back-fill.svg';
 
 import SettingsButton from '@/buttons/SettingsButton';
-import FancyButton from '@/lib/FancyButton';
+import FancyButton from '@/libs/FancyButton';
 import {
   useCurrentRecorder,
   useSetRecorderActive,
