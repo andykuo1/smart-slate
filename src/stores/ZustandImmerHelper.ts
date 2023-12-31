@@ -1,6 +1,7 @@
 import { produce } from 'immer';
 
 type Set = import('zustand').StoreApi<any>['setState'];
+type Get = import('zustand').StoreApi<any>['getState'];
 
 export function zi<Store, Args extends Array<any>>(
   set: Set,
@@ -8,4 +9,11 @@ export function zi<Store, Args extends Array<any>>(
 ) {
   return (...args: Args) =>
     set(produce((draft) => applier(draft as Store, ...(args as Args))));
+}
+
+export function ziget<Store, Args extends Array<any>>(
+  get: Get,
+  applier: (store: Store, ...args: Args) => void,
+) {
+  return (...args: Args) => applier(get(), ...(args as Args));
 }

@@ -10,7 +10,7 @@ import { ShotTypeSelector } from './ShotTypeSelector';
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  */
-export default function NewShotEntry({ documentId, blockId }) {
+export default function ShotEntryNew({ documentId, blockId }) {
   const [shotType, setShotType] = useState(
     /** @type {import('@/stores/document/DocumentStore').ShotType} */ (''),
   );

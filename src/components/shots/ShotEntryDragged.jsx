@@ -1,8 +1,9 @@
-import { useCallback, useRef } from 'react';
+import { useRef } from 'react';
 
-import { useDraggableCursor, useDraggableTarget } from '@/libs/draggable';
+import { useDraggableCursor, useDraggableTarget } from '@/stores/draggable';
 
 import ShotThumbnail from './ShotThumbnail';
+import { useShotEntryOnDragUpdate } from './UseShotEntryDraggable';
 
 /**
  * @param {object} props
@@ -13,21 +14,7 @@ import ShotThumbnail from './ShotThumbnail';
 export default function ShotEntryDragged({ documentId, sceneId, blockId }) {
   const targetRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const draggedShotId = useDraggableTarget();
-  /** @type {import('@/libs/draggable').OnDragUpdateCallback} */
-  const onDragUpdate = useCallback(function _onDragUpdate(
-    targetId,
-    overId,
-    x,
-    y,
-  ) {
-    let target = targetRef.current;
-    if (!target) {
-      return;
-    }
-    target.style.left = `${x}px`;
-    target.style.top = `${y}px`;
-    target.style.translate = '-25% -50%';
-  }, []);
+  const onDragUpdate = useShotEntryOnDragUpdate(targetRef);
   useDraggableCursor(onDragUpdate);
   return (
     <div

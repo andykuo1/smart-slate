@@ -1,15 +1,15 @@
-import { Fragment, useCallback } from 'react';
+import { Fragment } from 'react';
 
-import { useDraggableContainer, useDraggableDispatch } from '@/libs/draggable';
-import { useDocumentStore, useShotIds } from '@/stores/document';
-import { moveShot } from '@/stores/document/dispatch/DispatchShots';
+import { useShotIds } from '@/stores/document';
+import { useDraggableContainer } from '@/stores/draggable';
 import { useCurrentCursor } from '@/stores/user';
 
 import TakeList from '../takes/TakeList';
 import GridStyle from './GridStyle.module.css';
-import NewShotEntry from './NewShotEntry';
 import { ShotEntry } from './ShotEntry';
 import ShotEntryDragged from './ShotEntryDragged';
+import ShotEntryNew from './ShotEntryNew';
+import { useShotEntryOnDragComplete } from './UseShotEntryDraggable';
 
 /**
  * @param {object} props
@@ -30,60 +30,7 @@ export default function ShotList({
   const activeShotId = userCursor.shotId;
   const hasActiveShot = Boolean(activeShotId);
   const shotIds = useShotIds(documentId, blockId);
-  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
-  const { UNSAFE_getDraggableStore } = useDraggableDispatch();
-
-  /** @type {import('@/libs/draggable').OnDragCompleteCallback} */
-  const onDragComplete = useCallback(
-    function _onDragComplete(targetId, overId, x, y) {
-      if (targetId === overId) {
-        return;
-      }
-      let isBefore = false;
-      if (!overId) {
-        const refs = UNSAFE_getDraggableStore().elementRefs;
-        const targetX = x;
-        const targetY = y;
-        let nearestId = null;
-        let nearestBefore = false;
-        let nearestDistSqu = Number.POSITIVE_INFINITY;
-
-        // Get nearest over id
-        for (let [id, ref] of Object.entries(refs)) {
-          const element = ref?.current;
-          if (!element) {
-            continue;
-          }
-          const elementRect = element.getBoundingClientRect();
-          const dx = targetX - (elementRect.x + elementRect.width / 2);
-          const dy = targetY - (elementRect.y + elementRect.height / 2);
-          const elementBefore = dx < 0;
-          const distSqu = dx * dx + dy * dy;
-          if (distSqu < nearestDistSqu) {
-            nearestId = id;
-            nearestBefore = elementBefore;
-            nearestDistSqu = distSqu;
-          }
-        }
-        if (!nearestId) {
-          return;
-        }
-        overId = nearestId;
-      } else {
-        const refs = UNSAFE_getDraggableStore().elementRefs;
-        const overElement = refs[overId]?.current;
-        if (overElement) {
-          const overRect = overElement.getBoundingClientRect();
-          const overX = overRect.x + overRect.width / 2;
-          isBefore = x < overX;
-        }
-      }
-      const store = UNSAFE_getStore();
-      moveShot(store, documentId, blockId, targetId, overId, isBefore);
-    },
-    [UNSAFE_getDraggableStore, UNSAFE_getStore, documentId, blockId],
-  );
-
+  const onDragComplete = useShotEntryOnDragComplete(documentId, blockId);
   useDraggableContainer(onDragComplete);
 
   return (
@@ -112,7 +59,7 @@ export default function ShotList({
         )}
       </div>
       {editable && !hasActiveShot && (
-        <NewShotEntry documentId={documentId} blockId={blockId} />
+        <ShotEntryNew documentId={documentId} blockId={blockId} />
       )}
       <ShotEntryDragged
         documentId={documentId}

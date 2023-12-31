@@ -1,7 +1,27 @@
+import { zi, ziget } from '@/stores/ZustandImmerHelper';
+
 import {
   DRAG_AUTOSCROLL_SPEED,
   DRAG_START_BUFFER_RADIUS_SQUARED,
-} from './UseDraggable';
+} from './DraggableStoreContext';
+
+/** @typedef {ReturnType<createDispatch>} Dispatch */
+
+/**
+ * @param {import('zustand').StoreApi<any>['setState']} set
+ * @param {import('zustand').StoreApi<any>['getState']} get
+ */
+export function createDispatch(set, get) {
+  return {
+    tryStartDrag: zi(set, applyDragStart),
+    tryStopDrag: zi(set, applyDragStop),
+    tryMoveDrag: zi(set, applyDragMove),
+    tryMoveDragEnter: zi(set, applyDragEnter),
+    tryMoveDragLeave: zi(set, applyDragLeave),
+    tryAutoScroll: ziget(get, applyAutoScroll),
+    UNSAFE_getDraggableStore: get,
+  };
+}
 
 /**
  * @param {import('./DraggableStore').Store} draft
@@ -101,18 +121,18 @@ export function applyDragLeave(draft, targetId, x, y) {
 }
 
 /**
- * @param {import('./DraggableStore').Applier} applier
+ * @param {import('./DraggableStore').Store} store
  * @param {HTMLElement} scrollContainer
  * @param {number} scrollSpeedX
  * @param {number} scrollSpeedY
  */
 export function applyAutoScroll(
-  applier,
+  store,
   scrollContainer,
   scrollSpeedX,
   scrollSpeedY,
 ) {
-  const { dragging, dragMove } = applier.get();
+  const { dragging, dragMove } = store;
   if (!dragging) {
     return;
   }
@@ -157,28 +177,4 @@ export function applyAutoScroll(
       scrollContainer.scrollTop += dy * ry * scrollSpeedY;
     }
   }
-}
-
-/**
- * @param {import('./DraggableStore').Store} store
- * @param {string} targetId
- * @param {import('react').RefObject<any>} elementRef
- */
-export function applyUpdateElementRef(store, targetId, elementRef) {
-  store.elementRefs[targetId] = elementRef;
-}
-
-/**
- * @param {import('./DraggableStore').Store} store
- * @param {string} targetId
- */
-export function applyUpdateElementRect(store, targetId) {
-  /** @type {Element|null} */
-  const target = store.elementRefs[targetId]?.current;
-  if (!target) {
-    store.elementRects[targetId] = null;
-    return;
-  }
-  const rect = target.getBoundingClientRect();
-  store.elementRects[targetId] = rect;
 }

@@ -1,12 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { useCallback } from 'react';
 
-import { shallow } from 'zustand/shallow';
-
 import { useAnimationFrame } from '@/libs/animationframe';
-import { slowShallowCopyObjects } from '@/utils/ObjectCopy';
 
-import { useStore } from './DraggableStore';
+import { useDraggableStore } from './UseDraggableStore';
 
 /**
  * @callback OnDragUpdateCallback
@@ -30,59 +27,48 @@ export const DRAG_START_BUFFER_RADIUS_SQUARED =
 
 export const DRAG_AUTOSCROLL_SPEED = 5;
 
-export function useDraggableStore() {
-  return useStore(
-    (state) => /** @type {import('./DraggableStore').Store} */ (state),
-  );
-}
-
-export function useDraggableDispatch() {
-  return useStore(
-    (state) =>
-      slowShallowCopyObjects(
-        {},
-        /** @type {import('./DraggableStore').Dispatch} */ (state),
-      ),
-    shallow,
-  );
-}
-
 /**
  * @param {string} targetId
  */
 export function useIsDragging(targetId) {
-  return useStore((state) => state.dragging && state.dragTargetId === targetId);
+  return useDraggableStore(
+    (state) => state.dragging && state.dragTargetId === targetId,
+  );
 }
 
 export function useIsAnyDragging() {
-  return useStore((state) => state.dragging);
+  return useDraggableStore((state) => state.dragging);
 }
 
 /**
  * @param {string} targetId
  */
 export function useIsDraggingOver(targetId) {
-  return useStore(
+  return useDraggableStore(
     (state) => state.dragging && state.dragOverTargetId === targetId,
   );
 }
 
 export function useDraggableTarget() {
-  return useStore((state) => state.dragTargetId);
+  return useDraggableStore((state) => state.dragTargetId);
 }
 
 /**
  * @param {string} targetId
- * @param {import('react').RefObject<Element>} elementRef
+ * @param {import('react').RefObject<HTMLElement|null>} elementRef
  */
 export function useDraggable(targetId, elementRef) {
-  const {
-    tryStartDrag,
-    tryMoveDragEnter,
-    tryMoveDragLeave,
-    tryUpdateElementRect,
-    tryUpdateElementRef,
-  } = useDraggableDispatch();
+  const { tryStartDrag, tryMoveDragEnter, tryMoveDragLeave } =
+    useDraggableStore();
+
+  /** @type {import('react').TouchEventHandler} */
+  function onTouchStart(e) {
+    let touch = e.touches[0];
+    if (!touch) {
+      return;
+    }
+    tryStartDrag(targetId, touch.clientX, touch.clientY);
+  }
 
   /** @type {import('react').MouseEventHandler} */
   function onMouseDown(e) {
@@ -99,15 +85,14 @@ export function useDraggable(targetId, elementRef) {
     tryMoveDragLeave(targetId, e.clientX, e.clientY);
   }
 
-  useEffect(() => {
-    tryUpdateElementRef(targetId, elementRef);
-    tryUpdateElementRect(targetId);
-  }, [targetId, elementRef]);
-
   return {
-    onMouseDown: useCallback(onMouseDown, [targetId, tryStartDrag]),
     onMouseEnter: useCallback(onMouseEnter, [targetId, tryMoveDragEnter]),
     onMouseLeave: useCallback(onMouseLeave, [targetId, tryMoveDragLeave]),
+    handleProps: {
+      'data-draggable': targetId,
+      onTouchStart: useCallback(onTouchStart, [targetId, tryStartDrag]),
+      onMouseDown: useCallback(onMouseDown, [targetId, tryStartDrag]),
+    },
   };
 }
 
@@ -115,7 +100,7 @@ export function useDraggable(targetId, elementRef) {
  * @param {(targetId: string, overId: string, x: number, y: number) => void} onDragUpdate
  */
 export function useDraggableCursor(onDragUpdate) {
-  const { UNSAFE_getDraggableStore } = useDraggableDispatch();
+  const { UNSAFE_getDraggableStore } = useDraggableStore();
 
   const animationCallback = useCallback(
     /** @param {number} now */
@@ -137,7 +122,35 @@ export function useDraggableCursor(onDragUpdate) {
  * @param {(targetId: string, overId: string, x: number, y: number) => void} onDragComplete
  */
 export function useDraggableContainer(onDragComplete) {
-  const { tryMoveDrag, tryStopDrag } = useDraggableDispatch();
+  const { tryMoveDrag, tryStopDrag, UNSAFE_getDraggableStore } =
+    useDraggableStore();
+
+  const touchMoveCallback = useCallback(
+    /** @param {TouchEvent} e */
+    function onTouchMove(e) {
+      const touch = e.touches[0];
+      if (!touch) {
+        return;
+      }
+      tryMoveDrag(touch.clientX, touch.clientY);
+      if (UNSAFE_getDraggableStore().dragTargetId) {
+        e.preventDefault();
+      }
+    },
+    [tryMoveDrag],
+  );
+
+  const touchEndCallback = useCallback(
+    /** @param {TouchEvent} e */
+    function onTouchEnd(e) {
+      const touch = e.changedTouches[0];
+      if (!touch) {
+        return;
+      }
+      tryStopDrag(touch.clientX, touch.clientY, onDragComplete);
+    },
+    [tryStopDrag, onDragComplete],
+  );
 
   const moveCallback = useCallback(
     /** @param {MouseEvent} e */
@@ -156,13 +169,23 @@ export function useDraggableContainer(onDragComplete) {
   );
 
   useEffect(() => {
+    /** @type {AddEventListenerOptions} */
+    let touchMoveOptions = { passive: false };
+    document.addEventListener('touchmove', touchMoveCallback, touchMoveOptions);
+    document.addEventListener('touchend', touchEndCallback);
     document.addEventListener('mousemove', moveCallback);
     document.addEventListener('mouseup', upCallback);
     return () => {
+      document.removeEventListener(
+        'touchmove',
+        touchMoveCallback,
+        touchMoveOptions,
+      );
+      document.removeEventListener('touchend', touchEndCallback);
       document.removeEventListener('mousemove', moveCallback);
       document.removeEventListener('mouseup', upCallback);
     };
-  }, [moveCallback, upCallback]);
+  }, [touchMoveCallback, touchEndCallback, moveCallback, upCallback]);
 }
 
 const FRAME_DELTA_FACTOR = 10;
@@ -178,7 +201,7 @@ export function useDraggableContainerAutoScroll(
   scrollSpeedX = 1,
   scrollSpeedY = 1,
 ) {
-  const { tryAutoScroll } = useDraggableDispatch();
+  const { tryAutoScroll } = useDraggableStore();
   const prevFrameRef = useRef(0);
   const animationCallback = useCallback(
     /** @param {number} now */

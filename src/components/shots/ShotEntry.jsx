@@ -2,13 +2,13 @@ import { useRef } from 'react';
 
 import ArrowForwardIcon from '@material-symbols/svg-400/rounded/arrow_forward.svg';
 
-import { useDraggable, useDraggableTarget } from '@/libs/draggable';
 import OpenRecorderButton from '@/recorder/OpenRecorderButton';
 import {
   useSceneNumber,
   useSceneShotCount,
   useShotNumber,
 } from '@/stores/document';
+import { useDraggable, useDraggableTarget } from '@/stores/draggable';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
@@ -45,7 +45,7 @@ export function ShotEntry({
     currentCursor.shotId === shotId;
   const isFirst = sceneNumber <= 1 && shotNumber <= 1;
   const draggedShotId = useDraggableTarget();
-  const { onMouseDown, onMouseEnter, onMouseLeave } = useDraggable(
+  const { onMouseEnter, onMouseLeave, handleProps } = useDraggable(
     shotId,
     containerRef,
   );
@@ -67,17 +67,13 @@ export function ShotEntry({
           (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
         }>
         <BoxDrawingCharacter
-          className="cursor-grab"
+          className={
+            'cursor-grab' + ' ' + (collapsed ? 'opacity-100' : 'opacity-30')
+          }
           depth={0}
           start={false}
           end={shotNumber >= shotCount}
-          containerProps={
-            collapsed
-              ? {
-                  onMouseDown,
-                }
-              : {}
-          }
+          containerProps={collapsed ? handleProps : {}}
         />
         <ShotThumbnail
           className="ml-2"

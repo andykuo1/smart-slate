@@ -84,6 +84,8 @@ Other text goes here.
 - Add take preview on take click
 - Add autocomplete for scene heading
 - Add fallback contraints for media stream
+- Add draggable shots
+- Add touch support for draggables
 
 - Fix support for video snapshot on mobile
 - Fix delete cache per take missing write permissions

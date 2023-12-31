@@ -21,7 +21,7 @@ export default function BlockEntry({
   blockId,
   editable = true,
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const hasActiveShot = Boolean(useCurrentCursor()?.shotId);
   return (
     <div>
@@ -40,6 +40,7 @@ export default function BlockEntry({
             onClick={() => setOpen(true)}>
             <span className="absolute bottom-0 left-0 right-0">
               <ExpandMoreIcon className="mx-auto w-6 h-6 fill-current" />
+              Edit?
             </span>
           </button>
         )}
@@ -48,6 +49,7 @@ export default function BlockEntry({
         {open && (
           <button className="w-full" onClick={() => setOpen(false)}>
             <ExpandLessIcon className="mx-auto w-6 h-6 fill-current" />
+            Ready?
           </button>
         )}
         <legend className="hidden">Shot list</legend>
@@ -55,7 +57,7 @@ export default function BlockEntry({
           documentId={documentId}
           sceneId={sceneId}
           blockId={blockId}
-          editable={editable}
+          editable={open && editable}
           collapsed={open && !hasActiveShot}
         />
       </fieldset>

@@ -97,8 +97,10 @@ export function moveShot(
   const targetIndex = block.shotIds.indexOf(targetId);
   block.shotIds.splice(shotIndex, 1);
   if (before) {
-    block.shotIds.splice(targetIndex - 1, 0, shotId);
-  } else {
     block.shotIds.splice(targetIndex, 0, shotId);
+  } else if (targetIndex + 1 < block.shotIds.length) {
+    block.shotIds.splice(targetIndex + 1, 0, shotId);
+  } else {
+    block.shotIds.push(shotId);
   }
 }
