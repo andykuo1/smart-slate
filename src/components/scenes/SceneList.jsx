@@ -5,8 +5,8 @@ import { useDraggableContainerAutoScroll } from '@/stores/draggable';
 import { useCurrentCursor } from '@/stores/user';
 
 import DocumentTitle from '../shotlist/DocumentTitle';
-import NewSceneEntry from './NewSceneEntry';
 import SceneEntry from './SceneEntry';
+import SceneEntryNew from './SceneEntryNew';
 
 /**
  * @param {object} props
@@ -38,7 +38,7 @@ export default function SceneList({ documentId }) {
             </Fragment>
           ),
       )}
-      <NewSceneEntry documentId={documentId} />
+      <SceneEntryNew documentId={documentId} />
     </article>
   );
 }

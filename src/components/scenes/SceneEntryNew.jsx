@@ -10,10 +10,10 @@ import { useCurrentCursor } from '@/stores/user';
  * @param {object} props
  * @param {string} props.documentId
  */
-export default function NewSceneEntry({ documentId }) {
+export default function SceneEntryNew({ documentId }) {
   const userCursor = useCurrentCursor();
-  const activeShotId = userCursor.shotId;
-  const hasActiveShot = Boolean(activeShotId);
+  const hasActiveShot = Boolean(userCursor.shotId);
+  const hasActiveScene = Boolean(userCursor.sceneId);
 
   const addScene = useAddScene();
   const addBlock = useAddBlock();
@@ -28,7 +28,7 @@ export default function NewSceneEntry({ documentId }) {
     addShot(documentId, newBlock.blockId, newShot);
   }
 
-  if (hasActiveShot) {
+  if (hasActiveScene || hasActiveShot) {
     return null;
   }
   return (
