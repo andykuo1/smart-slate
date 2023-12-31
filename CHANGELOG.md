@@ -86,6 +86,7 @@ Other text goes here.
 - Add fallback contraints for media stream
 - Add draggable shots
 - Add touch support for draggables
+- Add focusable scene
 
 - Fix support for video snapshot on mobile
 - Fix delete cache per take missing write permissions

@@ -105,7 +105,7 @@ export function ShotEntry({
                   }
                   onClick={() => {
                     if (isActive) {
-                      setUserCursor(documentId, sceneId, '');
+                      setUserCursor(documentId, '', '');
                     } else {
                       setUserCursor(documentId, sceneId, shotId);
                     }

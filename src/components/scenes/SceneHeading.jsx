@@ -1,4 +1,6 @@
 import { useSceneHeading, useSceneNumber } from '@/stores/document';
+import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
+import BarberpoleStyle from '@/styles/Barberpole.module.css';
 
 /**
  * @param {object} props
@@ -9,18 +11,27 @@ import { useSceneHeading, useSceneNumber } from '@/stores/document';
 export default function SceneHeading({ className, documentId, sceneId }) {
   const [sceneHeading, setSceneHeading] = useSceneHeading(documentId, sceneId);
   const sceneNumber = useSceneNumber(documentId, sceneId);
+  const currentCursor = useCurrentCursor();
+  const setUserCursor = useSetUserCursor();
+  const isActive =
+    currentCursor.documentId === documentId &&
+    currentCursor.sceneId === sceneId &&
+    !currentCursor.shotId;
 
   /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
   function onChange(e) {
     const el = e.target;
     setSceneHeading(documentId, sceneId, el.value.toUpperCase());
   }
+
   return (
     <div
       className={
         'relative flex flex-row items-center w-full border-b-2 border-dotted border-black' +
         ' ' +
-        className
+        className +
+        ' ' +
+        (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
       }>
       <SceneNumber sceneNumber={sceneNumber} />
       <input
@@ -36,6 +47,21 @@ export default function SceneHeading({ className, documentId, sceneId }) {
         <option value="INT. " />
         <option value="EXT. " />
       </datalist>
+      <button
+        className={
+          'rounded px-2 m-2 whitespace-nowrap' +
+          ' ' +
+          (isActive ? 'bg-gray-600' : 'bg-gray-300')
+        }
+        onClick={() => {
+          if (isActive) {
+            setUserCursor(documentId, '', '');
+          } else {
+            setUserCursor(documentId, sceneId, '');
+          }
+        }}>
+        {isActive ? 'unfocus?' : 'focus?'}
+      </button>
       <SceneNumber sceneNumber={sceneNumber} />
     </div>
   );
