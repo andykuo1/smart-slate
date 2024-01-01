@@ -93,17 +93,18 @@ export function moveShot(
 ) {
   const document = store.documents[documentId];
   const block = document.blocks[blockId];
-  const shotIndex = block.shotIds.indexOf(shotId);
-  const targetIndex = block.shotIds.indexOf(targetId);
-  if (block.shotIds.length <= 0) {
+  const shotIds = block.shotIds;
+  const shotIndex = shotIds.indexOf(shotId);
+  if (shotIds.length <= 0) {
     return;
   }
-  block.shotIds.splice(shotIndex, 1);
+  shotIds.splice(shotIndex, 1);
+  const targetIndex = shotIds.indexOf(targetId);
   if (before) {
-    block.shotIds.splice(targetIndex, 0, shotId);
+    shotIds.splice(targetIndex, 0, shotId);
   } else if (targetIndex + 1 < block.shotIds.length) {
-    block.shotIds.splice(targetIndex + 1, 0, shotId);
+    shotIds.splice(targetIndex + 1, 0, shotId);
   } else {
-    block.shotIds.push(shotId);
+    shotIds.push(shotId);
   }
 }

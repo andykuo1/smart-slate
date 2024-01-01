@@ -1,5 +1,3 @@
-import { useRef } from 'react';
-
 import ArrowForwardIcon from '@material-symbols/svg-400/rounded/arrow_forward.svg';
 
 import OpenRecorderButton from '@/recorder/OpenRecorderButton';
@@ -35,7 +33,6 @@ export function ShotEntry({
   children,
   collapsed,
 }) {
-  const containerRef = useRef(/** @type {HTMLLIElement|null} */ (null));
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
   const shotCount = useSceneShotCount(documentId, sceneId);
@@ -46,10 +43,7 @@ export function ShotEntry({
     currentCursor.shotId === shotId;
   const isFirst = sceneNumber <= 1 && shotNumber <= 1;
   const draggedShotId = useDraggableTarget();
-  const { onMouseEnter, onMouseLeave, handleProps } = useDraggable(
-    shotId,
-    containerRef,
-  );
+  const { elementProps, handleProps } = useDraggable(shotId);
 
   return (
     <li
@@ -58,9 +52,7 @@ export function ShotEntry({
         ' ' +
         (draggedShotId === shotId ? 'opacity-30' : '')
       }
-      ref={containerRef}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}>
+      {...elementProps}>
       <div
         className={
           'flex flex-row items-center w-full h-[6rem] z-10 border-b border-gray-300 shadow' +

@@ -10,5 +10,7 @@ export function createStore() {
     dragMove: [0, 0],
     dragStop: [0, 0],
     dragging: false,
+    /** @type {import('./DraggableStoreContext').OnDragCompleteCallback|null} */
+    completeCallback: null,
   };
 }

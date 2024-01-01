@@ -79,6 +79,8 @@ Other text goes here.
 - Change shot thumbnail camera option to capture on tab click instead
 - Change scene focus when ready click
 
+- Fix drag box for touch
+
 # 0.1.10
 
 - Add storyboard view

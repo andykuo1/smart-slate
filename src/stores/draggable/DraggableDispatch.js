@@ -19,8 +19,17 @@ export function createDispatch(set, get) {
     tryMoveDragEnter: zi(set, applyDragEnter),
     tryMoveDragLeave: zi(set, applyDragLeave),
     tryAutoScroll: ziget(get, applyAutoScroll),
+    setCompleteCallback: zi(set, setCompleteCallback),
     UNSAFE_getDraggableStore: get,
   };
+}
+
+/**
+ * @param {import('./DraggableStore').Store} store
+ * @param {import('./DraggableStoreContext').OnDragCompleteCallback} callback
+ */
+export function setCompleteCallback(store, callback) {
+  store.completeCallback = callback;
 }
 
 /**
@@ -48,7 +57,7 @@ export function applyDragStart(draft, targetId, x, y) {
  * @param {import('./DraggableStore').Store} draft
  * @param {number} x
  * @param {number} y
- * @param {(targetId: string, overId: string, x: number, y: number) => void} callback
+ * @param {import('./DraggableStoreContext').OnDragCompleteCallback} callback
  */
 export function applyDragStop(draft, x, y, callback) {
   if (draft.dragging) {

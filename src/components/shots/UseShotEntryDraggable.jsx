@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 
 import { useDocumentStore } from '@/stores/document';
-import { moveShot } from '@/stores/document/dispatch/DispatchShots';
 
 /**
  * @param {import('react').RefObject<HTMLElement>} targetRef
@@ -30,7 +29,7 @@ export function useShotEntryOnDragUpdate(targetRef) {
  * @param {import('@/stores/document/DocumentStore').BlockId} blockId
  */
 export function useShotEntryOnDragComplete(documentId, blockId) {
-  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
+  const moveShot = useDocumentStore((ctx) => ctx.moveShot);
 
   /** @type {import('@/stores/draggable').OnDragCompleteCallback} */
   const onDragComplete = useCallback(
@@ -82,10 +81,10 @@ export function useShotEntryOnDragComplete(documentId, blockId) {
           isBefore = x < overX;
         }
       }
-      const store = UNSAFE_getStore();
-      moveShot(store, documentId, blockId, targetId, overId, isBefore);
+
+      moveShot(documentId, blockId, targetId, overId, isBefore);
     },
-    [UNSAFE_getStore, documentId, blockId],
+    [documentId, blockId],
   );
   return onDragComplete;
 }
