@@ -6,7 +6,7 @@ import StarIcon from '@material-symbols/svg-400/rounded/star-fill.svg';
 import HorizontallySnappableDiv from '@/libs/HorizontallySnappableDiv';
 import { useTakeRating } from '@/stores/document';
 
-import BoxDrawingCharacter from '../shotlist/BoxDrawingCharacter';
+import BoxDrawingCharacter from '../documents/BoxDrawingCharacter';
 import TakeOptions from './TakeOptions';
 import TakePreview from './TakePreview';
 

@@ -45,7 +45,10 @@ export default function ShotThumbnail({
   );
 
   return (
-    <div className={'relative flex items-center' + ' ' + className}>
+    <div
+      className={
+        'relative flex items-center border border-black' + ' ' + className
+      }>
       <PopoverProvider>
         <ShotThumbnailImage
           className={'flex-1 bg-gray-300'}
@@ -66,11 +69,7 @@ export default function ShotThumbnail({
               activeShotType={activeShotType}
               onChange={onShotTypeChange}
             />
-            <ShotThumbnailOptions
-              documentId={documentId}
-              shotId={shotId}
-              editable={editable}
-            />
+            <ShotThumbnailOptions documentId={documentId} shotId={shotId} />
           </div>
         </Popover>
       </PopoverProvider>

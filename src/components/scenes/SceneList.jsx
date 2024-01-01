@@ -4,7 +4,7 @@ import { useSceneIds } from '@/stores/document';
 import { useDraggableContainerAutoScroll } from '@/stores/draggable';
 import { useCurrentCursor } from '@/stores/user';
 
-import DocumentTitle from '../shotlist/DocumentTitle';
+import DocumentTitle from '../documents/DocumentTitle';
 import SceneEntry from './SceneEntry';
 import SceneEntryNew from './SceneEntryNew';
 

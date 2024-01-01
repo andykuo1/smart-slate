@@ -3,7 +3,7 @@ import { useState } from 'react';
 import ExpandLessIcon from '@material-symbols/svg-400/rounded/expand_less.svg';
 import ExpandMoreIcon from '@material-symbols/svg-400/rounded/expand_more.svg';
 
-import { useCurrentCursor } from '@/stores/user';
+import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 
 import ShotList from '../shots/ShotList';
 import BlockContent from './BlockContent';
@@ -22,7 +22,14 @@ export default function BlockEntry({
   editable = true,
 }) {
   const [open, setOpen] = useState(true);
+  const setUserCursor = useSetUserCursor();
   const hasActiveShot = Boolean(useCurrentCursor()?.shotId);
+
+  function onReadyClick() {
+    setOpen(false);
+    setUserCursor(documentId, sceneId, '');
+  }
+
   return (
     <div>
       <div
@@ -47,7 +54,7 @@ export default function BlockEntry({
       </div>
       <fieldset>
         {open && (
-          <button className="w-full" onClick={() => setOpen(false)}>
+          <button className="w-full" onClick={onReadyClick}>
             <ExpandLessIcon className="mx-auto w-6 h-6 fill-current" />
             Ready?
           </button>

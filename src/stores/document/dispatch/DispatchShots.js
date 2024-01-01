@@ -95,6 +95,9 @@ export function moveShot(
   const block = document.blocks[blockId];
   const shotIndex = block.shotIds.indexOf(shotId);
   const targetIndex = block.shotIds.indexOf(targetId);
+  if (block.shotIds.length <= 0) {
+    return;
+  }
   block.shotIds.splice(shotIndex, 1);
   if (before) {
     block.shotIds.splice(targetIndex, 0, shotId);

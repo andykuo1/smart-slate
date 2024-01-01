@@ -1,4 +1,4 @@
-import DocumentPanel from '@/components/shotlist/DocumentPanel';
+import DocumentPanel from '@/components/documents/DocumentPanel';
 import { useCurrentDocumentId } from '@/stores/user';
 
 export default function EditPage() {

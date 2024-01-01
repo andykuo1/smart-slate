@@ -1,6 +1,9 @@
 import { useSceneHeading, useSceneNumber } from '@/stores/document';
-import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
+import { useCurrentCursor } from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
+
+import SceneFocusButton from './SceneFocusButton';
+import SceneNumber from './SceneNumber';
 
 /**
  * @param {object} props
@@ -12,7 +15,6 @@ export default function SceneHeading({ className, documentId, sceneId }) {
   const [sceneHeading, setSceneHeading] = useSceneHeading(documentId, sceneId);
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const currentCursor = useCurrentCursor();
-  const setUserCursor = useSetUserCursor();
   const isActive =
     currentCursor.documentId === documentId &&
     currentCursor.sceneId === sceneId &&
@@ -47,31 +49,8 @@ export default function SceneHeading({ className, documentId, sceneId }) {
         <option value="INT. " />
         <option value="EXT. " />
       </datalist>
-      <button
-        className={
-          'rounded px-2 m-2 whitespace-nowrap' +
-          ' ' +
-          (isActive ? 'bg-gray-600' : 'bg-gray-300')
-        }
-        onClick={() => {
-          if (isActive) {
-            setUserCursor(documentId, '', '');
-          } else {
-            setUserCursor(documentId, sceneId, '');
-          }
-        }}>
-        {isActive ? 'unfocus?' : 'focus?'}
-      </button>
+      <SceneFocusButton documentId={documentId} sceneId={sceneId} />
       <SceneNumber sceneNumber={sceneNumber} />
     </div>
   );
-}
-
-/**
- * @param {object} props
- * @param {number} props.sceneNumber
- */
-function SceneNumber({ sceneNumber }) {
-  const result = sceneNumber < 0 ? '??' : String(sceneNumber).padStart(2, '0');
-  return <span className="px-2 font-mono opacity-30">{result}</span>;
 }

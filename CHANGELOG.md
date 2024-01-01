@@ -74,6 +74,11 @@ Other text goes here.
 ???
 ```
 
+# 0.1.11
+
+- Change shot thumbnail camera option to capture on tab click instead
+- Change scene focus when ready click
+
 # 0.1.10
 
 - Add storyboard view

@@ -9,11 +9,13 @@ import {
   useShotNumber,
 } from '@/stores/document';
 import { useDraggable, useDraggableTarget } from '@/stores/draggable';
-import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
+import { useCurrentCursor } from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 
-import BoxDrawingCharacter from '../shotlist/BoxDrawingCharacter';
+import BoxDrawingCharacter from '../documents/BoxDrawingCharacter';
+import ShotFocusButton from './ShotFocusButton';
+import ShotNumber from './ShotNumber';
 import ShotThumbnail from './ShotThumbnail';
 
 /**
@@ -38,7 +40,6 @@ export function ShotEntry({
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
   const shotCount = useSceneShotCount(documentId, sceneId);
   const currentCursor = useCurrentCursor();
-  const setUserCursor = useSetUserCursor();
   const isActive =
     currentCursor.documentId === documentId &&
     currentCursor.sceneId === sceneId &&
@@ -62,10 +63,13 @@ export function ShotEntry({
       onMouseLeave={onMouseLeave}>
       <div
         className={
-          'flex w-full h-[6rem] z-10 border-b border-gray-300 shadow' +
+          'flex flex-row items-center w-full h-[6rem] z-10 border-b border-gray-300 shadow' +
           ' ' +
           (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
         }>
+        {!collapsed && (
+          <ShotNumber sceneNumber={sceneNumber} shotNumber={shotNumber} />
+        )}
         <BoxDrawingCharacter
           className={
             'cursor-grab' + ' ' + (collapsed ? 'opacity-100' : 'opacity-30')
@@ -82,7 +86,7 @@ export function ShotEntry({
           shotId={shotId}
           editable={true}
         />
-        <div className="flex flex-row items-center">
+        <div className="flex-1 flex flex-row items-center">
           <div className="flex-1 flex flex-row">
             {!collapsed && (
               <div className="flex flex-col">
@@ -97,21 +101,6 @@ export function ShotEntry({
                   shotId={shotId}>
                   ◉
                 </OpenRecorderButton>
-                <button
-                  className={
-                    'rounded px-2 m-2 whitespace-nowrap' +
-                    ' ' +
-                    (isActive ? 'bg-gray-600' : 'bg-gray-300')
-                  }
-                  onClick={() => {
-                    if (isActive) {
-                      setUserCursor(documentId, '', '');
-                    } else {
-                      setUserCursor(documentId, sceneId, shotId);
-                    }
-                  }}>
-                  {isActive ? 'unfocus?' : 'focus?'}
-                </button>
               </div>
             )}
             {collapsed && <ArrowForwardIcon className="w-6 h-6" />}
@@ -124,6 +113,16 @@ export function ShotEntry({
             </div>
           )}
         </div>
+        {!collapsed && (
+          <>
+            <ShotFocusButton
+              documentId={documentId}
+              sceneId={sceneId}
+              shotId={shotId}
+            />
+            <ShotNumber sceneNumber={sceneNumber} shotNumber={shotNumber} />
+          </>
+        )}
       </div>
       {!collapsed && <div className="flex-1 w-full">{children}</div>}
     </li>
