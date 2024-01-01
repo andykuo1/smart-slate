@@ -1,3 +1,5 @@
+import { useShallow } from 'zustand/react/shallow';
+
 import { getBlockIdsInOrder, useDocumentStore } from '@/stores/document';
 import { useCurrentCursor } from '@/stores/user';
 
@@ -14,8 +16,8 @@ export default function SceneEntry({ documentId, sceneId }) {
   const activeShotId = userCursor.shotId;
   const activeSceneId = userCursor.sceneId;
   const hasActiveShot = Boolean(activeShotId);
-  const blockIds = useDocumentStore((ctx) =>
-    getBlockIdsInOrder(ctx, documentId, sceneId),
+  const blockIds = useDocumentStore(
+    useShallow((ctx) => getBlockIdsInOrder(ctx, documentId, sceneId)),
   );
 
   if (hasActiveShot && activeSceneId !== sceneId) {
@@ -24,9 +26,9 @@ export default function SceneEntry({ documentId, sceneId }) {
   return (
     <section className="flex flex-col mt-20">
       <SceneHeading documentId={documentId} sceneId={sceneId} />
-      {blockIds.map((blockId, index, array) => (
+      {blockIds.map((blockId) => (
         <BlockEntry
-          key={blockId}
+          key={`block-${blockId}`}
           documentId={documentId}
           sceneId={sceneId}
           blockId={blockId}

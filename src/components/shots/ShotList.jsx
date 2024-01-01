@@ -1,7 +1,6 @@
 import { Fragment } from 'react';
 
 import { useShotIds } from '@/stores/document';
-import { useDraggableContainer } from '@/stores/draggable';
 import { useCurrentCursor } from '@/stores/user';
 
 import TakeList from '../takes/TakeList';
@@ -9,7 +8,6 @@ import GridStyle from './GridStyle.module.css';
 import { ShotEntry } from './ShotEntry';
 import ShotEntryDragged from './ShotEntryDragged';
 import ShotEntryNew from './ShotEntryNew';
-import { useShotEntryOnDragComplete } from './UseShotEntryDraggable';
 
 /**
  * @param {object} props
@@ -30,8 +28,6 @@ export default function ShotList({
   const activeShotId = userCursor.shotId;
   const hasActiveShot = Boolean(activeShotId);
   const shotIds = useShotIds(documentId, blockId);
-  const onDragComplete = useShotEntryOnDragComplete(documentId, blockId);
-  useDraggableContainer(onDragComplete);
 
   return (
     <ul title="Shot list">

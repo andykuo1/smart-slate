@@ -1,10 +1,14 @@
 import { Fragment, useRef } from 'react';
 
 import { useSceneIds } from '@/stores/document';
-import { useDraggableContainerAutoScroll } from '@/stores/draggable';
+import {
+  useDraggableContainer,
+  useDraggableContainerAutoScroll,
+} from '@/stores/draggable';
 import { useCurrentCursor } from '@/stores/user';
 
 import DocumentTitle from '../documents/DocumentTitle';
+import { useShotEntryOnDragComplete } from '../shots/UseShotEntryDraggable';
 import SceneEntry from './SceneEntry';
 import SceneEntryNew from './SceneEntryNew';
 
@@ -15,6 +19,8 @@ import SceneEntryNew from './SceneEntryNew';
 export default function SceneList({ documentId }) {
   const containerRef = useRef(null);
   const sceneIds = useSceneIds(documentId);
+  const onDragComplete = useShotEntryOnDragComplete(documentId);
+  useDraggableContainer(onDragComplete);
   useDraggableContainerAutoScroll(containerRef);
 
   const userCursor = useCurrentCursor();

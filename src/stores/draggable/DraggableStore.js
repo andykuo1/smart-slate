@@ -4,7 +4,9 @@
 
 export function createStore() {
   return {
+    dragContainerId: '',
     dragTargetId: '',
+    dragOverContainerId: '',
     dragOverTargetId: '',
     dragStart: [0, 0],
     dragMove: [0, 0],

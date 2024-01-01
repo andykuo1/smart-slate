@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useAnimationFrame } from '@/libs/animationframe';
 import { NOOP } from '@/values/Functions';
 
+import { getCompleteCallback } from './DraggableDispatch';
 import { useDraggableStore } from './UseDraggableStore';
 
 /**
@@ -15,7 +16,9 @@ import { useDraggableStore } from './UseDraggableStore';
 
 /**
  * @callback OnDragCompleteCallback
+ * @param {string} targetContainerId
  * @param {string} targetId
+ * @param {string} overContainerId
  * @param {string} overId
  * @param {number} x
  * @param {number} y
@@ -53,15 +56,20 @@ export function useDraggableTarget() {
   return useDraggableStore((state) => state.dragTargetId);
 }
 
+export function useOnCompleteCallback() {
+  return useDraggableStore((ctx) => getCompleteCallback(ctx));
+}
+
 /**
  * https://web.dev/articles/mobile-touchandmouse
+ * @param {string} containerId
  * @param {string} targetId
  */
-function useTouchHandler(targetId) {
+function useTouchHandler(containerId, targetId) {
   const tryStartDrag = useDraggableStore((ctx) => ctx.tryStartDrag);
   const tryMoveDrag = useDraggableStore((ctx) => ctx.tryMoveDrag);
   const tryStopDrag = useDraggableStore((ctx) => ctx.tryStopDrag);
-  const completeCallback = useDraggableStore((ctx) => ctx.completeCallback);
+  const completeCallback = useOnCompleteCallback();
 
   const onTouchStart = useCallback(
     /** @param {TouchEvent} e */
@@ -110,7 +118,7 @@ function useTouchHandler(targetId) {
       target.addEventListener('touchend', onTouchEnd);
       target.addEventListener('touchcancel', onTouchCancel);
 
-      tryStartDrag(targetId, touch.clientX, touch.clientY);
+      tryStartDrag(containerId, targetId, touch.clientX, touch.clientY);
       e.preventDefault();
     },
     [tryStartDrag, tryMoveDrag, tryStopDrag, completeCallback],
@@ -120,25 +128,26 @@ function useTouchHandler(targetId) {
 }
 
 /**
+ * @param {string} containerId
  * @param {string} targetId
  */
-export function useDraggable(targetId) {
+export function useDraggable(containerId, targetId) {
   /** @type {import('react').MutableRefObject<any>} */
   const elementRef = useRef(null);
   const tryStartDrag = useDraggableStore((ctx) => ctx.tryStartDrag);
   const tryMoveDragEnter = useDraggableStore((ctx) => ctx.tryMoveDragEnter);
   const tryMoveDragLeave = useDraggableStore((ctx) => ctx.tryMoveDragLeave);
 
-  const onTouchStart = useTouchHandler(targetId);
+  const onTouchStart = useTouchHandler(containerId, targetId);
 
   /** @type {import('react').MouseEventHandler} */
   function onMouseDown(e) {
-    tryStartDrag(targetId, e.clientX, e.clientY);
+    tryStartDrag(containerId, targetId, e.clientX, e.clientY);
   }
 
   /** @type {import('react').MouseEventHandler} */
   function onMouseEnter(e) {
-    tryMoveDragEnter(targetId, e.clientX, e.clientY);
+    tryMoveDragEnter(containerId, targetId, e.clientX, e.clientY);
   }
 
   /** @type {import('react').MouseEventHandler} */
@@ -198,7 +207,7 @@ export function useDraggableCursor(onDragUpdate) {
 }
 
 /**
- * @param {(targetId: string, overId: string, x: number, y: number) => void} onDragComplete
+ * @param {OnDragCompleteCallback} onDragComplete
  */
 export function useDraggableContainer(onDragComplete) {
   const { tryMoveDrag, tryStopDrag, setCompleteCallback } = useDraggableStore();
@@ -224,10 +233,11 @@ export function useDraggableContainer(onDragComplete) {
     document.addEventListener('mousemove', moveCallback);
     document.addEventListener('mouseup', upCallback);
     return () => {
+      setCompleteCallback(null);
       document.removeEventListener('mousemove', moveCallback);
       document.removeEventListener('mouseup', upCallback);
     };
-  }, [moveCallback, upCallback]);
+  }, [onDragComplete, moveCallback, upCallback]);
 }
 
 const FRAME_DELTA_FACTOR = 10;

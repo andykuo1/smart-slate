@@ -43,7 +43,7 @@ export function ShotEntry({
     currentCursor.shotId === shotId;
   const isFirst = sceneNumber <= 1 && shotNumber <= 1;
   const draggedShotId = useDraggableTarget();
-  const { elementProps, handleProps } = useDraggable(shotId);
+  const { elementProps, handleProps } = useDraggable(blockId, shotId);
 
   return (
     <li

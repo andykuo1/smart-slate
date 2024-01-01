@@ -26,7 +26,14 @@ export function createDispatch(set, get) {
 
 /**
  * @param {import('./DraggableStore').Store} store
- * @param {import('./DraggableStoreContext').OnDragCompleteCallback} callback
+ */
+export function getCompleteCallback(store) {
+  return store.completeCallback;
+}
+
+/**
+ * @param {import('./DraggableStore').Store} store
+ * @param {import('./DraggableStoreContext').OnDragCompleteCallback|null} callback
  */
 export function setCompleteCallback(store, callback) {
   store.completeCallback = callback;
@@ -34,16 +41,19 @@ export function setCompleteCallback(store, callback) {
 
 /**
  * @param {import('./DraggableStore').Store} draft
+ * @param {string} containerId
  * @param {string} targetId
  * @param {number} x
  * @param {number} y
  */
-export function applyDragStart(draft, targetId, x, y) {
+export function applyDragStart(draft, containerId, targetId, x, y) {
   // Cannot start drag in the middle of another.
   if (draft.dragging) {
     return;
   }
+  draft.dragContainerId = containerId;
   draft.dragTargetId = targetId;
+  draft.dragOverContainerId = '';
   draft.dragOverTargetId = '';
   draft.dragStart[0] = x;
   draft.dragStart[1] = y;
@@ -54,19 +64,27 @@ export function applyDragStart(draft, targetId, x, y) {
 }
 
 /**
- * @param {import('./DraggableStore').Store} draft
+ * @param {import('./DraggableStore').Store} store
  * @param {number} x
  * @param {number} y
  * @param {import('./DraggableStoreContext').OnDragCompleteCallback} callback
  */
-export function applyDragStop(draft, x, y, callback) {
-  if (draft.dragging) {
-    callback(draft.dragTargetId, draft.dragOverTargetId, x, y);
+export function applyDragStop(store, x, y, callback) {
+  if (store.dragging) {
+    callback(
+      store.dragContainerId,
+      store.dragTargetId,
+      store.dragOverContainerId,
+      store.dragOverTargetId,
+      x,
+      y,
+    );
   }
-  draft.dragging = false;
-  draft.dragTargetId = '';
-  draft.dragStop[0] = x;
-  draft.dragStop[1] = y;
+  store.dragging = false;
+  store.dragContainerId = '';
+  store.dragTargetId = '';
+  store.dragStop[0] = x;
+  store.dragStop[1] = y;
 }
 
 /**
@@ -93,17 +111,19 @@ export function applyDragMove(draft, x, y) {
 
 /**
  * @param {import('./DraggableStore').Store} draft
+ * @param {string} containerId
  * @param {string} targetId
  * @param {number} x
  * @param {number} y
  */
-export function applyDragEnter(draft, targetId, x, y) {
+export function applyDragEnter(draft, containerId, targetId, x, y) {
   if (!draft.dragging) {
     return;
   }
   if (draft.dragTargetId === targetId) {
     return;
   }
+  draft.dragOverContainerId = containerId;
   draft.dragOverTargetId = targetId;
   draft.dragMove[0] = x;
   draft.dragMove[1] = y;
@@ -123,6 +143,7 @@ export function applyDragLeave(draft, targetId, x, y) {
     return;
   }
   if (draft.dragOverTargetId === targetId) {
+    draft.dragOverContainerId = '';
     draft.dragOverTargetId = '';
   }
   draft.dragMove[0] = x;
