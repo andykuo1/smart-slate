@@ -1,7 +1,10 @@
-import { Button, TabPanel } from '@ariakit/react';
+import { Tab } from '@ariakit/react';
 import { useCallback, useRef } from 'react';
 
+import PhotoCameraIcon from '@material-symbols/svg-400/rounded/photo_camera.svg';
+
 import { useSetShotThumbnail } from '@/stores/document';
+import TabStyle from '@/styles/Tab.module.css';
 import {
   MAX_THUMBNAIL_HEIGHT,
   MAX_THUMBNAIL_WIDTH,
@@ -13,8 +16,13 @@ import { blobToDataURI } from './ShotThumbnailHelper';
  * @param {object} props
  * @param {string} props.documentId
  * @param {string} props.shotId
+ * @param {boolean} [props.disabled]
  */
-export default function ThumbnailOptionCamera({ documentId, shotId }) {
+export default function ShotThumbnailCameraTab({
+  documentId,
+  shotId,
+  disabled = false,
+}) {
   const inputRef = useRef(/** @type {HTMLInputElement|null} */ (null));
   const canvasRef = useRef(/** @type {HTMLCanvasElement|null} */ (null));
   const setShotThumbnail = useSetShotThumbnail();
@@ -45,7 +53,10 @@ export default function ThumbnailOptionCamera({ documentId, shotId }) {
   );
 
   return (
-    <TabPanel className="flex flex-col">
+    <Tab
+      className={TabStyle.tab + ' ' + 'flex-1'}
+      disabled={disabled}
+      onClick={handleClick}>
       <input
         ref={inputRef}
         className="hidden"
@@ -55,14 +66,7 @@ export default function ThumbnailOptionCamera({ documentId, shotId }) {
         onChange={handleChange}
       />
       <canvas ref={canvasRef} className="hidden" />
-      <Button
-        className="border rounded-xl p-2 w-full hover:bg-opacity-10 bg-opacity-0 bg-white"
-        onClick={handleClick}>
-        Take a photo
-      </Button>
-      <p className="opacity-30 text-xs text-center mt-4">
-        Make it something inspiring :)
-      </p>
-    </TabPanel>
+      <PhotoCameraIcon className="w-6 h-6 fill-current" />
+    </Tab>
   );
 }

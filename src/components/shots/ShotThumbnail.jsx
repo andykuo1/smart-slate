@@ -3,17 +3,9 @@ import {
   PopoverArrow,
   PopoverDisclosure,
   PopoverProvider,
-  Tab,
-  TabList,
-  TabProvider,
 } from '@ariakit/react';
 
-import LinkIcon from '@material-symbols/svg-400/rounded/link.svg';
-import PhotoCameraIcon from '@material-symbols/svg-400/rounded/photo_camera.svg';
-import UploadIcon from '@material-symbols/svg-400/rounded/upload.svg';
-
 import ImageWithCaption from '@/libs/ImageWithCaption';
-import { isInputCaptureSupported } from '@/recorder/MediaRecorderSupport';
 import {
   useSceneNumber,
   useShotNumber,
@@ -21,13 +13,10 @@ import {
 } from '@/stores/document';
 import { shotNumberToChar } from '@/stores/document/DocumentStore';
 import PopoverStyle from '@/styles/Popover.module.css';
-import TabStyle from '@/styles/Tab.module.css';
 
+import ShotThumbnailOptions from './ShotThumbnailOptions';
 import { ShotTypeSelector, getShotTypeIcon } from './ShotTypeSelector';
 import { useShotTypeChange } from './UseShotType';
-import ShotThumbnailCameraTabPanel from './options/ShotThumbnailCameraTabPanel';
-import ShotThumbnailEmbedTabPanel from './options/ShotThumbnailEmbedTabPanel';
-import ShotThumbnailUploadTabPanel from './options/ShotThumbnailUploadTabPanel';
 
 /**
  * @param {object} props
@@ -77,37 +66,11 @@ export default function ShotThumbnail({
               activeShotType={activeShotType}
               onChange={onShotTypeChange}
             />
-            <div className="flex flex-col gap-4">
-              <TabProvider>
-                <TabList
-                  className={TabStyle.tabList + ' ' + 'flex flex-row'}
-                  aria-label="Where to get thumbnail images?">
-                  <Tab className={TabStyle.tab + ' ' + 'flex-1'}>
-                    <UploadIcon className="w-6 h-6 fill-current" />
-                  </Tab>
-                  <Tab className={TabStyle.tab + ' ' + 'flex-1'}>
-                    <LinkIcon className="w-6 h-6 fill-current" />
-                  </Tab>
-                  <Tab
-                    className={TabStyle.tab + ' ' + 'flex-1'}
-                    disabled={!isInputCaptureSupported()}>
-                    <PhotoCameraIcon className="w-6 h-6 fill-current" />
-                  </Tab>
-                </TabList>
-                <ShotThumbnailUploadTabPanel
-                  documentId={documentId}
-                  shotId={shotId}
-                />
-                <ShotThumbnailEmbedTabPanel
-                  documentId={documentId}
-                  shotId={shotId}
-                />
-                <ShotThumbnailCameraTabPanel
-                  documentId={documentId}
-                  shotId={shotId}
-                />
-              </TabProvider>
-            </div>
+            <ShotThumbnailOptions
+              documentId={documentId}
+              shotId={shotId}
+              editable={editable}
+            />
           </div>
         </Popover>
       </PopoverProvider>

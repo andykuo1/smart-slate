@@ -35,7 +35,7 @@ export default function SceneHeading({ className, documentId, sceneId }) {
       }>
       <SceneNumber sceneNumber={sceneNumber} />
       <input
-        className="flex-1 bg-transparent px-2 text-xl"
+        className="flex-1 bg-transparent px-2 py-6 text-xl"
         type="text"
         list="sceneHeading"
         placeholder="INT/EXT. SCENE - DAY"

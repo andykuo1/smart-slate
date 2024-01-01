@@ -8,7 +8,7 @@ import { useSetShotThumbnail } from '@/stores/document';
  * @param {string} props.documentId
  * @param {string} props.shotId
  */
-export default function ThumbnailOptionEmbed({ documentId, shotId }) {
+export default function ShotThumbnailEmbedTabPanel({ documentId, shotId }) {
   const inputRef = useRef(/** @type {HTMLInputElement|null} */ (null));
   const setShotThumbnail = useSetShotThumbnail();
 

@@ -14,7 +14,7 @@ import { blobToDataURI } from './ShotThumbnailHelper';
  * @param {string} props.documentId
  * @param {string} props.shotId
  */
-export default function ThumbnailOptionUpload({ documentId, shotId }) {
+export default function ShotThumbnailUploadTabPanel({ documentId, shotId }) {
   const setShotThumbnail = useSetShotThumbnail();
   const inputRef = useRef(/** @type {HTMLInputElement|null} */ (null));
   const canvasRef = useRef(/** @type {HTMLCanvasElement|null} */ (null));
