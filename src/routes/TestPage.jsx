@@ -14,7 +14,7 @@ import {
   MEDIA_STREAM_CONSTRAINTS,
 } from '@/values/RecorderValues';
 
-const TEST_VERSION = 'v6';
+const TEST_VERSION = 'v7';
 
 export default function TestPage() {
   return (
@@ -211,6 +211,7 @@ function VideoFrame({ className, videoRef, active, children }) {
         ref={videoRef}
         className={className}
         muted={preferMutedWhileRecording}
+        playsInline={true}
       />
       <>{children}</>
       <div className="absolute right-0 bottom-0">
