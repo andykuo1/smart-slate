@@ -152,6 +152,7 @@ function VideoFrame({
         ref={videoRef}
         className={className}
         muted={preferMutedWhileRecording}
+        playsInline={true}
       />
       {enableThumbnailWhileRecording && (
         <div className="absolute left-0 bottom-0">

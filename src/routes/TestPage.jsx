@@ -1,8 +1,6 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { useAnimationFrame } from '@/libs/animationframe';
-import { useFullscreen } from '@/libs/fullscreen';
 import { useRecorderV2 } from '@/recorder';
 import VideoRecorderBoothLayout from '@/recorder/VideoRecorderBoothLayout';
 import { downloadURLImpl } from '@/utils/Downloader';
@@ -14,7 +12,7 @@ import {
   MEDIA_STREAM_CONSTRAINTS,
 } from '@/values/RecorderValues';
 
-const TEST_VERSION = 'v7';
+const TEST_VERSION = 'v8';
 
 export default function TestPage() {
   return (
@@ -69,6 +67,7 @@ const MediaRecorderV2Provider = createProvider(
 );
 function useMediaRecorderV2ContextValue() {
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
+  const [videoDeviceId, setVideoDeviceId] = useState('');
   const [mediaStreamConstraints, setMediaStreamConstraints] = useState(
     MEDIA_STREAM_CONSTRAINTS,
   );
@@ -101,33 +100,33 @@ function useMediaRecorderV2ContextValue() {
     mediaStreamConstraints,
     mediaRecorderOptions,
     mediaBlobOptions,
+    videoDeviceId,
     setMediaBlobOptions,
     setMediaRecorderOptions,
     setMediaStreamConstraints,
+    setVideoDeviceId,
   };
 }
 
 function App() {
-  const preferPersistedMediaStream = false;
-  const navigate = useNavigate();
-  const { exitFullscreen } = useFullscreen();
-
-  const { videoRef, onStart, onStop, isPrepared, isRecording } = useContext(
-    MediaRecorderV2Context,
-  );
+  const { videoRef, onStart, onStop, isPrepared, isRecording, videoDeviceId } =
+    useContext(MediaRecorderV2Context);
 
   function onLoad() {
     onStart({
       record: false,
       mediaStreamConstraints: {
-        video: { facingMode: 'environment' },
+        video: {
+          facingMode: 'environment',
+          deviceId: videoDeviceId,
+        },
         audio: false,
       },
       mediaRecorderOptions: { mimeType: 'video/mp4' },
     });
   }
   function onUnload() {
-    onStop({ exit: true });
+    onStop({ exit: true, mediaBlobOptions: { type: 'video/mp4' } });
   }
 
   return (
@@ -142,14 +141,6 @@ function App() {
           <button className="bg-gray-800 p-2 m-2" onClick={onUnload}>
             STOP
           </button>
-          <BackButton
-            onClick={() => {
-              onStop({ exit: !preferPersistedMediaStream }).then(() => {
-                exitFullscreen();
-                navigate('/edit');
-              });
-            }}
-          />
           <VideoDeviceSelector />
         </>
       )}
@@ -171,28 +162,28 @@ function App() {
                 return;
               }
               if (!isRecording) {
-                onStart({ record: true });
+                onStart({
+                  record: true,
+                  mediaStreamConstraints: {
+                    video: {
+                      facingMode: 'environment',
+                      deviceId: videoDeviceId,
+                    },
+                    audio: false,
+                  },
+                  mediaRecorderOptions: { mimeType: 'video/mp4' },
+                });
               } else {
-                onStop({ exit: false });
+                onStop({
+                  exit: false,
+                  mediaBlobOptions: { type: 'video/mp4' },
+                });
               }
             }}
           />
         </>
       )}
     />
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} [props.className]
- * @param {import('react').MouseEventHandler<HTMLButtonElement>} props.onClick
- */
-function BackButton({ className, onClick }) {
-  return (
-    <button className={'rounded mx-2' + ' ' + className} onClick={onClick}>
-      {'<-'}Back
-    </button>
   );
 }
 
