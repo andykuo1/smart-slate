@@ -114,7 +114,10 @@ function App() {
   function onLoad() {
     onStart({
       record: false,
-      mediaStreamConstraints: { video: true, audio: false },
+      mediaStreamConstraints: {
+        video: { facingMode: 'environment' },
+        audio: false,
+      },
       mediaRecorderOptions: { mimeType: 'video/mp4' },
     });
   }
