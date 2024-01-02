@@ -5,6 +5,7 @@ import { useAnimationFrame } from '@/libs/animationframe';
 import { useFullscreen } from '@/libs/fullscreen';
 import { useRecorderV2 } from '@/recorder';
 import VideoRecorderBoothLayout from '@/recorder/VideoRecorderBoothLayout';
+import { downloadURLImpl } from '@/utils/Downloader';
 import { createContext, createProvider } from '@/utils/ReactContextHelper';
 import { formatHourMinSecTime } from '@/utils/StringFormat';
 import {
@@ -78,6 +79,10 @@ function useMediaRecorderV2ContextValue() {
 
   /** @type {import('@/recorder/UseMediaRecorder').MediaRecorderCompleteCallback} */
   const onComplete = useCallback(function _onComplete(blob, mediaRecorder) {
+    const dataURL = URL.createObjectURL(blob);
+    downloadURLImpl('Untitled.mp4', dataURL);
+    URL.revokeObjectURL(dataURL);
+
     const message = `Got ${blob.type}:${blob.size} bytes!`;
     window.alert(message);
   }, []);
