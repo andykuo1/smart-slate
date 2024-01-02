@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { useAnimationFrame } from '@/libs/animationframe';
 import { useFullscreen } from '@/libs/fullscreen';
@@ -13,7 +13,7 @@ import {
   MEDIA_STREAM_CONSTRAINTS,
 } from '@/values/RecorderValues';
 
-const TEST_VERSION = 'v2';
+const TEST_VERSION = 'v3';
 
 export default function TestPage() {
   return (
@@ -105,18 +105,12 @@ function App() {
     MediaRecorderV2Context,
   );
 
-  const location = useLocation();
-
-  useEffect(() => {
-    if (location.pathname.endsWith('/rec')) {
-      onStart({ record: false });
-    } else {
-      onStop({ exit: !preferPersistedMediaStream });
-    }
-  }, [preferPersistedMediaStream, location, onStart, onStop]);
-
   function onLoad() {
-    onStart({ record: false });
+    onStart({
+      record: false,
+      mediaStreamConstraints: { video: true, audio: false },
+      mediaRecorderOptions: { mimeType: 'video/mp4' },
+    });
   }
   function onUnload() {
     onStop({ exit: true });
