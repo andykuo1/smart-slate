@@ -2,7 +2,7 @@ import { useCallback, useRef } from 'react';
 
 /**
  * @param {import('react').RefObject<HTMLVideoElement|null>} videoRef
- * @returns {[import('react').RefObject<MediaStream|null>, (constraints: MediaStreamConstraints|Array<MediaStreamConstraints>) => Promise<MediaStream>, () => Promise<void>]}
+ * @returns {[import('react').RefObject<MediaStream|null>, (constraints: MediaStreamConstraints|Array<MediaStreamConstraints>|undefined) => Promise<MediaStream>, () => Promise<void>]}
  */
 export function useMediaStream(videoRef) {
   const ref = useRef(/** @type {MediaStream|null} */ (null));
@@ -30,9 +30,9 @@ export function useMediaStream(videoRef) {
 
   const init = useCallback(
     /**
-     * @param {MediaStreamConstraints|Array<MediaStreamConstraints>} constraints
+     * @param {MediaStreamConstraints|Array<MediaStreamConstraints>} [constraints]
      */
-    async function init(constraints) {
+    async function init(constraints = []) {
       if (ref.current) {
         await dead();
       }
@@ -40,6 +40,10 @@ export function useMediaStream(videoRef) {
       const mediaDevices = window.navigator.mediaDevices;
       if (!Array.isArray(constraints)) {
         constraints = [constraints];
+      }
+      if (constraints.length <= 0) {
+        // @ts-expect-error no contraints were given, so let's just use the default.
+        constraints.push(undefined);
       }
       let mediaStream = null;
       for (let constraint of constraints) {

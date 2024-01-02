@@ -13,9 +13,11 @@ import {
   MEDIA_STREAM_CONSTRAINTS,
 } from '@/values/RecorderValues';
 
+const TEST_VERSION = 'v2';
+
 export default function TestPage() {
   return (
-    <main className="w-full h-full flex flex-col items-center bg-white">
+    <main className="w-full h-full flex flex-col items-center bg-black text-white">
       <MediaRecorderV2Provider>
         <App />
       </MediaRecorderV2Provider>
@@ -27,6 +29,7 @@ function VideoDeviceSelector() {
   const [deviceList, setDeviceList] = useState(
     /** @type {Array<MediaDeviceInfo>} */ ([]),
   );
+
   useEffect(() => {
     if (
       typeof window !== 'undefined' &&
@@ -75,9 +78,6 @@ function useMediaRecorderV2ContextValue() {
 
   const { onStart, onStop, isPrepared, isRecording } = useRecorderV2(
     videoRef,
-    mediaStreamConstraints,
-    mediaRecorderOptions,
-    mediaBlobOptions,
     onComplete,
   );
 
@@ -115,12 +115,25 @@ function App() {
     }
   }, [preferPersistedMediaStream, location, onStart, onStop]);
 
+  function onLoad() {
+    onStart({ record: false });
+  }
+  function onUnload() {
+    onStop({ exit: true });
+  }
+
   return (
     <VideoRecorderBoothLayout
-      className="text-white bg-black"
       videoRef={videoRef}
       top={() => (
         <>
+          <p>{TEST_VERSION}</p>
+          <button className="bg-gray-800 p-2 m-2" onClick={onLoad}>
+            LOAD
+          </button>
+          <button className="bg-gray-800 p-2 m-2" onClick={onUnload}>
+            STOP
+          </button>
           <BackButton
             onClick={() => {
               onStop({ exit: !preferPersistedMediaStream }).then(() => {

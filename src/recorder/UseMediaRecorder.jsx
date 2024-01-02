@@ -9,7 +9,7 @@ import { useCallback, useRef } from 'react';
 /**
  * @param {import('react').RefObject<MediaStream|null>} mediaStreamRef
  * @param {MediaRecorderCompleteCallback} onComplete
- * @returns {[import('react').RefObject<MediaRecorder|null>, (options: MediaRecorderOptions) => Promise<MediaRecorder>, (dataOptions: BlobPropertyBag) => Promise<void>]}
+ * @returns {[import('react').RefObject<MediaRecorder|null>, (options: MediaRecorderOptions|undefined) => Promise<MediaRecorder>, (dataOptions: BlobPropertyBag|undefined) => Promise<void>]}
  */
 export function useMediaRecorder(mediaStreamRef, onComplete) {
   const ref = useRef(/** @type {MediaRecorder|null} */ (null));
@@ -39,8 +39,8 @@ export function useMediaRecorder(mediaStreamRef, onComplete) {
   );
 
   const stop = useCallback(
-    /** @param {BlobPropertyBag} dataOptions */
-    async function stop(dataOptions) {
+    /** @param {BlobPropertyBag} [dataOptions] */
+    async function stop(dataOptions = undefined) {
       if (!ref.current) {
         return null;
       }
@@ -83,8 +83,8 @@ export function useMediaRecorder(mediaStreamRef, onComplete) {
   );
 
   const start = useCallback(
-    /** @param {MediaRecorderOptions} options */
-    async function start(options) {
+    /** @param {MediaRecorderOptions} [options] */
+    async function start(options = undefined) {
       if (ref.current) {
         await stop({});
       }
@@ -128,9 +128,9 @@ export function useMediaRecorder(mediaStreamRef, onComplete) {
 
 /**
  * @param {Array<Blob>} dataBlobs
- * @param {BlobPropertyBag} dataOptions
+ * @param {BlobPropertyBag} [dataOptions]
  */
-function compileDataBlobs(dataBlobs, dataOptions) {
+function compileDataBlobs(dataBlobs, dataOptions = {}) {
   if (dataBlobs.length > 0) {
     let firstBlob = dataBlobs[0];
     let blobPropertyBag = {

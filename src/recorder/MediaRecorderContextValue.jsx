@@ -36,9 +36,6 @@ export function useMediaRecorderContextValue() {
 
   const { onStart, onStop, isPrepared, isRecording } = useRecorderV2(
     videoRef,
-    mediaStreamConstraints,
-    mediaRecorderOptions,
-    mediaBlobOptions,
     onComplete,
   );
 

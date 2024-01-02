@@ -14,6 +14,11 @@ import { useSettingsStore } from '@/stores/settings';
 import { useCurrentCursor } from '@/stores/user';
 import { formatHourMinSecTime } from '@/utils/StringFormat';
 import '@/values/RecorderValues';
+import {
+  MEDIA_BLOB_OPTIONS,
+  MEDIA_RECORDER_OPTIONS,
+  MEDIA_STREAM_CONSTRAINTS,
+} from '@/values/RecorderValues';
 
 import { MediaRecorderContext } from './MediaRecorderContext';
 import VideoRecorderBoothLayout from './VideoRecorderBoothLayout';
@@ -36,9 +41,16 @@ export default function MediaRecorderBooth() {
 
   useEffect(() => {
     if (location.pathname.endsWith('/rec')) {
-      onStart({ record: false });
+      onStart({
+        record: false,
+        mediaStreamConstraints: MEDIA_STREAM_CONSTRAINTS,
+        mediaRecorderOptions: MEDIA_RECORDER_OPTIONS,
+      });
     } else {
-      onStop({ exit: !preferPersistedMediaStream });
+      onStop({
+        exit: !preferPersistedMediaStream,
+        mediaBlobOptions: MEDIA_BLOB_OPTIONS,
+      });
     }
   }, [preferPersistedMediaStream, location, onStart, onStop]);
 
