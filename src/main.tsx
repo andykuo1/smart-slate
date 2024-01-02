@@ -10,7 +10,7 @@ import CameraPage from './routes/CameraPage';
 import EditPage from './routes/EditPage';
 import ErrorPage from './routes/ErrorPage';
 import RootPage from './routes/RootPage';
-import ViewPage from './routes/ViewPage';
+import TestPage from './routes/TestPage';
 import { PACKAGE_NAME } from './values/PackageJSON';
 
 const router = createBrowserRouter(
@@ -31,8 +31,8 @@ const router = createBrowserRouter(
       errorElement: <ErrorPage />,
     },
     {
-      path: '/view',
-      element: <ViewPage />,
+      path: '/test',
+      element: <TestPage />,
       errorElement: <ErrorPage />,
     },
   ],
