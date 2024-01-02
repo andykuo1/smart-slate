@@ -13,7 +13,7 @@ import {
   MEDIA_STREAM_CONSTRAINTS,
 } from '@/values/RecorderValues';
 
-const TEST_VERSION = 'v3';
+const TEST_VERSION = 'v4';
 
 export default function TestPage() {
   return (
