@@ -30,7 +30,13 @@ function VideoDeviceSelector() {
     /** @type {Array<MediaDeviceInfo>} */ ([]),
   );
 
+  const { isPrepared } = useContext(MediaRecorderV2Context);
+
   useEffect(() => {
+    if (!isPrepared) {
+      setDeviceList([]);
+      return;
+    }
     if (
       typeof window !== 'undefined' &&
       typeof window?.navigator?.mediaDevices?.enumerateDevices === 'function'
@@ -42,7 +48,7 @@ function VideoDeviceSelector() {
         );
       return () => setDeviceList([]);
     }
-  }, [setDeviceList]);
+  }, [setDeviceList, isPrepared]);
 
   return (
     <select>
