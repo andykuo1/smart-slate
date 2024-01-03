@@ -12,15 +12,77 @@ import {
   MEDIA_STREAM_CONSTRAINTS,
 } from '@/values/RecorderValues';
 
-const TEST_VERSION = 'v15';
+/**
+ * What should happen is you click the O button, it requests permissions, then it navigates the recording booth with the proper permissions.
+ * Otherwise, it alerts. This permission state is saved in the provider context, so that should persist across pages?
+ */
+
+const TEST_VERSION = 'v16';
 
 export default function TestPage() {
   return (
     <main className="w-full h-full flex flex-col items-center bg-black text-white">
       <MediaRecorderV2Provider>
-        <App />
+        <TestPageContent />
       </MediaRecorderV2Provider>
     </main>
+  );
+}
+
+function TestPageContent() {
+  const { onStart, onStop } = useContext(MediaRecorderV2Context);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) {
+      onStop({ exit: true });
+    }
+  }, [open]);
+
+  async function onClick() {
+    try {
+      // Step 1. Get all the permissions :P
+      await onStart({
+        record: false,
+        mediaStreamConstraints: [
+          {
+            video: { facingMode: 'environment' },
+            audio: true,
+          },
+        ],
+      });
+      // Step 2. Navigate to page.
+      setOpen((prev) => !prev);
+    } catch (e) {
+      // ... report it.
+      if (e instanceof Error) {
+        window.alert(`${e.name}: ${e.message}`);
+      } else {
+        console.error(JSON.stringify(e));
+      }
+      // ... and stop everything if it failed.
+      await onStop({ exit: true });
+    }
+  }
+  return (
+    <>
+      {!open && <VideoBoothButton onClick={onClick} />}
+      {open && <App />}
+    </>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {() => void} props.onClick
+ */
+function VideoBoothButton({ onClick }) {
+  return (
+    <button
+      className="absolute left-0 top-0 right-0 bottom-0 z-50 text-red-500 text-9xl"
+      onClick={onClick}>
+      ◉
+    </button>
   );
 }
 
@@ -328,7 +390,6 @@ function VideoFrame({ className, videoRef, active, children }) {
         className={className}
         muted={true}
         playsInline={true}
-        controls={true}
       />
       <>{children}</>
       <div className="absolute right-0 bottom-0">

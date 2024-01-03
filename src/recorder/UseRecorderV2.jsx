@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { useMediaRecorder } from './UseMediaRecorder';
 import { useMediaStream } from './UseMediaStream';
@@ -30,16 +30,11 @@ export function useRecorderV2(videoRef, onComplete) {
       mediaStreamConstraints,
       mediaRecorderOptions,
     }) {
-      try {
-        await initMediaStream(mediaStreamConstraints);
-        setIsPrepared(true);
-        if (record) {
-          await startMediaRecorder(mediaRecorderOptions);
-          setIsRecording(true);
-        }
-      } catch (e) {
-        // TODO: Errors are just consumed :( what are all the possible errors for media recorder?
-        console.error(e);
+      await initMediaStream(mediaStreamConstraints);
+      setIsPrepared(true);
+      if (record) {
+        await startMediaRecorder(mediaRecorderOptions);
+        setIsRecording(true);
       }
     },
     [initMediaStream, setIsPrepared, startMediaRecorder, setIsRecording],
@@ -52,20 +47,33 @@ export function useRecorderV2(videoRef, onComplete) {
      * @param {BlobPropertyBag} [opts.mediaBlobOptions]
      */
     async function onStop({ exit, mediaBlobOptions = undefined }) {
-      try {
-        await stopMediaRecorder(mediaBlobOptions);
-        setIsRecording(false);
-        if (exit) {
-          await deadMediaStream();
-          setIsPrepared(false);
-        }
-      } catch (e) {
-        // TODO: Errors are just consumed :( what are all the possible errors for media recorder?
-        console.error(e);
+      await stopMediaRecorder(mediaBlobOptions);
+      setIsRecording(false);
+      if (exit) {
+        await deadMediaStream();
+        setIsPrepared(false);
       }
     },
     [stopMediaRecorder, setIsRecording, deadMediaStream, setIsPrepared],
   );
+
+  useEffect(() => {
+    if (mediaStreamRef.current) {
+      // Add stream to output video
+      if (videoRef.current && !videoRef.current.srcObject) {
+        let video = videoRef.current;
+        video.srcObject = mediaStreamRef.current;
+        video.play();
+      }
+    } else {
+      // Remove stream from output video
+      if (videoRef.current && videoRef.current.srcObject) {
+        let video = videoRef.current;
+        video.pause();
+        video.srcObject = null;
+      }
+    }
+  }, [isPrepared]);
 
   return {
     onStart,
