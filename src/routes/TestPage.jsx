@@ -12,7 +12,7 @@ import {
   MEDIA_STREAM_CONSTRAINTS,
 } from '@/values/RecorderValues';
 
-const TEST_VERSION = 'v13';
+const TEST_VERSION = 'v14';
 
 const ON_START_OPTS = {
   /** @type {MediaStreamConstraints} */
@@ -203,6 +203,10 @@ function App() {
   function onUnload() {
     onStop({ exit: true, mediaBlobOptions: { type: 'video/mp4' } });
   }
+
+  /**
+   * @param {string} deviceId
+   */
   function onVideoChange(deviceId) {
     setVideoDeviceId(deviceId);
     onStop({ exit: true, mediaBlobOptions: { type: 'video/mp4' } });
@@ -220,6 +224,10 @@ function App() {
       mediaRecorderOptions: { mimeType: 'video/mp4' },
     });
   }
+
+  /**
+   * @param {string} deviceId
+   */
   function onAudioChange(deviceId) {
     setAudioDeviceId(deviceId);
     onStop({ exit: true, mediaBlobOptions: { type: 'video/mp4' } });
