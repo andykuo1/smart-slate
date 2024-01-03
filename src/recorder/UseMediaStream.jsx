@@ -55,7 +55,9 @@ export function useMediaStream(videoRef) {
             window.alert('MediaStream Success for video Only');
             // ... then request the regular.
           }
-          mediaStream = await mediaDevices.getUserMedia(constraint);
+          mediaStream = await mediaDevices
+            .getUserMedia(constraint)
+            .catch((e) => alert('failed!' + e.message));
           window.alert('MediaStream Success for both!');
           // Succeeded this constraint, skip the
           break;

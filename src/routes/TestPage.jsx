@@ -14,6 +14,17 @@ import {
 
 const TEST_VERSION = 'v13';
 
+const ON_START_OPTS = {
+  /** @type {MediaStreamConstraints} */
+  mediaStreamConstraints: {
+    video: {
+      facingMode: 'environment',
+    },
+    audio: true,
+  },
+  mediaRecorderOptions: { mimeType: 'video/mp4' },
+};
+
 export default function TestPage() {
   return (
     <main className="w-full h-full flex flex-col items-center bg-black text-white">
@@ -24,7 +35,12 @@ export default function TestPage() {
   );
 }
 
-function VideoDeviceSelector() {
+/**
+ * @param {object} props
+ * @param {string} props.value
+ * @param {(videoDeviceId: string) => void} props.onChange
+ */
+function VideoDeviceSelector({ value, onChange }) {
   const [deviceList, setDeviceList] = useState(
     /** @type {Array<MediaDeviceInfo>} */ ([]),
   );
@@ -42,16 +58,73 @@ function VideoDeviceSelector() {
     ) {
       window.navigator.mediaDevices
         .enumerateDevices()
-        .then((infos) => setDeviceList(infos.slice()));
+        .then((infos) =>
+          setDeviceList(infos.filter((info) => info.kind === 'videoinput')),
+        );
       return () => setDeviceList([]);
     }
   }, [setDeviceList, isPrepared]);
 
+  /** @type {import('react').ChangeEventHandler<HTMLSelectElement>} */
+  function changeCallback(e) {
+    const target = e.target;
+    const value = target.value;
+    onChange(value);
+  }
+
   return (
-    <select>
+    <select value={value} onChange={changeCallback}>
       {deviceList.map((deviceInfo, index) => (
         <option key={deviceInfo.deviceId} value={deviceInfo.deviceId}>
-          {deviceInfo.kind}:{deviceInfo.label || 'Camera ' + (index + 1)}
+          {deviceInfo.label || 'Camera ' + (index + 1)}
+        </option>
+      ))}
+    </select>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {string} props.value
+ * @param {(audioDeviceId: string) => void} props.onChange
+ */
+function AudioDeviceSelector({ value, onChange }) {
+  const [deviceList, setDeviceList] = useState(
+    /** @type {Array<MediaDeviceInfo>} */ ([]),
+  );
+
+  const { isPrepared } = useContext(MediaRecorderV2Context);
+
+  useEffect(() => {
+    if (!isPrepared) {
+      setDeviceList([]);
+      return;
+    }
+    if (
+      typeof window !== 'undefined' &&
+      typeof window?.navigator?.mediaDevices?.enumerateDevices === 'function'
+    ) {
+      window.navigator.mediaDevices
+        .enumerateDevices()
+        .then((infos) =>
+          setDeviceList(infos.filter((info) => info.kind === 'audioinput')),
+        );
+      return () => setDeviceList([]);
+    }
+  }, [setDeviceList, isPrepared]);
+
+  /** @type {import('react').ChangeEventHandler<HTMLSelectElement>} */
+  function changeCallback(e) {
+    const target = e.target;
+    const value = target.value;
+    onChange(value);
+  }
+
+  return (
+    <select value={value} onChange={changeCallback}>
+      {deviceList.map((deviceInfo, index) => (
+        <option key={deviceInfo.deviceId} value={deviceInfo.deviceId}>
+          {deviceInfo.label || 'Microphone ' + (index + 1)}
         </option>
       ))}
     </select>
@@ -66,7 +139,7 @@ const MediaRecorderV2Provider = createProvider(
 function useMediaRecorderV2ContextValue() {
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
   const [videoDeviceId, setVideoDeviceId] = useState('');
-  const [audioDeviceId] = useState('');
+  const [audioDeviceId, setAudioDeviceId] = useState('');
   const [mediaStreamConstraints, setMediaStreamConstraints] = useState(
     MEDIA_STREAM_CONSTRAINTS,
   );
@@ -104,31 +177,65 @@ function useMediaRecorderV2ContextValue() {
     setMediaRecorderOptions,
     setMediaStreamConstraints,
     setVideoDeviceId,
+    setAudioDeviceId,
   };
 }
 
 function App() {
-  const { videoRef, onStart, onStop, isPrepared, isRecording } = useContext(
-    MediaRecorderV2Context,
-  );
-
-  /** @type {MediaStreamConstraints} */
-  const mediaStreamConstraints = {
-    video: {
-      facingMode: 'environment',
-    },
-    audio: true,
-  };
+  const {
+    videoRef,
+    onStart,
+    onStop,
+    isPrepared,
+    isRecording,
+    videoDeviceId,
+    audioDeviceId,
+    setVideoDeviceId,
+    setAudioDeviceId,
+  } = useContext(MediaRecorderV2Context);
 
   async function onLoad() {
     await onStart({
       record: false,
-      mediaStreamConstraints,
-      mediaRecorderOptions: { mimeType: 'video/mp4' },
+      ...ON_START_OPTS,
     });
   }
   function onUnload() {
     onStop({ exit: true, mediaBlobOptions: { type: 'video/mp4' } });
+  }
+  function onVideoChange(deviceId) {
+    setVideoDeviceId(deviceId);
+    onStop({ exit: true, mediaBlobOptions: { type: 'video/mp4' } });
+    onStart({
+      record: false,
+      mediaStreamConstraints: {
+        video: {
+          facingMode: 'environment',
+          deviceId: { ideal: deviceId },
+        },
+        audio: {
+          deviceId: { ideal: audioDeviceId },
+        },
+      },
+      mediaRecorderOptions: { mimeType: 'video/mp4' },
+    });
+  }
+  function onAudioChange(deviceId) {
+    setAudioDeviceId(deviceId);
+    onStop({ exit: true, mediaBlobOptions: { type: 'video/mp4' } });
+    onStart({
+      record: false,
+      mediaStreamConstraints: {
+        video: {
+          facingMode: 'environment',
+          deviceId: { ideal: videoDeviceId },
+        },
+        audio: {
+          deviceId: { ideal: deviceId },
+        },
+      },
+      mediaRecorderOptions: { mimeType: 'video/mp4' },
+    });
   }
 
   return (
@@ -143,7 +250,8 @@ function App() {
           <button className="bg-gray-800 p-2 m-2" onClick={onUnload}>
             STOP
           </button>
-          <VideoDeviceSelector />
+          <VideoDeviceSelector value={videoDeviceId} onChange={onVideoChange} />
+          <AudioDeviceSelector value={audioDeviceId} onChange={onAudioChange} />
         </>
       )}
       center={({ className }) => (
@@ -166,8 +274,7 @@ function App() {
               if (!isRecording) {
                 onStart({
                   record: true,
-                  mediaStreamConstraints,
-                  mediaRecorderOptions: { mimeType: 'video/mp4' },
+                  ...ON_START_OPTS,
                 });
               } else {
                 onStop({
@@ -196,6 +303,7 @@ function VideoFrame({ className, videoRef, active, children }) {
       <video
         ref={videoRef}
         className={className}
+        muted={true}
         playsInline={true}
         controls={true}
       />
