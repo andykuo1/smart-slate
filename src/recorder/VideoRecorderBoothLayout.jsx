@@ -66,7 +66,7 @@ export default function VideoRecorderBoothLayout({
 
   useAnimationFrame(handleAnimationFrame);
 
-  const xMarginClassName = 'relative w-10 overflow-y-auto overflow-x-hidden';
+  const xMarginClassName = 'relative';
   const yMarginClassName =
     'absolute w-full h-10' +
     ' ' +

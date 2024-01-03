@@ -65,6 +65,14 @@ class MissingWindowFeatureError extends MissingFeatureError {
   }
 }
 
+class NonSecureAccessError extends Error {
+  constructor() {
+    super(
+      'User media access denied for non-secure access. Please redirect using https.',
+    );
+  }
+}
+
 function tryGetWindow() {
   if (typeof window === 'undefined') {
     throw new MissingWindowFeatureError();
@@ -74,6 +82,16 @@ function tryGetWindow() {
 
 function tryGetMediaDevices() {
   const window = tryGetWindow();
+
+  // Must be in a secure context -- localhost is allowed though.
+  if (
+    document?.location?.hostname !== 'localhost' &&
+    document?.location?.protocol !== 'https:'
+  ) {
+    throw new NonSecureAccessError();
+  }
+
+  // Now actually check if it is supported.
   let result = window.navigator?.mediaDevices;
   if (!result) {
     throw new MissingFeatureError('navigator.mediaDevices');
