@@ -191,7 +191,6 @@ function App() {
  * @param {boolean} props.active
  */
 function VideoFrame({ className, videoRef, active, children }) {
-  const preferMutedWhileRecording = true;
   return (
     <>
       <video
