@@ -12,18 +12,7 @@ import {
   MEDIA_STREAM_CONSTRAINTS,
 } from '@/values/RecorderValues';
 
-const TEST_VERSION = 'v14';
-
-const ON_START_OPTS = {
-  /** @type {MediaStreamConstraints} */
-  mediaStreamConstraints: {
-    video: {
-      facingMode: 'environment',
-    },
-    audio: true,
-  },
-  mediaRecorderOptions: { mimeType: 'video/mp4' },
-};
+const TEST_VERSION = 'v15';
 
 export default function TestPage() {
   return (
@@ -131,6 +120,26 @@ function AudioDeviceSelector({ value, onChange }) {
   );
 }
 
+function PermissionsButton() {
+  function onClick() {
+    navigator.permissions
+      // @ts-ignore
+      .query({ name: 'microphone' })
+      .then((result) =>
+        window.alert(JSON.stringify(result) + `${result.name}${result.state}`),
+      )
+      .catch((e) => window.alert('ERROR'));
+    navigator.permissions
+      // @ts-ignore
+      .query({ name: 'camera' })
+      .then((result) =>
+        window.alert(JSON.stringify(result) + `${result.name}${result.state}`),
+      )
+      .catch((e) => window.alert('ERROR'));
+  }
+  return <button onClick={onClick}>Permissions</button>;
+}
+
 const MediaRecorderV2Context = createContext(useMediaRecorderV2ContextValue);
 const MediaRecorderV2Provider = createProvider(
   MediaRecorderV2Context,
@@ -197,7 +206,12 @@ function App() {
   async function onLoad() {
     await onStart({
       record: false,
-      ...ON_START_OPTS,
+      /** @type {MediaStreamConstraints} */
+      mediaStreamConstraints: {
+        video: false,
+        audio: true,
+      },
+      mediaRecorderOptions: { mimeType: 'video/mp4' },
     });
   }
   function onUnload() {
@@ -260,6 +274,7 @@ function App() {
           </button>
           <VideoDeviceSelector value={videoDeviceId} onChange={onVideoChange} />
           <AudioDeviceSelector value={audioDeviceId} onChange={onAudioChange} />
+          <PermissionsButton />
         </>
       )}
       center={({ className }) => (
@@ -282,7 +297,7 @@ function App() {
               if (!isRecording) {
                 onStart({
                   record: true,
-                  ...ON_START_OPTS,
+                  mediaRecorderOptions: { mimeType: 'video/mp4' },
                 });
               } else {
                 onStop({
