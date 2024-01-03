@@ -12,7 +12,7 @@ import {
   MEDIA_STREAM_CONSTRAINTS,
 } from '@/values/RecorderValues';
 
-const TEST_VERSION = 'v9';
+const TEST_VERSION = 'v10';
 
 export default function TestPage() {
   return (
@@ -29,7 +29,7 @@ function VideoDeviceSelector() {
     /** @type {Array<MediaDeviceInfo>} */ ([]),
   );
 
-  const { isPrepared, mediaStreamRef } = useContext(MediaRecorderV2Context);
+  const { isPrepared } = useContext(MediaRecorderV2Context);
 
   useEffect(() => {
     if (!isPrepared) {
@@ -66,7 +66,7 @@ const MediaRecorderV2Provider = createProvider(
 function useMediaRecorderV2ContextValue() {
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
   const [videoDeviceId, setVideoDeviceId] = useState('');
-  const [audioDeviceId, setAudioDeviceId] = useState('');
+  const [audioDeviceId] = useState('');
   const [mediaStreamConstraints, setMediaStreamConstraints] = useState(
     MEDIA_STREAM_CONSTRAINTS,
   );
@@ -108,15 +108,9 @@ function useMediaRecorderV2ContextValue() {
 }
 
 function App() {
-  const {
-    videoRef,
-    onStart,
-    onStop,
-    isPrepared,
-    isRecording,
-    videoDeviceId,
-    audioDeviceId,
-  } = useContext(MediaRecorderV2Context);
+  const { videoRef, onStart, onStop, isPrepared, isRecording } = useContext(
+    MediaRecorderV2Context,
+  );
 
   /** @type {MediaStreamConstraints} */
   const mediaStreamConstraints = {
