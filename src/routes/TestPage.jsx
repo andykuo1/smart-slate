@@ -12,7 +12,7 @@ import {
   MEDIA_STREAM_CONSTRAINTS,
 } from '@/values/RecorderValues';
 
-const TEST_VERSION = 'v8';
+const TEST_VERSION = 'v9';
 
 export default function TestPage() {
   return (
@@ -29,7 +29,7 @@ function VideoDeviceSelector() {
     /** @type {Array<MediaDeviceInfo>} */ ([]),
   );
 
-  const { isPrepared } = useContext(MediaRecorderV2Context);
+  const { isPrepared, mediaStreamRef } = useContext(MediaRecorderV2Context);
 
   useEffect(() => {
     if (!isPrepared) {
@@ -42,9 +42,7 @@ function VideoDeviceSelector() {
     ) {
       window.navigator.mediaDevices
         .enumerateDevices()
-        .then((infos) =>
-          setDeviceList(infos.filter((info) => info.kind === 'videoinput')),
-        );
+        .then((infos) => setDeviceList(infos.slice()));
       return () => setDeviceList([]);
     }
   }, [setDeviceList, isPrepared]);
@@ -53,7 +51,7 @@ function VideoDeviceSelector() {
     <select>
       {deviceList.map((deviceInfo, index) => (
         <option key={deviceInfo.deviceId} value={deviceInfo.deviceId}>
-          {deviceInfo.label || 'Camera ' + (index + 1)}
+          {deviceInfo.kind}:{deviceInfo.label || 'Camera ' + (index + 1)}
         </option>
       ))}
     </select>
@@ -68,6 +66,7 @@ const MediaRecorderV2Provider = createProvider(
 function useMediaRecorderV2ContextValue() {
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
   const [videoDeviceId, setVideoDeviceId] = useState('');
+  const [audioDeviceId, setAudioDeviceId] = useState('');
   const [mediaStreamConstraints, setMediaStreamConstraints] = useState(
     MEDIA_STREAM_CONSTRAINTS,
   );
@@ -86,13 +85,12 @@ function useMediaRecorderV2ContextValue() {
     window.alert(message);
   }, []);
 
-  const { onStart, onStop, isPrepared, isRecording } = useRecorderV2(
-    videoRef,
-    onComplete,
-  );
+  const { onStart, onStop, isPrepared, isRecording, mediaStreamRef } =
+    useRecorderV2(videoRef, onComplete);
 
   return {
     videoRef,
+    mediaStreamRef,
     onStart,
     onStop,
     isPrepared,
@@ -101,6 +99,7 @@ function useMediaRecorderV2ContextValue() {
     mediaRecorderOptions,
     mediaBlobOptions,
     videoDeviceId,
+    audioDeviceId,
     setMediaBlobOptions,
     setMediaRecorderOptions,
     setMediaStreamConstraints,
@@ -109,19 +108,28 @@ function useMediaRecorderV2ContextValue() {
 }
 
 function App() {
-  const { videoRef, onStart, onStop, isPrepared, isRecording, videoDeviceId } =
-    useContext(MediaRecorderV2Context);
+  const {
+    videoRef,
+    onStart,
+    onStop,
+    isPrepared,
+    isRecording,
+    videoDeviceId,
+    audioDeviceId,
+  } = useContext(MediaRecorderV2Context);
 
-  function onLoad() {
-    onStart({
+  /** @type {MediaStreamConstraints} */
+  const mediaStreamConstraints = {
+    video: {
+      facingMode: 'environment',
+    },
+    audio: {},
+  };
+
+  async function onLoad() {
+    await onStart({
       record: false,
-      mediaStreamConstraints: {
-        video: {
-          facingMode: 'environment',
-          deviceId: videoDeviceId,
-        },
-        audio: false,
-      },
+      mediaStreamConstraints,
       mediaRecorderOptions: { mimeType: 'video/mp4' },
     });
   }
@@ -164,13 +172,7 @@ function App() {
               if (!isRecording) {
                 onStart({
                   record: true,
-                  mediaStreamConstraints: {
-                    video: {
-                      facingMode: 'environment',
-                      deviceId: videoDeviceId,
-                    },
-                    audio: false,
-                  },
+                  mediaStreamConstraints,
                   mediaRecorderOptions: { mimeType: 'video/mp4' },
                 });
               } else {

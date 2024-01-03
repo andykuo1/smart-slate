@@ -49,8 +49,11 @@ export function useMediaStream(videoRef) {
       for (let constraint of constraints) {
         try {
           mediaStream = await mediaDevices.getUserMedia(constraint);
+          // Succeeded this constraint, skip the
+          break;
         } catch {
           // Failed this contraint, try the next one.
+          continue;
         }
       }
       if (!mediaStream) {

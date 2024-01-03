@@ -72,5 +72,6 @@ export function useRecorderV2(videoRef, onComplete) {
     onStop,
     isPrepared,
     isRecording,
+    mediaStreamRef,
   };
 }
