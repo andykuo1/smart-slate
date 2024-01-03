@@ -12,7 +12,7 @@ import {
   MEDIA_STREAM_CONSTRAINTS,
 } from '@/values/RecorderValues';
 
-const TEST_VERSION = 'v10';
+const TEST_VERSION = 'v11';
 
 export default function TestPage() {
   return (
@@ -117,7 +117,7 @@ function App() {
     video: {
       facingMode: 'environment',
     },
-    audio: {},
+    audio: true,
   };
 
   async function onLoad() {

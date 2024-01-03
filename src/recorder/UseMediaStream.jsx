@@ -48,6 +48,12 @@ export function useMediaStream(videoRef) {
       let mediaStream = null;
       for (let constraint of constraints) {
         try {
+          if (constraint.video && constraint.audio) {
+            // Safari: Video-only first
+            let videoOnly = { ...constraint, audio: false };
+            mediaStream = await mediaDevices.getUserMedia(videoOnly);
+            // ... then request the regular.
+          }
           mediaStream = await mediaDevices.getUserMedia(constraint);
           // Succeeded this constraint, skip the
           break;
