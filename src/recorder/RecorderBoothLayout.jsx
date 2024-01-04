@@ -20,7 +20,7 @@ import { useAnimationFrame } from '@/libs/animationframe';
  * @param {() => import('react').ReactNode} [props.right]
  * @param {VideoLayoutCenterRenderProp} props.center
  */
-export default function VideoRecorderBoothLayout({
+export default function RecorderBoothLayout({
   className,
   videoRef,
   top,

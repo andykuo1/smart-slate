@@ -2,6 +2,10 @@ import { useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useFullscreen } from '@/libs/fullscreen';
+import { useInputCapture } from '@/libs/inputcapture';
+import { useTakeExporter } from '@/serdes/UseTakeExporter';
+import { useSettingsStore } from '@/stores/settings';
+import { useSetRecorderActive, useSetUserCursor } from '@/stores/user';
 
 import { RecorderContext } from './RecorderContext';
 
@@ -12,11 +16,36 @@ import { RecorderContext } from './RecorderContext';
  * @param {import('react').MouseEventHandler<HTMLButtonElement>} [props.onClick]
  */
 export default function RecorderOpenButton({ className, children, onClick }) {
+  const openRecorder = useOpenRecorder(onClick);
+  const openInputCapture = useOpenInputCapture(onClick);
+  const preferNativeRecorder = useSettingsStore(
+    (ctx) => ctx.user.preferNativeRecorder,
+  );
+
+  /** @type {import('react').MouseEventHandler<HTMLButtonElement>} */
+  function handleClick(e) {
+    if (!preferNativeRecorder) {
+      openRecorder(e);
+    } else {
+      openInputCapture(e);
+    }
+  }
+
+  return (
+    <button className={className} onClick={handleClick}>
+      {children}
+    </button>
+  );
+}
+
+/**
+ * @param {import('react').MouseEventHandler<any>} [onClick]
+ */
+function useOpenRecorder(onClick) {
   const { onStart, onStop } = useContext(RecorderContext);
   const { enterFullscreen, exitFullscreen } = useFullscreen();
   const navigate = useNavigate();
-
-  const handleClick = useCallback(
+  return useCallback(
     /** @type {import('react').MouseEventHandler<HTMLButtonElement>} */
     async function _handleClick(e) {
       try {
@@ -50,10 +79,28 @@ export default function RecorderOpenButton({ className, children, onClick }) {
     },
     [onStart, onStop, navigate, enterFullscreen, exitFullscreen, onClick],
   );
+}
 
-  return (
-    <button className={className} onClick={handleClick}>
-      {children}
-    </button>
+/**
+ * @param {import('react').MouseEventHandler<any>} [onClick]
+ */
+function useOpenInputCapture(onClick) {
+  const setUserCursor = useSetUserCursor();
+  const setRecorderActive = useSetRecorderActive();
+  const { startCapturing } = useInputCapture();
+  const exportTake = useTakeExporter();
+  return useCallback(
+    /** @type {import('react').MouseEventHandler<any>} */
+    function _handleClick(e) {
+      startCapturing(({ status, data }) => {
+        if (!data) {
+          return;
+        }
+        if (status === 'stopped') {
+          onClick?.(e);
+        }
+      });
+    },
+    [setRecorderActive, startCapturing, exportTake, setUserCursor],
   );
 }

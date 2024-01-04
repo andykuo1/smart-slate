@@ -16,9 +16,9 @@ import { formatHourMinSecTime } from '@/utils/StringFormat';
 import '@/values/RecorderValues';
 import { MEDIA_BLOB_OPTIONS } from '@/values/RecorderValues';
 
+import RecorderBoothLayout from './RecorderBoothLayout';
 import { RecorderContext } from './RecorderContext';
 import RecorderToolbar from './RecorderToolbar';
-import VideoRecorderBoothLayout from './VideoRecorderBoothLayout';
 
 export default function RecorderBooth() {
   const { documentId, sceneId, shotId } = useCurrentCursor();
@@ -35,7 +35,7 @@ export default function RecorderBooth() {
     useContext(RecorderContext);
 
   return (
-    <VideoRecorderBoothLayout
+    <RecorderBoothLayout
       className="text-white"
       videoRef={videoRef}
       top={() => (
