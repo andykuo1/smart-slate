@@ -160,17 +160,18 @@ export function useTakeExporter() {
       const takeId = newTake.takeId;
 
       // Always cache it-- just in case.
-      cacheVideoBlob(takeId, data).then((key) =>
-        setTakeExportedIDBKey(documentId, takeId, key),
-      );
-
-      // Try to capture the video snapshot.
-      captureVideoSnapshot(
-        data,
-        0.1,
-        MAX_THUMBNAIL_WIDTH,
-        MAX_THUMBNAIL_HEIGHT,
-      ).then((url) => setTakePreviewImage(documentId, takeId, url));
+      cacheVideoBlob(takeId, data)
+        .then((key) => setTakeExportedIDBKey(documentId, takeId, key))
+        .then(() =>
+          // Try to capture the video snapshot.
+          captureVideoSnapshot(
+            data,
+            0.1,
+            MAX_THUMBNAIL_WIDTH,
+            MAX_THUMBNAIL_HEIGHT,
+          ),
+        )
+        .then((url) => setTakePreviewImage(documentId, takeId, url));
 
       let shouldSave = true;
       if (shouldSave && enableDriveSync) {

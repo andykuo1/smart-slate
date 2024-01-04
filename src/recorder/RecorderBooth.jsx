@@ -14,6 +14,7 @@ import { useSettingsStore } from '@/stores/settings';
 import { useCurrentCursor } from '@/stores/user';
 import { formatHourMinSecTime } from '@/utils/StringFormat';
 import '@/values/RecorderValues';
+import { MEDIA_BLOB_OPTIONS } from '@/values/RecorderValues';
 
 import { RecorderContext } from './RecorderContext';
 import RecorderToolbar from './RecorderToolbar';
@@ -41,7 +42,10 @@ export default function RecorderBooth() {
         <>
           <BackButton
             onClick={() => {
-              onStop({ exit: !preferPersistedMediaStream }).then(() => {
+              onStop({
+                exit: !preferPersistedMediaStream,
+                mediaBlobOptions: MEDIA_BLOB_OPTIONS,
+              }).then(() => {
                 exitFullscreen();
                 navigate('/edit');
               });

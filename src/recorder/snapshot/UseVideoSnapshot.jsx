@@ -31,10 +31,12 @@ export function useVideoSnapshot(documentId, takeId) {
       }
       captureVideoSnapshot(
         videoBlob,
-        0.5,
+        0.1,
         MAX_THUMBNAIL_WIDTH,
         MAX_THUMBNAIL_HEIGHT,
-      ).then((url) => setTakePreviewImage(documentId, takeId, url));
+      ).then((url) => {
+        setTakePreviewImage(documentId, takeId, url);
+      });
     },
     [videoBlob, takePreviewImage, documentId, takeId, setTakePreviewImage],
   );

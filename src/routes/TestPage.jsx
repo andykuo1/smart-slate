@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 import { useAnimationFrame } from '@/libs/animationframe';
-import { useRecorderV2 } from '@/recorder';
+import { useRecorderV2 } from '@/recorder/UseRecorderV2';
 import VideoRecorderBoothLayout from '@/recorder/VideoRecorderBoothLayout';
 import { downloadURLImpl } from '@/utils/Downloader';
 import { createContext, createProvider } from '@/utils/ReactContextHelper';

@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 
 import { useInterval } from '@/libs/UseInterval';
 import { useSettingsStore } from '@/stores/settings';
+import { MEDIA_BLOB_OPTIONS } from '@/values/RecorderValues';
 
 import { RecorderContext } from './RecorderContext';
 import { useRecorderContextValue } from './RecorderContextValue';
@@ -21,7 +22,10 @@ export default function RecorderContextProvider({ children }) {
     function _onInterval() {
       // Always stop it if it's not in /rec page.
       if (isPrepared && !window?.location?.pathname?.endsWith?.('/rec')) {
-        onStop({ exit: !preferPersistedMediaStream });
+        onStop({
+          exit: !preferPersistedMediaStream,
+          mediaBlobOptions: MEDIA_BLOB_OPTIONS,
+        });
       }
     },
     [isPrepared, preferPersistedMediaStream, onStop],
