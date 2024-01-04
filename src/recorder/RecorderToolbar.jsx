@@ -11,6 +11,10 @@ import { useContext, useEffect, useState } from 'react';
 import SettingsIcon from '@material-symbols/svg-400/rounded/settings-fill.svg';
 
 import DialogStyle from '@/styles/Dialog.module.css';
+import {
+  MEDIA_BLOB_OPTIONS,
+  MEDIA_RECORDER_OPTIONS,
+} from '@/values/RecorderValues';
 
 import { RecorderContext } from './RecorderContext';
 
@@ -32,10 +36,10 @@ export default function RecorderToolbar({ className }) {
   /**
    * @param {string} deviceId
    */
-  function onVideoChange(deviceId) {
+  async function onVideoChange(deviceId) {
     setVideoDeviceId(deviceId);
-    onStop({ exit: true, mediaBlobOptions: { type: 'video/mp4' } });
-    onStart({
+    await onStop({ exit: true, mediaBlobOptions: MEDIA_BLOB_OPTIONS });
+    await onStart({
       record: false,
       mediaStreamConstraints: {
         video: {
@@ -45,28 +49,27 @@ export default function RecorderToolbar({ className }) {
           deviceId: { ideal: audioDeviceId },
         },
       },
-      mediaRecorderOptions: { mimeType: 'video/mp4' },
+      mediaRecorderOptions: MEDIA_RECORDER_OPTIONS,
     });
   }
 
   /**
    * @param {string} deviceId
    */
-  function onAudioChange(deviceId) {
+  async function onAudioChange(deviceId) {
     setAudioDeviceId(deviceId);
-    onStop({ exit: true, mediaBlobOptions: { type: 'video/mp4' } });
-    onStart({
+    await onStop({ exit: true, mediaBlobOptions: MEDIA_BLOB_OPTIONS });
+    await onStart({
       record: false,
       mediaStreamConstraints: {
         video: {
-          facingMode: 'environment',
           deviceId: { ideal: videoDeviceId },
         },
         audio: {
           deviceId: { ideal: deviceId },
         },
       },
-      mediaRecorderOptions: { mimeType: 'video/mp4' },
+      mediaRecorderOptions: MEDIA_RECORDER_OPTIONS,
     });
   }
 
@@ -122,7 +125,22 @@ export default function RecorderToolbar({ className }) {
 }
 
 function RecordButton() {
-  return <button className="text-red-500 text-4xl">◉</button>;
+  const { isRecording, onStart, onStop } = useContext(RecorderContext);
+  async function onClick() {
+    if (isRecording) {
+      await onStop({ exit: false, mediaBlobOptions: MEDIA_BLOB_OPTIONS });
+    } else {
+      await onStart({
+        record: true,
+        mediaRecorderOptions: MEDIA_RECORDER_OPTIONS,
+      });
+    }
+  }
+  return (
+    <button className="text-red-500 text-4xl" onClick={onClick}>
+      ◉
+    </button>
+  );
 }
 
 /**

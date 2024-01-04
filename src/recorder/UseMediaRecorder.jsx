@@ -130,7 +130,7 @@ export function useMediaRecorder(mediaStreamRef, onComplete) {
  * @param {Array<Blob>} dataBlobs
  * @param {BlobPropertyBag} [dataOptions]
  */
-function compileDataBlobs(dataBlobs, dataOptions = {}) {
+export function compileDataBlobs(dataBlobs, dataOptions = {}) {
   if (dataBlobs.length > 0) {
     let firstBlob = dataBlobs[0];
     let blobPropertyBag = {

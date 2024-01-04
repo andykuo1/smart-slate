@@ -48,7 +48,7 @@ export function useMediaStream() {
   return [ref, init, dead];
 }
 
-class MissingFeatureError extends Error {
+export class MissingFeatureError extends Error {
   /**
    * @param {string} featureName
    * @param {string} [supportMessage]
@@ -58,13 +58,13 @@ class MissingFeatureError extends Error {
   }
 }
 
-class MissingWindowFeatureError extends MissingFeatureError {
+export class MissingWindowFeatureError extends MissingFeatureError {
   constructor() {
     super('window', 'Please use a client-side browser.');
   }
 }
 
-class NonSecureAccessError extends Error {
+export class NonSecureAccessError extends Error {
   constructor() {
     super(
       'User media access denied for non-secure access. Please redirect using https.',
@@ -72,14 +72,14 @@ class NonSecureAccessError extends Error {
   }
 }
 
-function tryGetWindow() {
+export function tryGetWindow() {
   if (typeof window === 'undefined') {
     throw new MissingWindowFeatureError();
   }
   return window;
 }
 
-function tryGetMediaDevices() {
+export function tryGetMediaDevices() {
   const window = tryGetWindow();
 
   // Must be in a secure context -- localhost is allowed though.
@@ -98,7 +98,7 @@ function tryGetMediaDevices() {
   return result;
 }
 
-function tryGetPermissions() {
+export function tryGetPermissions() {
   const window = tryGetWindow();
   let result = window.navigator?.permissions;
   if (!result) {
@@ -111,7 +111,7 @@ function tryGetPermissions() {
  * @param {MediaDevices} mediaDevices
  * @param {Array<MediaStreamConstraints>} constraints
  */
-async function tryGetUserMedia(mediaDevices, constraints) {
+export async function tryGetUserMedia(mediaDevices, constraints) {
   let result = null;
 
   // Try all the constraints in order...
@@ -134,19 +134,25 @@ async function tryGetUserMedia(mediaDevices, constraints) {
 }
 
 /** @type {MediaStreamConstraints} */
-const DEFAULT_MEDIA_STREAM_CONSTRAINTS_BOTH = { video: true, audio: true };
-/** @type {MediaStreamConstraints} */
-const DEFAULT_MEDIA_STREAM_CONSTRAINTS_VIDEO_ONLY = {
+export const DEFAULT_MEDIA_STREAM_CONSTRAINTS_BOTH = {
   video: true,
   audio: true,
 };
 /** @type {MediaStreamConstraints} */
-const DEFAULT_MEDIA_STREAM_CONSTRAINTS_AUDIO_ONLY = {
+export const DEFAULT_MEDIA_STREAM_CONSTRAINTS_VIDEO_ONLY = {
+  video: true,
+  audio: true,
+};
+/** @type {MediaStreamConstraints} */
+export const DEFAULT_MEDIA_STREAM_CONSTRAINTS_AUDIO_ONLY = {
   video: false,
   audio: true,
 };
 /** @type {MediaStreamConstraints} */
-const DEFAULT_MEDIA_STREAM_CONSTRAINTS_NONE = { video: false, audio: false };
+export const DEFAULT_MEDIA_STREAM_CONSTRAINTS_NONE = {
+  video: false,
+  audio: false,
+};
 
 /**
  * @param {MediaDevices} mediaDevices
