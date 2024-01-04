@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useCallback } from 'react';
 
+import { useInterval } from '@/libs/UseInterval';
 import { useSettingsStore } from '@/stores/settings';
 
 import { RecorderContext } from './RecorderContext';
@@ -16,13 +16,17 @@ export default function RecorderContextProvider({ children }) {
   const preferPersistedMediaStream = useSettingsStore(
     (ctx) => ctx.user.preferPersistedMediaStream,
   );
-  const location = useLocation();
 
-  useEffect(() => {
-    if (isPrepared && !location.pathname.endsWith('/rec')) {
-      onStop({ exit: !preferPersistedMediaStream });
-    }
-  }, [location, isPrepared, onStop, preferPersistedMediaStream]);
+  const onInterval = useCallback(
+    function _onInterval() {
+      // Always stop it if it's not in /rec page.
+      if (isPrepared && !window?.location?.pathname?.endsWith?.('/rec')) {
+        onStop({ exit: !preferPersistedMediaStream });
+      }
+    },
+    [isPrepared, preferPersistedMediaStream, onStop],
+  );
+  useInterval(onInterval, 1_000);
 
   return (
     <RecorderContext.Provider value={value}>
