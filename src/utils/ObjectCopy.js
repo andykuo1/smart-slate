@@ -7,7 +7,7 @@
 export function slowShallowCopyObjects(out, target) {
   // TODO: Eventually make this faster ;)
   for (let key of Object.keys(target)) {
-    // @ts-ignore
+    // @ts-expect-error both objects should be generic json objects
     out[key] = target[key];
   }
   return /** @type {T} */ (out);

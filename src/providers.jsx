@@ -6,8 +6,7 @@ import {
   GoogleAPIProvider,
 } from '@/libs/googleapi';
 
-import { InputCaptureProvider } from './libs/inputcapture';
-import { MediaRecorderProvider } from './recorder';
+import RecorderContextProvider from './recorder/RecorderContextProvider';
 import { VideoCacheProvider } from './recorder/cache';
 
 /**
@@ -21,11 +20,9 @@ export default function Providers({ children }) {
       clientId={GAPI_CLIENT_ID}
       scopes={[GAPI_DRIVE_FILE_SCOPE]}>
       <VideoCacheProvider>
-        <InputCaptureProvider>
-          <MediaRecorderProvider>
-            <FullscreenProvider>{children}</FullscreenProvider>
-          </MediaRecorderProvider>
-        </InputCaptureProvider>
+        <FullscreenProvider>
+          <RecorderContextProvider>{children}</RecorderContextProvider>
+        </FullscreenProvider>
       </VideoCacheProvider>
     </GoogleAPIProvider>
   );

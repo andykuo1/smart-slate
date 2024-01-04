@@ -7,20 +7,18 @@ import { useDocumentStore } from '@/stores/document';
  */
 export function useShotEntryOnDragUpdate(targetRef) {
   /** @type {import('@/stores/draggable').OnDragUpdateCallback} */
-  const onDragUpdate = useCallback(function _onDragUpdate(
-    targetId,
-    overId,
-    x,
-    y,
-  ) {
-    let target = targetRef.current;
-    if (!target) {
-      return;
-    }
-    target.style.left = `${x}px`;
-    target.style.top = `${y}px`;
-    target.style.translate = '-25% -50%';
-  }, []);
+  const onDragUpdate = useCallback(
+    function _onDragUpdate(targetId, overId, x, y) {
+      let target = targetRef.current;
+      if (!target) {
+        return;
+      }
+      target.style.left = `${x}px`;
+      target.style.top = `${y}px`;
+      target.style.translate = '-25% -50%';
+    },
+    [targetRef],
+  );
   return onDragUpdate;
 }
 

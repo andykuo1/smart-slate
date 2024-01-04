@@ -1,10 +1,9 @@
 import { useCallback, useRef } from 'react';
 
 /**
- * @param {import('react').RefObject<HTMLVideoElement|null>} videoRef
  * @returns {[import('react').RefObject<MediaStream|null>, (constraints: MediaStreamConstraints|Array<MediaStreamConstraints>|undefined) => Promise<MediaStream>, () => Promise<void>]}
  */
-export function useMediaStream(videoRef) {
+export function useMediaStream() {
   const ref = useRef(/** @type {MediaStream|null} */ (null));
 
   const dead = useCallback(
@@ -18,7 +17,7 @@ export function useMediaStream(videoRef) {
         ref.current = null;
       }
     },
-    [ref, videoRef],
+    [ref],
   );
 
   const init = useCallback(
@@ -44,7 +43,7 @@ export function useMediaStream(videoRef) {
 
       return mediaStream;
     },
-    [ref, videoRef, dead],
+    [ref, dead],
   );
   return [ref, init, dead];
 }

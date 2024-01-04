@@ -1,13 +1,13 @@
 import ArrowForwardIcon from '@material-symbols/svg-400/rounded/arrow_forward.svg';
 
-import OpenRecorderButton from '@/recorder/OpenRecorderButton';
+import RecorderOpenButton from '@/recorder/RecorderOpenButton';
 import {
   useSceneNumber,
   useSceneShotCount,
   useShotNumber,
 } from '@/stores/document';
 import { useDraggable, useDraggableTarget } from '@/stores/draggable';
-import { useCurrentCursor } from '@/stores/user';
+import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 
@@ -37,6 +37,7 @@ export function ShotEntry({
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
   const shotCount = useSceneShotCount(documentId, sceneId);
   const currentCursor = useCurrentCursor();
+  const setUserCursor = useSetUserCursor();
   const isActive =
     currentCursor.documentId === documentId &&
     currentCursor.sceneId === sceneId &&
@@ -82,17 +83,15 @@ export function ShotEntry({
           <div className="flex-1 flex flex-row">
             {!collapsed && (
               <div className="flex flex-col">
-                <OpenRecorderButton
+                <RecorderOpenButton
                   className={
                     'group mx-2 my-auto' +
                     ' ' +
                     'text-4xl text-red-400 disabled:text-gray-300'
                   }
-                  documentId={documentId}
-                  sceneId={sceneId}
-                  shotId={shotId}>
+                  onClick={() => setUserCursor(documentId, sceneId, shotId)}>
                   ◉
-                </OpenRecorderButton>
+                </RecorderOpenButton>
               </div>
             )}
             {collapsed && <ArrowForwardIcon className="w-6 h-6" />}

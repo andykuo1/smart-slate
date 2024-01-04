@@ -73,7 +73,7 @@ export function useRecorderV2(videoRef, onComplete) {
         video.srcObject = null;
       }
     }
-  }, [isPrepared]);
+  }, [isPrepared, mediaStreamRef, videoRef]);
 
   return {
     onStart,

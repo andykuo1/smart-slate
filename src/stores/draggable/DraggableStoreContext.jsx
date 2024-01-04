@@ -121,7 +121,14 @@ function useTouchHandler(containerId, targetId) {
       tryStartDrag(containerId, targetId, touch.clientX, touch.clientY);
       e.preventDefault();
     },
-    [tryStartDrag, tryMoveDrag, tryStopDrag, completeCallback],
+    [
+      containerId,
+      targetId,
+      tryStartDrag,
+      tryMoveDrag,
+      tryStopDrag,
+      completeCallback,
+    ],
   );
 
   return onTouchStart;
@@ -169,17 +176,25 @@ export function useDraggable(containerId, targetId) {
         onTouchStart,
         touchStartOptions,
       );
-  }, [elementRef, onTouchStart]);
+  }, [containerId, elementRef, onTouchStart]);
 
   return {
     elementProps: {
       'data-draggable': targetId,
-      onMouseEnter: useCallback(onMouseEnter, [targetId, tryMoveDragEnter]),
+      onMouseEnter: useCallback(onMouseEnter, [
+        containerId,
+        targetId,
+        tryMoveDragEnter,
+      ]),
       onMouseLeave: useCallback(onMouseLeave, [targetId, tryMoveDragLeave]),
     },
     handleProps: {
       ref: elementRef,
-      onMouseDown: useCallback(onMouseDown, [targetId, tryStartDrag]),
+      onMouseDown: useCallback(onMouseDown, [
+        containerId,
+        targetId,
+        tryStartDrag,
+      ]),
     },
   };
 }
@@ -237,7 +252,7 @@ export function useDraggableContainer(onDragComplete) {
       document.removeEventListener('mousemove', moveCallback);
       document.removeEventListener('mouseup', upCallback);
     };
-  }, [onDragComplete, moveCallback, upCallback]);
+  }, [onDragComplete, moveCallback, upCallback, setCompleteCallback]);
 }
 
 const FRAME_DELTA_FACTOR = 10;

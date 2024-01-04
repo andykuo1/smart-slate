@@ -12,7 +12,7 @@ import SettingsIcon from '@material-symbols/svg-400/rounded/settings-fill.svg';
 
 import DialogStyle from '@/styles/Dialog.module.css';
 
-import { MediaRecorderV2Context } from './TestPage';
+import { RecorderContext } from './RecorderContext';
 
 /**
  * @param {object} props
@@ -27,7 +27,7 @@ export default function RecorderToolbar({ className }) {
     audioDeviceId,
     setVideoDeviceId,
     setAudioDeviceId,
-  } = useContext(MediaRecorderV2Context);
+  } = useContext(RecorderContext);
 
   /**
    * @param {string} deviceId
@@ -39,7 +39,6 @@ export default function RecorderToolbar({ className }) {
       record: false,
       mediaStreamConstraints: {
         video: {
-          facingMode: 'environment',
           deviceId: { ideal: deviceId },
         },
         audio: {
@@ -133,7 +132,7 @@ function RecordButton() {
 function VideoResolutionSelector({ className }) {
   const [value, setValue] = useState('');
 
-  const { mediaStreamRef, isPrepared } = useContext(MediaRecorderV2Context);
+  const { mediaStreamRef, isPrepared } = useContext(RecorderContext);
 
   useEffect(() => {
     if (!isPrepared) {
@@ -183,7 +182,7 @@ function VideoDeviceSelector({ className, value, onChange }) {
     /** @type {Array<MediaDeviceInfo>} */ ([]),
   );
 
-  const { isPrepared } = useContext(MediaRecorderV2Context);
+  const { isPrepared } = useContext(RecorderContext);
 
   useEffect(() => {
     if (!isPrepared) {
@@ -232,7 +231,7 @@ function AudioDeviceSelector({ className, value, onChange }) {
     /** @type {Array<MediaDeviceInfo>} */ ([]),
   );
 
-  const { isPrepared } = useContext(MediaRecorderV2Context);
+  const { isPrepared } = useContext(RecorderContext);
 
   useEffect(() => {
     if (!isPrepared) {

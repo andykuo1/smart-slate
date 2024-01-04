@@ -39,7 +39,7 @@ function TestPageContent() {
     if (!open) {
       onStop({ exit: true });
     }
-  }, [open]);
+  }, [open, onStop]);
 
   async function onClick() {
     try {
@@ -91,14 +91,14 @@ function VideoBoothButton({ onClick }) {
 function PermissionsButton() {
   function onClick() {
     navigator.permissions
-      // @ts-ignore
+      // @ts-expect-error 'microphone' is a permissable feature.
       .query({ name: 'microphone' })
       .then((result) =>
         window.alert(JSON.stringify(result) + `${result.name}${result.state}`),
       )
       .catch((e) => window.alert('ERROR'));
     navigator.permissions
-      // @ts-ignore
+      // @ts-expect-error 'camera' is a permissable feature.
       .query({ name: 'camera' })
       .then((result) =>
         window.alert(JSON.stringify(result) + `${result.name}${result.state}`),
@@ -161,7 +161,7 @@ function useMediaRecorderV2ContextValue() {
 }
 
 function App() {
-  const { videoRef, onStart, onStop, isPrepared, isRecording } = useContext(
+  const { videoRef, isPrepared, isRecording } = useContext(
     MediaRecorderV2Context,
   );
 
