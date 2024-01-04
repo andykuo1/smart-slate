@@ -11,8 +11,7 @@ export function useRecorderV2(videoRef, onComplete) {
   const [isPrepared, setIsPrepared] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
 
-  const [mediaStreamRef, initMediaStream, deadMediaStream] =
-    useMediaStream(videoRef);
+  const [mediaStreamRef, initMediaStream, deadMediaStream] = useMediaStream();
   const [_, startMediaRecorder, stopMediaRecorder] = useMediaRecorder(
     mediaStreamRef,
     onComplete,
