@@ -22,19 +22,14 @@ export function useRecorderContextValue() {
     [userCursor, exportTake, setUserCursor],
   );
 
-  const { onStart, onStop, isPrepared, isRecording, mediaStreamRef } =
-    useRecorderControls(onComplete);
-
-  useRecorderLiveVideo(videoRef, mediaStreamRef, isPrepared);
+  const controls = useRecorderControls(onComplete);
+  const { isPrepared, mediaStreamRef } = controls;
   const deviceIds = useRecorderDeviceIds(mediaStreamRef, isPrepared);
+  useRecorderLiveVideo(videoRef, mediaStreamRef, isPrepared);
 
   return {
     videoRef,
-    mediaStreamRef,
-    onStart,
-    onStop,
-    isPrepared,
-    isRecording,
+    ...controls,
     ...deviceIds,
   };
 }
@@ -108,15 +103,17 @@ function useRecorderControls(onComplete) {
     /**
      * @param {object} opts
      * @param {boolean} opts.record
+     * @param {boolean} [opts.restart]
      * @param {MediaStreamConstraints|Array<MediaStreamConstraints>} [opts.mediaStreamConstraints]
      * @param {MediaRecorderOptions} [opts.mediaRecorderOptions]
      */
     async function onStart({
       record,
+      restart,
       mediaStreamConstraints,
       mediaRecorderOptions,
     }) {
-      await initMediaStream(mediaStreamConstraints);
+      await initMediaStream(mediaStreamConstraints, restart);
       setIsPrepared(true);
       if (record) {
         await startMediaRecorder(mediaRecorderOptions);

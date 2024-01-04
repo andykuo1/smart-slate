@@ -22,6 +22,7 @@ export default function RecorderOpenButton({ className, children, onClick }) {
       try {
         // Step 1. Get all the permissions :P
         await onStart({
+          restart: true,
           record: false,
           mediaStreamConstraints: [
             {

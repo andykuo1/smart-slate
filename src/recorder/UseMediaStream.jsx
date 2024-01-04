@@ -1,7 +1,7 @@
 import { useCallback, useRef } from 'react';
 
 /**
- * @returns {[import('react').RefObject<MediaStream|null>, (constraints: MediaStreamConstraints|Array<MediaStreamConstraints>|undefined) => Promise<MediaStream>, () => Promise<void>]}
+ * @returns {[import('react').RefObject<MediaStream|null>, (constraints?: MediaStreamConstraints|Array<MediaStreamConstraints>, restart?: boolean) => Promise<MediaStream>, () => Promise<void>]}
  */
 export function useMediaStream() {
   const ref = useRef(/** @type {MediaStream|null} */ (null));
@@ -22,9 +22,10 @@ export function useMediaStream() {
 
   const init = useCallback(
     /**
-     * @param {MediaStreamConstraints|Array<MediaStreamConstraints>} [constraints]
+     * @param {MediaStreamConstraints|Array<MediaStreamConstraints>} constraints
+     * @param {boolean} restart
      */
-    async function init(constraints = []) {
+    async function init(constraints = [], restart = true) {
       if (!Array.isArray(constraints)) {
         constraints = [constraints];
       }
@@ -34,7 +35,11 @@ export function useMediaStream() {
       }
 
       if (ref.current) {
-        await dead();
+        if (restart) {
+          await dead();
+        } else {
+          return ref.current;
+        }
       }
 
       const mediaDevices = await tryGetMediaDevices();

@@ -17,6 +17,7 @@ import {
 } from '@/values/RecorderValues';
 
 import { RecorderContext } from './RecorderContext';
+import RecorderRecordButton from './RecorderRecordButton';
 
 /**
  * @param {object} props
@@ -40,6 +41,7 @@ export default function RecorderToolbar({ className }) {
     setVideoDeviceId(deviceId);
     await onStop({ exit: true, mediaBlobOptions: MEDIA_BLOB_OPTIONS });
     await onStart({
+      restart: true,
       record: false,
       mediaStreamConstraints: {
         video: {
@@ -60,6 +62,7 @@ export default function RecorderToolbar({ className }) {
     setAudioDeviceId(deviceId);
     await onStop({ exit: true, mediaBlobOptions: MEDIA_BLOB_OPTIONS });
     await onStart({
+      restart: true,
       record: false,
       mediaStreamConstraints: {
         video: {
@@ -116,30 +119,11 @@ export default function RecorderToolbar({ className }) {
         </Dialog>
       </DialogProvider>
       <div className="flex-1" />
-      <RecordButton />
+      <RecorderRecordButton />
       <div className="flex-1" />
       <div className="h-10" />
       <div className="flex-1" />
     </div>
-  );
-}
-
-function RecordButton() {
-  const { isRecording, onStart, onStop } = useContext(RecorderContext);
-  async function onClick() {
-    if (isRecording) {
-      await onStop({ exit: false, mediaBlobOptions: MEDIA_BLOB_OPTIONS });
-    } else {
-      await onStart({
-        record: true,
-        mediaRecorderOptions: MEDIA_RECORDER_OPTIONS,
-      });
-    }
-  }
-  return (
-    <button className="text-red-500 text-4xl" onClick={onClick}>
-      ◉
-    </button>
   );
 }
 
