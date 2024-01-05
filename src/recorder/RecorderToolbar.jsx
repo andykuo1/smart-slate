@@ -11,10 +11,7 @@ import { useContext, useEffect, useState } from 'react';
 import SettingsIcon from '@material-symbols/svg-400/rounded/settings-fill.svg';
 
 import DialogStyle from '@/styles/Dialog.module.css';
-import {
-  MEDIA_BLOB_OPTIONS,
-  MEDIA_RECORDER_OPTIONS,
-} from '@/values/RecorderValues';
+import { MEDIA_RECORDER_OPTIONS } from '@/values/RecorderValues';
 
 import { RecorderContext } from './RecorderContext';
 import RecorderRecordButton from './RecorderRecordButton';
@@ -39,7 +36,7 @@ export default function RecorderToolbar({ className }) {
    */
   async function onVideoChange(deviceId) {
     setVideoDeviceId(deviceId);
-    await onStop({ exit: true, mediaBlobOptions: MEDIA_BLOB_OPTIONS });
+    await onStop({ exit: true });
     await onStart({
       restart: true,
       record: false,
@@ -60,7 +57,7 @@ export default function RecorderToolbar({ className }) {
    */
   async function onAudioChange(deviceId) {
     setAudioDeviceId(deviceId);
-    await onStop({ exit: true, mediaBlobOptions: MEDIA_BLOB_OPTIONS });
+    await onStop({ exit: true });
     await onStart({
       restart: true,
       record: false,

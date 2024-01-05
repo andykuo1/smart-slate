@@ -8,9 +8,8 @@ import { useCallback, useRef } from 'react';
 
 /**
  * @param {import('react').RefObject<MediaStream|null>} mediaStreamRef
- * @param {MediaRecorderCompleteCallback} onComplete
  */
-export function useMediaRecorder(mediaStreamRef, onComplete) {
+export function useMediaRecorder(mediaStreamRef) {
   const mediaRecorderRef = useRef(/** @type {MediaRecorder|null} */ (null));
   const dataBlobsRef = useRef(/** @type {Array<Blob>} */ ([]));
 
@@ -37,13 +36,13 @@ export function useMediaRecorder(mediaStreamRef, onComplete) {
     [],
   );
 
+  /** @type {() => Promise<{ value: Blob|null, target: MediaRecorder|null }>} */
   const stopMediaRecorder = useCallback(
-    /** @param {BlobPropertyBag} [dataOptions] */
-    async function _stopMediaRecorder(dataOptions = undefined) {
-      if (!mediaRecorderRef.current) {
-        return null;
-      }
+    async function _stopMediaRecorder() {
       const mediaRecorder = mediaRecorderRef.current;
+      if (!mediaRecorder) {
+        return { value: null, target: null };
+      }
       mediaRecorderRef.current = null;
       return new Promise((resolve, reject) => {
         /** @param {MediaRecorderEventMap['start']} e */
@@ -63,12 +62,12 @@ export function useMediaRecorder(mediaStreamRef, onComplete) {
             let dataBlobs = dataBlobsRef.current;
             dataBlobsRef.current = [];
             let blob = compileDataBlobs(dataBlobs, {
-              ...(dataOptions || {}),
               type: mediaRecorder.mimeType,
             });
-            onComplete(blob, mediaRecorder);
+            resolve({ value: blob, target: mediaRecorder });
+          } else {
+            resolve({ value: null, target: mediaRecorder });
           }
-          resolve(mediaRecorder);
         }
         mediaRecorder.addEventListener('stop', onMediaRecorderStop);
         mediaRecorder.addEventListener('error', reject);
@@ -78,16 +77,17 @@ export function useMediaRecorder(mediaStreamRef, onComplete) {
     [
       mediaRecorderRef,
       dataBlobsRef,
-      onComplete,
       onMediaRecorderDataAvailable,
       onMediaRecorderError,
     ],
   );
 
+  /** @type {(options?: MediaRecorderOptions) => Promise<{ target: MediaRecorder }>} */
   const startMediaRecorder = useCallback(
     /** @param {MediaRecorderOptions} [options] */
     async function _startMediaRecorder(options = undefined) {
       if (mediaRecorderRef.current) {
+        // NOTE: The result of this is thrown away :(
         await stopMediaRecorder();
       }
       if (!mediaStreamRef.current) {
@@ -109,7 +109,7 @@ export function useMediaRecorder(mediaStreamRef, onComplete) {
             'dataavailable',
             onMediaRecorderDataAvailable,
           );
-          resolve(mediaRecorder);
+          resolve({ target: mediaRecorder });
         }
         mediaRecorder.addEventListener('start', onMediaRecorderStart);
         mediaRecorder.addEventListener('error', reject);

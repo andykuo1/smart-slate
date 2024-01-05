@@ -19,7 +19,7 @@ export function useMediaStreamRecorder(onRecord, onComplete) {
 
   const { mediaStreamRef, initMediaStream, deadMediaStream } = useMediaStream();
   const { mediaRecorderRef, startMediaRecorder, stopMediaRecorder } =
-    useMediaRecorder(mediaStreamRef, onComplete);
+    useMediaRecorder(mediaStreamRef);
 
   const onStart = useCallback(
     /**
@@ -50,16 +50,19 @@ export function useMediaStreamRecorder(onRecord, onComplete) {
     /**
      * @param {object} opts
      * @param {boolean} opts.exit
-     * @param {BlobPropertyBag} [opts.mediaBlobOptions]
      */
-    async function onStop({ exit, mediaBlobOptions = undefined }) {
-      await stopMediaRecorder(mediaBlobOptions);
+    async function onStop({ exit }) {
+      const result = await stopMediaRecorder();
       setIsRecording(false);
       onRecord(false);
       if (exit) {
         await deadMediaStream();
         setIsPrepared(false);
       }
+      if (result.value && result.target) {
+        onComplete(result.value, result.target);
+      }
+      return result;
     },
     [stopMediaRecorder, setIsRecording, deadMediaStream, setIsPrepared],
   );

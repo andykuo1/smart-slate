@@ -8,7 +8,6 @@ import {
 import { createContext } from '@/utils/ReactContextHelper';
 import { formatHourMinSecTime } from '@/utils/StringFormat';
 import {
-  MEDIA_BLOB_OPTIONS,
   MEDIA_RECORDER_OPTIONS,
   MEDIA_STREAM_CONSTRAINTS,
 } from '@/values/RecorderValues';
@@ -74,7 +73,7 @@ function TestRecorderImpl() {
 
   function onToggle() {
     if (isRecording) {
-      onStop({ exit: false, mediaBlobOptions: MEDIA_BLOB_OPTIONS });
+      onStop({ exit: false });
     } else {
       onStart({
         // @ts-ignore
@@ -90,7 +89,7 @@ function TestRecorderImpl() {
    */
   async function onVideoChange(deviceId) {
     setVideoDeviceId(deviceId);
-    await onStop({ exit: true, mediaBlobOptions: MEDIA_BLOB_OPTIONS });
+    await onStop({ exit: true });
     await onStart({
       record: false,
       mediaStreamConstraints: {
@@ -111,7 +110,7 @@ function TestRecorderImpl() {
    */
   async function onAudioChange(deviceId) {
     setAudioDeviceId(deviceId);
-    await onStop({ exit: true, mediaBlobOptions: MEDIA_BLOB_OPTIONS });
+    await onStop({ exit: true });
     await onStart({
       record: false,
       mediaStreamConstraints: {
@@ -256,7 +255,6 @@ function useTestRecorderContextValue(onChange) {
   const [mediaRecorderOptions, setMediaRecorderOptions] = useState(
     MEDIA_RECORDER_OPTIONS,
   );
-  const [mediaBlobOptions, setMediaBlobOptions] = useState(MEDIA_BLOB_OPTIONS);
 
   function onRecord() {}
 
@@ -280,10 +278,8 @@ function useTestRecorderContextValue(onChange) {
     isRecording,
     mediaStreamConstraints,
     mediaRecorderOptions,
-    mediaBlobOptions,
     videoDeviceId,
     audioDeviceId,
-    setMediaBlobOptions,
     setMediaRecorderOptions,
     setMediaStreamConstraints,
     setVideoDeviceId,

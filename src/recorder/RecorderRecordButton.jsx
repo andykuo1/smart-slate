@@ -1,9 +1,6 @@
 import { useContext } from 'react';
 
-import {
-  MEDIA_BLOB_OPTIONS,
-  MEDIA_RECORDER_OPTIONS,
-} from '@/values/RecorderValues';
+import { MEDIA_RECORDER_OPTIONS } from '@/values/RecorderValues';
 
 import { RecorderContext } from './RecorderContext';
 
@@ -12,7 +9,7 @@ export default function RecorderRecordButton() {
 
   async function onClick() {
     if (isRecording) {
-      await onStop({ exit: false, mediaBlobOptions: MEDIA_BLOB_OPTIONS });
+      await onStop({ exit: false });
     } else {
       await onStart({
         restart: false,
