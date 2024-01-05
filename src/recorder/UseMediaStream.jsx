@@ -1,31 +1,28 @@
 import { useCallback, useRef } from 'react';
 
-/**
- * @returns {[import('react').RefObject<MediaStream|null>, (constraints?: MediaStreamConstraints|Array<MediaStreamConstraints>, restart?: boolean) => Promise<MediaStream>, () => Promise<void>]}
- */
 export function useMediaStream() {
-  const ref = useRef(/** @type {MediaStream|null} */ (null));
+  const mediaStreamRef = useRef(/** @type {MediaStream|null} */ (null));
 
-  const dead = useCallback(
-    async function dead() {
-      if (ref.current) {
-        let mediaStream = ref.current;
+  const deadMediaStream = useCallback(
+    async function _deadMediaStream() {
+      if (mediaStreamRef.current) {
+        let mediaStream = mediaStreamRef.current;
         for (let track of mediaStream.getTracks()) {
           track.enabled = false;
           track.stop();
         }
-        ref.current = null;
+        mediaStreamRef.current = null;
       }
     },
-    [ref],
+    [mediaStreamRef],
   );
 
-  const init = useCallback(
+  const initMediaStream = useCallback(
     /**
      * @param {MediaStreamConstraints|Array<MediaStreamConstraints>} constraints
      * @param {boolean} restart
      */
-    async function init(constraints = [], restart = true) {
+    async function _initMediaStream(constraints = [], restart = true) {
       if (!Array.isArray(constraints)) {
         constraints = [constraints];
       }
@@ -34,23 +31,23 @@ export function useMediaStream() {
         constraints.push(undefined);
       }
 
-      if (ref.current) {
+      if (mediaStreamRef.current) {
         if (restart) {
-          await dead();
+          await deadMediaStream();
         } else {
-          return ref.current;
+          return mediaStreamRef.current;
         }
       }
 
       const mediaDevices = await tryGetMediaDevices();
       const mediaStream = await tryGetUserMedia(mediaDevices, constraints);
-      ref.current = mediaStream;
+      mediaStreamRef.current = mediaStream;
 
       return mediaStream;
     },
-    [ref, dead],
+    [mediaStreamRef, deadMediaStream],
   );
-  return [ref, init, dead];
+  return { mediaStreamRef, initMediaStream, deadMediaStream };
 }
 
 export class MissingFeatureError extends Error {

@@ -9,10 +9,9 @@ import { useCallback, useRef } from 'react';
 /**
  * @param {import('react').RefObject<MediaStream|null>} mediaStreamRef
  * @param {MediaRecorderCompleteCallback} onComplete
- * @returns {[import('react').RefObject<MediaRecorder|null>, (options: MediaRecorderOptions|undefined) => Promise<MediaRecorder>, (dataOptions: BlobPropertyBag|undefined) => Promise<void>]}
  */
 export function useMediaRecorder(mediaStreamRef, onComplete) {
-  const ref = useRef(/** @type {MediaRecorder|null} */ (null));
+  const mediaRecorderRef = useRef(/** @type {MediaRecorder|null} */ (null));
   const dataBlobsRef = useRef(/** @type {Array<Blob>} */ ([]));
 
   const onMediaRecorderDataAvailable = useCallback(
@@ -38,14 +37,14 @@ export function useMediaRecorder(mediaStreamRef, onComplete) {
     [],
   );
 
-  const stop = useCallback(
+  const stopMediaRecorder = useCallback(
     /** @param {BlobPropertyBag} [dataOptions] */
-    async function stop(dataOptions = undefined) {
-      if (!ref.current) {
+    async function _stopMediaRecorder(dataOptions = undefined) {
+      if (!mediaRecorderRef.current) {
         return null;
       }
-      const mediaRecorder = ref.current;
-      ref.current = null;
+      const mediaRecorder = mediaRecorderRef.current;
+      mediaRecorderRef.current = null;
       return new Promise((resolve, reject) => {
         /** @param {MediaRecorderEventMap['start']} e */
         function onMediaRecorderStop(e) {
@@ -77,7 +76,7 @@ export function useMediaRecorder(mediaStreamRef, onComplete) {
       });
     },
     [
-      ref,
+      mediaRecorderRef,
       dataBlobsRef,
       onComplete,
       onMediaRecorderDataAvailable,
@@ -85,18 +84,18 @@ export function useMediaRecorder(mediaStreamRef, onComplete) {
     ],
   );
 
-  const start = useCallback(
+  const startMediaRecorder = useCallback(
     /** @param {MediaRecorderOptions} [options] */
-    async function start(options = undefined) {
-      if (ref.current) {
-        await stop({});
+    async function _startMediaRecorder(options = undefined) {
+      if (mediaRecorderRef.current) {
+        await stopMediaRecorder();
       }
       if (!mediaStreamRef.current) {
         throw new Error('Missing media stream for recorder.');
       }
       const mediaStream = mediaStreamRef.current;
       const mediaRecorder = new MediaRecorder(mediaStream, options);
-      ref.current = mediaRecorder;
+      mediaRecorderRef.current = mediaRecorder;
       return new Promise((resolve, reject) => {
         /** @param {MediaRecorderEventMap['start']} e */
         function onMediaRecorderStart(e) {
@@ -118,15 +117,15 @@ export function useMediaRecorder(mediaStreamRef, onComplete) {
       });
     },
     [
-      ref,
+      mediaRecorderRef,
       mediaStreamRef,
       onMediaRecorderDataAvailable,
       onMediaRecorderError,
-      stop,
+      stopMediaRecorder,
     ],
   );
 
-  return [ref, start, stop];
+  return { mediaRecorderRef, startMediaRecorder, stopMediaRecorder };
 }
 
 /**

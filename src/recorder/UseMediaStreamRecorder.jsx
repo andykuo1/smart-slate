@@ -17,11 +17,9 @@ export function useMediaStreamRecorder(onRecord, onComplete) {
   const [isPrepared, setIsPrepared] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
 
-  const [mediaStreamRef, initMediaStream, deadMediaStream] = useMediaStream();
-  const [_, startMediaRecorder, stopMediaRecorder] = useMediaRecorder(
-    mediaStreamRef,
-    onComplete,
-  );
+  const { mediaStreamRef, initMediaStream, deadMediaStream } = useMediaStream();
+  const { mediaRecorderRef, startMediaRecorder, stopMediaRecorder } =
+    useMediaRecorder(mediaStreamRef, onComplete);
 
   const onStart = useCallback(
     /**
@@ -72,6 +70,7 @@ export function useMediaStreamRecorder(onRecord, onComplete) {
     isPrepared,
     isRecording,
     mediaStreamRef,
+    mediaRecorderRef,
   };
 }
 

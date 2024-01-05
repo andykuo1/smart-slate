@@ -258,6 +258,8 @@ function useTestRecorderContextValue(onChange) {
   );
   const [mediaBlobOptions, setMediaBlobOptions] = useState(MEDIA_BLOB_OPTIONS);
 
+  function onRecord() {}
+
   /** @type {import('@/recorder/UseMediaRecorder').MediaRecorderCompleteCallback} */
   const onComplete = useCallback(function _onComplete(blob, mediaRecorder) {
     onChange?.({ target: videoRef.current, value: blob });
@@ -266,7 +268,7 @@ function useTestRecorderContextValue(onChange) {
   }, []);
 
   const { onStart, onStop, isPrepared, isRecording, mediaStreamRef } =
-    useMediaStreamRecorder(onComplete);
+    useMediaStreamRecorder(onRecord, onComplete);
   useMediaStreamRecorderLiveVideo(videoRef, mediaStreamRef, isPrepared);
 
   return {
