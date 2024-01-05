@@ -10,7 +10,7 @@ import CameraPage from './routes/CameraPage';
 import EditPage from './routes/EditPage';
 import ErrorPage from './routes/ErrorPage';
 import RootPage from './routes/RootPage';
-import TestPage from './routes/TestPage';
+import TestPage from './routes/TestRecorderPage';
 import { PACKAGE_NAME } from './values/PackageJSON';
 
 const router = createBrowserRouter(

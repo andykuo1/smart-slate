@@ -13,35 +13,15 @@ export async function captureVideoSnapshot(
   height,
 ) {
   const video = document.createElement('video');
-  video.setAttribute('preload', 'metadata');
-  video.toggleAttribute('muted', true);
-  video.toggleAttribute('playsinline', true);
-  try {
-    // NOTE: We can use srcObject, but it's not universally supported yet.
-    video.srcObject = videoBlob;
-  } catch {
-    // ... so sometimes we stick to the old way :)
-    video.src = URL.createObjectURL(videoBlob);
-  }
-
-  /**
-   * @param {ErrorEvent} e
-   */
-  function onError(e) {
-    if (video.src) {
-      URL.revokeObjectURL(video.src);
-    }
-    throw e.error;
-  }
-  video.addEventListener('error', onError);
-
+  video.muted = true;
+  // NOTE: We can use srcObject, but it's not universally supported yet.
+  // ... so we stick to the old way :)
+  video.src = URL.createObjectURL(videoBlob);
   // NOTE: This needs to be called DIRECTLY in a user-gesture callback
   //  for mobile support :)
   video.load();
 
   return new Promise((resolve, reject) => {
-    // Replace the synchronouse error callback
-    video.removeEventListener('error', onError);
     video.addEventListener('error', (e) => {
       if (video.src) {
         URL.revokeObjectURL(video.src);

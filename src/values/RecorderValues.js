@@ -1,5 +1,3 @@
-import { getMediaRecorderSupportedMimeType } from '@/recorder/MediaRecorderSupport';
-
 const MEDIA_RECORDER_POSSIBLE_MIME_TYPES = [
   'video/mp4',
   'video/ogg',
@@ -54,3 +52,41 @@ export const MEDIA_STREAM_CONSTRAINTS = [
 export const MEDIA_BLOB_OPTIONS = {
   type: MEDIA_RECORDER_SUPPORTED_MIME_TYPE,
 };
+
+/**
+ * @param {Array<string>} possibleTypes
+ */
+export function getMediaRecorderSupportedMimeType(possibleTypes) {
+  if (
+    typeof window === 'undefined' ||
+    typeof window.MediaRecorder === 'undefined'
+  ) {
+    return '';
+  }
+
+  for (let type of possibleTypes) {
+    if (MediaRecorder.isTypeSupported(type)) {
+      return type;
+    }
+  }
+
+  return '';
+}
+
+/**
+ * @param {string} mimeType
+ */
+export function getVideoFileExtensionByMIMEType(mimeType) {
+  switch (mimeType) {
+    case 'video/quicktime':
+      return '.mov';
+    case 'video/mp4':
+      return '.mp4';
+    case 'video/webm':
+      return '.webm';
+    case 'video/ogg':
+      return '.ogg';
+    default:
+      return '';
+  }
+}

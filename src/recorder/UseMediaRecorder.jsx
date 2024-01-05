@@ -63,7 +63,10 @@ export function useMediaRecorder(mediaStreamRef, onComplete) {
           if (dataBlobsRef.current && dataBlobsRef.current.length > 0) {
             let dataBlobs = dataBlobsRef.current;
             dataBlobsRef.current = [];
-            let blob = compileDataBlobs(dataBlobs, dataOptions);
+            let blob = compileDataBlobs(dataBlobs, {
+              ...(dataOptions || {}),
+              type: mediaRecorder.mimeType,
+            });
             onComplete(blob, mediaRecorder);
           }
           resolve(mediaRecorder);

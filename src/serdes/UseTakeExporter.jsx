@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 
 import { uploadFile, useGAPITokenHandler } from '@/libs/googleapi';
-import { getVideoFileExtensionByMIMEType } from '@/recorder/MediaRecorderSupport';
 import { cacheVideoBlob, getVideoBlob } from '@/recorder/cache/VideoCache';
 import { ANY_SHOT } from '@/stores/ShotTypes';
 import {
@@ -22,12 +21,7 @@ import {
 } from '@/stores/document/DocumentStore';
 import { useSettingsStore } from '@/stores/settings';
 import { downloadURLImpl } from '@/utils/Downloader';
-import {
-  MAX_THUMBNAIL_HEIGHT,
-  MAX_THUMBNAIL_WIDTH,
-} from '@/values/Resolutions';
-
-import { captureVideoSnapshot } from '../recorder/snapshot/VideoSnapshot';
+import { getVideoFileExtensionByMIMEType } from '@/values/RecorderValues';
 
 export function useTakeDownloader() {
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
@@ -160,18 +154,9 @@ export function useTakeExporter() {
       const takeId = newTake.takeId;
 
       // Always cache it-- just in case.
-      cacheVideoBlob(takeId, data)
-        .then((key) => setTakeExportedIDBKey(documentId, takeId, key))
-        .then(() =>
-          // Try to capture the video snapshot.
-          captureVideoSnapshot(
-            data,
-            0.1,
-            MAX_THUMBNAIL_WIDTH,
-            MAX_THUMBNAIL_HEIGHT,
-          ),
-        )
-        .then((url) => setTakePreviewImage(documentId, takeId, url));
+      cacheVideoBlob(takeId, data).then((key) =>
+        setTakeExportedIDBKey(documentId, takeId, key),
+      );
 
       let shouldSave = true;
       if (shouldSave && enableDriveSync) {

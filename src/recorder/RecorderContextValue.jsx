@@ -1,178 +1,65 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef } from 'react';
 
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
+import { useSetTakePreviewImage } from '@/stores/document';
 import { useSetUserCursor, useUserStore } from '@/stores/user';
+import {
+  MAX_THUMBNAIL_HEIGHT,
+  MAX_THUMBNAIL_WIDTH,
+} from '@/values/Resolutions';
 
-import { useMediaRecorder } from './UseMediaRecorder';
-import { tryGetMediaDevices, useMediaStream } from './UseMediaStream';
+import {
+  useMediaStreamRecorder,
+  useMediaStreamRecorderDevices,
+  useMediaStreamRecorderLiveVideo,
+  useMediaStreamRecorderLiveVideoSnapshot,
+} from './UseMediaStreamRecorder';
 
 export function useRecorderContextValue() {
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
   const userCursor = useUserStore((ctx) => ctx.cursor);
   const setUserCursor = useSetUserCursor();
+  const setTakePreviewImage = useSetTakePreviewImage();
   const exportTake = useTakeExporter();
+  const snapshotControls = useMediaStreamRecorderLiveVideoSnapshot(videoRef);
+  const { setVideoSnapshotURL, takeVideoSnapshot } = snapshotControls;
 
   /** @type {import('@/recorder/UseMediaRecorder').MediaRecorderCompleteCallback} */
   const onComplete = useCallback(
     function _onComplete(blob, mediaRecorder) {
       const { documentId, sceneId, shotId } = userCursor;
       const takeId = exportTake(blob, documentId, sceneId, shotId);
+      setVideoSnapshotURL((prev) => {
+        if (prev) {
+          setTakePreviewImage(documentId, takeId, prev);
+        }
+        // Reset preview image :)
+        return '';
+      });
       setUserCursor(documentId, sceneId, shotId, takeId);
     },
-    [userCursor, exportTake, setUserCursor],
+    [userCursor, exportTake, setUserCursor, setVideoSnapshotURL],
   );
 
-  const controls = useRecorderControls(onComplete);
-  const { isPrepared, mediaStreamRef } = controls;
-  const deviceIds = useRecorderDeviceIds(mediaStreamRef, isPrepared);
-  useRecorderLiveVideo(videoRef, mediaStreamRef, isPrepared);
+  /** @type {import('@/recorder/UseMediaStreamRecorder').MediaStreamRecorderRecordCallback} */
+  const onRecord = useCallback(
+    function _onRecord(recording) {
+      if (recording) {
+        takeVideoSnapshot(MAX_THUMBNAIL_WIDTH, MAX_THUMBNAIL_HEIGHT);
+      }
+    },
+    [takeVideoSnapshot],
+  );
+
+  const recorderControls = useMediaStreamRecorder(onRecord, onComplete);
+  const { isPrepared, mediaStreamRef } = recorderControls;
+  const deviceIds = useMediaStreamRecorderDevices(mediaStreamRef, isPrepared);
+  useMediaStreamRecorderLiveVideo(videoRef, mediaStreamRef, isPrepared);
 
   return {
     videoRef,
-    ...controls,
+    ...recorderControls,
     ...deviceIds,
+    ...snapshotControls,
   };
-}
-
-/**
- * @param {import('react').RefObject<MediaStream|null>} mediaStreamRef
- * @param {boolean} isPrepared
- */
-function useRecorderDeviceIds(mediaStreamRef, isPrepared) {
-  const [videoDeviceId, setVideoDeviceId] = useState('');
-  const [audioDeviceId, setAudioDeviceId] = useState('');
-
-  const onDeviceChange = useCallback(
-    /** @type {import('react').EventHandler<any>} */
-    function _onDeviceChange(e) {
-      if (!mediaStreamRef.current) {
-        return;
-      }
-      const mediaStream = mediaStreamRef.current;
-      const currentVideoDeviceId =
-        mediaStream.getVideoTracks()[0]?.getSettings()?.deviceId || '';
-      const currentAudioDeviceId =
-        mediaStream.getAudioTracks()[0]?.getSettings()?.deviceId || '';
-      if (videoDeviceId !== currentVideoDeviceId) {
-        setVideoDeviceId(currentVideoDeviceId);
-      }
-      if (audioDeviceId !== currentAudioDeviceId) {
-        setAudioDeviceId(currentAudioDeviceId);
-      }
-    },
-    [
-      videoDeviceId,
-      audioDeviceId,
-      isPrepared,
-      mediaStreamRef,
-      setVideoDeviceId,
-      setAudioDeviceId,
-    ],
-  );
-
-  useEffect(() => {
-    const mediaDevices = tryGetMediaDevices();
-    mediaDevices.addEventListener('devicechange', onDeviceChange);
-    return () => {
-      mediaDevices.removeEventListener('devicechange', onDeviceChange);
-    };
-  }, [onDeviceChange]);
-
-  return {
-    videoDeviceId,
-    audioDeviceId,
-    setVideoDeviceId,
-    setAudioDeviceId,
-  };
-}
-
-/**
- * @param {import('./UseMediaRecorder').MediaRecorderCompleteCallback} onComplete
- */
-function useRecorderControls(onComplete) {
-  const [isPrepared, setIsPrepared] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
-
-  const [mediaStreamRef, initMediaStream, deadMediaStream] = useMediaStream();
-  const [_, startMediaRecorder, stopMediaRecorder] = useMediaRecorder(
-    mediaStreamRef,
-    onComplete,
-  );
-
-  const onStart = useCallback(
-    /**
-     * @param {object} opts
-     * @param {boolean} opts.record
-     * @param {boolean} [opts.restart]
-     * @param {MediaStreamConstraints|Array<MediaStreamConstraints>} [opts.mediaStreamConstraints]
-     * @param {MediaRecorderOptions} [opts.mediaRecorderOptions]
-     */
-    async function onStart({
-      record,
-      restart,
-      mediaStreamConstraints,
-      mediaRecorderOptions,
-    }) {
-      await initMediaStream(mediaStreamConstraints, restart);
-      setIsPrepared(true);
-      if (record) {
-        await startMediaRecorder(mediaRecorderOptions);
-        setIsRecording(true);
-      }
-    },
-    [initMediaStream, setIsPrepared, startMediaRecorder, setIsRecording],
-  );
-
-  const onStop = useCallback(
-    /**
-     * @param {object} opts
-     * @param {boolean} opts.exit
-     * @param {BlobPropertyBag} [opts.mediaBlobOptions]
-     */
-    async function onStop({ exit, mediaBlobOptions = undefined }) {
-      await stopMediaRecorder(mediaBlobOptions);
-      setIsRecording(false);
-      if (exit) {
-        await deadMediaStream();
-        setIsPrepared(false);
-      }
-    },
-    [stopMediaRecorder, setIsRecording, deadMediaStream, setIsPrepared],
-  );
-
-  return {
-    onStart,
-    onStop,
-    isPrepared,
-    isRecording,
-    mediaStreamRef,
-  };
-}
-
-/**
- * @param {import('react').RefObject<HTMLVideoElement|null>} videoRef
- * @param {import('react').RefObject<MediaStream|null>} mediaStreamRef
- * @param {boolean} isPrepared
- */
-function useRecorderLiveVideo(videoRef, mediaStreamRef, isPrepared) {
-  useEffect(() => {
-    if (!mediaStreamRef.current) {
-      return;
-    }
-    if (isPrepared) {
-      // Add stream to output video
-      if (videoRef.current && !videoRef.current.srcObject) {
-        let video = videoRef.current;
-        video.srcObject = mediaStreamRef.current;
-        video.play();
-      }
-    } else {
-      // Remove stream from output video
-      if (videoRef.current && videoRef.current.srcObject) {
-        let video = videoRef.current;
-        video.pause();
-        video.srcObject = null;
-      }
-    }
-  }, [isPrepared, mediaStreamRef, videoRef]);
 }

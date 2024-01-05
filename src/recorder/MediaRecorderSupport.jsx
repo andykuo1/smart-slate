@@ -56,44 +56,6 @@ function tryValidateMediaRecorderConstraints(constraints) {
   }
 }
 
-/**
- * @param {Array<string>} possibleTypes
- */
-export function getMediaRecorderSupportedMimeType(possibleTypes) {
-  if (
-    typeof window === 'undefined' ||
-    typeof window.MediaRecorder === 'undefined'
-  ) {
-    return '';
-  }
-
-  for (let type of possibleTypes) {
-    if (MediaRecorder.isTypeSupported(type)) {
-      return type;
-    }
-  }
-
-  return '';
-}
-
-/**
- * @param {string} mimeType
- */
-export function getVideoFileExtensionByMIMEType(mimeType) {
-  switch (mimeType) {
-    case 'video/mp4':
-      return '.mp4';
-    case 'video/quicktime':
-      return '.mov';
-    case 'video/webm':
-      return '.webm';
-    case 'video/ogg':
-      return '.ogg';
-    default:
-      return '';
-  }
-}
-
 export function isInputCaptureSupported() {
   return (
     typeof document !== 'undefined' &&
