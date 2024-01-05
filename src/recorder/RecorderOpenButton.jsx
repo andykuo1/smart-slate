@@ -55,7 +55,10 @@ function useOpenRecorder(onClick) {
           record: false,
           mediaStreamConstraints: [
             {
-              video: { facingMode: 'environment' },
+              video: {
+                facingMode: 'environment',
+                aspectRatio: 16 / 9,
+              },
               audio: true,
             },
           ],
