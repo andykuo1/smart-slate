@@ -4,16 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { useFullscreen } from '@/libs/fullscreen';
 import { useInputCapture } from '@/libs/inputcapture';
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
-import { useSetTakePreviewImage } from '@/stores/document';
 import { useSettingsStore } from '@/stores/settings';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
-import {
-  MAX_THUMBNAIL_HEIGHT,
-  MAX_THUMBNAIL_WIDTH,
-} from '@/values/Resolutions';
 
 import { RecorderContext } from './RecorderContext';
-import { captureVideoSnapshot } from './snapshot/VideoSnapshot';
 
 /**
  * @param {object} props
@@ -94,24 +88,19 @@ function useOpenInputCapture(onClick) {
   const { startCapturing } = useInputCapture();
   const exportTake = useTakeExporter();
   const userCursor = useCurrentCursor();
-  const setTakePreviewImage = useSetTakePreviewImage();
   const setUserCursor = useSetUserCursor();
 
-  /**
-   * @param {Blob} data
-   */
-  async function onComplete(data) {
-    const { documentId, sceneId, shotId } = userCursor;
-    const takeId = exportTake(data, documentId, sceneId, shotId);
-    const snapshot = await captureVideoSnapshot(
-      data,
-      0,
-      MAX_THUMBNAIL_WIDTH,
-      MAX_THUMBNAIL_HEIGHT,
-    );
-    setTakePreviewImage(documentId, takeId, snapshot);
-    setUserCursor(documentId, sceneId, shotId, takeId);
-  }
+  const onComplete = useCallback(
+    /**
+     * @param {Blob} data
+     */
+    async function onComplete(data) {
+      const { documentId, sceneId, shotId } = userCursor;
+      const takeId = exportTake(data, documentId, sceneId, shotId);
+      setUserCursor(documentId, sceneId, shotId, takeId);
+    },
+    [userCursor, exportTake, setUserCursor],
+  );
 
   return useCallback(
     /** @type {import('react').MouseEventHandler<any>} */
@@ -120,12 +109,10 @@ function useOpenInputCapture(onClick) {
         if (!data) {
           return;
         }
-        if (status === 'stopped') {
-          onComplete(data);
-        }
+        onComplete(data);
       });
       onClick?.(e);
     },
-    [startCapturing],
+    [onClick, onComplete, startCapturing],
   );
 }
