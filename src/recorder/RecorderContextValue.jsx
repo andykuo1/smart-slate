@@ -25,7 +25,7 @@ export function useRecorderContextValue() {
   const { setVideoSnapshotURL, takeVideoSnapshot } = snapshotControls;
 
   // TODO: Ideally, this is just passed in when we call onStart or something.
-  /** @type {import('@/recorder/UseMediaRecorder').MediaRecorderCompleteCallback} */
+  /** @type {import('@/recorder/UseMediaStreamRecorder').MediaRecorderCompleteCallback} */
   const onComplete = useCallback(
     function _onComplete(blob, mediaRecorder) {
       const { documentId, sceneId, shotId } = userCursor;

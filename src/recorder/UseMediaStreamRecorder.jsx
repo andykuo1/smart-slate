@@ -10,8 +10,14 @@ import { drawElementToCanvasWithRespectToAspectRatio } from './snapshot/VideoSna
  */
 
 /**
+ * @callback MediaRecorderCompleteCallback
+ * @param {Blob} value
+ * @param {MediaRecorder} target
+ */
+
+/**
  * @param {MediaStreamRecorderRecordCallback} onRecord
- * @param {import('./UseMediaRecorder').MediaRecorderCompleteCallback} onComplete
+ * @param {MediaRecorderCompleteCallback} onComplete
  */
 export function useMediaStreamRecorder(onRecord, onComplete) {
   const [isPrepared, setIsPrepared] = useState(false);
@@ -62,7 +68,6 @@ export function useMediaStreamRecorder(onRecord, onComplete) {
       if (result.value && result.target) {
         onComplete(result.value, result.target);
       }
-      return result;
     },
     [stopMediaRecorder, setIsRecording, deadMediaStream, setIsPrepared],
   );

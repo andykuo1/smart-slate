@@ -1,12 +1,6 @@
 import { useCallback, useRef } from 'react';
 
 /**
- * @callback MediaRecorderCompleteCallback
- * @param {Blob} blob
- * @param {MediaRecorder} mediaRecorder
- */
-
-/**
  * @param {import('react').RefObject<MediaStream|null>} mediaStreamRef
  */
 export function useMediaRecorder(mediaStreamRef) {

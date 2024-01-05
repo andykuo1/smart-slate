@@ -92,20 +92,22 @@ export default function RecorderToolbar({ className }) {
             The configurations for the recorder.
           </DialogDescription>
           <fieldset className="my-4">
-            <div className="flex flex-row">
+            <div className="flex flex-row opacity-30">
               <label className="px-2 whitespace-nowrap">Video Source:</label>
               <VideoDeviceSelector
                 className="flex-1"
                 value={videoDeviceId}
                 onChange={onVideoChange}
+                disabled={true}
               />
             </div>
-            <div className="flex flex-row">
+            <div className="flex flex-row opacity-30">
               <label className="px-2 whitespace-nowrap">Audio Source:</label>
               <AudioDeviceSelector
                 className="flex-1"
                 value={audioDeviceId}
                 onChange={onAudioChange}
+                disabled={true}
               />
             </div>
             <div className="flex flex-row">
@@ -174,9 +176,10 @@ function VideoResolutionSelector({ className }) {
  * @param {object} props
  * @param {string} [props.className]
  * @param {string} props.value
+ * @param {boolean} [props.disabled]
  * @param {(videoDeviceId: string) => void} props.onChange
  */
-function VideoDeviceSelector({ className, value, onChange }) {
+function VideoDeviceSelector({ className, value, disabled, onChange }) {
   const [deviceList, setDeviceList] = useState(
     /** @type {Array<MediaDeviceInfo>} */ ([]),
   );
@@ -209,7 +212,11 @@ function VideoDeviceSelector({ className, value, onChange }) {
   }
 
   return (
-    <select className={className} value={value} onChange={changeCallback}>
+    <select
+      className={className}
+      value={value}
+      onChange={changeCallback}
+      disabled={disabled}>
       {deviceList.map((deviceInfo, index) => (
         <option key={deviceInfo.deviceId} value={deviceInfo.deviceId}>
           {deviceInfo.label || 'Camera ' + (index + 1)}
@@ -223,9 +230,10 @@ function VideoDeviceSelector({ className, value, onChange }) {
  * @param {object} props
  * @param {string} [props.className]
  * @param {string} props.value
+ * @param {boolean} [props.disabled]
  * @param {(audioDeviceId: string) => void} props.onChange
  */
-function AudioDeviceSelector({ className, value, onChange }) {
+function AudioDeviceSelector({ className, value, disabled, onChange }) {
   const [deviceList, setDeviceList] = useState(
     /** @type {Array<MediaDeviceInfo>} */ ([]),
   );
@@ -258,7 +266,11 @@ function AudioDeviceSelector({ className, value, onChange }) {
   }
 
   return (
-    <select className={className} value={value} onChange={changeCallback}>
+    <select
+      className={className}
+      value={value}
+      onChange={changeCallback}
+      disabled={disabled}>
       {deviceList.map((deviceInfo, index) => (
         <option key={deviceInfo.deviceId} value={deviceInfo.deviceId}>
           {deviceInfo.label || 'Microphone ' + (index + 1)}

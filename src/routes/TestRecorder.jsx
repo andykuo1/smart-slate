@@ -258,7 +258,7 @@ function useTestRecorderContextValue(onChange) {
 
   function onRecord() {}
 
-  /** @type {import('@/recorder/UseMediaRecorder').MediaRecorderCompleteCallback} */
+  /** @type {import('@/recorder/UseMediaStreamRecorder').MediaRecorderCompleteCallback} */
   const onComplete = useCallback(function _onComplete(blob, mediaRecorder) {
     onChange?.({ target: videoRef.current, value: blob });
     const message = `Got ${blob.type}:${blob.size} bytes!`;
