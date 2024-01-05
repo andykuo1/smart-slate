@@ -4,10 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import { useFullscreen } from '@/libs/fullscreen';
 import { useInputCapture } from '@/libs/inputcapture';
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
+import { useSetTakePreviewImage } from '@/stores/document';
 import { useSettingsStore } from '@/stores/settings';
-import { useSetRecorderActive, useSetUserCursor } from '@/stores/user';
+import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
+import {
+  MAX_THUMBNAIL_HEIGHT,
+  MAX_THUMBNAIL_WIDTH,
+} from '@/values/Resolutions';
 
 import { RecorderContext } from './RecorderContext';
+import { captureVideoSnapshot } from './snapshot/VideoSnapshot';
 
 /**
  * @param {object} props
@@ -85,10 +91,28 @@ function useOpenRecorder(onClick) {
  * @param {import('react').MouseEventHandler<any>} [onClick]
  */
 function useOpenInputCapture(onClick) {
-  const setUserCursor = useSetUserCursor();
-  const setRecorderActive = useSetRecorderActive();
   const { startCapturing } = useInputCapture();
   const exportTake = useTakeExporter();
+  const userCursor = useCurrentCursor();
+  const setTakePreviewImage = useSetTakePreviewImage();
+  const setUserCursor = useSetUserCursor();
+
+  /**
+   * @param {Blob} data
+   */
+  async function onComplete(data) {
+    const { documentId, sceneId, shotId } = userCursor;
+    const takeId = exportTake(data, documentId, sceneId, shotId);
+    const snapshot = await captureVideoSnapshot(
+      data,
+      0,
+      MAX_THUMBNAIL_WIDTH,
+      MAX_THUMBNAIL_HEIGHT,
+    );
+    setTakePreviewImage(documentId, takeId, snapshot);
+    setUserCursor(documentId, sceneId, shotId, takeId);
+  }
+
   return useCallback(
     /** @type {import('react').MouseEventHandler<any>} */
     function _handleClick(e) {
@@ -97,10 +121,11 @@ function useOpenInputCapture(onClick) {
           return;
         }
         if (status === 'stopped') {
-          onClick?.(e);
+          onComplete(data);
         }
       });
+      onClick?.(e);
     },
-    [setRecorderActive, startCapturing, exportTake, setUserCursor],
+    [startCapturing],
   );
 }

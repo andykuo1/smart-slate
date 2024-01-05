@@ -22,32 +22,44 @@ export async function captureVideoSnapshot(
   video.load();
 
   return new Promise((resolve, reject) => {
-    video.addEventListener('error', (e) => {
+    /** @param {ErrorEvent} e */
+    function onError(e) {
       if (video.src) {
         URL.revokeObjectURL(video.src);
       }
       reject(e.error);
-    });
-    video.addEventListener('loadeddata', () => {
+    }
+
+    function onSeeked() {
+      const canvas = document.createElement('canvas');
+      drawElementToCanvasWithRespectToAspectRatio(
+        canvas,
+        video,
+        video.videoWidth || video.width,
+        video.videoHeight || video.height,
+        width,
+        height,
+      );
+      const result = canvas.toDataURL('image/png', 0.5);
+      resolve(result);
+    }
+
+    function onLoadedData() {
       if (video.src) {
         URL.revokeObjectURL(video.src);
       }
-      video.addEventListener('seeked', () => {
-        const canvas = document.createElement('canvas');
-        drawElementToCanvasWithRespectToAspectRatio(
-          canvas,
-          video,
-          video.videoWidth || video.width,
-          video.videoHeight || video.height,
-          width,
-          height,
-        );
-        const result = canvas.toDataURL('image/png', 0.5);
-        resolve(result);
-      });
-      // Start seeking!
-      video.currentTime = seekToSeconds;
-    });
+      // NOTE: This doesn't work well on Safari :(
+      if (seekToSeconds > 0) {
+        video.addEventListener('seeked', onSeeked);
+        // Start seeking!
+        video.currentTime = seekToSeconds;
+      } else {
+        onSeeked();
+      }
+    }
+
+    video.addEventListener('error', onError);
+    video.addEventListener('loadeddata', onLoadedData);
   });
 }
 

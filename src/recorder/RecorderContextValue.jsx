@@ -24,6 +24,7 @@ export function useRecorderContextValue() {
   const snapshotControls = useMediaStreamRecorderLiveVideoSnapshot(videoRef);
   const { setVideoSnapshotURL, takeVideoSnapshot } = snapshotControls;
 
+  // TODO: Ideally, this is just passed in when we call onStart or something.
   /** @type {import('@/recorder/UseMediaRecorder').MediaRecorderCompleteCallback} */
   const onComplete = useCallback(
     function _onComplete(blob, mediaRecorder) {
