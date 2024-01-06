@@ -35,6 +35,10 @@ export function useVideoSnapshot(documentId, takeId) {
         MAX_THUMBNAIL_WIDTH,
         MAX_THUMBNAIL_HEIGHT,
       ).then((url) => {
+        console.log(
+          '[UseVideoSnapshot] Setting take preview to url with length ' +
+            url?.length,
+        );
         setTakePreviewImage(documentId, takeId, url);
       });
     },

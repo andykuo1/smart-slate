@@ -1,10 +1,15 @@
 # Upcoming
 
+- Add recording resolution
+
 - Change shot thumbnail camera option to capture on tab click instead
 - Change scene focus when ready click
 
+- Fix custom recorder for mobile
 - Fix drag box for touch
 - Fix cross-block drag states
+- Fix unscrollable take list
+- Fix take preview snapshots for mobile
 
 # 0.1.10
 

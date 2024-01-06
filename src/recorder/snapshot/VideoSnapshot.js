@@ -22,8 +22,10 @@ export async function captureVideoSnapshot(
   video.load();
 
   return new Promise((resolve, reject) => {
+    console.log('[UseVideoSnapshot] Entering promise to take snapshot...');
     /** @param {ErrorEvent} e */
     function onError(e) {
+      console.log('[UseVideoSnapshot] ERROR! ' + e.message);
       if (video.src) {
         URL.revokeObjectURL(video.src);
       }
@@ -31,6 +33,7 @@ export async function captureVideoSnapshot(
     }
 
     function onSeeked() {
+      console.log('[UseVideoSnapshot] Seeked complete.');
       const canvas = document.createElement('canvas');
       drawElementToCanvasWithRespectToAspectRatio(
         canvas,
@@ -45,6 +48,7 @@ export async function captureVideoSnapshot(
     }
 
     function onLoadedMetadata() {
+      console.log('[UseVideoSnapshot] Metadata loaded.');
       if (video.src) {
         URL.revokeObjectURL(video.src);
       }
@@ -60,6 +64,7 @@ export async function captureVideoSnapshot(
 
     video.addEventListener('error', onError);
     video.addEventListener('loadedmetadata', onLoadedMetadata);
+    console.log('[UseVideoSnapshot] Listenting...');
   });
 }
 

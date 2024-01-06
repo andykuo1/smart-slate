@@ -31,37 +31,6 @@ export function useMediaStreamRecorder(onRecord, onComplete) {
     stopMediaRecorder,
   } = useMediaRecorder(mediaStreamRef);
 
-  const onStart = useCallback(
-    /**
-     * @param {object} opts
-     * @param {boolean} opts.record
-     * @param {boolean} [opts.restart]
-     * @param {MediaStreamConstraints|Array<MediaStreamConstraints>} [opts.mediaStreamConstraints]
-     * @param {MediaRecorderOptions} [opts.mediaRecorderOptions]
-     */
-    async function onStart({
-      record,
-      restart,
-      mediaStreamConstraints,
-      mediaRecorderOptions,
-    }) {
-      await initMediaStream(mediaStreamConstraints, restart);
-      setIsPrepared(true);
-      if (record) {
-        await startMediaRecorder(mediaRecorderOptions);
-        setIsRecording(true);
-        onRecord(true);
-      }
-    },
-    [
-      onRecord,
-      initMediaStream,
-      setIsPrepared,
-      startMediaRecorder,
-      setIsRecording,
-    ],
-  );
-
   const onStop = useCallback(
     /**
      * @param {object} opts
@@ -90,7 +59,6 @@ export function useMediaStreamRecorder(onRecord, onComplete) {
   );
 
   return {
-    onStart,
     onStop,
     isPrepared,
     isRecording,
