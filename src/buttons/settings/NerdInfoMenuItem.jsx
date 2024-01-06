@@ -37,7 +37,7 @@ export default function NerdInfoMenuItem() {
   return (
     <>
       <MenuItem className={MenuStyle.menuItem} onClick={() => setOpen(true)}>
-        <DeviceInfoIcon className="h-full" /> Show Nerd Info
+        <DeviceInfoIcon className="h-full fill-current" /> Show Nerd Info
       </MenuItem>
       <Dialog
         className={DialogStyle.dialog}
