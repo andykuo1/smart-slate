@@ -27,6 +27,9 @@ export default function MediaStreamVideoSnapshot({
         setCapturing(false);
         return;
       }
+      console.log(
+        '[MediaStreamVideoSnapshot] Taking media stream snapshot from video...',
+      );
       const canvas = document.createElement('canvas');
       drawElementToCanvasWithRespectToAspectRatio(
         canvas,
@@ -46,6 +49,7 @@ export default function MediaStreamVideoSnapshot({
   // Delay capture!
   useEffect(() => {
     if (capturing) {
+      console.log('[MediaStreamVideoSnapshot] Starting snapshot timeout...');
       const handle = setTimeout(takeSnapshot, 100);
       return () => {
         clearTimeout(handle);
@@ -60,6 +64,9 @@ export default function MediaStreamVideoSnapshot({
       return;
     }
     function onPlaying() {
+      console.log(
+        '[MediaStreamVideoSnapshot] Enable snapshot capturing for live video...',
+      );
       setCapturing(true);
     }
     video.addEventListener('playing', onPlaying);
