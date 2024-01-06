@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { useMediaRecorder } from './UseMediaRecorder';
 import { tryGetMediaDevices, useMediaStream } from './UseMediaStream';
-import { drawElementToCanvasWithRespectToAspectRatio } from './snapshot/VideoSnapshot';
 
 /**
  * @callback MediaStreamRecorderRecordCallback
@@ -23,9 +22,14 @@ export function useMediaStreamRecorder(onRecord, onComplete) {
   const [isPrepared, setIsPrepared] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
 
-  const { mediaStreamRef, initMediaStream, deadMediaStream } = useMediaStream();
-  const { mediaRecorderRef, startMediaRecorder, stopMediaRecorder } =
-    useMediaRecorder(mediaStreamRef);
+  const { mediaStream, mediaStreamRef, initMediaStream, deadMediaStream } =
+    useMediaStream();
+  const {
+    mediaRecorder,
+    mediaRecorderRef,
+    startMediaRecorder,
+    stopMediaRecorder,
+  } = useMediaRecorder(mediaStreamRef);
 
   const onStart = useCallback(
     /**
@@ -49,7 +53,13 @@ export function useMediaStreamRecorder(onRecord, onComplete) {
         onRecord(true);
       }
     },
-    [initMediaStream, setIsPrepared, startMediaRecorder, setIsRecording],
+    [
+      onRecord,
+      initMediaStream,
+      setIsPrepared,
+      startMediaRecorder,
+      setIsRecording,
+    ],
   );
 
   const onStop = useCallback(
@@ -69,7 +79,14 @@ export function useMediaStreamRecorder(onRecord, onComplete) {
         onComplete(result.value, result.target);
       }
     },
-    [stopMediaRecorder, setIsRecording, deadMediaStream, setIsPrepared],
+    [
+      onComplete,
+      onRecord,
+      stopMediaRecorder,
+      setIsRecording,
+      deadMediaStream,
+      setIsPrepared,
+    ],
   );
 
   return {
@@ -77,73 +94,13 @@ export function useMediaStreamRecorder(onRecord, onComplete) {
     onStop,
     isPrepared,
     isRecording,
+    mediaStream,
+    mediaRecorder,
     mediaStreamRef,
     mediaRecorderRef,
+    startMediaRecorder,
+    stopMediaRecorder,
   };
-}
-
-/**
- * @param {import('react').RefObject<HTMLVideoElement|null>} videoRef
- * @param {import('react').RefObject<MediaStream|null>} mediaStreamRef
- * @param {boolean} isPrepared
- */
-export function useMediaStreamRecorderLiveVideo(
-  videoRef,
-  mediaStreamRef,
-  isPrepared,
-) {
-  useEffect(() => {
-    if (!mediaStreamRef.current) {
-      return;
-    }
-    if (isPrepared) {
-      // Add stream to output video
-      if (videoRef.current && !videoRef.current.srcObject) {
-        let video = videoRef.current;
-        video.srcObject = mediaStreamRef.current;
-        video.play();
-      }
-    } else {
-      // Remove stream from output video
-      if (videoRef.current && videoRef.current.srcObject) {
-        let video = videoRef.current;
-        video.pause();
-        video.srcObject = null;
-      }
-    }
-  }, [isPrepared, mediaStreamRef, videoRef]);
-}
-
-/**
- * @param {import('react').RefObject<HTMLVideoElement|null>} videoRef
- */
-export function useMediaStreamRecorderLiveVideoSnapshot(videoRef) {
-  const [videoSnapshotURL, setVideoSnapshotURL] = useState('');
-  const takeVideoSnapshot = useCallback(
-    /**
-     * @param {number} width
-     * @param {number} height
-     */
-    function takeVideoSnapshot(width, height) {
-      if (!videoRef.current) {
-        return;
-      }
-      const video = videoRef.current;
-      const canvas = document.createElement('canvas');
-      drawElementToCanvasWithRespectToAspectRatio(
-        canvas,
-        video,
-        video.videoWidth || video.width,
-        video.videoHeight || video.height,
-        width,
-        height,
-      );
-      let result = canvas.toDataURL('image/png', 0.5);
-      setVideoSnapshotURL(result);
-    },
-    [videoRef, setVideoSnapshotURL],
-  );
-  return { videoSnapshotURL, setVideoSnapshotURL, takeVideoSnapshot };
 }
 
 /**
@@ -175,7 +132,6 @@ export function useMediaStreamRecorderDevices(mediaStreamRef, isPrepared) {
     [
       videoDeviceId,
       audioDeviceId,
-      isPrepared,
       mediaStreamRef,
       setVideoDeviceId,
       setAudioDeviceId,

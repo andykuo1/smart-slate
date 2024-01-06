@@ -19,8 +19,9 @@ import RecorderRecordButton from './RecorderRecordButton';
 /**
  * @param {object} props
  * @param {string} [props.className]
+ * @param {(blob: Blob) => void} props.onComplete
  */
-export default function RecorderToolbar({ className }) {
+export default function RecorderToolbar({ className, onComplete }) {
   const [open, setOpen] = useState(false);
   const {
     onStart,
@@ -74,7 +75,7 @@ export default function RecorderToolbar({ className }) {
   }
 
   return (
-    <div className="w-20 h-full flex flex-col items-center">
+    <div className={'w-20 h-full flex flex-col items-center' + ' ' + className}>
       <div className="flex-1" />
       <DialogProvider>
         <Button onClick={() => setOpen(true)}>
@@ -118,7 +119,7 @@ export default function RecorderToolbar({ className }) {
         </Dialog>
       </DialogProvider>
       <div className="flex-1" />
-      <RecorderRecordButton />
+      <RecorderRecordButton onComplete={onComplete} />
       <div className="flex-1" />
       <div className="h-10" />
       <div className="flex-1" />

@@ -1,27 +1,26 @@
-import { useContext } from 'react';
+import {
+  MEDIA_BLOB_OPTIONS,
+  MEDIA_RECORDER_OPTIONS,
+} from '@/values/RecorderValues';
 
-import { MEDIA_RECORDER_OPTIONS } from '@/values/RecorderValues';
+import MediaRecorderStartStop from './MediaRecorderStartStop';
 
-import { RecorderContext } from './RecorderContext';
-
-export default function RecorderRecordButton() {
-  const { isRecording, onStart, onStop } = useContext(RecorderContext);
-
-  async function onClick() {
-    if (isRecording) {
-      await onStop({ exit: false });
-    } else {
-      await onStart({
-        restart: false,
-        record: true,
-        mediaRecorderOptions: MEDIA_RECORDER_OPTIONS,
-      });
-    }
-  }
-
+/**
+ * @param {object} props
+ * @param {(blob: Blob) => void} props.onComplete
+ */
+export default function RecorderRecordButton({ onComplete }) {
   return (
-    <button className="text-red-500 text-4xl" onClick={onClick}>
+    <MediaRecorderStartStop
+      className="text-red-500 text-4xl"
+      mediaRecorderOptions={MEDIA_RECORDER_OPTIONS}
+      blobOptions={MEDIA_BLOB_OPTIONS}
+      onStop={(recorder, blob) => {
+        if (blob) {
+          onComplete(blob);
+        }
+      }}>
       ◉
-    </button>
+    </MediaRecorderStartStop>
   );
 }

@@ -1,18 +1,23 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 export function useMediaStream() {
+  const [mediaStream, setMediaStream] = useState(
+    /** @type {MediaStream|null} */ (null),
+  );
   const mediaStreamRef = useRef(/** @type {MediaStream|null} */ (null));
 
   const deadMediaStream = useCallback(
     async function _deadMediaStream() {
-      if (mediaStreamRef.current) {
-        let mediaStream = mediaStreamRef.current;
-        for (let track of mediaStream.getTracks()) {
-          track.enabled = false;
-          track.stop();
-        }
-        mediaStreamRef.current = null;
+      if (!mediaStreamRef.current) {
+        return;
       }
+      let mediaStream = mediaStreamRef.current;
+      for (let track of mediaStream.getTracks()) {
+        track.enabled = false;
+        track.stop();
+      }
+      mediaStreamRef.current = null;
+      setMediaStream(null);
     },
     [mediaStreamRef],
   );
@@ -42,12 +47,14 @@ export function useMediaStream() {
       const mediaDevices = await tryGetMediaDevices();
       const mediaStream = await tryGetUserMedia(mediaDevices, constraints);
       mediaStreamRef.current = mediaStream;
+      setMediaStream(mediaStream);
 
       return mediaStream;
     },
     [mediaStreamRef, deadMediaStream],
   );
-  return { mediaStreamRef, initMediaStream, deadMediaStream };
+
+  return { mediaStream, mediaStreamRef, initMediaStream, deadMediaStream };
 }
 
 export class MissingFeatureError extends Error {

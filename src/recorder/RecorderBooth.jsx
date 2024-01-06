@@ -4,34 +4,78 @@ import { useNavigate } from 'react-router-dom';
 import ShotThumbnail from '@/components/shots/ShotThumbnail';
 import { useAnimationFrame } from '@/libs/animationframe';
 import { useFullscreen } from '@/libs/fullscreen';
+import { useTakeExporter } from '@/serdes/UseTakeExporter';
 import {
   useSceneHeading,
+  useSetTakePreviewImage,
   useShotNumber,
   useShotTakeCount,
 } from '@/stores/document';
 import { shotNumberToChar } from '@/stores/document/DocumentStore';
 import { useSettingsStore } from '@/stores/settings';
-import { useCurrentCursor } from '@/stores/user';
+import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import { formatHourMinSecTime } from '@/utils/StringFormat';
-import '@/values/RecorderValues';
+import {
+  MAX_THUMBNAIL_HEIGHT,
+  MAX_THUMBNAIL_WIDTH,
+  STANDARD_VIDEO_RESOLUTIONS,
+} from '@/values/Resolutions';
 
+import MediaStreamVideoConstraints from './MediaStreamVideoConstraints';
+import MediaStreamVideoSnapshot from './MediaStreamVideoSnapshot';
+import MediaStreamVideoView from './MediaStreamVideoView';
 import RecorderBoothLayout from './RecorderBoothLayout';
 import { RecorderContext } from './RecorderContext';
 import RecorderToolbar from './RecorderToolbar';
 
 export default function RecorderBooth() {
-  const { documentId, sceneId, shotId } = useCurrentCursor();
+  const userCursor = useCurrentCursor();
+  const { documentId, sceneId, shotId } = userCursor;
   const takeCount = useShotTakeCount(documentId, shotId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
   const [sceneHeading] = useSceneHeading(documentId, sceneId);
   const preferPersistedMediaStream = useSettingsStore(
     (ctx) => ctx.user.preferPersistedMediaStream,
   );
+  const preferMutedWhileRecording = useSettingsStore(
+    (ctx) => ctx.user.preferMutedWhileRecording,
+  );
+  const enableThumbnailWhileRecording = useSettingsStore(
+    (ctx) => ctx.user.enableThumbnailWhileRecording,
+  );
   const navigate = useNavigate();
   const { exitFullscreen } = useFullscreen();
+  const setTakePreviewImage = useSetTakePreviewImage();
+  const exportTake = useTakeExporter();
+  const setUserCursor = useSetUserCursor();
+  const [_, setVideoSnapshotURL] = useState('');
 
-  const { videoRef, onStop, isPrepared, isRecording } =
-    useContext(RecorderContext);
+  const { videoRef, onStop, mediaRecorder } = useContext(RecorderContext);
+
+  const onComplete = useCallback(
+    /**
+     * @param {Blob} blob
+     */
+    function _onComplete(blob) {
+      const { documentId, sceneId, shotId } = userCursor;
+      const takeId = exportTake(blob, documentId, sceneId, shotId);
+      setVideoSnapshotURL((prev) => {
+        if (prev) {
+          setTakePreviewImage(documentId, takeId, prev);
+        }
+        // Reset preview image :)
+        return '';
+      });
+      setUserCursor(documentId, sceneId, shotId, takeId);
+    },
+    [
+      userCursor,
+      exportTake,
+      setUserCursor,
+      setVideoSnapshotURL,
+      setTakePreviewImage,
+    ],
+  );
 
   return (
     <RecorderBoothLayout
@@ -58,23 +102,47 @@ export default function RecorderBooth() {
         </>
       )}
       center={({ className }) => (
-        <VideoFrame
-          className={'border-4' + ' ' + className}
-          videoRef={videoRef}
-          documentId={documentId}
-          sceneId={sceneId}
-          shotId={shotId}
-          active={isPrepared && isRecording}
-        />
+        <>
+          <MediaStreamVideoConstraints
+            constraints={{
+              facingMode: 'environment',
+              width: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].width },
+              height: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].height },
+              aspectRatio: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].ratio },
+            }}
+          />
+          <MediaStreamVideoView
+            videoRef={videoRef}
+            className={'border-4' + ' ' + className}
+            muted={preferMutedWhileRecording}
+          />
+          <MediaStreamVideoSnapshot
+            videoRef={videoRef}
+            snapshotWidth={MAX_THUMBNAIL_WIDTH}
+            snapshotHeight={MAX_THUMBNAIL_HEIGHT}
+            onSnapshot={(e) => setVideoSnapshotURL(e.value)}
+          />
+          {enableThumbnailWhileRecording && (
+            <div className="absolute left-0 bottom-0">
+              <ShotThumbnail
+                className="shadow-md"
+                documentId={documentId}
+                sceneId={sceneId}
+                shotId={shotId}
+                editable={false}
+              />
+            </div>
+          )}
+        </>
       )}
       bottom={() => (
         <>
           <div className="flex-1" />
-          <RecordingTime active={isPrepared && isRecording} />
+          <RecordingTime active={Boolean(mediaRecorder)} />
           <div className="flex-1" />
         </>
       )}
-      right={() => <RecorderToolbar />}
+      right={() => <RecorderToolbar onComplete={onComplete} />}
     />
   );
 }
@@ -89,53 +157,6 @@ function BackButton({ className, onClick }) {
     <button className={'rounded mx-2' + ' ' + className} onClick={onClick}>
       {'<-'}Back
     </button>
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} [props.className]
- * @param {import('react').MutableRefObject<HTMLVideoElement|null>} props.videoRef
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
- * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
- * @param {boolean} props.active
- */
-function VideoFrame({
-  className,
-  videoRef,
-  documentId,
-  sceneId,
-  shotId,
-  active,
-}) {
-  const preferMutedWhileRecording = useSettingsStore(
-    (ctx) => ctx.user.preferMutedWhileRecording,
-  );
-  const enableThumbnailWhileRecording = useSettingsStore(
-    (ctx) => ctx.user.enableThumbnailWhileRecording,
-  );
-
-  return (
-    <>
-      <video
-        ref={videoRef}
-        className={className}
-        muted={preferMutedWhileRecording}
-        playsInline={true}
-      />
-      {enableThumbnailWhileRecording && (
-        <div className="absolute left-0 bottom-0">
-          <ShotThumbnail
-            className="shadow-md"
-            documentId={documentId}
-            sceneId={sceneId}
-            shotId={shotId}
-            editable={false}
-          />
-        </div>
-      )}
-    </>
   );
 }
 

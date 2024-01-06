@@ -1,9 +1,12 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 /**
  * @param {import('react').RefObject<MediaStream|null>} mediaStreamRef
  */
 export function useMediaRecorder(mediaStreamRef) {
+  const [mediaRecorder, setMediaRecorder] = useState(
+    /** @type {MediaRecorder|null} */ (null),
+  );
   const mediaRecorderRef = useRef(/** @type {MediaRecorder|null} */ (null));
   const dataBlobsRef = useRef(/** @type {Array<Blob>} */ ([]));
 
@@ -30,14 +33,15 @@ export function useMediaRecorder(mediaStreamRef) {
     [],
   );
 
-  /** @type {() => Promise<{ value: Blob|null, target: MediaRecorder|null }>} */
+  /** @type {(blobOptions?: BlobPropertyBag) => Promise<{ value: Blob|null, target: MediaRecorder|null }>} */
   const stopMediaRecorder = useCallback(
-    async function _stopMediaRecorder() {
+    async function _stopMediaRecorder(blobOptions = {}) {
       const mediaRecorder = mediaRecorderRef.current;
       if (!mediaRecorder) {
         return { value: null, target: null };
       }
       mediaRecorderRef.current = null;
+      setMediaRecorder(null);
       return new Promise((resolve, reject) => {
         /** @param {MediaRecorderEventMap['start']} e */
         function onMediaRecorderStop(e) {
@@ -55,9 +59,7 @@ export function useMediaRecorder(mediaStreamRef) {
           if (dataBlobsRef.current && dataBlobsRef.current.length > 0) {
             let dataBlobs = dataBlobsRef.current;
             dataBlobsRef.current = [];
-            let blob = compileDataBlobs(dataBlobs, {
-              type: mediaRecorder.mimeType,
-            });
+            let blob = compileDataBlobs(dataBlobs, blobOptions);
             resolve({ value: blob, target: mediaRecorder });
           } else {
             resolve({ value: null, target: mediaRecorder });
@@ -90,6 +92,7 @@ export function useMediaRecorder(mediaStreamRef) {
       const mediaStream = mediaStreamRef.current;
       const mediaRecorder = new MediaRecorder(mediaStream, options);
       mediaRecorderRef.current = mediaRecorder;
+      setMediaRecorder(mediaRecorder);
       return new Promise((resolve, reject) => {
         /** @param {MediaRecorderEventMap['start']} e */
         function onMediaRecorderStart(e) {
@@ -119,7 +122,12 @@ export function useMediaRecorder(mediaStreamRef) {
     ],
   );
 
-  return { mediaRecorderRef, startMediaRecorder, stopMediaRecorder };
+  return {
+    mediaRecorder,
+    mediaRecorderRef,
+    startMediaRecorder,
+    stopMediaRecorder,
+  };
 }
 
 /**

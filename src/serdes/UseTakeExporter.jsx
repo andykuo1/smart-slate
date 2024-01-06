@@ -7,7 +7,6 @@ import {
   useDocumentStore,
   useSetTakeExportedGoogleDriveFileId,
   useSetTakeExportedIDBKey,
-  useSetTakePreviewImage,
 } from '@/stores/document';
 import {
   getDocumentById,
@@ -111,7 +110,6 @@ export function useTakeExporter() {
   const addTake = useDocumentStore((ctx) => ctx.addTake);
   const setTakeExportedGoogleDriveFileId =
     useSetTakeExportedGoogleDriveFileId();
-  const setTakePreviewImage = useSetTakePreviewImage();
   const setTakeExportedIDBKey = useSetTakeExportedIDBKey();
   const enableDriveSync = useSettingsStore((ctx) => ctx.user.enableDriveSync);
   const handleToken = useGAPITokenHandler();
@@ -195,7 +193,6 @@ export function useTakeExporter() {
       handleToken,
       setTakeExportedGoogleDriveFileId,
       setTakeExportedIDBKey,
-      setTakePreviewImage,
     ],
   );
 
