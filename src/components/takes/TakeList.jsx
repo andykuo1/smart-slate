@@ -34,7 +34,8 @@ export default function TakeList({
     <ul
       title="Take list"
       className={
-        'bg-gray-100' + ' ' + getUnorderedListStyleByViewMode(viewMode)
+        // TODO: This has the wrong box sizing (going to force it with screen at the moment)
+        'bg-gray-100 w-screen' + ' ' + getUnorderedListStyleByViewMode(viewMode)
       }>
       <NewTake documentId={documentId} shotId={shotId} viewMode={viewMode} />
       {takeIds
