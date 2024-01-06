@@ -45,13 +45,16 @@ function useOpenRecorder(onClick) {
   const { onStart, onStop } = useContext(RecorderContext);
   const { enterFullscreen, exitFullscreen } = useFullscreen();
   const navigate = useNavigate();
+  const preferPersistedMediaStream = useSettingsStore(
+    (ctx) => ctx.user.preferPersistedMediaStream,
+  );
   return useCallback(
     /** @type {import('react').MouseEventHandler<HTMLButtonElement>} */
     async function _handleClick(e) {
       try {
         // Step 1. Get all the permissions :P
         await onStart({
-          restart: true,
+          restart: !preferPersistedMediaStream,
           record: false,
           mediaStreamConstraints: [
             {
@@ -80,7 +83,15 @@ function useOpenRecorder(onClick) {
         await onStop({ exit: true });
       }
     },
-    [onStart, onStop, navigate, enterFullscreen, exitFullscreen, onClick],
+    [
+      preferPersistedMediaStream,
+      onStart,
+      onStop,
+      navigate,
+      enterFullscreen,
+      exitFullscreen,
+      onClick,
+    ],
   );
 }
 

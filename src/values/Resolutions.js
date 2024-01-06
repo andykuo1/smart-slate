@@ -30,3 +30,53 @@ export function createVideoResolution(name, width, height, ratio) {
     ratio,
   };
 }
+
+/**
+ * @param {number} width
+ * @param {number} height
+ */
+export function getStandardVideoResolutionByDimension(width, height) {
+  for (let resolution of Object.values(STANDARD_VIDEO_RESOLUTIONS)) {
+    let dw = Math.abs(resolution.width - width);
+    let dh = Math.abs(resolution.height - height);
+    if (dw < 1 && dh < 1) {
+      return resolution;
+    }
+  }
+  return null;
+}
+
+/**
+ * @param {number} width
+ * @param {number} height
+ */
+export function getNearestStandardVideoResolution(width, height) {
+  let nearest = null;
+  let nearestDistSqu = Number.POSITIVE_INFINITY;
+  for (let resolution of Object.values(STANDARD_VIDEO_RESOLUTIONS)) {
+    let dw = Math.abs(resolution.width - width);
+    let dh = Math.abs(resolution.height - height);
+    let distSqu = dw * dw + dh * dh;
+    if (!nearest) {
+      nearest = resolution;
+      nearestDistSqu = distSqu;
+    } else if (distSqu < nearestDistSqu) {
+      nearest = resolution;
+      nearestDistSqu = distSqu;
+    }
+  }
+  return nearest;
+}
+
+/**
+ * @param {string} name
+ */
+export function getStandardVideoResolutionByName(name) {
+  if (name in STANDARD_VIDEO_RESOLUTIONS) {
+    return STANDARD_VIDEO_RESOLUTIONS[
+      /** @type {keyof STANDARD_VIDEO_RESOLUTIONS} */ (name)
+    ];
+  } else {
+    return null;
+  }
+}

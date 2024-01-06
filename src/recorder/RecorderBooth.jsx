@@ -48,8 +48,29 @@ export default function RecorderBooth() {
   const exportTake = useTakeExporter();
   const setUserCursor = useSetUserCursor();
   const [_, setVideoSnapshotURL] = useState('');
+  const [videoConstraints, setVideoConstraints] = useState({
+    facingMode: 'environment',
+    width: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].width },
+    height: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].height },
+    aspectRatio: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].ratio },
+  });
 
   const { videoRef, onStop } = useContext(RecorderContext);
+
+  const onVideoResolutionChange = useCallback(
+    /**
+     * @param {import('@/values/Resolutions').VideoResolution} resolution
+     */
+    function _onVideoResolutionChange(resolution) {
+      setVideoConstraints((prev) => ({
+        ...prev,
+        width: { ideal: resolution.width },
+        height: { ideal: resolution.height },
+        aspectRatio: { ideal: resolution.ratio },
+      }));
+    },
+    [setVideoConstraints],
+  );
 
   const onComplete = useCallback(
     /**
@@ -107,14 +128,7 @@ export default function RecorderBooth() {
       )}
       center={({ className }) => (
         <>
-          <MediaStreamVideoConstraints
-            constraints={{
-              facingMode: 'environment',
-              width: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].width },
-              height: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].height },
-              aspectRatio: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].ratio },
-            }}
-          />
+          <MediaStreamVideoConstraints constraints={videoConstraints} />
           <MediaStreamVideoView
             videoRef={videoRef}
             className={'border-4' + ' ' + className}
@@ -146,7 +160,12 @@ export default function RecorderBooth() {
           <div className="flex-1" />
         </>
       )}
-      right={() => <RecorderToolbar onComplete={onComplete} />}
+      right={() => (
+        <RecorderToolbar
+          onComplete={onComplete}
+          onResolutionChange={onVideoResolutionChange}
+        />
+      )}
     />
   );
 }
