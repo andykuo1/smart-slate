@@ -27,7 +27,7 @@ export default function TestSnapshot() {
     }
     captureVideoSnapshot(
       videoBlob,
-      0.1,
+      0,
       MAX_THUMBNAIL_WIDTH,
       MAX_THUMBNAIL_HEIGHT,
     ).then((url) => {

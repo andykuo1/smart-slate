@@ -14,6 +14,7 @@ export async function captureVideoSnapshot(
 ) {
   const video = document.createElement('video');
   video.muted = true;
+  video.playsInline = true;
   // NOTE: We can use srcObject, but it's not universally supported yet.
   // ... so we stick to the old way :)
   video.src = URL.createObjectURL(videoBlob);
