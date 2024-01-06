@@ -116,6 +116,22 @@ export function tryGetPermissions() {
   return result;
 }
 
+export function tryGetSharing() {
+  const window = tryGetWindow();
+  const canShare = window.navigator?.canShare;
+  if (!canShare) {
+    throw new MissingFeatureError('navigator.canShare');
+  }
+  const share = window.navigator?.share;
+  if (!share) {
+    throw new MissingFeatureError('navigator.share');
+  }
+  return {
+    canShare,
+    share,
+  };
+}
+
 /**
  * @param {MediaDevices} mediaDevices
  * @param {Array<MediaStreamConstraints>} constraints

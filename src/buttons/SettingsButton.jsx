@@ -18,6 +18,7 @@ import NerdInfoMenuItem from './settings/NerdInfoMenuItem';
 import PreferMutedWhileRecordingMenuItem from './settings/PreferMutedWhileRecordingMenuItem';
 import PreferNativeRecorderMenuItem from './settings/PreferNativeRecorderMenuItem';
 import PreferPersistedMediaStreamMenuItem from './settings/PreferPersistedMediaStreamMenuItem';
+import ShareFilesMenuItem from './settings/ShareFilesMenuItem';
 
 /**
  * @param {object} props
@@ -33,6 +34,7 @@ export default function SettingsButton({ className }) {
       </MenuButton>
       <Menu gutter={8} className={MenuStyle.menu}>
         <DeleteProjectMenuItem />
+        <ShareFilesMenuItem />
         <PreferNativeRecorderMenuItem />
         <PreferMutedWhileRecordingMenuItem />
         <PreferPersistedMediaStreamMenuItem />

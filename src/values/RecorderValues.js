@@ -8,6 +8,11 @@ const MEDIA_RECORDER_SUPPORTED_MIME_TYPE =
   getMediaRecorderSupportedMimeType(MEDIA_RECORDER_POSSIBLE_MIME_TYPES) ||
   MEDIA_RECORDER_POSSIBLE_MIME_TYPES[0];
 
+/** @type {BlobPropertyBag} */
+export const MEDIA_BLOB_OPTIONS = {
+  type: MEDIA_RECORDER_SUPPORTED_MIME_TYPE,
+};
+
 /** @type {MediaRecorderOptions} */
 export const MEDIA_RECORDER_OPTIONS = {
   mimeType: MEDIA_RECORDER_SUPPORTED_MIME_TYPE,
@@ -47,11 +52,6 @@ export const MEDIA_STREAM_CONSTRAINTS = [
     audio: true,
   },
 ];
-
-/** @type {BlobPropertyBag} */
-export const MEDIA_BLOB_OPTIONS = {
-  type: MEDIA_RECORDER_SUPPORTED_MIME_TYPE,
-};
 
 /**
  * @param {Array<string>} possibleTypes
