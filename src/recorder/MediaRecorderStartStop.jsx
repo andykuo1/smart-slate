@@ -46,7 +46,7 @@ export default function MediaRecorderStartStop({
 
   return (
     <button
-      className={className}
+      className={className + ' ' + 'disabled:opacity-30'}
       onClick={handleClick}
       disabled={disabled || pending}
       title="Start recording">
