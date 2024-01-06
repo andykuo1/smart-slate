@@ -1,8 +1,7 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ShotThumbnail from '@/components/shots/ShotThumbnail';
-import { useAnimationFrame } from '@/libs/animationframe';
 import { useFullscreen } from '@/libs/fullscreen';
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
 import {
@@ -14,13 +13,13 @@ import {
 import { shotNumberToChar } from '@/stores/document/DocumentStore';
 import { useSettingsStore } from '@/stores/settings';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
-import { formatHourMinSecTime } from '@/utils/StringFormat';
 import {
   MAX_THUMBNAIL_HEIGHT,
   MAX_THUMBNAIL_WIDTH,
   STANDARD_VIDEO_RESOLUTIONS,
 } from '@/values/Resolutions';
 
+import MediaRecorderRecordingTime from './MediaRecorderRecordingTime';
 import MediaStreamVideoConstraints from './MediaStreamVideoConstraints';
 import MediaStreamVideoSnapshot from './MediaStreamVideoSnapshot';
 import MediaStreamVideoView from './MediaStreamVideoView';
@@ -50,7 +49,7 @@ export default function RecorderBooth() {
   const setUserCursor = useSetUserCursor();
   const [_, setVideoSnapshotURL] = useState('');
 
-  const { videoRef, onStop, mediaRecorder } = useContext(RecorderContext);
+  const { videoRef, onStop } = useContext(RecorderContext);
 
   const onComplete = useCallback(
     /**
@@ -143,7 +142,7 @@ export default function RecorderBooth() {
       bottom={() => (
         <>
           <div className="flex-1" />
-          <RecordingTime active={Boolean(mediaRecorder)} />
+          <MediaRecorderRecordingTime />
           <div className="flex-1" />
         </>
       )}
@@ -162,46 +161,5 @@ function BackButton({ className, onClick }) {
     <button className={'rounded mx-2' + ' ' + className} onClick={onClick}>
       {'<-'}Back
     </button>
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} [props.className]
- * @param {boolean} props.active
- */
-function RecordingTime({ className, active }) {
-  const [startTime, setStartTime] = useState(-1);
-  const [timeString, setTimeString] = useState('');
-
-  useEffect(() => {
-    if (active && startTime < 0) {
-      setStartTime(Date.now());
-    } else if (!active) {
-      setStartTime(-1);
-    }
-  }, [active, startTime]);
-
-  const onAnimationFrame = useCallback(
-    function _onAnimationFrame() {
-      if (startTime > 0) {
-        setTimeString(formatHourMinSecTime(Date.now() - startTime));
-      }
-    },
-    [startTime],
-  );
-
-  useAnimationFrame(onAnimationFrame);
-  return (
-    <output
-      className={
-        'rounded p-1 font-mono transition-colors' +
-        ' ' +
-        (active ? 'bg-red-400' : 'bg-black') +
-        ' ' +
-        className
-      }>
-      {startTime > 0 ? timeString : '00:00:00'}
-    </output>
   );
 }
