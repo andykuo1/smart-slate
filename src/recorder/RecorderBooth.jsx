@@ -61,7 +61,10 @@ export default function RecorderBooth() {
       const takeId = exportTake(blob, documentId, sceneId, shotId);
       setVideoSnapshotURL((prev) => {
         if (prev) {
-          console.log('[RecorderBooth] Setting the snapshot as ' + prev);
+          console.log(
+            '[RecorderBooth] Setting the snapshot for url with length ' +
+              prev?.length,
+          );
           setTakePreviewImage(documentId, takeId, prev);
         }
         // Reset preview image :)
