@@ -42,7 +42,7 @@ export default function RecorderOpenButton({ className, children, onClick }) {
  * @param {import('react').MouseEventHandler<any>} [onClick]
  */
 function useOpenRecorder(onClick) {
-  const { onStart, onStop } = useContext(RecorderContext);
+  const { onStop, initMediaStream } = useContext(RecorderContext);
   const { enterFullscreen, exitFullscreen } = useFullscreen();
   const navigate = useNavigate();
   const preferPersistedMediaStream = useSettingsStore(
@@ -53,19 +53,13 @@ function useOpenRecorder(onClick) {
     async function _handleClick(e) {
       try {
         // Step 1. Get all the permissions :P
-        await onStart({
-          restart: !preferPersistedMediaStream,
-          record: false,
-          mediaStreamConstraints: [
-            {
-              video: {
-                facingMode: 'environment',
-                aspectRatio: 16 / 9,
-              },
-              audio: true,
-            },
-          ],
-        });
+        await initMediaStream(
+          {
+            video: { facingMode: 'environment', aspectRatio: 16 / 9 },
+            audio: true,
+          },
+          !preferPersistedMediaStream,
+        );
         // Step 2. Do something in the middle.
         onClick?.(e);
         // Step 3. Navigate to page.
@@ -85,7 +79,7 @@ function useOpenRecorder(onClick) {
     },
     [
       preferPersistedMediaStream,
-      onStart,
+      initMediaStream,
       onStop,
       navigate,
       enterFullscreen,

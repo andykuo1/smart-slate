@@ -23,15 +23,23 @@ export default function MediaRecorderStartStop({
   onStart,
   onStop,
 }) {
-  const { mediaStream, mediaRecorder, startMediaRecorder, stopMediaRecorder } =
-    useContext(RecorderContext);
+  const {
+    mediaStream,
+    mediaRecorder,
+    initMediaStream,
+    startMediaRecorder,
+    stopMediaRecorder,
+  } = useContext(RecorderContext);
   const [pending, setPending] = useState(false);
 
   function handleClick() {
+    setPending(true);
     if (!mediaStream) {
+      initMediaStream({ video: true, audio: true }, true).finally(() =>
+        setPending(false),
+      );
       return;
     }
-    setPending(true);
     if (!mediaRecorder) {
       startMediaRecorder(mediaRecorderOptions)
         .then((result) => onStart?.(result.target))

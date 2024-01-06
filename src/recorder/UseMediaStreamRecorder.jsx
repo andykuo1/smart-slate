@@ -100,6 +100,8 @@ export function useMediaStreamRecorder(onRecord, onComplete) {
     mediaRecorderRef,
     startMediaRecorder,
     stopMediaRecorder,
+    initMediaStream,
+    deadMediaStream,
   };
 }
 
