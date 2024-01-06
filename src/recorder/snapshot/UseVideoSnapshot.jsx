@@ -31,7 +31,7 @@ export function useVideoSnapshot(documentId, takeId) {
       }
       captureVideoSnapshot(
         videoBlob,
-        0,
+        0.5,
         MAX_THUMBNAIL_WIDTH,
         MAX_THUMBNAIL_HEIGHT,
       ).then((url) => {

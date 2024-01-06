@@ -44,7 +44,7 @@ export async function captureVideoSnapshot(
       resolve(result);
     }
 
-    function onLoadedData() {
+    function onLoadedMetadata() {
       if (video.src) {
         URL.revokeObjectURL(video.src);
       }
@@ -59,7 +59,7 @@ export async function captureVideoSnapshot(
     }
 
     video.addEventListener('error', onError);
-    video.addEventListener('loadeddata', onLoadedData);
+    video.addEventListener('loadedmetadata', onLoadedMetadata);
   });
 }
 
