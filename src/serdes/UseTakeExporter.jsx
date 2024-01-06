@@ -156,10 +156,9 @@ export function useTakeExporter() {
         setTakeExportedIDBKey(documentId, takeId, key),
       );
 
-      let shouldSave = true;
-      if (shouldSave && enableDriveSync) {
+      if (enableDriveSync) {
         // Upload it.
-        shouldSave = handleToken((token) => {
+        handleToken((token) => {
           uploadFile(
             token.access_token,
             exportedFileNameWithExt,
@@ -176,13 +175,6 @@ export function useTakeExporter() {
               );
             });
         });
-      }
-      if (shouldSave && !opts?.uploadOnly) {
-        // Download it.
-        const dataURL = URL.createObjectURL(data);
-        downloadURLImpl(exportedFileNameWithExt, dataURL);
-        URL.revokeObjectURL(dataURL);
-        shouldSave = false;
       }
       return takeId;
     },
