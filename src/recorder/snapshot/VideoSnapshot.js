@@ -7,7 +7,7 @@
  * @param {number} width
  * @param {number} height
  */
-export async function captureVideoSnapshot(
+export function captureVideoSnapshot(
   videoRef,
   videoBlob,
   seekToSeconds,
@@ -18,13 +18,11 @@ export async function captureVideoSnapshot(
   if (!video) {
     return;
   }
-  video.muted = true;
-  video.playsInline = true;
   // NOTE: For some reason, only srcObject works for Safari for loading video.
   video.srcObject = videoBlob;
   // NOTE: This needs to be called DIRECTLY in a user-gesture callback
   //  for mobile support :)
-  video.load();
+  video.play();
 
   return new Promise((resolve, reject) => {
     console.log('[UseVideoSnapshot] Entering promise to take snapshot...');
