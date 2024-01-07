@@ -53,8 +53,7 @@ export function ShotEntry({
         ' ' +
         (isDragging ? 'opacity-30' : '')
       }
-      {...elementProps}
-      {...(collapsed ? handleProps : {})}>
+      {...elementProps}>
       <div
         className={
           'flex flex-row items-center w-full h-[6rem] z-10 border-b border-gray-300 shadow' +
@@ -68,6 +67,7 @@ export function ShotEntry({
           depth={0}
           start={false}
           end={shotNumber >= shotCount}
+          containerProps={{ ...(collapsed ? handleProps : {}) }}
         />
         <ShotThumbnail
           className="ml-2"
