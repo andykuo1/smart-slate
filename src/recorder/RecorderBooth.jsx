@@ -42,6 +42,7 @@ export default function RecorderBooth() {
   const enableThumbnailWhileRecording = useSettingsStore(
     (ctx) => ctx.user.enableThumbnailWhileRecording,
   );
+  const show4x3Box = useSettingsStore((ctx) => ctx.user.show4x3Box);
   const navigate = useNavigate();
   const { exitFullscreen } = useFullscreen();
   const setTakePreviewImage = useSetTakePreviewImage();
@@ -126,12 +127,11 @@ export default function RecorderBooth() {
           </span>
         </>
       )}
-      center={({ className }) => (
+      center={() => (
         <>
           <MediaStreamVideoConstraints constraints={videoConstraints} />
           <MediaStreamVideoView
             videoRef={videoRef}
-            className={'border-4' + ' ' + className}
             muted={preferMutedWhileRecording}
           />
           <MediaStreamVideoSnapshot
@@ -140,6 +140,10 @@ export default function RecorderBooth() {
             snapshotHeight={MAX_THUMBNAIL_HEIGHT}
             onSnapshot={(e) => setVideoSnapshotURL(e.value)}
           />
+          {/* 4:3 box */}
+          {show4x3Box && (
+            <div className="absolute mx-auto left-0 right-0 -top-1 -bottom-1 w-[75%] border-x-4" />
+          )}
           {enableThumbnailWhileRecording && (
             <div className="absolute left-0 bottom-0">
               <ShotThumbnail

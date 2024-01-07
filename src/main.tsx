@@ -6,11 +6,12 @@ import '@/progressive/ServiceWorkerInstall';
 
 import './index.css';
 import Providers from './providers';
-import CameraPage from './routes/CameraPage';
 import EditPage from './routes/EditPage';
 import ErrorPage from './routes/ErrorPage';
+import RecordPage from './routes/RecordPage';
 import RootPage from './routes/RootPage';
 import TestPage from './routes/TestRecorderPage';
+import ViewPage from './routes/ViewPage';
 import { PACKAGE_NAME } from './values/PackageJSON';
 
 const router = createBrowserRouter(
@@ -22,12 +23,17 @@ const router = createBrowserRouter(
     },
     {
       path: '/rec',
-      element: <CameraPage />,
+      element: <RecordPage />,
       errorElement: <ErrorPage />,
     },
     {
       path: '/edit',
       element: <EditPage />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: '/view',
+      element: <ViewPage />,
       errorElement: <ErrorPage />,
     },
     {

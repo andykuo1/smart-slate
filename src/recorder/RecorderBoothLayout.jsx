@@ -3,13 +3,6 @@ import { useCallback, useRef } from 'react';
 import { useAnimationFrame } from '@/libs/animationframe';
 
 /**
- * @callback VideoLayoutCenterRenderProp
- * @param {object} props
- * @param {string} props.className
- * @returns {import('react').ReactNode}
- */
-
-/**
  *
  * @param {object} props
  * @param {string} [props.className]
@@ -18,7 +11,7 @@ import { useAnimationFrame } from '@/libs/animationframe';
  * @param {() => import('react').ReactNode} [props.bottom]
  * @param {() => import('react').ReactNode} [props.left]
  * @param {() => import('react').ReactNode} [props.right]
- * @param {VideoLayoutCenterRenderProp} props.center
+ * @param {() => import('react').ReactNode} props.center
  */
 export default function RecorderBoothLayout({
   className,
@@ -29,8 +22,8 @@ export default function RecorderBoothLayout({
   right,
   center,
 }) {
+  const videoContainerRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const parentRef = useRef(/** @type {HTMLDivElement|null} */ (null));
-  const videoClassName = 'absolute';
 
   const handleAnimationFrame = useCallback(
     function onAnimationFrame() {
@@ -38,8 +31,9 @@ export default function RecorderBoothLayout({
       if (!parent) {
         return;
       }
+      const videoContainer = videoContainerRef.current;
       const video = videoRef.current;
-      if (!video) {
+      if (!video || !videoContainer) {
         return;
       }
 
@@ -56,10 +50,11 @@ export default function RecorderBoothLayout({
       const dx = (toWidth - w * ratio) / 2;
       const dy = (toHeight - h * ratio) / 2;
 
-      video.style.left = `${dx}px`;
-      video.style.top = `${dy}px`;
-      video.style.width = `${w * ratio}px`;
-      video.style.height = `${h * ratio}px`;
+      videoContainer.style.left = `${dx}px`;
+      videoContainer.style.top = `${dy}px`;
+
+      videoContainer.style.width = video.style.width = `${w * ratio}px`;
+      videoContainer.style.height = video.style.height = `${h * ratio}px`;
     },
     [parentRef, videoRef],
   );
@@ -82,7 +77,11 @@ export default function RecorderBoothLayout({
       <div className={yMarginClassName + ' ' + 'top-0 left-0'}>{top?.()}</div>
       <div className={xMarginClassName}>{left?.()}</div>
       <div ref={parentRef} className="relative flex-1 overflow-hidden">
-        {center?.({ className: videoClassName })}
+        <div
+          ref={videoContainerRef}
+          className={'absolute flex items-center border-4'}>
+          {center?.()}
+        </div>
       </div>
       <div className={xMarginClassName}>{right?.()}</div>
       <div className={yMarginClassName + ' ' + 'bottom-0 left-0'}>

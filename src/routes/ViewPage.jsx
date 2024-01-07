@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import RecorderBooth from '@/recorder/RecorderBooth';
+import ViewerBooth from '@/viewer/ViewerBooth';
 
 export default function CameraPage() {
   useEffect(() => {
@@ -11,7 +11,7 @@ export default function CameraPage() {
   }, []);
   return (
     <main className="w-full h-full flex flex-col items-center bg-black">
-      <RecorderBooth />
+      <ViewerBooth />
     </main>
   );
 }
