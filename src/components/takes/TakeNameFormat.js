@@ -71,7 +71,7 @@ export function formatDocumentTitle(documentTitle) {
     return 'UNTITLED';
   }
   result = result.replace(/\s+/g, '');
-  result = result.replace(/[^\w\d_]/g, '');
+  result = result.replace(/[^\w\d_-]/g, '');
   return result.toUpperCase();
 }
 
