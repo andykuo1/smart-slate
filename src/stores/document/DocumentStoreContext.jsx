@@ -232,6 +232,35 @@ export function useSetTakePreviewImage() {
 
 /**
  * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').ShotId} shotId
+ */
+export function useBestTakeImageForShotThumbnail(documentId, shotId) {
+  return useDocumentStore((ctx) => {
+    const shot = getShotById(ctx, documentId, shotId);
+    if (!shot) {
+      return '';
+    }
+    let bestTake = null;
+    let bestRating = 0;
+    for (let takeId of shot.takeIds) {
+      const take = getTakeById(ctx, documentId, takeId);
+      if (!take) {
+        continue;
+      }
+      if (take.rating >= bestRating) {
+        bestTake = take;
+        bestRating = take.rating;
+      }
+    }
+    if (!bestTake) {
+      return shot.thumbnail;
+    }
+    return bestTake.previewImage;
+  });
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
  * @param {import('./DocumentStore').SceneId} sceneId
  * @returns {[string, import('./DocumentDispatch').Dispatch['setSceneHeading']]}
  */

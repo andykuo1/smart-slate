@@ -7,9 +7,9 @@ import {
 
 import ImageWithCaption from '@/libs/ImageWithCaption';
 import {
+  useBestTakeImageForShotThumbnail,
   useSceneNumber,
   useShotNumber,
-  useShotThumbnail,
 } from '@/stores/document';
 import PopoverStyle from '@/styles/Popover.module.css';
 
@@ -82,10 +82,10 @@ export default function ShotThumbnail({
  * @param {import('react').FC<any>} [props.Icon]
  */
 function ShotThumbnailImage({ className, alt, documentId, shotId, Icon }) {
-  const thumbnail = useShotThumbnail(documentId, shotId);
+  const image = useBestTakeImageForShotThumbnail(documentId, shotId);
   return (
     <ImageWithCaption
-      src={thumbnail}
+      src={image}
       alt={alt}
       className={'max-w-sm w-[128px] h-[72px]' + ' ' + className}
       usage="add"
