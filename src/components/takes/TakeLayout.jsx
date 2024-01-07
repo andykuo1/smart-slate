@@ -1,6 +1,3 @@
-import CachedIcon from '@material-symbols/svg-400/rounded/cached.svg';
-import CloudDoneIcon from '@material-symbols/svg-400/rounded/cloud_done.svg';
-import CloudUploadIcon from '@material-symbols/svg-400/rounded/cloud_upload-fill.svg';
 import StarIcon from '@material-symbols/svg-400/rounded/star-fill.svg';
 
 import HorizontallySnappableDiv from '@/libs/HorizontallySnappableDiv';
@@ -91,20 +88,7 @@ export default function TakeLayout({
       <HorizontallySnappableDiv>
         {/* PANEL 1 */}
         <div className={'flex-1 flex flex-row' + ' ' + listDecorationStyle}>
-          <button
-            className="flex flex-row px-2"
-            onClick={onCloudClick}
-            disabled={isCloudExported || !isCloudExportable || !isCached}>
-            {isCloudExported ? (
-              <CloudDoneIcon className="w-6 h-6 fill-current" />
-            ) : isCloudExportable && isCached ? (
-              <CloudUploadIcon className="w-6 h-6 fill-current" />
-            ) : (
-              isCached && <CachedIcon className="w-6 h-6 fill-current" />
-            )}
-          </button>
-          <div className="flex-1" />
-          <p className="opacity-30 whitespace-nowrap">
+          <p className="flex-1 opacity-30 whitespace-nowrap overflow-x-auto text-center">
             {isPending ? '--' : new Date(timestamp).toLocaleString()}
           </p>
         </div>
