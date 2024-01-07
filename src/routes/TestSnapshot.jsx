@@ -35,6 +35,7 @@ export default function TestSnapshot() {
       return;
     }
     captureVideoSnapshot(
+      videoRef,
       videoBlob,
       0,
       MAX_THUMBNAIL_WIDTH,

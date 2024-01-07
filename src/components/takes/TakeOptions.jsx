@@ -1,4 +1,5 @@
 import { Menu, MenuButton, MenuProvider } from '@ariakit/react';
+import { useRef } from 'react';
 
 import MoreVertIcon from '@material-symbols/svg-400/rounded/more_vert.svg';
 
@@ -31,7 +32,8 @@ export default function TakeOptions({
   showButton = true,
   disabled = false,
 }) {
-  const [_, click] = useVideoSnapshot(documentId, takeId);
+  const videoRef = useRef(null);
+  const [_, click] = useVideoSnapshot(videoRef, documentId, takeId);
   return (
     <MenuProvider>
       <MenuButton
@@ -42,6 +44,12 @@ export default function TakeOptions({
         {showButton && <MoreVertIcon className="w-6 h-6" />}
       </MenuButton>
       <Menu className={MenuStyle.menu}>
+        <video
+          className="hidden"
+          ref={videoRef}
+          muted={true}
+          playsInline={true}
+        />
         <TakeRatingMenuItem documentId={documentId} takeId={takeId} />
         <TakeCacheMenuItem documentId={documentId} takeId={takeId} />
         <TakeExportMenuItem

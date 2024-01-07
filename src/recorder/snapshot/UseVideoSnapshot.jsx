@@ -10,11 +10,12 @@ import { useCachedVideoBlob } from '../cache/UseCachedVideoBlob';
 import { captureVideoSnapshot } from './VideoSnapshot';
 
 /**
+ * @param {import('react').RefObject<HTMLVideoElement|null>} videoRef
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {import('@/stores/document/DocumentStore').TakeId} takeId
  * @returns {[boolean, import('react').MouseEventHandler<HTMLButtonElement>]}
  */
-export function useVideoSnapshot(documentId, takeId) {
+export function useVideoSnapshot(videoRef, documentId, takeId) {
   const videoBlob = useCachedVideoBlob(documentId, takeId);
   const takePreviewImage = useDocumentStore(
     (ctx) => getTakeById(ctx, documentId, takeId)?.previewImage,
@@ -30,6 +31,7 @@ export function useVideoSnapshot(documentId, takeId) {
         return;
       }
       captureVideoSnapshot(
+        videoRef,
         videoBlob,
         0.5,
         MAX_THUMBNAIL_WIDTH,

@@ -1,18 +1,23 @@
 /**
  * https://webkit.org/blog/6784/new-video-policies-for-ios/
  *
+ * @param {import('react').RefObject<HTMLVideoElement|null>} videoRef
  * @param {Blob} videoBlob
  * @param {number} seekToSeconds
  * @param {number} width
  * @param {number} height
  */
 export async function captureVideoSnapshot(
+  videoRef,
   videoBlob,
   seekToSeconds,
   width,
   height,
 ) {
-  const video = document.createElement('video');
+  const video = videoRef.current;
+  if (!video) {
+    return;
+  }
   video.muted = true;
   video.playsInline = true;
   // NOTE: For some reason, only srcObject works for Safari for loading video.
@@ -23,17 +28,29 @@ export async function captureVideoSnapshot(
 
   return new Promise((resolve, reject) => {
     console.log('[UseVideoSnapshot] Entering promise to take snapshot...');
+    const video = videoRef.current;
+    if (!video) {
+      return;
+    }
     /** @param {ErrorEvent} e */
     function onError(e) {
       console.log('[UseVideoSnapshot] ERROR! ' + e.message);
-      if (video.src) {
-        URL.revokeObjectURL(video.src);
+      const video = videoRef.current;
+      if (!video) {
+        return;
+      }
+      if (video?.srcObject) {
+        video.srcObject = null;
       }
       reject(e.error);
     }
 
     function onSeeked() {
       console.log('[UseVideoSnapshot] Seeked complete.');
+      const video = videoRef.current;
+      if (!video) {
+        return;
+      }
       const canvas = document.createElement('canvas');
       drawElementToCanvasWithRespectToAspectRatio(
         canvas,
@@ -49,8 +66,12 @@ export async function captureVideoSnapshot(
 
     function onLoadedMetadata() {
       console.log('[UseVideoSnapshot] Metadata loaded.');
-      if (video.src) {
-        URL.revokeObjectURL(video.src);
+      const video = videoRef.current;
+      if (!video) {
+        return;
+      }
+      if (video?.srcObject) {
+        video.srcObject = null;
       }
       // NOTE: This doesn't work well on Safari :(
       if (seekToSeconds > 0) {
