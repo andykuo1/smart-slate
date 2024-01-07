@@ -2,15 +2,9 @@ import { useCallback, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ShotThumbnail from '@/components/shots/ShotThumbnail';
-import { formatShotNumber } from '@/components/takes/TakeNameFormat';
 import { useFullscreen } from '@/libs/fullscreen';
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
-import {
-  useSceneHeading,
-  useSetTakePreviewImage,
-  useShotNumber,
-  useShotTakeCount,
-} from '@/stores/document';
+import { useSetTakePreviewImage } from '@/stores/document';
 import { useSettingsStore } from '@/stores/settings';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import {
@@ -24,15 +18,13 @@ import MediaStreamVideoConstraints from './MediaStreamVideoConstraints';
 import MediaStreamVideoSnapshot from './MediaStreamVideoSnapshot';
 import MediaStreamVideoView from './MediaStreamVideoView';
 import RecorderBoothLayout from './RecorderBoothLayout';
+import RecorderBoothTitle from './RecorderBoothTitle';
 import { RecorderContext } from './RecorderContext';
 import RecorderToolbar from './RecorderToolbar';
 
 export default function RecorderBooth() {
   const userCursor = useCurrentCursor();
   const { documentId, sceneId, shotId } = userCursor;
-  const takeCount = useShotTakeCount(documentId, shotId);
-  const shotNumber = useShotNumber(documentId, sceneId, shotId);
-  const [sceneHeading] = useSceneHeading(documentId, sceneId);
   const preferPersistedMediaStream = useSettingsStore(
     (ctx) => ctx.user.preferPersistedMediaStream,
   );
@@ -119,12 +111,11 @@ export default function RecorderBooth() {
               });
             }}
           />
-          <span className="mx-2">{sceneHeading || 'INT/EXT. SCENE - DAY'}</span>
-          <span className="flex-1" />
-          <span>Shot {formatShotNumber(shotNumber)}</span>
-          <span className="flex flex-row items-center mx-2">
-            Take #{takeCount + 1}
-          </span>
+          <RecorderBoothTitle
+            documentId={documentId}
+            sceneId={sceneId}
+            shotId={shotId}
+          />
         </>
       )}
       center={() => (

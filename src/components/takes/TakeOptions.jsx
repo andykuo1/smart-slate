@@ -10,6 +10,7 @@ import TakeCacheMenuItem from './options/TakeCacheMenuItem';
 import TakeExportMenuItem from './options/TakeExportMenuItem';
 import TakeRatingMenuItem from './options/TakeRatingMenuItem';
 import TakeReassignMenuItem from './options/TakeReassignMenuItem';
+import TakeViewMenuItem from './options/TakeViewMenuItem';
 
 /**
  * @param {object} props
@@ -59,6 +60,12 @@ export default function TakeOptions({
           takeId={takeId}
         />
         <TakeReassignMenuItem
+          documentId={documentId}
+          sceneId={sceneId}
+          shotId={shotId}
+          takeId={takeId}
+        />
+        <TakeViewMenuItem
           documentId={documentId}
           sceneId={sceneId}
           shotId={shotId}

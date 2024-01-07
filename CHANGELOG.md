@@ -2,6 +2,8 @@
 
 - Add recording resolution
 - Add best take to shot thumbnail
+- Add 4x3 box for recorder
+- Add viewer for takes
 
 - Change shot thumbnail camera option to capture on tab click instead
 - Change scene focus when ready click
