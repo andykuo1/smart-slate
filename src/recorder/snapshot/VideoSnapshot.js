@@ -37,9 +37,6 @@ export function captureVideoSnapshot(
       if (!video) {
         return;
       }
-      if (video?.srcObject) {
-        video.srcObject = null;
-      }
       reject(e.error);
     }
 
@@ -67,9 +64,6 @@ export function captureVideoSnapshot(
       const video = videoRef.current;
       if (!video) {
         return;
-      }
-      if (video?.srcObject) {
-        video.srcObject = null;
       }
       // NOTE: This doesn't work well on Safari :(
       if (seekToSeconds > 0) {
