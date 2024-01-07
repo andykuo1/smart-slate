@@ -7,9 +7,11 @@ import {
 } from '@/values/Resolutions';
 
 export default function TestSnapshot() {
+  const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
   const inputRef = useRef(null);
   const blobRef = useRef(/** @type {Blob|null} */ (null));
   const [imgSrc, setImgSrc] = useState('');
+
   /** @type {import('react').ChangeEventHandler<any>} */
   function onChange(e) {
     const el = /** @type {HTMLInputElement} */ (e.target);
@@ -19,7 +21,16 @@ export default function TestSnapshot() {
     }
     el.value = '';
     blobRef.current = file;
+    const video = videoRef.current;
+    if (!video) {
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    video.src = url;
+    URL.revokeObjectURL(url);
+    video.play();
   }
+
   function onClick() {
     const videoBlob = blobRef.current;
     if (!videoBlob) {
@@ -51,6 +62,12 @@ export default function TestSnapshot() {
         </li>
         <li>
           <div>Step 2</div>
+          <video
+            ref={videoRef}
+            muted={true}
+            playsInline={true}
+            controls={true}
+          />
           <button
             onClick={onClick}
             className="border rounded px-2 py-1 bg-gray-300">
