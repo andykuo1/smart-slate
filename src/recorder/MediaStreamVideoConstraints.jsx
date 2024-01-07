@@ -13,8 +13,9 @@ export default function MediaStreamVideoConstraints({ constraints }) {
     if (!mediaStream) {
       return;
     }
+    let orientedConstraints = getLandscapeOrientedConstraints(constraints);
     for (let track of mediaStream.getVideoTracks()) {
-      track.applyConstraints(constraints);
+      track.applyConstraints(orientedConstraints);
     }
   }, [mediaStream, constraints]);
 
@@ -31,5 +32,42 @@ export default function MediaStreamVideoConstraints({ constraints }) {
     };
   }, [mediaStream]);
 
+  useEffect(() => {
+    /** @param {Event} e */
+    function onOrientationChange(e) {
+      if (!mediaStream) {
+        return;
+      }
+      const target = /** @type {ScreenOrientation} */ (e.target);
+      console.error(
+        'Orientation changed to ' +
+          target.type +
+          '. Changing constraints to match.',
+      );
+      let orientedConstraints = getLandscapeOrientedConstraints(constraints);
+      for (let track of mediaStream.getVideoTracks()) {
+        track.applyConstraints(orientedConstraints);
+      }
+    }
+    screen?.orientation?.addEventListener('change', onOrientationChange);
+    return () =>
+      screen?.orientation?.removeEventListener('change', onOrientationChange);
+  }, [mediaStream, constraints]);
+
   return null;
+}
+
+/**
+ * @param {MediaTrackConstraints} constraints
+ */
+function getLandscapeOrientedConstraints(constraints) {
+  if (screen.orientation.type.includes('portrait')) {
+    return {
+      ...constraints,
+      width: constraints.height,
+      height: constraints.width,
+      aspectRatio: undefined,
+    };
+  }
+  return constraints;
 }
