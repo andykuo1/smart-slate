@@ -4,12 +4,14 @@
 
 - Change shot thumbnail camera option to capture on tab click instead
 - Change scene focus when ready click
+- Change take name to include number hash
 
 - Fix custom recorder for mobile
 - Fix drag box for touch
 - Fix cross-block drag states
 - Fix unscrollable take list
 - Fix take preview snapshots for mobile
+- Fix missing shot number for takes in blocks
 
 # 0.1.10
 

@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 
+import { formatTakeNameForFileExport } from '@/components/takes/TakeNameFormat';
 import { uploadFile, useGAPITokenHandler } from '@/libs/googleapi';
 import { cacheVideoBlob, getVideoBlob } from '@/recorder/cache/VideoCache';
-import { ANY_SHOT } from '@/stores/ShotTypes';
 import {
   useDocumentStore,
   useSetTakeExportedGoogleDriveFileId,
@@ -14,10 +14,7 @@ import {
   getShotById,
   getShotIndex,
 } from '@/stores/document';
-import {
-  createTake,
-  toScenShotTakeType,
-} from '@/stores/document/DocumentStore';
+import { createTake } from '@/stores/document/DocumentStore';
 import { useSettingsStore } from '@/stores/settings';
 import { downloadURLImpl } from '@/utils/Downloader';
 import { getVideoFileExtensionByMIMEType } from '@/values/RecorderValues';
@@ -39,7 +36,7 @@ export function useTakeDownloader() {
         return;
       }
       const ext = getVideoFileExtensionByMIMEType(data.type);
-      const exportedTakeName = getExportedTakeName(
+      const exportedTakeName = getNextAvailableTakeNameForFileExport(
         store,
         documentId,
         sceneId,
@@ -79,7 +76,7 @@ export function useTakeGoogleDriveUploader() {
         return;
       }
       const ext = getVideoFileExtensionByMIMEType(data.type);
-      const exportedTakeName = getExportedTakeName(
+      const exportedTakeName = getNextAvailableTakeNameForFileExport(
         store,
         documentId,
         sceneId,
@@ -128,7 +125,7 @@ export function useTakeExporter() {
     function exportTake(data, documentId, sceneId, shotId, opts = {}) {
       const store = UNSAFE_getStore();
       const ext = getVideoFileExtensionByMIMEType(data.type);
-      const exportedTakeName = getExportedTakeName(
+      const exportedTakeName = getNextAvailableTakeNameForFileExport(
         store,
         documentId,
         sceneId,
@@ -197,7 +194,12 @@ export function useTakeExporter() {
  * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
  * @param {import('@/stores/document/DocumentStore').ShotId} shotId
  */
-function getExportedTakeName(store, documentId, sceneId, shotId) {
+export function getNextAvailableTakeNameForFileExport(
+  store,
+  documentId,
+  sceneId,
+  shotId,
+) {
   const document = getDocumentById(store, documentId);
   const documentTitle = document.documentTitle || 'Untitled';
   // TODO: What if documentTitle changes? Should we use this hash?
@@ -210,14 +212,13 @@ function getExportedTakeName(store, documentId, sceneId, shotId) {
   const shotNumber = getShotIndex(store, documentId, sceneId, shotId);
   const takeNumber = shot.takeIds.length + 1;
   const shotType = shot.shotType;
-  const [SCENE, SHOT, TAKE, TYPE] = toScenShotTakeType(
+
+  const takeName = formatTakeNameForFileExport(
+    documentTitle,
     sceneNumber,
     shotNumber,
     takeNumber,
     shotType,
   );
-  return (
-    `${documentTitle}_${SCENE}${SHOT}_${TAKE}` +
-    (shotType !== ANY_SHOT.value ? `_${TYPE}` : '')
-  );
+  return takeName;
 }

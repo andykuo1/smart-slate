@@ -66,11 +66,28 @@ export function getBlockIndex(store, documentId, sceneId, blockId) {
 /**
  * @param {import('./DocumentStore').Store} store
  * @param {import('./DocumentStore').DocumentId} documentId
- * @param {import('./DocumentStore').BlockId} blockId
+ * @param {import('./DocumentStore').SceneId} sceneId
  * @param {import('./DocumentStore').ShotId} shotId
  */
-export function getShotIndex(store, documentId, blockId, shotId) {
-  return getBlockById(store, documentId, blockId)?.shotIds.indexOf(shotId) + 1;
+export function getShotIndex(store, documentId, sceneId, shotId) {
+  const scene = getSceneById(store, documentId, sceneId);
+  const blockIds = scene?.blockIds;
+  if (!blockIds) {
+    return -1;
+  }
+  // TODO: This doesn't respect block order!
+  let currentIndex = 0;
+  for (let blockId of blockIds) {
+    const block = getBlockById(store, documentId, blockId);
+    const index = block.shotIds.indexOf(shotId);
+    if (index >= 0) {
+      currentIndex += index;
+      break;
+    } else {
+      currentIndex += block.shotIds.length;
+    }
+  }
+  return currentIndex + 1;
 }
 
 /**
