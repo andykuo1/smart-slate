@@ -7,6 +7,7 @@
 - Change take name to include number hash
 - Change dragging handle to the whole take
 
+- Fix shot number for entry label
 - Fix custom recorder for mobile
 - Fix drag box for touch
 - Fix cross-block drag states

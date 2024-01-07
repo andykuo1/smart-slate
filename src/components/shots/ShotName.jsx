@@ -7,7 +7,13 @@ import {
   useShotType,
   useTakeNumber,
 } from '@/stores/document';
-import { toScenShotTakeType } from '@/stores/document/DocumentStore';
+
+import {
+  formatSceneNumber,
+  formatShotNumber,
+  formatShotType,
+  formatTakeNumber,
+} from '../takes/TakeNameFormat';
 
 /**
  * @param {object} props
@@ -30,24 +36,16 @@ export default function ShotName({
   const takeCount = useShotTakeCount(documentId, shotId);
   const takeIndex = useTakeNumber(documentId, shotId, takeId);
   const takeNumber = takeId ? takeIndex : takeCount + 1;
-
-  const [SCENE, SHOT, TAKE, TYPE] = toScenShotTakeType(
-    sceneNumber,
-    shotNumber,
-    takeNumber,
-    shotType,
-  );
-
   return (
     <ShotNameLayout
-      scene={() => SCENE}
-      shot={() => SHOT}
-      take={() => TAKE}
+      scene={() => formatSceneNumber(sceneNumber)}
+      shot={() => formatShotNumber(shotNumber)}
+      take={() => formatTakeNumber(takeNumber)}
       type={() =>
         editable ? (
           <ShotTypesMore documentId={documentId} shotId={shotId} />
         ) : (
-          TYPE
+          formatShotType(shotType)
         )
       }
     />

@@ -1,7 +1,5 @@
 import { uuid } from '@/utils/uuid';
 
-import ShotTypes, { ANY_SHOT } from '../ShotTypes';
-
 /**
  * @typedef {ReturnType<createStore>} Store
  * @typedef {ReturnType<createDocument>} Document
@@ -232,36 +230,4 @@ export function cloneTake(out, take) {
   out.exportedGDriveFileId = take.exportedGDriveFileId;
   out.exportedIDBKey = take.exportedIDBKey;
   return /** @type {Take} */ (out);
-}
-
-/**
- * @param {number} sceneNumber
- * @param {number} shotNumber
- * @param {number} takeNumber
- * @param {ShotType} [shotType]
- */
-export function toScenShotTakeType(
-  sceneNumber,
-  shotNumber,
-  takeNumber,
-  shotType,
-) {
-  return [
-    `S${sceneNumber > 0 ? String(sceneNumber).padStart(2, '0') : '--'}`,
-    shotNumber > 0 ? shotNumberToChar(shotNumber) : '--',
-    `T${takeNumber > 0 ? String(takeNumber).padStart(2, '0') : '--'}`,
-    typeof shotType !== 'undefined'
-      ? ShotTypes.getParamsByType(shotType).abbr
-      : ANY_SHOT.abbr,
-  ];
-}
-
-/**
- * @param {number} shotNumber
- */
-export function shotNumberToChar(shotNumber) {
-  if (!Number.isFinite(shotNumber)) {
-    return '--';
-  }
-  return String.fromCharCode('A'.charCodeAt(0) + (shotNumber - 1));
 }

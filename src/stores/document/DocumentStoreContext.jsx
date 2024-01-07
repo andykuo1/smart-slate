@@ -3,7 +3,6 @@ import { useShallow } from 'zustand/react/shallow';
 import {
   getBlockIdsInOrder,
   getDocumentIds,
-  getFirstSceneBlockId,
   getSceneById,
   getSceneIdsInOrder,
   getSceneIndex,
@@ -96,12 +95,7 @@ export function useSceneNumber(documentId, sceneId) {
  */
 export function useShotNumber(documentId, sceneId, shotId) {
   return useDocumentStore((ctx) =>
-    getShotIndex(
-      ctx,
-      documentId,
-      getFirstSceneBlockId(ctx, documentId, sceneId),
-      shotId,
-    ),
+    getShotIndex(ctx, documentId, sceneId, shotId),
   );
 }
 

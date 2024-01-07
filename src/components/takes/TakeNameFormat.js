@@ -38,7 +38,7 @@ export function formatTakeNameForFileExport(
     shotNumber,
     takeNumber,
   );
-  const [first, second, third, fourth] = getTakePathStrings(
+  const takePathStrings = getTakePathStrings(
     documentTitle,
     sceneNumber,
     shotNumber,
@@ -46,7 +46,7 @@ export function formatTakeNameForFileExport(
   );
   const shotTypeString = formatShotType(shotType);
   return (
-    `${takePathHash}_${first}_${second}${third}_${fourth}` +
+    `${takePathHash}_${takePathStrings.join('_')}` +
     (shotTypeString ? `_${shotTypeString}` : '')
   );
 }
@@ -73,6 +73,45 @@ export function formatDocumentTitle(documentTitle) {
   result = result.replace(/\s+/g, '');
   result = result.replace(/[^\w\d_]/g, '');
   return result.toUpperCase();
+}
+
+/**
+ * @param {number} sceneNumber
+ * @param {number} shotNumber
+ * @param {boolean} [abbreviated]
+ */
+export function formatSceneShotNumber(
+  sceneNumber,
+  shotNumber,
+  abbreviated = false,
+) {
+  const sceneString = sceneNumber > 0 ? String(sceneNumber) : '--';
+  const shotString = formatShotNumber(shotNumber);
+  if (abbreviated) {
+    return `${sceneString}${shotString}`;
+  }
+  return `S${sceneString.padStart(2, '0')}${shotString}`;
+}
+
+/**
+ * @param {number} sceneNumber
+ */
+export function formatSceneNumber(sceneNumber) {
+  return sceneNumber > 0 ? String(sceneNumber).padStart(2, '0') : '--';
+}
+
+/**
+ * @param {number} shotNumber
+ */
+export function formatShotNumber(shotNumber) {
+  return shotNumber >= 0 ? numToChar(shotNumber) : '-';
+}
+
+/**
+ * @param {number} takeNumber
+ */
+export function formatTakeNumber(takeNumber) {
+  return `T${takeNumber > 0 ? String(takeNumber).padStart(2, '0') : '--'}`;
 }
 
 /**
@@ -116,20 +155,9 @@ export function getTakePathStrings(
 ) {
   return [
     formatDocumentTitle(documentTitle),
-    `S${sceneNumber > 0 ? String(sceneNumber).padStart(2, '0') : '--'}`,
-    shotNumber > 0 ? numToChar(shotNumber) : '-',
-    `T${takeNumber > 0 ? String(takeNumber).padStart(2, '0') : '--'}`,
+    formatSceneShotNumber(sceneNumber, shotNumber),
+    formatTakeNumber(takeNumber),
   ];
-}
-
-/**
- * @param {number} num
- */
-export function numToChar(num) {
-  if (!Number.isFinite(num)) {
-    return '-';
-  }
-  return String.fromCharCode('A'.charCodeAt(0) + (num - 1));
 }
 
 /**
@@ -149,4 +177,21 @@ export function longestString(strings) {
     }
   }
   return result;
+}
+
+const WORD_CHARS = 'Z'.charCodeAt(0) - 'A'.charCodeAt(0);
+
+/**
+ * @param {number} num
+ */
+export function numToChar(num) {
+  if (!Number.isFinite(num)) {
+    return '-';
+  }
+  let result = '';
+  if (num > WORD_CHARS) {
+    result = numToChar(Math.floor(num / WORD_CHARS));
+    num = num % WORD_CHARS;
+  }
+  return result + String.fromCharCode('A'.charCodeAt(0) + (num - 1));
 }

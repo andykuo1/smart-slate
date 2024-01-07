@@ -11,9 +11,9 @@ import {
   useShotNumber,
   useShotThumbnail,
 } from '@/stores/document';
-import { shotNumberToChar } from '@/stores/document/DocumentStore';
 import PopoverStyle from '@/styles/Popover.module.css';
 
+import { formatSceneShotNumber } from '../takes/TakeNameFormat';
 import ShotThumbnailOptions from './ShotThumbnailOptions';
 import { ShotTypeSelector, getShotTypeIcon } from './ShotTypeSelector';
 import { useShotTypeChange } from './UseShotType';
@@ -35,10 +35,6 @@ export default function ShotThumbnail({
 }) {
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
-  const sceneShotString =
-    sceneNumber <= 0 || shotNumber <= 0
-      ? '--'
-      : `${sceneNumber}${shotNumberToChar(shotNumber)}`;
   const [activeShotType, onShotTypeChange] = useShotTypeChange(
     documentId,
     shotId,
@@ -54,7 +50,7 @@ export default function ShotThumbnail({
           className={'flex-1 bg-gray-300'}
           documentId={documentId}
           shotId={shotId}
-          alt={sceneShotString}
+          alt={formatSceneShotNumber(sceneNumber, shotNumber, true)}
           Icon={getShotTypeIcon(activeShotType)}
         />
         <PopoverDisclosure

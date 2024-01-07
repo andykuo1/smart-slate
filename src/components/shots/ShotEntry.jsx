@@ -61,9 +61,6 @@ export function ShotEntry({
           ' ' +
           (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
         }>
-        {!collapsed && (
-          <ShotNumber sceneNumber={sceneNumber} shotNumber={shotNumber} />
-        )}
         <BoxDrawingCharacter
           className={
             'cursor-grab' + ' ' + (collapsed ? 'opacity-100' : 'opacity-30')

@@ -2,6 +2,7 @@ import { useCallback, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ShotThumbnail from '@/components/shots/ShotThumbnail';
+import { formatShotNumber } from '@/components/takes/TakeNameFormat';
 import { useFullscreen } from '@/libs/fullscreen';
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
 import {
@@ -10,7 +11,6 @@ import {
   useShotNumber,
   useShotTakeCount,
 } from '@/stores/document';
-import { shotNumberToChar } from '@/stores/document/DocumentStore';
 import { useSettingsStore } from '@/stores/settings';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import {
@@ -120,7 +120,7 @@ export default function RecorderBooth() {
           />
           <span className="mx-2">{sceneHeading || 'INT/EXT. SCENE - DAY'}</span>
           <span className="flex-1" />
-          <span>Shot {shotNumberToChar(shotNumber)}</span>
+          <span>Shot {formatShotNumber(shotNumber)}</span>
           <span className="flex flex-row items-center mx-2">
             Take #{takeCount + 1}
           </span>
