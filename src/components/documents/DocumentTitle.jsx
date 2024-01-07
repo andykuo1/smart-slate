@@ -2,6 +2,8 @@ import { useCallback } from 'react';
 
 import { useDocumentTitle } from '@/stores/document';
 
+import { formatDocumentTitle } from '../takes/TakeNameFormat';
+
 /**
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
@@ -28,6 +30,9 @@ export default function DocumentTitle({ documentId }) {
           onChange={onDocumentTitleChange}
         />
       </div>
+      <label className="text-xs opacity-30">
+        <output>{formatDocumentTitle(documentTitle)}</output>
+      </label>
       <label className="text-xs opacity-30">
         <span>ID: </span>
         <output>{documentId}</output>

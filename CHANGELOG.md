@@ -5,6 +5,7 @@
 - Change shot thumbnail camera option to capture on tab click instead
 - Change scene focus when ready click
 - Change take name to include number hash
+- Change dragging handle to the whole take
 
 - Fix custom recorder for mobile
 - Fix drag box for touch

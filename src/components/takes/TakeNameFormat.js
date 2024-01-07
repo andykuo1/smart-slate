@@ -70,8 +70,8 @@ export function formatDocumentTitle(documentTitle) {
     // NOTE: Title was empty.
     return 'UNTITLED';
   }
-  result = documentTitle.replace(/\s+/, '_');
-  result = documentTitle.replace(/[^\w\d_]/, '-');
+  result = result.replace(/\s+/g, '');
+  result = result.replace(/[^\w\d_]/g, '');
   return result.toUpperCase();
 }
 

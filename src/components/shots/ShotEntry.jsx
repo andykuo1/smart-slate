@@ -6,7 +6,7 @@ import {
   useSceneShotCount,
   useShotNumber,
 } from '@/stores/document';
-import { useDraggable, useDraggableTarget } from '@/stores/draggable';
+import { useDraggable, useIsDragging } from '@/stores/draggable';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
@@ -43,7 +43,7 @@ export function ShotEntry({
     currentCursor.sceneId === sceneId &&
     currentCursor.shotId === shotId;
   const isFirst = sceneNumber <= 1 && shotNumber <= 1;
-  const draggedShotId = useDraggableTarget();
+  const isDragging = useIsDragging(shotId);
   const { elementProps, handleProps } = useDraggable(blockId, shotId);
 
   return (
@@ -51,9 +51,10 @@ export function ShotEntry({
       className={
         'flex flex-col items-center mx-auto' +
         ' ' +
-        (draggedShotId === shotId ? 'opacity-30' : '')
+        (isDragging ? 'opacity-30' : '')
       }
-      {...elementProps}>
+      {...elementProps}
+      {...(collapsed ? handleProps : {})}>
       <div
         className={
           'flex flex-row items-center w-full h-[6rem] z-10 border-b border-gray-300 shadow' +
@@ -70,7 +71,6 @@ export function ShotEntry({
           depth={0}
           start={false}
           end={shotNumber >= shotCount}
-          containerProps={collapsed ? handleProps : {}}
         />
         <ShotThumbnail
           className="ml-2"

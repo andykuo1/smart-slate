@@ -1,6 +1,10 @@
 import { useRef } from 'react';
 
-import { useDraggableCursor, useDraggableTarget } from '@/stores/draggable';
+import {
+  useDraggableCursor,
+  useDraggableTarget,
+  useIsAnyDragging,
+} from '@/stores/draggable';
 
 import ShotThumbnail from './ShotThumbnail';
 import { useShotEntryOnDragUpdate } from './UseShotEntryDraggable';
@@ -14,6 +18,7 @@ import { useShotEntryOnDragUpdate } from './UseShotEntryDraggable';
 export default function ShotEntryDragged({ documentId, sceneId, blockId }) {
   const targetRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const draggedShotId = useDraggableTarget();
+  const isAnyDragging = useIsAnyDragging();
   const onDragUpdate = useShotEntryOnDragUpdate(targetRef);
   useDraggableCursor(onDragUpdate);
   return (
@@ -23,7 +28,7 @@ export default function ShotEntryDragged({ documentId, sceneId, blockId }) {
         ' ' +
         'pointer-events-none opacity-30' +
         ' ' +
-        (!draggedShotId && 'hidden')
+        (!isAnyDragging && 'hidden')
       }
       ref={targetRef}>
       <ShotThumbnail
