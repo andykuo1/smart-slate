@@ -15,9 +15,8 @@ export async function captureVideoSnapshot(
   const video = document.createElement('video');
   video.muted = true;
   video.playsInline = true;
-  // NOTE: We can use srcObject, but it's not universally supported yet.
-  // ... so we stick to the old way :)
-  video.src = URL.createObjectURL(videoBlob);
+  // NOTE: For some reason, only srcObject works for Safari for loading video.
+  video.srcObject = videoBlob;
   // NOTE: This needs to be called DIRECTLY in a user-gesture callback
   //  for mobile support :)
   video.load();

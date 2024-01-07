@@ -25,10 +25,7 @@ export default function TestSnapshot() {
     if (!video) {
       return;
     }
-    const url = URL.createObjectURL(file);
-    //video.src = url;
     video.srcObject = file;
-    URL.revokeObjectURL(url);
     video.play();
   }
 
