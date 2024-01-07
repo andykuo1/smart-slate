@@ -26,7 +26,8 @@ export default function TestSnapshot() {
       return;
     }
     const url = URL.createObjectURL(file);
-    video.src = url;
+    //video.src = url;
+    video.srcObject = file;
     URL.revokeObjectURL(url);
     video.play();
   }
@@ -41,9 +42,7 @@ export default function TestSnapshot() {
       0,
       MAX_THUMBNAIL_WIDTH,
       MAX_THUMBNAIL_HEIGHT,
-    ).then((url) => {
-      setImgSrc(url);
-    });
+    ).then((url) => setImgSrc(url));
   }
   return (
     <fieldset className="relative my-4">
