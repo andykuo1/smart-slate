@@ -6,7 +6,7 @@ import RecorderBoothTitle from '@/recorder/RecorderBoothTitle';
 import { useCachedVideoBlob } from '@/recorder/cache';
 import { useCurrentCursor, useCurrentDocumentId } from '@/stores/user';
 
-export default function ViewingBooth() {
+export default function ViewerBooth() {
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
   const navigate = useNavigate();
   const documentId = useCurrentDocumentId();
@@ -14,20 +14,26 @@ export default function ViewingBooth() {
   const blob = useCachedVideoBlob(documentId, takeId || '');
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) {
+    if (!video || !blob) {
       return;
     }
-    if (!blob) {
-      return;
+    try {
+      // NOTE: Attempt this first for Safari.
+      video.srcObject = blob;
+    } catch (e) {
+      // NOTE: This is a Safari bug :(
+      //  https://bugs.webkit.org/show_bug.cgi?id=232076
+      //  As a temporary fix, let's use srcObject.
+      video.src = URL.createObjectURL(blob);
     }
-    const nextURL = URL.createObjectURL(blob);
-    const prevURL = video.currentSrc;
-    if (prevURL && prevURL.startsWith('blob:')) {
-      video.src = '';
-      URL.revokeObjectURL(prevURL);
-    }
-    video.src = nextURL;
     video.load();
+    return () => {
+      const prevSrc = video.currentSrc;
+      if (prevSrc && prevSrc?.startsWith('blob:')) {
+        video.src = '';
+        URL.revokeObjectURL(prevSrc);
+      }
+    };
   }, [blob, videoRef]);
   return (
     <RecorderBoothLayout
@@ -35,11 +41,7 @@ export default function ViewingBooth() {
       videoRef={videoRef}
       top={() => (
         <>
-          <BackButton
-            onClick={() => {
-              navigate('/edit');
-            }}
-          />
+          <BackButton onClick={() => navigate('/edit')} />
           <RecorderBoothTitle
             documentId={documentId}
             sceneId={sceneId}

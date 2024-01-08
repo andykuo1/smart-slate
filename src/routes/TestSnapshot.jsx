@@ -61,6 +61,7 @@ export default function TestSnapshot() {
           <div>Step 2</div>
           <video
             ref={videoRef}
+            preload="metadata"
             muted={true}
             playsInline={true}
             controls={true}

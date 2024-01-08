@@ -49,6 +49,7 @@ export default function MediaStreamVideoView({
     <video
       ref={videoRef}
       className={className}
+      preload="metadata"
       muted={muted}
       playsInline={true}
       onClick={onClick}

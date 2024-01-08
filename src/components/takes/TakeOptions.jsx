@@ -48,6 +48,7 @@ export default function TakeOptions({
         <video
           className="hidden"
           ref={videoRef}
+          preload="metadata"
           muted={true}
           playsInline={true}
         />
