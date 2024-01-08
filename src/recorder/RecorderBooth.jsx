@@ -133,7 +133,7 @@ export default function RecorderBooth() {
           />
           {/* 4:3 box */}
           {show4x3Box && (
-            <div className="absolute mx-auto left-0 right-0 -top-1 -bottom-1 w-[75%] border-x-4" />
+            <div className="absolute mx-auto left-0 right-0 -top-1 -bottom-1 w-[75%] border-x-4 pointer-events-none" />
           )}
           {enableThumbnailWhileRecording && (
             <div className="absolute left-0 bottom-0">

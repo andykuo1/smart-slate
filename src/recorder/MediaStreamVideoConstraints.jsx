@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 
 import { RecorderContext } from './RecorderContext';
 
@@ -9,15 +9,18 @@ import { RecorderContext } from './RecorderContext';
 export default function MediaStreamVideoConstraints({ constraints }) {
   const { mediaStream } = useContext(RecorderContext);
 
-  useEffect(() => {
-    if (!mediaStream) {
-      return;
-    }
-    let orientedConstraints = getLandscapeOrientedConstraints(constraints);
-    for (let track of mediaStream.getVideoTracks()) {
-      track.applyConstraints(orientedConstraints);
-    }
-  }, [mediaStream, constraints]);
+  const updateConstraints = useCallback(
+    function _updateConstraints() {
+      if (!mediaStream) {
+        return;
+      }
+      let orientedConstraints = getLandscapeOrientedConstraints(constraints);
+      for (let track of mediaStream.getVideoTracks()) {
+        track.applyConstraints(orientedConstraints);
+      }
+    },
+    [mediaStream, constraints],
+  );
 
   useEffect(() => {
     if (!mediaStream) {
@@ -33,22 +36,28 @@ export default function MediaStreamVideoConstraints({ constraints }) {
   }, [mediaStream]);
 
   useEffect(() => {
+    // Apply it on load first!
+    updateConstraints();
+
+    // ... and also every orientation change.
     /** @param {Event} e */
     function onOrientationChange(e) {
       if (!mediaStream) {
         return;
       }
       const target = /** @type {ScreenOrientation} */ (e.target);
-      console.error(
-        'Orientation changed to ' +
+      console.log(
+        '[MediaStreamVideoConstraints] Orientation changed to ' +
           target.type +
           '. Changing constraints to match.',
       );
-      let orientedConstraints = getLandscapeOrientedConstraints(constraints);
-      for (let track of mediaStream.getVideoTracks()) {
-        track.applyConstraints(orientedConstraints);
-      }
+      console.log(
+        '[MediaStreamVideoConstraints] ' +
+          JSON.stringify(mediaStream.getVideoTracks()[0].getCapabilities()),
+      );
+      updateConstraints();
     }
+
     screen?.orientation?.addEventListener('change', onOrientationChange);
     return () =>
       screen?.orientation?.removeEventListener('change', onOrientationChange);

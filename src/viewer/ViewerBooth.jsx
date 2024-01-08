@@ -12,22 +12,23 @@ export default function ViewerBooth() {
   const documentId = useCurrentDocumentId();
   const { sceneId, shotId, takeId } = useCurrentCursor();
   const blob = useCachedVideoBlob(documentId, takeId || '');
+
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !blob) {
       return;
     }
     try {
-      // NOTE: Attempt this first for Safari.
       console.log('[ViewerBooth] Setting srcObject as ' + blob.type);
+      // NOTE: This is a Safari bug :(
+      //  https://bugs.webkit.org/show_bug.cgi?id=232076
+      //  As a temporary fix, we first try to use srcObject.
       video.srcObject = blob;
     } catch (e) {
       console.log(
         '[ViewerBooth] Failed to set srcObject to Blob. Trying the old way.',
       );
-      // NOTE: This is a Safari bug :(
-      //  https://bugs.webkit.org/show_bug.cgi?id=232076
-      //  As a temporary fix, let's use srcObject.
+      // ... then fallback to src when it fails :(
       video.src = URL.createObjectURL(blob);
     }
     video.load();
@@ -36,9 +37,11 @@ export default function ViewerBooth() {
       if (prevSrc) {
         video.src = '';
         URL.revokeObjectURL(prevSrc);
+        console.log('[ViewerBooth] Revoking src blob url.');
       }
     };
   }, [blob, videoRef]);
+
   return (
     <RecorderBoothLayout
       className="text-white"
@@ -54,7 +57,13 @@ export default function ViewerBooth() {
         </>
       )}
       center={() => (
-        <video ref={videoRef} muted={true} playsInline={true} controls={true} />
+        <video
+          ref={videoRef}
+          preload="metadata"
+          muted={true}
+          playsInline={true}
+          controls={true}
+        />
       )}
     />
   );

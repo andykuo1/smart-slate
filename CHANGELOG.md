@@ -1,9 +1,5 @@
 # Upcoming
 
-- TODO: Take preview for native camera doesn't work
-- TODO: Take view page doesn't work
-- TODO: Reference image should always be in the same aspect ratio
-
 - Add recording resolution
 - Add best take to shot thumbnail
 - Add 4x3 box for recorder
