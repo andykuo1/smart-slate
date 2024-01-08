@@ -1,5 +1,7 @@
 # Upcoming
 
+- Change dragging handle to the whole take
+- Change shot references to always be in landscape
 - (in progress)
 
 # 0.1.11
@@ -13,8 +15,8 @@
 - Change shot thumbnail camera option to capture on tab click instead
 - Change scene focus when ready click
 - Change take name to include number hash
-- Change dragging handle to the whole take
 - Change shot thumbnail to reference image only while recording
+- Change recorder orientation to always be landscape
 
 - Fix shot number for entry label
 - Fix custom recorder for mobile

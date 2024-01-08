@@ -25,6 +25,7 @@ export async function blobToDataURI(blob, maxWidth, maxHeight, canvasRef) {
         img.height,
         maxWidth,
         maxHeight,
+        true,
       );
       const uri = canvas.toDataURL('image/png', 0.5);
       resolve(uri);

@@ -8,6 +8,7 @@ import { isInputCaptureSupported } from '@/recorder/MediaRecorderSupport';
 import TabStyle from '@/styles/Tab.module.css';
 
 import ShotThumbnailCameraTab from './options/ShotThumbnailCameraTab';
+import ShotThumbnailCameraTabPanel from './options/ShotThumbnailCameraTabPanel';
 import ShotThumbnailEmbedTabPanel from './options/ShotThumbnailEmbedTabPanel';
 import ShotThumbnailUploadTabPanel from './options/ShotThumbnailUploadTabPanel';
 
@@ -48,6 +49,7 @@ export default function ShotThumbnailOptions({
         </TabList>
         <ShotThumbnailUploadTabPanel documentId={documentId} shotId={shotId} />
         <ShotThumbnailEmbedTabPanel documentId={documentId} shotId={shotId} />
+        <ShotThumbnailCameraTabPanel documentId={documentId} shotId={shotId} />
       </TabProvider>
     </div>
   );

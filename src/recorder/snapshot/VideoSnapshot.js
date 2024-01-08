@@ -88,6 +88,7 @@ export function captureVideoSnapshot(
  * @param {number} elementHeight
  * @param {number} toWidth
  * @param {number} toHeight
+ * @param {boolean} autoRotate
  */
 export function drawElementToCanvasWithRespectToAspectRatio(
   canvas,
@@ -96,7 +97,20 @@ export function drawElementToCanvasWithRespectToAspectRatio(
   elementHeight,
   toWidth,
   toHeight,
+  autoRotate = false,
 ) {
+  let shouldRotate = false;
+  if (autoRotate) {
+    const elementRatio = elementWidth / elementHeight;
+    const toRatio = toWidth / toHeight;
+    if (Math.sign(1 - elementRatio) !== Math.sign(1 - toRatio)) {
+      // TODO: Fix this to save on pixels! It doesn't need to be a square.
+      let max = Math.max(toWidth, toHeight);
+      toWidth = max;
+      toHeight = max;
+      shouldRotate = true;
+    }
+  }
   const w = elementWidth;
   const h = elementHeight;
   const hr = toWidth / w;
@@ -114,15 +128,15 @@ export function drawElementToCanvasWithRespectToAspectRatio(
   }
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(
-    element,
-    0,
-    0,
-    elementWidth,
-    elementHeight,
-    dx,
-    dy,
-    w * ratio,
-    h * ratio,
-  );
+  let rw = ratio * w;
+  let rh = ratio * h;
+  if (shouldRotate) {
+    ctx.translate(dx, dy);
+    ctx.translate(rw / 2, rh / 2);
+    ctx.rotate(Math.PI / 2);
+    ctx.translate(-rw / 2, -rh / 2);
+    ctx.translate(-dx, -dy);
+  }
+  ctx.drawImage(element, 0, 0, elementWidth, elementHeight, dx, dy, rw, rh);
+  ctx.resetTransform();
 }
