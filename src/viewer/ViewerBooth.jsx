@@ -19,8 +19,12 @@ export default function ViewerBooth() {
     }
     try {
       // NOTE: Attempt this first for Safari.
+      console.log('[ViewerBooth] Setting srcObject as ' + blob.type);
       video.srcObject = blob;
     } catch (e) {
+      console.log(
+        '[ViewerBooth] Failed to set srcObject to Blob. Trying the old way.',
+      );
       // NOTE: This is a Safari bug :(
       //  https://bugs.webkit.org/show_bug.cgi?id=232076
       //  As a temporary fix, let's use srcObject.
@@ -29,7 +33,7 @@ export default function ViewerBooth() {
     video.load();
     return () => {
       const prevSrc = video.currentSrc;
-      if (prevSrc && prevSrc?.startsWith('blob:')) {
+      if (prevSrc) {
         video.src = '';
         URL.revokeObjectURL(prevSrc);
       }
