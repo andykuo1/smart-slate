@@ -25,6 +25,7 @@ import { useShotTypeChange } from './UseShotType';
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {boolean} [props.editable]
+ * @param {boolean} [props.referenceOnly]
  */
 export default function ShotThumbnail({
   className,
@@ -32,6 +33,7 @@ export default function ShotThumbnail({
   sceneId,
   shotId,
   editable = false,
+  referenceOnly = false,
 }) {
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
@@ -52,6 +54,7 @@ export default function ShotThumbnail({
           shotId={shotId}
           alt={formatSceneShotNumber(sceneNumber, shotNumber, true)}
           Icon={getShotTypeIcon(activeShotType)}
+          referenceOnly={referenceOnly}
         />
         <PopoverDisclosure
           className="absolute left-0 top-0 bottom-0 right-0"
@@ -79,10 +82,22 @@ export default function ShotThumbnail({
  * @param {string} props.alt
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ * @param {boolean} [props.referenceOnly]
  * @param {import('react').FC<any>} [props.Icon]
  */
-function ShotThumbnailImage({ className, alt, documentId, shotId, Icon }) {
-  const image = useBestTakeImageForShotThumbnail(documentId, shotId);
+function ShotThumbnailImage({
+  className,
+  alt,
+  documentId,
+  shotId,
+  Icon,
+  referenceOnly,
+}) {
+  const image = useBestTakeImageForShotThumbnail(
+    documentId,
+    shotId,
+    referenceOnly,
+  );
   return (
     <ImageWithCaption
       src={image}

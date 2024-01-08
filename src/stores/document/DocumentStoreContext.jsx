@@ -233,12 +233,20 @@ export function useSetTakePreviewImage() {
 /**
  * @param {import('./DocumentStore').DocumentId} documentId
  * @param {import('./DocumentStore').ShotId} shotId
+ * @param {boolean} [referenceOnly]
  */
-export function useBestTakeImageForShotThumbnail(documentId, shotId) {
+export function useBestTakeImageForShotThumbnail(
+  documentId,
+  shotId,
+  referenceOnly = false,
+) {
   return useDocumentStore((ctx) => {
     const shot = getShotById(ctx, documentId, shotId);
     if (!shot) {
       return '';
+    }
+    if (referenceOnly) {
+      return shot.thumbnail;
     }
     let bestTake = null;
     let bestRating = 0;

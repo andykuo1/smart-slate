@@ -1,14 +1,20 @@
 # Upcoming
 
+- TODO: Take preview for native camera doesn't work
+- TODO: Take view page doesn't work
+- TODO: Reference image should always be in the same aspect ratio
+
 - Add recording resolution
 - Add best take to shot thumbnail
 - Add 4x3 box for recorder
 - Add viewer for takes
+- Add move arrows to rearrange shots
 
 - Change shot thumbnail camera option to capture on tab click instead
 - Change scene focus when ready click
 - Change take name to include number hash
 - Change dragging handle to the whole take
+- Change shot thumbnail to reference image only while recording
 
 - Fix shot number for entry label
 - Fix custom recorder for mobile

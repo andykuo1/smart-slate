@@ -143,6 +143,7 @@ export default function RecorderBooth() {
                 sceneId={sceneId}
                 shotId={shotId}
                 editable={false}
+                referenceOnly={true}
               />
             </div>
           )}

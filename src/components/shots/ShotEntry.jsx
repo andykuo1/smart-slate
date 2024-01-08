@@ -1,7 +1,11 @@
 import ArrowForwardIcon from '@material-symbols/svg-400/rounded/arrow_forward.svg';
+import StatOneIcon from '@material-symbols/svg-400/rounded/stat_1.svg';
+import StatMinusOneIcon from '@material-symbols/svg-400/rounded/stat_minus_1.svg';
 
 import RecorderOpenButton from '@/recorder/RecorderOpenButton';
 import {
+  getShotIdsInOrder,
+  useDocumentStore,
   useSceneNumber,
   useSceneShotCount,
   useShotNumber,
@@ -42,9 +46,40 @@ export function ShotEntry({
     currentCursor.documentId === documentId &&
     currentCursor.sceneId === sceneId &&
     currentCursor.shotId === shotId;
-  const isFirst = sceneNumber <= 1 && shotNumber <= 1;
+  const isFirst = shotNumber <= 1;
+  const isLast = shotNumber >= shotCount;
   const isDragging = useIsDragging(shotId);
   const { elementProps, handleProps } = useDraggable(blockId, shotId);
+  const moveShot = useDocumentStore((ctx) => ctx.moveShot);
+  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
+
+  function onDownClick() {
+    const store = UNSAFE_getStore();
+    const shotIds = getShotIdsInOrder(store, documentId, blockId);
+    const i = shotIds.indexOf(shotId);
+    if (i < 0 || i >= shotIds.length) {
+      return;
+    }
+    const nextShotId = shotIds.at(i + 1);
+    if (!nextShotId) {
+      return;
+    }
+    moveShot(documentId, blockId, shotId, nextShotId);
+  }
+
+  function onUpClick() {
+    const store = UNSAFE_getStore();
+    const shotIds = getShotIdsInOrder(store, documentId, blockId);
+    const i = shotIds.indexOf(shotId);
+    if (i <= 0 || i >= shotIds.length) {
+      return;
+    }
+    const prevShotId = shotIds.at(i - 1);
+    if (!prevShotId) {
+      return;
+    }
+    moveShot(documentId, blockId, shotId, prevShotId, true);
+  }
 
   return (
     <li
@@ -60,15 +95,27 @@ export function ShotEntry({
           ' ' +
           (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
         }>
-        <BoxDrawingCharacter
-          className={
-            'cursor-grab' + ' ' + (collapsed ? 'opacity-100' : 'opacity-30')
-          }
-          depth={0}
-          start={false}
-          end={shotNumber >= shotCount}
-          containerProps={{ ...(collapsed ? handleProps : {}) }}
-        />
+        <div className="flex flex-col items-center">
+          <button
+            onClick={onUpClick}
+            disabled={isFirst}
+            className="disabled:opacity-30">
+            <StatOneIcon className="w-6 h-6 fill-current" />
+          </button>
+          <BoxDrawingCharacter
+            className="cursor-grab"
+            depth={0}
+            start={false}
+            end={isLast}
+            containerProps={{ ...(collapsed ? handleProps : {}) }}
+          />
+          <button
+            onClick={onDownClick}
+            disabled={isLast}
+            className="disabled:opacity-30">
+            <StatMinusOneIcon className="w-6 h-6 fill-current" />
+          </button>
+        </div>
         <ShotThumbnail
           className="ml-2"
           documentId={documentId}
