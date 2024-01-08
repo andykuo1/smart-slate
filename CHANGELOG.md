@@ -1,5 +1,9 @@
 # Upcoming
 
+- (in progress)
+
+# 0.1.11
+
 - Add recording resolution
 - Add best take to shot thumbnail
 - Add 4x3 box for recorder
