@@ -76,16 +76,21 @@ export function getShotIndex(store, documentId, sceneId, shotId) {
     return -1;
   }
   // TODO: This doesn't respect block order!
+  let outOfBlocks = true;
   let currentIndex = 0;
   for (let blockId of blockIds) {
     const block = getBlockById(store, documentId, blockId);
     const index = block.shotIds.indexOf(shotId);
     if (index >= 0) {
       currentIndex += index;
+      outOfBlocks = false;
       break;
     } else {
       currentIndex += block.shotIds.length;
     }
+  }
+  if (outOfBlocks) {
+    return -1;
   }
   return currentIndex + 1;
 }

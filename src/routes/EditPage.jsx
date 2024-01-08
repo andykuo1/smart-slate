@@ -1,3 +1,4 @@
+import NavBar from '@/components/NavBar';
 import DocumentPanel from '@/components/documents/DocumentPanel';
 import { useCurrentDocumentId } from '@/stores/user';
 
@@ -6,6 +7,7 @@ export default function EditPage() {
   return (
     <main className="w-full h-full flex flex-col items-center bg-white">
       <DocumentPanel documentId={documentId} />
+      <NavBar />
     </main>
   );
 }
