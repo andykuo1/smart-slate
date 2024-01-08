@@ -26,27 +26,31 @@ export default function NavBar() {
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
   const takeNumber = useTakeNumber(documentId, shotId, takeId);
   return (
-    <nav className="w-full flex flex-col">
+    <nav className="fixed bottom-0 w-full flex flex-col z-30">
       <table className="bg-black text-white">
         <thead>
           <tr className="text-xs opacity-60">
-            <th scope="col" className="w-[25%]">
+            <th scope="col" className="w-[55%]">
               Project
             </th>
-            <th scope="col" className="w-[25%]">
+            <th scope="col" className="w-[15%]">
               Scene
             </th>
-            <th scope="col" className="w-[25%]">
+            <th scope="col" className="w-[15%]">
               Shot
             </th>
-            <th scope="col" className="w-[25%]">
+            <th scope="col" className="w-[15%]">
               Take
             </th>
           </tr>
         </thead>
         <tbody>
           <tr className="text-center">
-            <td>{formatDocumentTitle(documentTitle)}</td>
+            <td>
+              <span className="inline-block w-[55vw] overflow-hidden overflow-ellipsis whitespace-nowrap">
+                {formatDocumentTitle(documentTitle)}
+              </span>
+            </td>
             <td>{formatSceneNumber(sceneNumber)}</td>
             <td>{formatShotNumber(shotNumber)}</td>
             <td>{formatTakeNumber(takeNumber)}</td>
@@ -98,7 +102,7 @@ function NavButton({ className, title, abbr, children, onClick, Icon }) {
       <Icon className="w-10 h-10 fill-current m-auto pointer-events-none" />
       <div
         className={
-          'absolute w-10 h-10 z-10 -right-5 top-0 bottom-0 my-auto rotate-45' +
+          'absolute w-10 h-10 z-10 -right-5 top-0 bottom-0 my-auto rotate-45 scale-50' +
           ' ' +
           'pointer-events-none' +
           ' ' +

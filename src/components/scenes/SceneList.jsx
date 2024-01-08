@@ -29,7 +29,7 @@ export default function SceneList({ documentId }) {
 
   return (
     <article
-      className="w-full h-full overflow-x-hidden overflow-y-auto py-20"
+      className="w-full h-full overflow-x-hidden overflow-y-auto pt-20 pb-40"
       ref={containerRef}>
       <DocumentTitle documentId={documentId} />
       {sceneIds.map(
