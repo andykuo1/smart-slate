@@ -180,7 +180,8 @@ export function fountainTokensToDocumentByScene(tokens) {
     return b;
   }
 
-  let titleScene = addScene();
+  // TODO: Title scenes (for now) will not be translated over. Let it die.
+  let titleScene = createScene();
   let titleBlock = addBlock(titleScene);
   let titleLines = [];
   let titleTitle = '';
