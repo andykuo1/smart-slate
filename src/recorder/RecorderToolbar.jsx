@@ -18,6 +18,7 @@ import {
 
 import MediaRecorderStartStop from './MediaRecorderStartStop';
 import MediaStreamVideoResolutionSelector from './MediaStreamVideoResolutionSelector';
+import MediaStreamVideoZoomControls from './MediaStreamVideoZoomControls';
 import { RecorderContext } from './RecorderContext';
 
 /**
@@ -94,7 +95,7 @@ export default function RecorderToolbar({
         ◉
       </MediaRecorderStartStop>
       <div className="flex-1" />
-      <div className="h-10" />
+      <MediaStreamVideoZoomControls className="flex-1" />
       <div className="flex-1" />
     </div>
   );
