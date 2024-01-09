@@ -22,14 +22,26 @@ export default function MediaStreamVideoZoomControls({ className }) {
     const target = /** @type {HTMLInputElement} */ (e.target);
     const value = target.value;
     const [track] = mediaStream.getVideoTracks();
-    track.applyConstraints({
-      advanced: [
-        {
-          // @ts-expect-error Zoom is supported on Safari.
-          zoom: value,
-        },
-      ],
-    });
+    track
+      .applyConstraints({
+        advanced: [
+          {
+            // @ts-expect-error Zoom is supported on Safari.
+            zoom: value,
+          },
+        ],
+      })
+      .then(() =>
+        console.log(
+          '[MediaStreamVideoZoomControls] Applied constraints at ' + value,
+        ),
+      )
+      .catch((e) =>
+        console.error(
+          '[MediaStreamVideoZoomControls] Failed to apply constraints! ' +
+            e.meessage,
+        ),
+      );
   }
 
   useEffect(() => {
@@ -59,7 +71,14 @@ export default function MediaStreamVideoZoomControls({ className }) {
       let currentZoom = Number(set.zoom);
       setZoomValue(currentZoom);
       console.log(
-        '[MediaStreamVideoZoomControls] Zoom changed to ' + currentZoom,
+        '[MediaStreamVideoZoomControls] Zoom changed to ' +
+          currentZoom +
+          ' for range [' +
+          input.min +
+          ', ' +
+          input.max +
+          '] at step ' +
+          input.step,
       );
     }
     if (disabled) {
