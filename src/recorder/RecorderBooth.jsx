@@ -56,6 +56,9 @@ export default function RecorderBooth() {
       zoom: { ideal: 1 },
     }),
   );
+  const [__, setAudioConstraints] = useState(
+    /** @type {MediaTrackConstraints} */ ({}),
+  );
 
   const { videoRef, onStop } = useContext(RecorderContext);
 
@@ -70,6 +73,19 @@ export default function RecorderBooth() {
       }));
     },
     [setVideoConstraints],
+  );
+
+  const onAudioConstraintsChange = useCallback(
+    /**
+     * @param {MediaTrackConstraints} constraints
+     */
+    function _onAudioConstraintsChange(constraints) {
+      setAudioConstraints((prev) => ({
+        ...prev,
+        ...constraints,
+      }));
+    },
+    [setAudioConstraints],
   );
 
   const onComplete = useCallback(
@@ -167,6 +183,7 @@ export default function RecorderBooth() {
         <RecorderToolbar
           onComplete={onComplete}
           onVideoConstraintsChange={onVideoConstraintsChange}
+          onAudioConstraintsChange={onAudioConstraintsChange}
         />
       )}
     />
