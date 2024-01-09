@@ -52,8 +52,10 @@ export default function SettingsPage() {
           <br />
           <SettingsNerdInfoButton />
           <br />
-          <SettingsVideoCacheClearButton />
-          <SettingsProjectDeleteButton />
+          <SettingsFieldGroup title="Dangerous Stuff">
+            <SettingsVideoCacheClearButton />
+            <SettingsProjectDeleteButton />
+          </SettingsFieldGroup>
           <br />
         </fieldset>
       </NavBarLayout>
