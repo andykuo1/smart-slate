@@ -43,6 +43,10 @@ export default function RecorderToolbar({
   );
 
   function onApplyClick() {
+    console.log(
+      '[RecorderToolbar] Applying video constraints ' +
+        JSON.stringify(videoConstraints),
+    );
     onVideoConstraintsChange(videoConstraints);
     // TODO: onAudioConstraintsChange(audioConstraints);
     setOpen(false);
