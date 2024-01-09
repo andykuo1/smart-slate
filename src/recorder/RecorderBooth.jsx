@@ -33,7 +33,7 @@ const DEFAULT_VIDEO_CONSTRAINTS = {
   height: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].height },
   aspectRatio: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].ratio },
   // @ts-expect-error Safari supports 'zoom'.
-  zoom: { ideal: 1.0 },
+  zoom: { ideal: 1.1 },
 };
 
 export default function RecorderBooth() {
