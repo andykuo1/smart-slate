@@ -29,7 +29,7 @@ export default function SceneHeading({ className, documentId, sceneId }) {
   return (
     <div
       className={
-        'relative flex flex-row items-center w-full border-b-2 border-dotted border-black' +
+        'relative flex flex-row items-center w-full' +
         ' ' +
         className +
         ' ' +
@@ -37,7 +37,7 @@ export default function SceneHeading({ className, documentId, sceneId }) {
       }>
       <SceneNumber sceneNumber={sceneNumber} />
       <input
-        className="flex-1 bg-transparent px-2 py-6 text-xl"
+        className="flex-1 bg-transparent px-2 py-6 text-xl font-bold"
         type="text"
         list="sceneHeading"
         placeholder="INT/EXT. SCENE - DAY"
