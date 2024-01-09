@@ -14,7 +14,7 @@ import SettingsField from './SettingsField';
  * @param {boolean} [props.disabled]
  * @param {import('react').MutableRefObject<HTMLInputElement|null>} [props.inputRef]
  */
-export default function SettingsInputField({
+export default function SettingsFieldInput({
   id,
   title,
   value,

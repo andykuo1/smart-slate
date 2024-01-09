@@ -1,7 +1,7 @@
 import { getDocumentSettingsById, useDocumentStore } from '@/stores/document';
 import { useCurrentDocumentId } from '@/stores/user';
 
-import SettingsSelectField from './SettingsSelectField';
+import SettingsFieldSelect from './SettingsFieldSelect';
 
 export default function SettingsAspectRatioField() {
   const documentId = useCurrentDocumentId();
@@ -24,13 +24,13 @@ export default function SettingsAspectRatioField() {
   }
 
   return (
-    <SettingsSelectField
+    <SettingsFieldSelect
       title="Aspect Ratio:"
       id="aspect-ratio"
       value={documentSettingsAspectRatio}
       onChange={onChange}>
       <option value="16:9">16:9 (default)</option>
       <option value="4:3">4:3</option>
-    </SettingsSelectField>
+    </SettingsFieldSelect>
   );
 }

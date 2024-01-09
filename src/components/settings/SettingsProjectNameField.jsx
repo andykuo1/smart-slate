@@ -5,7 +5,7 @@ import {
 } from '@/stores/document';
 import { useCurrentDocumentId } from '@/stores/user';
 
-import SettingsInputField from './SettingsInputField';
+import SettingsFieldInput from './SettingsFieldInput';
 
 export default function SettingsProjectNameField() {
   const documentId = useCurrentDocumentId();
@@ -32,7 +32,7 @@ export default function SettingsProjectNameField() {
   }
 
   return (
-    <SettingsInputField
+    <SettingsFieldInput
       title="Project Name:"
       id="project-name"
       placeholder="Untitled"

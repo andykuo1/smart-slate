@@ -20,7 +20,7 @@ import { useCurrentDocumentId } from '@/stores/user';
 import PopoverStyle from '@/styles/Popover.module.css';
 
 import { formatProjectId } from '../takes/TakeNameFormat';
-import SettingsInputField from './SettingsInputField';
+import SettingsFieldInput from './SettingsFieldInput';
 
 export default function SettingsProjectIdField() {
   const inputRef = useRef(/** @type {HTMLInputElement|null} */ (null));
@@ -72,7 +72,7 @@ export default function SettingsProjectIdField() {
 
   return (
     <PopoverProvider>
-      <SettingsInputField
+      <SettingsFieldInput
         title="Project ID:"
         id="project-id"
         placeholder={defaultProjectId}
@@ -105,7 +105,7 @@ export default function SettingsProjectIdField() {
             humans).
           </p>
         </Popover>
-      </SettingsInputField>
+      </SettingsFieldInput>
     </PopoverProvider>
   );
 }

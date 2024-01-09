@@ -1,4 +1,3 @@
-import { MenuItem } from '@ariakit/react';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -6,9 +5,8 @@ import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
 
 import { useDocumentStore } from '@/stores/document';
 import { useCurrentDocumentId, useSetUserCursor } from '@/stores/user';
-import MenuStyle from '@/styles/Menu.module.css';
 
-export default function DeleteProjectMenuItem() {
+export default function SettingsProjectDeleteButton() {
   const documentId = useCurrentDocumentId();
   const setUserCursor = useSetUserCursor();
   const deleteDocument = useDocumentStore((ctx) => ctx.deleteDocument);
@@ -26,11 +24,11 @@ export default function DeleteProjectMenuItem() {
   );
 
   return (
-    <MenuItem
-      className={MenuStyle.menuItem + ' ' + 'flex flex-row fill-current'}
+    <button
+      className="w-full flex flex-row items-center outline rounded p-2 hover:bg-red-500 hover:text-white"
       onClick={handleClick}>
-      <DeleteIcon className="h-full fill-current" />
-      Delete Project
-    </MenuItem>
+      <DeleteIcon className="w-6 h-6 fill-current" />
+      <span className="flex-1">Delete project</span>
+    </button>
   );
 }

@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 
 import BackIcon from '@material-symbols/svg-400/rounded/arrow_back-fill.svg';
 
-import SettingsButton from '@/buttons/SettingsButton';
 import FancyButton from '@/libs/FancyButton';
 import {
   useCurrentRecorder,
@@ -19,7 +18,6 @@ import SceneList from '../scenes/SceneList';
 export default function DocumentPanel({ documentId }) {
   return (
     <>
-      <SettingsButton className="fixed top-2 right-2 z-20" />
       <HomeButton className="bg-white" />
       <SceneList documentId={documentId} />
     </>

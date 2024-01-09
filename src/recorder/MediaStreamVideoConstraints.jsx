@@ -61,7 +61,7 @@ export default function MediaStreamVideoConstraints({ constraints }) {
     screen?.orientation?.addEventListener('change', onOrientationChange);
     return () =>
       screen?.orientation?.removeEventListener('change', onOrientationChange);
-  }, [mediaStream, constraints]);
+  }, [mediaStream, constraints, updateConstraints]);
 
   return null;
 }

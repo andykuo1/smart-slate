@@ -44,7 +44,14 @@ export function useVideoSnapshot(videoRef, documentId, takeId) {
         setTakePreviewImage(documentId, takeId, url);
       });
     },
-    [videoBlob, takePreviewImage, documentId, takeId, setTakePreviewImage],
+    [
+      videoRef,
+      videoBlob,
+      takePreviewImage,
+      documentId,
+      takeId,
+      setTakePreviewImage,
+    ],
   );
 
   return [Boolean(videoBlob), click];

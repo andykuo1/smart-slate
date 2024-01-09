@@ -1,23 +1,19 @@
-import { MenuItem } from '@ariakit/react';
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import ShareIcon from '@material-symbols/svg-400/rounded/share.svg';
 
 import { tryGetSharing } from '@/recorder/UseMediaStream';
 import { getVideoBlob } from '@/recorder/cache';
 import { useDocumentStore } from '@/stores/document';
-import { useCurrentDocumentId, useSetUserCursor } from '@/stores/user';
-import MenuStyle from '@/styles/Menu.module.css';
+import { useCurrentDocumentId } from '@/stores/user';
 import { APP_TITLE } from '@/values/PackageJSON';
 import { MEDIA_BLOB_OPTIONS } from '@/values/RecorderValues';
 
-export default function ShareFilesMenuItem() {
+import SettingsFieldButton from './SettingsFieldButton';
+
+export default function SettingsShareFilesButton() {
   const documentId = useCurrentDocumentId();
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
-  const setUserCursor = useSetUserCursor();
-  const deleteDocument = useDocumentStore((ctx) => ctx.deleteDocument);
-  const navigate = useNavigate();
   const [disabled, setDisabled] = useState(true);
 
   const handleClick = useCallback(
@@ -51,7 +47,7 @@ export default function ShareFilesMenuItem() {
         }
       });
     },
-    [documentId, setUserCursor, deleteDocument, navigate],
+    [documentId, UNSAFE_getStore],
   );
 
   useEffect(() => {
@@ -68,12 +64,8 @@ export default function ShareFilesMenuItem() {
   }, [disabled, setDisabled]);
 
   return (
-    <MenuItem
-      className={MenuStyle.menuItem + ' ' + 'flex flex-row fill-current'}
-      onClick={handleClick}
-      disabled={true}>
-      <ShareIcon className="h-full fill-current" />
-      Share Files
-    </MenuItem>
+    <SettingsFieldButton Icon={ShareIcon} onClick={handleClick} disabled={true}>
+      Share files
+    </SettingsFieldButton>
   );
 }

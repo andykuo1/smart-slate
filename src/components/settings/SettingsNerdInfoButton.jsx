@@ -4,18 +4,17 @@ import {
   DialogDescription,
   DialogDismiss,
   DialogHeading,
-  MenuItem,
 } from '@ariakit/react';
 import { useEffect, useState } from 'react';
 
 import ContentCopy from '@material-symbols/svg-400/rounded/content_copy.svg';
 import DeviceInfoIcon from '@material-symbols/svg-400/rounded/device_unknown.svg';
 
+import MarkdownArea from '@/buttons/MarkdownArea';
 import DialogStyle from '@/styles/Dialog.module.css';
-import MenuStyle from '@/styles/Menu.module.css';
 import Codecs from '@/values/Codecs';
 
-import MarkdownArea from '../MarkdownArea';
+import SettingsFieldButton from './SettingsFieldButton';
 
 export default function NerdInfoMenuItem() {
   const [open, setOpen] = useState(false);
@@ -36,9 +35,9 @@ export default function NerdInfoMenuItem() {
 
   return (
     <>
-      <MenuItem className={MenuStyle.menuItem} onClick={() => setOpen(true)}>
-        <DeviceInfoIcon className="h-full fill-current" /> Show Nerd Info
-      </MenuItem>
+      <SettingsFieldButton Icon={DeviceInfoIcon} onClick={() => setOpen(true)}>
+        Show nerd info
+      </SettingsFieldButton>
       <Dialog
         className={DialogStyle.dialog}
         open={open}

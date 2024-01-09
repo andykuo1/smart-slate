@@ -1,14 +1,14 @@
-import { MenuItem } from '@ariakit/react';
 import { useCallback, useEffect, useState } from 'react';
 
 import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
 
 import { useInterval } from '@/libs/UseInterval';
 import { clearVideoCache } from '@/recorder/cache/VideoCache';
-import MenuStyle from '@/styles/Menu.module.css';
 import { formatBytes } from '@/utils/StringFormat';
 
-export default function ClearVideoCacheMenuItem() {
+import SettingsFieldButton from './SettingsFieldButton';
+
+export default function SettingsVideoCacheClearButton() {
   const handleClick = useCallback(function handleClick() {
     if (window.confirm('Are you sure you want to clear ALL video cache?')) {
       clearVideoCache();
@@ -16,15 +16,12 @@ export default function ClearVideoCacheMenuItem() {
   }, []);
 
   return (
-    <MenuItem
-      className={MenuStyle.menuItem + ' ' + 'flex flex-row fill-current'}
-      onClick={handleClick}>
-      <DeleteIcon className="h-full fill-current" />
-      <div className="flex-1 flex flex-col">
-        <span>Clear Video Cache</span>
+    <SettingsFieldButton Icon={DeleteIcon} onClick={handleClick}>
+      <div className="flex-1 px-2 flex flex-col">
+        <span>Clear video cache</span>
         <VideoCacheUsageProgress />
       </div>
-    </MenuItem>
+    </SettingsFieldButton>
   );
 }
 
@@ -50,9 +47,9 @@ function VideoCacheUsageProgress({ className }) {
   const percent =
     (quota > 0 ? Math.max(Number(usage / quota), 0.01).toFixed(2) : '--') + '%';
   return (
-    <div className={'relative flex' + ' ' + className}>
+    <div className={'relative flex items-center' + ' ' + className}>
       <progress
-        className="flex-1 rounded-full overflow-hidden"
+        className="flex-1 rounded-full overflow-hidden h-6"
         value={usage}
         max={quota}
       />

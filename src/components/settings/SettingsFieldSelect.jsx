@@ -7,10 +7,10 @@ import SettingsField from './SettingsField';
  * @param {string} [props.className]
  * @param {boolean} [props.required]
  * @param {import('react').ReactNode} props.children
- * @param {string} props.value
- * @param {import('react').ChangeEventHandler<HTMLSelectElement>} props.onChange
+ * @param {string} [props.value]
+ * @param {import('react').ChangeEventHandler<HTMLSelectElement>} [props.onChange]
  */
-export default function SettingsSelectField({
+export default function SettingsFieldSelect({
   id,
   title,
   className,
