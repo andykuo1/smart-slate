@@ -57,9 +57,10 @@ export default function MediaStreamVideoZoomControls({ className }) {
     input.step = String(zoom.step);
     if ('zoom' in set) {
       let currentZoom = Number(set.zoom);
-      if (zoomValue !== currentZoom) {
-        setZoomValue(currentZoom);
-      }
+      setZoomValue(currentZoom);
+      console.log(
+        '[MediaStreamVideoZoomControls] Zoom changed to ' + currentZoom,
+      );
     }
     if (disabled) {
       setDisabled(false);
