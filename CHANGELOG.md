@@ -8,6 +8,8 @@
 - Change dragging handle to the whole take
 - Change shot references to always be in landscape
 - Change fountain import to ignore title page
+- Change scene heading underline to bold
+- Change new shot buttons to create on click too
 
 - Fix wrong take number for viewer
 - (in progress)

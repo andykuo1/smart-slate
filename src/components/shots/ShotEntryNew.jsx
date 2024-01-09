@@ -18,13 +18,16 @@ export default function ShotEntryNew({ documentId, blockId }) {
 
   function onClick() {
     let newShot = createShot();
-    newShot.shotType = shotType;
     addShot(documentId, blockId, newShot);
   }
 
   /** @type {import('react').ChangeEventHandler<any>} */
   function onShotTypeChange(e) {
-    setShotType(e.target.value);
+    const newShotType = e.target.value;
+    setShotType(newShotType);
+    let newShot = createShot();
+    newShot.shotType = newShotType;
+    addShot(documentId, blockId, newShot);
   }
 
   return (
