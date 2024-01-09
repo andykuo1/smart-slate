@@ -17,25 +17,22 @@ import {
 } from '@/values/RecorderValues';
 
 import MediaRecorderStartStop from './MediaRecorderStartStop';
+import MediaStreamVideoDeviceSelector from './MediaStreamVideoDeviceSelector';
 import MediaStreamVideoResolutionSelector from './MediaStreamVideoResolutionSelector';
-import MediaStreamVideoZoomControls from './MediaStreamVideoZoomControls';
 import { RecorderContext } from './RecorderContext';
 
 /**
  * @param {object} props
  * @param {string} [props.className]
  * @param {(blob: Blob) => void} props.onComplete
- * @param {(resolution: import('@/values/Resolutions').VideoResolution) => void} props.onResolutionChange
- * @param {(zoom: number) => void} props.onZoomChange
+ * @param {(constraints: MediaTrackConstraints) => void} props.onVideoConstraintsChange
  */
 export default function RecorderToolbar({
   className,
   onComplete,
-  onResolutionChange,
-  onZoomChange,
+  onVideoConstraintsChange,
 }) {
   const [open, setOpen] = useState(false);
-  const { videoDeviceId, audioDeviceId } = useContext(RecorderContext);
 
   return (
     <div className={'w-20 h-full flex flex-col items-center' + ' ' + className}>
@@ -58,10 +55,11 @@ export default function RecorderToolbar({
           <fieldset className="my-4">
             <div className="flex flex-row gap-2 my-1 opacity-30">
               <label className="whitespace-nowrap">Video Source:</label>
-              <VideoDeviceSelector
+              <MediaStreamVideoDeviceSelector
                 className="flex-1"
-                value={videoDeviceId}
-                onChange={() => {}}
+                onChange={(deviceId) =>
+                  onVideoConstraintsChange({ deviceId: { exact: deviceId } })
+                }
                 disabled={true}
               />
             </div>
@@ -69,7 +67,7 @@ export default function RecorderToolbar({
               <label className="whitespace-nowrap">Audio Source:</label>
               <AudioDeviceSelector
                 className="flex-1"
-                value={audioDeviceId}
+                value={''}
                 onChange={() => {}}
                 disabled={true}
               />
@@ -78,24 +76,39 @@ export default function RecorderToolbar({
               <label className="whitespace-nowrap">Resolution:</label>
               <MediaStreamVideoResolutionSelector
                 className="flex-1"
-                onChange={onResolutionChange}
+                onChange={(resolution) =>
+                  onVideoConstraintsChange({
+                    width: { ideal: resolution.width },
+                    height: { ideal: resolution.height },
+                    aspectRatio: { ideal: resolution.ratio },
+                  })
+                }
               />
             </div>
             <div className="flex flex-row gap-2 my-1">
               <label className="whitespace-nowrap">Zoom:</label>
               <button
                 className="flex-1 rounded bg-gray-600"
-                onClick={() => onZoomChange(0.5)}>
+                onClick={() =>
+                  // @ts-expect-error Zoom exists for Safari.
+                  onVideoConstraintsChange({ zoom: { ideal: 0.5 } })
+                }>
                 x0.5
               </button>
               <button
                 className="flex-1 rounded bg-gray-600"
-                onClick={() => onZoomChange(1)}>
+                onClick={() =>
+                  // @ts-expect-error Zoom exists for Safari.
+                  onVideoConstraintsChange({ zoom: { ideal: 1 } })
+                }>
                 x1
               </button>
               <button
                 className="flex-1 rounded bg-gray-600"
-                onClick={() => onZoomChange(2)}>
+                onClick={() =>
+                  // @ts-expect-error Zoom exists for Safari.
+                  onVideoConstraintsChange({ zoom: { ideal: 2 } })
+                }>
                 x2
               </button>
             </div>
@@ -115,63 +128,9 @@ export default function RecorderToolbar({
         ◉
       </MediaRecorderStartStop>
       <div className="flex-1" />
-      <MediaStreamVideoZoomControls className="flex-1" />
+      <div className="h-10" />
       <div className="flex-1" />
     </div>
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} [props.className]
- * @param {string} props.value
- * @param {boolean} [props.disabled]
- * @param {(videoDeviceId: string) => void} props.onChange
- */
-function VideoDeviceSelector({ className, value, disabled, onChange }) {
-  const [deviceList, setDeviceList] = useState(
-    /** @type {Array<MediaDeviceInfo>} */ ([]),
-  );
-
-  const { isPrepared } = useContext(RecorderContext);
-
-  useEffect(() => {
-    if (!isPrepared) {
-      setDeviceList([]);
-      return;
-    }
-    if (
-      typeof window !== 'undefined' &&
-      typeof window?.navigator?.mediaDevices?.enumerateDevices === 'function'
-    ) {
-      window.navigator.mediaDevices
-        .enumerateDevices()
-        .then((infos) =>
-          setDeviceList(infos.filter((info) => info.kind === 'videoinput')),
-        );
-      return () => setDeviceList([]);
-    }
-  }, [setDeviceList, isPrepared]);
-
-  /** @type {import('react').ChangeEventHandler<HTMLSelectElement>} */
-  function changeCallback(e) {
-    const target = e.target;
-    const value = target.value;
-    onChange(value);
-  }
-
-  return (
-    <select
-      className={className}
-      value={value}
-      onChange={changeCallback}
-      disabled={disabled}>
-      {deviceList.map((deviceInfo, index) => (
-        <option key={deviceInfo.deviceId} value={deviceInfo.deviceId}>
-          {deviceInfo.label || 'Camera ' + (index + 1)}
-        </option>
-      ))}
-    </select>
   );
 }
 

@@ -47,41 +47,26 @@ export default function RecorderBooth() {
   const exportTake = useTakeExporter();
   const setUserCursor = useSetUserCursor();
   const [_, setVideoSnapshotURL] = useState('');
-  const [zoomLevel, setZoomLevel] = useState(1);
-  const [videoConstraints, setVideoConstraints] = useState({
-    facingMode: 'environment',
-    width: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].width },
-    height: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].height },
-    aspectRatio: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].ratio },
-    zoom: { ideal: zoomLevel },
-  });
+  const [videoConstraints, setVideoConstraints] = useState(
+    /** @type {MediaTrackConstraints} */ ({
+      facingMode: 'environment',
+      width: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].width },
+      height: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].height },
+      aspectRatio: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].ratio },
+      zoom: { ideal: 1 },
+    }),
+  );
 
   const { videoRef, onStop } = useContext(RecorderContext);
 
-  const onVideoZoomChange = useCallback(
+  const onVideoConstraintsChange = useCallback(
     /**
-     * @param {number} zoom
+     * @param {MediaTrackConstraints} constraints
      */
-    function _onVideoZoomChange(zoom) {
-      setZoomLevel(zoom);
+    function _onVideoConstraintsChange(constraints) {
       setVideoConstraints((prev) => ({
         ...prev,
-        zoom: { ideal: zoom },
-      }));
-    },
-    [setZoomLevel, setVideoConstraints],
-  );
-
-  const onVideoResolutionChange = useCallback(
-    /**
-     * @param {import('@/values/Resolutions').VideoResolution} resolution
-     */
-    function _onVideoResolutionChange(resolution) {
-      setVideoConstraints((prev) => ({
-        ...prev,
-        width: { ideal: resolution.width },
-        height: { ideal: resolution.height },
-        aspectRatio: { ideal: resolution.ratio },
+        ...constraints,
       }));
     },
     [setVideoConstraints],
@@ -181,8 +166,7 @@ export default function RecorderBooth() {
       right={() => (
         <RecorderToolbar
           onComplete={onComplete}
-          onResolutionChange={onVideoResolutionChange}
-          onZoomChange={onVideoZoomChange}
+          onVideoConstraintsChange={onVideoConstraintsChange}
         />
       )}
     />
