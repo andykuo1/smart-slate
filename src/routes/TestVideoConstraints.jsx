@@ -11,7 +11,10 @@ export default function TestVideoConstraints() {
   function step1() {
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: false })
-      .then((stream) => setMediaStream(stream));
+      .then((stream) => setMediaStream(stream))
+      .catch((e) =>
+        console.error('[TestVideoConstraints] Failed! ' + e.message),
+      );
     console.log('[TestVideoConstraints] Getting media stream...');
   }
 
