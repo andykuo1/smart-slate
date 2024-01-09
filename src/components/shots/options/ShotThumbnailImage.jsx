@@ -1,3 +1,5 @@
+import AddPhotoAltIcon from '@material-symbols/svg-400/rounded/add_photo_alternate.svg';
+
 import { formatSceneShotNumber } from '@/components/takes/TakeNameFormat';
 import ImageWithCaption from '@/libs/ImageWithCaption';
 import {
@@ -7,7 +9,7 @@ import {
   useShotType,
 } from '@/stores/document';
 
-import { getShotTypeIcon } from './ShotTypeSelector';
+import { getShotTypeIcon } from './ShotTypeIcon';
 
 /**
  * @param {object} props
@@ -38,8 +40,7 @@ export default function ShotThumbnailImage({
       alt="Shot reference image"
       caption={formatSceneShotNumber(sceneNumber, shotNumber, true)}
       className={'max-w-sm w-[128px] h-[72px]' + ' ' + className}
-      usage="add"
-      Icon={getShotTypeIcon(shotType)}
+      Icon={shotType ? getShotTypeIcon(shotType) : AddPhotoAltIcon}
     />
   );
 }

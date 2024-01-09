@@ -1,24 +1,19 @@
-import AddPhotoAltIcon from '@material-symbols/svg-400/rounded/add_photo_alternate.svg';
-import PhotoIcon from '@material-symbols/svg-400/rounded/photo.svg';
-
 /**
  * @param {object} props
  * @param {string} props.src
  * @param {string} props.alt
+ * @param {import('react').FC<any>} props.Icon
  * @param {string} [props.caption]
  * @param {string} [props.className]
- * @param {'add'} [props.usage]
  * @param {import('react').ReactNode} [props.children]
- * @param {import('react').FC<any>} [props.Icon]
  */
 export default function ImageWithCaption({
   className,
   src,
   alt,
   caption,
-  usage,
   children,
-  Icon = getIconByUsage(usage),
+  Icon,
 }) {
   return (
     <figure
@@ -40,16 +35,4 @@ export default function ImageWithCaption({
       {children}
     </figure>
   );
-}
-
-/**
- * @param {'add'} [usage]
- */
-function getIconByUsage(usage) {
-  switch (usage) {
-    case 'add':
-      return AddPhotoAltIcon;
-    default:
-      return PhotoIcon;
-  }
 }
