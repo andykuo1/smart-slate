@@ -35,22 +35,6 @@ export default function RecorderToolbar({
   onAudioConstraintsChange,
 }) {
   const [open, setOpen] = useState(false);
-  const [videoConstraints, setVideoConstraints] = useState(
-    /** @type {MediaTrackConstraints} */ ({}),
-  );
-  const [_, setAudioConstraints] = useState(
-    /** @type {MediaTrackConstraints} */ ({}),
-  );
-
-  function onApplyClick() {
-    console.log(
-      '[RecorderToolbar] Applying video constraints ' +
-        JSON.stringify(videoConstraints),
-    );
-    onVideoConstraintsChange(videoConstraints);
-    // TODO: onAudioConstraintsChange(audioConstraints);
-    setOpen(false);
-  }
 
   return (
     <div className={'w-20 h-full flex flex-col items-center' + ' ' + className}>
@@ -75,38 +59,21 @@ export default function RecorderToolbar({
               <label className="whitespace-nowrap">Video Source:</label>
               <MediaStreamVideoDeviceSelector
                 className="flex-1"
-                onChange={(deviceId) =>
-                  setVideoConstraints((prev) => ({
-                    ...prev,
-                    deviceId: deviceId ? { exact: deviceId } : undefined,
-                  }))
-                }
+                onChange={() => {}}
               />
             </div>
             <div className="flex flex-row gap-2 my-1">
               <label className="whitespace-nowrap">Audio Source:</label>
               <MediaStreamAudioDeviceSelector
                 className="flex-1"
-                onChange={(deviceId) =>
-                  setAudioConstraints((prev) => ({
-                    ...prev,
-                    deviceId: deviceId ? { exact: deviceId } : undefined,
-                  }))
-                }
+                onChange={() => {}}
               />
             </div>
             <div className="flex flex-row gap-2 my-1">
               <label className="whitespace-nowrap">Resolution:</label>
               <MediaStreamVideoResolutionSelector
                 className="flex-1"
-                onChange={(resolution) =>
-                  setVideoConstraints((prev) => ({
-                    ...prev,
-                    width: { ideal: resolution.width },
-                    height: { ideal: resolution.height },
-                    aspectRatio: { ideal: resolution.ratio },
-                  }))
-                }
+                onChange={() => {}}
               />
             </div>
             <div className="flex flex-row gap-2 my-1">
@@ -141,9 +108,6 @@ export default function RecorderToolbar({
                 }>
                 x2
               </button>
-            </div>
-            <div className="flex flex-row gap-2 my-1">
-              <button onClick={onApplyClick}>Apply</button>
             </div>
           </fieldset>
         </Dialog>

@@ -75,7 +75,7 @@ function getLandscapeOrientedConstraints(constraints) {
       ...constraints,
       width: constraints.height,
       height: constraints.width,
-      aspectRatio: undefined,
+      aspectRatio: 9 / 16,
     };
   }
   return constraints;

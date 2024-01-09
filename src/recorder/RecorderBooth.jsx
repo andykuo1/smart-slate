@@ -33,7 +33,7 @@ const DEFAULT_VIDEO_CONSTRAINTS = {
   height: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].height },
   aspectRatio: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].ratio },
   // @ts-expect-error Safari supports 'zoom'.
-  zoom: { ideal: 2 },
+  zoom: { ideal: 1.0 },
 };
 
 export default function RecorderBooth() {
@@ -64,34 +64,17 @@ export default function RecorderBooth() {
     /** @type {MediaTrackConstraints} */ ({}),
   );
 
-  const { videoRef, onStop, initMediaStream } = useContext(RecorderContext);
+  const { videoRef, onStop } = useContext(RecorderContext);
 
   const onVideoConstraintsChange = useCallback(
     /**
      * @param {MediaTrackConstraints} constraints
      */
     function _onVideoConstraintsChange(constraints) {
-      if (constraints.deviceId) {
-        // Restart instead.
-        let result = { ...DEFAULT_VIDEO_CONSTRAINTS, ...constraints };
-        // Remove facing mode and prefer device id selection
-        delete result.facingMode;
-        initMediaStream(
-          [
-            {
-              video: result,
-              audio: true,
-            },
-          ],
-          true,
-        );
-      } else {
-        // Try apply.
-        setVideoConstraints((prev) => ({
-          ...prev,
-          ...constraints,
-        }));
-      }
+      setVideoConstraints((prev) => ({
+        ...prev,
+        ...constraints,
+      }));
     },
     [setVideoConstraints],
   );
