@@ -16,6 +16,7 @@ import { uuid } from '@/utils/uuid';
  *
  * @typedef {'wide'|'medium'|'closeup'|'full'|'long'|''} ShotType
  * @typedef {'string'|'lexical'} BlockContentType
+ * @typedef {string} ShotHash
  */
 
 export function createStore() {
@@ -49,6 +50,8 @@ export function createDocument(documentId = uuid()) {
     scenes: {},
     /** @type {Record<BlockId, Block>} */
     blocks: {},
+    /** @type {Array<ShotHash>} */
+    shotHashes: [],
     /** @type {Record<ShotId, Shot>} */
     shots: {},
     /** @type {Record<TakeId, Take>} */
@@ -91,8 +94,13 @@ export function createShot(shotId = uuid()) {
     shotId,
     /** @type {ShotType} */
     shotType: '',
+    /**
+     * A unique hash to identify shots-- the unit of story for editors.
+     * @type {ShotHash}
+     */
+    shotHash: '',
     /** @type {string} */
-    thumbnail: '',
+    referenceImage: '',
     description: '',
     /** @type {Array<TakeId>} */
     takeIds: [],
@@ -144,6 +152,7 @@ export function cloneDocument(out, document) {
   out.documentTitle = document.documentTitle;
   out.revisionNumber = document.revisionNumber;
   out.sceneOrder = document.sceneOrder.slice();
+  out.shotHashes = document.shotHashes.slice();
   out.settings = { ...(document.settings || {}) };
 
   let outScenes = out.scenes || {};
@@ -218,6 +227,8 @@ export function cloneBlock(out, block) {
 export function cloneShot(out, shot) {
   out.shotId = shot.shotId;
   out.shotType = shot.shotType;
+  out.shotHash = shot.shotHash;
+  out.referenceImage = shot.referenceImage;
   out.description = shot.description;
   out.takeIds = shot.takeIds.slice();
   return /** @type {Shot} */ (out);

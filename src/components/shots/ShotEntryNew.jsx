@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useDocumentStore } from '@/stores/document';
 import { createShot } from '@/stores/document/DocumentStore';
 
-import { ShotTypeSelector } from './ShotTypeSelector';
+import { ShotTypeSelector } from './options/ShotTypeSelector';
 
 /**
  * @param {object} props

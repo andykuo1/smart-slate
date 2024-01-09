@@ -179,6 +179,15 @@ export function deleteShot(store, documentId, shotId) {
       shotIds.splice(i, 1);
     }
   }
+  // Remove assigned shot hash from document
+  if (shot.shotHash) {
+    let oldShotHash = shot.shotHash;
+    shot.shotHash = '';
+    let i = document.shotHashes.indexOf(oldShotHash);
+    if (i >= 0) {
+      document.shotHashes.splice(i, 1);
+    }
+  }
   // Remove from document
   delete document.shots[shotId];
   incrementDocumentRevisionNumber(document);

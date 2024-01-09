@@ -208,20 +208,6 @@ export function useTake(documentId, takeId) {
   return useDocumentStore((ctx) => getTakeById(ctx, documentId, takeId));
 }
 
-/**
- * @param {import('./DocumentStore').DocumentId} documentId
- * @param {import('./DocumentStore').ShotId} shotId
- */
-export function useShotThumbnail(documentId, shotId) {
-  return useDocumentStore(
-    (ctx) => getShotById(ctx, documentId, shotId)?.thumbnail || '',
-  );
-}
-
-export function useSetShotThumbnail() {
-  return useDocumentStore((ctx) => ctx.setShotThumbnail);
-}
-
 export function useSetTakeExportedGoogleDriveFileId() {
   return useDocumentStore((ctx) => ctx.setTakeExportedGoogleDriveFileId);
 }
@@ -246,7 +232,7 @@ export function useBestTakeImageForShotThumbnail(
       return '';
     }
     if (referenceOnly) {
-      return shot.thumbnail;
+      return shot.referenceImage;
     }
     let bestTake = null;
     let bestRating = 0;
@@ -261,7 +247,7 @@ export function useBestTakeImageForShotThumbnail(
       }
     }
     if (!bestTake) {
-      return shot.thumbnail;
+      return shot.referenceImage;
     }
     return bestTake.previewImage;
   });

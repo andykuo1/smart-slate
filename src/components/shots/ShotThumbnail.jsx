@@ -5,18 +5,10 @@ import {
   PopoverProvider,
 } from '@ariakit/react';
 
-import ImageWithCaption from '@/libs/ImageWithCaption';
-import {
-  useBestTakeImageForShotThumbnail,
-  useSceneNumber,
-  useShotNumber,
-} from '@/stores/document';
 import PopoverStyle from '@/styles/Popover.module.css';
 
-import { formatSceneShotNumber } from '../takes/TakeNameFormat';
-import ShotThumbnailOptions from './ShotThumbnailOptions';
-import { ShotTypeSelector, getShotTypeIcon } from './ShotTypeSelector';
-import { useShotTypeChange } from './UseShotType';
+import ShotOptions from './options/ShotOptions';
+import ShotThumbnailImage from './options/ShotThumbnailImage';
 
 /**
  * @param {object} props
@@ -35,13 +27,6 @@ export default function ShotThumbnail({
   editable = false,
   referenceOnly = false,
 }) {
-  const sceneNumber = useSceneNumber(documentId, sceneId);
-  const shotNumber = useShotNumber(documentId, sceneId, shotId);
-  const [activeShotType, onShotTypeChange] = useShotTypeChange(
-    documentId,
-    shotId,
-  );
-
   return (
     <div
       className={
@@ -51,9 +36,8 @@ export default function ShotThumbnail({
         <ShotThumbnailImage
           className={'flex-1 bg-gray-300'}
           documentId={documentId}
+          sceneId={sceneId}
           shotId={shotId}
-          alt={formatSceneShotNumber(sceneNumber, shotNumber, true)}
-          Icon={getShotTypeIcon(activeShotType)}
           referenceOnly={referenceOnly}
         />
         <PopoverDisclosure
@@ -62,49 +46,13 @@ export default function ShotThumbnail({
         />
         <Popover className={PopoverStyle.popover} modal={true}>
           <PopoverArrow className={PopoverStyle.arrow} />
-          <div className="flex flex-row gap-4">
-            <ShotTypeSelector
-              className="flex-1 flex flex-col items-center"
-              activeShotType={activeShotType}
-              onChange={onShotTypeChange}
-            />
-            <ShotThumbnailOptions documentId={documentId} shotId={shotId} />
-          </div>
+          <ShotOptions
+            documentId={documentId}
+            sceneId={sceneId}
+            shotId={shotId}
+          />
         </Popover>
       </PopoverProvider>
     </div>
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} [props.className]
- * @param {string} props.alt
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
- * @param {boolean} [props.referenceOnly]
- * @param {import('react').FC<any>} [props.Icon]
- */
-function ShotThumbnailImage({
-  className,
-  alt,
-  documentId,
-  shotId,
-  Icon,
-  referenceOnly,
-}) {
-  const image = useBestTakeImageForShotThumbnail(
-    documentId,
-    shotId,
-    referenceOnly,
-  );
-  return (
-    <ImageWithCaption
-      src={image}
-      alt={alt}
-      className={'max-w-sm w-[128px] h-[72px]' + ' ' + className}
-      usage="add"
-      Icon={Icon}
-    />
   );
 }

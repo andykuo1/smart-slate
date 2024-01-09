@@ -1,15 +1,27 @@
 # Upcoming
 
+- Add zoom controls for wide lens
+  - Pick a better camera (not the widest, is that possible? change zoom?)
+  - List audio/video sources
+- Photo recorder for story building
+- Remove ready/edit (shot exit should just focus)
+- Shot in text.
+
 - Add project settings page
 - Add more options to project settings page
 - Add aspect ratio picker
 - Add configurable project id (for take name)
+- Add shot hash
+- Add record button to shot options
 
 - Change dragging handle to the whole take
 - Change shot references to always be in landscape
 - Change fountain import to ignore title page
 - Change scene heading underline to bold
 - Change new shot buttons to create on click too
+- Change take number hash to shot hash for editing
+- Change background for recorder back button
+- Change shot options to be just a list
 
 - Fix wrong take number for viewer
 - (in progress)

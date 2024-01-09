@@ -11,7 +11,7 @@ import ShotTypes, {
   WIDE_SHOT,
 } from '@/stores/ShotTypes';
 
-import { getShotTypeColor } from './ShotColors';
+import { getShotTypeColor } from '../ShotColors';
 
 /**
  * @param {object} props
@@ -76,7 +76,7 @@ export function MoreShotTypeSelector({ className, activeShotType, onChange }) {
     <select
       ref={selectRef}
       className={
-        'text-center bg-transparent rounded' +
+        'text-center bg-transparent rounded py-1' +
         ' ' +
         (isActive && getShotTypeColor(activeShotType)) +
         ' ' +
@@ -109,7 +109,7 @@ export function ShotTypeButton({
   return (
     <button
       className={
-        'px-1 rounded' +
+        'p-1 rounded' +
         ' ' +
         (isActive && getShotTypeColor(shotType)) +
         ' ' +
@@ -123,7 +123,7 @@ export function ShotTypeButton({
       disabled={!onClick}>
       <ShotTypeIcon
         shotType={shotType}
-        className="w-6 h-6 fill-current pointer-events-none"
+        className="w-6 h-6 fill-current pointer-events-none mx-auto"
       />
     </button>
   );

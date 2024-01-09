@@ -9,7 +9,7 @@ export function createDispatchShots(set, get) {
   return {
     setShotType: zi(set, setShotType),
     setShotDescription: zi(set, setShotDescription),
-    setShotThumbnail: zi(set, setShotThumbnail),
+    setShotReferenceImage: zi(set, setShotReferenceImage),
     moveShot: zi(set, moveShot),
     updateShot: zi(set, updateShot),
   };
@@ -66,12 +66,17 @@ export function setShotDescription(store, documentId, shotId, description) {
  * @param {import('../DocumentStore').Store} store
  * @param {import('../DocumentStore').DocumentId} documentId
  * @param {import('../DocumentStore').ShotId} shotId
- * @param {string} thumbnailUrl
+ * @param {string} referenceImageUrl
  */
-export function setShotThumbnail(store, documentId, shotId, thumbnailUrl) {
+export function setShotReferenceImage(
+  store,
+  documentId,
+  shotId,
+  referenceImageUrl,
+) {
   let document = store.documents[documentId];
   let shot = document.shots[shotId];
-  shot.thumbnail = thumbnailUrl;
+  shot.referenceImage = referenceImageUrl;
   incrementDocumentRevisionNumber(document);
 }
 

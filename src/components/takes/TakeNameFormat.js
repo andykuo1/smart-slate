@@ -5,6 +5,7 @@ import ShotTypes, { ANY_SHOT } from '@/stores/ShotTypes';
  * @param {number} sceneNumber
  * @param {number} shotNumber
  * @param {number} takeNumber
+ * @param {string} shotHash
  * @param {import('@/stores/document/DocumentStore').ShotType} [shotType]
  */
 export function formatTakeNameForFileExport(
@@ -12,6 +13,7 @@ export function formatTakeNameForFileExport(
   sceneNumber,
   shotNumber,
   takeNumber,
+  shotHash,
   shotType,
 ) {
   if (sceneNumber <= 0) {
@@ -32,12 +34,6 @@ export function formatTakeNameForFileExport(
   if (takeNumber > 99) {
     throw new Error('Invalid take number - must be less than 100.');
   }
-  const takePathHash = getTakePathNumberHash(
-    projectId,
-    sceneNumber,
-    shotNumber,
-    takeNumber,
-  );
   const takePathStrings = getTakePathStrings(
     projectId,
     sceneNumber,
@@ -46,8 +42,9 @@ export function formatTakeNameForFileExport(
   );
   const shotTypeString = formatShotType(shotType);
   return (
-    `${takePathHash}_${takePathStrings.join('_')}` +
-    (shotTypeString ? `_${shotTypeString}` : '')
+    takePathStrings.join('_') +
+    (shotTypeString ? `_${shotTypeString}` : '') +
+    `_${shotHash}`
   );
 }
 
@@ -118,25 +115,15 @@ export function formatTakeNumber(takeNumber) {
  * @param {string|undefined} projectId
  * @param {number} sceneNumber
  * @param {number} shotNumber
- * @param {number} takeNumber
  */
-export function getTakePathNumberHash(
-  projectId,
-  sceneNumber,
-  shotNumber,
-  takeNumber,
-) {
-  const projectChar = projectId ? findProjectIdChar(projectId) : 'U';
+export function getShotHash(projectId, sceneNumber, shotNumber) {
   const sceneDigits = String(Math.min(99, Math.max(0, sceneNumber)))
     .padStart(2, '0') // If less then 2 digits, pad with 0
     .substring(0, 2); // If more than 2 digits, contract it
   const shotDigits = String(Math.min(99, Math.max(0, shotNumber)))
     .padStart(2, '0') // If less then 2 digits, pad with 0
     .substring(0, 2); // If more than 2 digits, contract it
-  const takeDigits = String(Math.min(99, Math.max(0, takeNumber)))
-    .padStart(2, '0') // If less then 2 digits, pad with 0
-    .substring(0, 2); // If more than 2 digits, contract it
-  return `${projectChar}${sceneDigits}${shotDigits}${takeDigits}`;
+  return `${sceneDigits}${shotDigits}`;
 }
 
 /**

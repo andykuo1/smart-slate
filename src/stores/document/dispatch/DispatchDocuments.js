@@ -1,3 +1,4 @@
+import { getDocumentById, getShotById } from '..';
 import { zi } from '../../ZustandImmerHelper';
 
 /**
@@ -14,6 +15,7 @@ export function createDispatchDocuments(set, get) {
     setBlockContent: zi(set, setBlockContent),
 
     incrementDocumentRevisionNumber: zi(set, incrementDocumentRevisionNumber),
+    assignAvailableShotHash: zi(set, assignAvailableShotHash),
   };
 }
 
@@ -86,4 +88,46 @@ export function setBlockContent(
 export function incrementDocumentRevisionNumber(document) {
   document.revisionNumber += 1;
   document.lastUpdatedMillis = Date.now();
+}
+
+const MAX_SHOT_HASH_RANGE = 9999;
+
+/**
+ * @param {import('../DocumentStore').Store} store
+ * @param {import('../DocumentStore').DocumentId} documentId
+ */
+export function findNextAvailableShotHash(store, documentId) {
+  let document = getDocumentById(store, documentId);
+  if (document.shotHashes.length >= MAX_SHOT_HASH_RANGE) {
+    throw new Error('Out of available shot hashes.');
+  }
+  let hash = Math.floor(Math.random() * MAX_SHOT_HASH_RANGE) + 1;
+  let result = String(hash).padStart(4, '0');
+  while (document.shotHashes.includes(result)) {
+    hash = (hash + 1) % (MAX_SHOT_HASH_RANGE + 1);
+    if (hash <= 0) {
+      hash = 1;
+    }
+    result = String(hash).padStart(4, '0');
+  }
+  return result;
+}
+
+/**
+ * @param {import('../DocumentStore').Store} store
+ * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('../DocumentStore').ShotId} shotId
+ * @param {import('../DocumentStore').ShotHash} shotHash
+ */
+export function assignAvailableShotHash(store, documentId, shotId, shotHash) {
+  let document = getDocumentById(store, documentId);
+  let shot = getShotById(store, documentId, shotId);
+  if (shot.shotHash) {
+    throw new Error('Shot is already assigned another shot hash.');
+  }
+  if (document.shotHashes.includes(shotHash)) {
+    throw new Error('The given shot hash is not available.');
+  }
+  shot.shotHash = shotHash;
+  document.shotHashes.push(shotHash);
 }

@@ -15,12 +15,16 @@ import {
   getShotIndex,
 } from '@/stores/document';
 import { createTake } from '@/stores/document/DocumentStore';
+import { findNextAvailableShotHash } from '@/stores/document/dispatch/DispatchDocuments';
 import { useSettingsStore } from '@/stores/settings';
 import { downloadURLImpl } from '@/utils/Downloader';
 import { getVideoFileExtensionByMIMEType } from '@/values/RecorderValues';
 
 export function useTakeDownloader() {
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
+  const assignAvailableShotHash = useDocumentStore(
+    (ctx) => ctx.assignAvailableShotHash,
+  );
 
   const downloadTake = useCallback(
     /**
@@ -35,12 +39,22 @@ export function useTakeDownloader() {
       if (!data) {
         return;
       }
+
+      // NOTE: Generate the shot hash now-- since it may not exist.
+      const shot = getShotById(store, documentId, shotId);
+      const shotHash =
+        shot.shotHash || findNextAvailableShotHash(store, documentId);
+      if (shot.shotHash !== shotHash) {
+        assignAvailableShotHash(documentId, shotId, shotHash);
+      }
+
       const ext = getVideoFileExtensionByMIMEType(data.type);
       const exportedTakeName = getNextAvailableTakeNameForFileExport(
         store,
         documentId,
         sceneId,
         shotId,
+        shotHash,
       );
       const exportedFileNameWithExt = `${exportedTakeName}${ext}`;
 
@@ -60,6 +74,9 @@ export function useTakeGoogleDriveUploader() {
   const setTakeExportedGoogleDriveFileId = useDocumentStore(
     (ctx) => ctx.setTakeExportedGoogleDriveFileId,
   );
+  const assignAvailableShotHash = useDocumentStore(
+    (ctx) => ctx.assignAvailableShotHash,
+  );
   const handleToken = useGAPITokenHandler();
 
   const uploadTake = useCallback(
@@ -75,12 +92,22 @@ export function useTakeGoogleDriveUploader() {
       if (!data) {
         return;
       }
+
+      // NOTE: Generate the shot hash now-- since it may not exist.
+      const shot = getShotById(store, documentId, shotId);
+      const shotHash =
+        shot.shotHash || findNextAvailableShotHash(store, documentId);
+      if (shot.shotHash !== shotHash) {
+        assignAvailableShotHash(documentId, shotId, shotHash);
+      }
+
       const ext = getVideoFileExtensionByMIMEType(data.type);
       const exportedTakeName = getNextAvailableTakeNameForFileExport(
         store,
         documentId,
         sceneId,
         shotId,
+        shotHash,
       );
       const exportedFileNameWithExt = `${exportedTakeName}${ext}`;
 
@@ -108,6 +135,9 @@ export function useTakeExporter() {
   const setTakeExportedGoogleDriveFileId =
     useSetTakeExportedGoogleDriveFileId();
   const setTakeExportedIDBKey = useSetTakeExportedIDBKey();
+  const assignAvailableShotHash = useDocumentStore(
+    (ctx) => ctx.assignAvailableShotHash,
+  );
   const enableDriveSync = useSettingsStore((ctx) => ctx.user.enableDriveSync);
   const handleToken = useGAPITokenHandler();
 
@@ -124,23 +154,29 @@ export function useTakeExporter() {
      */
     function exportTake(data, documentId, sceneId, shotId, opts = {}) {
       const store = UNSAFE_getStore();
+
+      // NOTE: Generate the shot hash now-- since it may not exist.
+      const shot = getShotById(store, documentId, shotId);
+      const shotHash =
+        shot.shotHash || findNextAvailableShotHash(store, documentId);
+      if (shot.shotHash !== shotHash) {
+        assignAvailableShotHash(documentId, shotId, shotHash);
+      }
+
       const ext = getVideoFileExtensionByMIMEType(data.type);
       const exportedTakeName = getNextAvailableTakeNameForFileExport(
         store,
         documentId,
         sceneId,
         shotId,
+        shotHash,
       );
       const exportedFileNameWithExt = `${exportedTakeName}${ext}`;
 
       let newTake = createTake();
       newTake.exportedFileName = exportedFileNameWithExt;
       newTake.exportedMillis = Date.now();
-      newTake.exportedShotType = getShotById(
-        store,
-        documentId,
-        shotId,
-      ).shotType;
+      newTake.exportedShotType = shot.shotType;
       newTake.exportedSize = data.size;
       if (opts?.targetTakeId) {
         newTake.takeId = opts.targetTakeId;
@@ -193,21 +229,18 @@ export function useTakeExporter() {
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
  * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ * @param {import('@/stores/document/DocumentStore').ShotHash} shotHash
  */
 export function getNextAvailableTakeNameForFileExport(
   store,
   documentId,
   sceneId,
   shotId,
+  shotHash,
 ) {
   const document = getDocumentById(store, documentId);
   const projectId =
     document.settings.projectId || document.documentTitle || 'Untitled';
-  // TODO: What if documentTitle changes? Should we use this hash?
-  /*
-  const documentName =
-    documentTitle.charAt(0).toUpperCase() + documentId.substring(0, 4);
-  */
   const shot = getShotById(store, documentId, shotId);
   const sceneNumber = getSceneIndex(store, documentId, sceneId);
   const shotNumber = getShotIndex(store, documentId, sceneId, shotId);
@@ -219,6 +252,7 @@ export function getNextAvailableTakeNameForFileExport(
     sceneNumber,
     shotNumber,
     takeNumber,
+    shotHash,
     shotType,
   );
   return takeName;
