@@ -73,7 +73,7 @@ export default function MediaStreamVideoZoomControls({ className }) {
       className={className + ' ' + '-rotate-90 disabled:opacity-30'}
       value={zoomValue}
       onInput={onInput}
-      disabled={true}
+      disabled={disabled}
     />
   );
 }

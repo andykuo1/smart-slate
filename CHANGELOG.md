@@ -13,6 +13,7 @@
 - Add configurable project id (for take name)
 - Add shot hash
 - Add record button to shot options
+- Add zoom controls
 
 - Change dragging handle to the whole take
 - Change shot references to always be in landscape
