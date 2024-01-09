@@ -16,7 +16,6 @@ import BarberpoleStyle from '@/styles/Barberpole.module.css';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 
 import BoxDrawingCharacter from '../documents/BoxDrawingCharacter';
-import ShotFocusButton from './ShotFocusButton';
 import ShotNumber from './ShotNumber';
 import ShotThumbnail from './ShotThumbnail';
 
@@ -79,6 +78,14 @@ export function ShotEntry({
       return;
     }
     moveShot(documentId, blockId, shotId, prevShotId, true);
+  }
+
+  function onShotFocusClick() {
+    if (isActive) {
+      setUserCursor(documentId, '', '');
+    } else {
+      setUserCursor(documentId, sceneId, shotId);
+    }
   }
 
   return (
@@ -149,14 +156,11 @@ export function ShotEntry({
           )}
         </div>
         {!collapsed && (
-          <>
-            <ShotFocusButton
-              documentId={documentId}
-              sceneId={sceneId}
-              shotId={shotId}
-            />
-            <ShotNumber sceneNumber={sceneNumber} shotNumber={shotNumber} />
-          </>
+          <ShotNumber
+            sceneNumber={sceneNumber}
+            shotNumber={shotNumber}
+            onClick={onShotFocusClick}
+          />
         )}
       </div>
       {!collapsed && <div className="flex-1 w-full">{children}</div>}

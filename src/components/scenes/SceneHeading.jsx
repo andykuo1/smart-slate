@@ -1,8 +1,7 @@
 import { useSceneHeading, useSceneNumber } from '@/stores/document';
-import { useCurrentCursor } from '@/stores/user';
+import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 
-import SceneFocusButton from './SceneFocusButton';
 import SceneNumber from './SceneNumber';
 
 /**
@@ -15,6 +14,7 @@ export default function SceneHeading({ className, documentId, sceneId }) {
   const [sceneHeading, setSceneHeading] = useSceneHeading(documentId, sceneId);
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const currentCursor = useCurrentCursor();
+  const setUserCursor = useSetUserCursor();
   const isActive =
     currentCursor.documentId === documentId &&
     currentCursor.sceneId === sceneId &&
@@ -26,6 +26,14 @@ export default function SceneHeading({ className, documentId, sceneId }) {
     setSceneHeading(documentId, sceneId, el.value.toUpperCase());
   }
 
+  function onClick() {
+    if (isActive) {
+      setUserCursor(documentId, '', '');
+    } else {
+      setUserCursor(documentId, sceneId, '');
+    }
+  }
+
   return (
     <div
       className={
@@ -35,7 +43,7 @@ export default function SceneHeading({ className, documentId, sceneId }) {
         ' ' +
         (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
       }>
-      <SceneNumber sceneNumber={sceneNumber} />
+      <SceneNumber sceneNumber={sceneNumber} onClick={onClick} />
       <input
         className="flex-1 bg-transparent px-2 py-6 text-xl font-bold"
         type="text"
@@ -49,8 +57,7 @@ export default function SceneHeading({ className, documentId, sceneId }) {
         <option value="INT. " />
         <option value="EXT. " />
       </datalist>
-      <SceneFocusButton documentId={documentId} sceneId={sceneId} />
-      <SceneNumber sceneNumber={sceneNumber} />
+      <SceneNumber sceneNumber={sceneNumber} onClick={onClick} />
     </div>
   );
 }

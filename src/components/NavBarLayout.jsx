@@ -7,7 +7,7 @@ import NavBar from './NavBar';
 export default function NavBarLayout({ children }) {
   return (
     <>
-      <div className="flex-1 flex flex-col items-center overflow-y-auto py-2">
+      <div className="flex-1 flex flex-col items-center overflow-y-auto">
         {children}
       </div>
       <div className={'h-12' /* TODO: Used to be h-24 */}>
