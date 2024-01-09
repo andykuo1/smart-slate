@@ -2,6 +2,10 @@
 
 - Change dragging handle to the whole take
 - Change shot references to always be in landscape
+- Add project settings page
+- Add aspect ratio picker
+- Add configurable project id (for take name)
+- Fix wrong take number for viewer
 - (in progress)
 
 # 0.1.11

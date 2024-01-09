@@ -10,7 +10,6 @@ import { useContext, useEffect, useState } from 'react';
 
 import SettingsIcon from '@material-symbols/svg-400/rounded/settings-fill.svg';
 
-import { useSettingsStore } from '@/stores/settings';
 import DialogStyle from '@/styles/Dialog.module.css';
 import {
   MEDIA_BLOB_OPTIONS,
@@ -34,8 +33,6 @@ export default function RecorderToolbar({
 }) {
   const [open, setOpen] = useState(false);
   const { videoDeviceId, audioDeviceId } = useContext(RecorderContext);
-  const show4x3Box = useSettingsStore((ctx) => ctx.user.show4x3Box);
-  const setShow4x3Box = useSettingsStore((ctx) => ctx.setShow4x3Box);
 
   return (
     <div className={'w-20 h-full flex flex-col items-center' + ' ' + className}>
@@ -81,14 +78,6 @@ export default function RecorderToolbar({
                 onChange={onResolutionChange}
               />
             </div>
-            <button
-              className="flex-1 my-2 w-full whitespace-nowrap bg-neutral-700"
-              onClick={() => {
-                setShow4x3Box(!show4x3Box);
-                setOpen(false);
-              }}>
-              Show 4:3 Box
-            </button>
           </fieldset>
         </Dialog>
       </DialogProvider>

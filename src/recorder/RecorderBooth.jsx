@@ -4,7 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import ShotThumbnail from '@/components/shots/ShotThumbnail';
 import { useFullscreen } from '@/libs/fullscreen';
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
-import { useSetTakePreviewImage } from '@/stores/document';
+import {
+  getDocumentSettingsById,
+  useDocumentStore,
+  useSetTakePreviewImage,
+} from '@/stores/document';
 import { useSettingsStore } from '@/stores/settings';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import {
@@ -34,7 +38,9 @@ export default function RecorderBooth() {
   const enableThumbnailWhileRecording = useSettingsStore(
     (ctx) => ctx.user.enableThumbnailWhileRecording,
   );
-  const show4x3Box = useSettingsStore((ctx) => ctx.user.show4x3Box);
+  const isAspectRatio43 = useDocumentStore(
+    (ctx) => getDocumentSettingsById(ctx, documentId)?.aspectRatio,
+  );
   const navigate = useNavigate();
   const { exitFullscreen } = useFullscreen();
   const setTakePreviewImage = useSetTakePreviewImage();
@@ -132,7 +138,7 @@ export default function RecorderBooth() {
             onSnapshot={(e) => setVideoSnapshotURL(e.value)}
           />
           {/* 4:3 box */}
-          {show4x3Box && (
+          {isAspectRatio43 && (
             <div className="absolute mx-auto left-0 right-0 -top-1 -bottom-1 w-[75%] border-x-4 pointer-events-none" />
           )}
           {enableThumbnailWhileRecording && (

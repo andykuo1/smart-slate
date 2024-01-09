@@ -1,14 +1,19 @@
 import { useCallback } from 'react';
 
-import { useDocumentTitle } from '@/stores/document';
-
-import { formatDocumentTitle } from '../takes/TakeNameFormat';
+import {
+  getDocumentSettingsById,
+  useDocumentStore,
+  useDocumentTitle,
+} from '@/stores/document';
 
 /**
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  */
 export default function DocumentTitle({ documentId }) {
+  const projectId = useDocumentStore(
+    (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
+  );
   const [documentTitle, setDocumentTitle] = useDocumentTitle(documentId);
   const onDocumentTitleChange = useCallback(
     /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
@@ -31,11 +36,7 @@ export default function DocumentTitle({ documentId }) {
         />
       </div>
       <label className="text-xs opacity-30">
-        <output>{formatDocumentTitle(documentTitle)}</output>
-      </label>
-      <label className="text-xs opacity-30">
-        <span>ID: </span>
-        <output>{documentId}</output>
+        <output>{projectId}</output>
       </label>
     </h2>
   );

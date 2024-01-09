@@ -53,6 +53,7 @@ export default function ViewerBooth() {
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
+            takeId={takeId}
           />
         </>
       )}

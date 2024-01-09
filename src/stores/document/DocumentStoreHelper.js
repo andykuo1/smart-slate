@@ -2,6 +2,14 @@
  * @param {import('./DocumentStore').Store} store
  * @param {import('./DocumentStore').DocumentId} documentId
  */
+export function getDocumentSettingsById(store, documentId) {
+  return store?.documents?.[documentId]?.settings;
+}
+
+/**
+ * @param {import('./DocumentStore').Store} store
+ * @param {import('./DocumentStore').DocumentId} documentId
+ */
 export function getDocumentById(store, documentId) {
   return store?.documents?.[documentId];
 }

@@ -201,7 +201,8 @@ export function getNextAvailableTakeNameForFileExport(
   shotId,
 ) {
   const document = getDocumentById(store, documentId);
-  const documentTitle = document.documentTitle || 'Untitled';
+  const projectId =
+    document.settings.projectId || document.documentTitle || 'Untitled';
   // TODO: What if documentTitle changes? Should we use this hash?
   /*
   const documentName =
@@ -214,7 +215,7 @@ export function getNextAvailableTakeNameForFileExport(
   const shotType = shot.shotType;
 
   const takeName = formatTakeNameForFileExport(
-    documentTitle,
+    projectId,
     sceneNumber,
     shotNumber,
     takeNumber,

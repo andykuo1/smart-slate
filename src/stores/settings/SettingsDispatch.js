@@ -12,7 +12,6 @@ export function createDispatch(set) {
     setEnableThumbnailWhileRecording: zi(set, setEnableThumbnailWhileRecording),
     setEnableDriveSync: zi(set, setEnableDriveSync),
     setPreferPersistedMediaStream: zi(set, setPreferPersistedMediaStream),
-    setShow4x3Box: zi(set, setShow4x3Box),
   };
 }
 
@@ -59,13 +58,4 @@ export function setEnableDriveSync(store, enabled) {
 export function setPreferPersistedMediaStream(store, enabled) {
   let settings = store.user;
   settings.preferPersistedMediaStream = enabled;
-}
-
-/**
- * @param {import('./SettingsStore').Store} store
- * @param {boolean} enabled
- */
-export function setShow4x3Box(store, enabled) {
-  let settings = store.user;
-  settings.show4x3Box = enabled;
 }

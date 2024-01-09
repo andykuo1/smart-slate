@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 import EditSquareIcon from '@material-symbols/svg-400/rounded/edit_square.svg';
 import ListAltIcon from '@material-symbols/svg-400/rounded/list_alt.svg';
 import RadioButtonCheckedIcon from '@material-symbols/svg-400/rounded/radio_button_checked.svg';
@@ -5,7 +7,8 @@ import SubscriptionsIcon from '@material-symbols/svg-400/rounded/subscriptions.s
 import TuneIcon from '@material-symbols/svg-400/rounded/tune.svg';
 
 import {
-  useDocumentTitle,
+  getDocumentSettingsById,
+  useDocumentStore,
   useSceneNumber,
   useShotNumber,
   useTakeNumber,
@@ -13,7 +16,6 @@ import {
 import { useCurrentCursor } from '@/stores/user';
 
 import {
-  formatDocumentTitle,
   formatSceneNumber,
   formatShotNumber,
   formatTakeNumber,
@@ -21,7 +23,9 @@ import {
 
 export default function NavBar() {
   const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
-  const [documentTitle] = useDocumentTitle(documentId);
+  const projectId = useDocumentStore(
+    (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
+  );
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
   const takeNumber = useTakeNumber(documentId, shotId, takeId);
@@ -48,7 +52,7 @@ export default function NavBar() {
           <tr className="text-center">
             <td>
               <span className="inline-block w-[55vw] overflow-hidden overflow-ellipsis whitespace-nowrap">
-                {formatDocumentTitle(documentTitle)}
+                {projectId || '--'}
               </span>
             </td>
             <td>{formatSceneNumber(sceneNumber)}</td>
@@ -59,10 +63,10 @@ export default function NavBar() {
       </table>
       <ul className="flex-1 flex flex-row bg-black text-white border-t-2 border-white">
         <li className="flex-1 flex">
-          <NavButton title="Project" abbr="Proj" Icon={TuneIcon} />
+          <NavTuneButton />
         </li>
         <li className="flex-1 flex">
-          <NavButton title="Edit" abbr="Edit" Icon={EditSquareIcon} />
+          <NavEditButton />
         </li>
         <li className="flex-1 flex">
           <NavButton title="Shotlist" abbr="Shot" Icon={ListAltIcon} />
@@ -75,6 +79,31 @@ export default function NavBar() {
         </li>
       </ul>
     </nav>
+  );
+}
+
+function NavEditButton() {
+  const navigate = useNavigate();
+  function onClick() {
+    navigate('/edit');
+  }
+  return (
+    <NavButton
+      title="Edit"
+      abbr="Edit"
+      Icon={EditSquareIcon}
+      onClick={onClick}
+    />
+  );
+}
+
+function NavTuneButton() {
+  const navigate = useNavigate();
+  function onClick() {
+    navigate('/settings');
+  }
+  return (
+    <NavButton title="Project" abbr="Proj" Icon={TuneIcon} onClick={onClick} />
   );
 }
 
@@ -91,7 +120,9 @@ function NavButton({ className, title, abbr, children, onClick, Icon }) {
   return (
     <button
       className={
-        'group relative flex-1 p-2 cursor-pointer hover:bg-white hover:text-black' +
+        'group relative flex-1 p-2' +
+        ' ' +
+        'enabled:cursor-pointer enabled:hover:bg-white enabled:hover:text-black disabled:opacity-30' +
         ' ' +
         className
       }
@@ -106,7 +137,7 @@ function NavButton({ className, title, abbr, children, onClick, Icon }) {
           ' ' +
           'pointer-events-none' +
           ' ' +
-          'bg-black group-hover:bg-white'
+          'bg-black group-enabled:group-hover:bg-white'
         }
       />
       <label className="hidden sm:inline absolute top-[50%] -translate-y-[50%] z-20 ml-6 my-auto text-black pointer-events-none">

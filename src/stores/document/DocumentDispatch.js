@@ -1,4 +1,5 @@
 import { zi } from '../ZustandImmerHelper';
+import { createDispatchDocumentSettings } from './dispatch/DispatchDocumentSettings';
 import {
   createDispatchDocuments,
   incrementDocumentRevisionNumber,
@@ -30,6 +31,7 @@ export function createDispatch(set, get) {
     deleteTake: zi(set, deleteTake),
 
     ...createDispatchDocuments(set, get),
+    ...createDispatchDocumentSettings(set, get),
     ...createDispatchShots(set, get),
     ...createDispatchTakes(set, get),
   };

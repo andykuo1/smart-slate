@@ -34,6 +34,15 @@ export function createDocument(documentId = uuid()) {
     documentTitle: '',
     lastUpdatedMillis: 0,
     revisionNumber: 0,
+    settings: {
+      projectId: '',
+      /** @type {'16:9'|'4:3'|''} */
+      aspectRatio: '',
+      /** @type {'4K'|'HD'|''} */
+      videoResolution: '',
+      /** @type {'local'|'gdrive'|''} */
+      autoSaveTo: '',
+    },
     /** @type {Array<SceneId>} */
     sceneOrder: [],
     /** @type {Record<SceneId, Scene>} */
@@ -135,6 +144,7 @@ export function cloneDocument(out, document) {
   out.documentTitle = document.documentTitle;
   out.revisionNumber = document.revisionNumber;
   out.sceneOrder = document.sceneOrder.slice();
+  out.settings = { ...(document.settings || {}) };
 
   let outScenes = out.scenes || {};
   for (let scene of Object.values(document.scenes)) {

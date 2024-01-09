@@ -1,14 +1,14 @@
 import ShotTypes, { ANY_SHOT } from '@/stores/ShotTypes';
 
 /**
- * @param {string} documentTitle
+ * @param {string} projectId
  * @param {number} sceneNumber
  * @param {number} shotNumber
  * @param {number} takeNumber
  * @param {import('@/stores/document/DocumentStore').ShotType} [shotType]
  */
 export function formatTakeNameForFileExport(
-  documentTitle,
+  projectId,
   sceneNumber,
   shotNumber,
   takeNumber,
@@ -33,13 +33,13 @@ export function formatTakeNameForFileExport(
     throw new Error('Invalid take number - must be less than 100.');
   }
   const takePathHash = getTakePathNumberHash(
-    documentTitle,
+    projectId,
     sceneNumber,
     shotNumber,
     takeNumber,
   );
   const takePathStrings = getTakePathStrings(
-    documentTitle,
+    projectId,
     sceneNumber,
     shotNumber,
     takeNumber,
@@ -62,10 +62,10 @@ export function formatShotType(shotType) {
 }
 
 /**
- * @param {string} documentTitle
+ * @param {string} projectId
  */
-export function formatDocumentTitle(documentTitle) {
-  let result = documentTitle?.trim();
+export function formatProjectId(projectId) {
+  let result = projectId?.trim();
   if (!result) {
     // NOTE: Title was empty.
     return 'UNTITLED';
@@ -115,20 +115,18 @@ export function formatTakeNumber(takeNumber) {
 }
 
 /**
- * @param {string|undefined} documentTitle
+ * @param {string|undefined} projectId
  * @param {number} sceneNumber
  * @param {number} shotNumber
  * @param {number} takeNumber
  */
 export function getTakePathNumberHash(
-  documentTitle,
+  projectId,
   sceneNumber,
   shotNumber,
   takeNumber,
 ) {
-  const documentTitleParts = documentTitle?.split(' ') || [];
-  const documentLongestPart = longestString(documentTitleParts) || 'U';
-  const documentChar = documentLongestPart.charAt(0).toUpperCase();
+  const projectChar = projectId ? findProjectIdChar(projectId) : 'U';
   const sceneDigits = String(Math.min(99, Math.max(0, sceneNumber)))
     .padStart(2, '0') // If less then 2 digits, pad with 0
     .substring(0, 2); // If more than 2 digits, contract it
@@ -138,23 +136,44 @@ export function getTakePathNumberHash(
   const takeDigits = String(Math.min(99, Math.max(0, takeNumber)))
     .padStart(2, '0') // If less then 2 digits, pad with 0
     .substring(0, 2); // If more than 2 digits, contract it
-  return `${documentChar}${sceneDigits}${shotDigits}${takeDigits}`;
+  return `${projectChar}${sceneDigits}${shotDigits}${takeDigits}`;
+}
+
+/**
+ * @param {string} projectId
+ */
+export function findProjectIdChar(projectId) {
+  let sum = 0;
+  for (let i = 0; i < projectId.length; ++i) {
+    sum += projectId.charCodeAt(i) - FIRST_CHAR_CODE + 1;
+  }
+  sum %= CHAR_CODE_RANGE;
+  return String.fromCharCode(FIRST_CHAR_CODE + sum).toUpperCase();
 }
 
 /**
  * @param {string} documentTitle
+ */
+export function findDocumentTitleChar(documentTitle) {
+  const documentTitleParts = documentTitle?.split(' ') || [];
+  const documentLongestPart = longestString(documentTitleParts) || 'U';
+  return documentLongestPart.charAt(0).toUpperCase();
+}
+
+/**
+ * @param {string} projectId
  * @param {number} sceneNumber
  * @param {number} shotNumber
  * @param {number} takeNumber
  */
 export function getTakePathStrings(
-  documentTitle,
+  projectId,
   sceneNumber,
   shotNumber,
   takeNumber,
 ) {
   return [
-    formatDocumentTitle(documentTitle),
+    formatProjectId(projectId),
     formatSceneShotNumber(sceneNumber, shotNumber),
     formatTakeNumber(takeNumber),
   ];
@@ -179,7 +198,9 @@ export function longestString(strings) {
   return result;
 }
 
-const WORD_CHARS = 'Z'.charCodeAt(0) - 'A'.charCodeAt(0);
+const FIRST_CHAR_CODE = 'A'.charCodeAt(0);
+const LAST_CHAR_CODE = 'Z'.charCodeAt(0);
+const CHAR_CODE_RANGE = LAST_CHAR_CODE - FIRST_CHAR_CODE;
 
 /**
  * @param {number} num
@@ -189,9 +210,9 @@ export function numToChar(num) {
     return '-';
   }
   let result = '';
-  if (num > WORD_CHARS) {
-    result = numToChar(Math.floor(num / WORD_CHARS));
-    num = num % WORD_CHARS;
+  if (num > CHAR_CODE_RANGE) {
+    result = numToChar(Math.floor(num / CHAR_CODE_RANGE));
+    num = num % CHAR_CODE_RANGE;
   }
   return result + String.fromCharCode('A'.charCodeAt(0) + (num - 1));
 }
