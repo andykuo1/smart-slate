@@ -60,7 +60,6 @@ export default function RecorderToolbar({
                 onChange={(deviceId) =>
                   onVideoConstraintsChange({ deviceId: { exact: deviceId } })
                 }
-                disabled={true}
               />
             </div>
             <div className="flex flex-row gap-2 my-1 opacity-30">
