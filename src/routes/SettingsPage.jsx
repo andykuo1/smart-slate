@@ -1,3 +1,11 @@
+import {
+  Disclosure,
+  DisclosureContent,
+  DisclosureProvider,
+} from '@ariakit/react';
+
+import ExpandMoreIcon from '@material-symbols/svg-400/rounded/expand_more.svg';
+
 import NavBarLayout from '@/components/NavBarLayout';
 import SettingsAspectRatioField from '@/components/settings/SettingsAspectRatioField';
 import SettingsAutoSaveToField from '@/components/settings/SettingsAutoSaveToField';
@@ -38,24 +46,32 @@ export default function SettingsPage() {
           <br />
           <SettingsReturnHomeField />
           <br />
-          <SettingsFieldGroup title="Data Settings">
-            <SettingsEnableGoogleDriveSyncToggle />
-            <SettingsShareFilesButton />
-          </SettingsFieldGroup>
-          <br />
-          <SettingsFieldGroup title="Recorder Settings">
-            <SettingsPreferNativeRecorderToggle />
-            <SettingsPreferPersistedMediaStreamToggle />
-            <SettingsEnableRecorderReferenceToggle />
-            <SettingsEnableRecorderLiveAudioToggle />
-          </SettingsFieldGroup>
-          <br />
-          <SettingsNerdInfoButton />
-          <br />
-          <SettingsFieldGroup title="Dangerous Stuff">
-            <SettingsVideoCacheClearButton />
-            <SettingsProjectDeleteButton />
-          </SettingsFieldGroup>
+          <DisclosureProvider>
+            <Disclosure className="w-full flex items-center border-b-2 border-black">
+              <span className="flex-1">More Settings</span>
+              <ExpandMoreIcon className="w-6 h-6 fill-current" />
+            </Disclosure>
+            <DisclosureContent className="py-4">
+              <SettingsFieldGroup title="Data Settings">
+                <SettingsEnableGoogleDriveSyncToggle />
+                <SettingsShareFilesButton />
+              </SettingsFieldGroup>
+              <br />
+              <SettingsFieldGroup title="Recorder Settings">
+                <SettingsPreferNativeRecorderToggle />
+                <SettingsPreferPersistedMediaStreamToggle />
+                <SettingsEnableRecorderReferenceToggle />
+                <SettingsEnableRecorderLiveAudioToggle />
+              </SettingsFieldGroup>
+              <br />
+              <SettingsNerdInfoButton />
+              <br />
+              <SettingsFieldGroup title="Dangerous Stuff">
+                <SettingsVideoCacheClearButton />
+                <SettingsProjectDeleteButton />
+              </SettingsFieldGroup>
+            </DisclosureContent>
+          </DisclosureProvider>
           <br />
         </fieldset>
       </NavBarLayout>
