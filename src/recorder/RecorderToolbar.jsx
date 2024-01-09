@@ -26,11 +26,13 @@ import { RecorderContext } from './RecorderContext';
  * @param {string} [props.className]
  * @param {(blob: Blob) => void} props.onComplete
  * @param {(resolution: import('@/values/Resolutions').VideoResolution) => void} props.onResolutionChange
+ * @param {(zoom: number) => void} props.onZoomChange
  */
 export default function RecorderToolbar({
   className,
   onComplete,
   onResolutionChange,
+  onZoomChange,
 }) {
   const [open, setOpen] = useState(false);
   const { videoDeviceId, audioDeviceId } = useContext(RecorderContext);
@@ -54,8 +56,8 @@ export default function RecorderToolbar({
             The configurations for the recorder.
           </DialogDescription>
           <fieldset className="my-4">
-            <div className="flex flex-row opacity-30">
-              <label className="px-2 whitespace-nowrap">Video Source:</label>
+            <div className="flex flex-row gap-2 my-1 opacity-30">
+              <label className="whitespace-nowrap">Video Source:</label>
               <VideoDeviceSelector
                 className="flex-1"
                 value={videoDeviceId}
@@ -63,8 +65,8 @@ export default function RecorderToolbar({
                 disabled={true}
               />
             </div>
-            <div className="flex flex-row opacity-30">
-              <label className="px-2 whitespace-nowrap">Audio Source:</label>
+            <div className="flex flex-row gap-2 my-1 opacity-30">
+              <label className="whitespace-nowrap">Audio Source:</label>
               <AudioDeviceSelector
                 className="flex-1"
                 value={audioDeviceId}
@@ -72,12 +74,30 @@ export default function RecorderToolbar({
                 disabled={true}
               />
             </div>
-            <div className="flex flex-row">
-              <label className="px-2 whitespace-nowrap">Resolution:</label>
+            <div className="flex flex-row gap-2 my-1">
+              <label className="whitespace-nowrap">Resolution:</label>
               <MediaStreamVideoResolutionSelector
                 className="flex-1"
                 onChange={onResolutionChange}
               />
+            </div>
+            <div className="flex flex-row gap-2 my-1">
+              <label className="whitespace-nowrap">Zoom:</label>
+              <button
+                className="flex-1 rounded bg-gray-600"
+                onClick={() => onZoomChange(0.5)}>
+                x0.5
+              </button>
+              <button
+                className="flex-1 rounded bg-gray-600"
+                onClick={() => onZoomChange(1)}>
+                x1
+              </button>
+              <button
+                className="flex-1 rounded bg-gray-600"
+                onClick={() => onZoomChange(2)}>
+                x2
+              </button>
             </div>
           </fieldset>
         </Dialog>

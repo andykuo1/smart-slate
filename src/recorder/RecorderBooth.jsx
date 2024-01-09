@@ -47,15 +47,30 @@ export default function RecorderBooth() {
   const exportTake = useTakeExporter();
   const setUserCursor = useSetUserCursor();
   const [_, setVideoSnapshotURL] = useState('');
+  const [zoomLevel, setZoomLevel] = useState(1);
   const [videoConstraints, setVideoConstraints] = useState({
     facingMode: 'environment',
     width: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].width },
     height: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].height },
     aspectRatio: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].ratio },
-    zoom: { ideal: 2 },
+    zoom: { ideal: zoomLevel },
   });
 
   const { videoRef, onStop } = useContext(RecorderContext);
+
+  const onVideoZoomChange = useCallback(
+    /**
+     * @param {number} zoom
+     */
+    function _onVideoZoomChange(zoom) {
+      setZoomLevel(zoom);
+      setVideoConstraints((prev) => ({
+        ...prev,
+        zoom: { ideal: zoom },
+      }));
+    },
+    [setZoomLevel, setVideoConstraints],
+  );
 
   const onVideoResolutionChange = useCallback(
     /**
@@ -167,6 +182,7 @@ export default function RecorderBooth() {
         <RecorderToolbar
           onComplete={onComplete}
           onResolutionChange={onVideoResolutionChange}
+          onZoomChange={onVideoZoomChange}
         />
       )}
     />
