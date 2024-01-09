@@ -114,30 +114,30 @@ export default function RecorderToolbar({
               <button
                 className="flex-1 rounded bg-gray-600"
                 onClick={() =>
-                  setVideoConstraints((prev) => ({
-                    ...prev,
-                    zoom: { ideal: 0.5 },
-                  }))
+                  onVideoConstraintsChange({
+                    // @ts-ignore
+                    zoom: { exact: 0.5 },
+                  })
                 }>
                 x0.5
               </button>
               <button
                 className="flex-1 rounded bg-gray-600"
                 onClick={() =>
-                  setVideoConstraints((prev) => ({
-                    ...prev,
-                    zoom: { ideal: 1 },
-                  }))
+                  onVideoConstraintsChange({
+                    // @ts-ignore
+                    zoom: { exact: 1.0 },
+                  })
                 }>
                 x1
               </button>
               <button
                 className="flex-1 rounded bg-gray-600"
                 onClick={() =>
-                  setVideoConstraints((prev) => ({
-                    ...prev,
-                    zoom: { ideal: 2 },
-                  }))
+                  onVideoConstraintsChange({
+                    // @ts-ignore
+                    zoom: { exact: 2.0 },
+                  })
                 }>
                 x2
               </button>
