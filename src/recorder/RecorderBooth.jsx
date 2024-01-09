@@ -52,6 +52,7 @@ export default function RecorderBooth() {
     width: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].width },
     height: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].height },
     aspectRatio: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].ratio },
+    zoom: { ideal: 2 },
   });
 
   const { videoRef, onStop } = useContext(RecorderContext);
