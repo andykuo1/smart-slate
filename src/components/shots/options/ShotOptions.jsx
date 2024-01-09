@@ -67,7 +67,7 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
       setOpen(false);
       openRecorder(e);
     },
-    [setUserCursor, setOpen],
+    [setOpen, openRecorder],
   );
 
   const onInputChange = useCallback(

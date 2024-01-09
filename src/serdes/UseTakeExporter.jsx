@@ -63,7 +63,7 @@ export function useTakeDownloader() {
       downloadURLImpl(exportedFileNameWithExt, dataURL);
       URL.revokeObjectURL(dataURL);
     },
-    [UNSAFE_getStore],
+    [UNSAFE_getStore, assignAvailableShotHash],
   );
 
   return downloadTake;
@@ -123,7 +123,12 @@ export function useTakeGoogleDriveUploader() {
           });
       });
     },
-    [UNSAFE_getStore, handleToken, setTakeExportedGoogleDriveFileId],
+    [
+      UNSAFE_getStore,
+      handleToken,
+      assignAvailableShotHash,
+      setTakeExportedGoogleDriveFileId,
+    ],
   );
 
   return uploadTake;
@@ -216,6 +221,7 @@ export function useTakeExporter() {
       UNSAFE_getStore,
       addTake,
       handleToken,
+      assignAvailableShotHash,
       setTakeExportedGoogleDriveFileId,
       setTakeExportedIDBKey,
     ],

@@ -64,7 +64,7 @@ export default function MediaStreamVideoZoomControls({ className }) {
     if (disabled) {
       setDisabled(false);
     }
-  }, [inputRef, mediaStream]);
+  }, [inputRef, mediaStream, disabled, zoomValue]);
 
   return (
     <input

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useRef, useState } from 'react';
 
 export default function TestVideoConstraints() {
@@ -38,25 +37,34 @@ export default function TestVideoConstraints() {
     const [track] = mediaStream.getVideoTracks();
     const cap = track.getCapabilities();
     const set = track.getSettings();
-    input.min = cap?.zoom?.min;
-    input.max = cap?.zoom?.max;
-    input.step = cap?.zoom?.step;
-    input.value = set?.zoom;
+    if (!('zoom' in cap)) {
+      return;
+    }
+    const zoom = /** @type {{ min: number, max: number, step: number }} */ (
+      cap.zoom
+    );
+    input.min = String(zoom.min);
+    input.max = String(zoom.max);
+    input.step = String(zoom.step);
+    if ('zoom' in set) {
+      input.value = String(set.zoom);
+    }
     input.hidden = false;
-    console.log('[TestVideoConstraints] Set zoom!', cap, cap.zoom, set.zoom);
+    console.log('[TestVideoConstraints] Set zoom!', cap, cap.zoom, input.value);
   }
 
-  /** @param {InputEvent} e */
+  /** @type {import('react').FormEventHandler<HTMLInputElement>} */
   function onInput(e) {
     if (!mediaStream) {
       return;
     }
-    const target = e.target;
-    const value = e.target.value;
+    const target = /** @type {HTMLInputElement} */ (e.target);
+    const value = target.value;
     const [track] = mediaStream.getVideoTracks();
     track.applyConstraints({
       advanced: [
         {
+          // @ts-expect-error Zoom exists for Safari.
           zoom: value,
         },
       ],
