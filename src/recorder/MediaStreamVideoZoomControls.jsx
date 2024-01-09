@@ -39,7 +39,7 @@ export default function MediaStreamVideoZoomControls({ className }) {
       .catch((e) =>
         console.error(
           '[MediaStreamVideoZoomControls] Failed to apply constraints! ' +
-            e.meessage,
+            e.message,
         ),
       );
   }
@@ -66,7 +66,7 @@ export default function MediaStreamVideoZoomControls({ className }) {
     );
     input.min = String(zoom.min);
     input.max = String(zoom.max);
-    input.step = String(zoom.step);
+    input.step = String(zoom.step || 1);
     if ('zoom' in set) {
       let currentZoom = Number(set.zoom);
       setZoomValue(currentZoom);
