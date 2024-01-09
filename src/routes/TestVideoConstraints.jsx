@@ -10,8 +10,9 @@ export default function TestVideoConstraints() {
 
   function step1() {
     navigator.mediaDevices
-      .getUserMedia({ video: true })
+      .getUserMedia({ video: true, audio: false })
       .then((stream) => setMediaStream(stream));
+    console.log('[TestVideoConstraints] Getting media stream...');
   }
 
   function step2() {
@@ -34,12 +35,12 @@ export default function TestVideoConstraints() {
     const [track] = mediaStream.getVideoTracks();
     const cap = track.getCapabilities();
     const set = track.getSettings();
-    console.log(cap, cap.zoom, set.zoom);
-    input.min = cap.zoom.min;
-    input.max = cap.zoom.max;
-    input.step = cap.zoom.step;
-    input.value = set.zoom;
+    input.min = cap?.zoom?.min;
+    input.max = cap?.zoom?.max;
+    input.step = cap?.zoom?.step;
+    input.value = set?.zoom;
     input.hidden = false;
+    console.log('[TestVideoConstraints] Set zoom!', cap, cap.zoom, set.zoom);
   }
 
   /** @param {InputEvent} e */
@@ -68,16 +69,16 @@ export default function TestVideoConstraints() {
         <li>
           <div>Step 1</div>
           <button onClick={step1}>Open MediaStream</button>
+        </li>
+        <li>
+          <div>Step 2</div>
+          <button onClick={step2}>Attach Video</button>
           <video
             ref={videoRef}
             preload="metadata"
             muted={true}
             playsInline={true}
           />
-        </li>
-        <li>
-          <div>Step 2</div>
-          <button onClick={step2}>Attach Zoom</button>
         </li>
         <li>
           <div>Step 3</div>
