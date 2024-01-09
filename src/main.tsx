@@ -11,7 +11,7 @@ import ErrorPage from './routes/ErrorPage';
 import RecordPage from './routes/RecordPage';
 import RootPage from './routes/RootPage';
 import SettingsPage from './routes/SettingsPage';
-import TestPage from './routes/TestRecorderPage';
+import TestPage from './routes/TestPage';
 import ViewPage from './routes/ViewPage';
 import { PACKAGE_NAME } from './values/PackageJSON';
 
