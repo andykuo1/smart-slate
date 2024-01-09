@@ -22,45 +22,11 @@ import {
 } from './takes/TakeNameFormat';
 
 export default function NavBar() {
-  const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
-  const projectId = useDocumentStore(
-    (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
-  );
-  const sceneNumber = useSceneNumber(documentId, sceneId);
-  const shotNumber = useShotNumber(documentId, sceneId, shotId);
-  const takeNumber = useTakeNumber(documentId, shotId, takeId);
   return (
     <nav className="fixed bottom-0 w-full flex flex-col z-30">
-      <table className="bg-black text-white">
-        <thead>
-          <tr className="text-xs opacity-60">
-            <th scope="col" className="w-[55%]">
-              Project
-            </th>
-            <th scope="col" className="w-[15%]">
-              Scene
-            </th>
-            <th scope="col" className="w-[15%]">
-              Shot
-            </th>
-            <th scope="col" className="w-[15%]">
-              Take
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr className="text-center">
-            <td>
-              <span className="inline-block w-[55vw] overflow-hidden overflow-ellipsis whitespace-nowrap">
-                {projectId || '--'}
-              </span>
-            </td>
-            <td>{formatSceneNumber(sceneNumber)}</td>
-            <td>{formatShotNumber(shotNumber)}</td>
-            <td>{formatTakeNumber(takeNumber)}</td>
-          </tr>
-        </tbody>
-      </table>
+      {false /* TODO: Don't show until we have something better */ && (
+        <NavSceneShotTake />
+      )}
       <ul className="flex-1 flex flex-row bg-black text-white border-t-2 border-white">
         <li className="flex-1 flex">
           <NavTuneButton />
@@ -79,6 +45,48 @@ export default function NavBar() {
         </li>
       </ul>
     </nav>
+  );
+}
+
+function NavSceneShotTake() {
+  const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
+  const projectId = useDocumentStore(
+    (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
+  );
+  const sceneNumber = useSceneNumber(documentId, sceneId);
+  const shotNumber = useShotNumber(documentId, sceneId, shotId);
+  const takeNumber = useTakeNumber(documentId, shotId, takeId);
+  return (
+    <table className="bg-black text-white">
+      <thead>
+        <tr className="text-xs opacity-60">
+          <th scope="col" className="w-[55%]">
+            Project
+          </th>
+          <th scope="col" className="w-[15%]">
+            Scene
+          </th>
+          <th scope="col" className="w-[15%]">
+            Shot
+          </th>
+          <th scope="col" className="w-[15%]">
+            Take
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr className="text-center">
+          <td>
+            <span className="inline-block w-[55vw] overflow-hidden overflow-ellipsis whitespace-nowrap">
+              {projectId || '--'}
+            </span>
+          </td>
+          <td>{formatSceneNumber(sceneNumber)}</td>
+          <td>{formatShotNumber(shotNumber)}</td>
+          <td>{formatTakeNumber(takeNumber)}</td>
+        </tr>
+      </tbody>
+    </table>
   );
 }
 
