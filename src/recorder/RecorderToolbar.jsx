@@ -6,7 +6,7 @@ import {
   DialogHeading,
   DialogProvider,
 } from '@ariakit/react';
-import { useContext, useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import SettingsIcon from '@material-symbols/svg-400/rounded/settings-fill.svg';
 
@@ -17,20 +17,22 @@ import {
 } from '@/values/RecorderValues';
 
 import MediaRecorderStartStop from './MediaRecorderStartStop';
+import MediaStreamAudioDeviceSelector from './MediaStreamAudioDeviceSelector';
 import MediaStreamVideoDeviceSelector from './MediaStreamVideoDeviceSelector';
 import MediaStreamVideoResolutionSelector from './MediaStreamVideoResolutionSelector';
-import { RecorderContext } from './RecorderContext';
 
 /**
  * @param {object} props
  * @param {string} [props.className]
  * @param {(blob: Blob) => void} props.onComplete
  * @param {(constraints: MediaTrackConstraints) => void} props.onVideoConstraintsChange
+ * @param {(constraints: MediaTrackConstraints) => void} props.onAudioConstraintsChange
  */
 export default function RecorderToolbar({
   className,
   onComplete,
   onVideoConstraintsChange,
+  onAudioConstraintsChange,
 }) {
   const [open, setOpen] = useState(false);
 
@@ -64,11 +66,11 @@ export default function RecorderToolbar({
             </div>
             <div className="flex flex-row gap-2 my-1 opacity-30">
               <label className="whitespace-nowrap">Audio Source:</label>
-              <AudioDeviceSelector
+              <MediaStreamAudioDeviceSelector
                 className="flex-1"
-                value={''}
-                onChange={() => {}}
-                disabled={true}
+                onChange={(deviceId) =>
+                  onAudioConstraintsChange({ deviceId: { exact: deviceId } })
+                }
               />
             </div>
             <div className="flex flex-row gap-2 my-1">
@@ -130,59 +132,5 @@ export default function RecorderToolbar({
       <div className="h-10" />
       <div className="flex-1" />
     </div>
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} [props.className]
- * @param {string} props.value
- * @param {boolean} [props.disabled]
- * @param {(audioDeviceId: string) => void} props.onChange
- */
-function AudioDeviceSelector({ className, value, disabled, onChange }) {
-  const [deviceList, setDeviceList] = useState(
-    /** @type {Array<MediaDeviceInfo>} */ ([]),
-  );
-
-  const { isPrepared } = useContext(RecorderContext);
-
-  useEffect(() => {
-    if (!isPrepared) {
-      setDeviceList([]);
-      return;
-    }
-    if (
-      typeof window !== 'undefined' &&
-      typeof window?.navigator?.mediaDevices?.enumerateDevices === 'function'
-    ) {
-      window.navigator.mediaDevices
-        .enumerateDevices()
-        .then((infos) =>
-          setDeviceList(infos.filter((info) => info.kind === 'audioinput')),
-        );
-      return () => setDeviceList([]);
-    }
-  }, [setDeviceList, isPrepared]);
-
-  /** @type {import('react').ChangeEventHandler<HTMLSelectElement>} */
-  function changeCallback(e) {
-    const target = e.target;
-    const value = target.value;
-    onChange(value);
-  }
-
-  return (
-    <select
-      className={className}
-      value={value}
-      onChange={changeCallback}
-      disabled={disabled}>
-      {deviceList.map((deviceInfo, index) => (
-        <option key={deviceInfo.deviceId} value={deviceInfo.deviceId}>
-          {deviceInfo.label || 'Microphone ' + (index + 1)}
-        </option>
-      ))}
-    </select>
   );
 }
