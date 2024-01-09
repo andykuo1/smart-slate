@@ -35,6 +35,18 @@ export default function RecorderToolbar({
   onAudioConstraintsChange,
 }) {
   const [open, setOpen] = useState(false);
+  const [videoConstraints, setVideoConstraints] = useState(
+    /** @type {MediaTrackConstraints} */ ({}),
+  );
+  const [_, setAudioConstraints] = useState(
+    /** @type {MediaTrackConstraints} */ ({}),
+  );
+
+  function onApplyClick() {
+    onVideoConstraintsChange(videoConstraints);
+    // TODO: onAudioConstraintsChange(audioConstraints);
+    setOpen(false);
+  }
 
   return (
     <div className={'w-20 h-full flex flex-col items-center' + ' ' + className}>
@@ -60,7 +72,10 @@ export default function RecorderToolbar({
               <MediaStreamVideoDeviceSelector
                 className="flex-1"
                 onChange={(deviceId) =>
-                  onVideoConstraintsChange({ deviceId: { exact: deviceId } })
+                  setVideoConstraints((prev) => ({
+                    ...prev,
+                    deviceId: deviceId ? { exact: deviceId } : undefined,
+                  }))
                 }
               />
             </div>
@@ -69,7 +84,10 @@ export default function RecorderToolbar({
               <MediaStreamAudioDeviceSelector
                 className="flex-1"
                 onChange={(deviceId) =>
-                  onAudioConstraintsChange({ deviceId: { exact: deviceId } })
+                  setAudioConstraints((prev) => ({
+                    ...prev,
+                    deviceId: deviceId ? { exact: deviceId } : undefined,
+                  }))
                 }
               />
             </div>
@@ -78,11 +96,12 @@ export default function RecorderToolbar({
               <MediaStreamVideoResolutionSelector
                 className="flex-1"
                 onChange={(resolution) =>
-                  onVideoConstraintsChange({
+                  setVideoConstraints((prev) => ({
+                    ...prev,
                     width: { ideal: resolution.width },
                     height: { ideal: resolution.height },
                     aspectRatio: { ideal: resolution.ratio },
-                  })
+                  }))
                 }
               />
             </div>
@@ -91,27 +110,36 @@ export default function RecorderToolbar({
               <button
                 className="flex-1 rounded bg-gray-600"
                 onClick={() =>
-                  // @ts-expect-error Zoom exists for Safari.
-                  onVideoConstraintsChange({ zoom: { ideal: 0.5 } })
+                  setVideoConstraints((prev) => ({
+                    ...prev,
+                    zoom: { ideal: 0.5 },
+                  }))
                 }>
                 x0.5
               </button>
               <button
                 className="flex-1 rounded bg-gray-600"
                 onClick={() =>
-                  // @ts-expect-error Zoom exists for Safari.
-                  onVideoConstraintsChange({ zoom: { ideal: 1 } })
+                  setVideoConstraints((prev) => ({
+                    ...prev,
+                    zoom: { ideal: 1 },
+                  }))
                 }>
                 x1
               </button>
               <button
                 className="flex-1 rounded bg-gray-600"
                 onClick={() =>
-                  // @ts-expect-error Zoom exists for Safari.
-                  onVideoConstraintsChange({ zoom: { ideal: 2 } })
+                  setVideoConstraints((prev) => ({
+                    ...prev,
+                    zoom: { ideal: 2 },
+                  }))
                 }>
                 x2
               </button>
+            </div>
+            <div className="flex flex-row gap-2 my-1">
+              <button onClick={onApplyClick}>Apply</button>
             </div>
           </fieldset>
         </Dialog>

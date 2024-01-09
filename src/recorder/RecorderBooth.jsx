@@ -26,6 +26,16 @@ import RecorderBoothTitle from './RecorderBoothTitle';
 import { RecorderContext } from './RecorderContext';
 import RecorderToolbar from './RecorderToolbar';
 
+/** @type {MediaTrackConstraints} */
+const DEFAULT_VIDEO_CONSTRAINTS = {
+  facingMode: 'environment',
+  width: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].width },
+  height: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].height },
+  aspectRatio: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].ratio },
+  // @ts-expect-error Safari supports 'zoom'.
+  zoom: { ideal: 1 },
+};
+
 export default function RecorderBooth() {
   const userCursor = useCurrentCursor();
   const { documentId, sceneId, shotId } = userCursor;
@@ -48,29 +58,37 @@ export default function RecorderBooth() {
   const setUserCursor = useSetUserCursor();
   const [_, setVideoSnapshotURL] = useState('');
   const [videoConstraints, setVideoConstraints] = useState(
-    /** @type {MediaTrackConstraints} */ ({
-      facingMode: 'environment',
-      width: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].width },
-      height: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].height },
-      aspectRatio: { ideal: STANDARD_VIDEO_RESOLUTIONS['1080p'].ratio },
-      zoom: { ideal: 1 },
-    }),
+    DEFAULT_VIDEO_CONSTRAINTS,
   );
   const [__, setAudioConstraints] = useState(
     /** @type {MediaTrackConstraints} */ ({}),
   );
 
-  const { videoRef, onStop } = useContext(RecorderContext);
+  const { videoRef, onStop, initMediaStream } = useContext(RecorderContext);
 
   const onVideoConstraintsChange = useCallback(
     /**
      * @param {MediaTrackConstraints} constraints
      */
     function _onVideoConstraintsChange(constraints) {
-      setVideoConstraints((prev) => ({
-        ...prev,
-        ...constraints,
-      }));
+      if (constraints.deviceId) {
+        // Restart instead.
+        initMediaStream(
+          [
+            {
+              video: { ...DEFAULT_VIDEO_CONSTRAINTS, ...constraints },
+              audio: true,
+            },
+          ],
+          true,
+        );
+      } else {
+        // Try apply.
+        setVideoConstraints((prev) => ({
+          ...prev,
+          ...constraints,
+        }));
+      }
     },
     [setVideoConstraints],
   );
