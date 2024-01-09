@@ -73,10 +73,13 @@ export default function RecorderBooth() {
     function _onVideoConstraintsChange(constraints) {
       if (constraints.deviceId) {
         // Restart instead.
+        let result = { ...DEFAULT_VIDEO_CONSTRAINTS, ...constraints };
+        // Remove facing mode and prefer device id selection
+        delete result.facingMode;
         initMediaStream(
           [
             {
-              video: { ...DEFAULT_VIDEO_CONSTRAINTS, ...constraints },
+              video: result,
               audio: true,
             },
           ],

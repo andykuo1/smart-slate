@@ -67,7 +67,7 @@ export default function RecorderToolbar({
             The configurations for the recorder.
           </DialogDescription>
           <fieldset className="my-4">
-            <div className="flex flex-row gap-2 my-1 opacity-30">
+            <div className="flex flex-row gap-2 my-1">
               <label className="whitespace-nowrap">Video Source:</label>
               <MediaStreamVideoDeviceSelector
                 className="flex-1"
@@ -79,7 +79,7 @@ export default function RecorderToolbar({
                 }
               />
             </div>
-            <div className="flex flex-row gap-2 my-1 opacity-30">
+            <div className="flex flex-row gap-2 my-1">
               <label className="whitespace-nowrap">Audio Source:</label>
               <MediaStreamAudioDeviceSelector
                 className="flex-1"
