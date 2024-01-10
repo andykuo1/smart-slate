@@ -41,34 +41,38 @@ export default function SettingsPage() {
           <SettingsAutoSaveToField />
           <SettingsProjectStartButton />
           <SettingsReturnHomeField />
-          <br />
+          <fieldset>
+            <legend className="w-full py-4">
+              <h4 className="text-center border-b-2 border-black">
+                More Settings
+              </h4>
+            </legend>
+            <SettingsAspectRatioField />
+            <SettingsVideoResolutionField />
+            <br />
+            <SettingsFieldGroup title="Data Settings">
+              <SettingsEnableGoogleDriveSyncToggle />
+              <SettingsShareFilesButton />
+            </SettingsFieldGroup>
+            <br />
+            <SettingsFieldGroup title="Recorder Settings">
+              <SettingsPreferNativeRecorderToggle />
+              <SettingsPreferPersistedMediaStreamToggle />
+              <SettingsEnableRecorderReferenceToggle />
+              <SettingsEnableRecorderLiveAudioToggle />
+            </SettingsFieldGroup>
+            <br />
+            <SettingsNerdInfoButton />
+            <br />
+          </fieldset>
           <DisclosureProvider>
             <Disclosure className="w-full flex items-center border-b-2 border-black">
-              <span className="flex-1">More Settings</span>
+              <span className="flex-1">Dangerous Stuff</span>
               <ExpandMoreIcon className="w-6 h-6 fill-current" />
             </Disclosure>
             <DisclosureContent className="py-4">
-              <SettingsAspectRatioField />
-              <SettingsVideoResolutionField />
-              <br />
-              <SettingsFieldGroup title="Data Settings">
-                <SettingsEnableGoogleDriveSyncToggle />
-                <SettingsShareFilesButton />
-              </SettingsFieldGroup>
-              <br />
-              <SettingsFieldGroup title="Recorder Settings">
-                <SettingsPreferNativeRecorderToggle />
-                <SettingsPreferPersistedMediaStreamToggle />
-                <SettingsEnableRecorderReferenceToggle />
-                <SettingsEnableRecorderLiveAudioToggle />
-              </SettingsFieldGroup>
-              <br />
-              <SettingsNerdInfoButton />
-              <br />
-              <SettingsFieldGroup title="Dangerous Stuff">
-                <SettingsVideoCacheClearButton />
-                <SettingsProjectDeleteButton />
-              </SettingsFieldGroup>
+              <SettingsVideoCacheClearButton />
+              <SettingsProjectDeleteButton />
             </DisclosureContent>
           </DisclosureProvider>
           <br />
