@@ -18,7 +18,6 @@ import {
 
 import { useShotTypeChange } from '../UseShotType';
 import { blobToDataURI } from './ShotThumbnailHelper';
-import ShotThumbnailImage from './ShotThumbnailImage';
 
 /**
  * @param {object} props
@@ -93,37 +92,30 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
 
   return (
     <div className="flex flex-col gap-2">
-      <ShotThumbnailImage
-        className="m-auto text-black border"
-        documentId={documentId}
-        sceneId={sceneId}
-        shotId={shotId}
-        referenceOnly={true}
-      />
+      <Button
+        className="flex-1 p-1 flex items-center rounded hover:bg-opacity-10 bg-opacity-0 bg-white disabled:opacity-30"
+        onClick={onRecordClick}>
+        <RadioButtonCheckedIcon className="w-6 h-6 fill-current" />
+        <span className="flex-1 text-right">Record!</span>
+      </Button>
+      <div className="border" />
       <ShotTypeSelector
         className="flex-1 flex flex-row items-center"
         activeShotType={activeShotType}
         onChange={onShotTypeChange}
       />
       <Button
-        className="flex-1 w-full p-1 flex items-center hover:bg-opacity-10 bg-opacity-0 bg-white disabled:opacity-30"
+        className="flex-1 p-1 flex items-center rounded hover:bg-opacity-10 bg-opacity-0 bg-white disabled:opacity-30"
         disabled={!isCameraEnabled}
         onClick={onInputCaptureClick}>
         <PhotoCameraIcon className="w-6 h-6 fill-current" />
-        <span className="flex-1 text-right">Take photo</span>
+        <span className="flex-1 text-right ml-2">Take photo</span>
       </Button>
       <Button
         className="flex-1 p-1 flex items-center rounded hover:bg-opacity-10 bg-opacity-0 bg-white disabled:opacity-30"
         onClick={onInputUploadClick}>
         <UploadIcon className="w-6 h-6 fill-current" />
-        <span className="flex-1 text-right">Upload photo</span>
-      </Button>
-      <div className="border" />
-      <Button
-        className="flex-1 p-1 flex items-center rounded hover:bg-opacity-10 bg-opacity-0 bg-white disabled:opacity-30"
-        onClick={onRecordClick}>
-        <RadioButtonCheckedIcon className="w-6 h-6 fill-current" />
-        <span className="flex-1 text-right">Record!</span>
+        <span className="flex-1 text-right ml-2">From file</span>
       </Button>
       <canvas ref={canvasRef} className="hidden" />
       <input

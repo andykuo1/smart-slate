@@ -27,6 +27,7 @@
 - Change take number hash to shot hash for editing
 - Change background for recorder back button
 - Change shot options to be just a list
+- Change record to be first in shot options
 
 - Fix wrong take number for viewer
 
