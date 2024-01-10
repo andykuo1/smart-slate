@@ -19,6 +19,7 @@ import SettingsPreferPersistedMediaStreamToggle from '@/components/settings/Sett
 import SettingsProjectDeleteButton from '@/components/settings/SettingsProjectDeleteButton';
 import SettingsProjectIdField from '@/components/settings/SettingsProjectIdField';
 import SettingsProjectNameField from '@/components/settings/SettingsProjectNameField';
+import SettingsProjectStartButton from '@/components/settings/SettingsProjectStartButton';
 import SettingsReturnHomeField from '@/components/settings/SettingsReturnHomeField';
 import SettingsShareFilesButton from '@/components/settings/SettingsShareFilesButton';
 import SettingsVideoCacheClearButton from '@/components/settings/SettingsVideoCacheClearButton';
@@ -35,15 +36,10 @@ export default function SettingsPage() {
               Change to whatever floats your boat :)
             </p>
           </legend>
-          <br />
           <SettingsProjectNameField />
           <SettingsProjectIdField />
-          <br />
-          <SettingsAspectRatioField />
-          <SettingsVideoResolutionField />
-          <br />
           <SettingsAutoSaveToField />
-          <br />
+          <SettingsProjectStartButton />
           <SettingsReturnHomeField />
           <br />
           <DisclosureProvider>
@@ -52,6 +48,9 @@ export default function SettingsPage() {
               <ExpandMoreIcon className="w-6 h-6 fill-current" />
             </Disclosure>
             <DisclosureContent className="py-4">
+              <SettingsAspectRatioField />
+              <SettingsVideoResolutionField />
+              <br />
               <SettingsFieldGroup title="Data Settings">
                 <SettingsEnableGoogleDriveSyncToggle />
                 <SettingsShareFilesButton />

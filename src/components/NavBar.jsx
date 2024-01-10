@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import EditSquareIcon from '@material-symbols/svg-400/rounded/edit_square.svg';
 import ListAltIcon from '@material-symbols/svg-400/rounded/list_alt.svg';
@@ -13,7 +13,7 @@ import {
   useShotNumber,
   useTakeNumber,
 } from '@/stores/document';
-import { useCurrentCursor } from '@/stores/user';
+import { useCurrentCursor, useCurrentDocumentId } from '@/stores/user';
 
 import {
   formatSceneNumber,
@@ -91,7 +91,12 @@ function NavSceneShotTake() {
 }
 
 function NavEditButton() {
+  const documentId = useCurrentDocumentId();
+  const projectId = useDocumentStore(
+    (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
+  );
   const navigate = useNavigate();
+  const location = useLocation();
   function onClick() {
     navigate('/edit');
   }
@@ -100,6 +105,8 @@ function NavEditButton() {
       title="Edit"
       abbr="Edit"
       Icon={EditSquareIcon}
+      active={location.pathname.includes('/edit')}
+      disabled={!projectId}
       onClick={onClick}
     />
   );
@@ -111,7 +118,13 @@ function NavTuneButton() {
     navigate('/settings');
   }
   return (
-    <NavButton title="Project" abbr="Proj" Icon={TuneIcon} onClick={onClick} />
+    <NavButton
+      title="Project"
+      abbr="Proj"
+      Icon={TuneIcon}
+      active={location.pathname.includes('/settings')}
+      onClick={onClick}
+    />
   );
 }
 
@@ -123,8 +136,19 @@ function NavTuneButton() {
  * @param {import('react').ReactNode} [props.children]
  * @param {() => void} [props.onClick]
  * @param {import('react').FC<any>} props.Icon
+ * @param {boolean} [props.active]
+ * @param {boolean} [props.disabled]
  */
-function NavButton({ className, title, abbr, children, onClick, Icon }) {
+function NavButton({
+  className,
+  title,
+  abbr,
+  children,
+  onClick,
+  Icon,
+  active,
+  disabled = !onClick,
+}) {
   return (
     <button
       className={
@@ -132,11 +156,13 @@ function NavButton({ className, title, abbr, children, onClick, Icon }) {
         ' ' +
         'enabled:cursor-pointer enabled:hover:bg-white enabled:hover:text-black disabled:opacity-30' +
         ' ' +
+        (active ? 'bg-white text-black' : '') +
+        ' ' +
         className
       }
       title={title}
       onClick={onClick}
-      disabled={!onClick}>
+      disabled={disabled}>
       {children}
       <Icon className="w-10 h-10 fill-current m-auto pointer-events-none" />
       <div
@@ -145,7 +171,9 @@ function NavButton({ className, title, abbr, children, onClick, Icon }) {
           ' ' +
           'pointer-events-none' +
           ' ' +
-          'bg-black group-enabled:group-hover:bg-white'
+          'bg-black group-enabled:group-hover:bg-white' +
+          ' ' +
+          (active ? 'bg-white' : '')
         }
       />
       <label className="hidden sm:inline absolute top-[50%] -translate-y-[50%] z-20 ml-6 my-auto text-black pointer-events-none">

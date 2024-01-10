@@ -31,7 +31,7 @@ export default function WelcomePanel() {
       newDocument.lastUpdatedMillis = Date.now();
       addDocument(newDocument);
       setUserCursor(newDocument.documentId, '', '', '');
-      navigate('/edit');
+      navigate('/settings');
     },
     [addDocument, setUserCursor, navigate],
   );

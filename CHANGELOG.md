@@ -15,7 +15,10 @@
 - Add shot hash
 - Add record button to shot options
 - Add zoom controls
+- Add start button to settings page
+- Add auto-focus and capitalization to project name
 
+- Change new projects to start on settings page
 - Change dragging handle to the whole take
 - Change shot references to always be in landscape
 - Change fountain import to ignore title page
@@ -26,7 +29,6 @@
 - Change shot options to be just a list
 
 - Fix wrong take number for viewer
-- (in progress)
 
 # 0.1.11
 

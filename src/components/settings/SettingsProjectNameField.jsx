@@ -40,6 +40,8 @@ export default function SettingsProjectNameField() {
       value={documentTitle}
       onChange={onChange}
       onBlur={onBlur}
+      autoFocus={!documentSettingsProjectId}
+      autoCapitalize="words"
     />
   );
 }

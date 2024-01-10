@@ -13,6 +13,8 @@ import SettingsField from './SettingsField';
  * @param {import('react').ReactNode} [props.children]
  * @param {boolean} [props.disabled]
  * @param {import('react').MutableRefObject<HTMLInputElement|null>} [props.inputRef]
+ * @param {boolean} [props.autoFocus]
+ * @param {'sentences'|'words'|'characters'|'on'|'off'|'none'} [props.autoCapitalize]
  */
 export default function SettingsFieldInput({
   id,
@@ -26,6 +28,8 @@ export default function SettingsFieldInput({
   children,
   disabled = !onChange,
   inputRef,
+  autoFocus,
+  autoCapitalize,
 }) {
   return (
     <SettingsField
@@ -45,6 +49,8 @@ export default function SettingsFieldInput({
         onChange={onChange}
         onBlur={onBlur}
         disabled={disabled}
+        autoFocus={autoFocus}
+        autoCapitalize={autoCapitalize}
       />
       {children}
     </SettingsField>
