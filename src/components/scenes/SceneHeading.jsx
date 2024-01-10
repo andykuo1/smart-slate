@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 import { useSceneHeading, useSceneNumber } from '@/stores/document';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
@@ -11,6 +13,7 @@ import SceneNumber from './SceneNumber';
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  */
 export default function SceneHeading({ className, documentId, sceneId }) {
+  const containerRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const [sceneHeading, setSceneHeading] = useSceneHeading(documentId, sceneId);
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const currentCursor = useCurrentCursor();
@@ -32,10 +35,20 @@ export default function SceneHeading({ className, documentId, sceneId }) {
     } else {
       setUserCursor(documentId, sceneId, '');
     }
+    // Debounce to wait for layout changes...
+    setTimeout(
+      () =>
+        containerRef.current?.scrollIntoView({
+          block: 'start',
+          behavior: 'instant',
+        }),
+      0,
+    );
   }
 
   return (
     <div
+      ref={containerRef}
       className={
         'relative flex flex-row items-center w-full' +
         ' ' +

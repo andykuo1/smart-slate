@@ -29,22 +29,26 @@ export default function SceneList({ documentId }) {
 
   return (
     <article
-      className="w-full h-full overflow-x-hidden overflow-y-auto py-20"
+      className="w-full h-full overflow-x-hidden overflow-y-auto flex flex-col"
       ref={containerRef}>
-      <DocumentTitle documentId={documentId} />
-      {sceneIds.map(
-        (sceneId) =>
-          (!hasActiveScene || sceneId === activeSceneId) && (
-            <Fragment key={`scene-${sceneId}`}>
-              <SceneEntry
-                key={sceneId}
-                documentId={documentId}
-                sceneId={sceneId}
-              />
-            </Fragment>
-          ),
-      )}
-      <SceneEntryNew documentId={documentId} />
+      <DocumentTitle
+        className={'pt-20' + ' ' + (!hasActiveScene ? 'visible' : 'invisible')}
+        documentId={documentId}
+      />
+      {sceneIds.map((sceneId) => (
+        <Fragment key={`scene-${sceneId}`}>
+          <SceneEntry
+            className={
+              hasActiveScene && activeSceneId !== sceneId
+                ? 'invisible'
+                : 'visible'
+            }
+            documentId={documentId}
+            sceneId={sceneId}
+          />
+        </Fragment>
+      ))}
+      <SceneEntryNew className="pb-20" documentId={documentId} />
     </article>
   );
 }

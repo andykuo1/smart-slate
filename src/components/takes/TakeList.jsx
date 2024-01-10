@@ -7,6 +7,7 @@ import { NewTake, TakeEntry } from './TakeEntry';
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
@@ -14,6 +15,7 @@ import { NewTake, TakeEntry } from './TakeEntry';
  * @param {'list'|'inline'} props.viewMode
  */
 export default function TakeList({
+  className,
   documentId,
   sceneId,
   blockId,

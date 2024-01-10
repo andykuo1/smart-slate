@@ -172,7 +172,7 @@ export function longestString(strings) {
 
 const FIRST_CHAR_CODE = 'A'.charCodeAt(0);
 const LAST_CHAR_CODE = 'Z'.charCodeAt(0);
-const CHAR_CODE_RANGE = LAST_CHAR_CODE - FIRST_CHAR_CODE;
+const CHAR_CODE_RANGE = LAST_CHAR_CODE - FIRST_CHAR_CODE + 1;
 
 /**
  * @param {number} num

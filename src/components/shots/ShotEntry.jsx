@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 import ArrowForwardIcon from '@material-symbols/svg-400/rounded/arrow_forward.svg';
 import StatOneIcon from '@material-symbols/svg-400/rounded/stat_1.svg';
 import StatMinusOneIcon from '@material-symbols/svg-400/rounded/stat_minus_1.svg';
@@ -22,6 +24,7 @@ import ShotThumbnail from './ShotThumbnail';
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
@@ -30,6 +33,7 @@ import ShotThumbnail from './ShotThumbnail';
  * @param {boolean} [props.collapsed]
  */
 export function ShotEntry({
+  className,
   documentId,
   sceneId,
   blockId,
@@ -37,6 +41,7 @@ export function ShotEntry({
   children,
   collapsed,
 }) {
+  const containerRef = useRef(/** @type {HTMLLIElement|null} */ (null));
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
   const shotCount = useSceneShotCount(documentId, sceneId);
@@ -91,14 +96,26 @@ export function ShotEntry({
     } else {
       setUserCursor(documentId, sceneId, shotId);
     }
+    // Debounce to wait for layout changes...
+    setTimeout(
+      () =>
+        containerRef.current?.scrollIntoView({
+          block: 'start',
+          behavior: 'instant',
+        }),
+      0,
+    );
   }
 
   return (
     <li
+      ref={containerRef}
       className={
         'relative flex flex-col items-center mx-auto' +
         ' ' +
-        (isDragging ? 'opacity-30' : '')
+        (isDragging ? 'opacity-30' : '') +
+        ' ' +
+        className
       }
       {...elementProps}>
       <div

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { useDocumentStore } from '@/stores/document';
 import { createShot } from '@/stores/document/DocumentStore';
@@ -11,6 +11,7 @@ import { ShotTypeSelector } from './options/ShotTypeSelector';
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  */
 export default function ShotEntryNew({ documentId, blockId }) {
+  const containerRef = useRef(/** @type {HTMLLIElement|null} */ (null));
   const [shotType, setShotType] = useState(
     /** @type {import('@/stores/document/DocumentStore').ShotType} */ (''),
   );
@@ -19,6 +20,9 @@ export default function ShotEntryNew({ documentId, blockId }) {
   function onClick() {
     let newShot = createShot();
     addShot(documentId, blockId, newShot);
+    containerRef.current?.scrollIntoView({
+      behavior: 'smooth',
+    });
   }
 
   /** @type {import('react').ChangeEventHandler<any>} */
@@ -28,10 +32,14 @@ export default function ShotEntryNew({ documentId, blockId }) {
     let newShot = createShot();
     newShot.shotType = newShotType;
     addShot(documentId, blockId, newShot);
+    containerRef.current?.scrollIntoView({
+      behavior: 'smooth',
+    });
   }
 
   return (
     <li
+      ref={containerRef}
       className={
         'group flex flex-col-reverse lg:flex-row py-2 items-center ml-auto m-2 bg-gradient-to-l from-gray-300 to-transparent rounded-full overflow-hidden'
       }>

@@ -11,6 +11,7 @@ import ShotEntryNew from './ShotEntryNew';
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
@@ -18,6 +19,7 @@ import ShotEntryNew from './ShotEntryNew';
  * @param {boolean} [props.collapsed]
  */
 export default function ShotList({
+  className,
   documentId,
   sceneId,
   blockId,
@@ -25,38 +27,41 @@ export default function ShotList({
   collapsed = false,
 }) {
   const userCursor = useCurrentCursor();
+  const activeSceneId = userCursor.sceneId;
   const activeShotId = userCursor.shotId;
+  const hasActiveScene = Boolean(activeSceneId);
   const hasActiveShot = Boolean(activeShotId);
   const shotIds = useShotIds(documentId, blockId);
 
   return (
-    <ul title="Shot list">
+    <ul title="Shot list" className={className}>
       <div className={collapsed ? GridStyle.grid : ''}>
-        {shotIds.map(
-          (shotId) =>
-            (!hasActiveShot || shotId === activeShotId) && (
-              <Fragment key={`shot-${shotId}`}>
-                <ShotEntry
-                  documentId={documentId}
-                  sceneId={sceneId}
-                  blockId={blockId}
-                  shotId={shotId}
-                  collapsed={collapsed}>
-                  <TakeList
-                    documentId={documentId}
-                    sceneId={sceneId}
-                    blockId={blockId}
-                    shotId={shotId}
-                    viewMode={hasActiveShot ? 'list' : 'inline'}
-                  />
-                </ShotEntry>
-              </Fragment>
-            ),
-        )}
+        {shotIds.map((shotId) => (
+          <Fragment key={`shot-${shotId}`}>
+            <ShotEntry
+              className={
+                (!hasActiveScene || sceneId === activeSceneId) &&
+                (!hasActiveShot || shotId === activeShotId)
+                  ? 'visible'
+                  : 'invisible'
+              }
+              documentId={documentId}
+              sceneId={sceneId}
+              blockId={blockId}
+              shotId={shotId}
+              collapsed={collapsed}>
+              <TakeList
+                documentId={documentId}
+                sceneId={sceneId}
+                blockId={blockId}
+                shotId={shotId}
+                viewMode={collapsed ? 'list' : 'inline'}
+              />
+            </ShotEntry>
+          </Fragment>
+        ))}
       </div>
-      {editable && !hasActiveShot && (
-        <ShotEntryNew documentId={documentId} blockId={blockId} />
-      )}
+      {editable && <ShotEntryNew documentId={documentId} blockId={blockId} />}
       <ShotEntryDragged
         documentId={documentId}
         sceneId={sceneId}

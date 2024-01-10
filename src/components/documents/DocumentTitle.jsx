@@ -9,8 +9,9 @@ import {
 /**
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {string} [props.className]
  */
-export default function DocumentTitle({ documentId }) {
+export default function DocumentTitle({ className, documentId }) {
   const projectId = useDocumentStore(
     (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
   );
@@ -25,7 +26,7 @@ export default function DocumentTitle({ documentId }) {
   );
 
   return (
-    <h2 className="flex flex-col text-center my-2">
+    <h2 className={'flex flex-col text-center my-2' + ' ' + className}>
       <div className="flex-1 flex flex-row underline mx-2">
         <input
           className="flex-1 text-center text-2xl bg-transparent"

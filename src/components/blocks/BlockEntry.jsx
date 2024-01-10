@@ -27,7 +27,9 @@ export default function BlockEntry({
           className={
             'relative' +
             ' ' +
-            (!isCollapsed ? 'max-h-[15vh] overflow-y-hidden' : 'max-w-[60vw]')
+            (!isCollapsed
+              ? 'max-h-[15vh] overflow-y-hidden'
+              : 'min-w-[50vw] max-w-[60vw]')
           }>
           <BlockContent
             documentId={documentId}

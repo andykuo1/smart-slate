@@ -17,6 +17,7 @@
 - Add start button to settings page
 - Add auto-focus and capitalization to project name
 - Add sign-in popover on welcome
+- Add auto-scroll on focus/unfocus
 
 - Change new projects to start on settings page
 - Change dragging handle to the whole take
@@ -30,6 +31,7 @@
 - Change record to be first in shot options
 - Change web app install popover to a button in settings
 - Change ready/edit toggles to a nav button
+- Change scene numbers to be bigger
 
 - Fix wrong take number for viewer
 - Fix missing project id for imported projects

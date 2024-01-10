@@ -23,7 +23,12 @@ export default function ImageWithCaption({
         className
       }>
       {src ? (
-        <img className="flex-1 object-contain" src={src} alt={alt} />
+        <img
+          className="flex-1 object-contain"
+          src={src}
+          alt={alt}
+          loading="lazy"
+        />
       ) : (
         <Icon className="flex-1 fill-gray-400" />
       )}
