@@ -1,3 +1,4 @@
+import { formatProjectId } from '@/components/takes/TakeNameFormat';
 import {
   createBlock,
   createDocument,
@@ -295,5 +296,6 @@ export function fountainTokensToDocumentByScene(tokens) {
     );
   }
   result.documentTitle = titleTitle || 'My Fountain Movie';
+  result.settings.projectId = formatProjectId(result.documentTitle);
   return result;
 }

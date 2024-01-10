@@ -30,6 +30,7 @@
 - Change record to be first in shot options
 
 - Fix wrong take number for viewer
+- Fix missing project id for imported projects
 
 # 0.1.11
 

@@ -24,7 +24,7 @@ export default function SceneEntry({ documentId, sceneId }) {
     return null;
   }
   return (
-    <section className="flex flex-col mt-20">
+    <section className="flex flex-col mt-10">
       <SceneHeading documentId={documentId} sceneId={sceneId} />
       {blockIds.map((blockId) => (
         <BlockEntry
