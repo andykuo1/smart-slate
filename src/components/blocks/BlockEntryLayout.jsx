@@ -9,14 +9,17 @@ import { useUserStore } from '@/stores/user';
 export default function BlockEntryLayout({ collapsed, content, children }) {
   const setEditMode = useUserStore((ctx) => ctx.setEditMode);
   return (
-    <div className={'flex flex-row' + ' ' + (!collapsed ? 'flex-col' : '')}>
+    <div
+      className={
+        'flex' + ' ' + (!collapsed ? 'flex-col' : 'flex-col md:flex-row')
+      }>
       <div
         className={
           'relative' +
           ' ' +
           (!collapsed
             ? 'max-h-[15vh] overflow-y-hidden'
-            : 'min-w-[50vw] max-w-[60vw]')
+            : 'md:min-w-[50vw] md:max-w-[60vw]')
         }>
         {content}
         {!collapsed && (
