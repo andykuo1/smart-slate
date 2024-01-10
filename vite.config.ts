@@ -11,6 +11,9 @@ import PackageJSON from './package.json';
 // https://vitejs.dev/config/
 export default defineConfig({
   base: `/${PackageJSON.name}/`,
+  define: {
+    __CONFIGTIME__: JSON.stringify(Date.now()),
+  },
   plugins: [
     react(),
     svgr({

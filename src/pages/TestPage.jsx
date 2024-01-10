@@ -6,13 +6,17 @@ import TestSnapshot from '@/tests/TestSnapshot';
 import TestVideoConstraints from '../tests/TestVideoConstraints';
 
 const TEST_VERSION = 'v16';
+// @ts-expect-error This is a custom env variable defined in vite config.
+const TEST_CONFIGTIME = new Date(__CONFIGTIME__ || 0).toLocaleString();
 
 export default function TestPage() {
   const [test, setTest] = useState('');
   return (
     <main className="w-full h-full flex flex-col items-center py-20">
       <div className="fixed top-0 left-0 z-50 flex flex-row rounded-ee-full bg-gray-200 overflow-hidden">
-        <p className="bg-green-300 rounded-full p-1 m-1">{TEST_VERSION}</p>
+        <p className="bg-green-300 rounded-full px-2 m-1">
+          {TEST_VERSION} @ {TEST_CONFIGTIME}
+        </p>
         <select
           className="bg-transparent outline-none mr-4"
           value={test}
