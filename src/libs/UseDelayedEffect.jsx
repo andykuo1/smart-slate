@@ -17,7 +17,7 @@ export function useDelayedEffect(callback, delayedMillis, once = true) {
       }
       callback();
     },
-    [callback],
+    [once, callback],
   );
 
   useEffect(() => {

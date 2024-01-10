@@ -36,6 +36,7 @@ export default function SettingsProjectStartButton() {
       navigate('/edit');
     },
     [
+      documentId,
       documentSettingsProjectId,
       documentTitle,
       setDocumentSettingsProjectId,

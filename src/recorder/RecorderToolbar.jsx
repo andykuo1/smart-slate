@@ -82,7 +82,7 @@ export default function RecorderToolbar({
                 className="flex-1 rounded bg-gray-600"
                 onClick={() =>
                   onVideoConstraintsChange({
-                    // @ts-ignore
+                    // @ts-expect-error Zoom exists for Safari.
                     zoom: { exact: 0.5 },
                   })
                 }>
@@ -92,7 +92,7 @@ export default function RecorderToolbar({
                 className="flex-1 rounded bg-gray-600"
                 onClick={() =>
                   onVideoConstraintsChange({
-                    // @ts-ignore
+                    // @ts-expect-error Zoom exists for Safari.
                     zoom: { exact: 1.0 },
                   })
                 }>
@@ -102,7 +102,7 @@ export default function RecorderToolbar({
                 className="flex-1 rounded bg-gray-600"
                 onClick={() =>
                   onVideoConstraintsChange({
-                    // @ts-ignore
+                    // @ts-expect-error Zoom exists for Safari.
                     zoom: { exact: 2.0 },
                   })
                 }>

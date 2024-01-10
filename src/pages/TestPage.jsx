@@ -7,7 +7,7 @@ import TestVideoConstraints from '../tests/TestVideoConstraints';
 
 const TEST_VERSION = 'v16';
 // @ts-expect-error This is a custom env variable defined in vite config.
-const TEST_CONFIGTIME = new Date(__CONFIGTIME__ || 0).toLocaleString();
+const TEST_CONFIGTIME = new Date(__CONFIGTIME__ || 0).toLocaleString(); // eslint-disable-line no-undef
 
 export default function TestPage() {
   const [test, setTest] = useState('');

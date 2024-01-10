@@ -10,7 +10,7 @@ import { ShotTypeSelector } from '@/components/shots/options/ShotTypeSelector';
 import { isInputCaptureSupported } from '@/recorder/MediaRecorderSupport';
 import { useOpenPreferredRecorder } from '@/recorder/UseOpenRecorder';
 import { useDocumentStore } from '@/stores/document';
-import { useSetUserCursor } from '@/stores/user';
+import { useSetUserCursor, useUserStore } from '@/stores/user';
 import { NOOP } from '@/values/Functions';
 import {
   MAX_THUMBNAIL_HEIGHT,
@@ -41,6 +41,7 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
     (ctx) => ctx.setShotReferenceImage,
   );
   const setUserCursor = useSetUserCursor();
+  const setEditMode = useUserStore((ctx) => ctx.setEditMode);
   const onRecorderOpen = useCallback(
     function _onRecorderOpen() {
       setUserCursor(documentId, sceneId, shotId);
@@ -74,8 +75,9 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
     function _onFocusClick() {
       setOpen(false);
       setUserCursor(documentId, sceneId, shotId);
+      setEditMode('shotlist');
     },
-    [setUserCursor, documentId, sceneId, shotId],
+    [setUserCursor, documentId, sceneId, shotId, setOpen],
   );
 
   const onInputChange = useCallback(

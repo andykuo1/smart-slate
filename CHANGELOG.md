@@ -37,6 +37,7 @@
 - Change to disable draggable when shot-focused
 
 - Fix wrong take number for viewer
+- Fix wrong take number for exported files
 - Fix missing project id for imported projects
 
 # 0.1.11

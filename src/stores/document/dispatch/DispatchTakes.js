@@ -11,6 +11,7 @@ export function createDispatchTakes(set, get) {
     setTakeExportedIDBKey: zi(set, setTakeExportedIDBKey),
     setTakePreviewImage: zi(set, setTakePreviewImage),
     setTakeRating: zi(set, setTakeRating),
+    setTakeExportedFileName: zi(set, setTakeExportedFileName),
   };
 }
 
@@ -68,5 +69,23 @@ export function setTakeExportedIDBKey(store, documentId, takeId, idbKey) {
   let document = store.documents[documentId];
   let take = document.takes[takeId];
   take.exportedIDBKey = idbKey;
+  incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('../DocumentStore').Store} store
+ * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('../DocumentStore').TakeId} takeId
+ * @param {string} fileNameWithExt
+ */
+export function setTakeExportedFileName(
+  store,
+  documentId,
+  takeId,
+  fileNameWithExt,
+) {
+  let document = store.documents[documentId];
+  let take = document.takes[takeId];
+  take.exportedFileName = fileNameWithExt;
   incrementDocumentRevisionNumber(document);
 }
