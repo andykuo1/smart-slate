@@ -172,7 +172,7 @@ export function ShotEntry({
                 </RecorderOpenButton>
               </div>
             )}
-            {collapsed && <ArrowForwardIcon className="w-6 h-6" />}
+            {collapsed && <ArrowForwardIcon className="w-6 h-6 fill-current" />}
           </div>
           {!collapsed && (
             <div className="flex-1 opacity-30 text-xs hidden sm:block">

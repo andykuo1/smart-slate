@@ -1,5 +1,5 @@
 import { useBlockIdForShot } from '@/stores/document';
-import { useCurrentCursor } from '@/stores/user';
+import { useCurrentCursor, useUserStore } from '@/stores/user';
 
 import { ShotEntry } from '../shots/ShotEntry';
 import TakeList from '../takes/TakeList';
@@ -13,12 +13,13 @@ import BlockEntryLayout from './BlockEntryLayout';
 export default function BlockEntryFocused({ documentId }) {
   const { sceneId, shotId } = useCurrentCursor();
   const blockId = useBlockIdForShot(documentId, sceneId, shotId);
+  const isStoryMode = useUserStore((ctx) => ctx.editMode === 'story');
   if (!sceneId || !blockId || !shotId) {
     return null;
   }
   return (
     <BlockEntryLayout
-      collapsed={false}
+      collapsed={isStoryMode}
       content={
         <BlockContent
           documentId={documentId}
@@ -32,7 +33,7 @@ export default function BlockEntryFocused({ documentId }) {
         sceneId={sceneId}
         blockId={blockId}
         shotId={shotId}
-        collapsed={false}>
+        collapsed={isStoryMode}>
         <TakeList
           documentId={documentId}
           sceneId={sceneId}

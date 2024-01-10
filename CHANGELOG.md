@@ -18,6 +18,7 @@
 - Add auto-focus and capitalization to project name
 - Add sign-in popover on welcome
 - Add auto-scroll on focus/unfocus
+- Add scene text view when shot-focused
 
 - Change new projects to start on settings page
 - Change dragging handle to the whole take
@@ -32,6 +33,7 @@
 - Change web app install popover to a button in settings
 - Change ready/edit toggles to a nav button
 - Change scene numbers to be bigger
+- Change focus mode to overlay for better performance
 
 - Fix wrong take number for viewer
 - Fix missing project id for imported projects
