@@ -4,8 +4,6 @@
 - Remove ready/edit (shot exit should just focus)
 - Shot in text.
 - Zoom requires it ZOOMS out before zooming back in.
-- Rotating the camera stops for a moment (though I think that's okay)
-- Persisted stream isn't that nice. Can we preserve options?
 
 - Add shot hash to shot entry
 - Add project settings page
@@ -17,6 +15,7 @@
 - Add zoom controls
 - Add start button to settings page
 - Add auto-focus and capitalization to project name
+- Add sign-in popover on welcome
 
 - Change new projects to start on settings page
 - Change dragging handle to the whole take
@@ -28,6 +27,7 @@
 - Change background for recorder back button
 - Change shot options to be just a list
 - Change record to be first in shot options
+- Change web app install popover to a button in settings
 
 - Fix wrong take number for viewer
 - Fix missing project id for imported projects

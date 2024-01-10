@@ -13,6 +13,14 @@ function useGoogleAPI() {
   return result;
 }
 
+export function useGAPILoginCallbacks() {
+  const { onLoginSuccess, onLoginError } = useGoogleAPI();
+  return {
+    onSuccess: onLoginSuccess,
+    onError: onLoginError,
+  };
+}
+
 export function useGAPILogin() {
   const { login } = useGoogleAPI();
   return login;

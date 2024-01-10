@@ -14,14 +14,30 @@ import InstallMobileIcon from '@material-symbols/svg-400/rounded/install_mobile.
 
 import PopoverStyle from '@/styles/Popover.module.css';
 
+import {
+  isAndroidMobileDevice,
+  isAppleMobileDevice,
+  isDesktopDevice,
+  isStandaloneMode,
+} from './DeviceHelper';
 import MoreVertIcon from './material-more-vert.svg';
 import PlusSquare from './sf-plus-square.svg';
 import SquareAndArrowUp from './sf-square-and-arrow-up.svg';
 
-export default function AutoInstallPopover() {
+/**
+ * @param {object} props
+ * @param {boolean} [props.autoDisclose]
+ * @param {import('react').ReactNode} [props.content]
+ * @param {import('react').ReactNode} [props.children]
+ */
+export default function AutoInstallPopover({
+  autoDisclose = true,
+  content,
+  children,
+}) {
   return (
     <PopoverProvider>
-      <PopoverAutoDisclosure />
+      {autoDisclose && <PopoverAutoDisclosure />}
       <PopoverAnchor className="fixed top-0 right-0" />
       <Popover className={PopoverStyle.popover}>
         <PopoverArrow className={PopoverStyle.arrow} />
@@ -34,7 +50,9 @@ export default function AutoInstallPopover() {
         ) : (
           <PopoverContentUnknown />
         )}
+        {content}
       </Popover>
+      {children}
     </PopoverProvider>
   );
 }
@@ -151,27 +169,4 @@ function PopoverAutoDisclosure() {
     }
   }, [store]);
   return null;
-}
-
-function isAppleMobileDevice() {
-  // Detects if device is on iOS
-  const userAgent = window.navigator.userAgent.toLowerCase();
-  return /iphone|ipad|ipod/.test(userAgent);
-}
-
-function isAndroidMobileDevice() {
-  // Detects if device is on Android
-  const userAgent = window.navigator.userAgent.toLowerCase();
-  return /android/.test(userAgent);
-}
-
-function isDesktopDevice() {
-  // Detects if device is on desktop
-  const userAgent = window.navigator.userAgent.toLowerCase();
-  return /mac os|windows|cros|ubuntu/.test(userAgent);
-}
-
-function isStandaloneMode() {
-  // Detects if device is in standalone mode
-  return 'standalone' in window.navigator && window.navigator.standalone;
 }

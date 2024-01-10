@@ -18,6 +18,7 @@ import SettingsPreferNativeRecorderToggle from '@/components/settings/SettingsPr
 import SettingsPreferPersistedMediaStreamToggle from '@/components/settings/SettingsPreferPersistedMediaStreamToggle';
 import SettingsProjectDeleteButton from '@/components/settings/SettingsProjectDeleteButton';
 import SettingsProjectIdField from '@/components/settings/SettingsProjectIdField';
+import SettingsProjectInstallField from '@/components/settings/SettingsProjectInstallField';
 import SettingsProjectNameField from '@/components/settings/SettingsProjectNameField';
 import SettingsProjectStartButton from '@/components/settings/SettingsProjectStartButton';
 import SettingsReturnHomeField from '@/components/settings/SettingsReturnHomeField';
@@ -39,6 +40,7 @@ export default function SettingsPage() {
           <SettingsProjectNameField />
           <SettingsProjectIdField />
           <SettingsAutoSaveToField />
+          <SettingsProjectInstallField />
           <SettingsProjectStartButton />
           <SettingsReturnHomeField />
           <fieldset>

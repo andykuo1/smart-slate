@@ -17,18 +17,40 @@ export const GoogleAPIContext = createContext(
 );
 
 /**
+ * @callback OnLoginSuccessCallback
+ * @param {import('@react-oauth/google').TokenResponse} response
+ */
+
+/**
+ * @callback OnLoginErrorCallback
+ * @param {Pick<import('@react-oauth/google').TokenResponse, "error" | "error_description" | "error_uri">} error
+ */
+
+/**
  * @param {Array<string>} scopes
  * @param {() => void} login
  * @param {() => void} logout
  * @param {boolean} gapiLoaded
  * @param {boolean} gsiLoaded
+ * @param {OnLoginSuccessCallback} onLoginSuccess
+ * @param {OnLoginErrorCallback} onLoginError
  */
-function createGoogleAPI(scopes, login, logout, gapiLoaded, gsiLoaded) {
+function createGoogleAPI(
+  scopes,
+  login,
+  logout,
+  gapiLoaded,
+  gsiLoaded,
+  onLoginSuccess,
+  onLoginError,
+) {
   return {
     scopes,
     login,
     logout,
     status: Boolean(gapiLoaded && gsiLoaded),
+    onLoginSuccess,
+    onLoginError,
   };
 }
 
@@ -59,16 +81,32 @@ function GoogleAPILoginProvider({ apiKey, scopes, children }) {
   const [gapiLoaded, setGAPILoaded] = useState(false);
   const [gsiLoaded, setGSILoaded] = useState(false);
 
-  const login = useGoogleLogin({
-    scope: scopes.join(' '),
-    onSuccess(tokenResponse) {
-      setGoogleAPICachedTokenResponse(tokenResponse);
+  const onLoginSuccess = useCallback(
+    /**
+     * @param {import('@react-oauth/google').TokenResponse} response
+     */
+    function _onLoginSuccess(response) {
+      setGoogleAPICachedTokenResponse(response);
       setGSILoaded(true);
     },
-    onError(errorResponse) {
+    [setGSILoaded],
+  );
+
+  const onLoginError = useCallback(
+    /**
+     * @param {Pick<import('@react-oauth/google').TokenResponse, "error" | "error_description" | "error_uri">} error
+     */
+    function _onLoginError(error) {
       setGoogleAPICachedTokenResponse(null);
-      console.error(errorResponse);
+      console.error('[GoogleAPIContext] ' + error);
     },
+    [],
+  );
+
+  const login = useGoogleLogin({
+    scope: scopes.join(' '),
+    onSuccess: onLoginSuccess,
+    onError: onLoginError,
   });
 
   const logout = useCallback(() => {
@@ -89,7 +127,15 @@ function GoogleAPILoginProvider({ apiKey, scopes, children }) {
     })();
   }, [apiKey]);
 
-  const value = createGoogleAPI(scopes, login, logout, gapiLoaded, gsiLoaded);
+  const value = createGoogleAPI(
+    scopes,
+    login,
+    logout,
+    gapiLoaded,
+    gsiLoaded,
+    onLoginSuccess,
+    onLoginError,
+  );
   return (
     <GoogleAPIContext.Provider value={value}>
       {children}

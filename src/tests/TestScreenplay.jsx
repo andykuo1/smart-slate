@@ -30,7 +30,6 @@ export default function TestScreenplay() {
 }
 
 /**
- *
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').Document} props.document
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
