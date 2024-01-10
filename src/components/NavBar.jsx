@@ -63,7 +63,9 @@ function NavShotListButton() {
   const location = useLocation();
   function onClick() {
     setEditMode('shotlist');
-    navigate('/edit');
+    if (!location.pathname.includes('/edit')) {
+      navigate('/edit');
+    }
   }
   return (
     <NavButton
@@ -130,7 +132,9 @@ function NavEditButton() {
   const location = useLocation();
   function onClick() {
     setEditMode('story');
-    navigate('/edit');
+    if (!location.pathname.includes('/edit')) {
+      navigate('/edit');
+    }
   }
   return (
     <NavButton
@@ -146,8 +150,11 @@ function NavEditButton() {
 
 function NavTuneButton() {
   const navigate = useNavigate();
+  const location = useLocation();
   function onClick() {
-    navigate('/settings');
+    if (!location.pathname.includes('/settings')) {
+      navigate('/settings');
+    }
   }
   return (
     <NavButton

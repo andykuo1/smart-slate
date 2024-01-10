@@ -20,13 +20,7 @@ export default function BlockEntryFocused({ documentId }) {
   return (
     <BlockEntryLayout
       collapsed={isStoryMode}
-      content={
-        <BlockContent
-          documentId={documentId}
-          blockId={blockId}
-          editable={false}
-        />
-      }>
+      content={<BlockContent documentId={documentId} blockId={blockId} />}>
       <ShotEntry
         className="flex-1"
         documentId={documentId}
