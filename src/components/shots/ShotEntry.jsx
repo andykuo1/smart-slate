@@ -126,6 +126,13 @@ export function ShotEntry({
           ' ' +
           (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
         }>
+        {!collapsed && (
+          <ShotNumber
+            sceneNumber={sceneNumber}
+            shotNumber={shotNumber}
+            onClick={onShotFocusClick}
+          />
+        )}
         <div className="flex flex-col items-center">
           <button
             onClick={onUpClick}
@@ -147,18 +154,20 @@ export function ShotEntry({
             <StatMinusOneIcon className="w-6 h-6 fill-current" />
           </button>
         </div>
-        {shotHash && (
-          <label className="absolute top-0 left-7 z-10 px-1 bg-white text-black font-mono rounded">
-            {shotHash}
-          </label>
-        )}
-        <ShotThumbnail
-          className="ml-2"
-          documentId={documentId}
-          sceneId={sceneId}
-          shotId={shotId}
-          editable={true}
-        />
+        <div className="relative">
+          {shotHash && (
+            <label className="absolute -top-2 left-0 z-10 px-1 bg-white text-black font-mono rounded">
+              {shotHash}
+            </label>
+          )}
+          <ShotThumbnail
+            className="ml-2"
+            documentId={documentId}
+            sceneId={sceneId}
+            shotId={shotId}
+            editable={true}
+          />
+        </div>
         <div className="flex-1 flex flex-row items-center">
           <div className="flex-1 flex flex-row">
             {!collapsed && (

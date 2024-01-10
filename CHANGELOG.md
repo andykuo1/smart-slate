@@ -4,6 +4,12 @@
 - Shot in text.
 - Zoom requires it ZOOMS out before zooming back in?
 
+- Add shot number for both sides
+
+- Change to full-width storyboard on smaller screens
+
+- Fix overflow for scene headers
+
 # 0.1.12
 
 - Add shotlist view

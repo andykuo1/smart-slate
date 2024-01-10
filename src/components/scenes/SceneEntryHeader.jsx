@@ -50,7 +50,7 @@ export default function SceneEntryHeader({ className, documentId, sceneId }) {
     <div
       ref={containerRef}
       className={
-        'relative flex flex-row items-center w-full' +
+        'relative flex flex-row items-center' +
         ' ' +
         className +
         ' ' +
@@ -58,7 +58,7 @@ export default function SceneEntryHeader({ className, documentId, sceneId }) {
       }>
       <SceneNumber sceneNumber={sceneNumber} onClick={onClick} />
       <input
-        className="flex-1 bg-transparent px-2 py-6 text-xl font-bold"
+        className="flex-1 w-full bg-transparent px-2 py-6 text-xl font-bold"
         type="text"
         list="sceneHeading"
         placeholder="INT/EXT. SCENE - DAY"
