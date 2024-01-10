@@ -6,7 +6,7 @@ import { Fountain } from 'fountain-js';
 import ExampleScript from '@/serdes/BrickAndSteel.fountain?raw';
 import { fountainTokensToDocument } from '@/serdes/FountainToDocumentParser';
 
-export default function Screenplay() {
+export default function TestScreenplay() {
   const fountain = new Fountain();
   const { tokens } = fountain.parse(ExampleScript, true);
   const document = fountainTokensToDocument(tokens);

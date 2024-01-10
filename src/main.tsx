@@ -5,14 +5,14 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import '@/progressive/ServiceWorkerInstall';
 
 import './index.css';
+import EditPage from './pages/EditPage';
+import ErrorPage from './pages/ErrorPage';
+import RecordPage from './pages/RecordPage';
+import RootPage from './pages/RootPage';
+import SettingsPage from './pages/SettingsPage';
+import TestPage from './pages/TestPage';
+import ViewPage from './pages/ViewPage';
 import Providers from './providers';
-import EditPage from './routes/EditPage';
-import ErrorPage from './routes/ErrorPage';
-import RecordPage from './routes/RecordPage';
-import RootPage from './routes/RootPage';
-import SettingsPage from './routes/SettingsPage';
-import TestPage from './routes/TestPage';
-import ViewPage from './routes/ViewPage';
 import { PACKAGE_NAME } from './values/PackageJSON';
 
 const router = createBrowserRouter(
