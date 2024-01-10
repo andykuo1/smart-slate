@@ -100,7 +100,7 @@ export function ShotEntry({
     setTimeout(
       () =>
         containerRef.current?.scrollIntoView({
-          block: 'start',
+          block: 'center',
           behavior: 'instant',
         }),
       0,

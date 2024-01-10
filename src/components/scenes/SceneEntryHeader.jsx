@@ -12,7 +12,7 @@ import SceneNumber from './SceneNumber';
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  */
-export default function SceneHeading({ className, documentId, sceneId }) {
+export default function SceneEntryHeader({ className, documentId, sceneId }) {
   const containerRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const [sceneHeading, setSceneHeading] = useSceneHeading(documentId, sceneId);
   const sceneNumber = useSceneNumber(documentId, sceneId);

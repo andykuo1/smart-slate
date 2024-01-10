@@ -1,7 +1,6 @@
 import { Fragment } from 'react';
 
 import { useShotIds } from '@/stores/document';
-import { useCurrentCursor } from '@/stores/user';
 
 import TakeList from '../takes/TakeList';
 import GridStyle from './GridStyle.module.css';
@@ -26,25 +25,13 @@ export default function ShotList({
   editable = true,
   collapsed = false,
 }) {
-  const userCursor = useCurrentCursor();
-  const activeSceneId = userCursor.sceneId;
-  const activeShotId = userCursor.shotId;
-  const hasActiveScene = Boolean(activeSceneId);
-  const hasActiveShot = Boolean(activeShotId);
   const shotIds = useShotIds(documentId, blockId);
-
   return (
     <ul title="Shot list" className={className}>
       <div className={collapsed ? GridStyle.grid : ''}>
         {shotIds.map((shotId) => (
           <Fragment key={`shot-${shotId}`}>
             <ShotEntry
-              className={
-                (!hasActiveScene || sceneId === activeSceneId) &&
-                (!hasActiveShot || shotId === activeShotId)
-                  ? 'visible'
-                  : 'invisible'
-              }
               documentId={documentId}
               sceneId={sceneId}
               blockId={blockId}

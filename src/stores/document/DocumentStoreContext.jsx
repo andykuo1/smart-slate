@@ -1,6 +1,7 @@
 import { useShallow } from 'zustand/react/shallow';
 
 import {
+  getBlockById,
   getBlockIdsInOrder,
   getDocumentIds,
   getSceneById,
@@ -296,5 +297,18 @@ export function useSetTakeExportedIDBKey() {
 export function useTakeExportedIDBKey(documentId, takeId) {
   return useDocumentStore(
     (ctx) => getTakeById(ctx, documentId, takeId)?.exportedIDBKey,
+  );
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ * @param {import('./DocumentStore').SceneId} sceneId
+ * @param {import('./DocumentStore').ShotId} shotId
+ */
+export function useBlockIdForShot(documentId, sceneId, shotId) {
+  return useDocumentStore((ctx) =>
+    getSceneById(ctx, documentId, sceneId)?.blockIds?.find((blockId) =>
+      getBlockById(ctx, documentId, blockId)?.shotIds?.includes(shotId),
+    ),
   );
 }
