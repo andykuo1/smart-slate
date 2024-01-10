@@ -30,6 +30,7 @@ import ShotThumbnail from './ShotThumbnail';
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {import('react').ReactNode} [props.children]
+ * @param {boolean} [props.editable]
  * @param {boolean} [props.collapsed]
  */
 export function ShotEntry({
@@ -39,6 +40,7 @@ export function ShotEntry({
   blockId,
   shotId,
   children,
+  editable,
   collapsed,
 }) {
   const containerRef = useRef(/** @type {HTMLLIElement|null} */ (null));
@@ -127,20 +129,20 @@ export function ShotEntry({
         <div className="flex flex-col items-center">
           <button
             onClick={onUpClick}
-            disabled={isFirst}
+            disabled={!editable || isFirst}
             className="disabled:opacity-30">
             <StatOneIcon className="w-6 h-6 fill-current" />
           </button>
           <BoxDrawingCharacter
-            className="cursor-grab"
+            className={!editable ? 'opacity-30' : 'cursor-grab'}
             depth={0}
             start={false}
             end={isLast}
-            containerProps={{ ...(collapsed ? handleProps : {}) }}
+            containerProps={{ ...(editable && collapsed ? handleProps : {}) }}
           />
           <button
             onClick={onDownClick}
-            disabled={isLast}
+            disabled={!editable || isLast}
             className="disabled:opacity-30">
             <StatMinusOneIcon className="w-6 h-6 fill-current" />
           </button>

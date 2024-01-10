@@ -36,6 +36,7 @@ export default function ShotList({
               sceneId={sceneId}
               blockId={blockId}
               shotId={shotId}
+              editable={editable}
               collapsed={collapsed}>
               <TakeList
                 documentId={documentId}

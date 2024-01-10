@@ -34,6 +34,7 @@
 - Change ready/edit toggles to a nav button
 - Change scene numbers to be bigger
 - Change focus mode to overlay for better performance
+- Change to disable draggable when shot-focused
 
 - Fix wrong take number for viewer
 - Fix missing project id for imported projects
