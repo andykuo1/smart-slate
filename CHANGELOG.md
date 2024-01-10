@@ -4,6 +4,8 @@
 - Shot in text.
 - Zoom requires it ZOOMS out before zooming back in?
 
+# 0.1.12
+
 - Add shotlist view
 - Add shot details option
 - Add shot hash to shot entry
@@ -35,6 +37,7 @@
 - Change scene numbers to be bigger
 - Change focus mode to overlay for better performance
 - Change to disable draggable when shot-focused
+- Change to enable editing text when shot-focused
 
 - Fix wrong take number for viewer
 - Fix wrong take number for exported files
