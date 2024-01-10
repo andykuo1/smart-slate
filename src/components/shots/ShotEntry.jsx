@@ -4,6 +4,7 @@ import StatMinusOneIcon from '@material-symbols/svg-400/rounded/stat_minus_1.svg
 
 import RecorderOpenButton from '@/recorder/RecorderOpenButton';
 import {
+  getShotById,
   getShotIdsInOrder,
   useDocumentStore,
   useSceneNumber,
@@ -52,6 +53,10 @@ export function ShotEntry({
   const moveShot = useDocumentStore((ctx) => ctx.moveShot);
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
 
+  const shotHash = useDocumentStore(
+    (ctx) => getShotById(ctx, documentId, shotId)?.shotHash,
+  );
+
   function onDownClick() {
     const store = UNSAFE_getStore();
     const shotIds = getShotIdsInOrder(store, documentId, blockId);
@@ -91,7 +96,7 @@ export function ShotEntry({
   return (
     <li
       className={
-        'flex flex-col items-center mx-auto' +
+        'relative flex flex-col items-center mx-auto' +
         ' ' +
         (isDragging ? 'opacity-30' : '')
       }
@@ -123,6 +128,11 @@ export function ShotEntry({
             <StatMinusOneIcon className="w-6 h-6 fill-current" />
           </button>
         </div>
+        {shotHash && (
+          <label className="absolute top-0 left-7 z-10 px-1 bg-white text-black font-mono rounded">
+            {shotHash}
+          </label>
+        )}
         <ShotThumbnail
           className="ml-2"
           documentId={documentId}

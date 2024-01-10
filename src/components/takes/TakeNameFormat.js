@@ -112,21 +112,6 @@ export function formatTakeNumber(takeNumber) {
 }
 
 /**
- * @param {string|undefined} projectId
- * @param {number} sceneNumber
- * @param {number} shotNumber
- */
-export function getShotHash(projectId, sceneNumber, shotNumber) {
-  const sceneDigits = String(Math.min(99, Math.max(0, sceneNumber)))
-    .padStart(2, '0') // If less then 2 digits, pad with 0
-    .substring(0, 2); // If more than 2 digits, contract it
-  const shotDigits = String(Math.min(99, Math.max(0, shotNumber)))
-    .padStart(2, '0') // If less then 2 digits, pad with 0
-    .substring(0, 2); // If more than 2 digits, contract it
-  return `${sceneDigits}${shotDigits}`;
-}
-
-/**
  * @param {string} projectId
  */
 export function findProjectIdChar(projectId) {

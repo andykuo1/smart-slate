@@ -38,7 +38,9 @@ export default function TakeCacheMenuItem({
     if (!idbKey || !videoBlob) {
       return;
     }
-    downloadTake(documentId, sceneId, shotId, takeId);
+    downloadTake(documentId, sceneId, shotId, takeId).catch((e) =>
+      console.error('[TakeExportMenuItem] Error! ' + e.message),
+    );
   }
 
   function onGoogleDriveClick() {
@@ -60,7 +62,7 @@ export default function TakeCacheMenuItem({
       <MenuItem
         className={MenuStyle.menuItem + ' ' + 'flex-1 flex flex-row'}
         onClick={onDownloadClick}
-        disabled={!videoBlob}>
+        disabled={!idbKey || !videoBlob}>
         <span className="flex-1">Export to</span>
         <DownloadIcon className="w-6 h-6 fill-current" />
       </MenuItem>

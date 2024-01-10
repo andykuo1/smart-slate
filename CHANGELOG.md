@@ -1,12 +1,13 @@
 # Upcoming
 
-- Add zoom controls for wide lens
-  - Pick a better camera (not the widest, is that possible? change zoom?)
-  - List audio/video sources
 - Photo recorder for story building
 - Remove ready/edit (shot exit should just focus)
 - Shot in text.
+- Zoom requires it ZOOMS out before zooming back in.
+- Rotating the camera stops for a moment (though I think that's okay)
+- Persisted stream isn't that nice. Can we preserve options?
 
+- Add shot hash to shot entry
 - Add project settings page
 - Add more options to project settings page
 - Add aspect ratio picker
