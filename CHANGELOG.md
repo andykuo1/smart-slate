@@ -1,10 +1,11 @@
 # Upcoming
 
 - Photo recorder for story building
-- Remove ready/edit (shot exit should just focus)
 - Shot in text.
-- Zoom requires it ZOOMS out before zooming back in.
+- Zoom requires it ZOOMS out before zooming back in?
 
+- Add shotlist view
+- Add shot details option
 - Add shot hash to shot entry
 - Add project settings page
 - Add more options to project settings page
@@ -28,6 +29,7 @@
 - Change shot options to be just a list
 - Change record to be first in shot options
 - Change web app install popover to a button in settings
+- Change ready/edit toggles to a nav button
 
 - Fix wrong take number for viewer
 - Fix missing project id for imported projects

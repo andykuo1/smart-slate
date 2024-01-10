@@ -1,4 +1,4 @@
-import PhotoIcon from '@material-symbols/svg-400/rounded/photo.svg';
+import VideoFileIcon from '@material-symbols/svg-400/rounded/video_file.svg';
 
 import ImageWithCaption from '@/libs/ImageWithCaption';
 
@@ -20,7 +20,7 @@ export default function TakePreview({
       className={'w-32 h-[4.5rem]' + ' ' + className}
       src={previewImage}
       alt={title}
-      Icon={PhotoIcon}>
+      Icon={VideoFileIcon}>
       {children}
     </ImageWithCaption>
   );

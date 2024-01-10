@@ -8,6 +8,8 @@ export function createStore() {
   return {
     cursor: createCursor(),
     recorder: createRecorder(),
+    /** @type {'shotlist'|'story'} */
+    editMode: 'story',
   };
 }
 
@@ -21,6 +23,8 @@ export function createCursor() {
     shotId: '',
     /** @type {import('@/stores/document/DocumentStore').TakeId} */
     takeId: '',
+    /** @type {import('@/stores/document/DocumentStore').BlockId} */
+    blockId: '',
   };
 }
 

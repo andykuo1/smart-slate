@@ -13,7 +13,11 @@ import {
   useShotNumber,
   useTakeNumber,
 } from '@/stores/document';
-import { useCurrentCursor, useCurrentDocumentId } from '@/stores/user';
+import {
+  useCurrentCursor,
+  useCurrentDocumentId,
+  useUserStore,
+} from '@/stores/user';
 
 import {
   formatSceneNumber,
@@ -35,7 +39,7 @@ export default function NavBar() {
           <NavEditButton />
         </li>
         <li className="flex-1 flex">
-          <NavButton title="Shotlist" abbr="Shot" Icon={ListAltIcon} />
+          <NavShotListButton />
         </li>
         <li className="flex-1 flex">
           <NavButton title="Record" abbr="Rec" Icon={RadioButtonCheckedIcon} />
@@ -45,6 +49,31 @@ export default function NavBar() {
         </li>
       </ul>
     </nav>
+  );
+}
+
+function NavShotListButton() {
+  const documentId = useCurrentDocumentId();
+  const projectId = useDocumentStore(
+    (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
+  );
+  const isShotListMode = useUserStore((ctx) => ctx.editMode === 'shotlist');
+  const setEditMode = useUserStore((ctx) => ctx.setEditMode);
+  const navigate = useNavigate();
+  const location = useLocation();
+  function onClick() {
+    setEditMode('shotlist');
+    navigate('/edit');
+  }
+  return (
+    <NavButton
+      title="Shotlist"
+      abbr="Shot"
+      active={location.pathname.includes('/edit') && isShotListMode}
+      Icon={ListAltIcon}
+      onClick={onClick}
+      disabled={!projectId}
+    />
   );
 }
 
@@ -95,9 +124,12 @@ function NavEditButton() {
   const projectId = useDocumentStore(
     (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
   );
+  const isStoryMode = useUserStore((ctx) => ctx.editMode === 'story');
+  const setEditMode = useUserStore((ctx) => ctx.setEditMode);
   const navigate = useNavigate();
   const location = useLocation();
   function onClick() {
+    setEditMode('story');
     navigate('/edit');
   }
   return (
@@ -105,7 +137,7 @@ function NavEditButton() {
       title="Edit"
       abbr="Edit"
       Icon={EditSquareIcon}
-      active={location.pathname.includes('/edit')}
+      active={location.pathname.includes('/edit') && isStoryMode}
       disabled={!projectId}
       onClick={onClick}
     />

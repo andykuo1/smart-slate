@@ -31,16 +31,18 @@ export default function ShotEntryNew({ documentId, blockId }) {
   }
 
   return (
-    <li className="group flex flex-row ml-auto">
-      <div className="flex-1" />
-      <ShotTypeSelector
-        className="mx-2 flex flex-row items-center"
-        activeShotType={shotType}
-        onChange={onShotTypeChange}
-      />
-      <button
-        className="pl-[20%] text-right whitespace-nowrap bg-gradient-to-l from-gray-300 to-transparent px-4 py-2 my-2 rounded-full"
-        onClick={onClick}>
+    <li
+      className={
+        'group flex flex-col-reverse lg:flex-row py-2 items-center ml-auto m-2 bg-gradient-to-l from-gray-300 to-transparent rounded-full overflow-hidden'
+      }>
+      <div className="flex-1 w-full px-2">
+        <ShotTypeSelector
+          className="w-full flex flex-row items-center"
+          activeShotType={shotType}
+          onChange={onShotTypeChange}
+        />
+      </div>
+      <button className="px-4 text-center whitespace-nowrap" onClick={onClick}>
         + New Shot
       </button>
     </li>

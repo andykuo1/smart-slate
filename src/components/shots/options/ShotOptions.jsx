@@ -1,6 +1,7 @@
 import { Button, usePopoverContext } from '@ariakit/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import ListAltIcon from '@material-symbols/svg-400/rounded/list_alt.svg';
 import PhotoCameraIcon from '@material-symbols/svg-400/rounded/photo_camera.svg';
 import RadioButtonCheckedIcon from '@material-symbols/svg-400/rounded/radio_button_checked.svg';
 import UploadIcon from '@material-symbols/svg-400/rounded/upload.svg';
@@ -69,6 +70,14 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
     [setOpen, openRecorder],
   );
 
+  const onFocusClick = useCallback(
+    function _onFocusClick() {
+      setOpen(false);
+      setUserCursor(documentId, sceneId, shotId);
+    },
+    [setUserCursor, documentId, sceneId, shotId],
+  );
+
   const onInputChange = useCallback(
     /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
     function _onInputChange(e) {
@@ -97,6 +106,12 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
         onClick={onRecordClick}>
         <RadioButtonCheckedIcon className="w-6 h-6 fill-current" />
         <span className="flex-1 text-right">Record!</span>
+      </Button>
+      <Button
+        className="flex-1 p-1 flex items-center rounded hover:bg-opacity-10 bg-opacity-0 bg-white disabled:opacity-30"
+        onClick={onFocusClick}>
+        <ListAltIcon className="w-6 h-6 fill-current" />
+        <span className="flex-1 text-right">Shot Details</span>
       </Button>
       <div className="border" />
       <ShotTypeSelector

@@ -1,9 +1,4 @@
-import { useState } from 'react';
-
-import ExpandLessIcon from '@material-symbols/svg-400/rounded/expand_less.svg';
-import ExpandMoreIcon from '@material-symbols/svg-400/rounded/expand_more.svg';
-
-import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
+import { useUserStore } from '@/stores/user';
 
 import ShotList from '../shots/ShotList';
 import BlockContent from './BlockContent';
@@ -21,53 +16,42 @@ export default function BlockEntry({
   blockId,
   editable = true,
 }) {
-  const [open, setOpen] = useState(true);
-  const setUserCursor = useSetUserCursor();
-  const hasActiveShot = Boolean(useCurrentCursor()?.shotId);
-
-  function onReadyClick() {
-    setOpen(false);
-    setUserCursor(documentId, sceneId, '');
-  }
-
+  const hasActiveShot = useUserStore((ctx) => Boolean(ctx.cursor?.shotId));
+  const setEditMode = useUserStore((ctx) => ctx.setEditMode);
+  const isShotListMode = useUserStore((ctx) => ctx.editMode === 'shotlist');
+  const isCollapsed = !isShotListMode && !hasActiveShot;
   return (
     <div>
-      <div
-        className={
-          'relative overflow-y-hidden' + ' ' + (!open && 'max-h-[15vh]')
-        }>
-        <BlockContent
-          documentId={documentId}
-          blockId={blockId}
-          editable={editable}
-        />
-        {!open && (
-          <button
-            className="absolute top-0 bottom-0 left-0 right-0 bg-gradient-to-t from-white to-transparent"
-            onClick={() => setOpen(true)}>
-            <span className="absolute bottom-0 left-0 right-0">
-              <ExpandMoreIcon className="mx-auto w-6 h-6 fill-current" />
-              Edit?
-            </span>
-          </button>
-        )}
+      <div className={'flex flex-row' + ' ' + (!isCollapsed ? 'flex-col' : '')}>
+        <div
+          className={
+            'relative' +
+            ' ' +
+            (!isCollapsed ? 'max-h-[15vh] overflow-y-hidden' : 'max-w-[60vw]')
+          }>
+          <BlockContent
+            documentId={documentId}
+            blockId={blockId}
+            editable={editable}
+          />
+          {!isCollapsed && (
+            <button
+              className="absolute top-0 bottom-0 left-0 right-0 bg-gradient-to-t from-white to-transparent"
+              onClick={() => setEditMode('story')}
+            />
+          )}
+        </div>
+        <fieldset className="flex-1">
+          <legend className="hidden">Shot list</legend>
+          <ShotList
+            documentId={documentId}
+            sceneId={sceneId}
+            blockId={blockId}
+            editable={editable && !hasActiveShot}
+            collapsed={isCollapsed}
+          />
+        </fieldset>
       </div>
-      <fieldset>
-        {open && (
-          <button className="w-full" onClick={onReadyClick}>
-            <ExpandLessIcon className="mx-auto w-6 h-6 fill-current" />
-            Ready?
-          </button>
-        )}
-        <legend className="hidden">Shot list</legend>
-        <ShotList
-          documentId={documentId}
-          sceneId={sceneId}
-          blockId={blockId}
-          editable={open && editable}
-          collapsed={open && !hasActiveShot}
-        />
-      </fieldset>
     </div>
   );
 }
