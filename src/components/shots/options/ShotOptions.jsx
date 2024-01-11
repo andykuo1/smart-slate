@@ -9,7 +9,7 @@ import UploadIcon from '@material-symbols/svg-400/rounded/upload.svg';
 import { ShotTypeSelector } from '@/components/shots/options/ShotTypeSelector';
 import { isInputCaptureSupported } from '@/recorder/MediaRecorderSupport';
 import { useOpenPreferredRecorder } from '@/recorder/UseOpenRecorder';
-import { useDocumentStore } from '@/stores/document';
+import { useDocumentStore, useShotTakeCount } from '@/stores/document';
 import { useSetUserCursor, useUserStore } from '@/stores/user';
 import { NOOP } from '@/values/Functions';
 import {
@@ -37,6 +37,7 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
     documentId,
     shotId,
   );
+  const shotTakeCount = useShotTakeCount(documentId, shotId);
   const setShotReferenceImage = useDocumentStore(
     (ctx) => ctx.setShotReferenceImage,
   );
@@ -104,13 +105,15 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
   return (
     <div className="flex flex-col gap-2">
       <Button
-        className="flex-1 p-1 flex items-center rounded hover:bg-opacity-10 bg-opacity-0 bg-white disabled:opacity-30"
+        className="flex-1 p-1 flex items-center gap-2 rounded hover:bg-opacity-10 bg-opacity-0 bg-white disabled:opacity-30"
         onClick={onRecordClick}>
         <RadioButtonCheckedIcon className="w-6 h-6 fill-current" />
-        <span className="flex-1 text-right">Record!</span>
+        <span className="flex-1 text-right">
+          Record Take #{shotTakeCount + 1}
+        </span>
       </Button>
       <Button
-        className="flex-1 p-1 flex items-center rounded hover:bg-opacity-10 bg-opacity-0 bg-white disabled:opacity-30"
+        className="flex-1 p-1 flex items-center gap-2 rounded hover:bg-opacity-10 bg-opacity-0 bg-white disabled:opacity-30"
         onClick={onFocusClick}>
         <ListAltIcon className="w-6 h-6 fill-current" />
         <span className="flex-1 text-right">Shot Details</span>

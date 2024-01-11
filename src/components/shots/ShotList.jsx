@@ -27,7 +27,7 @@ export default function ShotList({
 }) {
   const shotIds = useShotIds(documentId, blockId);
   return (
-    <ul title="Shot list" className={className}>
+    <ul className={className}>
       <div className={collapsed ? GridStyle.grid : ''}>
         {shotIds.map((shotId) => (
           <Fragment key={`shot-${shotId}`}>

@@ -110,7 +110,7 @@ export function getShotIndex(store, documentId, sceneId, shotId) {
  * @param {import('./DocumentStore').TakeId} takeId
  */
 export function getTakeIndex(store, documentId, shotId, takeId) {
-  return getShotById(store, documentId, shotId)?.takeIds.indexOf(takeId) + 1;
+  return getShotById(store, documentId, shotId)?.takeIds?.indexOf(takeId) + 1;
 }
 
 /**

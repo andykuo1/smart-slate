@@ -7,12 +7,16 @@ import ImageWithCaption from '@/libs/ImageWithCaption';
  * @param {string} [props.className]
  * @param {string} props.previewImage
  * @param {string} props.title
+ * @param {string} props.caption
+ * @param {import('react').FC<any>} [props.Icon]
  * @param {import('react').ReactNode} [props.children]
  */
 export default function TakePreview({
   className,
   previewImage,
   title,
+  caption,
+  Icon = VideoFileIcon,
   children,
 }) {
   return (
@@ -20,7 +24,8 @@ export default function TakePreview({
       className={'w-32 h-[4.5rem]' + ' ' + className}
       src={previewImage}
       alt={title}
-      Icon={VideoFileIcon}>
+      caption={caption}
+      Icon={Icon}>
       {children}
     </ImageWithCaption>
   );

@@ -45,14 +45,11 @@ export default function TakeOptions({
         {showButton && <MoreVertIcon className="w-6 h-6" />}
       </MenuButton>
       <Menu className={MenuStyle.menu}>
-        <video
-          className="hidden"
-          ref={videoRef}
-          preload="metadata"
-          muted={true}
-          playsInline={true}
+        <TakeRatingMenuItem
+          documentId={documentId}
+          shotId={shotId}
+          takeId={takeId}
         />
-        <TakeRatingMenuItem documentId={documentId} takeId={takeId} />
         <TakeCacheMenuItem documentId={documentId} takeId={takeId} />
         <TakeExportMenuItem
           documentId={documentId}
@@ -71,6 +68,13 @@ export default function TakeOptions({
           sceneId={sceneId}
           shotId={shotId}
           takeId={takeId}
+        />
+        <video
+          className="hidden"
+          ref={videoRef}
+          preload="metadata"
+          muted={true}
+          playsInline={true}
         />
       </Menu>
     </MenuProvider>

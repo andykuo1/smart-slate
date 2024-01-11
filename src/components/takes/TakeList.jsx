@@ -3,7 +3,8 @@ import { Fragment, useEffect, useState } from 'react';
 import { useGAPITokenHandler } from '@/libs/googleapi';
 import { useTakeIds } from '@/stores/document';
 
-import { NewTake, TakeEntry } from './TakeEntry';
+import TakeEntry from './TakeEntry';
+import TakeEntryNew from './TakeEntryNew';
 
 /**
  * @param {object} props
@@ -34,12 +35,20 @@ export default function TakeList({
 
   return (
     <ul
-      title="Take list"
       className={
         // TODO: This has the wrong box sizing (going to force it with screen at the moment)
-        'bg-gray-100 w-screen' + ' ' + getUnorderedListStyleByViewMode(viewMode)
+        'bg-gray-100 w-screen' +
+        ' ' +
+        getUnorderedListStyleByViewMode(viewMode) +
+        ' ' +
+        className
       }>
-      <NewTake documentId={documentId} shotId={shotId} viewMode={viewMode} />
+      <TakeEntryNew
+        documentId={documentId}
+        sceneId={sceneId}
+        shotId={shotId}
+        viewMode={viewMode}
+      />
       {takeIds
         .slice()
         .reverse()

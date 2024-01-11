@@ -4,7 +4,6 @@ import ArrowForwardIcon from '@material-symbols/svg-400/rounded/arrow_forward.sv
 import StatOneIcon from '@material-symbols/svg-400/rounded/stat_1.svg';
 import StatMinusOneIcon from '@material-symbols/svg-400/rounded/stat_minus_1.svg';
 
-import RecorderOpenButton from '@/recorder/RecorderOpenButton';
 import {
   getShotById,
   getShotIdsInOrder,
@@ -170,19 +169,6 @@ export function ShotEntry({
         </div>
         <div className="flex-1 flex flex-row items-center">
           <div className="flex-1 flex flex-row">
-            {!collapsed && (
-              <div className="flex flex-col">
-                <RecorderOpenButton
-                  className={
-                    'group mx-2 my-auto' +
-                    ' ' +
-                    'text-4xl text-red-400 disabled:text-gray-300'
-                  }
-                  onClick={() => setUserCursor(documentId, sceneId, shotId)}>
-                  ◉
-                </RecorderOpenButton>
-              </div>
-            )}
             {collapsed && <ArrowForwardIcon className="w-6 h-6 fill-current" />}
           </div>
           {!collapsed && (
