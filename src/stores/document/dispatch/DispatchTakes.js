@@ -12,6 +12,7 @@ export function createDispatchTakes(set, get) {
     setTakePreviewImage: zi(set, setTakePreviewImage),
     setTakeRating: zi(set, setTakeRating),
     setTakeExportedFileName: zi(set, setTakeExportedFileName),
+    toggleGoodTake: zi(set, toggleGoodTake),
   };
 }
 
@@ -87,5 +88,21 @@ export function setTakeExportedFileName(
   let document = store.documents[documentId];
   let take = document.takes[takeId];
   take.exportedFileName = fileNameWithExt;
+  incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('../DocumentStore').Store} store
+ * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('../DocumentStore').TakeId} takeId
+ */
+export function toggleGoodTake(store, documentId, takeId) {
+  let document = store.documents[documentId];
+  let take = document.takes[takeId];
+  if (take.rating <= 0) {
+    take.rating = 1;
+  } else {
+    take.rating = 0;
+  }
   incrementDocumentRevisionNumber(document);
 }

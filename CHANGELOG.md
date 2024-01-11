@@ -1,20 +1,17 @@
 # Upcoming
 
 - Photo recorder for story building
-- Shot in text.
+- Put shots in text
 - Zoom requires it ZOOMS out before zooming back in?
-- Record Take 4
 - shot details focus experience
 - - nav takes on shotlist
 - - nav shots on edit mode
-- move the exit button
-- move it higher avoid bar
-- add fav last take Take 3 (-> 4)
 - Good take on filenames?
 - - Searchable
 - Batch export
 
 - Add shot number for both sides
+- Add good take toggle in recorder
 
 - Change to full-width storyboard on smaller screens
 - Change `Record!` to include next take number
@@ -22,6 +19,7 @@
 - Change take rating to only be good or not
 - Change record button to placeholder take
 - Change exit button to settings
+- Change nav bar higher
 
 - Fix overflow for scene headers
 

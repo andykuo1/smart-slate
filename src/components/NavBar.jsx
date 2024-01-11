@@ -191,7 +191,8 @@ function NavButton({
   return (
     <button
       className={
-        'group relative flex-1 p-2' +
+        // NOTE: This is pb-5, since pb-2 collides with iOS menu bar
+        'group relative flex-1 p-2 pb-5' +
         ' ' +
         'enabled:cursor-pointer enabled:hover:bg-white enabled:hover:text-black disabled:opacity-30' +
         ' ' +

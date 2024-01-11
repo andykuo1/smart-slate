@@ -63,8 +63,20 @@ export default function RecorderBooth() {
   const [__, setAudioConstraints] = useState(
     /** @type {MediaTrackConstraints} */ ({}),
   );
+  const { videoRef, onStop, mediaRecorder } = useContext(RecorderContext);
 
-  const { videoRef, onStop } = useContext(RecorderContext);
+  const [prevTakeId, setPrevTakeId] = useState('');
+  const toggleGoodTake = useDocumentStore((ctx) => ctx.toggleGoodTake);
+
+  const onGoodTake = useCallback(
+    function _onGoodTake() {
+      if (!prevTakeId) {
+        return;
+      }
+      toggleGoodTake(documentId, prevTakeId);
+    },
+    [prevTakeId, documentId, toggleGoodTake],
+  );
 
   const onVideoConstraintsChange = useCallback(
     /**
@@ -99,6 +111,7 @@ export default function RecorderBooth() {
     function _onComplete(blob) {
       const { documentId, sceneId, shotId } = userCursor;
       const takeId = exportTake(blob, documentId, sceneId, shotId);
+      setPrevTakeId(takeId);
       setVideoSnapshotURL((prev) => {
         if (prev) {
           console.log(
@@ -119,6 +132,7 @@ export default function RecorderBooth() {
       setUserCursor,
       setVideoSnapshotURL,
       setTakePreviewImage,
+      setPrevTakeId,
     ],
   );
 
@@ -142,6 +156,8 @@ export default function RecorderBooth() {
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
+            prevTakeId={!mediaRecorder ? prevTakeId : ''}
+            onGoodTake={onGoodTake}
           />
         </>
       )}
