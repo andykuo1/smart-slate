@@ -6,6 +6,8 @@ import {
   useDocumentTitle,
 } from '@/stores/document';
 
+import DocumentContentCount from './DocumentContentCount';
+
 /**
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
@@ -36,9 +38,10 @@ export default function DocumentTitle({ className, documentId }) {
           onChange={onDocumentTitleChange}
         />
       </div>
-      <label className="text-xs opacity-30">
+      <label className="text-xs opacity-30 flex flex-col">
         <output>{projectId}</output>
       </label>
+      <DocumentContentCount documentId={documentId} />
     </h2>
   );
 }

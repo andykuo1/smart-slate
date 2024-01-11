@@ -12,6 +12,7 @@
 
 - Add shot number for both sides
 - Add good take toggle in recorder
+- Add scene/shot/take count to document title
 
 - Change to full-width storyboard on smaller screens
 - Change `Record!` to include next take number
