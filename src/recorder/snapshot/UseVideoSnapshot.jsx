@@ -36,13 +36,17 @@ export function useVideoSnapshot(videoRef, documentId, takeId) {
         0.5,
         MAX_THUMBNAIL_WIDTH,
         MAX_THUMBNAIL_HEIGHT,
-      )?.then((url) => {
-        console.log(
-          '[UseVideoSnapshot] Setting take preview to url with length ' +
-            url?.length,
-        );
-        setTakePreviewImage(documentId, takeId, url);
-      });
+      )
+        ?.then((url) => {
+          console.log(
+            '[UseVideoSnapshot] Setting take preview to url with length ' +
+              url?.length,
+          );
+          setTakePreviewImage(documentId, takeId, url);
+        })
+        ?.catch((e) => {
+          console.error('[UseVideoSnapshot] Failed! ' + e.message);
+        });
     },
     [
       videoRef,

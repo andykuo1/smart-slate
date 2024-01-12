@@ -3,10 +3,9 @@ import { useCallback } from 'react';
 import UploadIcon from '@material-symbols/svg-400/rounded/upload-fill.svg';
 
 import FancyButton from '@/libs/FancyButton';
+import { useSingleFileInput } from '@/libs/UseSingleFileInput';
 import { useProjectImport } from '@/serdes/UseProjectImport';
 import { NOOP, RETHROW } from '@/values/Functions';
-
-import { useSingleFileInput } from './UseSingleFileInput';
 
 /**
  * @param {object} props
@@ -19,7 +18,7 @@ export default function ImportProjectButton({
 }) {
   const importProject = useProjectImport();
 
-  /** @type {import('./UseSingleFileInput').SingleFileInputChangeHandler} */
+  /** @type {import('../libs/UseSingleFileInput').SingleFileInputChangeHandler} */
   const onFile = useCallback(
     function _onFile(file) {
       file

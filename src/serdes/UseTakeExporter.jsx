@@ -148,14 +148,14 @@ export function useTakeExporter() {
     function exportTake(data, documentId, sceneId, shotId, opts = {}) {
       const store = UNSAFE_getStore();
 
-      const shotHash = resolveTakeShotHash(store, documentId, shotId);
+      const takeShotHash = resolveTakeShotHash(store, documentId, shotId);
       const takeFileName = resolveTakeFileName(
         store,
         documentId,
         sceneId,
         shotId,
         '',
-        shotHash,
+        takeShotHash,
         data.type,
       );
 

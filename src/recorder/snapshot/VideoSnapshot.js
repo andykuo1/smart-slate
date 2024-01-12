@@ -18,11 +18,18 @@ export function captureVideoSnapshot(
   if (!video) {
     return;
   }
-  // NOTE: For some reason, only srcObject works for Safari for loading video.
-  video.srcObject = videoBlob;
-  // NOTE: This needs to be called DIRECTLY in a user-gesture callback
-  //  for mobile support :)
-  video.play();
+  try {
+    // NOTE: For some reason, only srcObject works for Safari for loading video.
+    video.srcObject = videoBlob;
+    // NOTE: This needs to be called DIRECTLY in a user-gesture callback
+    //  for mobile support :)
+    video.play();
+  } catch (e) {
+    console.error(
+      '[UseVideoSnapshot] Failed to start video - ' +
+        /** @type {Error} */ (e).message,
+    );
+  }
 
   return new Promise((resolve, reject) => {
     console.log('[UseVideoSnapshot] Entering promise to take snapshot...');

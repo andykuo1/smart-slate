@@ -1,4 +1,4 @@
-import TakeEntryDetails from './TakeEntryDetails';
+import TakeEntryDetailsNew from './TakeEntryDetailsNew';
 import TakeEntryHeaderNew from './TakeEntryHeaderNew';
 import TakeEntryLayout from './TakeEntryLayout';
 
@@ -24,7 +24,12 @@ export default function TakeEntryNew({
         shotId={shotId}
         viewMode={viewMode}
       />
-      <TakeEntryDetails documentId={documentId} takeId="" viewMode={viewMode} />
+      <TakeEntryDetailsNew
+        documentId={documentId}
+        sceneId={sceneId}
+        shotId={shotId}
+        viewMode={viewMode}
+      />
     </TakeEntryLayout>
   );
 }
