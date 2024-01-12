@@ -163,3 +163,57 @@ export function getTakeIdsInOrder(store, documentId, shotId) {
 export function getFirstSceneBlockId(store, documentId, sceneId) {
   return getSceneById(store, documentId, sceneId).blockIds[0] || '';
 }
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').BlockId} blockId
+ */
+export function findSceneWithBlockId(store, documentId, blockId) {
+  if (!blockId) {
+    return null;
+  }
+  const document = getDocumentById(store, documentId);
+  for (let scene of Object.values(document?.scenes || {})) {
+    if (scene?.blockIds?.includes?.(blockId)) {
+      return scene;
+    }
+  }
+  return null;
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ */
+export function findBlockWithShotId(store, documentId, shotId) {
+  if (!shotId) {
+    return null;
+  }
+  const document = getDocumentById(store, documentId);
+  for (let block of Object.values(document?.blocks || {})) {
+    if (block?.shotIds?.includes?.(shotId)) {
+      return block;
+    }
+  }
+  return null;
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
+ */
+export function findShotWithTakeId(store, documentId, takeId) {
+  if (!takeId) {
+    return null;
+  }
+  const document = getDocumentById(store, documentId);
+  for (let shot of Object.values(document?.shots || {})) {
+    if (shot?.takeIds?.includes?.(takeId)) {
+      return shot;
+    }
+  }
+  return null;
+}

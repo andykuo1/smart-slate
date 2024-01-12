@@ -17,6 +17,7 @@ import SettingsNerdInfoButton from '@/components/settings/SettingsNerdInfoButton
 import SettingsPreferNativeRecorderToggle from '@/components/settings/SettingsPreferNativeRecorderToggle';
 import SettingsPreferPersistedMediaStreamToggle from '@/components/settings/SettingsPreferPersistedMediaStreamToggle';
 import SettingsProjectDeleteButton from '@/components/settings/SettingsProjectDeleteButton';
+import SettingsProjectDownloadButton from '@/components/settings/SettingsProjectDownloadButton';
 import SettingsProjectIdField from '@/components/settings/SettingsProjectIdField';
 import SettingsProjectInstallField from '@/components/settings/SettingsProjectInstallField';
 import SettingsProjectNameField from '@/components/settings/SettingsProjectNameField';
@@ -55,6 +56,7 @@ export default function SettingsPage() {
             <SettingsFieldGroup title="Data Settings">
               <SettingsEnableGoogleDriveSyncToggle />
               <SettingsShareFilesButton />
+              <SettingsProjectDownloadButton />
             </SettingsFieldGroup>
             <br />
             <SettingsFieldGroup title="Recorder Settings">

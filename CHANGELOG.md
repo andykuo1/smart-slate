@@ -13,6 +13,8 @@
 - Add shot number for both sides
 - Add good take toggle in recorder
 - Add scene/shot/take count to document title
+- Add import footage button
+- Add export all as zip button
 
 - Change to full-width storyboard on smaller screens
 - Change `Record!` to include next take number
