@@ -64,7 +64,8 @@ export default function Clapperboard() {
       takeFileNameWithoutExt = takeFileName.substring(0, extIndex);
     }
     const result = JSON.stringify({ key: takeFileNameWithoutExt });
-    setDataString(result);
+    const base64 = btoa(result);
+    setDataString('https://jsonhero.io/new?j=' + base64);
   }, [
     documentId,
     sceneId,
