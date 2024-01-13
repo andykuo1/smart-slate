@@ -85,7 +85,7 @@ export default function Clapperboard() {
   }
 
   return (
-    <fieldset className="grid grid-cols-4 w-full h-full border-white text-white text-4xl px-4 font-mono">
+    <fieldset className="grid grid-cols-4 w-full h-full border-white text-white text-md md:text-4xl px-4 font-mono">
       <div className="relative col-span-4 flex overflow-hidden">
         <label className="inline-block text-xs text-center upright-rl p-1 pl-0">
           PROD
@@ -318,7 +318,11 @@ function SceneShotSelector({ className, documentId, shotId }) {
       value={shotId}
       onChange={onChange}>
       {sceneIds.map((sceneId) => (
-        <SceneShotOptions documentId={documentId} sceneId={sceneId} />
+        <SceneShotOptions
+          key={sceneId}
+          documentId={documentId}
+          sceneId={sceneId}
+        />
       ))}
     </select>
   );
