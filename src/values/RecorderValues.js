@@ -77,6 +77,9 @@ export function getMediaRecorderSupportedMimeType(possibleTypes) {
  * @param {string} mimeType
  */
 export function getVideoFileExtensionByMIMEType(mimeType) {
+  if (!mimeType) {
+    return '';
+  }
   switch (mimeType) {
     case 'video/quicktime':
       return '.mov';

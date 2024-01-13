@@ -10,6 +10,7 @@ export function createDispatch(set) {
     setUserCursor: zi(set, setUserCursor),
     setRecorderActive: zi(set, setRecorderActive),
     setEditMode: zi(set, setEditMode),
+    setRecordMode: zi(set, setRecordMode),
   };
 }
 
@@ -58,4 +59,12 @@ function setRecorderActive(store, active, forceStart) {
  */
 function setEditMode(store, editMode) {
   store.editMode = editMode;
+}
+
+/**
+ * @param {import('./UserStore').Store} store
+ * @param {'recorder'|'clapper'} recordMode
+ */
+function setRecordMode(store, recordMode) {
+  store.recordMode = recordMode;
 }

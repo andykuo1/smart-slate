@@ -5,7 +5,11 @@ import { useFullscreen } from '@/libs/fullscreen';
 import { useInputCapture } from '@/libs/inputcapture';
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
 import { useSettingsStore } from '@/stores/settings';
-import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
+import {
+  useCurrentCursor,
+  useSetUserCursor,
+  useUserStore,
+} from '@/stores/user';
 
 import { RecorderContext } from './RecorderContext';
 
@@ -41,6 +45,7 @@ function useOpenMediaRecorder(onClick) {
   const preferPersistedMediaStream = useSettingsStore(
     (ctx) => ctx.user.preferPersistedMediaStream,
   );
+  const setRecordMode = useUserStore((ctx) => ctx.setRecordMode);
   return useCallback(
     /** @type {import('react').MouseEventHandler<HTMLButtonElement>} */
     async function _handleClick(e) {
@@ -57,6 +62,7 @@ function useOpenMediaRecorder(onClick) {
         onClick?.(e);
         // Step 3. Navigate to page.
         enterFullscreen();
+        setRecordMode('recorder');
         navigate('/rec');
       } catch (e) {
         // ... report it.

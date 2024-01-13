@@ -10,6 +10,8 @@ export function createStore() {
     recorder: createRecorder(),
     /** @type {'shotlist'|'story'} */
     editMode: 'story',
+    /** @type {'recorder'|'clapper'} */
+    recordMode: 'clapper',
   };
 }
 

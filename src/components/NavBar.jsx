@@ -42,13 +42,39 @@ export default function NavBar() {
           <NavShotListButton />
         </li>
         <li className="flex-1 flex">
-          <NavButton title="Record" abbr="Rec" Icon={RadioButtonCheckedIcon} />
+          <NavRecorderButton />
         </li>
         <li className="flex-1 flex">
           <NavButton title="Visualize" abbr="Vis" Icon={SubscriptionsIcon} />
         </li>
       </ul>
     </nav>
+  );
+}
+
+function NavRecorderButton() {
+  const documentId = useCurrentDocumentId();
+  const projectId = useDocumentStore(
+    (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
+  );
+  const setRecordMode = useUserStore((ctx) => ctx.setRecordMode);
+  const navigate = useNavigate();
+  const location = useLocation();
+  function onClick() {
+    setRecordMode('clapper');
+    if (!location.pathname.includes('/rec')) {
+      navigate('/rec');
+    }
+  }
+  return (
+    <NavButton
+      title="Recorder"
+      abbr="Rec"
+      active={location.pathname.includes('/rec')}
+      Icon={RadioButtonCheckedIcon}
+      onClick={onClick}
+      disabled={!projectId}
+    />
   );
 }
 

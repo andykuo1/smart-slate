@@ -1,8 +1,12 @@
 import { useEffect } from 'react';
 
+import Clapperboard from '@/components/Clapperboard';
 import RecorderBooth from '@/recorder/RecorderBooth';
+import { useUserStore } from '@/stores/user';
 
 export default function RecordPage() {
+  const recordMode = useUserStore((ctx) => ctx.recordMode);
+  const isRecorderMode = recordMode === 'recorder';
   useEffect(() => {
     document.body.style.background = 'black';
     return () => {
@@ -11,7 +15,7 @@ export default function RecordPage() {
   }, []);
   return (
     <main className="w-full h-full flex flex-col items-center bg-black">
-      <RecorderBooth />
+      {isRecorderMode ? <RecorderBooth /> : <Clapperboard />}
     </main>
   );
 }

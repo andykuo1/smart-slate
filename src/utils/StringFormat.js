@@ -34,3 +34,19 @@ export function formatHourMinSecTime(millis) {
     String(seconds).padStart(2, '0')
   );
 }
+
+/**
+ * @param {Date} date
+ */
+export function formatYearMonthDay(date) {
+  const day = date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+  return (
+    String(year) +
+    '.' +
+    String(month + 1).padStart(2, '0') +
+    '.' +
+    String(day).padStart(2, '0')
+  );
+}

@@ -106,9 +106,17 @@ export function formatShotNumber(shotNumber) {
 
 /**
  * @param {number} takeNumber
+ * @param {boolean} [abbreviated]
  */
-export function formatTakeNumber(takeNumber) {
-  return `T${takeNumber > 0 ? String(takeNumber).padStart(2, '0') : '--'}`;
+export function formatTakeNumber(takeNumber, abbreviated = false) {
+  if (takeNumber <= 0) {
+    return '--';
+  }
+  if (abbreviated) {
+    return String(takeNumber);
+  } else {
+    return `T${String(takeNumber).padStart(2, '0')}`;
+  }
 }
 
 /**
