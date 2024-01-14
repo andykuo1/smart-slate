@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
+import TestLexicalMarkdown from '@/tests/TestLexicalMarkdown';
 import TestScreenplay from '@/tests/TestScreenplay';
 import TestSnapshot from '@/tests/TestSnapshot';
-
-import TestVideoConstraints from '../tests/TestVideoConstraints';
+import TestVideoConstraints from '@/tests/TestVideoConstraints';
 
 const TEST_VERSION = 'v16';
 // @ts-expect-error This is a custom env variable defined in vite config.
@@ -25,11 +25,13 @@ export default function TestPage() {
           <option value="screenplay">Screenplay Test</option>
           <option value="snapshot">Snapshot Test</option>
           <option value="videoconstraints">Video Constraints Test</option>
+          <option value="lexicalmarkdown">Lexical Markdown Test</option>
         </select>
       </div>
       {test === 'screenplay' && <TestScreenplay />}
       {test === 'snapshot' && <TestSnapshot />}
       {test === 'videoconstraints' && <TestVideoConstraints />}
+      {test === 'lexicalmarkdown' && <TestLexicalMarkdown />}
     </main>
   );
 }
