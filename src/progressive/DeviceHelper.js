@@ -1,12 +1,7 @@
 import InstallDesktopIcon from '@material-symbols/svg-400/rounded/install_desktop.svg';
 import InstallMobileIcon from '@material-symbols/svg-400/rounded/install_mobile.svg';
 
-import { tryGetWindow } from '@/recorder/UseMediaStream';
-
-export function tryGetUserAgent() {
-  const window = tryGetWindow();
-  return (window.navigator?.userAgent || '').toLowerCase();
-}
+import { tryGetUserAgent, tryGetWindow } from '@/utils/BrowserFeatures';
 
 export function isAppleMobileDevice(userAgent = tryGetUserAgent()) {
   // Detects if device is on iOS
