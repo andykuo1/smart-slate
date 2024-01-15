@@ -4,6 +4,7 @@ import ShareIcon from '@material-symbols/svg-400/rounded/share.svg';
 
 import { getVideoBlob } from '@/recorder/cache';
 import { useDocumentStore } from '@/stores/document';
+import { getIDBKeyFromTakeId } from '@/stores/document/ExportedTakeIDBKey';
 import { useCurrentDocumentId } from '@/stores/user';
 import { tryGetSharing } from '@/utils/BrowserFeatures';
 import { APP_TITLE } from '@/values/PackageJSON';
@@ -22,9 +23,10 @@ export default function SettingsShareFilesButton() {
       const takes = Object.entries(store.documents[documentId].takes);
       let promises = [];
       for (let [takeId, take] of takes) {
+        const idbKey = take.exportedIDBKey || getIDBKeyFromTakeId(takeId);
         const fileName = take.exportedFileName;
         promises.push(
-          getVideoBlob(documentId, takeId).then((blob) =>
+          getVideoBlob(documentId, idbKey).then((blob) =>
             blob
               ? new File([blob], fileName, { type: MEDIA_BLOB_OPTIONS.type })
               : null,

@@ -17,6 +17,7 @@ import {
   getShotIndex,
 } from '@/stores/document';
 import { createTake } from '@/stores/document/DocumentStore';
+import { getIDBKeyFromTakeId } from '@/stores/document/ExportedTakeIDBKey';
 import { findNextAvailableShotHash } from '@/stores/document/dispatch/DispatchDocuments';
 import { useSettingsStore } from '@/stores/settings';
 import { downloadURLImpl } from '@/utils/Downloader';
@@ -36,7 +37,8 @@ export function useTakeDownloader() {
      */
     async function _downloadTake(documentId, sceneId, shotId, takeId) {
       const store = UNSAFE_getStore();
-      const data = await getVideoBlob(documentId, takeId);
+      const idbKey = getIDBKeyFromTakeId(takeId);
+      const data = await getVideoBlob(documentId, idbKey);
       if (!data) {
         return;
       }
@@ -82,7 +84,8 @@ export function useTakeGoogleDriveUploader() {
      */
     async function _uploadTake(documentId, sceneId, shotId, takeId) {
       const store = UNSAFE_getStore();
-      const data = await getVideoBlob(documentId, takeId);
+      const idbKey = getIDBKeyFromTakeId(takeId);
+      const data = await getVideoBlob(documentId, idbKey);
       if (!data) {
         return;
       }

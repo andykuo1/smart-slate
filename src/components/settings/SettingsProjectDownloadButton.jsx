@@ -5,6 +5,7 @@ import { Zip, ZipPassThrough } from 'fflate';
 
 import { getVideoBlob } from '@/recorder/cache';
 import { getDocumentById, useDocumentStore } from '@/stores/document';
+import { getIDBKeyFromTakeId } from '@/stores/document/ExportedTakeIDBKey';
 import { useCurrentDocumentId } from '@/stores/user';
 import { downloadURLImpl } from '@/utils/Downloader';
 
@@ -55,9 +56,10 @@ export default function SettingsProjectDownloadButton() {
             }
           };
           for (let take of takes) {
-            const takeId = take.takeId;
+            const idbKey =
+              take.exportedIDBKey || getIDBKeyFromTakeId(take.takeId);
             const fileName = take.exportedFileName;
-            const blob = await getVideoBlob(documentId, takeId);
+            const blob = await getVideoBlob(documentId, idbKey);
             if (!blob) {
               continue;
             }
