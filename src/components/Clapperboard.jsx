@@ -52,10 +52,10 @@ export default function Clapperboard() {
     if (!documentId) {
       newDocumentId = getDocumentIds(store)?.[0] || '';
     }
-    if (!sceneId) {
+    if (newDocumentId && !sceneId) {
       newSceneId = getSceneIdsInOrder(store, newDocumentId)?.[0] || '';
     }
-    if (!shotId) {
+    if (newDocumentId && newSceneId && !shotId) {
       let blockId = getFirstSceneBlockId(store, newDocumentId, newSceneId);
       newShotId = getShotIdsInOrder(store, newDocumentId, blockId)?.[0] || '';
     }

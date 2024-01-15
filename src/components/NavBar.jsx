@@ -8,6 +8,7 @@ import TuneIcon from '@material-symbols/svg-400/rounded/tune.svg';
 
 import { useFullscreen } from '@/libs/fullscreen';
 import {
+  getDocumentById,
   getDocumentSettingsById,
   useDocumentStore,
   useSceneNumber,
@@ -58,6 +59,9 @@ function NavRecorderButton() {
   const projectId = useDocumentStore(
     (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
   );
+  const shotCount = useDocumentStore(
+    (ctx) => Object.keys(getDocumentById(ctx, documentId)?.shots || {}).length,
+  );
   const setRecordMode = useUserStore((ctx) => ctx.setRecordMode);
   const navigate = useNavigate();
   const location = useLocation();
@@ -76,7 +80,7 @@ function NavRecorderButton() {
       active={location.pathname.includes('/rec')}
       Icon={RadioButtonCheckedIcon}
       onClick={onClick}
-      disabled={!projectId}
+      disabled={!projectId || shotCount <= 0}
     />
   );
 }
