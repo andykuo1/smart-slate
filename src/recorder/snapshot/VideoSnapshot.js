@@ -3,17 +3,8 @@
  *
  * @param {import('react').RefObject<HTMLVideoElement|null>} videoRef
  * @param {Blob} videoBlob
- * @param {number} seekToSeconds
- * @param {number} width
- * @param {number} height
  */
-export function captureVideoSnapshot(
-  videoRef,
-  videoBlob,
-  seekToSeconds,
-  width,
-  height,
-) {
+export function prepareVideoWithBlob(videoRef, videoBlob) {
   const video = videoRef.current;
   if (!video) {
     return;
@@ -23,20 +14,42 @@ export function captureVideoSnapshot(
     video.srcObject = videoBlob;
     // NOTE: This needs to be called DIRECTLY in a user-gesture callback
     //  for mobile support :)
-    video.play();
-  } catch (e) {
-    console.error(
-      '[UseVideoSnapshot] Failed to start video - ' +
-        /** @type {Error} */ (e).message,
-    );
+    video.load();
+  } catch {
+    try {
+      if (video.src) {
+        const oldSrc = video.src;
+        video.src = '';
+        URL.revokeObjectURL(oldSrc);
+      }
+      const url = URL.createObjectURL(videoBlob);
+      video.src = url;
+      video.load();
+    } catch (e) {
+      console.error(
+        '[UseVideoSnapshot] Failed to start video - ' +
+          /** @type {Error} */ (e).message,
+      );
+    }
   }
+}
 
+/**
+ * https://webkit.org/blog/6784/new-video-policies-for-ios/
+ *
+ * @param {import('react').RefObject<HTMLVideoElement|null>} videoRef
+ * @param {number} seekToSeconds
+ * @param {number} width
+ * @param {number} height
+ */
+export function captureVideoSnapshot(videoRef, seekToSeconds, width, height) {
   return new Promise((resolve, reject) => {
     console.log('[UseVideoSnapshot] Entering promise to take snapshot...');
     const video = videoRef.current;
     if (!video) {
       return;
     }
+
     /** @param {ErrorEvent} e */
     function onError(e) {
       console.log('[UseVideoSnapshot] ERROR! ' + e.message);
@@ -82,9 +95,14 @@ export function captureVideoSnapshot(
       }
     }
 
-    video.addEventListener('error', onError);
-    video.addEventListener('loadedmetadata', onLoadedMetadata);
-    console.log('[UseVideoSnapshot] Listenting...');
+    if (video.readyState > 0) {
+      console.log('[UseVideoSnapshot] ...already loaded! Do it now.');
+      onLoadedMetadata();
+    } else {
+      console.log('[UseVideoSnapshot] Listening...');
+      video.addEventListener('error', onError);
+      video.addEventListener('loadedmetadata', onLoadedMetadata);
+    }
   });
 }
 
@@ -133,7 +151,6 @@ export function drawElementToCanvasWithRespectToAspectRatio(
   if (!ctx) {
     return;
   }
-
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   let rw = ratio * w;
   let rh = ratio * h;

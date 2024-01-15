@@ -25,6 +25,8 @@
 - Change nav bar higher
 
 - Fix overflow for scene headers
+- Fix leaking video cache on project delete
+- Fix video snapshot to better load video
 
 # 0.1.12
 

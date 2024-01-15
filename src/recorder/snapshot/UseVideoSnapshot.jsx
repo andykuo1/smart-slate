@@ -7,7 +7,7 @@ import {
 } from '@/values/Resolutions';
 
 import { useCachedVideoBlob } from '../cache/UseCachedVideoBlob';
-import { captureVideoSnapshot } from './VideoSnapshot';
+import { captureVideoSnapshot, prepareVideoWithBlob } from './VideoSnapshot';
 
 /**
  * @param {import('react').RefObject<HTMLVideoElement|null>} videoRef
@@ -30,9 +30,9 @@ export function useVideoSnapshot(videoRef, documentId, takeId) {
       if (!videoBlob || takePreviewImage) {
         return;
       }
+      prepareVideoWithBlob(videoRef, videoBlob);
       captureVideoSnapshot(
         videoRef,
-        videoBlob,
         0.5,
         MAX_THUMBNAIL_WIDTH,
         MAX_THUMBNAIL_HEIGHT,

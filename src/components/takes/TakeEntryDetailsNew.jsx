@@ -27,7 +27,7 @@ export default function TakeEntryDetails({
   /** @type {import('@/libs/UseMultiFileInput').MultiFileInputChangeHandler} */
   const onFile = useCallback(function _onFile(files) {
     for (let file of files) {
-      console.log(file.name + ' ' + file.type);
+      console.log('[ImportFootage] Imported ' + file.name + ' ' + file.type);
       exportTake(file, documentId, sceneId, shotId);
     }
   }, []);

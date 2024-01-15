@@ -8,9 +8,12 @@ import TestVideoConstraints from '@/tests/TestVideoConstraints';
 const TEST_VERSION = 'v16';
 // @ts-expect-error This is a custom env variable defined in vite config.
 const TEST_CONFIGTIME = new Date(__CONFIGTIME__ || 0).toLocaleString(); // eslint-disable-line no-undef
+const TEST_STORAGE_KEY = '__TEST_PAGE_TARGET__';
 
 export default function TestPage() {
-  const [test, setTest] = useState('');
+  const [test, setTest] = useState(
+    sessionStorage.getItem(TEST_STORAGE_KEY) || '',
+  );
   return (
     <main className="w-full h-full flex flex-col items-center py-20">
       <div className="fixed top-0 left-0 z-50 flex flex-row rounded-ee-full bg-gray-200 overflow-hidden">
@@ -20,7 +23,11 @@ export default function TestPage() {
         <select
           className="bg-transparent outline-none mr-4"
           value={test}
-          onChange={(e) => setTest(e.target.value)}>
+          onChange={(e) => {
+            const value = e.target.value;
+            setTest(value);
+            sessionStorage.setItem(TEST_STORAGE_KEY, value);
+          }}>
           <option value="">No Test</option>
           <option value="screenplay">Screenplay Test</option>
           <option value="snapshot">Snapshot Test</option>

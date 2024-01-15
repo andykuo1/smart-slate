@@ -1,6 +1,9 @@
 import { useRef, useState } from 'react';
 
-import { captureVideoSnapshot } from '@/recorder/snapshot/VideoSnapshot';
+import {
+  captureVideoSnapshot,
+  prepareVideoWithBlob,
+} from '@/recorder/snapshot/VideoSnapshot';
 import {
   MAX_THUMBNAIL_HEIGHT,
   MAX_THUMBNAIL_WIDTH,
@@ -21,12 +24,7 @@ export default function TestSnapshot() {
     }
     el.value = '';
     blobRef.current = file;
-    const video = videoRef.current;
-    if (!video) {
-      return;
-    }
-    video.srcObject = file;
-    video.play();
+    prepareVideoWithBlob(videoRef, file);
   }
 
   function onClick() {
@@ -36,8 +34,7 @@ export default function TestSnapshot() {
     }
     captureVideoSnapshot(
       videoRef,
-      videoBlob,
-      0,
+      0.5,
       MAX_THUMBNAIL_WIDTH,
       MAX_THUMBNAIL_HEIGHT,
     )?.then((url) => setImgSrc(url));
