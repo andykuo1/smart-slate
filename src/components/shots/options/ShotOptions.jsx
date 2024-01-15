@@ -78,7 +78,7 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
       setUserCursor(documentId, sceneId, shotId);
       setEditMode('shotlist');
     },
-    [setUserCursor, documentId, sceneId, shotId, setOpen],
+    [setUserCursor, documentId, sceneId, shotId, setOpen, setEditMode],
   );
 
   const onInputChange = useCallback(

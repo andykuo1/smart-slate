@@ -66,7 +66,7 @@ export default function Clapperboard() {
     ) {
       setUserCursor(newDocumentId, newSceneId, newShotId, '');
     }
-  }, []);
+  }, [documentId, sceneId, shotId, UNSAFE_getStore, setUserCursor]);
 
   function onBackClick() {
     navigate('/edit');

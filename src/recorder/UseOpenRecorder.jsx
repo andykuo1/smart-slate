@@ -78,6 +78,7 @@ function useOpenMediaRecorder(onClick) {
     },
     [
       preferPersistedMediaStream,
+      setRecordMode,
       initMediaStream,
       onStop,
       navigate,

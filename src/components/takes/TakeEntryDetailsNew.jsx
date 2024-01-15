@@ -25,12 +25,15 @@ export default function TakeEntryDetails({
 }) {
   const exportTake = useTakeExporter();
   /** @type {import('@/libs/UseMultiFileInput').MultiFileInputChangeHandler} */
-  const onFile = useCallback(function _onFile(files) {
-    for (let file of files) {
-      console.log('[ImportFootage] Imported ' + file.name + ' ' + file.type);
-      exportTake(file, documentId, sceneId, shotId);
-    }
-  }, []);
+  const onFile = useCallback(
+    function _onFile(files) {
+      for (let file of files) {
+        console.log('[ImportFootage] Imported ' + file.name + ' ' + file.type);
+        exportTake(file, documentId, sceneId, shotId);
+      }
+    },
+    [documentId, sceneId, shotId, exportTake],
+  );
   const [render, click] = useMultiFileInput('video/*', onFile);
 
   const listDecorationStyle = getListDecorationStyleByViewMode(viewMode);

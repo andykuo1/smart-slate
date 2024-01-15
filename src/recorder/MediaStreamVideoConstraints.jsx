@@ -14,9 +14,20 @@ export default function MediaStreamVideoConstraints({ constraints }) {
       if (!mediaStream) {
         return;
       }
-      let orientedConstraints = getLandscapeOrientedConstraints(constraints);
+      const tracks = mediaStream.getVideoTracks();
+      const orientedConstraints = getLandscapeOrientedConstraints(constraints);
+      const filteredConstraints = filterSupportedConstraints(
+        tracks[0].getCapabilities(),
+        orientedConstraints,
+      );
+      console.log(
+        '[MediaStreamVideoConstraints] Applying video constraints - ' +
+          JSON.stringify(orientedConstraints) +
+          ' -> ' +
+          JSON.stringify(filteredConstraints),
+      );
       for (let track of mediaStream.getVideoTracks()) {
-        track.applyConstraints(orientedConstraints);
+        track.applyConstraints(filteredConstraints);
       }
     },
     [mediaStream, constraints],
@@ -79,4 +90,21 @@ function getLandscapeOrientedConstraints(constraints) {
     };
   }
   return constraints;
+}
+
+/**
+ *
+ * @param {MediaTrackCapabilities} capabilities
+ * @param {MediaTrackConstraints} constraints
+ */
+function filterSupportedConstraints(capabilities, constraints) {
+  /** @type {Record<string, any>} */
+  let result = {};
+  for (let key of Object.keys(constraints)) {
+    if (key in capabilities) {
+      // @ts-expect-error This is already a key of the constraints.
+      result[key] = constraints[key];
+    }
+  }
+  return result;
 }

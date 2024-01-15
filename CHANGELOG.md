@@ -6,8 +6,6 @@
 - shot details focus experience
 - - nav takes on shotlist
 - - nav shots on edit mode
-- Good take on filenames?
-- - Searchable
 
 - Add shot number for both sides
 - Add good take toggle in recorder
