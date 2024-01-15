@@ -1,19 +1,15 @@
 // NOTE: https://www.studiobinder.com/blog/how-to-use-a-film-slate/
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import QRCode from 'qrcode';
+import AddIcon from '@material-symbols/svg-400/rounded/add.svg';
+import ArrowBackIcon from '@material-symbols/svg-400/rounded/arrow_back.svg';
 
-import GridStyle from '@/components/shots/GridStyle.module.css';
 import { useInterval } from '@/libs/UseInterval';
-import {
-  useDefineTake,
-  useTakeFileNameResolver,
-  useTakeShotHashResolver,
-} from '@/serdes/UseTakeExporter';
+import { useDefineTake } from '@/serdes/UseTakeExporter';
 import {
   findBlockWithShotId,
   findSceneWithBlockId,
-  getDocumentSettingsById,
   useBlockIds,
   useDocumentStore,
   useSceneIds,
@@ -26,78 +22,54 @@ import {
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import { formatYearMonthDay } from '@/utils/StringFormat';
 
+import ClapperCameraNameField from './clapper/ClapperCameraNameField';
+import ClapperDirectorNameField from './clapper/ClapperDirectorNameField';
+import ClapperMoreFields from './clapper/ClapperMoreFields';
+import ClapperProductionTitleField from './clapper/ClapperProductionTitleField';
+import ClapperQRCodeField from './clapper/ClapperQRCodeField';
 import {
   formatSceneShotNumber,
   formatTakeNumber,
 } from './takes/TakeNameFormat';
 
-export default function Clapperboard() {
-  const [dataString, setDataString] = useState('');
+export default function ClapperboardV2() {
   const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
-  const projectId = useDocumentStore(
-    (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
-  );
+  const setUserCursor = useSetUserCursor();
   const dateString = useDateString();
-  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
-  const resolveTakeFileName = useTakeFileNameResolver();
-  const resolveTakeShotHash = useTakeShotHashResolver();
+  const navigate = useNavigate();
   const defineTake = useDefineTake();
 
-  useEffect(() => {
-    if (!documentId || !sceneId || !shotId) {
-      return;
-    }
-    const store = UNSAFE_getStore();
-    const takeShotHash = resolveTakeShotHash(store, documentId, shotId);
-    const takeFileName = resolveTakeFileName(
-      store,
-      documentId,
-      sceneId,
-      shotId,
-      takeId,
-      takeShotHash,
-      '',
-    );
-    let takeFileNameWithoutExt = takeFileName;
-    const extIndex = takeFileName.lastIndexOf('.');
-    if (extIndex >= 0) {
-      takeFileNameWithoutExt = takeFileName.substring(0, extIndex);
-    }
-    const result = JSON.stringify({ key: takeFileNameWithoutExt });
-    const base64 = btoa(result);
-    setDataString('https://jsonhero.io/new?j=' + base64);
-  }, [
-    documentId,
-    sceneId,
-    shotId,
-    takeId,
-    UNSAFE_getStore,
-    resolveTakeFileName,
-    resolveTakeShotHash,
-    setDataString,
-  ]);
+  function onBackClick() {
+    navigate('/edit');
+  }
 
-  function onNextTake() {
+  function onAddClick() {
     if (!documentId || !sceneId || !shotId) {
       return;
     }
     defineTake(documentId, sceneId, shotId);
+    setUserCursor(documentId, sceneId, shotId, '');
   }
 
   return (
-    <fieldset className="grid grid-cols-4 w-full h-full border-white text-white text-md md:text-4xl px-4 font-mono">
-      <div className="relative col-span-4 flex overflow-hidden">
-        <label className="inline-block text-xs text-center upright-rl p-1 pl-0">
-          PROD
-        </label>
-        <output className="m-auto">{projectId}</output>
-      </div>
-      <table className="relative table-fixed col-span-4 text-center border-y-4 border-white overflow-hidden">
+    <fieldset className="relative w-full h-full flex flex-col text-white text-[5vmin] font-mono overflow-hidden">
+      <button
+        className="absolute left-1 top-1 bg-black rounded"
+        onClick={onBackClick}>
+        <ArrowBackIcon className="w-6 h-6 fill-current" />
+      </button>
+      <button
+        className="absolute right-1 top-1 bg-black rounded"
+        onClick={onAddClick}>
+        <AddIcon className="w-6 h-6 fill-current" />
+      </button>
+
+      <table className="table-fixed text-center border-y-4 border-white overflow-hidden text-[20vmin]">
         <thead>
           <tr>
-            <th className="border-r-4 border-white scale-50 w-[33%]">ROLL</th>
-            <th className="border-x-4 border-white scale-50 w-[33%]">SCENE</th>
-            <th className="border-l-4 border-white scale-50 w-[33%]">TAKE</th>
+            <th className="border-r-4 border-white w-[33%] text-xs">ROLL</th>
+            <th className="border-x-4 border-white w-[33%] text-xs">SCENE</th>
+            <th className="border-l-4 border-white w-[33%] text-xs">TAKE</th>
           </tr>
         </thead>
         <tbody>
@@ -106,51 +78,57 @@ export default function Clapperboard() {
             <td className="border-x-4 border-white">
               <SceneShotSelector documentId={documentId} shotId={shotId} />
             </td>
-            <td className="border-l-4 border-white">
-              <TakeSelector
-                documentId={documentId}
-                sceneId={sceneId}
-                shotId={shotId}
-                takeId={takeId}
-              />
+            <td className="relative border-l-4 border-white">
+              <TakeSelector />
             </td>
           </tr>
         </tbody>
       </table>
-      <div className="col-span-3">
-        <button onClick={onNextTake} disabled={!shotId}>
-          NEXT
-        </button>
-      </div>
-      <div className="relative col-span-2 overflow-hidden flex flex-col">
-        <div className="flex-1 flex items-center">
-          <label className="text-xs text-left upright-rl p-1 pl-0">DIR</label>
-          <div className="flex-1 px-2">
-            <DirectorInput className="inline-block w-full uppercase bg-transparent" />
+
+      <div className="grid grid-cols-2">
+        <ul>
+          <li className="flex items-center">
+            <VerticalLabel title="PROD" />
+            <ClapperProductionTitleField
+              className="mx-1 w-full uppercase bg-transparent h-[50%]"
+              documentId={documentId}
+            />
+          </li>
+          <li className="flex items-center">
+            <VerticalLabel title="DIR" />
+            <ClapperDirectorNameField
+              className="mx-1 w-full uppercase bg-transparent h-[50%]"
+              documentId={documentId}
+            />
+          </li>
+          <li className="flex items-center">
+            <VerticalLabel title="CAM" />
+            <ClapperCameraNameField
+              className="mx-1 w-full uppercase bg-transparent h-[50%]"
+              documentId={documentId}
+            />
+          </li>
+        </ul>
+
+        <div className="sticky bottom-0 right-0 overflow-hidden">
+          <ClapperQRCodeField
+            documentId={documentId}
+            sceneId={sceneId}
+            shotId={shotId}
+            takeId={takeId}
+          />
+        </div>
+
+        <div className="col-span-2 flex flex-row">
+          <div className="flex-1 flex items-center">
+            <VerticalLabel title="DATE" />
+            <output className="uppercase">{dateString}</output>
+          </div>
+          <div className="flex-1 flex items-center">
+            <VerticalLabel title="ETC" />
+            <ClapperMoreFields className="flex-1" documentId={documentId} />
           </div>
         </div>
-        <div className="flex-1 flex items-center">
-          <label className="text-xs upright-rl p-1 pl-0">CAM</label>
-          <div className="flex-1 px-2">
-            <CameraInput className="inline-block w-full uppercase bg-transparent" />
-          </div>
-        </div>
-        <div className="flex-1" />
-        <div className="flex-1 flex items-center">
-          <label className="text-xs upright-rl p-1 pl-0">DATE</label>
-          <output className="uppercase">{dateString}</output>
-        </div>
-        <div className="flex-1 flex items-center">
-          <label className="text-xs upright-rl p-1 pl-0">ETC</label>
-          <div className={GridStyle.grid + ' ' + 'flex-1'}>
-            <ToggleSyncButton />
-            <ToggleMOSButton />
-          </div>
-        </div>
-      </div>
-      <div className="relative col-span-2 row-span-2 flex flex-col overflow-hidden">
-        <TakeQRCode data={dataString} />
-        <span className="text-xs overflow-x-auto">{dataString}</span>
       </div>
     </fieldset>
   );
@@ -159,24 +137,38 @@ export default function Clapperboard() {
 /**
  * @param {object} props
  * @param {string} [props.className]
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
- * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
- * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
+ * @param {string} [props.title]
+ * @param {import('react').ReactNode} [props.children]
  */
-function TakeSelector({ className, documentId, sceneId, shotId, takeId }) {
+function VerticalLabel({ className, title = '', children }) {
+  return (
+    <label
+      className={'text-[2vmin] upright-rl py-1 text-center' + ' ' + className}>
+      {title}
+      {children}
+    </label>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ */
+function TakeSelector({ className }) {
+  const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
+  const takeIds = useTakeIds(documentId, shotId);
   const setUserCursor = useSetUserCursor();
 
-  const takeIds = useTakeIds(documentId, shotId);
   /** @type {import('react').ChangeEventHandler<HTMLSelectElement>} */
   function onChange(e) {
     const target = /** @type {HTMLSelectElement} */ (e.target);
     const value = target.value;
     setUserCursor(documentId, sceneId, shotId, value);
   }
+
   return (
     <select
-      className={'bg-transparent text-center' + ' ' + className}
+      className={'w-full bg-transparent text-center' + ' ' + className}
       value={takeId}
       onChange={onChange}>
       <optgroup label="New">
@@ -189,101 +181,6 @@ function TakeSelector({ className, documentId, sceneId, shotId, takeId }) {
       </optgroup>
     </select>
   );
-}
-
-function ToggleSyncButton() {
-  const [state, setState] = useState(true);
-
-  function onClick() {
-    setState((prev) => !prev);
-  }
-  return (
-    <button
-      className={!state ? 'line-through opacity-30' : ''}
-      onClick={onClick}>
-      SYNC
-    </button>
-  );
-}
-
-function ToggleMOSButton() {
-  const [state, setState] = useState(false);
-
-  function onClick() {
-    setState((prev) => !prev);
-  }
-  return (
-    <button
-      className={!state ? 'line-through opacity-30' : ''}
-      onClick={onClick}>
-      MOS
-    </button>
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} props.className
- */
-function DirectorInput({ className }) {
-  const [state, setState] = useState('');
-  /** @type {import('react').FormEventHandler<HTMLTextAreaElement>} */
-  function onInput(e) {
-    const target = /** @type {HTMLTextAreaElement} */ (e.target);
-    const value = target.value;
-    setState(value);
-  }
-  return (
-    <textarea
-      className={'resize-none' + ' ' + className}
-      name="director-name"
-      value={state}
-      onInput={onInput}
-      placeholder="Director's name"
-    />
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} props.className
- */
-function CameraInput({ className }) {
-  const [state, setState] = useState('');
-  /** @type {import('react').FormEventHandler<HTMLTextAreaElement>} */
-  function onInput(e) {
-    const target = /** @type {HTMLTextAreaElement} */ (e.target);
-    const value = target.value;
-    setState(value);
-  }
-  return (
-    <textarea
-      className={'resize-none' + ' ' + className}
-      name="director-of-photography-name"
-      value={state}
-      onInput={onInput}
-      placeholder="DP's name"
-    />
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} props.data
- */
-function TakeQRCode({ data }) {
-  const canvasRef = useRef(null);
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) {
-      return;
-    }
-    if (!data) {
-      return;
-    }
-    QRCode.toCanvas(canvas, data, { errorCorrectionLevel: 'L' });
-  }, [data]);
-  return <canvas ref={canvasRef} className="block" />;
 }
 
 /**
@@ -314,7 +211,7 @@ function SceneShotSelector({ className, documentId, shotId }) {
   }
   return (
     <select
-      className={'text-center bg-transparent' + ' ' + className}
+      className={'w-full text-center bg-transparent' + ' ' + className}
       value={shotId}
       onChange={onChange}>
       {sceneIds.map((sceneId) => (
@@ -402,6 +299,8 @@ function useDateString() {
     [setDateString],
   );
   useInterval(onInterval, 1_000);
+  // NOTE: Run once at the start.
+  useEffect(onInterval, [onInterval]);
 
   return dateString;
 }

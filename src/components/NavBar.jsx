@@ -6,6 +6,7 @@ import RadioButtonCheckedIcon from '@material-symbols/svg-400/rounded/radio_butt
 import SubscriptionsIcon from '@material-symbols/svg-400/rounded/subscriptions.svg';
 import TuneIcon from '@material-symbols/svg-400/rounded/tune.svg';
 
+import { useFullscreen } from '@/libs/fullscreen';
 import {
   getDocumentSettingsById,
   useDocumentStore,
@@ -60,8 +61,10 @@ function NavRecorderButton() {
   const setRecordMode = useUserStore((ctx) => ctx.setRecordMode);
   const navigate = useNavigate();
   const location = useLocation();
+  const { enterFullscreen } = useFullscreen();
   function onClick() {
     setRecordMode('clapper');
+    enterFullscreen();
     if (!location.pathname.includes('/rec')) {
       navigate('/rec');
     }

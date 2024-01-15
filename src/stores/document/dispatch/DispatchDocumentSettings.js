@@ -18,7 +18,24 @@ export function createDispatchDocumentSettings(set, get) {
       set,
       setDocumentSettingsVideoResolution,
     ),
+    setDocumentSettingsDirectorName: zi(set, setDocumentSettingsDirectorName),
+    setDocumentSettingsCameraName: zi(set, setDocumentSettingsCameraName),
   };
+}
+
+/**
+ * @param {import('../DocumentStore').Store} store
+ * @param {import('../DocumentStore').DocumentId} documentId
+ */
+function resolveDocumentSettingsById(store, documentId) {
+  /** @type {Partial<import('../DocumentStore').Document['settings']>} */
+  let settings = getDocumentSettingsById(store, documentId);
+  if (!settings) {
+    settings = {};
+    // @ts-expect-error settings should always be able to be partially constructed.
+    getDocumentById(store, documentId).settings = settings;
+  }
+  return settings;
 }
 
 /**
@@ -62,14 +79,19 @@ function setDocumentSettingsVideoResolution(
 /**
  * @param {import('../DocumentStore').Store} store
  * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {string} name
  */
-function resolveDocumentSettingsById(store, documentId) {
-  /** @type {Partial<import('../DocumentStore').Document['settings']>} */
-  let settings = getDocumentSettingsById(store, documentId);
-  if (!settings) {
-    settings = {};
-    // @ts-expect-error settings should always be able to be partially constructed.
-    getDocumentById(store, documentId).settings = settings;
-  }
-  return settings;
+function setDocumentSettingsDirectorName(store, documentId, name) {
+  let settings = resolveDocumentSettingsById(store, documentId);
+  settings.directorName = name;
+}
+
+/**
+ * @param {import('../DocumentStore').Store} store
+ * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {string} name
+ */
+function setDocumentSettingsCameraName(store, documentId, name) {
+  let settings = resolveDocumentSettingsById(store, documentId);
+  settings.cameraName = name;
 }

@@ -4,6 +4,7 @@ import {
   getBlockById,
   getBlockIdsInOrder,
   getDocumentIds,
+  getDocumentSettingsById,
   getSceneById,
   getSceneIdsInOrder,
   getSceneIndex,
@@ -310,5 +311,14 @@ export function useBlockIdForShot(documentId, sceneId, shotId) {
     getSceneById(ctx, documentId, sceneId)?.blockIds?.find((blockId) =>
       getBlockById(ctx, documentId, blockId)?.shotIds?.includes(shotId),
     ),
+  );
+}
+
+/**
+ * @param {import('./DocumentStore').DocumentId} documentId
+ */
+export function useProjectId(documentId) {
+  return useDocumentStore(
+    (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
   );
 }

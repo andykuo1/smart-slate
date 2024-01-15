@@ -43,6 +43,8 @@ export function createDocument(documentId = uuid()) {
       videoResolution: '',
       /** @type {'local'|'gdrive'|''} */
       autoSaveTo: '',
+      directorName: '',
+      cameraName: '',
     },
     /** @type {Array<SceneId>} */
     sceneOrder: [],
