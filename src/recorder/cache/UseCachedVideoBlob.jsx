@@ -12,7 +12,7 @@ import { getVideoBlob } from './VideoCache';
  */
 export function useCachedVideoBlob(documentId, takeId) {
   const videoCacheReady = useVideoCache();
-  const [videoBlob, setVideoBlob] = useState(null);
+  const [videoBlob, setVideoBlob] = useState(/** @type {Blob|null} */ (null));
   const exportedIDBKey = useDocumentStore(
     (ctx) => getTakeById(ctx, documentId, takeId)?.exportedIDBKey,
   );
@@ -26,7 +26,7 @@ export function useCachedVideoBlob(documentId, takeId) {
     // NOTE: Re-fetch anytime there's a new export time.
     exportedMillis;
     // Actually get the cached video blob
-    getVideoBlob(exportedIDBKey)
+    getVideoBlob(documentId, exportedIDBKey)
       .then((blob) => setVideoBlob(blob))
       .catch(() => setVideoBlob(null));
   }, [videoCacheReady, exportedMillis, exportedIDBKey, documentId, takeId]);

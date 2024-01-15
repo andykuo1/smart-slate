@@ -57,7 +57,10 @@ export default function SettingsProjectDownloadButton() {
           for (let take of takes) {
             const takeId = take.takeId;
             const fileName = take.exportedFileName;
-            const blob = await getVideoBlob(takeId);
+            const blob = await getVideoBlob(documentId, takeId);
+            if (!blob) {
+              continue;
+            }
             addFileToZip(fileName, blob, zip);
           }
           zip.end();

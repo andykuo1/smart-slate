@@ -4,16 +4,21 @@ import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
 
 import { useInterval } from '@/libs/UseInterval';
 import { clearVideoCache } from '@/recorder/cache/VideoCache';
+import { useCurrentDocumentId } from '@/stores/user';
 import { formatBytes } from '@/utils/StringFormat';
 
 import SettingsFieldButton from './SettingsFieldButton';
 
 export default function SettingsVideoCacheClearButton() {
-  const handleClick = useCallback(function handleClick() {
-    if (window.confirm('Are you sure you want to clear ALL video cache?')) {
-      clearVideoCache();
-    }
-  }, []);
+  const documentId = useCurrentDocumentId();
+  const handleClick = useCallback(
+    function handleClick() {
+      if (window.confirm('Are you sure you want to clear ALL video cache?')) {
+        clearVideoCache(documentId);
+      }
+    },
+    [documentId],
+  );
 
   return (
     <SettingsFieldButton Icon={DeleteIcon} onClick={handleClick}>

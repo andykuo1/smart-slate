@@ -2,10 +2,10 @@ import { useCallback, useEffect, useState } from 'react';
 
 import ShareIcon from '@material-symbols/svg-400/rounded/share.svg';
 
-import { tryGetSharing } from '@/recorder/UseMediaStream';
 import { getVideoBlob } from '@/recorder/cache';
 import { useDocumentStore } from '@/stores/document';
 import { useCurrentDocumentId } from '@/stores/user';
+import { tryGetSharing } from '@/utils/BrowserFeatures';
 import { APP_TITLE } from '@/values/PackageJSON';
 import { MEDIA_BLOB_OPTIONS } from '@/values/RecorderValues';
 
@@ -24,9 +24,10 @@ export default function SettingsShareFilesButton() {
       for (let [takeId, take] of takes) {
         const fileName = take.exportedFileName;
         promises.push(
-          getVideoBlob(takeId).then(
-            (blob) =>
-              new File(blob, fileName, { type: MEDIA_BLOB_OPTIONS.type }),
+          getVideoBlob(documentId, takeId).then((blob) =>
+            blob
+              ? new File([blob], fileName, { type: MEDIA_BLOB_OPTIONS.type })
+              : null,
           ),
         );
         break;
@@ -34,7 +35,13 @@ export default function SettingsShareFilesButton() {
       Promise.all(promises).then(async (files) => {
         try {
           const sharing = tryGetSharing();
-          const sharable = { title: APP_TITLE, files };
+          /** @type {ShareData} */
+          const sharable = {
+            title: APP_TITLE,
+            files: /** @type {File[]} */ (
+              files.filter((file) => file !== null)
+            ),
+          };
           if (sharing.canShare(sharable)) {
             return sharing.share(sharable);
           } else {

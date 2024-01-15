@@ -64,7 +64,7 @@ export function setTakeRating(store, documentId, takeId, rating) {
  * @param {import('../DocumentStore').Store} store
  * @param {import('../DocumentStore').DocumentId} documentId
  * @param {import('../DocumentStore').TakeId} takeId
- * @param {string} idbKey
+ * @param {IDBValidKey} idbKey
  */
 export function setTakeExportedIDBKey(store, documentId, takeId, idbKey) {
   let document = store.documents[documentId];

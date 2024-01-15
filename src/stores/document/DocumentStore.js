@@ -122,6 +122,7 @@ export function createTake(takeId = uuid()) {
     /** @type {ShotType} */
     exportedShotType: '',
     exportedGDriveFileId: '',
+    /** @type {IDBValidKey} */
     exportedIDBKey: '',
   };
 }

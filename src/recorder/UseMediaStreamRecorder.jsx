@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import { tryGetMediaDevices } from '@/utils/BrowserFeatures';
+
 import { useMediaRecorder } from './UseMediaRecorder';
-import { tryGetMediaDevices, useMediaStream } from './UseMediaStream';
+import { useMediaStream } from './UseMediaStream';
 
 /**
  * @callback MediaStreamRecorderRecordCallback

@@ -1,28 +1,19 @@
-import { openIndexedDB } from '@/stores/IndexedDBHelper';
+import { getIDBKeyFromTakeId } from '@/stores/document/ExportedTakeIDBKey';
+import { arrayBufferToBlob, blobToArrayBuffer } from '@/utils/BlobHelper';
+import { openIndexedDB, thenIDBRequest } from '@/utils/IndexedDBStorage';
+
+import { tryMigrateVideoCacheV1ToV2 } from './VideoCacheMigrationV1';
 
 // https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB
 // https://hacks.mozilla.org/2012/02/storing-images-and-files-in-indexeddb/
 
-const VIDEO_CACHE_STORE_NAME = 'videoCache';
+export const DATABASE_NAME = 'smartSlate';
+export const DATABASE_VERSION = 2;
+export const VIDEO_CACHE_STORE_NAME = 'videoCache';
+export const VIDEO_CACHE_STORE_NAME_V2 = 'videoCacheV2';
 const DATABASE_REF = { current: /** @type {IDBDatabase|null} */ (null) };
 
-export async function initVideoCache() {
-  if (DATABASE_REF.current) {
-    return;
-  }
-  DATABASE_REF.current = await openIndexedDB('smartSlate', 1, (db) => {
-    if (!db.objectStoreNames.contains(VIDEO_CACHE_STORE_NAME)) {
-      db.createObjectStore(VIDEO_CACHE_STORE_NAME);
-    }
-  });
-}
-
-export async function clearVideoCache() {
-  getDatabase()
-    .transaction([VIDEO_CACHE_STORE_NAME], 'readwrite')
-    .objectStore(VIDEO_CACHE_STORE_NAME)
-    .clear();
-}
+/** @typedef {ReturnType<createVideoCacheEntry>} VideoCacheEntry */
 
 function getDatabase() {
   let result = DATABASE_REF.current;
@@ -33,83 +24,140 @@ function getDatabase() {
 }
 
 /**
- * @param {() => IDBObjectStore} getStore
- * @param {Blob} blob
- * @param {string} key
- */
-async function storeBlob(getStore, blob, key) {
-  return new Promise((resolve, reject) => {
-    const store = getStore();
-    let request;
-    try {
-      request = store.put(blob, key);
-    } catch (e) {
-      reject(e);
-      return;
-    }
-    request.addEventListener('error', reject);
-    request.addEventListener('success', resolve);
-  }).catch((e) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.addEventListener('load', (event) => {
-        const store = getStore();
-        const data = event.target?.result;
-        let request;
-        try {
-          request = store.put(data, key);
-        } catch (e) {
-          reject(e);
-          return;
-        }
-        request.addEventListener('error', reject);
-        request.addEventListener('success', resolve);
-      });
-      reader.readAsDataURL(blob);
-    });
-  });
-}
-
-/**
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {import('@/stores/document/DocumentStore').TakeId} takeId
- * @param {Blob} blob
+ * @param {ArrayBuffer} arrayBuffer
+ * @param {string} mimeType
  */
-export async function cacheVideoBlob(takeId, blob) {
-  await storeBlob(
-    () =>
-      getDatabase()
-        .transaction([VIDEO_CACHE_STORE_NAME], 'readwrite')
-        .objectStore(VIDEO_CACHE_STORE_NAME),
-    blob,
+export function createVideoCacheEntry(
+  documentId,
+  takeId,
+  arrayBuffer,
+  mimeType,
+) {
+  return {
+    documentId,
     takeId,
+    arrayBuffer,
+    mimeType,
+  };
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
+ * @param {Blob} blob
+ */
+export async function createVideoCacheEntryFromBlob(documentId, takeId, blob) {
+  const arrayBuffer = await blobToArrayBuffer(blob);
+  const mimeType = blob.type;
+  return createVideoCacheEntry(documentId, takeId, arrayBuffer, mimeType);
+}
+
+export async function initVideoCache() {
+  if (DATABASE_REF.current) {
+    return;
+  }
+
+  const request = await openIndexedDB(
+    DATABASE_NAME,
+    DATABASE_VERSION,
+    (request, oldVersion, newVersion) => {
+      console.log(
+        `[VideoCache] Upgrade needed for video cache from ${oldVersion} to ${newVersion}.`,
+      );
+      const db = request.result;
+      if (!db.objectStoreNames.contains(VIDEO_CACHE_STORE_NAME_V2)) {
+        const store = db.createObjectStore(VIDEO_CACHE_STORE_NAME_V2);
+        if (!store.indexNames.contains('documentId')) {
+          store.createIndex('documentId', 'documentId', { unique: false });
+        }
+      }
+    },
   );
-  return takeId;
+  DATABASE_REF.current = request.result;
+
+  if (getDatabase().objectStoreNames.contains(VIDEO_CACHE_STORE_NAME)) {
+    console.log('[VideoCache] Trying to migrate the database to v2.');
+    tryMigrateVideoCacheV1ToV2(getDatabase());
+  }
 }
 
 /**
- * @param {import('@/stores/document/DocumentStore').TakeId} takeId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  */
-export async function getVideoBlob(takeId) {
-  return new Promise((resolve, reject) => {
-    const db = getDatabase();
-    const t = db.transaction(VIDEO_CACHE_STORE_NAME);
-    const store = t.objectStore(VIDEO_CACHE_STORE_NAME);
-    const request = store.get(takeId);
-    request.addEventListener('error', reject);
-    request.addEventListener('success', () => resolve(request.result));
-  });
+export async function clearVideoCache(documentId) {
+  const request = await thenIDBRequest(() =>
+    getDatabase()
+      .transaction([VIDEO_CACHE_STORE_NAME_V2], 'readonly')
+      .objectStore(VIDEO_CACHE_STORE_NAME_V2)
+      .index('documentId')
+      .getAllKeys(documentId),
+  );
+  await Promise.all(
+    request.result.map((key) =>
+      thenIDBRequest(() =>
+        getDatabase()
+          .transaction([VIDEO_CACHE_STORE_NAME_V2], 'readwrite')
+          .objectStore(VIDEO_CACHE_STORE_NAME_V2)
+          .delete(key),
+      ),
+    ),
+  );
 }
 
 /**
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
+ * @param {Blob} blob
+ * @returns {Promise<IDBValidKey>}
+ */
+export async function cacheVideoBlob(documentId, takeId, blob) {
+  const idbKey = getIDBKeyFromTakeId(takeId);
+  const value = await createVideoCacheEntryFromBlob(documentId, takeId, blob);
+  await thenIDBRequest(() =>
+    getDatabase()
+      .transaction([VIDEO_CACHE_STORE_NAME_V2], 'readwrite')
+      .objectStore(VIDEO_CACHE_STORE_NAME_V2)
+      .put(value, idbKey),
+  );
+  return idbKey;
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
+ * @returns {Promise<Blob|null>}
+ */
+export async function getVideoBlob(documentId, takeId) {
+  const idbKey = getIDBKeyFromTakeId(takeId);
+  const request = await thenIDBRequest(
+    () =>
+      /** @type {IDBRequest<VideoCacheEntry|undefined>} */
+      (
+        getDatabase()
+          .transaction([VIDEO_CACHE_STORE_NAME_V2], 'readonly')
+          .objectStore(VIDEO_CACHE_STORE_NAME_V2)
+          .get(idbKey)
+      ),
+  );
+  const result = request.result;
+  if (!result) {
+    return null;
+  }
+  return arrayBufferToBlob(result.arrayBuffer, result.mimeType);
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {import('@/stores/document/DocumentStore').TakeId} takeId
  */
-export async function deleteVideoBlob(takeId) {
-  return new Promise((resolve, reject) => {
-    const db = getDatabase();
-    const t = db.transaction(VIDEO_CACHE_STORE_NAME, 'readwrite');
-    const store = t.objectStore(VIDEO_CACHE_STORE_NAME);
-    const request = store.delete(takeId);
-    request.addEventListener('error', reject);
-    request.addEventListener('success', resolve);
-  });
+export async function deleteVideoBlob(documentId, takeId) {
+  const idbKey = getIDBKeyFromTakeId(takeId);
+  await thenIDBRequest(() =>
+    getDatabase()
+      .transaction([VIDEO_CACHE_STORE_NAME_V2], 'readwrite')
+      .objectStore(VIDEO_CACHE_STORE_NAME_V2)
+      .delete(idbKey),
+  );
 }

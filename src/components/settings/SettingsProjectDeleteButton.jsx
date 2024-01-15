@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
 
+import { clearVideoCache } from '@/recorder/cache';
 import { useDocumentStore } from '@/stores/document';
 import { useCurrentDocumentId, useSetUserCursor } from '@/stores/user';
 
@@ -17,6 +18,7 @@ export default function SettingsProjectDeleteButton() {
       if (window.confirm('Are you sure you want to delete this project?')) {
         setUserCursor('', '', '');
         deleteDocument(documentId);
+        clearVideoCache(documentId);
         navigate('/');
       }
     },

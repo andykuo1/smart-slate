@@ -32,7 +32,7 @@ export default function TakeCacheMenuItem({ documentId, takeId }) {
       return;
     }
     // TODO: This doesn't complete on mobile?
-    await deleteVideoBlob(idbKey);
+    await deleteVideoBlob(documentId, takeId);
     setIDBKey(documentId, takeId, '');
   }
 

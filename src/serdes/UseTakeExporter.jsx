@@ -36,7 +36,7 @@ export function useTakeDownloader() {
      */
     async function _downloadTake(documentId, sceneId, shotId, takeId) {
       const store = UNSAFE_getStore();
-      const data = await getVideoBlob(takeId);
+      const data = await getVideoBlob(documentId, takeId);
       if (!data) {
         return;
       }
@@ -82,7 +82,7 @@ export function useTakeGoogleDriveUploader() {
      */
     async function _uploadTake(documentId, sceneId, shotId, takeId) {
       const store = UNSAFE_getStore();
-      const data = await getVideoBlob(takeId);
+      const data = await getVideoBlob(documentId, takeId);
       if (!data) {
         return;
       }
@@ -219,7 +219,7 @@ export function useTakeExporter() {
       const takeId = newTake.takeId;
 
       // Always cache it-- just in case.
-      cacheVideoBlob(takeId, data).then((key) =>
+      cacheVideoBlob(documentId, takeId, data).then((key) =>
         setTakeExportedIDBKey(documentId, takeId, key),
       );
 
