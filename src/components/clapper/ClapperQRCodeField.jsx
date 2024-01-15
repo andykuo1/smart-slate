@@ -7,21 +7,11 @@ import {
   useTakeShotHashResolver,
 } from '@/serdes/UseTakeExporter';
 import { useDocumentStore } from '@/stores/document';
+import { useCurrentCursor } from '@/stores/user';
 
-/**
- * @param {object} props
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
- * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
- * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
- */
-export default function ClapperQRCodeField({
-  documentId,
-  sceneId,
-  shotId,
-  takeId,
-}) {
+export default function ClapperQRCodeField() {
   const [dataString, setDataString] = useState('');
+  const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
 
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const resolveTakeFileName = useTakeFileNameResolver();

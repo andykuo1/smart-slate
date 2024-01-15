@@ -10,6 +10,10 @@ import { useDefineTake } from '@/serdes/UseTakeExporter';
 import {
   findBlockWithShotId,
   findSceneWithBlockId,
+  getDocumentIds,
+  getFirstSceneBlockId,
+  getSceneIdsInOrder,
+  getShotIdsInOrder,
   useBlockIds,
   useDocumentStore,
   useSceneIds,
@@ -32,12 +36,37 @@ import {
   formatTakeNumber,
 } from './takes/TakeNameFormat';
 
-export default function ClapperboardV2() {
-  const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
+export default function Clapperboard() {
+  const { documentId, sceneId, shotId } = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
   const dateString = useDateString();
   const navigate = useNavigate();
   const defineTake = useDefineTake();
+  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
+
+  useEffect(() => {
+    const store = UNSAFE_getStore();
+    let newDocumentId = documentId;
+    let newSceneId = sceneId;
+    let newShotId = shotId;
+    if (!documentId) {
+      newDocumentId = getDocumentIds(store)?.[0] || '';
+    }
+    if (!sceneId) {
+      newSceneId = getSceneIdsInOrder(store, newDocumentId)?.[0] || '';
+    }
+    if (!shotId) {
+      let blockId = getFirstSceneBlockId(store, newDocumentId, newSceneId);
+      newShotId = getShotIdsInOrder(store, newDocumentId, blockId)?.[0] || '';
+    }
+    if (
+      newDocumentId !== documentId ||
+      newSceneId !== sceneId ||
+      newShotId !== shotId
+    ) {
+      setUserCursor(newDocumentId, newSceneId, newShotId, '');
+    }
+  }, []);
 
   function onBackClick() {
     navigate('/edit');
@@ -76,7 +105,11 @@ export default function ClapperboardV2() {
           <tr>
             <td className="border-r-4 border-white">A001</td>
             <td className="border-x-4 border-white">
-              <SceneShotSelector documentId={documentId} shotId={shotId} />
+              <SceneShotSelector
+                documentId={documentId}
+                sceneId={sceneId}
+                shotId={shotId}
+              />
             </td>
             <td className="relative border-l-4 border-white">
               <TakeSelector />
@@ -111,12 +144,7 @@ export default function ClapperboardV2() {
         </ul>
 
         <div className="sticky bottom-0 right-0 overflow-hidden">
-          <ClapperQRCodeField
-            documentId={documentId}
-            sceneId={sceneId}
-            shotId={shotId}
-            takeId={takeId}
-          />
+          <ClapperQRCodeField />
         </div>
 
         <div className="col-span-2 flex flex-row">
@@ -176,7 +204,9 @@ function TakeSelector({ className }) {
       </optgroup>
       <optgroup label="Old">
         {takeIds.map((takeId, index) => (
-          <option value={takeId}>{formatTakeNumber(index + 1, true)}</option>
+          <option key={takeId} value={takeId}>
+            {formatTakeNumber(index + 1, true)}
+          </option>
         ))}
       </optgroup>
     </select>
@@ -187,9 +217,10 @@ function TakeSelector({ className }) {
  * @param {object} props
  * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  */
-function SceneShotSelector({ className, documentId, shotId }) {
+function SceneShotSelector({ className, documentId, sceneId, shotId }) {
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const setUserCursor = useSetUserCursor();
 
