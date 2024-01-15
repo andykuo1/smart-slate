@@ -126,11 +126,10 @@ export async function cacheVideoBlob(documentId, takeId, blob) {
 
 /**
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
- * @param {import('@/stores/document/DocumentStore').TakeId} takeId
+ * @param {IDBValidKey} idbKey
  * @returns {Promise<Blob|null>}
  */
-export async function getVideoBlob(documentId, takeId) {
-  const idbKey = getIDBKeyFromTakeId(takeId);
+export async function getVideoBlob(documentId, idbKey) {
   const request = await thenIDBRequest(
     () =>
       /** @type {IDBRequest<VideoCacheEntry|undefined>} */

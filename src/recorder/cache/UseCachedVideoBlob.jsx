@@ -29,7 +29,7 @@ export function useCachedVideoBlob(documentId, takeId) {
     getVideoBlob(documentId, exportedIDBKey)
       .then((blob) => setVideoBlob(blob))
       .catch(() => setVideoBlob(null));
-  }, [videoCacheReady, exportedMillis, exportedIDBKey, documentId, takeId]);
+  }, [videoCacheReady, exportedMillis, exportedIDBKey, documentId]);
 
   return videoBlob;
 }
