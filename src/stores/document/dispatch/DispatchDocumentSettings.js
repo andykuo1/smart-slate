@@ -1,10 +1,8 @@
 import { formatProjectId } from '@/components/takes/TakeNameFormat';
 
 import { zi } from '../../ZustandImmerHelper';
-import {
-  getDocumentById,
-  getDocumentSettingsById,
-} from '../DocumentStoreHelper';
+import { getDocumentById } from '../get';
+import { getDocumentSettingsById } from '../get/GetDocumentSettings';
 
 /**
  * @param {import('zustand').StoreApi<any>['setState']} set

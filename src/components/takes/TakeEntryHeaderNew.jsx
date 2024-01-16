@@ -1,5 +1,5 @@
 import RecorderOpenButton from '@/recorder/RecorderOpenButton';
-import { useShotTakeCount } from '@/stores/document';
+import { useShotTakeCount } from '@/stores/document/use';
 import { useSetUserCursor } from '@/stores/user';
 
 import BoxDrawingCharacter from '../documents/BoxDrawingCharacter';

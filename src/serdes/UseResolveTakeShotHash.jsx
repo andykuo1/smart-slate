@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
 
-import { getShotById, useDocumentStore } from '@/stores/document';
-import { findNextAvailableShotHash } from '@/stores/document/dispatch/DispatchDocuments';
+import { getShotById } from '@/stores/document';
+import { findNextAvailableShotHash } from '@/stores/document/get';
+import { useDocumentStore } from '@/stores/document/use';
 
 export function useResolveTakeShotHash() {
   const assignAvailableShotHash = useDocumentStore(

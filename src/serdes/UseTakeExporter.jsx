@@ -4,19 +4,16 @@ import { formatTakeNameForFileExport } from '@/components/takes/TakeNameFormat';
 import { uploadFile, useGAPITokenHandler } from '@/libs/googleapi';
 import { cacheVideoBlob, getVideoBlob } from '@/recorder/cache/VideoCache';
 import {
-  getTakeIndex,
-  useDocumentStore,
+  getSceneNumber,
+  getShotNumber,
+  getTakeNumber,
   useSetTakeExportedGoogleDriveFileId,
   useSetTakeExportedIDBKey,
 } from '@/stores/document';
-import {
-  getDocumentById,
-  getSceneIndex,
-  getShotById,
-  getShotIndex,
-} from '@/stores/document';
+import { getDocumentById, getShotById } from '@/stores/document';
 import { createTake } from '@/stores/document/DocumentStore';
 import { getIDBKeyFromTakeId } from '@/stores/document/ExportedTakeIDBKey';
+import { useDocumentStore } from '@/stores/document/use';
 import { useSettingsStore } from '@/stores/settings';
 import { downloadURLImpl } from '@/utils/Downloader';
 
@@ -229,10 +226,10 @@ export function getNextAvailableTakeNameForFileExport(
   const projectId =
     document?.settings?.projectId || document?.documentTitle || 'Untitled';
   const shot = getShotById(store, documentId, shotId);
-  const sceneNumber = getSceneIndex(store, documentId, sceneId);
-  const shotNumber = getShotIndex(store, documentId, sceneId, shotId);
+  const sceneNumber = getSceneNumber(store, documentId, sceneId);
+  const shotNumber = getShotNumber(store, documentId, sceneId, shotId);
   const takeNumber = takeId
-    ? getTakeIndex(store, documentId, shotId, takeId)
+    ? getTakeNumber(store, documentId, shotId, takeId)
     : shot?.takeIds?.length + 1;
   const shotType = shot?.shotType;
 

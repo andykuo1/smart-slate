@@ -12,7 +12,7 @@ import { ShotTypeSelector } from '@/components/shots/options/ShotTypeSelector';
 import { useFullscreen } from '@/libs/fullscreen';
 import { isInputCaptureSupported } from '@/recorder/MediaRecorderSupport';
 import { useOpenPreferredRecorder } from '@/recorder/UseOpenRecorder';
-import { useDocumentStore, useShotTakeCount } from '@/stores/document';
+import { useDocumentStore, useShotTakeCount } from '@/stores/document/use';
 import { useSetUserCursor, useUserStore } from '@/stores/user';
 import { NOOP } from '@/values/Functions';
 import {

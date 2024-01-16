@@ -5,7 +5,8 @@ import QRCode from 'qrcode';
 
 import { useDefineTake } from '@/serdes/UseDefineTake';
 import { useResolveTakeQRCodeKey } from '@/serdes/UseResolveTakeQRCodeKey';
-import { getTakeById, useDocumentStore } from '@/stores/document';
+import { getTakeById } from '@/stores/document';
+import { useDocumentStore } from '@/stores/document/use';
 import { useSetUserCursor } from '@/stores/user';
 
 /**

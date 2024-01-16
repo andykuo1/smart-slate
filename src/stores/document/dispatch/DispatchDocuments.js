@@ -1,5 +1,5 @@
-import { getDocumentById, getShotById } from '..';
 import { zi } from '../../ZustandImmerHelper';
+import { getDocumentById, getShotById } from '../get';
 
 /**
  * @param {import('zustand').StoreApi<any>['setState']} set
@@ -31,7 +31,7 @@ export function createDispatchDocuments(set, get) {
  * @param {import('../DocumentStore').DocumentId} documentId
  * @param {UpdateDocumentHandler} handler
  */
-export function updateDocument(store, documentId, handler) {
+function updateDocument(store, documentId, handler) {
   let document = store.documents[documentId];
   handler(document, documentId, store);
   incrementDocumentRevisionNumber(document);
@@ -42,7 +42,7 @@ export function updateDocument(store, documentId, handler) {
  * @param {import('../DocumentStore').DocumentId} documentId
  * @param {string} title
  */
-export function setDocumentTitle(store, documentId, title) {
+function setDocumentTitle(store, documentId, title) {
   let document = store.documents[documentId];
   document.documentTitle = title;
   incrementDocumentRevisionNumber(document);
@@ -54,7 +54,7 @@ export function setDocumentTitle(store, documentId, title) {
  * @param {import('../DocumentStore').SceneId} sceneId
  * @param {string} heading
  */
-export function setSceneHeading(store, documentId, sceneId, heading) {
+function setSceneHeading(store, documentId, sceneId, heading) {
   let document = store.documents[documentId];
   let scene = document.scenes[sceneId];
   scene.sceneHeading = heading;
@@ -68,13 +68,7 @@ export function setSceneHeading(store, documentId, sceneId, heading) {
  * @param {import('../DocumentStore').BlockContentType} contentType
  * @param {string} content
  */
-export function setBlockContent(
-  store,
-  documentId,
-  blockId,
-  contentType,
-  content,
-) {
+function setBlockContent(store, documentId, blockId, contentType, content) {
   let document = store.documents[documentId];
   let block = document.blocks[blockId];
   block.contentType = contentType;
@@ -90,36 +84,13 @@ export function incrementDocumentRevisionNumber(document) {
   document.lastUpdatedMillis = Date.now();
 }
 
-const MAX_SHOT_HASH_RANGE = 9999;
-
-/**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- */
-export function findNextAvailableShotHash(store, documentId) {
-  let document = getDocumentById(store, documentId);
-  if (document.shotHashes.length >= MAX_SHOT_HASH_RANGE) {
-    throw new Error('Out of available shot hashes.');
-  }
-  let hash = Math.floor(Math.random() * MAX_SHOT_HASH_RANGE) + 1;
-  let result = String(hash).padStart(4, '0');
-  while (document.shotHashes.includes(result)) {
-    hash = (hash + 1) % (MAX_SHOT_HASH_RANGE + 1);
-    if (hash <= 0) {
-      hash = 1;
-    }
-    result = String(hash).padStart(4, '0');
-  }
-  return result;
-}
-
 /**
  * @param {import('../DocumentStore').Store} store
  * @param {import('../DocumentStore').DocumentId} documentId
  * @param {import('../DocumentStore').ShotId} shotId
  * @param {import('../DocumentStore').ShotHash} shotHash
  */
-export function assignAvailableShotHash(store, documentId, shotId, shotHash) {
+function assignAvailableShotHash(store, documentId, shotId, shotHash) {
   let document = getDocumentById(store, documentId);
   let shot = getShotById(store, documentId, shotId);
   if (shot.shotHash) {

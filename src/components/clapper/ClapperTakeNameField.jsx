@@ -2,14 +2,16 @@ import {
   findBlockWithShotId,
   findSceneWithBlockId,
   useBlockIds,
-  useDocumentStore,
-  useSceneIds,
   useSceneNumber,
-  useSceneShotCount,
   useShotIds,
   useShotNumber,
   useTakeIds,
 } from '@/stores/document';
+import {
+  useDocumentStore,
+  useSceneIds,
+  useSceneShotCount,
+} from '@/stores/document/use';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 
 import {

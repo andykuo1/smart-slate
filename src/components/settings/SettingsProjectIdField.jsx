@@ -11,11 +11,9 @@ import { useRef, useState } from 'react';
 import LockIcon from '@material-symbols/svg-400/rounded/lock-fill.svg';
 import LockOpenIcon from '@material-symbols/svg-400/rounded/lock_open.svg';
 
-import {
-  getDocumentById,
-  getDocumentSettingsById,
-  useDocumentStore,
-} from '@/stores/document';
+import { getDocumentById } from '@/stores/document';
+import { getDocumentSettingsById } from '@/stores/document/get';
+import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentDocumentId } from '@/stores/user';
 import PopoverStyle from '@/styles/Popover.module.css';
 

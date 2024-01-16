@@ -1,4 +1,5 @@
-import { getDocumentById, useDocumentStore } from '@/stores/document';
+import { getDocumentById } from '@/stores/document';
+import { useDocumentStore } from '@/stores/document/use';
 
 /**
  *

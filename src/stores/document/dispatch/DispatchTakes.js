@@ -1,6 +1,6 @@
 import { zi } from '@/stores/ZustandImmerHelper';
 
-import { getDocumentById, getTakeById } from '../DocumentStoreHelper';
+import { getDocumentById, getTakeById } from '../get';
 import { incrementDocumentRevisionNumber } from './DispatchDocuments';
 
 /**
@@ -25,12 +25,7 @@ export function createDispatchTakes(set, get) {
  * @param {import('../DocumentStore').TakeId} takeId
  * @param {string} fileId
  */
-export function setTakeExportedGoogleDriveFileId(
-  store,
-  documentId,
-  takeId,
-  fileId,
-) {
+function setTakeExportedGoogleDriveFileId(store, documentId, takeId, fileId) {
   let document = store.documents[documentId];
   let take = document.takes[takeId];
   take.exportedGDriveFileId = fileId;
@@ -43,7 +38,7 @@ export function setTakeExportedGoogleDriveFileId(
  * @param {import('../DocumentStore').TakeId} takeId
  * @param {string} previewImage
  */
-export function setTakePreviewImage(store, documentId, takeId, previewImage) {
+function setTakePreviewImage(store, documentId, takeId, previewImage) {
   let document = store.documents[documentId];
   let take = document.takes[takeId];
   take.previewImage = previewImage;
@@ -56,7 +51,7 @@ export function setTakePreviewImage(store, documentId, takeId, previewImage) {
  * @param {import('../DocumentStore').TakeId} takeId
  * @param {number} rating
  */
-export function setTakeRating(store, documentId, takeId, rating) {
+function setTakeRating(store, documentId, takeId, rating) {
   let document = store.documents[documentId];
   let take = document.takes[takeId];
   take.rating = rating;
@@ -69,7 +64,7 @@ export function setTakeRating(store, documentId, takeId, rating) {
  * @param {import('../DocumentStore').TakeId} takeId
  * @param {IDBValidKey} idbKey
  */
-export function setTakeExportedIDBKey(store, documentId, takeId, idbKey) {
+function setTakeExportedIDBKey(store, documentId, takeId, idbKey) {
   let document = store.documents[documentId];
   let take = document.takes[takeId];
   take.exportedIDBKey = idbKey;
@@ -82,12 +77,7 @@ export function setTakeExportedIDBKey(store, documentId, takeId, idbKey) {
  * @param {import('../DocumentStore').TakeId} takeId
  * @param {string} fileNameWithExt
  */
-export function setTakeExportedFileName(
-  store,
-  documentId,
-  takeId,
-  fileNameWithExt,
-) {
+function setTakeExportedFileName(store, documentId, takeId, fileNameWithExt) {
   let document = store.documents[documentId];
   let take = document.takes[takeId];
   take.exportedFileName = fileNameWithExt;
@@ -100,7 +90,7 @@ export function setTakeExportedFileName(
  * @param {import('../DocumentStore').TakeId} takeId
  * @param {string} qrCodeKey
  */
-export function setTakeExportedQRCodeKey(store, documentId, takeId, qrCodeKey) {
+function setTakeExportedQRCodeKey(store, documentId, takeId, qrCodeKey) {
   let document = getDocumentById(store, documentId);
   let take = getTakeById(store, documentId, takeId);
   take.exportedQRCodeKey = qrCodeKey;
@@ -112,7 +102,7 @@ export function setTakeExportedQRCodeKey(store, documentId, takeId, qrCodeKey) {
  * @param {import('../DocumentStore').DocumentId} documentId
  * @param {import('../DocumentStore').TakeId} takeId
  */
-export function toggleGoodTake(store, documentId, takeId) {
+function toggleGoodTake(store, documentId, takeId) {
   let document = store.documents[documentId];
   let take = document.takes[takeId];
   if (take.rating <= 0) {

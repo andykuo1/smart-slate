@@ -8,13 +8,10 @@ import ImportProjectButton from '@/buttons/ImportProjectButton';
 import ProfileButton from '@/buttons/ProfileButton';
 import FancyButton from '@/libs/FancyButton';
 import HorizontallyScrollableDiv from '@/libs/HorizontallyScrollableDiv';
-import {
-  useDocumentIds,
-  useDocumentLastUpdatedMillis,
-  useDocumentStore,
-} from '@/stores/document';
+import { useDocumentLastUpdatedMillis } from '@/stores/document';
 import { getDocumentById } from '@/stores/document';
 import { createDocument } from '@/stores/document/DocumentStore';
+import { useDocumentIds, useDocumentStore } from '@/stores/document/use';
 import { useSetUserCursor } from '@/stores/user';
 
 import AppTitle from './AppTitle';

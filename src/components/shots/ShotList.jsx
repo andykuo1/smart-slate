@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 
 import { useShotIds } from '@/stores/document';
+import { useFirstBlockIdInScene } from '@/stores/document/use';
 
 import TakeList from '../takes/TakeList';
 import GridStyle from './GridStyle.module.css';
@@ -26,6 +27,10 @@ export default function ShotList({
   collapsed = false,
 }) {
   const shotIds = useShotIds(documentId, blockId);
+  const firstBlockId = useFirstBlockIdInScene(documentId, sceneId);
+  if (firstBlockId !== blockId && collapsed && shotIds.length <= 0) {
+    return null;
+  }
   return (
     <ul className={className}>
       <div className={collapsed ? GridStyle.grid : ''}>

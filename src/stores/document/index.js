@@ -1,3 +1,2 @@
 export * from './DocumentStoreContext';
-export * from './DocumentStoreHelper';
-export * from './UseDocumentStore';
+export * from './get';

@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 
-import { useSceneIds } from '@/stores/document';
+import { useSceneIds } from '@/stores/document/use';
 
 import SceneEntry from './SceneEntry';
 import SceneEntryFocused from './SceneEntryFocused';

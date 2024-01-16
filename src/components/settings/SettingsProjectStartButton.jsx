@@ -3,11 +3,9 @@ import { useNavigate } from 'react-router-dom';
 
 import ArrowForwardIcon from '@material-symbols/svg-400/rounded/arrow_forward.svg';
 
-import {
-  getDocumentById,
-  getDocumentSettingsById,
-  useDocumentStore,
-} from '@/stores/document';
+import { getDocumentById } from '@/stores/document';
+import { getDocumentSettingsById } from '@/stores/document/get';
+import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentDocumentId } from '@/stores/user';
 
 import { formatProjectId } from '../takes/TakeNameFormat';

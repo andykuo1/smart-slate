@@ -12,29 +12,10 @@ import { createLexicalStateFromText } from './LexicalParser';
  * @returns {import('@/stores/document/DocumentStore').Document}
  */
 export function fountainTokensToDocument(tokens) {
-  let result = createDocument();
-
-  function addScene() {
-    let s = createScene();
-    result.scenes[s.sceneId] = s;
-    result.sceneOrder.push(s.sceneId);
-    return s;
-  }
-
-  /**
-   * @param {import('@/stores/document/DocumentStore').Scene} scene
-   */
-  function addBlock(scene) {
-    let b = createBlock();
-    result.blocks[b.blockId] = b;
-    scene.blockIds.push(b.blockId);
-    return b;
-  }
-
-  let titleScene = addScene();
-  let titleBlock = addBlock(titleScene);
-  let titleLines = [];
-  let titleTitle = '';
+  const documentParser = setupDocumentParser();
+  const frontMatterParser = setupFrontMatterParser(documentParser);
+  const { document: result, addScene, addBlock } = documentParser;
+  const { addFrontMatterLine, bakeFrontMatter } = frontMatterParser;
 
   let currentScene = null;
   let currentBlock = null;
@@ -44,11 +25,7 @@ export function fountainTokensToDocument(tokens) {
   for (let token of tokens) {
     const { text = '' } = token;
     if (token.is_title) {
-      if (token.type === 'title') {
-        titleTitle = text;
-      } else {
-        titleLines.push(text);
-      }
+      addFrontMatterLine(text, token.type === 'title');
       continue;
     }
     if (!currentScene) {
@@ -146,14 +123,7 @@ export function fountainTokensToDocument(tokens) {
     lines.length = 0;
   }
 
-  // Set title...
-  if (titleLines.length > 0) {
-    titleBlock.contentType = 'lexical';
-    titleBlock.content = JSON.stringify(
-      createLexicalStateFromText(titleLines.join('\n')),
-    );
-  }
-  result.documentTitle = titleTitle || 'My Fountain Movie';
+  bakeFrontMatter();
   return result;
 }
 
@@ -162,30 +132,10 @@ export function fountainTokensToDocument(tokens) {
  * @returns {import('@/stores/document/DocumentStore').Document}
  */
 export function fountainTokensToDocumentByScene(tokens) {
-  let result = createDocument();
-
-  function addScene() {
-    let s = createScene();
-    result.scenes[s.sceneId] = s;
-    result.sceneOrder.push(s.sceneId);
-    return s;
-  }
-
-  /**
-   * @param {import('@/stores/document/DocumentStore').Scene} scene
-   */
-  function addBlock(scene) {
-    let b = createBlock();
-    result.blocks[b.blockId] = b;
-    scene.blockIds.push(b.blockId);
-    return b;
-  }
-
-  // TODO: Title scenes (for now) will not be translated over. Let it die.
-  let titleScene = createScene();
-  let titleBlock = addBlock(titleScene);
-  let titleLines = [];
-  let titleTitle = '';
+  const documentParser = setupDocumentParser();
+  const frontMatterParser = setupFrontMatterParser(documentParser);
+  const { document: result, addScene, addBlock } = documentParser;
+  const { addFrontMatterLine, bakeFrontMatter } = frontMatterParser;
 
   let currentScene = null;
   let currentContents = [];
@@ -195,11 +145,7 @@ export function fountainTokensToDocumentByScene(tokens) {
   for (let token of tokens) {
     const { text = '' } = token;
     if (token.is_title) {
-      if (token.type === 'title') {
-        titleTitle = text;
-      } else {
-        titleLines.push(text);
-      }
+      addFrontMatterLine(text, token.type === 'title');
       continue;
     }
     if (!currentScene) {
@@ -288,14 +234,76 @@ export function fountainTokensToDocumentByScene(tokens) {
     currentContents.length = 0;
   }
 
-  // Set title...
-  if (titleLines.length > 0) {
-    titleBlock.contentType = 'lexical';
-    titleBlock.content = JSON.stringify(
-      createLexicalStateFromText(titleLines.join('\n')),
-    );
-  }
-  result.documentTitle = titleTitle || 'My Fountain Movie';
-  result.settings.projectId = formatProjectId(result.documentTitle);
+  bakeFrontMatter();
   return result;
+}
+
+/**
+ * @param {ReturnType<setupDocumentParser>} documentParser
+ */
+function setupFrontMatterParser(documentParser) {
+  // TODO: Title scenes (for now) will not be translated over. Let it die.
+  let titleScene = createScene(); // addScene()
+  let titleBlock = documentParser.addBlock(titleScene);
+  /** @type {Array<string>} */
+  let titleLines = [];
+  let titleTitle = '';
+
+  /**
+   * @param {string} text
+   * @param {boolean} isTitle
+   */
+  function addFrontMatterLine(text, isTitle) {
+    if (isTitle) {
+      titleTitle = text;
+    } else {
+      titleLines.push(text);
+    }
+  }
+
+  function bakeFrontMatter() {
+    // Set title...
+    if (titleLines.length > 0) {
+      titleBlock.contentType = 'lexical';
+      titleBlock.content = JSON.stringify(
+        createLexicalStateFromText(titleLines.join('\n')),
+      );
+    }
+    // Set document settings...
+    let result = documentParser.document;
+    result.documentTitle = titleTitle || 'My Fountain Movie';
+    result.settings.projectId = formatProjectId(result.documentTitle);
+  }
+
+  return {
+    addFrontMatterLine,
+    bakeFrontMatter,
+  };
+}
+
+function setupDocumentParser() {
+  let result = createDocument();
+
+  function addScene() {
+    let s = createScene();
+    result.scenes[s.sceneId] = s;
+    result.sceneOrder.push(s.sceneId);
+    return s;
+  }
+
+  /**
+   * @param {import('@/stores/document/DocumentStore').Scene} scene
+   */
+  function addBlock(scene) {
+    let b = createBlock();
+    result.blocks[b.blockId] = b;
+    scene.blockIds.push(b.blockId);
+    return b;
+  }
+
+  return {
+    document: result,
+    addScene,
+    addBlock,
+  };
 }

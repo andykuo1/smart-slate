@@ -3,8 +3,9 @@ import ArrowForwardIcon from '@material-symbols/svg-400/rounded/arrow_forward.sv
 import RedoIcon from '@material-symbols/svg-400/rounded/redo.svg';
 import UndoIcon from '@material-symbols/svg-400/rounded/undo.svg';
 
-import { useDocumentStore, useShotIds } from '@/stores/document';
+import { useShotIds } from '@/stores/document';
 import { createShot } from '@/stores/document/DocumentStore';
+import { useDocumentStore } from '@/stores/document/use';
 
 import ShotThumbnail from '../ShotThumbnail';
 

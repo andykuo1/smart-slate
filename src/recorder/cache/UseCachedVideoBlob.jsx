@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { getTakeById, useDocumentStore } from '@/stores/document';
+import { getTakeById } from '@/stores/document';
+import { useDocumentStore } from '@/stores/document/use';
 
 import { useVideoCache } from './UseVideoCache';
 import { getVideoBlob } from './VideoCache';

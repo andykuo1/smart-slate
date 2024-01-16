@@ -9,12 +9,12 @@ import TuneIcon from '@material-symbols/svg-400/rounded/tune.svg';
 import { useFullscreen } from '@/libs/fullscreen';
 import {
   getDocumentById,
-  getDocumentSettingsById,
-  useDocumentStore,
   useSceneNumber,
   useShotNumber,
   useTakeNumber,
 } from '@/stores/document';
+import { getDocumentSettingsById } from '@/stores/document/get';
+import { useDocumentStore } from '@/stores/document/use';
 import {
   useCurrentCursor,
   useCurrentDocumentId,

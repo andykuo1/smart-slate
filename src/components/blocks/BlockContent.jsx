@@ -5,7 +5,8 @@ import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
 import { useEffect } from 'react';
 
-import { getBlockById, useDocumentStore } from '@/stores/document';
+import { getBlockById } from '@/stores/document';
+import { useDocumentStore } from '@/stores/document/use';
 
 // https://dio.la/article/lexical-state-updates
 

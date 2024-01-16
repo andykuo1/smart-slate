@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
-import { getTakeById, useDocumentStore } from '@/stores/document';
+import { getTakeById } from '@/stores/document';
+import { useDocumentStore } from '@/stores/document/use';
 
 import { useResolveTakeFileName } from './UseResolveTakeFileName';
 import { useResolveTakeShotHash } from './UseResolveTakeShotHash';

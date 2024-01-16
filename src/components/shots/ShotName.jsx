@@ -3,10 +3,10 @@ import {
   useSceneNumber,
   useSetShotType,
   useShotNumber,
-  useShotTakeCount,
   useShotType,
   useTakeNumber,
 } from '@/stores/document';
+import { useShotTakeCount } from '@/stores/document/use';
 
 import {
   formatSceneNumber,

@@ -1,10 +1,8 @@
 import { useCallback } from 'react';
 
-import {
-  getDocumentSettingsById,
-  useDocumentStore,
-  useDocumentTitle,
-} from '@/stores/document';
+import { getDocumentSettingsById } from '@/stores/document/get';
+import { useDocumentTitle } from '@/stores/document/use';
+import { useDocumentStore } from '@/stores/document/use';
 
 import DocumentContentCount from './DocumentContentCount';
 

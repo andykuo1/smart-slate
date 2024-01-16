@@ -1,4 +1,4 @@
-import { useBlockIdForShot } from '@/stores/document';
+import { useBlockIdForShot } from '@/stores/document/use';
 import { useCurrentCursor, useUserStore } from '@/stores/user';
 
 import { ShotEntry } from '../shots/ShotEntry';

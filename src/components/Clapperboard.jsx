@@ -7,11 +7,11 @@ import ArrowBackIcon from '@material-symbols/svg-400/rounded/arrow_back.svg';
 import { useFullscreen } from '@/libs/fullscreen';
 import {
   getDocumentIds,
-  getFirstSceneBlockId,
+  getFirstBlockIdInScene,
   getSceneIdsInOrder,
   getShotIdsInOrder,
-  useDocumentStore,
 } from '@/stores/document';
+import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 
 import ClapperCameraNameField from './clapper/ClapperCameraNameField';
@@ -42,7 +42,7 @@ export default function Clapperboard() {
       newSceneId = getSceneIdsInOrder(store, newDocumentId)?.[0] || '';
     }
     if (newDocumentId && newSceneId && !shotId) {
-      let blockId = getFirstSceneBlockId(store, newDocumentId, newSceneId);
+      let blockId = getFirstBlockIdInScene(store, newDocumentId, newSceneId);
       newShotId = getShotIdsInOrder(store, newDocumentId, blockId)?.[0] || '';
     }
     if (

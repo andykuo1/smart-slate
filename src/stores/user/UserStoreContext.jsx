@@ -1,10 +1,10 @@
 import {
-  getSceneIndex,
-  getShotIndex,
-  getTakeIndex,
-  useDocumentStore,
+  getSceneNumber,
+  getShotNumber,
+  getTakeNumber,
 } from '@/stores/document';
 
+import { useDocumentStore } from '../document/use';
 import { useUserStore } from './UseUserStore';
 
 export function useCurrentDocumentId() {
@@ -22,15 +22,15 @@ export function useCurrentCursor() {
 export function useCurrentSceneShotTakeNumbers() {
   const cursor = useUserStore((ctx) => ctx.cursor);
   const sceneIndex = useDocumentStore((ctx) =>
-    getSceneIndex(ctx, cursor.documentId, cursor.sceneId),
+    getSceneNumber(ctx, cursor.documentId, cursor.sceneId),
   );
-  const shotIndex = useDocumentStore((ctx) =>
-    getShotIndex(ctx, cursor.documentId, cursor.sceneId, cursor.shotId),
+  const shotNumber = useDocumentStore((ctx) =>
+    getShotNumber(ctx, cursor.documentId, cursor.sceneId, cursor.shotId),
   );
   const takeIndex = useDocumentStore((ctx) =>
-    getTakeIndex(ctx, cursor.documentId, cursor.shotId, cursor.takeId),
+    getTakeNumber(ctx, cursor.documentId, cursor.shotId, cursor.takeId),
   );
-  return [sceneIndex, shotIndex, takeIndex];
+  return [sceneIndex, shotNumber, takeIndex];
 }
 
 export function useCurrentRecorder() {

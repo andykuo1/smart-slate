@@ -2,12 +2,8 @@ import PhotoIcon from '@material-symbols/svg-400/rounded/photo.svg';
 
 import { formatSceneShotNumber } from '@/components/takes/TakeNameFormat';
 import ImageWithCaption from '@/libs/ImageWithCaption';
-import {
-  useBestTakeImageForShotThumbnail,
-  useSceneNumber,
-  useShotNumber,
-  useShotType,
-} from '@/stores/document';
+import { useSceneNumber, useShotNumber, useShotType } from '@/stores/document';
+import { useBestTakeImageForShotThumbnail } from '@/stores/document/use';
 
 import { getShotTypeIcon } from './ShotTypeIcon';
 

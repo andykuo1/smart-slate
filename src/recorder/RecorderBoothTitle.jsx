@@ -6,10 +6,10 @@ import { formatShotNumber } from '@/components/takes/TakeNameFormat';
 import {
   useSceneHeading,
   useShotNumber,
-  useShotTakeCount,
   useTakeNumber,
   useTakeRating,
 } from '@/stores/document';
+import { useShotTakeCount } from '@/stores/document/use';
 
 /**
  * @param {object} props

@@ -2,7 +2,8 @@ import { useNavigate } from 'react-router-dom';
 
 import BackIcon from '@material-symbols/svg-400/rounded/arrow_back.svg';
 
-import { getDocumentSettingsById, useDocumentStore } from '@/stores/document';
+import { getDocumentSettingsById } from '@/stores/document/get';
+import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentDocumentId, useSetUserCursor } from '@/stores/user';
 
 import SettingsFieldButton from './SettingsFieldButton';

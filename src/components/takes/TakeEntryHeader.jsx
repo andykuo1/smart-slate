@@ -1,12 +1,7 @@
 import ThumbUpIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg';
 
-import {
-  getTakeById,
-  useDocumentStore,
-  useShotTakeCount,
-  useTakeNumber,
-  useTakeRating,
-} from '@/stores/document';
+import { getTakeById, useTakeNumber, useTakeRating } from '@/stores/document';
+import { useDocumentStore, useShotTakeCount } from '@/stores/document/use';
 
 import BoxDrawingCharacter from '../documents/BoxDrawingCharacter';
 import { getListDecorationStyleByViewMode } from './TakeListViewMode';

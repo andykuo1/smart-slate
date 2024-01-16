@@ -1,3 +1,4 @@
+import { useBlockShotCount } from '@/stores/document/use';
 import { useUserStore } from '@/stores/user';
 
 import ShotList from '../shots/ShotList';
@@ -20,15 +21,21 @@ export default function BlockEntry({
   collapsed = false,
 }) {
   const hasActiveShot = useUserStore((ctx) => Boolean(ctx.cursor?.shotId));
+  const blockShotCount = useBlockShotCount(documentId, blockId);
+  if (!collapsed && blockShotCount <= 0) {
+    return null;
+  }
   return (
     <BlockEntryLayout
       collapsed={collapsed}
       content={
-        <BlockContent
-          documentId={documentId}
-          blockId={blockId}
-          editable={editable}
-        />
+        <>
+          <BlockContent
+            documentId={documentId}
+            blockId={blockId}
+            editable={editable}
+          />
+        </>
       }>
       <ShotList
         className="flex-1"

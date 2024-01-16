@@ -4,8 +4,9 @@ import DownloadIcon from '@material-symbols/svg-400/rounded/download.svg';
 import { Zip, ZipPassThrough } from 'fflate';
 
 import { getVideoBlob } from '@/recorder/cache';
-import { getDocumentById, useDocumentStore } from '@/stores/document';
+import { getDocumentById } from '@/stores/document';
 import { getIDBKeyFromTakeId } from '@/stores/document/ExportedTakeIDBKey';
+import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentDocumentId } from '@/stores/user';
 import { downloadURLImpl } from '@/utils/Downloader';
 

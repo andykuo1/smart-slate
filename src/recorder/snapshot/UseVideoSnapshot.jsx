@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
-import { getTakeById, useDocumentStore } from '@/stores/document';
+import { getTakeById } from '@/stores/document';
+import { useDocumentStore } from '@/stores/document/use';
 import {
   MAX_THUMBNAIL_HEIGHT,
   MAX_THUMBNAIL_WIDTH,

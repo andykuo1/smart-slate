@@ -5,12 +5,11 @@ import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg
 import ThumbUpIcon from '@material-symbols/svg-400/rounded/thumb_up.svg';
 
 import {
-  getTakeIndex,
-  useDocumentStore,
+  getTakeNumber,
   useSetTakeRating,
-  useShotTakeCount,
   useTakeRating,
 } from '@/stores/document';
+import { useDocumentStore, useShotTakeCount } from '@/stores/document/use';
 import MenuStyle from '@/styles/Menu.module.css';
 
 /**
@@ -25,7 +24,7 @@ export default function TakeRatingMenuItem({ documentId, shotId, takeId }) {
 
   const shotTakeCount = useShotTakeCount(documentId, shotId);
   const takeNumber = useDocumentStore((ctx) =>
-    getTakeIndex(ctx, documentId, shotId, takeId),
+    getTakeNumber(ctx, documentId, shotId, takeId),
   );
 
   const onGoodClick = useCallback(

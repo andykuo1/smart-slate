@@ -5,11 +5,11 @@ import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
 import { useCachedVideoBlob } from '@/recorder/cache/UseCachedVideoBlob';
 import { deleteVideoBlob } from '@/recorder/cache/VideoCache';
 import {
-  useDocumentStore,
   useSetTakeExportedIDBKey,
   useTakeExportedIDBKey,
 } from '@/stores/document';
 import { getTakeById } from '@/stores/document';
+import { useDocumentStore } from '@/stores/document/use';
 import MenuStyle from '@/styles/Menu.module.css';
 import { formatBytes } from '@/utils/StringFormat';
 

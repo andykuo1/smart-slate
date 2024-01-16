@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 
-import { useDocumentStore } from '@/stores/document';
 import { createShot } from '@/stores/document/DocumentStore';
+import { useDocumentStore } from '@/stores/document/use';
 
 import { ShotTypeSelector } from './options/ShotTypeSelector';
 

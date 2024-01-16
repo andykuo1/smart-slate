@@ -1,4 +1,5 @@
-import { getShotById, useDocumentStore } from '@/stores/document';
+import { getShotById } from '@/stores/document';
+import { useDocumentStore } from '@/stores/document/use';
 
 /**
  * @param {object} props

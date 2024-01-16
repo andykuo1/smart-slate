@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { useDocumentStore } from '@/stores/document';
+import { useDocumentStore } from '@/stores/document/use';
 
 /**
  * @param {import('react').RefObject<HTMLElement>} targetRef

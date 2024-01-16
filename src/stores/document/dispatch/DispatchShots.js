@@ -29,7 +29,7 @@ export function createDispatchShots(set, get) {
  * @param {import('../DocumentStore').ShotId} shotId
  * @param {UpdateShotHandler} handler
  */
-export function updateShot(store, documentId, shotId, handler) {
+function updateShot(store, documentId, shotId, handler) {
   let document = store.documents[documentId];
   let shot = document.shots[shotId];
   handler(shot, shotId, documentId, store);
@@ -55,7 +55,7 @@ export function setShotType(store, documentId, shotId, shotType) {
  * @param {import('../DocumentStore').ShotId} shotId
  * @param {string} description
  */
-export function setShotDescription(store, documentId, shotId, description) {
+function setShotDescription(store, documentId, shotId, description) {
   let document = store.documents[documentId];
   let shot = document.shots[shotId];
   shot.description = description;
@@ -68,12 +68,7 @@ export function setShotDescription(store, documentId, shotId, description) {
  * @param {import('../DocumentStore').ShotId} shotId
  * @param {string} referenceImageUrl
  */
-export function setShotReferenceImage(
-  store,
-  documentId,
-  shotId,
-  referenceImageUrl,
-) {
+function setShotReferenceImage(store, documentId, shotId, referenceImageUrl) {
   let document = store.documents[documentId];
   let shot = document.shots[shotId];
   shot.referenceImage = referenceImageUrl;
@@ -88,7 +83,7 @@ export function setShotReferenceImage(
  * @param {import('../DocumentStore').ShotId} targetId
  * @param {boolean} [before]
  */
-export function moveShot(
+function moveShot(
   store,
   documentId,
   blockId,

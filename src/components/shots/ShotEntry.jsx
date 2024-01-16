@@ -7,11 +7,10 @@ import StatMinusOneIcon from '@material-symbols/svg-400/rounded/stat_minus_1.svg
 import {
   getShotById,
   getShotIdsInOrder,
-  useDocumentStore,
   useSceneNumber,
-  useSceneShotCount,
   useShotNumber,
 } from '@/stores/document';
+import { useDocumentStore, useSceneShotCount } from '@/stores/document/use';
 import { useDraggable, useIsDragging } from '@/stores/draggable';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';

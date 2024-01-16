@@ -4,11 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import ShotThumbnail from '@/components/shots/ShotThumbnail';
 import { useFullscreen } from '@/libs/fullscreen';
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
-import {
-  getDocumentSettingsById,
-  useDocumentStore,
-  useSetTakePreviewImage,
-} from '@/stores/document';
+import { useSetTakePreviewImage } from '@/stores/document';
+import { getDocumentSettingsById } from '@/stores/document/get';
+import { useDocumentStore } from '@/stores/document/use';
 import { useSettingsStore } from '@/stores/settings';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import {

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
 
 import { clearVideoCache } from '@/recorder/cache';
-import { useDocumentStore } from '@/stores/document';
+import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentDocumentId, useSetUserCursor } from '@/stores/user';
 
 export default function SettingsProjectDeleteButton() {

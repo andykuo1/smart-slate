@@ -1,4 +1,5 @@
-import { getDocumentSettingsById, useDocumentStore } from '@/stores/document';
+import { getDocumentSettingsById } from '@/stores/document/get';
+import { useDocumentStore } from '@/stores/document/use';
 
 /**
  * @param {object} props

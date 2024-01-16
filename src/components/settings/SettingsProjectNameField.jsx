@@ -1,8 +1,5 @@
-import {
-  getDocumentSettingsById,
-  useDocumentStore,
-  useDocumentTitle,
-} from '@/stores/document';
+import { getDocumentSettingsById } from '@/stores/document/get';
+import { useDocumentStore, useDocumentTitle } from '@/stores/document/use';
 import { useCurrentDocumentId } from '@/stores/user';
 
 import SettingsFieldInput from './SettingsFieldInput';

@@ -1,6 +1,7 @@
 import { useShallow } from 'zustand/react/shallow';
 
-import { getBlockIdsInOrder, useDocumentStore } from '@/stores/document';
+import { getBlockIdsInOrder } from '@/stores/document';
+import { useDocumentStore } from '@/stores/document/use';
 import { useUserStore } from '@/stores/user';
 
 import BlockEntry from './BlockEntry';
