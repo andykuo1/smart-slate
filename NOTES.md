@@ -171,3 +171,7 @@ Scanning QR Code
 ShotHash 4 digit randomly?
 
 1234T00
+
+---
+
+- AutoUpdate for scanner

@@ -1,64 +1,81 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
+import QRCode2AddIcon from '@material-symbols/svg-400/rounded/qr_code_2_add.svg';
 import QRCode from 'qrcode';
 
-import {
-  useTakeFileNameResolver,
-  useTakeShotHashResolver,
-} from '@/serdes/UseTakeExporter';
-import { useDocumentStore } from '@/stores/document';
-import { useCurrentCursor } from '@/stores/user';
+import { useDefineTake } from '@/serdes/UseDefineTake';
+import { useResolveTakeQRCodeKey } from '@/serdes/UseResolveTakeQRCodeKey';
+import { getTakeById, useDocumentStore } from '@/stores/document';
+import { useSetUserCursor } from '@/stores/user';
 
-export default function ClapperQRCodeField() {
-  const [dataString, setDataString] = useState('');
-  const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
-
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
+ */
+export default function ClapperQRCodeField({
+  documentId,
+  sceneId,
+  shotId,
+  takeId,
+}) {
+  const setUserCursor = useSetUserCursor();
+  const takeExportedQRCodeKey = useDocumentStore(
+    (ctx) => getTakeById(ctx, documentId, takeId)?.exportedQRCodeKey,
+  );
+  const defineTake = useDefineTake();
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
-  const resolveTakeFileName = useTakeFileNameResolver();
-  const resolveTakeShotHash = useTakeShotHashResolver();
+  const resolveTakeQRCodeKey = useResolveTakeQRCodeKey();
 
-  useEffect(() => {
-    if (!documentId || !sceneId || !shotId) {
-      return;
-    }
-    const store = UNSAFE_getStore();
-    const takeShotHash = resolveTakeShotHash(store, documentId, shotId);
-    const takeFileName = resolveTakeFileName(
-      store,
+  const onClick = useCallback(
+    function _onClick() {
+      const thisTakeId = takeId || defineTake(documentId, sceneId, shotId);
+      const store = UNSAFE_getStore();
+      resolveTakeQRCodeKey(store, documentId, sceneId, shotId, thisTakeId);
+      setUserCursor(documentId, sceneId, shotId, thisTakeId);
+    },
+    [
       documentId,
       sceneId,
       shotId,
       takeId,
-      takeShotHash,
-      '',
-    );
-    let takeFileNameWithoutExt = takeFileName;
-    const extIndex = takeFileName.lastIndexOf('.');
-    if (extIndex >= 0) {
-      takeFileNameWithoutExt = takeFileName.substring(0, extIndex);
-    }
-    const result = JSON.stringify({ key: takeFileNameWithoutExt });
-    const base64 = btoa(result);
-    setDataString('https://jsonhero.io/new?j=' + base64);
-  }, [
-    documentId,
-    sceneId,
-    shotId,
-    takeId,
-    UNSAFE_getStore,
-    resolveTakeFileName,
-    resolveTakeShotHash,
-    setDataString,
-  ]);
+      UNSAFE_getStore,
+      defineTake,
+      setUserCursor,
+    ],
+  );
 
-  return <TakeQRCode data={dataString} />;
+  useEffect(() => {
+    if (!documentId || !sceneId || !shotId || !takeId) {
+      return;
+    }
+    onClick();
+  }, [documentId, sceneId, shotId, takeId, onClick]);
+
+  return (
+    <button
+      className="w-full h-full flex items-center outline"
+      onClick={onClick}>
+      {takeExportedQRCodeKey ? (
+        <QRCodeView className="m-auto" data={takeExportedQRCodeKey} />
+      ) : (
+        <div className="flex flex-col m-auto">
+          <QRCode2AddIcon className="w-32 h-32 fill-current m-auto" />
+          <label className="text-xs">CREATE TAKE</label>
+        </div>
+      )}
+    </button>
+  );
 }
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {string} props.data
  */
-function TakeQRCode({ data }) {
+function QRCodeView({ className, data }) {
   const canvasRef = useRef(null);
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -70,15 +87,5 @@ function TakeQRCode({ data }) {
     }
     QRCode.toCanvas(canvas, data, { errorCorrectionLevel: 'L' });
   }, [data]);
-  return (
-    <div className="flex flex-col items-center">
-      <canvas ref={canvasRef} className="flex-1 m-auto" />
-      <a
-        className="text-xs whitespace-nowrap overflow-x-auto w-full"
-        href={data}
-        target="_blank">
-        {data}
-      </a>
-    </div>
-  );
+  return <canvas ref={canvasRef} className={className} />;
 }

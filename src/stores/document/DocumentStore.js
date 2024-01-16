@@ -126,6 +126,7 @@ export function createTake(takeId = uuid()) {
     exportedGDriveFileId: '',
     /** @type {IDBValidKey} */
     exportedIDBKey: '',
+    exportedQRCodeKey: '',
   };
 }
 
@@ -253,5 +254,6 @@ export function cloneTake(out, take) {
   out.exportedShotType = take.exportedShotType;
   out.exportedGDriveFileId = take.exportedGDriveFileId;
   out.exportedIDBKey = take.exportedIDBKey;
+  out.exportedQRCodeKey = take.exportedQRCodeKey;
   return /** @type {Take} */ (out);
 }

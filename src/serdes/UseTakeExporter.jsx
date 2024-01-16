@@ -4,7 +4,6 @@ import { formatTakeNameForFileExport } from '@/components/takes/TakeNameFormat';
 import { uploadFile, useGAPITokenHandler } from '@/libs/googleapi';
 import { cacheVideoBlob, getVideoBlob } from '@/recorder/cache/VideoCache';
 import {
-  getTakeById,
   getTakeIndex,
   useDocumentStore,
   useSetTakeExportedGoogleDriveFileId,
@@ -18,15 +17,16 @@ import {
 } from '@/stores/document';
 import { createTake } from '@/stores/document/DocumentStore';
 import { getIDBKeyFromTakeId } from '@/stores/document/ExportedTakeIDBKey';
-import { findNextAvailableShotHash } from '@/stores/document/dispatch/DispatchDocuments';
 import { useSettingsStore } from '@/stores/settings';
 import { downloadURLImpl } from '@/utils/Downloader';
-import { getVideoFileExtensionByMIMEType } from '@/values/RecorderValues';
+
+import { useResolveTakeFileName } from './UseResolveTakeFileName';
+import { useResolveTakeShotHash } from './UseResolveTakeShotHash';
 
 export function useTakeDownloader() {
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
-  const resolveTakeFileName = useTakeFileNameResolver();
-  const resolveTakeShotHash = useTakeShotHashResolver();
+  const resolveTakeFileName = useResolveTakeFileName();
+  const resolveTakeShotHash = useResolveTakeShotHash();
 
   const downloadTake = useCallback(
     /**
@@ -67,8 +67,8 @@ export function useTakeDownloader() {
 
 export function useTakeGoogleDriveUploader() {
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
-  const resolveTakeFileName = useTakeFileNameResolver();
-  const resolveTakeShotHash = useTakeShotHashResolver();
+  const resolveTakeFileName = useResolveTakeFileName();
+  const resolveTakeShotHash = useResolveTakeShotHash();
 
   const setTakeExportedGoogleDriveFileId = useDocumentStore(
     (ctx) => ctx.setTakeExportedGoogleDriveFileId,
@@ -125,57 +125,10 @@ export function useTakeGoogleDriveUploader() {
   return uploadTake;
 }
 
-export function useDefineTake() {
-  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
-  const resolveTakeFileName = useTakeFileNameResolver();
-  const resolveTakeShotHash = useTakeShotHashResolver();
-
-  const addTake = useDocumentStore((ctx) => ctx.addTake);
-  const defineTake = useCallback(
-    /**
-     * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
-     * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
-     * @param {import('@/stores/document/DocumentStore').ShotId} shotId
-     * @param {object} [opts]
-     * @param {import('@/stores/document/DocumentStore').TakeId} [opts.targetTakeId]
-     * @returns {import('@/stores/document/DocumentStore').TakeId}
-     */
-    function defineTake(documentId, sceneId, shotId, opts = {}) {
-      const store = UNSAFE_getStore();
-
-      const takeShotHash = resolveTakeShotHash(store, documentId, shotId);
-      const takeFileName = resolveTakeFileName(
-        store,
-        documentId,
-        sceneId,
-        shotId,
-        '',
-        takeShotHash,
-        '',
-      );
-
-      const shot = getShotById(store, documentId, shotId);
-      let newTake = createTake();
-      newTake.exportedFileName = takeFileName;
-      newTake.exportedMillis = Date.now();
-      newTake.exportedShotType = shot?.shotType;
-      newTake.exportedSize = -1;
-      if (opts?.targetTakeId) {
-        newTake.takeId = opts.targetTakeId;
-      }
-      addTake(documentId, shotId, newTake);
-      return newTake.takeId;
-    },
-    [UNSAFE_getStore, addTake, resolveTakeShotHash, resolveTakeFileName],
-  );
-
-  return defineTake;
-}
-
 export function useTakeExporter() {
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
-  const resolveTakeFileName = useTakeFileNameResolver();
-  const resolveTakeShotHash = useTakeShotHashResolver();
+  const resolveTakeFileName = useResolveTakeFileName();
+  const resolveTakeShotHash = useResolveTakeShotHash();
 
   const addTake = useDocumentStore((ctx) => ctx.addTake);
   const setTakeExportedGoogleDriveFileId =
@@ -292,83 +245,4 @@ export function getNextAvailableTakeNameForFileExport(
     shotType,
   );
   return takeName;
-}
-
-export function useTakeFileNameResolver() {
-  const setTakeExportedFileName = useDocumentStore(
-    (ctx) => ctx.setTakeExportedFileName,
-  );
-
-  const resolveTakeFileName = useCallback(
-    /**
-     * @param {import('@/stores/document/DocumentStore').Store} store
-     * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
-     * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
-     * @param {import('@/stores/document/DocumentStore').ShotId} shotId
-     * @param {import('@/stores/document/DocumentStore').TakeId} takeId
-     * @param {import('@/stores/document/DocumentStore').ShotHash} shotHash
-     * @param {string} mimeType
-     */
-    function _resolveTakeName(
-      store,
-      documentId,
-      sceneId,
-      shotId,
-      takeId,
-      shotHash,
-      mimeType,
-    ) {
-      const take = getTakeById(store, documentId, takeId);
-      let result = take?.exportedFileName;
-      if (!result) {
-        const ext = getVideoFileExtensionByMIMEType(mimeType);
-        const exportedTakeName = getNextAvailableTakeNameForFileExport(
-          store,
-          documentId,
-          sceneId,
-          shotId,
-          takeId,
-          shotHash,
-        );
-        result = `${exportedTakeName}${ext}`;
-        if (takeId) {
-          setTakeExportedFileName(documentId, takeId, result);
-        }
-      }
-      return result;
-    },
-    [setTakeExportedFileName],
-  );
-
-  return resolveTakeFileName;
-}
-
-export function useTakeShotHashResolver() {
-  const assignAvailableShotHash = useDocumentStore(
-    (ctx) => ctx.assignAvailableShotHash,
-  );
-
-  const resolveTakeShotHash = useCallback(
-    /**
-     * @param {import('@/stores/document/DocumentStore').Store} store
-     * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
-     * @param {import('@/stores/document/DocumentStore').ShotId} shotId
-     */
-    function _resolveTakeShotHash(store, documentId, shotId) {
-      // NOTE: Generate the shot hash now-- since it may not exist.
-      const shot = getShotById(store, documentId, shotId);
-      if (!shot) {
-        return '0000';
-      }
-      const result =
-        shot.shotHash || findNextAvailableShotHash(store, documentId);
-      if (shot.shotHash !== result) {
-        assignAvailableShotHash(documentId, shotId, result);
-      }
-      return result;
-    },
-    [assignAvailableShotHash],
-  );
-
-  return resolveTakeShotHash;
 }

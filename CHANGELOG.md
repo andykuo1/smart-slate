@@ -7,12 +7,16 @@
 - - nav takes on shotlist
 - - nav shots on edit mode
 
+# 0.1.13
+
 - Add shot number for both sides
 - Add good take toggle in recorder
 - Add scene/shot/take count to document title
 - Add import footage button
 - Add export all as zip button
 - Add clapperboard
+- Add shot hash to clapperboard
+- Add shot type to clapperboard
 
 - Change to full-width storyboard on smaller screens
 - Change `Record!` to include next take number
@@ -25,6 +29,7 @@
 - Fix overflow for scene headers
 - Fix leaking video cache on project delete
 - Fix video snapshot to better load video
+- Fix leaked qr code
 
 # 0.1.12
 

@@ -1,4 +1,6 @@
-import { zi } from '../../ZustandImmerHelper';
+import { zi } from '@/stores/ZustandImmerHelper';
+
+import { getDocumentById, getTakeById } from '../DocumentStoreHelper';
 import { incrementDocumentRevisionNumber } from './DispatchDocuments';
 
 /**
@@ -12,6 +14,7 @@ export function createDispatchTakes(set, get) {
     setTakePreviewImage: zi(set, setTakePreviewImage),
     setTakeRating: zi(set, setTakeRating),
     setTakeExportedFileName: zi(set, setTakeExportedFileName),
+    setTakeExportedQRCodeKey: zi(set, setTakeExportedQRCodeKey),
     toggleGoodTake: zi(set, toggleGoodTake),
   };
 }
@@ -88,6 +91,19 @@ export function setTakeExportedFileName(
   let document = store.documents[documentId];
   let take = document.takes[takeId];
   take.exportedFileName = fileNameWithExt;
+  incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('../DocumentStore').Store} store
+ * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('../DocumentStore').TakeId} takeId
+ * @param {string} qrCodeKey
+ */
+export function setTakeExportedQRCodeKey(store, documentId, takeId, qrCodeKey) {
+  let document = getDocumentById(store, documentId);
+  let take = getTakeById(store, documentId, takeId);
+  take.exportedQRCodeKey = qrCodeKey;
   incrementDocumentRevisionNumber(document);
 }
 
