@@ -1,12 +1,15 @@
 import { Button, usePopoverContext } from '@ariakit/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import ListAltIcon from '@material-symbols/svg-400/rounded/list_alt.svg';
+import MovieIcon from '@material-symbols/svg-400/rounded/movie.svg';
 import PhotoCameraIcon from '@material-symbols/svg-400/rounded/photo_camera.svg';
 import RadioButtonCheckedIcon from '@material-symbols/svg-400/rounded/radio_button_checked.svg';
 import UploadIcon from '@material-symbols/svg-400/rounded/upload.svg';
 
 import { ShotTypeSelector } from '@/components/shots/options/ShotTypeSelector';
+import { useFullscreen } from '@/libs/fullscreen';
 import { isInputCaptureSupported } from '@/recorder/MediaRecorderSupport';
 import { useOpenPreferredRecorder } from '@/recorder/UseOpenRecorder';
 import { useDocumentStore, useShotTakeCount } from '@/stores/document';
@@ -50,6 +53,9 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
     [documentId, sceneId, shotId, setUserCursor],
   );
   const openRecorder = useOpenPreferredRecorder(onRecorderOpen);
+  const navigate = useNavigate();
+  const setRecordMode = useUserStore((ctx) => ctx.setRecordMode);
+  const { enterFullscreen } = useFullscreen();
 
   useEffect(() => {
     setCameraEnabled(isInputCaptureSupported());
@@ -71,6 +77,14 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
     },
     [setOpen, openRecorder],
   );
+
+  function onClapboardClick() {
+    setOpen(false);
+    setUserCursor(documentId, sceneId, shotId, '');
+    setRecordMode('clapper');
+    navigate('/rec');
+    enterFullscreen();
+  }
 
   const onFocusClick = useCallback(
     function _onFocusClick() {
@@ -117,6 +131,12 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
         onClick={onFocusClick}>
         <ListAltIcon className="w-6 h-6 fill-current" />
         <span className="flex-1 text-right">Shot Details</span>
+      </Button>
+      <Button
+        className="flex-1 p-1 flex items-center gap-2 rounded hover:bg-opacity-10 bg-opacity-0 bg-white disabled:opacity-30"
+        onClick={onClapboardClick}>
+        <MovieIcon className="w-6 h-6 fill-current" />
+        <span className="flex-1 text-right">Clapboard</span>
       </Button>
       <div className="border" />
       <ShotTypeSelector

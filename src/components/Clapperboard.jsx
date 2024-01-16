@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@material-symbols/svg-400/rounded/arrow_back.svg';
 
+import { useFullscreen } from '@/libs/fullscreen';
 import {
   getDocumentIds,
   getFirstSceneBlockId,
@@ -24,9 +25,10 @@ import ClapperVerticalLabel from './clapper/ClapperVerticalLabel';
 
 export default function Clapperboard() {
   const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
+  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const setUserCursor = useSetUserCursor();
   const navigate = useNavigate();
-  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
+  const { exitFullscreen } = useFullscreen();
 
   useEffect(() => {
     const store = UNSAFE_getStore();
@@ -54,6 +56,7 @@ export default function Clapperboard() {
 
   function onBackClick() {
     navigate('/edit');
+    exitFullscreen();
   }
 
   return (
