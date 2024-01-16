@@ -17,6 +17,7 @@
 - Add clapperboard
 - Add shot hash to clapperboard
 - Add shot type to clapperboard
+- Add clapboard option to shots
 
 - Change to full-width storyboard on smaller screens
 - Change `Record!` to include next take number
