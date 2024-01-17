@@ -3,7 +3,7 @@
 /**
  * @param {string} name
  * @param {string} abbr
- * @param {import('./document/DocumentStore').ShotType} value
+ * @param {import('@/stores/document/DocumentStore').ShotType} value
  */
 function createShotTypeParams(name, abbr, value) {
   return {
@@ -32,7 +32,7 @@ const VALUES = PARAMS.map((param) => param.value);
 const PARAM_BY_VALUES = PARAMS.reduce((prev, curr) => {
   prev[curr.value] = curr;
   return prev;
-}, /** @type {Record<import('./document/DocumentStore').ShotType, ShotTypeParams>} */ ({}));
+}, /** @type {Record<import('../DocumentStore').ShotType, ShotTypeParams>} */ ({}));
 
 function values() {
   return VALUES;
@@ -43,7 +43,7 @@ function params() {
 }
 
 /**
- * @param {import('./document/DocumentStore').ShotType} value
+ * @param {import('../DocumentStore').ShotType} value
  */
 function getParamsByType(value) {
   return PARAM_BY_VALUES[value];

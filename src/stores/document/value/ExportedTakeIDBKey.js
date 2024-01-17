@@ -1,5 +1,5 @@
 /**
- * @param {import('./DocumentStore').TakeId} takeId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
  * @returns {IDBValidKey}
  */
 export function getIDBKeyFromTakeId(takeId) {
@@ -8,7 +8,7 @@ export function getIDBKeyFromTakeId(takeId) {
 
 /**
  * @param {IDBValidKey} idbKey
- * @returns {import('./DocumentStore').TakeId}
+ * @returns {import('@/stores/document/DocumentStore').TakeId}
  */
 export function getTakeIdFromIDBKey(idbKey) {
   return String(idbKey);

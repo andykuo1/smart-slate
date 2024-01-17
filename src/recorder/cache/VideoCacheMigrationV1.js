@@ -1,5 +1,5 @@
-import { getTakeIdFromIDBKey } from '@/stores/document/ExportedTakeIDBKey';
 import { findDocumentWithTakeId } from '@/stores/document/get';
+import { getTakeIdFromIDBKey } from '@/stores/document/value';
 import { thenIDBRequest } from '@/utils/IndexedDBStorage';
 
 import {

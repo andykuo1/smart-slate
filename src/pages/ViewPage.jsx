@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import ViewerBooth from '@/viewer/ViewerBooth';
+import ViewerBooth from '@/components/ViewerBooth';
 
 export default function CameraPage() {
   useEffect(() => {

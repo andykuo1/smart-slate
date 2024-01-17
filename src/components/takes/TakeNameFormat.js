@@ -1,4 +1,4 @@
-import ShotTypes, { ANY_SHOT } from '@/stores/ShotTypes';
+import { ANY_SHOT, ShotTypes } from '@/stores/document/value';
 
 /**
  * @param {string} projectId

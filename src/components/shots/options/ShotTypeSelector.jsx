@@ -4,7 +4,7 @@ import ShotTypes, {
   CLOSE_UP,
   MEDIUM_SHOT,
   WIDE_SHOT,
-} from '@/stores/ShotTypes';
+} from '@/stores/document/value/ShotTypes';
 
 import { getShotTypeColor } from '../ShotColors';
 import { getShotTypeIcon } from './ShotTypeIcon';

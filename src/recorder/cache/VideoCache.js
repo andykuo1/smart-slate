@@ -1,4 +1,4 @@
-import { getIDBKeyFromTakeId } from '@/stores/document/ExportedTakeIDBKey';
+import { getIDBKeyFromTakeId } from '@/stores/document/value';
 import { arrayBufferToBlob, blobToArrayBuffer } from '@/utils/BlobHelper';
 import { openIndexedDB, thenIDBRequest } from '@/utils/IndexedDBStorage';
 

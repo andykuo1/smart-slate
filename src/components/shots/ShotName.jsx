@@ -1,4 +1,3 @@
-import ShotTypes from '@/stores/ShotTypes';
 import {
   useSceneNumber,
   useSetShotType,
@@ -7,6 +6,7 @@ import {
   useTakeNumber,
 } from '@/stores/document';
 import { useShotTakeCount } from '@/stores/document/use';
+import { ShotTypes } from '@/stores/document/value';
 
 import {
   formatSceneNumber,

@@ -12,8 +12,8 @@ import {
 } from '@/stores/document';
 import { getDocumentById, getShotById } from '@/stores/document';
 import { createTake } from '@/stores/document/DocumentStore';
-import { getIDBKeyFromTakeId } from '@/stores/document/ExportedTakeIDBKey';
 import { useDocumentStore } from '@/stores/document/use';
+import { getIDBKeyFromTakeId } from '@/stores/document/value';
 import { useSettingsStore } from '@/stores/settings';
 import { downloadURLImpl } from '@/utils/Downloader';
 

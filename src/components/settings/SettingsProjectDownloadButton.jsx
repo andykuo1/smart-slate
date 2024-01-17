@@ -5,8 +5,8 @@ import { Zip, ZipPassThrough } from 'fflate';
 
 import { getVideoBlob } from '@/recorder/cache';
 import { getDocumentById } from '@/stores/document';
-import { getIDBKeyFromTakeId } from '@/stores/document/ExportedTakeIDBKey';
 import { useDocumentStore } from '@/stores/document/use';
+import { getIDBKeyFromTakeId } from '@/stores/document/value';
 import { useCurrentDocumentId } from '@/stores/user';
 import { downloadURLImpl } from '@/utils/Downloader';
 

@@ -3,8 +3,8 @@ import { useCallback, useEffect, useState } from 'react';
 import ShareIcon from '@material-symbols/svg-400/rounded/share.svg';
 
 import { getVideoBlob } from '@/recorder/cache';
-import { getIDBKeyFromTakeId } from '@/stores/document/ExportedTakeIDBKey';
 import { useDocumentStore } from '@/stores/document/use';
+import { getIDBKeyFromTakeId } from '@/stores/document/value';
 import { useCurrentDocumentId } from '@/stores/user';
 import { tryGetSharing } from '@/utils/BrowserFeatures';
 import { APP_TITLE } from '@/values/PackageJSON';
