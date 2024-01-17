@@ -18,7 +18,7 @@ export default function SceneEntryFocused({ className, documentId }) {
     return null;
   }
   return (
-    <div className="absolute top-0 left-0 right-0 bottom-10 z-10 overflow-y-auto bg-white">
+    <div className="absolute top-0 left-0 right-0 bottom-0 z-10 overflow-y-auto bg-white">
       <section className={'flex flex-col mb-10' + ' ' + className}>
         <SceneEntryHeader documentId={documentId} sceneId={sceneId} />
         {!shotId ? (

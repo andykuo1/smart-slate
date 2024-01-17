@@ -1,3 +1,5 @@
+import AddBoxIcon from '@material-symbols/svg-400/rounded/add_box.svg';
+
 import { useBlockShotCount } from '@/stores/document/use';
 import { useUserStore } from '@/stores/user';
 
@@ -25,17 +27,25 @@ export default function BlockEntry({
   if (!collapsed && blockShotCount <= 0) {
     return null;
   }
+
+  function onClick() {}
+
   return (
     <BlockEntryLayout
       collapsed={collapsed}
       content={
-        <>
-          <BlockContent
-            documentId={documentId}
-            blockId={blockId}
-            editable={editable}
-          />
-        </>
+        <BlockContent
+          className="relative px-4"
+          documentId={documentId}
+          blockId={blockId}
+          editable={false}>
+          <button
+            className="group absolute -bottom-3 left-0 right-0 z-10 flex flex-row items-center"
+            onClick={onClick}>
+            <AddBoxIcon className="w-6 h-6 fill-current opacity-10 group-hover:opacity-100" />
+            <hr className="flex-1 border-t-4 border-spacing-2 border-black border-dashed opacity-0 group-hover:opacity-100 transition-opacity" />
+          </button>
+        </BlockContent>
       }>
       <ShotList
         className="flex-1"

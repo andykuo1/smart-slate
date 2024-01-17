@@ -7,13 +7,12 @@ import NavBar from './NavBar';
 export default function NavBarLayout({ children }) {
   return (
     <>
-      <div className="flex-1 flex flex-col items-center overflow-y-auto">
+      <div className="relative flex-1 flex flex-col items-center overflow-y-auto">
         {children}
       </div>
-      <div className={'h-12' /* TODO: Used to be h-24 */}>
-        {/* NOTE: Add some scrollable whitespace, because <NavBar/> is a floating element. */}
-        <NavBar />
-      </div>
+      {/* NOTE: Add some scrollable whitespace, because <NavBar/> is a floating element. */}
+      <div className={'w-full h-20' /* TODO: Used to be h-24 */} />
+      <NavBar />
     </>
   );
 }

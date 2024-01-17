@@ -16,12 +16,14 @@ import { useDocumentStore } from '@/stores/document/use';
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  * @param {boolean} [props.editable]
+ * @param {import('react').ReactNode} [props.children]
  */
 export default function BlockContent({
   className,
   documentId,
   blockId,
   editable = true,
+  children,
 }) {
   const blockContentType = useDocumentStore(
     (ctx) => getBlockById(ctx, documentId, blockId)?.contentType,
@@ -53,11 +55,16 @@ export default function BlockContent({
   }
 
   if (blockContent && blockContentType !== 'lexical') {
-    return <p>{blockContent}</p>;
+    return (
+      <p className={className}>
+        {blockContent}
+        {children}
+      </p>
+    );
   }
 
   return (
-    <div className={'relative m-2' + ' ' + className}>
+    <div className={'relative' + ' ' + className}>
       <LexicalComposer initialConfig={initialConfig}>
         <PlainTextPlugin
           contentEditable={<ContentEditable className="p-2" />}
@@ -70,6 +77,7 @@ export default function BlockContent({
         />
         <OnChangePlugin onChange={onChange} />
       </LexicalComposer>
+      {children}
     </div>
   );
 }

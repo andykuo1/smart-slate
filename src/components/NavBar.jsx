@@ -29,11 +29,11 @@ import {
 
 export default function NavBar() {
   return (
-    <nav className="fixed bottom-0 w-full flex flex-col z-30">
+    <nav className="fixed bottom-0 w-full h-20 flex flex-col z-30">
       {false /* TODO: Don't show until we have something better */ && (
         <NavSceneShotTake />
       )}
-      <ul className="flex-1 flex flex-row bg-black text-white border-t-2 border-white">
+      <ul className="flex-1 flex flex-row bg-black text-white">
         <li className="flex-1 flex">
           <NavTuneButton />
         </li>
