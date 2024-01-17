@@ -6,7 +6,7 @@ import {
 
 import ExpandMoreIcon from '@material-symbols/svg-400/rounded/expand_more.svg';
 
-import NavBarLayout from '@/components/NavBarLayout';
+import NavBarLayout from '@/app/NavBarLayout';
 import SettingsAspectRatioField from '@/components/settings/SettingsAspectRatioField';
 import SettingsAutoSaveToField from '@/components/settings/SettingsAutoSaveToField';
 import SettingsEnableGoogleDriveSyncToggle from '@/components/settings/SettingsEnableGoogleDriveSyncToggle';

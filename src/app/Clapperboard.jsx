@@ -14,14 +14,14 @@ import {
 import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 
-import ClapperCameraNameField from './clapper/ClapperCameraNameField';
-import ClapperDateField from './clapper/ClapperDateField';
-import ClapperDirectorNameField from './clapper/ClapperDirectorNameField';
-import ClapperMoreFields from './clapper/ClapperMoreFields';
-import ClapperProductionTitleField from './clapper/ClapperProductionTitleField';
-import ClapperQRCodeField from './clapper/ClapperQRCodeField';
-import ClapperTakeNameField from './clapper/ClapperTakeNameField';
-import ClapperVerticalLabel from './clapper/ClapperVerticalLabel';
+import ClapperCameraNameField from '../components/clapper/ClapperCameraNameField';
+import ClapperDateField from '../components/clapper/ClapperDateField';
+import ClapperDirectorNameField from '../components/clapper/ClapperDirectorNameField';
+import ClapperMoreFields from '../components/clapper/ClapperMoreFields';
+import ClapperProductionTitleField from '../components/clapper/ClapperProductionTitleField';
+import ClapperQRCodeField from '../components/clapper/ClapperQRCodeField';
+import ClapperTakeNameField from '../components/clapper/ClapperTakeNameField';
+import ClapperVerticalLabel from '../components/clapper/ClapperVerticalLabel';
 
 export default function Clapperboard() {
   const { documentId, sceneId, shotId, takeId } = useCurrentCursor();

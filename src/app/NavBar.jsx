@@ -6,6 +6,11 @@ import RadioButtonCheckedIcon from '@material-symbols/svg-400/rounded/radio_butt
 import SubscriptionsIcon from '@material-symbols/svg-400/rounded/subscriptions.svg';
 import TuneIcon from '@material-symbols/svg-400/rounded/tune.svg';
 
+import {
+  formatSceneNumber,
+  formatShotNumber,
+  formatTakeNumber,
+} from '@/components/takes/TakeNameFormat';
 import { useFullscreen } from '@/libs/fullscreen';
 import {
   getDocumentById,
@@ -20,12 +25,6 @@ import {
   useCurrentDocumentId,
   useUserStore,
 } from '@/stores/user';
-
-import {
-  formatSceneNumber,
-  formatShotNumber,
-  formatTakeNumber,
-} from './takes/TakeNameFormat';
 
 export default function NavBar() {
   return (

@@ -19,7 +19,7 @@ export default function DrawerLayout({ content, children }) {
       </button>
       <div
         className={
-          'fixed top-0 bottom-20 right-0 z-20' +
+          'fixed top-0 bottom-20 right-0 z-20 overflow-y-auto' +
           ' ' +
           'shadow-xl bg-gray-200' +
           ' ' +
