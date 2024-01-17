@@ -4,7 +4,7 @@ import { Fountain } from 'fountain-js';
 
 import { useAddDocument } from '@/stores/document';
 
-import { fountainTokensToDocument } from './FountainToDocumentParser';
+import { fountainTokensToDocumentByScene } from './FountainToDocumentParser';
 
 /**
  * @param {import('@/stores/document/DocumentStore').DocumentId} [documentId]
@@ -21,7 +21,8 @@ export function useProjectImport(documentId = undefined) {
         case 'fountain-text': {
           const fountain = new Fountain();
           const { tokens } = fountain.parse(data, true);
-          let document = fountainTokensToDocument(tokens);
+          // TODO: fountainTokensToDocument(tokens) when ready :)
+          let document = fountainTokensToDocumentByScene(tokens);
           if (documentId) {
             document.documentId = documentId;
           }
