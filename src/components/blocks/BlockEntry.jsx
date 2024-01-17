@@ -38,7 +38,7 @@ export default function BlockEntry({
           className="relative px-4"
           documentId={documentId}
           blockId={blockId}
-          editable={false}>
+          editable={true /* TODO: false when ready to add shotlists :) */}>
           <button
             className="hidden group absolute -bottom-3 left-0 right-0 z-10 flex-row items-center"
             onClick={onClick}>
