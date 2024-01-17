@@ -8,6 +8,8 @@
 - - nav shots on edit mode
 
 - Add qr code scanner
+- Add import/export project as json
+- Add scanned names export csv list
 
 # 0.1.13
 
