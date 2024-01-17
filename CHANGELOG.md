@@ -7,6 +7,8 @@
 - - nav takes on shotlist
 - - nav shots on edit mode
 
+- Add qr code scanner
+
 # 0.1.13
 
 - Add shot number for both sides

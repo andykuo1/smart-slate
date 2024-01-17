@@ -40,7 +40,7 @@ export default function BlockEntry({
           blockId={blockId}
           editable={false}>
           <button
-            className="group absolute -bottom-3 left-0 right-0 z-10 flex flex-row items-center"
+            className="hidden group absolute -bottom-3 left-0 right-0 z-10 flex-row items-center"
             onClick={onClick}>
             <AddBoxIcon className="w-6 h-6 fill-current opacity-10 group-hover:opacity-100" />
             <hr className="flex-1 border-t-4 border-spacing-2 border-black border-dashed opacity-0 group-hover:opacity-100 transition-opacity" />
