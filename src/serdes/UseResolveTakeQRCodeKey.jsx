@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 
 import { getTakeById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
+import { basename } from '@/utils/PathHelper';
 
 import { useResolveTakeFileName } from './UseResolveTakeFileName';
 import { useResolveTakeShotHash } from './UseResolveTakeShotHash';
@@ -38,14 +39,7 @@ export function useResolveTakeQRCodeKey() {
         '',
       );
 
-      // Trim ext from file name
-      let takeFileNameWithoutExt = takeFileName;
-      const extIndex = takeFileName.lastIndexOf('.');
-      if (extIndex >= 0) {
-        takeFileNameWithoutExt = takeFileName.substring(0, extIndex);
-      }
-
-      const jsonData = JSON.stringify({ key: takeFileNameWithoutExt });
+      const jsonData = JSON.stringify({ key: basename(takeFileName) });
       const base64 = btoa(jsonData);
       result = 'https://jsonhero.io/new?j=' + base64;
       setTakeExportedQRCodeKey(documentId, takeId, result);

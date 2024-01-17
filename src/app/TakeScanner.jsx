@@ -2,6 +2,7 @@ import { useRef } from 'react';
 
 import { openDirectory } from '@/qrcode/DirectoryPicker';
 import { scanVideoBlobForQRCodes } from '@/qrcode/QRCodeReader';
+import { extname } from '@/utils/PathHelper';
 
 import { setVideoSrcBlob } from './VideoBlobSource';
 
@@ -188,7 +189,7 @@ async function performRename(input, output, onChange) {
         continue;
       }
       const result = input[key].code;
-      if (!result || !getFileExt(result)) {
+      if (!result || !extname(result)) {
         output[key] = '[ERROR: Found no code for file.]';
         onChange({ target: { value: output } });
         continue;
@@ -237,15 +238,4 @@ function transformCode(filePath, code) {
   } catch {
     return '';
   }
-}
-
-/**
- * @param {string} fileName
- */
-function getFileExt(fileName) {
-  let index = fileName.lastIndexOf('.');
-  if (index < 0) {
-    return '';
-  }
-  return fileName.substring(index);
 }

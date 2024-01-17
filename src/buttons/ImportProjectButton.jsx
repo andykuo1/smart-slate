@@ -5,6 +5,7 @@ import UploadIcon from '@material-symbols/svg-400/rounded/upload-fill.svg';
 import FancyButton from '@/libs/FancyButton';
 import { useSingleFileInput } from '@/libs/UseSingleFileInput';
 import { useProjectImport } from '@/serdes/UseProjectImport';
+import { extname } from '@/utils/PathHelper';
 import { NOOP, RETHROW } from '@/values/Functions';
 
 /**
@@ -20,17 +21,36 @@ export default function ImportProjectButton({
 
   /** @type {import('../libs/UseSingleFileInput').SingleFileInputChangeHandler} */
   const onFile = useCallback(
-    function _onFile(file) {
-      file
-        .text()
-        .then((text) => importProject('fountain-text', text))
-        .then(onSuccess)
-        .catch(onError);
+    async function _onFile(file) {
+      try {
+        const ext = extname(file.name);
+        switch (ext) {
+          case '.fountain':
+          case '.txt':
+            await importProject('fountain-text', await file.text());
+            break;
+          case '.json':
+            await importProject('project-json', await file.text());
+            break;
+          default:
+            throw new Error('Unsupported project file extension.');
+        }
+        onSuccess();
+      } catch (e) {
+        /** @type {Error} */
+        let error;
+        if (!(e instanceof Error)) {
+          error = new Error(String(e));
+        } else {
+          error = e;
+        }
+        onError(error);
+      }
     },
     [importProject, onSuccess, onError],
   );
 
-  const [render, click] = useSingleFileInput('*.fountain,*.txt', onFile);
+  const [render, click] = useSingleFileInput('*.fountain,*.txt,*.json', onFile);
   return (
     <FancyButton title="Import" className="mx-1 px-12" onClick={click}>
       {render()}

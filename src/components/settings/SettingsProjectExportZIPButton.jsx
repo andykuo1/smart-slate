@@ -13,7 +13,7 @@ import { downloadURLImpl } from '@/utils/Downloader';
 import { formatProjectId } from '../takes/TakeNameFormat';
 import SettingsFieldButton from './SettingsFieldButton';
 
-export default function SettingsProjectDownloadButton() {
+export default function SettingsProjectExportZIPButton() {
   const [disabled, setDisabled] = useState(false);
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const documentId = useCurrentDocumentId();
