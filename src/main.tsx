@@ -2,16 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
+import EditPage from '@/pages/EditPage';
+import ErrorPage from '@/pages/ErrorPage';
+import RecordPage from '@/pages/RecordPage';
+import RootPage from '@/pages/RootPage';
+import ScanPage from '@/pages/ScanPage';
+import SettingsPage from '@/pages/SettingsPage';
+import TestPage from '@/pages/TestPage';
+import ViewPage from '@/pages/ViewPage';
 import '@/progressive/ServiceWorkerInstall';
 
 import './index.css';
-import EditPage from './pages/EditPage';
-import ErrorPage from './pages/ErrorPage';
-import RecordPage from './pages/RecordPage';
-import RootPage from './pages/RootPage';
-import SettingsPage from './pages/SettingsPage';
-import TestPage from './pages/TestPage';
-import ViewPage from './pages/ViewPage';
 import Providers from './providers';
 import { PACKAGE_NAME } from './values/PackageJSON';
 
@@ -45,6 +46,11 @@ const router = createBrowserRouter(
     {
       path: '/test',
       element: <TestPage />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: '/scan',
+      element: <ScanPage />,
       errorElement: <ErrorPage />,
     },
   ],

@@ -1,4 +1,5 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { openDirectory } from '@/qrcode/DirectoryPicker';
 import { scanVideoBlobForQRCodes } from '@/qrcode/QRCodeReader';
@@ -30,6 +31,12 @@ export default function TakeScanner({ className, onChange }) {
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
   const inputRef = useRef(/** @type {Record<string, ScannerResult>} */ ({}));
   const outputRef = useRef(/** @type {Record<string, string>} */ ({}));
+  const navigate = useNavigate();
+  const [status, setStatus] = useState('');
+
+  function onBackClick() {
+    navigate('/settings');
+  }
 
   async function onScanClick() {
     let input = inputRef.current;
@@ -67,7 +74,9 @@ export default function TakeScanner({ className, onChange }) {
       output[file.name] = '[SKIP]';
       delete input[file.name];
     }
+
     onChange({ target: { value: output } });
+    setStatus('scanned');
     console.log(
       `[TakeScanner] Received ${files.length} file(s) - found ${videoFiles.length} video(s).`,
     );
@@ -79,6 +88,7 @@ export default function TakeScanner({ className, onChange }) {
     // Scan videos
     await performScan(input, output, videoRef, onChange);
 
+    setStatus('analyzed');
     console.log(`[TakeScanner] Scanned videos.`);
   }
   async function onApplyClick() {
@@ -109,26 +119,50 @@ export default function TakeScanner({ className, onChange }) {
     );
     downloadText(fileName, result);
   }
+
+  const isShowDirectoryPickerSupported =
+    // @ts-ignore
+    typeof window.showDirectoryPicker !== 'undefined';
+
   return (
     <>
+      <button className={className} onClick={onBackClick}>
+        Back
+      </button>
       <button className={className} onClick={onScanClick}>
         Scan directory
       </button>
-      <button className={className} onClick={onAnalyzeClick}>
-        Analyze directory
+      <button
+        className={className}
+        onClick={onAnalyzeClick}
+        disabled={status !== 'scanned'}>
+        Analyze files
       </button>
-      <button className={className} onClick={onApplyClick}>
-        Apply directory
+      <button
+        className={className}
+        onClick={onApplyClick}
+        disabled={status !== 'analyzed' || !isShowDirectoryPickerSupported}>
+        Apply to files
+        {
+          <span className="block w-[80%] mx-auto mt-4">
+            NOTE: Only <b>Chrome</b> browsers currently support this step.
+            Otherwise, download the CSV file below and use a batch rename tool.
+          </span>
+        }
       </button>
-      <button className={className} onClick={onExportClick}>
+      <button
+        className={className}
+        onClick={onExportClick}
+        disabled={status !== 'analyzed'}>
         Export list to .csv
       </button>
       <video
         ref={videoRef}
+        className="w-[50%]"
         preload="metadata"
         playsInline={true}
         muted={true}
-        controls={true}
+        hidden={true}
       />
     </>
   );

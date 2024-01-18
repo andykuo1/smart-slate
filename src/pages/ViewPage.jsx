@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 
 import ViewerBooth from '@/app/ViewerBooth';
 
+import PageLayout from './PageLayout';
+
 export default function CameraPage() {
   useEffect(() => {
     document.body.style.background = 'black';
@@ -10,8 +12,8 @@ export default function CameraPage() {
     };
   }, []);
   return (
-    <main className="w-full h-full flex flex-col items-center bg-black">
+    <PageLayout>
       <ViewerBooth />
-    </main>
+    </PageLayout>
   );
 }

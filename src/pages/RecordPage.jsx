@@ -4,6 +4,8 @@ import Clapperboard from '@/app/Clapperboard';
 import RecorderBooth from '@/recorder/RecorderBooth';
 import { useUserStore } from '@/stores/user';
 
+import PageLayout from './PageLayout';
+
 export default function RecordPage() {
   const recordMode = useUserStore((ctx) => ctx.recordMode);
   const isRecorderMode = recordMode === 'recorder';
@@ -14,8 +16,8 @@ export default function RecordPage() {
     };
   }, []);
   return (
-    <main className="w-full h-full flex flex-col items-center bg-black">
+    <PageLayout>
       {isRecorderMode ? <RecorderBooth /> : <Clapperboard />}
-    </main>
+    </PageLayout>
   );
 }
