@@ -28,3 +28,17 @@ export function findDocumentWithTakeId(store, takeId) {
   }
   return null;
 }
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {string} projectId
+ */
+export function findDocumentWithProjectId(store, projectId) {
+  for (const documentId of getDocumentIds(store)) {
+    const document = getDocumentById(store, documentId);
+    if (document?.settings?.projectId === projectId) {
+      return document;
+    }
+  }
+  return null;
+}

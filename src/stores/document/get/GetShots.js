@@ -92,3 +92,18 @@ export function findShotWithTakeId(store, documentId, takeId) {
   }
   return null;
 }
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotHash} shotHash
+ */
+export function findShotWithShotHash(store, documentId, shotHash) {
+  const document = getDocumentById(store, documentId);
+  for (let shot of Object.values(document?.shots || {})) {
+    if (shot.shotHash === shotHash) {
+      return shot;
+    }
+  }
+  return null;
+}

@@ -3,10 +3,22 @@ import { useNavigate } from 'react-router-dom';
 
 import { openDirectory } from '@/qrcode/DirectoryPicker';
 import { scanVideoBlobForQRCodes } from '@/qrcode/QRCodeReader';
+import { captureVideoSnapshot } from '@/recorder/snapshot/VideoSnapshot';
 import { toDateString } from '@/serdes/ExportNameFormat';
+import {
+  findDocumentWithProjectId,
+  findShotWithShotHash,
+  findTakeWithTakeNumber,
+  useSetTakePreviewImage,
+} from '@/stores/document';
+import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentDocumentId } from '@/stores/user';
 import { downloadText } from '@/utils/Downloader';
 import { extname } from '@/utils/PathHelper';
+import {
+  MAX_THUMBNAIL_HEIGHT,
+  MAX_THUMBNAIL_WIDTH,
+} from '@/values/Resolutions';
 
 import { setVideoSrcBlob } from './VideoBlobSource';
 
@@ -16,7 +28,7 @@ import { setVideoSrcBlob } from './VideoBlobSource';
  */
 
 /**
- * @typedef {{ file: import('@/qrcode/DirectoryPicker').FileWithHandles, code: string }} ScannerResult
+ * @typedef {{ file: import('@/qrcode/DirectoryPicker').FileWithHandles, code: string, snapshot: string }} ScannerResult
  */
 
 /**
@@ -25,7 +37,9 @@ import { setVideoSrcBlob } from './VideoBlobSource';
  * @param {OnScannerChangeCallback} props.onChange
  */
 export default function TakeScanner({ className, onChange }) {
+  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const documentId = useCurrentDocumentId();
+  const setTakePreview = useSetTakePreviewImage();
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
   const inputRef = useRef(/** @type {Record<string, ScannerResult>} */ ({}));
   const outputRef = useRef(/** @type {Record<string, string>} */ ({}));
@@ -58,7 +72,7 @@ export default function TakeScanner({ className, onChange }) {
       return;
     }
     for (let file of files) {
-      input[file.name] = { file, code: '' };
+      input[file.name] = { file, code: '', snapshot: '' };
       output[file.name] = '[GOT]';
     }
     onChange({ target: { value: output } });
@@ -83,6 +97,7 @@ export default function TakeScanner({ className, onChange }) {
       `[TakeScanner] Received ${files.length} file(s) - found ${videoFiles.length} video(s).`,
     );
   }
+
   async function onAnalyzeClick() {
     let input = inputRef.current;
     let output = outputRef.current;
@@ -90,9 +105,22 @@ export default function TakeScanner({ className, onChange }) {
     // Scan videos
     await performScan(input, output, videoRef, onChange);
 
+    if (documentId) {
+      for (const key of Object.keys(input)) {
+        const value = input[key];
+        if (!value.snapshot) {
+          continue;
+        }
+        const store = UNSAFE_getStore();
+        const takeId = findTakeIdWithQRCode(store, value.code);
+        setTakePreview(documentId, takeId, value.snapshot);
+      }
+    }
+
     setStatus('analyzed');
     console.log(`[TakeScanner] Scanned videos.`);
   }
+
   async function onApplyClick() {
     let input = inputRef.current;
     let output = outputRef.current;
@@ -102,6 +130,7 @@ export default function TakeScanner({ className, onChange }) {
 
     console.log(`[TakeScanner] Renamed videos.`);
   }
+
   async function onExportClick() {
     let input = inputRef.current;
 
@@ -163,6 +192,55 @@ export default function TakeScanner({ className, onChange }) {
   );
 }
 
+const PROJECT_ID_PATTERN = /^(.+)_S\d+\w+_T/;
+const SHOT_HASH_PATTERN = /_(\d+)$/;
+const TAKE_NUMBER_PATTERN = /_T(\d+)_/;
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {string} qrCode
+ */
+function findTakeIdWithQRCode(store, qrCode) {
+  const projectIdExecArray = PROJECT_ID_PATTERN.exec(qrCode);
+  if (!projectIdExecArray) {
+    return '';
+  }
+  const [_0, projectIdCaptured] = projectIdExecArray;
+  const projectId = String(projectIdCaptured);
+  const document = findDocumentWithProjectId(store, projectId);
+  if (!document) {
+    return '';
+  }
+
+  const shotHashExecArray = SHOT_HASH_PATTERN.exec(qrCode);
+  if (!shotHashExecArray) {
+    return '';
+  }
+  const [_1, shotHashCaptured] = shotHashExecArray;
+  const shotHash = String(shotHashCaptured);
+  const shot = findShotWithShotHash(store, document.documentId, shotHash);
+  if (!shot) {
+    return '';
+  }
+
+  const takeNumberExecArray = TAKE_NUMBER_PATTERN.exec(qrCode);
+  if (!takeNumberExecArray) {
+    return '';
+  }
+  const [_2, takeNumberCaptured] = takeNumberExecArray;
+  const takeNumber = Number(takeNumberCaptured);
+  const take = findTakeWithTakeNumber(
+    store,
+    document.documentId,
+    shot.shotId,
+    takeNumber,
+  );
+  if (!take) {
+    return '';
+  }
+  return take.takeId;
+}
+
 /**
  * @param {Array<File>} files
  */
@@ -181,11 +259,13 @@ async function performScan(input, output, videoRef, onChange) {
   if (!video) {
     return;
   }
+
   // Clear existing scan results
   for (let key of Object.keys(input)) {
     output[key] = '[WAITING]';
   }
   onChange({ target: { value: output } });
+
   // Now start the scan.
   for (let key of Object.keys(input)) {
     const videoFile = input[key].file;
@@ -193,6 +273,19 @@ async function performScan(input, output, videoRef, onChange) {
       output[key] = '[SCANNING...]';
       onChange({ target: { value: output } });
       setVideoSrcBlob(video, videoFile);
+
+      try {
+        const url = await captureVideoSnapshot(
+          videoRef,
+          0.5,
+          MAX_THUMBNAIL_WIDTH,
+          MAX_THUMBNAIL_HEIGHT,
+        );
+        input[key].snapshot = url;
+      } catch (e) {
+        console.error('[TakeScanner] Failed snapshot - ', e);
+      }
+
       /** @type {string[]} */
       let codes;
       try {

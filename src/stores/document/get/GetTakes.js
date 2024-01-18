@@ -33,3 +33,19 @@ export function getTakeNumber(store, documentId, shotId, takeId) {
   }
   return index + 1;
 }
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ * @param {number} takeNumber
+ */
+export function findTakeWithTakeNumber(store, documentId, shotId, takeNumber) {
+  const result = getShotById(store, documentId, shotId)?.takeIds?.[
+    takeNumber - 1
+  ];
+  if (!result) {
+    return null;
+  }
+  return getTakeById(store, documentId, result);
+}

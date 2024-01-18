@@ -38,8 +38,9 @@ export function useResolveTakeQRCodeKey() {
         takeShotHash,
         '',
       );
-
-      const jsonData = JSON.stringify({ key: basename(takeFileName) });
+      const jsonData = JSON.stringify({
+        key: basename(takeFileName),
+      });
       const base64 = btoa(jsonData);
       result = 'https://jsonhero.io/new?j=' + base64;
       setTakeExportedQRCodeKey(documentId, takeId, result);

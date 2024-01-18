@@ -174,4 +174,38 @@ ShotHash 4 digit randomly?
 
 ---
 
-- AutoUpdate for scanner
+- Favorite vs "Print It!"
+- Put all "Printed" into a folder
+
+Folder Structure:
+
+- Date is important. SAVED by date.
+- Call sheets - scenes and shots are usually categorized by date.
+- SD card usually have CFAST cards
+- RED has a harddrive
+
+CFAST1A_01 => CFAST card Day 1 Cam A and First card
+
+- grouped by folders first (this is then copied and backed up)
+- putting folders
+
+---
+
+- Google Drive project synx
+- QR scanner should get the take preview (also have a standalone one)
+- Import shot syntax from fountain
+- Relayout slate
+
+- What if you create a shot later?
+
+- Focus chart?
+
+- Announce the slate - Text-to-speech recognition?
+
+---
+
+Symlink
+
+- Starts in the slate app.
+
+- Roll (CARD) is typed in.
