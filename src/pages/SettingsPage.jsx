@@ -68,7 +68,7 @@ export default function SettingsPage() {
               <SettingsFieldButton
                 Icon={QRCode2Icon}
                 onClick={() => navigate('/scan')}>
-                Scan QR codes
+                Have QR codes?
               </SettingsFieldButton>
             </SettingsFieldGroup>
             <br />

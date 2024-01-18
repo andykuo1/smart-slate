@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { openDirectory } from '@/qrcode/DirectoryPicker';
 import { scanVideoBlobForQRCodes } from '@/qrcode/QRCodeReader';
-import { formatExportName } from '@/serdes/ExportNameFormat';
-import { useDocumentStore } from '@/stores/document/use';
-import { useCurrentDocumentId } from '@/stores/user';
+import { toDateString } from '@/serdes/ExportNameFormat';
 import { downloadText } from '@/utils/Downloader';
 import { extname } from '@/utils/PathHelper';
 
@@ -26,8 +24,6 @@ import { setVideoSrcBlob } from './VideoBlobSource';
  * @param {OnScannerChangeCallback} props.onChange
  */
 export default function TakeScanner({ className, onChange }) {
-  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
-  const documentId = useCurrentDocumentId();
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
   const inputRef = useRef(/** @type {Record<string, ScannerResult>} */ ({}));
   const outputRef = useRef(/** @type {Record<string, string>} */ ({}));
@@ -35,7 +31,7 @@ export default function TakeScanner({ className, onChange }) {
   const [status, setStatus] = useState('');
 
   function onBackClick() {
-    navigate('/settings');
+    navigate('/');
   }
 
   async function onScanClick() {
@@ -108,15 +104,8 @@ export default function TakeScanner({ className, onChange }) {
       lines.push(`${key},${input[key].code}`);
     }
     const result = lines.join('\n');
-
-    const store = UNSAFE_getStore();
-    const fileName = formatExportName(
-      store,
-      documentId,
-      '',
-      'SCANNED_NAMES',
-      'csv',
-    );
+    const dateString = toDateString(new Date());
+    const fileName = 'EAGLESLATE_' + dateString + '_SCANNED_NAMES.csv';
     downloadText(fileName, result);
   }
 
