@@ -109,11 +109,25 @@ export default function TakeScanner({ className, onChange }) {
       for (const key of Object.keys(input)) {
         const value = input[key];
         if (!value.snapshot) {
+          // Did not have a snapshot to use.
           continue;
         }
         const store = UNSAFE_getStore();
-        const takeId = findTakeIdWithQRCode(store, value.code);
-        setTakePreview(documentId, takeId, value.snapshot);
+        const document = findDocumentWithQRCode(store, value.code);
+        if (document?.documentId !== documentId) {
+          // Not in the same project.
+          continue;
+        }
+        const take = findTakeWithQRCode(
+          store,
+          document?.documentId,
+          value.code,
+        );
+        if (!take) {
+          // Invalid info.
+          continue;
+        }
+        setTakePreview(documentId, take.takeId, value.snapshot);
       }
     }
 
@@ -200,45 +214,40 @@ const TAKE_NUMBER_PATTERN = /_T(\d+)_/;
  * @param {import('@/stores/document/DocumentStore').Store} store
  * @param {string} qrCode
  */
-function findTakeIdWithQRCode(store, qrCode) {
+function findDocumentWithQRCode(store, qrCode) {
   const projectIdExecArray = PROJECT_ID_PATTERN.exec(qrCode);
   if (!projectIdExecArray) {
-    return '';
+    return null;
   }
-  const [_0, projectIdCaptured] = projectIdExecArray;
+  const [_, projectIdCaptured] = projectIdExecArray;
   const projectId = String(projectIdCaptured);
-  const document = findDocumentWithProjectId(store, projectId);
-  if (!document) {
-    return '';
-  }
+  return findDocumentWithProjectId(store, projectId);
+}
 
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {string} qrCode
+ */
+function findTakeWithQRCode(store, documentId, qrCode) {
   const shotHashExecArray = SHOT_HASH_PATTERN.exec(qrCode);
   if (!shotHashExecArray) {
-    return '';
+    return null;
   }
   const [_1, shotHashCaptured] = shotHashExecArray;
   const shotHash = String(shotHashCaptured);
-  const shot = findShotWithShotHash(store, document.documentId, shotHash);
+  const shot = findShotWithShotHash(store, documentId, shotHash);
   if (!shot) {
-    return '';
+    return null;
   }
 
   const takeNumberExecArray = TAKE_NUMBER_PATTERN.exec(qrCode);
   if (!takeNumberExecArray) {
-    return '';
+    return null;
   }
   const [_2, takeNumberCaptured] = takeNumberExecArray;
   const takeNumber = Number(takeNumberCaptured);
-  const take = findTakeWithTakeNumber(
-    store,
-    document.documentId,
-    shot.shotId,
-    takeNumber,
-  );
-  if (!take) {
-    return '';
-  }
-  return take.takeId;
+  return findTakeWithTakeNumber(store, documentId, shot.shotId, takeNumber);
 }
 
 /**
