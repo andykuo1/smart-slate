@@ -20,9 +20,6 @@ export default function ShotEntryNew({ documentId, blockId }) {
   function onClick() {
     let newShot = createShot();
     addShot(documentId, blockId, newShot);
-    containerRef.current?.scrollIntoView({
-      behavior: 'smooth',
-    });
   }
 
   /** @type {import('react').ChangeEventHandler<any>} */
@@ -32,9 +29,6 @@ export default function ShotEntryNew({ documentId, blockId }) {
     let newShot = createShot();
     newShot.shotType = newShotType;
     addShot(documentId, blockId, newShot);
-    containerRef.current?.scrollIntoView({
-      behavior: 'smooth',
-    });
   }
 
   return (
