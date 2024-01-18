@@ -10,6 +10,7 @@
 - Add qr code scanner
 - Add import/export project as json
 - Add scanned names export csv list
+- Add scanner button to landing page and settings
 
 # 0.1.13
 

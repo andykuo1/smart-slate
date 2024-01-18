@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { openDirectory } from '@/qrcode/DirectoryPicker';
 import { scanVideoBlobForQRCodes } from '@/qrcode/QRCodeReader';
 import { toDateString } from '@/serdes/ExportNameFormat';
+import { useCurrentDocumentId } from '@/stores/user';
 import { downloadText } from '@/utils/Downloader';
 import { extname } from '@/utils/PathHelper';
 
@@ -24,6 +25,7 @@ import { setVideoSrcBlob } from './VideoBlobSource';
  * @param {OnScannerChangeCallback} props.onChange
  */
 export default function TakeScanner({ className, onChange }) {
+  const documentId = useCurrentDocumentId();
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
   const inputRef = useRef(/** @type {Record<string, ScannerResult>} */ ({}));
   const outputRef = useRef(/** @type {Record<string, string>} */ ({}));
@@ -31,7 +33,11 @@ export default function TakeScanner({ className, onChange }) {
   const [status, setStatus] = useState('');
 
   function onBackClick() {
-    navigate('/');
+    if (documentId) {
+      navigate('/settings');
+    } else {
+      navigate('/');
+    }
   }
 
   async function onScanClick() {
