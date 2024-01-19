@@ -188,3 +188,58 @@ export async function uploadFile(
   const result = await response.json();
   return result.id || '';
 }
+
+/**
+ * Requires gapi scope `https://www.googleapis.com/auth/drive.file`.
+ *
+ * @see https://developers.google.com/drive/api/reference/rest/v3/files/create
+ * @param {string} accessToken
+ * @param {string} fileId
+ * @param {string} fileName
+ * @param {string} mimeType
+ * @param {string|Blob} data
+ * @param {object} [opts]
+ * @param {Array<string>} [opts.parentFolderIds]
+ * @returns {Promise<string>}
+ */
+export async function uploadFileByFileId(
+  accessToken,
+  fileId,
+  fileName,
+  mimeType,
+  data,
+  opts = {},
+) {
+  const { parentFolderIds = [] } = opts;
+  /** @type {gapi.client.drive.File} */
+  const metadata = {
+    name: fileName,
+    mimeType,
+    parents: parentFolderIds,
+  };
+
+  let url = new URL(GAPI_DRIVE_FILES_URI + '/' + fileId);
+  let params = new URLSearchParams({
+    uploadType: 'multipart',
+    fileId: fileId,
+    // For the response
+    fields: 'id',
+    // For security
+    access_token: accessToken,
+  });
+  url.search = params.toString();
+
+  let body = new FormData();
+  let metadataBlob = new Blob([JSON.stringify(metadata)], {
+    type: 'application/json; charset=UTF-8',
+  });
+  body.append('metadata', metadataBlob);
+  body.append('data', data);
+
+  const response = await fetch(url, {
+    method: 'PATCH',
+    body,
+  });
+  const result = await response.json();
+  return result.id || '';
+}

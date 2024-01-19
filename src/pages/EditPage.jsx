@@ -1,12 +1,14 @@
 import DrawerLayout from '@/app/DrawerLayout';
 import NavBarLayout from '@/app/NavBarLayout';
 import DocumentEntry from '@/components/documents/DocumentEntry';
+import { useProjectAutoSave } from '@/serdes/UseProjectAutoSave';
 import { useCurrentDocumentId } from '@/stores/user';
 
 import PageLayout from './PageLayout';
 
 export default function EditPage() {
   const documentId = useCurrentDocumentId();
+  useProjectAutoSave();
   return (
     <PageLayout>
       <NavBarLayout>

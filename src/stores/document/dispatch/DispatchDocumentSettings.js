@@ -22,6 +22,7 @@ export function createDispatchDocumentSettings(set, get) {
       set,
       setDocumentSettingsAutoSaveGDriveFileId,
     ),
+    setDocumentSettingsAutoSaveTo: zi(set, setDocumentSettingsAutoSaveTo),
   };
 }
 
@@ -96,6 +97,16 @@ function setDocumentSettingsDirectorName(store, documentId, name) {
 function setDocumentSettingsCameraName(store, documentId, name) {
   let settings = resolveDocumentSettingsById(store, documentId);
   settings.cameraName = name;
+}
+
+/**
+ * @param {import('../DocumentStore').Store} store
+ * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {'local'|'gdrive'} dest
+ */
+function setDocumentSettingsAutoSaveTo(store, documentId, dest) {
+  let settings = resolveDocumentSettingsById(store, documentId);
+  settings.autoSaveTo = dest;
 }
 
 /**
