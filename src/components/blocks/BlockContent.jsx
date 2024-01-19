@@ -3,7 +3,7 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { getBlockById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
@@ -14,6 +14,7 @@ import { useDocumentStore } from '@/stores/document/use';
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  * @param {boolean} [props.editable]
+ * @param {Function} [props.setEditable]
  * @param {import('react').ReactNode} [props.children]
  */
 export default function BlockContent({
@@ -21,6 +22,7 @@ export default function BlockContent({
   documentId,
   blockId,
   editable = true,
+  setEditable,
   children,
 }) {
   const blockContentType = useDocumentStore(
@@ -52,7 +54,9 @@ export default function BlockContent({
       <BlockContentFountainJSON
         className={className}
         documentId={documentId}
-        blockId={blockId}>
+        blockId={blockId}
+        editable={editable}
+        setEditable={setEditable}>
         {children}
       </BlockContentFountainJSON>
     );
@@ -71,12 +75,16 @@ export default function BlockContent({
  * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
+ * @param {boolean} [props.editable]
+ * @param {Function} [props.setEditable]
  * @param {import('react').ReactNode} [props.children]
  */
 function BlockContentFountainJSON({
   className,
   documentId,
   blockId,
+  editable,
+  setEditable,
   children,
 }) {
   const content = useDocumentStore(
@@ -85,6 +93,18 @@ function BlockContentFountainJSON({
   const contentStyle = useDocumentStore(
     (ctx) => getBlockById(ctx, documentId, blockId)?.contentStyle,
   );
+  if (editable) {
+    return (
+      <BlockContentFountainJSONInput
+        className={className}
+        documentId={documentId}
+        blockId={blockId}
+        content={content}
+        setEditable={setEditable}>
+        {children}
+      </BlockContentFountainJSONInput>
+    );
+  }
   let contentClassName = [];
   switch (contentStyle) {
     case 'centered':
@@ -129,6 +149,44 @@ function BlockContentFountainJSON({
       {content}
       {children}
     </pre>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
+ * @param {string} props.content
+ * @param {Function} [props.setEditable]
+ * @param {import('react').ReactNode} [props.children]
+ */
+function BlockContentFountainJSONInput({
+  className,
+  documentId,
+  blockId,
+  content,
+  setEditable,
+  children,
+}) {
+  const inputRef = useRef(/** @type {HTMLTextAreaElement|null} */ (null));
+  const setBlockContent = useDocumentStore((ctx) => ctx.setBlockContent);
+  useEffect(() => {
+    inputRef.current?.focus();
+  });
+  return (
+    <>
+      <textarea
+        ref={inputRef}
+        className={'bg-transparent resize-none w-full' + ' ' + className}
+        value={content}
+        onChange={(e) =>
+          setBlockContent(documentId, blockId, 'fountain-json', e.target.value)
+        }
+        onBlur={(e) => setEditable?.(false)}
+      />
+      {children}
+    </>
   );
 }
 
