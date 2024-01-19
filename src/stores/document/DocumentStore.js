@@ -43,6 +43,7 @@ export function createDocument(documentId = uuid()) {
       videoResolution: '',
       /** @type {'local'|'gdrive'|''} */
       autoSaveTo: '',
+      autoSaveGDriveFileId: '',
       directorName: '',
       cameraName: '',
     },
@@ -79,6 +80,8 @@ export function createScene(sceneId = uuid()) {
 export function createBlock(blockId = uuid()) {
   return {
     blockId,
+    /** @type {'action'|'dialogue'|'transition'|'centered'|'note'|'lyric'|''} */
+    contentStyle: '',
     /** @type {BlockContentType} */
     contentType: 'string',
     /** @type {string} */
@@ -106,6 +109,7 @@ export function createShot(shotId = uuid()) {
     description: '',
     /** @type {Array<TakeId>} */
     takeIds: [],
+    nextTakeNumber: 1,
   };
 }
 
@@ -115,6 +119,7 @@ export function createShot(shotId = uuid()) {
 export function createTake(takeId = uuid()) {
   return {
     takeId,
+    takeNumber: 0,
     notes: '',
     rating: 0,
     previewImage: '',
@@ -235,6 +240,7 @@ export function cloneShot(out, shot) {
   out.referenceImage = shot.referenceImage;
   out.description = shot.description;
   out.takeIds = shot.takeIds.slice();
+  out.nextTakeNumber = shot.nextTakeNumber;
   return /** @type {Shot} */ (out);
 }
 
@@ -245,6 +251,7 @@ export function cloneShot(out, shot) {
  */
 export function cloneTake(out, take) {
   out.takeId = take.takeId;
+  out.takeNumber = take.takeNumber;
   out.notes = take.notes;
   out.rating = take.rating;
   out.previewImage = take.previewImage;

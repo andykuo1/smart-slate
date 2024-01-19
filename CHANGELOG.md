@@ -11,6 +11,9 @@
 - Add import/export project as json
 - Add scanned names export csv list
 - Add scanner button to landing page and settings
+- Add take preview imports from scanned footage
+- Add custom fountain parser
+- Add shotlist syntax to fountain parser
 
 # 0.1.13
 

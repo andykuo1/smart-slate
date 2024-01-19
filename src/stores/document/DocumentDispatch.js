@@ -96,6 +96,8 @@ export function addTake(store, documentId, shotId, take) {
   let document = store.documents[documentId];
   let shot = document.shots[shotId];
   document.takes[take.takeId] = take;
+  let takeNumber = shot.nextTakeNumber++;
+  take.takeNumber = takeNumber;
   shot.takeIds.push(take.takeId);
   incrementDocumentRevisionNumber(document);
 }

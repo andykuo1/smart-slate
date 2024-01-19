@@ -1,10 +1,9 @@
 import { useCallback } from 'react';
 
-import { Fountain } from 'fountain-js';
-
 import { useAddDocument } from '@/stores/document';
 
-import { fountainTokensToDocumentByScene } from './FountainToDocumentParser';
+import { parse } from './FountainParser';
+import { fountainToDocument } from './FountainToDocumentParser';
 
 /**
  * @param {import('@/stores/document/DocumentStore').DocumentId} [documentId]
@@ -19,10 +18,8 @@ export function useProjectImport(documentId = undefined) {
     function _importProject(type, data) {
       switch (type) {
         case 'fountain-text': {
-          const fountain = new Fountain();
-          const { tokens } = fountain.parse(data, true);
-          // TODO: fountainTokensToDocument(tokens) when ready :)
-          let document = fountainTokensToDocumentByScene(tokens);
+          const { tokens } = parse(data);
+          let document = fountainToDocument(tokens);
           if (documentId) {
             document.documentId = documentId;
           }

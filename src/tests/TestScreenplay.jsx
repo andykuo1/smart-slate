@@ -1,180 +1,162 @@
-import { useState } from 'react';
-
-import AddNotesIcon from '@material-symbols/svg-400/rounded/add_notes.svg';
-import { Fountain } from 'fountain-js';
-
 import ExampleScript from '@/serdes/BrickAndSteel.fountain?raw';
-import { fountainTokensToDocument } from '@/serdes/FountainToDocumentParser';
+import { parse } from '@/serdes/FountainParser';
+import { fountainToDocument } from '@/serdes/FountainToDocumentParser';
+import {
+  getBlockById,
+  getSceneById,
+  getShotById,
+  getTakeById,
+} from '@/stores/document';
 
 export default function TestScreenplay() {
-  const fountain = new Fountain();
-  const { tokens } = fountain.parse(ExampleScript, true);
-  const document = fountainTokensToDocument(tokens);
-  const documentId = document.documentId;
-  const sceneIds = document.sceneOrder;
+  const { tokens } = parse(ExampleScript);
+  const document = fountainToDocument(tokens);
+  const store = {
+    documents: {
+      [document.documentId]: document,
+    },
+  };
   return (
-    <article className="md:mx-[20vw] py-20">
-      <h2 className="text-center">{document.documentTitle}</h2>
-      <div className="flex flex-col">
-        {sceneIds.map((sceneId) => (
-          <SceneBlock
-            key={`sceneblock-${sceneId}`}
-            documentId={documentId}
-            sceneId={sceneId}
-            document={document}
-          />
+    <div className="py-20 w-full">
+      <output>
+        {tokens.map((token) => (
+          <pre>
+            <code>{JSON.stringify(token)}</code>
+          </pre>
         ))}
+      </output>
+      <h2 className="text-2xl font-bold text-center">
+        {document.documentTitle}
+      </h2>
+      <div className="flex flex-col">
+        <Document
+          store={store}
+          documentId={document.documentId}
+          value={document}
+        />
       </div>
+    </div>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').Store} props.store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').Document} props.value
+ */
+function Document({ store, documentId, value }) {
+  return (
+    <article>
+      {Object.values(value.sceneOrder).map((sceneId) => (
+        <Scene
+          store={store}
+          documentId={documentId}
+          value={getSceneById(store, documentId, sceneId)}
+        />
+      ))}
     </article>
   );
 }
 
 /**
  * @param {object} props
- * @param {import('@/stores/document/DocumentStore').Document} props.document
+ * @param {import('@/stores/document/DocumentStore').Store} props.store
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').Scene} props.value
  */
-function SceneBlock({ document, documentId, sceneId }) {
-  const scene = document.scenes[sceneId];
-  const blockIds = scene.blockIds;
+function Scene({ store, documentId, value }) {
   return (
-    <section className="flex flex-row my-10">
-      <div className="flex-1">
-        <HeadingBlock
-          document={document}
+    <section>
+      <h2 className="text-xl font-bold">{value.sceneHeading}</h2>
+      {Object.values(value.blockIds).map((blockId) => (
+        <Block
+          store={store}
           documentId={documentId}
-          sceneId={sceneId}
+          value={getBlockById(store, documentId, blockId)}
         />
-        {blockIds.map((blockId, index) => (
-          <Block
-            key={`block-${blockId}`}
-            documentId={documentId}
-            blockId={blockId}
-            block={document.blocks[blockId]}
-            blockNumber={index + 1}
-          />
-        ))}
-      </div>
+      ))}
     </section>
   );
 }
 
 /**
  * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').Store} props.store
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
- * @param {import('@/stores/document/DocumentStore').Document} props.document
+ * @param {import('@/stores/document/DocumentStore').Block} props.value
  */
-function HeadingBlock({ documentId, sceneId, document }) {
-  const scene = document.scenes[sceneId];
+function Block({ store, documentId, value }) {
+  let json = value.content ? JSON.parse(value.content) : null;
+  if (!json) {
+    return <p className="opacity-30">{'<empty>'}</p>;
+  }
+  let style = '';
+  switch (value.contentStyle) {
+    case 'note':
+      style = 'opacity-30';
+      break;
+    case 'centered':
+      style = 'text-center';
+      break;
+    case 'transition':
+      style = 'text-right';
+      break;
+    case 'lyric':
+      style = 'italic';
+      break;
+    case 'dialogue':
+      style = 'ml-10';
+      break;
+  }
   return (
-    <BlockLayout title={'Scene Heading'} blockNumber={'#'} disabled={true}>
-      <h2 className="flex-1 flex flex-row items-center underline">
-        {scene.sceneHeading || '---'}
-      </h2>
-    </BlockLayout>
+    <div className="my-10">
+      <p className={style}>
+        <pre>{json?.root?.children?.[0]?.children?.[0]?.text}</pre>
+      </p>
+      <ul>
+        {Object.values(value.shotIds).map((shotId) => (
+          <Shot
+            store={store}
+            documentId={documentId}
+            value={getShotById(store, documentId, shotId)}
+          />
+        ))}
+      </ul>
+    </div>
   );
 }
 
 /**
  * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').Store} props.store
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
- * @param {import('@/stores/document/DocumentStore').Block} props.block
- * @param {number} props.blockNumber
+ * @param {import('@/stores/document/DocumentStore').Shot} props.value
  */
-function Block({ documentId, blockId, block, blockNumber }) {
-  const [opened, setOpened] = useState(false);
-
-  function onClick() {
-    setOpened(true);
-  }
-
+function Shot({ store, documentId, value }) {
   return (
-    <BlockLayout
-      title={'Block ' + blockNumber}
-      blockNumber={blockNumber}
-      onClick={onClick}>
-      <div className="flex-1">
-        {block.content.split('\n').map((text) => (
-          <p key={text}>{text}</p>
+    <li className="ml-4 flex flex-row gap-2">
+      <div className="font-bold">- {value.shotType}</div>
+      <div>{value.description}</div>
+      <div className="ml-8">
+        {Object.values(value.takeIds).map((takeId) => (
+          <Take
+            store={store}
+            documentId={documentId}
+            value={getTakeById(store, documentId, takeId)}
+          />
         ))}
       </div>
-      {opened && (
-        <div className="flex-1 flex">
-          <textarea className="flex-1 resize-none bg-transparent px-2" />
-        </div>
-      )}
-    </BlockLayout>
+    </li>
   );
 }
 
 /**
  * @param {object} props
- * @param {string} props.title
- * @param {number|string} props.blockNumber
- * @param {() => void} [props.onClick]
- * @param {import('react').ReactNode} props.children
- * @param {boolean} [props.disabled]
+ * @param {import('@/stores/document/DocumentStore').Store} props.store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').Take} props.value
  */
-function BlockLayout({
-  title,
-  blockNumber,
-  onClick = undefined,
-  disabled = false,
-  children,
-}) {
-  return (
-    <div className="relative group flex flex-row my-4">
-      <BlockOptions
-        title={title}
-        displayName={String(blockNumber)}
-        onClick={onClick}
-        disabled={disabled}
-      />
-      <div className="flex-1 flex flex-row">{children}</div>
-      <BlockOptions
-        title={title}
-        displayName={String(blockNumber)}
-        onClick={onClick}
-        disabled={disabled}
-      />
-    </div>
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} props.title
- * @param {string} props.displayName
- * @param {() => void} [props.onClick]
- * @param {boolean} [props.disabled]
- */
-function BlockOptions({
-  title,
-  displayName,
-  onClick = undefined,
-  disabled = false,
-}) {
-  return (
-    <div className="flex flex-col items-center">
-      <button
-        className="w-10 text-center bg-gray-100 rounded-full mx-2 py-2"
-        title={title}
-        onClick={onClick}
-        disabled={disabled}>
-        {displayName}
-        <AddNotesIcon
-          className={
-            'fill-current w-6 h-6 mx-auto' +
-            ' ' +
-            'opacity-0' +
-            ' ' +
-            (!disabled && 'transition-opacity group-hover:opacity-100')
-          }
-        />
-      </button>
-    </div>
-  );
+function Take({ store, value }) {
+  return <output>Take {value.takeNumber}</output>;
 }

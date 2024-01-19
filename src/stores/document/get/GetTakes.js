@@ -22,12 +22,29 @@ export function getTakeIdsInOrder(store, documentId, shotId) {
  * @param {import('@/stores/document/DocumentStore').Store} store
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ */
+export function findNextAvailableTakeNumber(store, documentId, shotId) {
+  let shot = getShotById(store, documentId, shotId);
+  return shot?.nextTakeNumber || 1;
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
  * @param {import('@/stores/document/DocumentStore').TakeId} takeId
  */
 export function getTakeNumber(store, documentId, shotId, takeId) {
-  let index = Number(
-    getShotById(store, documentId, shotId)?.takeIds?.indexOf?.(takeId),
-  );
+  let take = getTakeById(store, documentId, takeId);
+  if (take?.takeNumber) {
+    return take.takeNumber;
+  }
+  // NOTE: For backward compatibility
+  let shot = getShotById(store, documentId, shotId);
+  if (!shot) {
+    return -1;
+  }
+  let index = Number(shot.takeIds?.indexOf?.(takeId));
   if (index < 0) {
     return -1;
   }

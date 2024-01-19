@@ -49,10 +49,23 @@ function getParamsByType(value) {
   return PARAM_BY_VALUES[value];
 }
 
+/**
+ * @param {string} value
+ */
+function getShotTypeByAbbreviation(value) {
+  for (let param of PARAMS) {
+    if (param.abbr === value) {
+      return param.value;
+    }
+  }
+  return '';
+}
+
 const result = {
   values,
   params,
   getParamsByType,
+  getShotTypeByAbbreviation,
 };
 
 export default result;
