@@ -4,19 +4,17 @@ import PersonIcon from '@material-symbols/svg-400/rounded/person-fill.svg';
 import PhotoIcon from '@material-symbols/svg-400/rounded/photo.svg';
 import StarsIcon from '@material-symbols/svg-400/rounded/stars-fill.svg';
 
-import { CLOSE_UP, MEDIUM_SHOT, WIDE_SHOT } from '@/stores/document/value';
-
 /**
- * @param {import('@/stores/document/DocumentStore').ShotType} [shotType]
+ * @param {string} [shotType]
  * @returns {import('react').FC<any>}
  */
 export function getShotTypeIcon(shotType = undefined) {
   switch (shotType) {
-    case CLOSE_UP.value:
+    case 'CU':
       return FaceIcon;
-    case MEDIUM_SHOT.value:
+    case 'MS':
       return PersonIcon;
-    case WIDE_SHOT.value:
+    case 'WS':
       return NaturePeopleIcon;
     case '':
       return PhotoIcon;

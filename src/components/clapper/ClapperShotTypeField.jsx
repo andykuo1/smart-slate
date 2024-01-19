@@ -1,8 +1,6 @@
 import { getShotById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 
-import { formatShotType } from '../takes/TakeNameFormat';
-
 /**
  * @param {object} props
  * @param {string} props.className
@@ -17,6 +15,5 @@ export default function ClapperShotTypeField({
   const shotType = useDocumentStore(
     (ctx) => getShotById(ctx, documentId, shotId)?.shotType,
   );
-  const formattedShotType = formatShotType(shotType);
-  return <div className={className}>{formattedShotType || '--'}</div>;
+  return <div className={className}>{shotType || '--'}</div>;
 }

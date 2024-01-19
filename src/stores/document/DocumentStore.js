@@ -14,7 +14,6 @@ import { uuid } from '@/utils/uuid';
  * @typedef {string} TakeId
  * @typedef {string} BlockId
  *
- * @typedef {'wide'|'medium'|'closeup'|'full'|'long'|''} ShotType
  * @typedef {'string'|'lexical'|'fountain-json'} BlockContentType
  * @typedef {string} ShotHash
  */
@@ -97,7 +96,6 @@ export function createBlock(blockId = uuid()) {
 export function createShot(shotId = uuid()) {
   return {
     shotId,
-    /** @type {ShotType} */
     shotType: '',
     /**
      * A unique hash to identify shots-- the unit of story for editors.
@@ -126,7 +124,6 @@ export function createTake(takeId = uuid()) {
     exportedSize: 0,
     exportedMillis: 0,
     exportedFileName: '',
-    /** @type {ShotType} */
     exportedShotType: '',
     exportedGDriveFileId: '',
     /** @type {IDBValidKey} */

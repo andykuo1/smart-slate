@@ -12,9 +12,7 @@ import { ShotTypeSelector } from './options/ShotTypeSelector';
  */
 export default function ShotEntryNew({ documentId, blockId }) {
   const containerRef = useRef(/** @type {HTMLLIElement|null} */ (null));
-  const [shotType, setShotType] = useState(
-    /** @type {import('@/stores/document/DocumentStore').ShotType} */ (''),
-  );
+  const [shotType, setShotType] = useState('');
   const addShot = useDocumentStore((ctx) => ctx.addShot);
 
   function onClick() {

@@ -6,12 +6,11 @@ import {
   useTakeNumber,
 } from '@/stores/document';
 import { useShotTakeCount } from '@/stores/document/use';
-import { ShotTypes } from '@/stores/document/value';
+import { SHOT_TYPES } from '@/stores/document/value';
 
 import {
   formatSceneNumber,
   formatShotNumber,
-  formatShotType,
   formatTakeNumber,
 } from '../takes/TakeNameFormat';
 
@@ -45,7 +44,7 @@ export default function ShotName({
         editable ? (
           <ShotTypesMore documentId={documentId} shotId={shotId} />
         ) : (
-          formatShotType(shotType)
+          shotType
         )
       }
     />
@@ -102,13 +101,7 @@ function ShotTypesMore({ documentId, shotId }) {
   /** @type {import('react').ChangeEventHandler<HTMLSelectElement>} */
   function onShotTypeChange(e) {
     let el = e.target;
-    setShotType(
-      documentId,
-      shotId,
-      /** @type {import('@/stores/document/DocumentStore').ShotType} */ (
-        el.value
-      ),
-    );
+    setShotType(documentId, shotId, el.value);
   }
 
   return (
@@ -116,9 +109,9 @@ function ShotTypesMore({ documentId, shotId }) {
       className="text-center bg-transparent -mx-1"
       value={shotType}
       onChange={onShotTypeChange}>
-      {ShotTypes.params().map((type) => (
-        <option key={type.value} title={type.name} value={type.value}>
-          {type.abbr}
+      {SHOT_TYPES.map((shotType) => (
+        <option key={shotType} title={shotType} value={shotType}>
+          {shotType}
         </option>
       ))}
     </select>

@@ -1,12 +1,10 @@
-import { ANY_SHOT, ShotTypes } from '@/stores/document/value';
-
 /**
  * @param {string} projectId
  * @param {number} sceneNumber
  * @param {number} shotNumber
  * @param {number} takeNumber
  * @param {string} shotHash
- * @param {import('@/stores/document/DocumentStore').ShotType} [shotType]
+ * @param {string} [shotType]
  */
 export function formatTakeNameForFileExport(
   projectId,
@@ -40,22 +38,11 @@ export function formatTakeNameForFileExport(
     shotNumber,
     takeNumber,
   );
-  const shotTypeString = formatShotType(shotType);
   return (
     takePathStrings.join('_') +
-    (shotTypeString ? `_${shotTypeString}` : '') +
+    (shotType ? `_${shotType}` : '') +
     `_${shotHash}`
   );
-}
-
-/**
- * @param {import('@/stores/document/DocumentStore').ShotType|undefined} shotType
- */
-export function formatShotType(shotType) {
-  if (!shotType || shotType === ANY_SHOT.value) {
-    return '';
-  }
-  return ShotTypes.getParamsByType(shotType).abbr;
 }
 
 /**

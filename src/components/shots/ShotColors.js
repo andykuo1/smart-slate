@@ -1,15 +1,13 @@
-import { CLOSE_UP, MEDIUM_SHOT, WIDE_SHOT } from '@/stores/document/value';
-
 /**
- * @param {import('@/stores/document/DocumentStore').ShotType} [shotType]
+ * @param {string} [shotType]
  */
 export function getShotTypeColor(shotType) {
   switch (shotType) {
-    case CLOSE_UP.value:
+    case 'CU':
       return 'bg-blue-300';
-    case MEDIUM_SHOT.value:
+    case 'MS':
       return 'bg-green-300';
-    case WIDE_SHOT.value:
+    case 'WS':
       return 'bg-red-300';
     default:
       return 'bg-yellow-300';

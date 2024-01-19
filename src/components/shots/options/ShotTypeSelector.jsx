@@ -1,10 +1,6 @@
 import { useRef } from 'react';
 
-import ShotTypes, {
-  CLOSE_UP,
-  MEDIUM_SHOT,
-  WIDE_SHOT,
-} from '@/stores/document/value/ShotTypes';
+import { SHOT_TYPES } from '@/stores/document/value/ShotTypes';
 
 import { getShotTypeColor } from '../ShotColors';
 import { getShotTypeIcon } from './ShotTypeIcon';
@@ -13,7 +9,7 @@ import { getShotTypeIcon } from './ShotTypeIcon';
  * @param {object} props
  * @param {string} [props.className]
  * @param {import('react').ChangeEventHandler<any>} props.onChange
- * @param {import('@/stores/document/DocumentStore').ShotType} [props.activeShotType]
+ * @param {string} [props.activeShotType]
  * @param {boolean} [props.showMore]
  */
 export function ShotTypeSelector({
@@ -26,21 +22,21 @@ export function ShotTypeSelector({
     <div className={className}>
       <ShotTypeButton
         className="flex-1"
-        shotType={WIDE_SHOT.value}
+        shotType="WS"
         onClick={onChange}
-        isActive={activeShotType === WIDE_SHOT.value}
+        isActive={activeShotType === 'WS'}
       />
       <ShotTypeButton
         className="flex-1"
-        shotType={MEDIUM_SHOT.value}
+        shotType="MS"
         onClick={onChange}
-        isActive={activeShotType === MEDIUM_SHOT.value}
+        isActive={activeShotType === 'MS'}
       />
       <ShotTypeButton
         className="flex-1"
-        shotType={CLOSE_UP.value}
+        shotType="CU"
         onClick={onChange}
-        isActive={activeShotType === CLOSE_UP.value}
+        isActive={activeShotType === 'CU'}
       />
       {showMore && (
         <MoreShotTypeSelector
@@ -56,7 +52,7 @@ export function ShotTypeSelector({
 /**
  * @param {object} props
  * @param {string} [props.className]
- * @param {import('@/stores/document/DocumentStore').ShotType} props.activeShotType
+ * @param {string} props.activeShotType
  * @param {import('react').ChangeEventHandler<any>} props.onChange
  */
 function MoreShotTypeSelector({ className, activeShotType, onChange }) {
@@ -64,9 +60,9 @@ function MoreShotTypeSelector({ className, activeShotType, onChange }) {
 
   const isActive =
     !!activeShotType &&
-    activeShotType !== WIDE_SHOT.value &&
-    activeShotType !== MEDIUM_SHOT.value &&
-    activeShotType !== CLOSE_UP.value;
+    activeShotType !== 'WS' &&
+    activeShotType !== 'MS' &&
+    activeShotType !== 'CU';
 
   return (
     <select
@@ -80,9 +76,9 @@ function MoreShotTypeSelector({ className, activeShotType, onChange }) {
       }
       value={activeShotType}
       onChange={onChange}>
-      {ShotTypes.params().map((type) => (
-        <option key={type.value} title={type.name} value={type.value}>
-          {type.abbr}
+      {SHOT_TYPES.map((shotType) => (
+        <option key={shotType} title={shotType} value={shotType}>
+          {shotType}
         </option>
       ))}
     </select>
@@ -91,7 +87,7 @@ function MoreShotTypeSelector({ className, activeShotType, onChange }) {
 
 /**
  * @param {object} props
- * @param {import('@/stores/document/DocumentStore').ShotType} [props.shotType]
+ * @param {string} [props.shotType]
  * @param {string} [props.className]
  * @param {import('react').MouseEventHandler} [props.onClick]
  * @param {boolean} [props.isActive]
@@ -107,9 +103,7 @@ function ShotTypeButton({ shotType, className, onClick, isActive = false }) {
         ' ' +
         className
       }
-      title={
-        (shotType && ShotTypes.getParamsByType(shotType)?.name) || 'Special'
-      }
+      title={shotType}
       value={shotType}
       onClick={onClick}
       disabled={!onClick}>
