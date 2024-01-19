@@ -8,8 +8,6 @@ import { useEffect } from 'react';
 import { getBlockById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 
-// https://dio.la/article/lexical-state-updates
-
 /**
  * @param {object} props
  * @param {string} [props.className]
@@ -31,6 +29,128 @@ export default function BlockContent({
   const blockContent = useDocumentStore(
     (ctx) => getBlockById(ctx, documentId, blockId)?.content,
   );
+  if (blockContentType === 'lexical') {
+    return (
+      <BlockContentLexical
+        className={className}
+        documentId={documentId}
+        blockId={blockId}
+        blockContent={blockContent}
+        editable={editable}>
+        {children}
+      </BlockContentLexical>
+    );
+  } else if (blockContentType === 'string') {
+    return (
+      <pre className={className}>
+        {blockContent}
+        {children}
+      </pre>
+    );
+  } else if (blockContentType === 'fountain-json') {
+    return (
+      <BlockContentFountainJSON
+        className={className}
+        documentId={documentId}
+        blockId={blockId}>
+        {children}
+      </BlockContentFountainJSON>
+    );
+  } else {
+    return (
+      <pre className={className}>
+        {blockContentType}:{blockContent}
+        {children}
+      </pre>
+    );
+  }
+}
+
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
+ * @param {import('react').ReactNode} [props.children]
+ */
+function BlockContentFountainJSON({
+  className,
+  documentId,
+  blockId,
+  children,
+}) {
+  const content = useDocumentStore(
+    (ctx) => getBlockById(ctx, documentId, blockId)?.content,
+  );
+  const contentStyle = useDocumentStore(
+    (ctx) => getBlockById(ctx, documentId, blockId)?.contentStyle,
+  );
+  let contentClassName = [];
+  switch (contentStyle) {
+    case 'centered':
+      contentClassName.push('text-center whitespace-normal');
+      break;
+    case 'dialogue':
+      const lines = content.split('\n');
+      return (
+        <div className={'my-4 mx-20 whitespace-normal' + ' ' + className}>
+          <pre className="ml-16 font-bold whitespace-normal">{lines[0]}</pre>
+          {lines.slice(1).map((line, index) => (
+            <pre
+              key={line + '.' + index}
+              className={
+                'whitespace-normal' + ' ' + (line.startsWith('(') ? 'ml-4' : '')
+              }>
+              {line}
+            </pre>
+          ))}
+          {children}
+        </div>
+      );
+    case 'transition':
+      contentClassName.push('text-right mr-10');
+      break;
+    case 'lyric':
+      contentClassName.push('ml-10 italic');
+      break;
+    case 'note':
+      contentClassName.push('opacity-30');
+      break;
+  }
+  return (
+    <pre
+      className={
+        'my-4 whitespace-normal' +
+        ' ' +
+        contentClassName.join(' ') +
+        ' ' +
+        className
+      }>
+      {content}
+      {children}
+    </pre>
+  );
+}
+
+// https://dio.la/article/lexical-state-updates
+
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
+ * @param {string} props.blockContent
+ * @param {boolean} [props.editable]
+ * @param {import('react').ReactNode} [props.children]
+ */
+function BlockContentLexical({
+  className,
+  documentId,
+  blockId,
+  blockContent,
+  editable = true,
+  children,
+}) {
   const setBlockContent = useDocumentStore((ctx) => ctx.setBlockContent);
 
   /** @type {import('@lexical/react/LexicalComposer').InitialConfigType} */
@@ -52,15 +172,6 @@ export default function BlockContent({
   function onChange(editorState) {
     const jsonString = JSON.stringify(editorState.toJSON());
     setBlockContent(documentId, blockId, 'lexical', jsonString);
-  }
-
-  if (blockContent && blockContentType !== 'lexical') {
-    return (
-      <p className={className}>
-        {blockContent}
-        {children}
-      </p>
-    );
   }
 
   return (

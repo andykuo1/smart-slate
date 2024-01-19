@@ -1,6 +1,7 @@
 import AddBoxIcon from '@material-symbols/svg-400/rounded/add_box.svg';
 
-import { useBlockShotCount } from '@/stores/document/use';
+import { createShot } from '@/stores/document/DocumentStore';
+import { useBlockShotCount, useDocumentStore } from '@/stores/document/use';
 import { useUserStore } from '@/stores/user';
 
 import ShotList from '../shots/ShotList';
@@ -22,30 +23,34 @@ export default function BlockEntry({
   editable = true,
   collapsed = false,
 }) {
+  const addShot = useDocumentStore((ctx) => ctx.addShot);
   const hasActiveShot = useUserStore((ctx) => Boolean(ctx.cursor?.shotId));
   const blockShotCount = useBlockShotCount(documentId, blockId);
   if (!collapsed && blockShotCount <= 0) {
     return null;
   }
 
-  function onClick() {}
+  function onClick() {
+    let shot = createShot();
+    addShot(documentId, blockId, shot);
+  }
 
   return (
     <BlockEntryLayout
       collapsed={collapsed}
       content={
-        <BlockContent
-          className="relative px-4"
-          documentId={documentId}
-          blockId={blockId}
-          editable={true /* TODO: false when ready to add shotlists :) */}>
+        <div className="group relative px-4">
+          <BlockContent
+            documentId={documentId}
+            blockId={blockId}
+            editable={true /* TODO: false when ready to add shotlists :) */}
+          />
           <button
-            className="hidden group absolute -bottom-3 left-0 right-0 z-10 flex-row items-center"
+            className="absolute top-0 bottom-0 right-0 z-10 flex-row items-center"
             onClick={onClick}>
-            <AddBoxIcon className="w-6 h-6 fill-current opacity-10 group-hover:opacity-100" />
-            <hr className="flex-1 border-t-4 border-spacing-2 border-black border-dashed opacity-0 group-hover:opacity-100 transition-opacity" />
+            <AddBoxIcon className="w-6 h-6 fill-current opacity-0 group-hover:opacity-100" />
           </button>
-        </BlockContent>
+        </div>
       }>
       <ShotList
         className="flex-1"

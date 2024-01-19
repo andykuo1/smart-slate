@@ -15,7 +15,7 @@ import { uuid } from '@/utils/uuid';
  * @typedef {string} BlockId
  *
  * @typedef {'wide'|'medium'|'closeup'|'full'|'long'|''} ShotType
- * @typedef {'string'|'lexical'} BlockContentType
+ * @typedef {'string'|'lexical'|'fountain-json'} BlockContentType
  * @typedef {string} ShotHash
  */
 

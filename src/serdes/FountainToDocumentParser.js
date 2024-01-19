@@ -61,10 +61,8 @@ export function fountainToDocument(tokens) {
         break;
       case 'action':
         currentBlock = addBlock(currentScene);
-        currentBlock.contentType = 'lexical';
-        currentBlock.content = JSON.stringify(
-          createLexicalStateFromText(token.text),
-        );
+        currentBlock.contentType = 'fountain-json';
+        currentBlock.content = token.text;
         if (token.style === 'centered') {
           currentBlock.contentStyle = 'centered';
         } else {
@@ -75,61 +73,47 @@ export function fountainToDocument(tokens) {
         lines.length = 0;
         lines.push(token.text);
         currentBlock = addBlock(currentScene);
-        currentBlock.contentType = 'lexical';
-        currentBlock.content = JSON.stringify(
-          createLexicalStateFromText(lines.join('\n')),
-        );
+        currentBlock.contentType = 'fountain-json';
+        currentBlock.content = lines.join('\n');
         currentBlock.contentStyle = 'dialogue';
         break;
       case 'dialogue':
         lines.push(token.text);
         if (currentBlock) {
-          currentBlock.content = JSON.stringify(
-            createLexicalStateFromText(lines.join('\n')),
-          );
+          currentBlock.content = lines.join('\n');
         }
         break;
       case 'parenthetical':
         lines.push(token.text);
         if (currentBlock) {
-          currentBlock.content = JSON.stringify(
-            createLexicalStateFromText(lines.join('\n')),
-          );
+          currentBlock.content = lines.join('\n');
         }
         break;
       case 'lyric':
         currentBlock = addBlock(currentScene);
-        currentBlock.contentType = 'lexical';
-        currentBlock.content = JSON.stringify(
-          createLexicalStateFromText(token.text),
-        );
+        currentBlock.contentType = 'fountain-json';
+        currentBlock.content = token.text;
         // @ts-ignore
         currentBlock.contentStyle = 'lyric';
         break;
       case 'note':
         currentBlock = addBlock(currentScene);
-        currentBlock.contentType = 'lexical';
-        currentBlock.content = JSON.stringify(
-          createLexicalStateFromText(token.text),
-        );
+        currentBlock.contentType = 'fountain-json';
+        currentBlock.content = token.text;
         currentBlock.contentStyle = 'note';
         break;
       case 'transition':
         currentBlock = addBlock(currentScene);
-        currentBlock.contentType = 'lexical';
-        currentBlock.content = JSON.stringify(
-          createLexicalStateFromText(token.text),
-        );
+        currentBlock.contentType = 'fountain-json';
+        currentBlock.content = token.text;
         currentBlock.contentStyle = 'transition';
         break;
       // @ts-ignore
       case 'shot':
         if (!currentBlock) {
           currentBlock = addBlock(currentScene);
-          currentBlock.contentType = 'lexical';
-          currentBlock.content = JSON.stringify(
-            createLexicalStateFromText(token.text),
-          );
+          currentBlock.contentType = 'fountain-json';
+          currentBlock.content = token.text;
           currentBlock.contentStyle = 'action';
         }
         currentShot = addShot(currentBlock);
@@ -139,10 +123,8 @@ export function fountainToDocument(tokens) {
         break;
       default:
         currentBlock = addBlock(currentScene);
-        currentBlock.contentType = 'lexical';
-        currentBlock.content = JSON.stringify(
-          createLexicalStateFromText(token.text),
-        );
+        currentBlock.contentType = 'fountain-json';
+        currentBlock.content = token.text;
         // @ts-ignore
         currentBlock.contentStyle = token.type;
         break;
