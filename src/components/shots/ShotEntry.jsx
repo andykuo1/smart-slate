@@ -61,6 +61,9 @@ export function ShotEntry({
   const shotHash = useDocumentStore(
     (ctx) => getShotById(ctx, documentId, shotId)?.shotHash,
   );
+  const shotDescription = useDocumentStore(
+    (ctx) => getShotById(ctx, documentId, shotId)?.description,
+  );
 
   function onDownClick() {
     const store = UNSAFE_getStore();
@@ -170,13 +173,16 @@ export function ShotEntry({
           <div className="flex-1 flex flex-row">
             {collapsed && <ArrowForwardIcon className="w-6 h-6 fill-current" />}
           </div>
-          {!collapsed && (
-            <div className="flex-1 opacity-30 text-xs hidden sm:block">
-              {isFirst
-                ? '<- Tap the ◉ to record'
-                : choosePlaceholderRandomly(shotId)}
-            </div>
-          )}
+          {!collapsed &&
+            (shotDescription ? (
+              <p className="flex-1">{shotDescription}</p>
+            ) : (
+              <div className="flex-1 opacity-30 text-xs hidden sm:block">
+                {isFirst
+                  ? '<- Tap the ◉ to record'
+                  : choosePlaceholderRandomly(shotId)}
+              </div>
+            ))}
         </div>
         {!collapsed && (
           <ShotNumber

@@ -14,6 +14,7 @@
 - Add take preview imports from scanned footage
 - Add custom fountain parser
 - Add shotlist syntax to fountain parser
+- Add shot description to shotlist
 
 # 0.1.13
 
