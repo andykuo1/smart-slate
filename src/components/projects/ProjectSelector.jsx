@@ -2,7 +2,8 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import HorizontallyScrollableDiv from '@/libs/HorizontallyScrollableDiv';
-import { getDocumentById } from '@/stores/document';
+import { useGoogleDriveSync } from '@/libs/googleapi/sync/GoogleDriveSync';
+import { getDocumentById, getDocumentSettingsById } from '@/stores/document';
 import { useDocumentIds, useDocumentStore } from '@/stores/document/use';
 import { useSetUserCursor } from '@/stores/user';
 
@@ -68,16 +69,23 @@ function ProjectSelectorOption({ documentId }) {
   const lastUpdatedMillis = useDocumentStore(
     (ctx) => getDocumentById(ctx, documentId)?.lastUpdatedMillis,
   );
+  const autoSaveTo = useDocumentStore(
+    (ctx) => getDocumentSettingsById(ctx, documentId)?.autoSaveTo,
+  );
+  const { syncToGoogleDrive } = useGoogleDriveSync();
   const setUserCursor = useSetUserCursor();
   const navigate = useNavigate();
 
   const onClick = useCallback(
-    function onClick() {
-      // NOTE: Sync from GoogleDrive first.
+    async function onClick() {
+      if (autoSaveTo === 'gdrive') {
+        // Import from GoogleDrive before opening...
+        await syncToGoogleDrive();
+      }
       setUserCursor(documentId, '', '', '');
       navigate('/edit');
     },
-    [documentId, setUserCursor, navigate],
+    [autoSaveTo, documentId, setUserCursor, navigate, syncToGoogleDrive],
   );
 
   const titleWithPlaceholder = title || 'Untitled';

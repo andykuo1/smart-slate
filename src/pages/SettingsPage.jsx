@@ -10,6 +10,7 @@ import QRCode2Icon from '@material-symbols/svg-400/rounded/qr_code_2.svg';
 
 import NavBarLayout from '@/app/NavBarLayout';
 import SettingsAspectRatioField from '@/components/settings/SettingsAspectRatioField';
+import SettingsAutoSaveLastTimeField from '@/components/settings/SettingsAutoSaveLastTimeField';
 import SettingsAutoSaveToField from '@/components/settings/SettingsAutoSaveToField';
 import SettingsEnableGoogleDriveSyncToggle from '@/components/settings/SettingsEnableGoogleDriveSyncToggle';
 import SettingsEnableRecorderLiveAudioToggle from '@/components/settings/SettingsEnableRecorderLiveAudioToggle';
@@ -49,6 +50,7 @@ export default function SettingsPage() {
           <SettingsProjectNameField />
           <SettingsProjectIdField />
           <SettingsAutoSaveToField />
+          <SettingsAutoSaveLastTimeField className="-mt-2 mb-4" />
           <SettingsProjectInstallField />
           <SettingsProjectStartButton />
           <SettingsReturnHomeField />

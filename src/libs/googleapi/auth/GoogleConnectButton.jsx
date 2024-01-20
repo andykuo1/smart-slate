@@ -118,7 +118,7 @@ function GoogleConnectStatus({ status }) {
       return (
         <>
           <AddToDriveIcon className="inline-block w-6 h-6 mr-2 fill-current" />
-          Error! Please reconnect.
+          Error! Please reconnect
         </>
       );
     default:

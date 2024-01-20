@@ -1,8 +1,8 @@
-import { createContext, useCallback, useContext, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 
 import { useDocumentStore } from '@/stores/document/use';
+import { useUserStore } from '@/stores/user';
 
-import { useGoogleToken } from '../auth/UseGoogleToken';
 import {
   useDocumentStoreCRUD,
   useGetDocumentStoreConfiguration,
@@ -12,11 +12,8 @@ import {
   useGetGoogleDriveConfiguration,
   useUpdateGoogleDriveConfiguration,
 } from './GoogleDriveCRUD';
+import { GoogleDriveSyncContext } from './GoogleDriveSyncContext';
 import { sync } from './Sync';
-
-export const GoogleDriveSyncContext = createContext(
-  /** @type {ReturnType<useGoogleDriveSyncImpl>|null} */ (null),
-);
 
 export function useGoogleDriveSync() {
   let result = useContext(GoogleDriveSyncContext);
@@ -30,7 +27,7 @@ export function useGoogleDriveSyncImpl() {
   const [syncStatus, setSyncStatus] = useState(
     /** @type {'offline'|'online'|'syncing'} */ ('offline'),
   );
-  const token = useGoogleToken();
+  const UNSAFE_getUserStore = useUserStore((ctx) => ctx.UNSAFE_getUserStore);
   const getDocumentStoreConfiguration = useGetDocumentStoreConfiguration();
   const getGoogleDriveConfiguration = useGetGoogleDriveConfiguration();
   const updateGoogleDriveConfiguration = useUpdateGoogleDriveConfiguration();
@@ -45,6 +42,7 @@ export function useGoogleDriveSyncImpl() {
   // Syncs to app-data
   const syncToGoogleDrive = useCallback(
     async function _syncToGoogleDrive() {
+      const token = UNSAFE_getUserStore()?.googleContext?.token;
       if (!token) {
         console.log(
           '[GoogleDriveSync] Not connected to Google Drive. Skipping...',
@@ -86,8 +84,8 @@ export function useGoogleDriveSyncImpl() {
       }
     },
     [
-      token,
       documentStoreCRUD,
+      UNSAFE_getUserStore,
       getDocumentStoreConfiguration,
       getGoogleDriveConfiguration,
       setDocumentLastExportedMillis,

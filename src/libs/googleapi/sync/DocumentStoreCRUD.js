@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { clearVideoCache } from '@/recorder/cache';
 import { getDocumentById } from '@/stores/document';
 import { cloneDocument, createDocument } from '@/stores/document/DocumentStore';
@@ -37,34 +39,41 @@ export function useDocumentStoreCRUD() {
   const addDocument = useDocumentStore((ctx) => ctx.addDocument);
   const updateDocument = useDocumentStore((ctx) => ctx.updateDocument);
   const deleteDocument = useDocumentStore((ctx) => ctx.deleteDocument);
-  return {
-    async create(key, name, data) {
-      const result = createDocument(key);
-      cloneDocument(result, data);
-      result.settings.autoSaveGDriveFileId = name;
-      addDocument(result);
-      return result.documentId;
-    },
-    async read(key) {
-      const store = UNSAFE_getStore();
-      return getDocumentById(store, key);
-    },
-    async update(key, name, data) {
-      updateDocument(key, (result) => {
-        cloneDocument(result, data);
-        result.settings.autoSaveGDriveFileId = name;
-      });
-    },
-    async delete(key) {
-      deleteDocument(key);
-      clearVideoCache(key);
-    },
-    async list() {
-      const store = UNSAFE_getStore();
-      return Object.keys(store.documents).map((documentId) => ({
-        id: documentId,
-        name: documentId,
-      }));
-    },
-  };
+
+  const result = useMemo(
+    () =>
+      /** @type {CRUD<import('@/stores/document/DocumentStore').Document>} */ ({
+        async create(key, name, data) {
+          const result = createDocument(key);
+          cloneDocument(result, data);
+          result.settings.autoSaveGDriveFileId = name;
+          addDocument(result);
+          return result.documentId;
+        },
+        async read(key) {
+          const store = UNSAFE_getStore();
+          return getDocumentById(store, key);
+        },
+        async update(key, name, data) {
+          updateDocument(key, (result) => {
+            cloneDocument(result, data);
+            result.settings.autoSaveGDriveFileId = name;
+          });
+        },
+        async delete(key) {
+          deleteDocument(key);
+          clearVideoCache(key);
+        },
+        async list() {
+          const store = UNSAFE_getStore();
+          return Object.keys(store.documents).map((documentId) => ({
+            id: documentId,
+            name: documentId,
+          }));
+        },
+      }),
+    [UNSAFE_getStore, addDocument, updateDocument, deleteDocument],
+  );
+
+  return result;
 }

@@ -1,5 +1,5 @@
 import { useGoogleStatus } from '@/libs/googleapi/auth/UseGoogleStatus';
-import { getDocumentSettingsById } from '@/stores/document';
+import { getDocumentById, getDocumentSettingsById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentDocumentId } from '@/stores/user';
 
@@ -11,6 +11,9 @@ export default function SettingsAutoSaveToField() {
     (ctx) => getDocumentSettingsById(ctx, documentId)?.autoSaveTo,
   );
   const googleStatus = useGoogleStatus();
+  const lastExportedMillis = useDocumentStore(
+    (ctx) => getDocumentById(ctx, documentId)?.lastExportedMillis,
+  );
   const setDocumentSettingsAutoSaveTo = useDocumentStore(
     (ctx) => ctx.setDocumentSettingsAutoSaveTo,
   );
@@ -29,7 +32,9 @@ export default function SettingsAutoSaveToField() {
       <option value="local">
         {'<'}This local device{'>'}
       </option>
-      <option value="gdrive" disabled={!googleStatus}>
+      <option
+        value="gdrive"
+        disabled={!googleStatus && lastExportedMillis <= 0}>
         Google Drive
       </option>
     </SettingsFieldSelect>

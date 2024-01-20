@@ -4,9 +4,12 @@ import { zi } from '../ZustandImmerHelper';
 
 /**
  * @param {import('zustand').StoreApi<any>['setState']} set
+ * @param {import('zustand').StoreApi<any>['getState']} get
  */
-export function createDispatch(set) {
+export function createDispatch(set, get) {
   return {
+    /** @type {() => import('./UserStore').Store} */
+    UNSAFE_getUserStore: get,
     setUserCursor: zi(set, setUserCursor),
     setRecorderActive: zi(set, setRecorderActive),
     setEditMode: zi(set, setEditMode),

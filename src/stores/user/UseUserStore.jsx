@@ -11,9 +11,9 @@ const SESSION_STORAGE_KEY = 'userStore';
 /** @type {import('zustand').UseBoundStore<import('zustand').StoreApi<StoreAndDispatch>>} */
 export const useUserStore = create(
   persist(
-    (set) => ({
+    (set, get) => ({
       ...createStore(),
-      ...createDispatch(set),
+      ...createDispatch(set, get),
     }),
     {
       name: SESSION_STORAGE_KEY,

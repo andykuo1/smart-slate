@@ -17,6 +17,7 @@
 - Add shot description to shotlist
 - Add gdrive sync option
 - Add cloud sync status
+- Add cloud sync on project open and load
 
 # 0.1.13
 

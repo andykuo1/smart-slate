@@ -1,7 +1,5 @@
-import {
-  GoogleDriveSyncContext,
-  useGoogleDriveSyncImpl,
-} from './GoogleDriveSync';
+import { useGoogleDriveSyncImpl } from './GoogleDriveSync';
+import { GoogleDriveSyncContext } from './GoogleDriveSyncContext';
 
 /**
  * @param {object} props
