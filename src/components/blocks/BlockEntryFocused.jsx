@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { useBlockIdForShot } from '@/stores/document/use';
 import { useCurrentCursor, useUserStore } from '@/stores/user';
 
@@ -12,6 +14,7 @@ import BlockEntryLayout from './BlockEntryLayout';
  */
 export default function BlockEntryFocused({ documentId }) {
   const { sceneId, shotId } = useCurrentCursor();
+  const [blockEditable, setBlockEditable] = useState(false);
   const blockId = useBlockIdForShot(documentId, sceneId, shotId);
   const isStoryMode = useUserStore((ctx) => ctx.editMode === 'story');
   if (!sceneId || !blockId || !shotId) {
@@ -20,7 +23,14 @@ export default function BlockEntryFocused({ documentId }) {
   return (
     <BlockEntryLayout
       collapsed={isStoryMode}
-      content={<BlockContent documentId={documentId} blockId={blockId} />}>
+      content={
+        <BlockContent
+          documentId={documentId}
+          blockId={blockId}
+          editable={blockEditable}
+          setEditable={setBlockEditable}
+        />
+      }>
       <ShotEntry
         className="flex-1"
         documentId={documentId}

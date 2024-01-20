@@ -17,7 +17,7 @@ export default function ProfileButton() {
   const handleToken = useGAPITokenHandler();
   const onProfileClick = useCallback(
     function onProfileClick() {
-      if (!handleToken(() => setLoggedIn('logged in'))) {
+      if (!handleToken(() => {})) {
         login();
         setLoggedIn('pending');
       } else {

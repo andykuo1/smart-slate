@@ -209,3 +209,12 @@ Symlink
 - Starts in the slate app.
 
 - Roll (CARD) is typed in.
+
+---
+
+What I really want:
+
+- EAGLE slate saves the ENTIRE STORE to app data.
+  - Probably a document list with then each file as a document itself.
+- Over time, each project update will that document file by itself.
+  - Only the latest updated document is preferred.

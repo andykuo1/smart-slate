@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import TestCRUDSync from '@/tests/TestCRUDSync';
 import TestLexicalMarkdown from '@/tests/TestLexicalMarkdown';
 import TestScreenplay from '@/tests/TestScreenplay';
 import TestSnapshot from '@/tests/TestSnapshot';
@@ -33,12 +34,14 @@ export default function TestPage() {
           <option value="snapshot">Snapshot Test</option>
           <option value="videoconstraints">Video Constraints Test</option>
           <option value="lexicalmarkdown">Lexical Markdown Test</option>
+          <option value="crudsync">CRUD Sync Test</option>
         </select>
       </div>
       {test === 'screenplay' && <TestScreenplay />}
       {test === 'snapshot' && <TestSnapshot />}
       {test === 'videoconstraints' && <TestVideoConstraints />}
       {test === 'lexicalmarkdown' && <TestLexicalMarkdown />}
+      {test === 'crudsync' && <TestCRUDSync />}
     </main>
   );
 }

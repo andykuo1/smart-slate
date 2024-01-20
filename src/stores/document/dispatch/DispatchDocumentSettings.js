@@ -1,5 +1,6 @@
 import { formatProjectId } from '@/components/takes/TakeNameFormat';
 
+import { incrementDocumentRevisionNumber } from '.';
 import { zi } from '../../ZustandImmerHelper';
 import { getDocumentById } from '../get';
 import { getDocumentSettingsById } from '../get/GetDocumentSettings';
@@ -35,7 +36,6 @@ function resolveDocumentSettingsById(store, documentId) {
   let settings = getDocumentSettingsById(store, documentId);
   if (!settings) {
     settings = {};
-    // @ts-expect-error settings should always be able to be partially constructed.
     getDocumentById(store, documentId).settings = settings;
   }
   return settings;
@@ -117,4 +117,5 @@ function setDocumentSettingsAutoSaveTo(store, documentId, dest) {
 function setDocumentSettingsAutoSaveGDriveFileId(store, documentId, fileId) {
   let settings = resolveDocumentSettingsById(store, documentId);
   settings.autoSaveGDriveFileId = fileId;
+  incrementDocumentRevisionNumber(getDocumentById(store, documentId));
 }

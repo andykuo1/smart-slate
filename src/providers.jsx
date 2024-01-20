@@ -2,10 +2,12 @@ import { FullscreenProvider } from '@/libs/fullscreen';
 import {
   GAPI_API_KEY,
   GAPI_CLIENT_ID,
+  GAPI_DRIVE_APPDATA_SCOPE,
   GAPI_DRIVE_FILE_SCOPE,
   GoogleAPIProvider,
 } from '@/libs/googleapi';
 
+import GoogleDriveSyncProvider from './libs/googleapi/sync/GoogleDriveSyncProvider';
 import { InputCaptureProvider } from './libs/inputcapture';
 import RecorderContextProvider from './recorder/RecorderContextProvider';
 import { VideoCacheProvider } from './recorder/cache';
@@ -19,14 +21,16 @@ export default function Providers({ children }) {
     <GoogleAPIProvider
       apiKey={GAPI_API_KEY}
       clientId={GAPI_CLIENT_ID}
-      scopes={[GAPI_DRIVE_FILE_SCOPE]}>
-      <VideoCacheProvider>
-        <FullscreenProvider>
-          <InputCaptureProvider>
-            <RecorderContextProvider>{children}</RecorderContextProvider>
-          </InputCaptureProvider>
-        </FullscreenProvider>
-      </VideoCacheProvider>
+      scopes={[GAPI_DRIVE_FILE_SCOPE, GAPI_DRIVE_APPDATA_SCOPE]}>
+      <GoogleDriveSyncProvider>
+        <VideoCacheProvider>
+          <FullscreenProvider>
+            <InputCaptureProvider>
+              <RecorderContextProvider>{children}</RecorderContextProvider>
+            </InputCaptureProvider>
+          </FullscreenProvider>
+        </VideoCacheProvider>
+      </GoogleDriveSyncProvider>
     </GoogleAPIProvider>
   );
 }

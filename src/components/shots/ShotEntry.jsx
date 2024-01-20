@@ -175,7 +175,7 @@ export function ShotEntry({
           </div>
           {!collapsed &&
             (shotDescription ? (
-              <p className="flex-1">{shotDescription}</p>
+              <p className="flex-1 text-xs overflow-auto">{shotDescription}</p>
             ) : (
               <div className="flex-1 opacity-30 text-xs hidden sm:block">
                 {isFirst

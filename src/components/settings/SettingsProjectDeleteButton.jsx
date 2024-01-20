@@ -10,19 +10,19 @@ import { useCurrentDocumentId, useSetUserCursor } from '@/stores/user';
 export default function SettingsProjectDeleteButton() {
   const documentId = useCurrentDocumentId();
   const setUserCursor = useSetUserCursor();
-  const deleteDocument = useDocumentStore((ctx) => ctx.deleteDocument);
+  const trashDocument = useDocumentStore((ctx) => ctx.trashDocument);
   const navigate = useNavigate();
 
   const handleClick = useCallback(
     function handleClick() {
       if (window.confirm('Are you sure you want to delete this project?')) {
         setUserCursor('', '', '');
-        deleteDocument(documentId);
+        trashDocument(documentId);
         clearVideoCache(documentId);
         navigate('/');
       }
     },
-    [documentId, setUserCursor, deleteDocument, navigate],
+    [documentId, setUserCursor, trashDocument, navigate],
   );
 
   return (

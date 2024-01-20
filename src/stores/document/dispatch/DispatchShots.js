@@ -42,7 +42,7 @@ function updateShot(store, documentId, shotId, handler) {
  * @param {import('../DocumentStore').ShotId} shotId
  * @param {string} shotType
  */
-export function setShotType(store, documentId, shotId, shotType) {
+function setShotType(store, documentId, shotId, shotType) {
   let document = store.documents[documentId];
   let shot = document.shots[shotId];
   shot.shotType = shotType;

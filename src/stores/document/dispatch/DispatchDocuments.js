@@ -1,5 +1,8 @@
-import { zi } from '../../ZustandImmerHelper';
+import { zi } from '@/stores/ZustandImmerHelper';
+
+import { cloneDocument } from '../DocumentStore';
 import { getDocumentById, getShotById } from '../get';
+import { addDocument } from './DispatchAddDelete';
 
 /**
  * @param {import('zustand').StoreApi<any>['setState']} set
@@ -9,14 +12,35 @@ export function createDispatchDocuments(set, get) {
   return {
     setDocumentTitle: zi(set, setDocumentTitle),
     updateDocument: zi(set, updateDocument),
+    applyDocument: zi(set, applyDocument),
 
     setSceneHeading: zi(set, setSceneHeading),
-
     setBlockContent: zi(set, setBlockContent),
 
     incrementDocumentRevisionNumber: zi(set, incrementDocumentRevisionNumber),
     assignAvailableShotHash: zi(set, assignAvailableShotHash),
+    trashDocument: zi(set, trashDocument),
+    setDocumentLastExportedMillis: zi(set, setDocumentLastExportedMillis),
   };
+}
+
+/**
+ * @param {import('../DocumentStore').Store} store
+ * @param {import('../DocumentStore').DocumentId} documentId
+ */
+function trashDocument(store, documentId) {
+  const document = getDocumentById(store, documentId);
+  if (!document) {
+    return;
+  }
+  document.lastDeletedMillis = Date.now();
+  // Remove all data.
+  document.sceneOrder.length = 0;
+  document.shotHashes.length = 0;
+  document.scenes = {};
+  document.blocks = {};
+  document.shots = {};
+  document.takes = {};
 }
 
 /**
@@ -101,4 +125,34 @@ function assignAvailableShotHash(store, documentId, shotId, shotHash) {
   }
   shot.shotHash = shotHash;
   document.shotHashes.push(shotHash);
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').Document} document
+ * @param {boolean} [force]
+ */
+function applyDocument(store, documentId, document, force = false) {
+  const existing = getDocumentById(store, documentId);
+  if (!existing) {
+    addDocument(store, document);
+  } else {
+    if (force || existing.lastUpdatedMillis < document.lastUpdatedMillis) {
+      // Prefer most recent update
+      cloneDocument(existing, document);
+    } else {
+      // Prefer existing document if no date available
+    }
+  }
+}
+
+/**
+ * @param {import('../DocumentStore').Store} store
+ * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {number} millis
+ */
+function setDocumentLastExportedMillis(store, documentId, millis) {
+  let document = getDocumentById(store, documentId);
+  document.lastExportedMillis = millis;
 }

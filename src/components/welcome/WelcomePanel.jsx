@@ -2,6 +2,9 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '@material-symbols/svg-400/rounded/add-fill.svg';
+import CloudDoneIcon from '@material-symbols/svg-400/rounded/cloud_done.svg';
+import CloudOffIcon from '@material-symbols/svg-400/rounded/cloud_off.svg';
+import CloudSyncIcon from '@material-symbols/svg-400/rounded/cloud_sync.svg';
 
 import ChangelogButton from '@/buttons/ChangelogButton';
 import ImportProjectButton from '@/buttons/ImportProjectButton';
@@ -9,7 +12,7 @@ import ProfileButton from '@/buttons/ProfileButton';
 import ScannerButton from '@/buttons/ScannerButton';
 import FancyButton from '@/libs/FancyButton';
 import HorizontallyScrollableDiv from '@/libs/HorizontallyScrollableDiv';
-import { useDocumentLastUpdatedMillis } from '@/stores/document';
+import { getDocumentSettingsById } from '@/stores/document';
 import { getDocumentById } from '@/stores/document';
 import { createDocument } from '@/stores/document/DocumentStore';
 import { useDocumentIds, useDocumentStore } from '@/stores/document/use';
@@ -102,7 +105,18 @@ function SavedProjectItem({ documentId }) {
   const title = useDocumentStore(
     (ctx) => getDocumentById(ctx, documentId)?.documentTitle,
   );
-  const millis = useDocumentLastUpdatedMillis(documentId);
+  const autoSaveTo = useDocumentStore(
+    (ctx) => getDocumentSettingsById(ctx, documentId)?.autoSaveTo,
+  );
+  const lastDeletedMillis = useDocumentStore(
+    (ctx) => getDocumentById(ctx, documentId)?.lastDeletedMillis,
+  );
+  const lastUpdatedMillis = useDocumentStore(
+    (ctx) => getDocumentById(ctx, documentId)?.lastUpdatedMillis,
+  );
+  const lastExportedMillis = useDocumentStore(
+    (ctx) => getDocumentById(ctx, documentId)?.lastExportedMillis,
+  );
   const setUserCursor = useSetUserCursor();
   const navigate = useNavigate();
 
@@ -116,10 +130,14 @@ function SavedProjectItem({ documentId }) {
 
   const titleWithPlaceholder = title || 'Untitled';
 
+  if (lastDeletedMillis > 0) {
+    // It's been deleted, so don't show it.
+    return null;
+  }
   return (
     <li
       className={
-        'overflow-hidden text-center w-[8rem] min-w-[8rem] max-w-[8rem]' +
+        'relative overflow-hidden text-center w-[8rem] min-w-[8rem] max-w-[8rem]' +
         ' ' +
         'bg-gray-100 rounded-xl mx-2 my-4 p-2' +
         ' ' +
@@ -130,8 +148,19 @@ function SavedProjectItem({ documentId }) {
       <div className="flex flex-col">
         <h3 className="text-gray-300">Open</h3>
         <p>{titleWithPlaceholder}</p>
-        <p className="text-gray-400">{new Date(millis).toLocaleString()}</p>
+        <p className="text-gray-400">
+          {new Date(lastUpdatedMillis).toLocaleString()}
+        </p>
       </div>
+      {autoSaveTo === 'gdrive' ? (
+        lastExportedMillis >= lastUpdatedMillis ? (
+          <CloudDoneIcon className="absolute top-1 right-1 w-6 h-6" />
+        ) : (
+          <CloudSyncIcon className="absolute top-1 right-1 w-6 h-6" />
+        )
+      ) : (
+        <CloudOffIcon className="absolute top-1 right-1 w-6 h-6" />
+      )}
     </li>
   );
 }

@@ -16,23 +16,23 @@ export default function TakeEntryDetails({
   takeId,
   viewMode,
 }) {
-  const { exportedFileName, exportedMillis } =
-    useTake(documentId, takeId) || {};
+  const { exportDetails } = useTake(documentId, takeId) || {};
+  const { fileName, timestampMillis } = exportDetails || {};
   const listDecorationStyle = getListDecorationStyleByViewMode(viewMode);
   return (
     <HorizontallySnappableDiv className={listDecorationStyle}>
       {/* PANEL 1 */}
       <div className="flex-1 flex flex-row">
         <p className="flex-1 opacity-30 whitespace-nowrap overflow-x-auto text-center">
-          {!exportedMillis || exportedMillis <= 0
+          {!timestampMillis || timestampMillis <= 0
             ? '--'
-            : new Date(exportedMillis).toLocaleString()}
+            : new Date(timestampMillis).toLocaleString()}
         </p>
       </div>
       {/* PANEL 2 */}
       <div className="flex-1 flex flex-row">
         <p className="flex-1 opacity-30 overflow-x-auto text-center">
-          {exportedFileName}
+          {fileName}
         </p>
       </div>
     </HorizontallySnappableDiv>

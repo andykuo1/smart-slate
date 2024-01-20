@@ -4,3 +4,4 @@ export * from './UploadFile';
 export * from './CreateFolder';
 export * from './Keys';
 export * from './GoogleAPICachedTokenResponse';
+export * from './ListFiles';

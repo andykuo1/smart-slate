@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { createDispatch } from '../DocumentDispatch';
-import { createStore } from '../DocumentStore';
+import { cloneStore, createStore } from '../DocumentStore';
 
 export const LOCAL_STORAGE_KEY = 'documentStore';
 
@@ -18,6 +18,21 @@ export const useDocumentStore = create(
     {
       name: LOCAL_STORAGE_KEY,
       storage: createJSONStorage(() => localStorage),
+      version: 1,
+      /**
+       * @param {unknown} persistedState
+       * @param {unknown} version
+       */
+      async migrate(persistedState, version) {
+        const initial = createStore();
+        const result = cloneStore(
+          initial,
+          /** @type {import('@/stores/document/DocumentStore').Store} */ (
+            persistedState
+          ),
+        );
+        return /** @type {StoreAndDispatch} */ (result);
+      },
     },
   ),
 );
