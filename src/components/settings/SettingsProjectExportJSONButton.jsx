@@ -10,7 +10,6 @@ import { downloadText } from '@/utils/Downloader';
 import SettingsFieldButton from './SettingsFieldButton';
 
 export default function SettingsProjectExportJSONButton() {
-  const [disabled, setDisabled] = useState(false);
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const documentId = useCurrentDocumentId();
 
@@ -30,10 +29,7 @@ export default function SettingsProjectExportJSONButton() {
   );
 
   return (
-    <SettingsFieldButton
-      Icon={DownloadIcon}
-      onClick={handleClick}
-      disabled={disabled}>
+    <SettingsFieldButton Icon={DownloadIcon} onClick={handleClick}>
       Export project file
     </SettingsFieldButton>
   );
