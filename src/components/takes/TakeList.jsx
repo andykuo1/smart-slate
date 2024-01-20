@@ -1,6 +1,5 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment } from 'react';
 
-import { useGAPITokenHandler } from '@/libs/googleapi';
 import { useTakeIds } from '@/stores/document';
 
 import TakeEntry from './TakeEntry';
@@ -24,14 +23,6 @@ export default function TakeList({
   viewMode,
 }) {
   const takeIds = useTakeIds(documentId, shotId);
-  const [cloudExportable, setCloudExportable] = useState(false);
-  const handleToken = useGAPITokenHandler();
-
-  useEffect(() => {
-    if (!handleToken((token) => setCloudExportable(Boolean(token)))) {
-      setCloudExportable(false);
-    }
-  }, [handleToken, setCloudExportable]);
 
   return (
     <ul
@@ -59,7 +50,6 @@ export default function TakeList({
               sceneId={sceneId}
               shotId={shotId}
               takeId={takeId}
-              cloudExportable={cloudExportable}
               viewMode={viewMode}
             />
           </Fragment>

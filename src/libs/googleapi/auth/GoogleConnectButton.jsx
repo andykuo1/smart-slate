@@ -17,9 +17,10 @@ import { useUserStore } from '@/stores/user';
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('react').ReactNode} [props.children]
  */
-export default function GoogleConnectButton({ children }) {
+export default function GoogleConnectButton({ className, children }) {
   const [status, setStatus] = useState('disconnected');
   const token = useUserStore((ctx) => ctx.googleContext.token);
   const setGoogleContextTokenResponse = useUserStore(
@@ -53,11 +54,17 @@ export default function GoogleConnectButton({ children }) {
 
   useEffect(() => {
     const [firstScope, ...restScopes] = scope.split(' ');
-    if (token && !hasGrantedAllScopesGoogle(token, firstScope, ...restScopes)) {
-      // Token lost some scopes! Try reconnecting.
-      setStatus('partial');
+    if (token) {
+      if (!hasGrantedAllScopesGoogle(token, firstScope, ...restScopes)) {
+        // Token lost some scopes! Try reconnecting.
+        setStatus('partial');
+      } else {
+        setStatus('connected');
+      }
+    } else {
+      setStatus('disconnected');
     }
-  }, [scope, token, scope, authorize, setStatus]);
+  }, [scope, token, authorize, setStatus]);
 
   function onClick() {
     if (token) {
@@ -70,22 +77,13 @@ export default function GoogleConnectButton({ children }) {
     }
   }
 
-  switch (status) {
-    case 'connecting':
-      break;
-    case 'connected':
-      break;
-    case 'disconnected':
-      break;
-    case 'partial':
-      break;
-    case 'error':
-      break;
-  }
-
   return (
     <button
-      className="flex-1 border p-2 rounded text-black hover:bg-black hover:text-white shadow"
+      className={
+        'flex-1 border p-2 rounded text-black hover:bg-black hover:text-white shadow' +
+        ' ' +
+        className
+      }
       onClick={onClick}>
       <GoogleConnectStatus status={status} />
       {children}
@@ -117,6 +115,12 @@ function GoogleConnectStatus({ status }) {
       );
     case 'partial':
     case 'error':
+      return (
+        <>
+          <AddToDriveIcon className="inline-block w-6 h-6 mr-2 fill-current" />
+          Error! Please reconnect.
+        </>
+      );
     default:
       return (
         <>

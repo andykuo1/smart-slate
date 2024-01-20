@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import DownloadIcon from '@material-symbols/svg-400/rounded/download.svg';
 
 import { formatExportName } from '@/serdes/ExportNameFormat';
+import { getDocumentById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentDocumentId } from '@/stores/user';
 import { downloadText } from '@/utils/Downloader';
@@ -23,6 +24,7 @@ export default function SettingsProjectExportJSONButton() {
         'PROJECT',
         'json',
       );
+      const document = getDocumentById(store, documentId);
       downloadText(fileName, JSON.stringify(document));
     },
     [documentId, UNSAFE_getStore],

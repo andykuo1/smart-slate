@@ -9,7 +9,6 @@ import TakeEntryLayout from './TakeEntryLayout';
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
- * @param {boolean} props.cloudExportable
  * @param {'list'|'inline'} props.viewMode
  */
 export default function TakeEntry({

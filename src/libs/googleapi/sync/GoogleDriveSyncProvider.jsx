@@ -8,9 +8,9 @@ import {
  * @param {import('react').ReactNode} props.children
  */
 export default function GoogleDriveSyncProvider({ children }) {
-  const syncGoogleDrive = useGoogleDriveSyncImpl();
+  const value = useGoogleDriveSyncImpl();
   return (
-    <GoogleDriveSyncContext.Provider value={syncGoogleDrive}>
+    <GoogleDriveSyncContext.Provider value={value}>
       {children}
     </GoogleDriveSyncContext.Provider>
   );

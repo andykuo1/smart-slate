@@ -10,8 +10,8 @@ import {
 import { useCallback } from 'react';
 
 import { useDelayedEffect } from '@/libs/UseDelayedEffect';
-import { useGAPITokenHandler } from '@/libs/googleapi';
 import GoogleLoginButton from '@/libs/googleapi/auth/GoogleLoginButton';
+import { useGoogleStatus } from '@/libs/googleapi/auth/UseGoogleStatus';
 import PopoverStyle from '@/styles/Popover.module.css';
 
 export default function ProfilePopover() {
@@ -60,13 +60,13 @@ function PopoverContentProfile() {
 
 function PopoverAutoDisclosureOnSignedOut() {
   const store = usePopoverContext();
-  const handleToken = useGAPITokenHandler();
+  const googleStatus = useGoogleStatus();
 
   const onDelayedEffect = useCallback(() => {
-    if (!handleToken(() => {})) {
+    if (!googleStatus) {
       store?.show();
     }
-  }, [store, handleToken]);
+  }, [store, googleStatus]);
 
   useDelayedEffect(onDelayedEffect, 10_000);
   return null;

@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
 
 import { formatTakeNameForFileExport } from '@/components/takes/TakeNameFormat';
-import { uploadFile, useGAPITokenHandler } from '@/libs/googleapi';
+import { uploadFile } from '@/libs/googleapi';
+import { useGoogleToken } from '@/libs/googleapi/auth/UseGoogleToken';
 import { cacheVideoBlob, getVideoBlob } from '@/recorder/cache/VideoCache';
 import {
   getSceneNumber,
@@ -67,10 +68,10 @@ export function useTakeGoogleDriveUploader() {
   const resolveTakeFileName = useResolveTakeFileName();
   const resolveTakeShotHash = useResolveTakeShotHash();
 
+  const token = useGoogleToken();
   const setTakeExportedGoogleDriveFileId = useDocumentStore(
     (ctx) => ctx.setTakeExportedGoogleDriveFileId,
   );
-  const handleToken = useGAPITokenHandler();
 
   const uploadTake = useCallback(
     /**
@@ -98,21 +99,22 @@ export function useTakeGoogleDriveUploader() {
         data.type,
       );
 
-      // Upload it.
-      handleToken((token) => {
-        uploadFile(token.access_token, takeFileName, data.type, data)
-          .then((fileId) => {
-            setTakeExportedGoogleDriveFileId(documentId, takeId, fileId);
-            console.log('Upload file - ' + takeFileName);
-          })
-          .catch(() => {
-            console.error('Failed to upload file - ' + takeFileName);
-          });
-      });
+      // Upload it (if online).
+      if (!token) {
+        return;
+      }
+      uploadFile(token.access_token, takeFileName, data.type, data)
+        .then((fileId) => {
+          setTakeExportedGoogleDriveFileId(documentId, takeId, fileId);
+          console.log('Upload file - ' + takeFileName);
+        })
+        .catch(() => {
+          console.error('Failed to upload file - ' + takeFileName);
+        });
     },
     [
+      token,
       UNSAFE_getStore,
-      handleToken,
       resolveTakeShotHash,
       resolveTakeFileName,
       setTakeExportedGoogleDriveFileId,
@@ -132,7 +134,7 @@ export function useTakeExporter() {
     useSetTakeExportedGoogleDriveFileId();
   const setTakeExportedIDBKey = useSetTakeExportedIDBKey();
   const enableDriveSync = useSettingsStore((ctx) => ctx.user.enableDriveSync);
-  const handleToken = useGAPITokenHandler();
+  const token = useGoogleToken();
 
   const exportTake = useCallback(
     /**
@@ -176,26 +178,24 @@ export function useTakeExporter() {
         setTakeExportedIDBKey(documentId, takeId, key),
       );
 
-      if (enableDriveSync) {
+      if (token && enableDriveSync) {
         // Upload it.
-        handleToken((token) => {
-          uploadFile(token.access_token, takeFileName, data.type, data)
-            .then((fileId) => {
-              setTakeExportedGoogleDriveFileId(documentId, takeId, fileId);
-              console.log('Upload file - ' + takeFileName);
-            })
-            .catch(() => {
-              console.error('Failed to upload file - ' + takeFileName);
-            });
-        });
+        uploadFile(token.access_token, takeFileName, data.type, data)
+          .then((fileId) => {
+            setTakeExportedGoogleDriveFileId(documentId, takeId, fileId);
+            console.log('Upload file - ' + takeFileName);
+          })
+          .catch(() => {
+            console.error('Failed to upload file - ' + takeFileName);
+          });
       }
       return takeId;
     },
     [
+      token,
       enableDriveSync,
       UNSAFE_getStore,
       addTake,
-      handleToken,
       resolveTakeShotHash,
       resolveTakeFileName,
       setTakeExportedGoogleDriveFileId,

@@ -1,56 +1,19 @@
-import {
-  GoogleOAuthProvider,
-  googleLogout,
-  useGoogleLogin,
-} from '@react-oauth/google';
-import { createContext, useCallback, useEffect, useState } from 'react';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { createContext, useEffect } from 'react';
 
 import {
   getGoogleAPI,
   initializeGoogleAPI,
   initializeGoogleAPIClient,
 } from './GoogleAPI';
-import { setGoogleAPICachedTokenResponse } from './GoogleAPICachedTokenResponse';
 
 export const GoogleAPIContext = createContext(
   /** @type {ReturnType<createGoogleAPI>|null} */ (null),
 );
 
-/**
- * @callback OnLoginSuccessCallback
- * @param {import('@react-oauth/google').TokenResponse} response
- */
-
-/**
- * @callback OnLoginErrorCallback
- * @param {Pick<import('@react-oauth/google').TokenResponse, "error" | "error_description" | "error_uri">} error
- */
-
-/**
- * @param {Array<string>} scopes
- * @param {() => void} login
- * @param {() => void} logout
- * @param {boolean} gapiLoaded
- * @param {boolean} gsiLoaded
- * @param {OnLoginSuccessCallback} onLoginSuccess
- * @param {OnLoginErrorCallback} onLoginError
- */
-function createGoogleAPI(
-  scopes,
-  login,
-  logout,
-  gapiLoaded,
-  gsiLoaded,
-  onLoginSuccess,
-  onLoginError,
-) {
+function createGoogleAPI() {
   return {
-    scopes,
-    login,
-    logout,
-    status: Boolean(gapiLoaded && gsiLoaded),
-    onLoginSuccess,
-    onLoginError,
+    /* For the future :) */
   };
 }
 
@@ -58,15 +21,12 @@ function createGoogleAPI(
  * @param {object} props
  * @param {string} props.apiKey
  * @param {string} props.clientId
- * @param {Array<string>} props.scopes
  * @param {import('react').ReactNode} props.children
  */
-export function GoogleAPIProvider({ apiKey, clientId, scopes, children }) {
+export function GoogleAPIProvider({ apiKey, clientId, children }) {
   return (
     <GoogleOAuthProvider clientId={clientId}>
-      <GoogleAPILoginProvider apiKey={apiKey} scopes={scopes}>
-        {children}
-      </GoogleAPILoginProvider>
+      <GoogleInitProvider apiKey={apiKey}>{children}</GoogleInitProvider>
     </GoogleOAuthProvider>
   );
 }
@@ -74,46 +34,9 @@ export function GoogleAPIProvider({ apiKey, clientId, scopes, children }) {
 /**
  * @param {object} props
  * @param {string} props.apiKey
- * @param {Array<string>} props.scopes
  * @param {import('react').ReactNode} props.children
  */
-function GoogleAPILoginProvider({ apiKey, scopes, children }) {
-  const [gapiLoaded, setGAPILoaded] = useState(false);
-  const [gsiLoaded, setGSILoaded] = useState(false);
-
-  const onLoginSuccess = useCallback(
-    /**
-     * @param {import('@react-oauth/google').TokenResponse} response
-     */
-    function _onLoginSuccess(response) {
-      setGoogleAPICachedTokenResponse(response);
-      setGSILoaded(true);
-    },
-    [setGSILoaded],
-  );
-
-  const onLoginError = useCallback(
-    /**
-     * @param {Pick<import('@react-oauth/google').TokenResponse, "error" | "error_description" | "error_uri">} error
-     */
-    function _onLoginError(error) {
-      setGoogleAPICachedTokenResponse(null);
-      console.error('[GoogleAPIContext] ' + error);
-    },
-    [],
-  );
-
-  const login = useGoogleLogin({
-    scope: scopes.join(' '),
-    onSuccess: onLoginSuccess,
-    onError: onLoginError,
-  });
-
-  const logout = useCallback(() => {
-    googleLogout();
-    setGoogleAPICachedTokenResponse(null);
-  }, []);
-
+function GoogleInitProvider({ apiKey, children }) {
   useEffect(() => {
     (async () => {
       await initializeGoogleAPI();
@@ -123,19 +46,10 @@ function GoogleAPILoginProvider({ apiKey, scopes, children }) {
           'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
         ],
       });
-      setGAPILoaded(true);
     })();
   }, [apiKey]);
 
-  const value = createGoogleAPI(
-    scopes,
-    login,
-    logout,
-    gapiLoaded,
-    gsiLoaded,
-    onLoginSuccess,
-    onLoginError,
-  );
+  const value = createGoogleAPI();
   return (
     <GoogleAPIContext.Provider value={value}>
       {children}

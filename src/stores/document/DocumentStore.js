@@ -37,6 +37,8 @@ export function createDocument(documentId = uuid()) {
     lastUpdatedMillis: 0,
     lastDeletedMillis: 0,
     lastExportedMillis: 0,
+    // NOTE: To be used in the future, when we download project data separately.
+    lastDataExportedMillis: 0,
     revisionNumber: 0,
     /** @type {DocumentSettings} */
     settings: createDocumentSettings(),
@@ -183,6 +185,8 @@ export function cloneDocument(out, document) {
     out.lastDeletedMillis = document.lastDeletedMillis;
   if (typeof document.lastExportedMillis !== 'undefined')
     out.lastExportedMillis = document.lastExportedMillis;
+  if (typeof document.lastDataExportedMillis !== 'undefined')
+    out.lastDataExportedMillis = document.lastDataExportedMillis;
   if (typeof document.revisionNumber !== 'undefined')
     out.revisionNumber = document.revisionNumber;
   if (typeof document.sceneOrder !== 'undefined')

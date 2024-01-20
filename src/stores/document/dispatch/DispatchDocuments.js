@@ -21,6 +21,10 @@ export function createDispatchDocuments(set, get) {
     assignAvailableShotHash: zi(set, assignAvailableShotHash),
     trashDocument: zi(set, trashDocument),
     setDocumentLastExportedMillis: zi(set, setDocumentLastExportedMillis),
+    setDocumentLastDataExportedMillis: zi(
+      set,
+      setDocumentLastDataExportedMillis,
+    ),
   };
 }
 
@@ -155,4 +159,14 @@ function applyDocument(store, documentId, document, force = false) {
 function setDocumentLastExportedMillis(store, documentId, millis) {
   let document = getDocumentById(store, documentId);
   document.lastExportedMillis = millis;
+}
+
+/**
+ * @param {import('../DocumentStore').Store} store
+ * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {number} millis
+ */
+function setDocumentLastDataExportedMillis(store, documentId, millis) {
+  let document = getDocumentById(store, documentId);
+  document.lastDataExportedMillis = millis;
 }

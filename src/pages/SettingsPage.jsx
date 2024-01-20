@@ -30,6 +30,7 @@ import SettingsReturnHomeField from '@/components/settings/SettingsReturnHomeFie
 import SettingsShareFilesButton from '@/components/settings/SettingsShareFilesButton';
 import SettingsVideoCacheClearButton from '@/components/settings/SettingsVideoCacheClearButton';
 import SettingsVideoResolutionField from '@/components/settings/SettingsVideoResolutionField';
+import GoogleConnectButton from '@/libs/googleapi/auth/GoogleConnectButton';
 
 import PageLayout from './PageLayout';
 
@@ -61,6 +62,7 @@ export default function SettingsPage() {
             <SettingsVideoResolutionField />
             <br />
             <SettingsFieldGroup title="Data Settings">
+              <GoogleConnectButton className="mt-4 mb-2" />
               <SettingsEnableGoogleDriveSyncToggle />
               <SettingsShareFilesButton />
               <SettingsProjectExportZIPButton />

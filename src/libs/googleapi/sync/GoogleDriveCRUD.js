@@ -3,45 +3,17 @@ import { useCallback } from 'react';
 import { listAppDataFiles, readFile } from '../ListFiles';
 import { deleteFile } from '../ListFiles';
 import { uploadFile, uploadFileByFileId } from '../UploadFile';
-import { useGAPITokenHandler } from '../UseGoogleAPI';
+import { useGoogleToken } from '../auth/UseGoogleToken';
 import CRUD from './CRUD';
 import { createConfiguration } from './Sync';
 
 const CONFIG_FILE_NAME = '__config.json';
 
-export function useGetToken() {
-  const handleToken = useGAPITokenHandler();
-
-  const getToken = useCallback(
-    /**
-     * @returns {Promise<import('@react-oauth/google').TokenResponse|null>}
-     */
-    function getToken() {
-      return new Promise((resolve, reject) => {
-        let result = handleToken((token) => {
-          if (token) {
-            resolve(token);
-          } else {
-            resolve(null);
-          }
-        });
-        if (!result) {
-          resolve(null);
-        }
-      });
-    },
-    [handleToken],
-  );
-
-  return getToken;
-}
-
 export function useGetGoogleDriveConfiguration() {
-  const getToken = useGetToken();
+  const token = useGoogleToken();
 
   const getGoogleDriveConfiguration = useCallback(
     async function _getGoogleDriveConfiguration() {
-      const token = await getToken();
       if (!token) {
         throw new Error('Missing token.');
       }
@@ -74,21 +46,20 @@ export function useGetGoogleDriveConfiguration() {
       }
       return result;
     },
-    [getToken],
+    [token],
   );
 
   return getGoogleDriveConfiguration;
 }
 
 export function useUpdateGoogleDriveConfiguration() {
-  const getToken = useGetToken();
+  const token = useGoogleToken();
 
   const updateGoogleDriveConfiguration = useCallback(
     /**
      * @param {import('./Sync').Configuration} config
      */
     async function _updateGoogleDriveConfiguration(config) {
-      const token = await getToken();
       if (!token) {
         return;
       }
@@ -103,7 +74,7 @@ export function useUpdateGoogleDriveConfiguration() {
         JSON.stringify(config),
       );
     },
-    [getToken],
+    [token],
   );
   return updateGoogleDriveConfiguration;
 }

@@ -1,10 +1,9 @@
 import { MenuItem } from '@ariakit/react';
-import { useEffect, useState } from 'react';
 
 import AddToDriveIcon from '@material-symbols/svg-400/rounded/add_to_drive.svg';
 import DownloadIcon from '@material-symbols/svg-400/rounded/download.svg';
 
-import { useGAPITokenHandler } from '@/libs/googleapi';
+import { useGoogleStatus } from '@/libs/googleapi/auth/UseGoogleStatus';
 import { useCachedVideoBlob } from '@/recorder/cache';
 import {
   useTakeDownloader,
@@ -28,14 +27,12 @@ export default function TakeCacheMenuItem({
   takeId,
 }) {
   const videoBlob = useCachedVideoBlob(documentId, takeId);
-
-  const [googleDriveConnected, setGoogleDriveConnected] = useState(false);
   const idbKey = useDocumentStore(
     (ctx) => getTakeExportDetailsById(ctx, documentId, takeId)?.idbKey,
   );
+  const googleStatus = useGoogleStatus();
   const downloadTake = useTakeDownloader();
   const uploadTake = useTakeGoogleDriveUploader();
-  const handleToken = useGAPITokenHandler();
 
   function onDownloadClick() {
     if (!idbKey || !videoBlob) {
@@ -53,13 +50,6 @@ export default function TakeCacheMenuItem({
     uploadTake(documentId, sceneId, shotId, takeId);
   }
 
-  useEffect(() => {
-    // Test google drive connection
-    if (!handleToken((token) => setGoogleDriveConnected(Boolean(token)))) {
-      setGoogleDriveConnected(false);
-    }
-  }, [handleToken, takeId]);
-
   return (
     <div className="flex flex-row">
       <MenuItem
@@ -72,7 +62,7 @@ export default function TakeCacheMenuItem({
       <MenuItem
         className={MenuStyle.menuItem}
         onClick={onGoogleDriveClick}
-        disabled={!videoBlob || !googleDriveConnected}>
+        disabled={!videoBlob || !googleStatus}>
         <AddToDriveIcon className="w-6 h-6 fill-current" />
       </MenuItem>
     </div>

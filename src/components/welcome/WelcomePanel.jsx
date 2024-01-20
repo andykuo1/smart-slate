@@ -6,6 +6,7 @@ import AddIcon from '@material-symbols/svg-400/rounded/add-fill.svg';
 import ChangelogButton from '@/buttons/ChangelogButton';
 import ImportProjectButton from '@/buttons/ImportProjectButton';
 import ScannerButton from '@/buttons/ScannerButton';
+import ProjectSelector from '@/components/projects/ProjectSelector';
 import FancyButton from '@/libs/FancyButton';
 import GoogleConnectButton from '@/libs/googleapi/auth/GoogleConnectButton';
 import { createDocument } from '@/stores/document/DocumentStore';
@@ -13,7 +14,6 @@ import { useDocumentStore } from '@/stores/document/use';
 import { useSetUserCursor } from '@/stores/user';
 
 import AppTitle from './AppTitle';
-import ProjectSelector from './ProjectSelector';
 
 export default function WelcomePanel() {
   const addDocument = useDocumentStore((ctx) => ctx.addDocument);
