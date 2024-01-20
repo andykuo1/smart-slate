@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import Clapperboard from '@/app/Clapperboard';
+import Clapperboard from '@/clapper/Clapperboard';
 import RecorderBooth from '@/recorder/RecorderBooth';
 import { useUserStore } from '@/stores/user';
 

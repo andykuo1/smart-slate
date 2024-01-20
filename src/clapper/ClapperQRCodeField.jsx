@@ -65,7 +65,6 @@ export default function ClapperQRCodeField({
       ) : (
         <div className="flex flex-col m-auto">
           <QRCode2AddIcon className="w-32 h-32 fill-current m-auto" />
-          <label className="text-xs">CREATE TAKE</label>
         </div>
       )}
     </button>
@@ -78,16 +77,33 @@ export default function ClapperQRCodeField({
  * @param {string} props.data
  */
 function QRCodeView({ className, data }) {
-  const canvasRef = useRef(null);
+  const canvasRef = useRef(/** @type {HTMLCanvasElement|null} */ (null));
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) {
+    const ctx = canvas?.getContext?.('2d');
+    if (!canvas || !ctx) {
       return;
     }
     if (!data) {
       return;
     }
-    QRCode.toCanvas(canvas, data, { errorCorrectionLevel: 'L' });
+    const buffer = document.createElement('canvas');
+    QRCode.toCanvas(buffer, data, { errorCorrectionLevel: 'L' });
+    ctx.drawImage(
+      buffer,
+      0,
+      0,
+      buffer.width,
+      buffer.height,
+      0,
+      0,
+      canvas.width,
+      canvas.height,
+    );
   }, [data]);
-  return <canvas ref={canvasRef} className={className} />;
+  return (
+    <div className={'w-full h-full flex items-center' + ' ' + className}>
+      <canvas ref={canvasRef} className="block mx-auto w-full h-full" />
+    </div>
+  );
 }

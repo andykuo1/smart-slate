@@ -14,14 +14,14 @@ import {
 import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 
-import ClapperCameraNameField from '../components/clapper/ClapperCameraNameField';
-import ClapperDateField from '../components/clapper/ClapperDateField';
-import ClapperDirectorNameField from '../components/clapper/ClapperDirectorNameField';
-import ClapperMoreFields from '../components/clapper/ClapperMoreFields';
-import ClapperProductionTitleField from '../components/clapper/ClapperProductionTitleField';
-import ClapperQRCodeField from '../components/clapper/ClapperQRCodeField';
-import ClapperTakeNameField from '../components/clapper/ClapperTakeNameField';
-import ClapperVerticalLabel from '../components/clapper/ClapperVerticalLabel';
+import ClapperCameraNameField from './ClapperCameraNameField';
+import ClapperDateField from './ClapperDateField';
+import ClapperDirectorNameField from './ClapperDirectorNameField';
+import ClapperMoreFields from './ClapperMoreFields';
+import ClapperProductionTitleField from './ClapperProductionTitleField';
+import ClapperQRCodeField from './ClapperQRCodeField';
+import ClapperTakeNameField from './ClapperTakeNameField';
+import ClapperVerticalLabel from './ClapperVerticalLabel';
 
 export default function Clapperboard() {
   const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
@@ -66,11 +66,12 @@ export default function Clapperboard() {
         onClick={onBackClick}>
         <ArrowBackIcon className="w-6 h-6 fill-current" />
       </button>
-
-      <ClapperTakeNameField documentId={documentId} />
-
-      <div className="grid grid-cols-2">
+      <div className="grid grid-cols-2 text-md">
         <ul>
+          <ClapperTakeNameField
+            className="border-r-4"
+            documentId={documentId}
+          />
           <li className="flex items-center">
             <ClapperVerticalLabel>PROD</ClapperVerticalLabel>
             <ClapperProductionTitleField
@@ -108,11 +109,17 @@ export default function Clapperboard() {
             <ClapperVerticalLabel>DATE</ClapperVerticalLabel>
             <ClapperDateField />
           </div>
-          <div className="flex-1 flex items-center">
+          <div className="relative flex-1 flex items-center">
             <ClapperVerticalLabel>ETC</ClapperVerticalLabel>
             <ClapperMoreFields className="flex-1" documentId={documentId} />
           </div>
         </div>
+      </div>
+      <div className="flex-1 flex flex-row">
+        <textarea
+          className="flex-1 resize-none p-2 bg-transparent"
+          placeholder="Comments"
+        />
       </div>
     </fieldset>
   );

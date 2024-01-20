@@ -17,18 +17,24 @@ import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import {
   formatSceneShotNumber,
   formatTakeNumber,
-} from '../takes/TakeNameFormat';
+} from '../components/takes/TakeNameFormat';
 import ClapperShotHashField from './ClapperShotHashField';
 import ClapperShotTypeField from './ClapperShotTypeField';
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  */
-export default function ClapperTakeNameField({ documentId }) {
+export default function ClapperTakeNameField({ className, documentId }) {
   const { sceneId, shotId } = useCurrentCursor();
   return (
-    <table className="table-fixed text-center border-y-4 border-white overflow-hidden text-[20vmin]">
+    <table
+      className={
+        'table-fixed text-center border-y-4 border-white overflow-hidden text-[20vmin]' +
+        ' ' +
+        className
+      }>
       <thead>
         <tr>
           <th className="border-r-4 border-white w-[33%] text-xs">ROLL</th>
