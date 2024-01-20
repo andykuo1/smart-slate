@@ -28,7 +28,7 @@ export function createDispatchTakes(set, get) {
 function setTakeExportedGoogleDriveFileId(store, documentId, takeId, fileId) {
   let document = store.documents[documentId];
   let take = document.takes[takeId];
-  take.exportedGDriveFileId = fileId;
+  take.exportDetails.gdriveFileId = fileId;
   incrementDocumentRevisionNumber(document);
 }
 
@@ -67,7 +67,7 @@ function setTakeRating(store, documentId, takeId, rating) {
 function setTakeExportedIDBKey(store, documentId, takeId, idbKey) {
   let document = store.documents[documentId];
   let take = document.takes[takeId];
-  take.exportedIDBKey = idbKey;
+  take.exportDetails.idbKey = idbKey;
   incrementDocumentRevisionNumber(document);
 }
 
@@ -80,7 +80,7 @@ function setTakeExportedIDBKey(store, documentId, takeId, idbKey) {
 function setTakeExportedFileName(store, documentId, takeId, fileNameWithExt) {
   let document = store.documents[documentId];
   let take = document.takes[takeId];
-  take.exportedFileName = fileNameWithExt;
+  take.exportDetails.fileName = fileNameWithExt;
   incrementDocumentRevisionNumber(document);
 }
 
@@ -93,7 +93,7 @@ function setTakeExportedFileName(store, documentId, takeId, fileNameWithExt) {
 function setTakeExportedQRCodeKey(store, documentId, takeId, qrCodeKey) {
   let document = getDocumentById(store, documentId);
   let take = getTakeById(store, documentId, takeId);
-  take.exportedQRCodeKey = qrCodeKey;
+  take.exportDetails.qrCodeKey = qrCodeKey;
   incrementDocumentRevisionNumber(document);
 }
 

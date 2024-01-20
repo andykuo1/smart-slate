@@ -24,7 +24,7 @@ export default function ClapperQRCodeField({
 }) {
   const setUserCursor = useSetUserCursor();
   const takeExportedQRCodeKey = useDocumentStore(
-    (ctx) => getTakeById(ctx, documentId, takeId)?.exportedQRCodeKey,
+    (ctx) => getTakeById(ctx, documentId, takeId)?.exportDetails?.qrCodeKey,
   );
   const defineTake = useDefineTake();
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
@@ -45,6 +45,7 @@ export default function ClapperQRCodeField({
       UNSAFE_getStore,
       defineTake,
       setUserCursor,
+      resolveTakeQRCodeKey,
     ],
   );
 

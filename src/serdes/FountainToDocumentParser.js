@@ -93,7 +93,6 @@ export function fountainToDocument(tokens) {
         currentBlock = addBlock(currentScene);
         currentBlock.contentType = 'fountain-json';
         currentBlock.content = token.text;
-        // @ts-ignore
         currentBlock.contentStyle = 'lyric';
         break;
       case 'note':
@@ -108,7 +107,7 @@ export function fountainToDocument(tokens) {
         currentBlock.content = token.text;
         currentBlock.contentStyle = 'transition';
         break;
-      // @ts-ignore
+      // @ts-expect-error shot is a new type for documents.
       case 'shot':
         if (!currentBlock) {
           currentBlock = addBlock(currentScene);
@@ -118,14 +117,13 @@ export function fountainToDocument(tokens) {
         }
         currentShot = addShot(currentBlock);
         currentShot.description = token.text;
-        // @ts-ignore
         currentShot.shotType = token.style;
         break;
       default:
         currentBlock = addBlock(currentScene);
         currentBlock.contentType = 'fountain-json';
         currentBlock.content = token.text;
-        // @ts-ignore
+        // @ts-expect-error The token is correct.
         currentBlock.contentStyle = token.type;
         break;
     }

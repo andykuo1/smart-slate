@@ -53,8 +53,8 @@ export default function SettingsProjectExportZIPButton() {
           };
           for (let take of takes) {
             const idbKey =
-              take.exportedIDBKey || getIDBKeyFromTakeId(take.takeId);
-            const fileName = take.exportedFileName;
+              take.exportDetails.idbKey || getIDBKeyFromTakeId(take.takeId);
+            const fileName = take.exportDetails.fileName || '';
             const blob = await getVideoBlob(documentId, idbKey);
             if (!blob) {
               continue;

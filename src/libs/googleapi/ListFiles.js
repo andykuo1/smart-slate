@@ -1,8 +1,10 @@
+import { getGoogleAPI } from './GoogleAPI';
+
 export const GAPI_DRIVE_APPDATA_SCOPE =
   'https://www.googleapis.com/auth/drive.appdata';
 
 export async function listAppDataFiles() {
-  let response = await gapi.client.drive.files.list({
+  let response = await getGoogleAPI().client.drive.files.list({
     spaces: 'appDataFolder',
     pageSize: 10,
     fields: 'nextPageToken, files(id, name)',
@@ -26,7 +28,7 @@ export async function listAppDataFiles() {
  * @param {string} fileId
  */
 export async function readFile(fileId) {
-  let response = await gapi.client.drive.files.get({
+  let response = await getGoogleAPI().client.drive.files.get({
     fileId,
     alt: 'media',
   });
@@ -37,7 +39,7 @@ export async function readFile(fileId) {
  * @param {string} fileId
  */
 export async function deleteFile(fileId) {
-  await gapi.client.drive.files.delete({
+  await getGoogleAPI().client.drive.files.delete({
     fileId,
   });
 }

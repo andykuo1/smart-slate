@@ -10,7 +10,7 @@ function randomKey() {
 export default class InMemoryCRUD extends CRUD {
   constructor() {
     super();
-    /** @type {Record<string, object>} */
+    /** @type {Record<string, { fileName: string, data: object, time: number }>} */
     this.cache = {};
   }
 
@@ -32,7 +32,6 @@ export default class InMemoryCRUD extends CRUD {
    * @returns {Promise<object>}
    */
   async read(key) {
-    // @ts-ignore
     return this.cache[key].data;
   }
 

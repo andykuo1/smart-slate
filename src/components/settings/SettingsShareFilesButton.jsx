@@ -23,8 +23,8 @@ export default function SettingsShareFilesButton() {
       const takes = Object.entries(store.documents[documentId].takes);
       let promises = [];
       for (let [takeId, take] of takes) {
-        const idbKey = take.exportedIDBKey || getIDBKeyFromTakeId(takeId);
-        const fileName = take.exportedFileName;
+        const idbKey = take.exportDetails.idbKey || getIDBKeyFromTakeId(takeId);
+        const fileName = take.exportDetails.fileName || '';
         promises.push(
           getVideoBlob(documentId, idbKey).then((blob) =>
             blob

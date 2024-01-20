@@ -161,10 +161,10 @@ export function useTakeExporter() {
 
       const shot = getShotById(store, documentId, shotId);
       let newTake = createTake();
-      newTake.exportedFileName = takeFileName;
-      newTake.exportedMillis = Date.now();
-      newTake.exportedShotType = shot?.shotType;
-      newTake.exportedSize = data.size;
+      newTake.exportDetails.fileName = takeFileName;
+      newTake.exportDetails.timestampMillis = Date.now();
+      newTake.exportDetails.shotType = shot?.shotType;
+      newTake.exportDetails.sizeBytes = data.size;
       if (opts?.targetTakeId) {
         newTake.takeId = opts.targetTakeId;
       }

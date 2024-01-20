@@ -110,7 +110,7 @@ function BlockContentFountainJSON({
     case 'centered':
       contentClassName.push('text-center whitespace-normal');
       break;
-    case 'dialogue':
+    case 'dialogue': {
       const lines = content.split('\n');
       return (
         <div className={'my-4 mx-20 whitespace-normal' + ' ' + className}>
@@ -127,6 +127,7 @@ function BlockContentFountainJSON({
           {children}
         </div>
       );
+    }
     case 'transition':
       contentClassName.push('text-right mr-10');
       break;

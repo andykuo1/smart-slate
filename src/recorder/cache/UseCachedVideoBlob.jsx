@@ -15,10 +15,11 @@ export function useCachedVideoBlob(documentId, takeId) {
   const videoCacheReady = useVideoCache();
   const [videoBlob, setVideoBlob] = useState(/** @type {Blob|null} */ (null));
   const exportedIDBKey = useDocumentStore(
-    (ctx) => getTakeById(ctx, documentId, takeId)?.exportedIDBKey,
+    (ctx) => getTakeById(ctx, documentId, takeId)?.exportDetails?.idbKey || '',
   );
   const exportedMillis = useDocumentStore(
-    (ctx) => getTakeById(ctx, documentId, takeId)?.exportedMillis,
+    (ctx) =>
+      getTakeById(ctx, documentId, takeId)?.exportDetails?.timestampMillis,
   );
   useEffect(() => {
     if (!videoCacheReady) {

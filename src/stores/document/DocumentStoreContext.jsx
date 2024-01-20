@@ -182,13 +182,3 @@ export function useSetTakeRating() {
 export function useSetTakeExportedIDBKey() {
   return useDocumentStore((ctx) => ctx.setTakeExportedIDBKey);
 }
-
-/**
- * @param {import('./DocumentStore').DocumentId} documentId
- * @param {import('./DocumentStore').TakeId} takeId
- */
-export function useTakeExportedIDBKey(documentId, takeId) {
-  return useDocumentStore(
-    (ctx) => getTakeById(ctx, documentId, takeId)?.exportedIDBKey,
-  );
-}

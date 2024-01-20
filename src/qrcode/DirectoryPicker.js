@@ -23,13 +23,12 @@ export async function openDirectory(mode = 'read') {
     /** @type {Promise<File[]>|undefined} */
     let directoryStructure = undefined;
 
-    // @ts-ignore
+    // @ts-expect-error DirectoryPicker is just dangerous :P
     const getFiles = async (dirHandle, path = dirHandle.name) => {
       /** @type {Array<Promise<File[]>>} */
       const dirs = [];
       /** @type {Array<Promise<File>>} */
       const files = [];
-      // @ts-ignore
       for await (const entry of dirHandle.values()) {
         const nestedPath = `${path}/${entry.name}`;
         if (entry.kind === 'file') {
@@ -61,8 +60,8 @@ export async function openDirectory(mode = 'read') {
     };
 
     try {
-      // @ts-ignore
-      const handle = await showDirectoryPicker({
+      // @ts-expect-error DirectoryPicker is just dangerous :P
+      const handle = await window.showDirectoryPicker({
         mode,
       });
       directoryStructure = getFiles(handle, undefined);
@@ -73,7 +72,7 @@ export async function openDirectory(mode = 'read') {
         console.error(e.name, e.message);
       }
     }
-    // @ts-ignore
+    // @ts-expect-error DirectoryPicker is just dangerous :P
     return directoryStructure;
   }
   // Fallback if the File System Access API is not supported.

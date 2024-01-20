@@ -30,7 +30,7 @@ export function useResolveTakeFileName() {
       mimeType,
     ) {
       const take = getTakeById(store, documentId, takeId);
-      let result = take?.exportedFileName;
+      let result = take?.exportDetails?.fileName;
       if (result) {
         return result;
       }

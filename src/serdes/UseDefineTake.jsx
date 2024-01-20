@@ -37,10 +37,10 @@ export function useDefineTake() {
 
       const shot = getShotById(store, documentId, shotId);
       let newTake = createTake();
-      newTake.exportedFileName = takeFileName;
-      newTake.exportedMillis = Date.now();
-      newTake.exportedShotType = shot?.shotType;
-      newTake.exportedSize = -1;
+      newTake.exportDetails.fileName = takeFileName;
+      newTake.exportDetails.timestampMillis = Date.now();
+      newTake.exportDetails.shotType = shot?.shotType;
+      newTake.exportDetails.sizeBytes = -1;
       if (opts?.targetTakeId) {
         newTake.takeId = opts.targetTakeId;
       }

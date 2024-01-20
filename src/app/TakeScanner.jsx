@@ -20,7 +20,7 @@ import {
   MAX_THUMBNAIL_WIDTH,
 } from '@/values/Resolutions';
 
-import { setVideoSrcBlob } from './VideoBlobSource';
+import { setVideoSrcBlob } from './VideoBlobSourceHelper';
 
 /**
  * @callback OnScannerChangeCallback
@@ -84,7 +84,7 @@ export default function TakeScanner({ className, onChange }) {
     }
     onChange({ target: { value: output } });
     const ignoredFiles = files.filter(
-      (file) => !Boolean(videoFiles.find((video) => video.name === file.name)),
+      (file) => !videoFiles.find((video) => video.name === file.name),
     );
     for (let file of ignoredFiles) {
       output[file.name] = '[SKIP]';
@@ -159,7 +159,7 @@ export default function TakeScanner({ className, onChange }) {
   }
 
   const isShowDirectoryPickerSupported =
-    // @ts-ignore
+    'showDirectoryPicker' in window &&
     typeof window.showDirectoryPicker !== 'undefined';
 
   return (
@@ -355,7 +355,7 @@ async function performRename(input, output, onChange) {
       }
 
       console.log(`[TakeScanner] Renaming ${fileHandle.name} => ${result}`);
-      // @ts-ignore
+      // @ts-expect-error Move is supported on chrome (though not standard).
       fileHandle.move(result);
       output[key] = '[DONE]';
       onChange({ target: { value: output } });

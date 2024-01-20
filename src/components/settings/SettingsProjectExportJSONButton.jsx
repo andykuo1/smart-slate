@@ -26,7 +26,7 @@ export default function SettingsProjectExportJSONButton() {
       );
       downloadText(fileName, JSON.stringify(document));
     },
-    [documentId, UNSAFE_getStore, setDisabled],
+    [documentId, UNSAFE_getStore],
   );
 
   return (

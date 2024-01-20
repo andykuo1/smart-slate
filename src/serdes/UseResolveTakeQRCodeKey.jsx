@@ -23,7 +23,7 @@ export function useResolveTakeQRCodeKey() {
      */
     function _resolveTakeQRCodeKey(store, documentId, sceneId, shotId, takeId) {
       const take = getTakeById(store, documentId, takeId);
-      let result = take?.exportedQRCodeKey;
+      let result = take?.exportDetails?.qrCodeKey;
       if (result) {
         return result;
       }
@@ -46,12 +46,7 @@ export function useResolveTakeQRCodeKey() {
       setTakeExportedQRCodeKey(documentId, takeId, result);
       return result;
     },
-    [
-      getTakeById,
-      resolveTakeFileName,
-      resolveTakeShotHash,
-      setTakeExportedQRCodeKey,
-    ],
+    [resolveTakeFileName, resolveTakeShotHash, setTakeExportedQRCodeKey],
   );
   return resolveTakeQRCodeKey;
 }

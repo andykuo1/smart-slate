@@ -65,7 +65,7 @@ function tokenizeNoteShots(noteToken) {
     if (shotText.length <= 0) {
       continue;
     }
-    // @ts-ignore
+    // @ts-expect-error shot token type is Eagle-specific
     result.push(createToken('shot', shotText, false, shotType));
   }
   return result;

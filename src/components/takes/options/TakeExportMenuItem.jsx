@@ -10,7 +10,8 @@ import {
   useTakeDownloader,
   useTakeGoogleDriveUploader,
 } from '@/serdes/UseTakeExporter';
-import { useTakeExportedIDBKey } from '@/stores/document';
+import { getTakeExportDetailsById } from '@/stores/document';
+import { useDocumentStore } from '@/stores/document/use';
 import MenuStyle from '@/styles/Menu.module.css';
 
 /**
@@ -29,7 +30,9 @@ export default function TakeCacheMenuItem({
   const videoBlob = useCachedVideoBlob(documentId, takeId);
 
   const [googleDriveConnected, setGoogleDriveConnected] = useState(false);
-  const idbKey = useTakeExportedIDBKey(documentId, takeId);
+  const idbKey = useDocumentStore(
+    (ctx) => getTakeExportDetailsById(ctx, documentId, takeId)?.idbKey,
+  );
   const downloadTake = useTakeDownloader();
   const uploadTake = useTakeGoogleDriveUploader();
   const handleToken = useGAPITokenHandler();

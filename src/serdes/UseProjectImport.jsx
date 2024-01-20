@@ -26,12 +26,13 @@ export function useProjectImport(documentId = undefined) {
           addDocument(document);
           return document.documentId;
         }
-        case 'project-json':
+        case 'project-json': {
           /** @type {import('@/stores/document/DocumentStore').Document} */
           let document = JSON.parse(data);
           // TODO: Maybe some versioning would be helpful here :P
           addDocument(document);
           break;
+        }
         default:
           throw new Error('Unsupported import type.');
       }

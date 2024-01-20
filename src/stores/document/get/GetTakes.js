@@ -12,6 +12,15 @@ export function getTakeById(store, documentId, takeId) {
 /**
  * @param {import('@/stores/document/DocumentStore').Store} store
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
+ */
+export function getTakeExportDetailsById(store, documentId, takeId) {
+  return store?.documents?.[documentId]?.takes?.[takeId]?.exportDetails;
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {import('@/stores/document/DocumentStore').ShotId} shotId
  */
 export function getTakeIdsInOrder(store, documentId, shotId) {

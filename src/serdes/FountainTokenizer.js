@@ -123,7 +123,7 @@ export const FOUNTAIN_TOKEN_STYLES = [
 ];
 
 const HEADING_FORCE_PATTERN = /^\.[\w\d]/;
-const ACTION_FORCE_PATTERN = /^\!/;
+const ACTION_FORCE_PATTERN = /^!/;
 const CHARACTER_FORCE_PATTERN = /^@/;
 const CHARACTER_SIMULTANEOUS_FORCE_PATTERN = /\^$/;
 const LYRIC_FORCE_PATTERN = /^~/;

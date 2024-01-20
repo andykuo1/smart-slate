@@ -15,6 +15,8 @@
 - Add custom fountain parser
 - Add shotlist syntax to fountain parser
 - Add shot description to shotlist
+- Add gdrive sync option
+- Add cloud sync status
 
 # 0.1.13
 

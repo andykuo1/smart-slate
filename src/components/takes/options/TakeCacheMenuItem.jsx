@@ -5,8 +5,8 @@ import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
 import { useCachedVideoBlob } from '@/recorder/cache/UseCachedVideoBlob';
 import { deleteVideoBlob } from '@/recorder/cache/VideoCache';
 import {
+  getTakeExportDetailsById,
   useSetTakeExportedIDBKey,
-  useTakeExportedIDBKey,
 } from '@/stores/document';
 import { getTakeById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
@@ -20,10 +20,13 @@ import { formatBytes } from '@/utils/StringFormat';
  */
 export default function TakeCacheMenuItem({ documentId, takeId }) {
   const videoBlob = useCachedVideoBlob(documentId, takeId);
-  const idbKey = useTakeExportedIDBKey(documentId, takeId);
+  const idbKey = useDocumentStore(
+    (ctx) => getTakeExportDetailsById(ctx, documentId, takeId)?.idbKey,
+  );
 
   const size = useDocumentStore(
-    (ctx) => getTakeById(ctx, documentId, takeId)?.exportedSize || 0,
+    (ctx) =>
+      getTakeById(ctx, documentId, takeId)?.exportDetails?.sizeBytes || 0,
   );
   const setIDBKey = useSetTakeExportedIDBKey();
 
