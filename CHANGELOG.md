@@ -7,6 +7,8 @@
 - - nav takes on shotlist
 - - nav shots on edit mode
 
+# 0.1.14
+
 - Add qr code scanner
 - Add import/export project as json
 - Add scanned names export csv list
