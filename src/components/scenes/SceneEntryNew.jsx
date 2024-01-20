@@ -23,6 +23,8 @@ export default function SceneEntryNew({ className, documentId }) {
   function onClick() {
     let newScene = createScene();
     let newBlock = createBlock();
+    // NOTE: This should be the default.
+    newBlock.contentType = 'fountain-json';
     let newShot = createShot();
     addScene(documentId, newScene);
     addBlock(documentId, newScene.sceneId, newBlock);

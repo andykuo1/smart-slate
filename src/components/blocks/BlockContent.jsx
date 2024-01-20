@@ -147,7 +147,11 @@ function BlockContentFountainJSON({
         ' ' +
         className
       }>
-      {content}
+      {content || (
+        <span className="opacity-30">
+          {'< '}What happened?{' >'}
+        </span>
+      )}
       {children}
     </pre>
   );
@@ -179,8 +183,11 @@ function BlockContentFountainJSONInput({
     <>
       <textarea
         ref={inputRef}
-        className={'bg-transparent resize-none w-full' + ' ' + className}
+        className={
+          'font-mono bg-transparent resize-none w-full' + ' ' + className
+        }
         value={content}
+        placeholder="< What happened? >"
         onChange={(e) =>
           setBlockContent(documentId, blockId, 'fountain-json', e.target.value)
         }
