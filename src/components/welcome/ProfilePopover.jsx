@@ -9,10 +9,9 @@ import {
 } from '@ariakit/react';
 import { useCallback } from 'react';
 
-import AddToDriveIcon from '@material-symbols/svg-400/rounded/add_to_drive.svg';
-
 import { useDelayedEffect } from '@/libs/UseDelayedEffect';
-import { useGAPILogin, useGAPITokenHandler } from '@/libs/googleapi';
+import { useGAPITokenHandler } from '@/libs/googleapi';
+import GoogleLoginButton from '@/libs/googleapi/auth/GoogleLoginButton';
 import PopoverStyle from '@/styles/Popover.module.css';
 
 export default function ProfilePopover() {
@@ -28,12 +27,6 @@ export default function ProfilePopover() {
 }
 
 function PopoverContentProfile() {
-  const login = useGAPILogin();
-  const store = usePopoverContext();
-  function onClick() {
-    store?.hide();
-    login();
-  }
   return (
     <>
       <PopoverHeading className="font-bold">
@@ -53,14 +46,7 @@ function PopoverContentProfile() {
           </button>
           <span className="mx-2 text-black">or</span>
         </div>
-        <div className="w-full px-2 flex">
-          <button
-            className="flex-1 border rounded text-black"
-            onClick={onClick}>
-            <AddToDriveIcon className="inline-block w-6 h-6 mr-2 fill-current" />
-            Use with Google Drive
-          </button>
-        </div>
+        <GoogleLoginButton />
       </div>
       <p className="text-gray-400 text-xs">
         Already have an account?

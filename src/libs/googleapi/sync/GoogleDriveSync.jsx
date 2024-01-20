@@ -1,3 +1,5 @@
+import { createContext, useContext } from 'react';
+
 import { useDocumentStore } from '@/stores/document/use';
 
 import {
@@ -12,7 +14,19 @@ import {
 } from './GoogleDriveCRUD';
 import { sync } from './Sync';
 
+export const GoogleDriveSyncContext = createContext(
+  /** @type {ReturnType<useGoogleDriveSyncImpl>|null} */ (null),
+);
+
 export function useGoogleDriveSync() {
+  let result = useContext(GoogleDriveSyncContext);
+  if (!result) {
+    throw new Error('Missing provider.');
+  }
+  return result;
+}
+
+export function useGoogleDriveSyncImpl() {
   const getToken = useGetToken();
   const getDocumentStoreConfiguration = useGetDocumentStoreConfiguration();
   const getGoogleDriveConfiguration = useGetGoogleDriveConfiguration();

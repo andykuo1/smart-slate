@@ -2,23 +2,18 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '@material-symbols/svg-400/rounded/add-fill.svg';
-import CloudDoneIcon from '@material-symbols/svg-400/rounded/cloud_done.svg';
-import CloudOffIcon from '@material-symbols/svg-400/rounded/cloud_off.svg';
-import CloudSyncIcon from '@material-symbols/svg-400/rounded/cloud_sync.svg';
 
 import ChangelogButton from '@/buttons/ChangelogButton';
 import ImportProjectButton from '@/buttons/ImportProjectButton';
-import ProfileButton from '@/buttons/ProfileButton';
 import ScannerButton from '@/buttons/ScannerButton';
 import FancyButton from '@/libs/FancyButton';
-import HorizontallyScrollableDiv from '@/libs/HorizontallyScrollableDiv';
-import { getDocumentSettingsById } from '@/stores/document';
-import { getDocumentById } from '@/stores/document';
+import GoogleConnectButton from '@/libs/googleapi/auth/GoogleConnectButton';
 import { createDocument } from '@/stores/document/DocumentStore';
-import { useDocumentIds, useDocumentStore } from '@/stores/document/use';
+import { useDocumentStore } from '@/stores/document/use';
 import { useSetUserCursor } from '@/stores/user';
 
 import AppTitle from './AppTitle';
+import ProjectSelector from './ProjectSelector';
 
 export default function WelcomePanel() {
   const addDocument = useDocumentStore((ctx) => ctx.addDocument);
@@ -41,7 +36,9 @@ export default function WelcomePanel() {
     <>
       <AppTitle />
       <div className="flex flex-row text-center mx-auto">
-        <ProfileButton />
+        <div className="absolute top-2 right-2">
+          <GoogleConnectButton />
+        </div>
         <FancyButton
           title="New Project"
           className="mx-1 px-12"
@@ -52,115 +49,7 @@ export default function WelcomePanel() {
         <ChangelogButton />
         <ScannerButton />
       </div>
-      <SavedProjectView className="mx-auto mb-auto" />
+      <ProjectSelector className="mx-auto mb-auto" />
     </>
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} props.className
- */
-function SavedProjectView({ className }) {
-  const documentIds = useDocumentIds();
-  if (documentIds.length <= 0) {
-    return (
-      <label className={'mx-auto my-2 text-gray-400' + ' ' + className}>
-        Pick one to get started!
-      </label>
-    );
-  }
-  return (
-    <>
-      <label className="mx-auto my-2 text-gray-400">
-        Or open an existing project...
-      </label>
-      <HorizontallyScrollableDiv
-        className={
-          'w-[60%] max-w-[60%] rounded-xl bg-black border-x-8 border-y-4 border-black' +
-          ' ' +
-          className
-        }>
-        <ul className={'flex flex-row'}>
-          <div className="flex-1 min-w-[2rem] text-white text-right my-auto">
-            |
-          </div>
-          {documentIds.map((documentId) => (
-            <SavedProjectItem key={documentId} documentId={documentId} />
-          ))}
-          <div className="flex-1 min-w-[2rem] text-white text-left my-auto">
-            |
-          </div>
-        </ul>
-      </HorizontallyScrollableDiv>
-    </>
-  );
-}
-
-/**
- * @param {object} props
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- */
-function SavedProjectItem({ documentId }) {
-  const title = useDocumentStore(
-    (ctx) => getDocumentById(ctx, documentId)?.documentTitle,
-  );
-  const autoSaveTo = useDocumentStore(
-    (ctx) => getDocumentSettingsById(ctx, documentId)?.autoSaveTo,
-  );
-  const lastDeletedMillis = useDocumentStore(
-    (ctx) => getDocumentById(ctx, documentId)?.lastDeletedMillis,
-  );
-  const lastUpdatedMillis = useDocumentStore(
-    (ctx) => getDocumentById(ctx, documentId)?.lastUpdatedMillis,
-  );
-  const lastExportedMillis = useDocumentStore(
-    (ctx) => getDocumentById(ctx, documentId)?.lastExportedMillis,
-  );
-  const setUserCursor = useSetUserCursor();
-  const navigate = useNavigate();
-
-  const onClick = useCallback(
-    function onClick() {
-      setUserCursor(documentId, '', '', '');
-      navigate('/edit');
-    },
-    [documentId, setUserCursor, navigate],
-  );
-
-  const titleWithPlaceholder = title || 'Untitled';
-
-  if (lastDeletedMillis > 0) {
-    // It's been deleted, so don't show it.
-    return null;
-  }
-  return (
-    <li
-      className={
-        'relative overflow-hidden text-center w-[8rem] min-w-[8rem] max-w-[8rem]' +
-        ' ' +
-        'bg-gray-100 rounded-xl mx-2 my-4 p-2' +
-        ' ' +
-        'transition-transform hover:-translate-y-1 hover:bg-white hover:cursor-pointer'
-      }
-      title={`Open "${titleWithPlaceholder}" Project`}
-      onClick={onClick}>
-      <div className="flex flex-col">
-        <h3 className="text-gray-300">Open</h3>
-        <p>{titleWithPlaceholder}</p>
-        <p className="text-gray-400">
-          {new Date(lastUpdatedMillis).toLocaleString()}
-        </p>
-      </div>
-      {autoSaveTo === 'gdrive' ? (
-        lastExportedMillis >= lastUpdatedMillis ? (
-          <CloudDoneIcon className="absolute top-1 right-1 w-6 h-6" />
-        ) : (
-          <CloudSyncIcon className="absolute top-1 right-1 w-6 h-6" />
-        )
-      ) : (
-        <CloudOffIcon className="absolute top-1 right-1 w-6 h-6" />
-      )}
-    </li>
   );
 }

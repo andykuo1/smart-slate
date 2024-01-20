@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
 import DownloadIcon from '@material-symbols/svg-400/rounded/download.svg';
 

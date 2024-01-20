@@ -2,6 +2,7 @@
  * @typedef {ReturnType<createStore>} Store
  * @typedef {ReturnType<createCursor>} Cursor
  * @typedef {ReturnType<createRecorder>} Recorder
+ * @typedef {ReturnType<createGoogleContext>} GoogleContext
  */
 
 export function createStore() {
@@ -12,6 +13,16 @@ export function createStore() {
     editMode: 'story',
     /** @type {'recorder'|'clapper'} */
     recordMode: 'clapper',
+    googleContext: createGoogleContext(),
+  };
+}
+
+export function createGoogleContext() {
+  return {
+    /** @type {import('@react-oauth/google').CredentialResponse|null} */
+    credential: null,
+    /** @type {import('@react-oauth/google').TokenResponse|null} */
+    token: null,
   };
 }
 

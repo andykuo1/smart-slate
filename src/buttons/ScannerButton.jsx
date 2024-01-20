@@ -17,7 +17,7 @@ export default function ScannerButton() {
   return (
     <FancyButton
       title="Have QR codes?"
-      className="absolute bottom-2 left-2 mx-1 px-12"
+      className="absolute bottom-2 left-2 mx-1 px-12 hidden sm:block"
       onClick={onClick}>
       <QRCode2Icon className="inline-block w-6 fill-current" />
     </FancyButton>

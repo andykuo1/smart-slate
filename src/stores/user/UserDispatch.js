@@ -11,6 +11,11 @@ export function createDispatch(set) {
     setRecorderActive: zi(set, setRecorderActive),
     setEditMode: zi(set, setEditMode),
     setRecordMode: zi(set, setRecordMode),
+    setGoogleContextCredentialResponse: zi(
+      set,
+      setGoogleContextCredentialResponse,
+    ),
+    setGoogleContextTokenResponse: zi(set, setGoogleContextTokenResponse),
   };
 }
 
@@ -67,4 +72,20 @@ function setEditMode(store, editMode) {
  */
 function setRecordMode(store, recordMode) {
   store.recordMode = recordMode;
+}
+
+/**
+ * @param {import('./UserStore').Store} store
+ * @param {import('@react-oauth/google').CredentialResponse} response
+ */
+function setGoogleContextCredentialResponse(store, response) {
+  store.googleContext.credential = response;
+}
+
+/**
+ * @param {import('./UserStore').Store} store
+ * @param {import('@react-oauth/google').TokenResponse|null} response
+ */
+function setGoogleContextTokenResponse(store, response) {
+  store.googleContext.token = response;
 }
