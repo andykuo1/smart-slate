@@ -1,4 +1,4 @@
-import { BrowserQRCodeReader } from '@zxing/library';
+import { BrowserQRCodeReader, NotFoundException } from '@zxing/library';
 
 /**
  * @param {HTMLVideoElement} video
@@ -27,8 +27,12 @@ export async function scanVideoBlobForQRCodes(videoBlob) {
     let result = await reader.decodeFromVideo(undefined, url);
     results.push(result.getText());
   } catch (err) {
-    console.error('[QRCodeReader] ', err);
-    results.push('');
+    if (err instanceof NotFoundException) {
+      // No qr code in this one.
+      results.push('');
+    } else {
+      console.error('[QRCodeReader] ', err);
+    }
   } finally {
     URL.revokeObjectURL(url);
   }

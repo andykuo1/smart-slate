@@ -1,3 +1,5 @@
+import { useShallow } from 'zustand/react/shallow';
+
 import DownloadingIcon from '@material-symbols/svg-400/rounded/downloading.svg';
 import PublishedWithChangesIcon from '@material-symbols/svg-400/rounded/published_with_changes.svg';
 import SyncIcon from '@material-symbols/svg-400/rounded/sync.svg';
@@ -6,7 +8,8 @@ import SyncDisabledIcon from '@material-symbols/svg-400/rounded/sync_disabled.sv
 import { useGoogleStatus } from '@/libs/googleapi/auth/UseGoogleStatus';
 import { useGoogleToken } from '@/libs/googleapi/auth/UseGoogleToken';
 import { useGoogleDriveSync } from '@/libs/googleapi/sync/GoogleDriveSync';
-import { useActiveDocumentIds } from '@/stores/document/use';
+import { getDocumentById, getDocumentIds } from '@/stores/document';
+import { useActiveDocumentIds, useDocumentStore } from '@/stores/document/use';
 
 /**
  * @param {object} props
@@ -14,6 +17,16 @@ import { useActiveDocumentIds } from '@/stores/document/use';
  */
 export default function ProjectListStatusButton({ className }) {
   const documentIds = useActiveDocumentIds();
+  const syncableDocumentIds = useDocumentStore(
+    useShallow((ctx) =>
+      getDocumentIds(ctx).filter((documentId) => {
+        let document = getDocumentById(ctx, documentId);
+        if (document?.lastDeletedMillis <= 0) return false;
+        if (document?.settings?.autoSaveTo === 'gdrive') return true;
+        return false;
+      }),
+    ),
+  );
   const token = useGoogleToken();
   const { syncStatus, syncToGoogleDrive } = useGoogleDriveSync();
   async function onClick() {
@@ -24,7 +37,9 @@ export default function ProjectListStatusButton({ className }) {
       className={'group flex flex-row items-center' + ' ' + className}
       onClick={onClick}
       disabled={!token}>
-      <span className="mx-2">{documentIds.length}</span>
+      <span className="mx-2">
+        {syncableDocumentIds.length}/{documentIds.length}
+      </span>
       <SyncStatusIcon
         className="group-disabled:opacity-30"
         value={syncStatus}

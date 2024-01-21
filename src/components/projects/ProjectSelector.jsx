@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import HorizontallyScrollableDiv from '@/libs/HorizontallyScrollableDiv';
 import { useGoogleDriveSync } from '@/libs/googleapi/sync/GoogleDriveSync';
 import { getDocumentById, getDocumentSettingsById } from '@/stores/document';
-import { useDocumentIds, useDocumentStore } from '@/stores/document/use';
+import { useActiveDocumentIds, useDocumentStore } from '@/stores/document/use';
 import { useSetUserCursor } from '@/stores/user';
 
 import ProjectListStatusButton from './ProjectListStatusButton';
@@ -15,7 +15,7 @@ import ProjectSyncStatus from './ProjectSyncStatus';
  * @param {string} [props.className]
  */
 export default function ProjectSelector({ className }) {
-  const documentIds = useDocumentIds();
+  const documentIds = useActiveDocumentIds();
 
   if (documentIds.length <= 0) {
     return (

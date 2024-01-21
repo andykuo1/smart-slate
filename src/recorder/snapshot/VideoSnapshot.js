@@ -67,6 +67,7 @@ export function captureVideoSnapshot(videoRef, seekToSeconds, width, height) {
       console.log('[UseVideoSnapshot] Seeked complete.');
       const video = /** @type {HTMLVideoElement} */ (e.target);
       video.removeEventListener('seeked', onSeeked);
+      video.removeEventListener('error', onError, true);
       const canvas = document.createElement('canvas');
       drawElementToCanvasWithRespectToAspectRatio(
         canvas,
@@ -86,7 +87,7 @@ export function captureVideoSnapshot(videoRef, seekToSeconds, width, height) {
     function onLoadedMetadata(e) {
       console.log('[UseVideoSnapshot] Metadata loaded.');
       const video = /** @type {HTMLVideoElement} */ (e.target);
-      video.removeEventListener('loadedmetadata', onLoadedMetadata);
+      video.removeEventListener('loadedmetadata', onLoadedMetadata, true);
       // NOTE: This doesn't work well on Safari :(
       if (seekToSeconds > 0) {
         video.addEventListener('seeked', onSeeked);
@@ -103,8 +104,8 @@ export function captureVideoSnapshot(videoRef, seekToSeconds, width, height) {
       onLoadedMetadata(/** @type {Event} */ (e));
     } else {
       console.log('[UseVideoSnapshot] ...not yet loaded. Listening...');
-      video.addEventListener('error', onError);
-      video.addEventListener('loadedmetadata', onLoadedMetadata);
+      video.addEventListener('error', onError, true);
+      video.addEventListener('loadedmetadata', onLoadedMetadata, true);
     }
   });
 }

@@ -6,7 +6,7 @@ import { scanVideoBlobForQRCodes } from '@/qrcode/QRCodeReader';
 import { captureVideoSnapshot } from '@/recorder/snapshot/VideoSnapshot';
 import { toDateString } from '@/serdes/ExportNameFormat';
 import {
-  findDocumentWithProjectId,
+  findDocumentsWithProjectId,
   findShotWithShotHash,
   findTakeWithTakeNumber,
   useSetTakePreviewImage,
@@ -42,7 +42,9 @@ export default function TakeScanner({ className, onChange }) {
   const setTakePreview = useSetTakePreviewImage();
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
   const inputRef = useRef(/** @type {Record<string, ScannerResult>} */ ({}));
-  const outputRef = useRef(/** @type {Record<string, string>} */ ({}));
+  const outputRef = useRef(
+    /** @type {Record<string, { status: string, result: string }>} */ ({}),
+  );
   const navigate = useNavigate();
   const [status, setStatus] = useState('');
 
@@ -73,21 +75,21 @@ export default function TakeScanner({ className, onChange }) {
     }
     for (let file of files) {
       input[file.name] = { file, code: '', snapshot: '' };
-      output[file.name] = '[GOT]';
+      output[file.name] = { status: '[GOT]', result: '' };
     }
     onChange({ target: { value: output } });
 
     // Find videos...
     const videoFiles = filterVideoFiles(files);
     for (let file of videoFiles) {
-      output[file.name] = '[READY]';
+      output[file.name] = { status: '[READY]', result: '' };
     }
     onChange({ target: { value: output } });
     const ignoredFiles = files.filter(
       (file) => !videoFiles.find((video) => video.name === file.name),
     );
     for (let file of ignoredFiles) {
-      output[file.name] = '[SKIP]';
+      output[file.name] = { status: '[SKIP]', result: '' };
       delete input[file.name];
     }
 
@@ -110,23 +112,52 @@ export default function TakeScanner({ className, onChange }) {
         const value = input[key];
         if (!value.snapshot) {
           // Did not have a snapshot to use.
+          output[key] = {
+            status: '[ERROR: No snapshot available.]',
+            result: output[key]?.result,
+          };
+          onChange({ target: { value: output } });
           continue;
         }
         const store = UNSAFE_getStore();
-        const document = findDocumentWithQRCode(store, value.code);
-        if (document?.documentId !== documentId) {
-          // Not in the same project.
+        const documents = findDocumentsWithQRCode(store, value.code);
+        if (documents.length <= 0) {
+          // No same project id found.
+          output[key] = {
+            status: '[ERROR: No project found with same project id.]',
+            result: output[key]?.result,
+          };
+          onChange({ target: { value: output } });
           continue;
         }
-        const take = findTakeWithQRCode(
-          store,
-          document?.documentId,
-          value.code,
+        const target = documents.find(
+          (document) => document.documentId === documentId,
         );
-        if (!take) {
-          // Invalid info.
+        if (!target) {
+          // Project id matched, but the user's currently-viewed document is not it.
+          output[key] = {
+            status: '[ERROR: Found for another project.]',
+            result: output[key]?.result,
+          };
+          onChange({ target: { value: output } });
           continue;
         }
+        const take = findTakeWithQRCode(store, target.documentId, value.code);
+        if (!take) {
+          // Missing matching take info.
+          output[key] = {
+            status: '[ERROR: Take not found in this project.]',
+            result: output[key]?.result,
+          };
+          onChange({ target: { value: output } });
+          continue;
+        }
+        output[key] = {
+          status: '[IMPORTED]',
+          result: output[key]?.result,
+        };
+        onChange({ target: { value: output } });
+        console.log('[TakeScanner] Found take with snapshot in project!');
         setTakePreview(documentId, take.takeId, value.snapshot);
       }
     }
@@ -214,14 +245,14 @@ const TAKE_NUMBER_PATTERN = /_T(\d+)_/;
  * @param {import('@/stores/document/DocumentStore').Store} store
  * @param {string} qrCode
  */
-function findDocumentWithQRCode(store, qrCode) {
+function findDocumentsWithQRCode(store, qrCode) {
   const projectIdExecArray = PROJECT_ID_PATTERN.exec(qrCode);
   if (!projectIdExecArray) {
-    return null;
+    return [];
   }
   const [_, projectIdCaptured] = projectIdExecArray;
   const projectId = String(projectIdCaptured);
-  return findDocumentWithProjectId(store, projectId);
+  return findDocumentsWithProjectId(store, projectId);
 }
 
 /**
@@ -259,7 +290,7 @@ function filterVideoFiles(files) {
 
 /**
  * @param {Record<string, ScannerResult>} input
- * @param {Record<string, string>} output
+ * @param {Record<string, { status: string, result: string }>} output
  * @param {import('react').RefObject<HTMLVideoElement>} videoRef
  * @param {OnScannerChangeCallback} onChange
  */
@@ -271,7 +302,7 @@ async function performScan(input, output, videoRef, onChange) {
 
   // Clear existing scan results
   for (let key of Object.keys(input)) {
-    output[key] = '[WAITING]';
+    output[key] = { status: '[WAITING]', result: '' };
   }
   onChange({ target: { value: output } });
 
@@ -279,7 +310,7 @@ async function performScan(input, output, videoRef, onChange) {
   for (let key of Object.keys(input)) {
     const videoFile = input[key].file;
     try {
-      output[key] = '[SCANNING...]';
+      output[key] = { status: '[SCANNING...]', result: '' };
       onChange({ target: { value: output } });
       setVideoSrcBlob(video, videoFile);
 
@@ -304,18 +335,21 @@ async function performScan(input, output, videoRef, onChange) {
         codes = [];
       }
       if (!codes || codes.length <= 0) {
-        output[key] = '[ERROR: No codes found :( ]';
+        output[key] = { status: '[ERROR: No codes found :( ]', result: '' };
         delete input[key];
       } else if (codes.length > 1) {
-        output[key] = '[ERROR: Found too many codes!]';
+        output[key] = { status: '[ERROR: Found too many codes!]', result: '' };
         delete input[key];
       } else {
         const transformedCode = transformCode(key, codes[0]);
         if (!transformedCode) {
-          output[key] = '[ERROR: Not a valid Eagle code.]';
+          output[key] = {
+            status: '[ERROR: Not a valid Eagle code.]',
+            result: '',
+          };
           delete input[key];
         } else {
-          output[key] = transformedCode;
+          output[key] = { status: '[FOUND]', result: transformedCode };
           input[key].code = transformedCode;
         }
       }
@@ -332,7 +366,7 @@ async function performScan(input, output, videoRef, onChange) {
 
 /**
  * @param {Record<string, ScannerResult>} input
- * @param {Record<string, string>} output
+ * @param {Record<string, { status: string, result: string }>} output
  * @param {OnScannerChangeCallback} onChange
  */
 async function performRename(input, output, onChange) {
@@ -343,13 +377,19 @@ async function performRename(input, output, onChange) {
     try {
       const fileHandle = input[key].file.handle;
       if (!fileHandle) {
-        output[key] = '[ERROR: FileSystemAPI is unsupported here :( ]';
+        output[key] = {
+          status: '[ERROR: FileSystemAPI is unsupported here :( ]',
+          result: '',
+        };
         onChange({ target: { value: output } });
         continue;
       }
       const result = input[key].code;
       if (!result || !extname(result)) {
-        output[key] = '[ERROR: Found no code for file.]';
+        output[key] = {
+          status: '[ERROR: Found no code for file.]',
+          result: '',
+        };
         onChange({ target: { value: output } });
         continue;
       }
@@ -357,7 +397,7 @@ async function performRename(input, output, onChange) {
       console.log(`[TakeScanner] Renaming ${fileHandle.name} => ${result}`);
       // @ts-expect-error Move is supported on chrome (though not standard).
       fileHandle.move(result);
-      output[key] = '[DONE]';
+      output[key] = { status: '[DONE]', result: '' };
       onChange({ target: { value: output } });
     } catch (e) {
       const error = /** @type {Error} */ (e);
