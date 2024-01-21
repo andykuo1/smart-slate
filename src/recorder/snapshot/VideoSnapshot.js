@@ -112,7 +112,7 @@ export function captureVideoSnapshot(videoRef, seekToSeconds, width, height) {
 
 /**
  * @param {HTMLCanvasElement} canvas
- * @param {HTMLImageElement|HTMLVideoElement} element
+ * @param {HTMLCanvasElement|HTMLImageElement|HTMLVideoElement} element
  * @param {number} elementWidth
  * @param {number} elementHeight
  * @param {number} toWidth

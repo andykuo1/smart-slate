@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import QRCode2AddIcon from '@material-symbols/svg-400/rounded/qr_code_2_add.svg';
 import QRCode from 'qrcode';
 
+import { drawElementToCanvasWithRespectToAspectRatio } from '@/recorder/snapshot/VideoSnapshot';
 import { useDefineTake } from '@/serdes/UseDefineTake';
 import { useResolveTakeQRCodeKey } from '@/serdes/UseResolveTakeQRCodeKey';
 import { getTakeById } from '@/stores/document';
@@ -89,16 +90,14 @@ function QRCodeView({ className, data }) {
     }
     const buffer = document.createElement('canvas');
     QRCode.toCanvas(buffer, data, { errorCorrectionLevel: 'L' });
-    ctx.drawImage(
+    const rect = canvas.getBoundingClientRect();
+    drawElementToCanvasWithRespectToAspectRatio(
+      canvas,
       buffer,
-      0,
-      0,
       buffer.width,
       buffer.height,
-      0,
-      0,
-      canvas.width,
-      canvas.height,
+      rect.width,
+      rect.height,
     );
   }, [data]);
   return (
