@@ -45,6 +45,8 @@ export function formatTakeNameForFileExport(
   );
 }
 
+export const MAX_PROJECT_ID_LENGTH = 16;
+
 /**
  * @param {string} projectId
  */
@@ -56,7 +58,21 @@ export function formatProjectId(projectId) {
   }
   result = result.replace(/\s+/g, '');
   result = result.replace(/[^\w\d_-]/g, '');
-  return result.toUpperCase();
+  result = result.toUpperCase();
+  if (result.length > MAX_PROJECT_ID_LENGTH) {
+    result = result.substring(0, MAX_PROJECT_ID_LENGTH);
+  }
+  return result;
+}
+
+/**
+ * @param {Date} date
+ */
+export function getDefaultProjectIdByDate(date) {
+  // NOTE: Use the whole alphabet :P
+  return formatProjectId(
+    `M${Number(Math.floor(date.getTime() / 1_000)).toString(36)}`,
+  );
 }
 
 /**

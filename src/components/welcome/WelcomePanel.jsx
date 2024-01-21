@@ -24,7 +24,8 @@ export default function WelcomePanel() {
     function onNewProjectClick() {
       let newDocument = createDocument();
       newDocument.documentTitle = 'My Movie';
-      newDocument.lastUpdatedMillis = Date.now();
+      newDocument.firstCreatedMillis = Date.now();
+      newDocument.lastUpdatedMillis = newDocument.firstCreatedMillis;
       addDocument(newDocument);
       setUserCursor(newDocument.documentId, '', '', '');
       navigate('/settings');

@@ -10,9 +10,6 @@ export default function SettingsProjectNameField() {
   const documentSettingsProjectId = useDocumentStore(
     (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
   );
-  const setDocumentSettingsProjectId = useDocumentStore(
-    (ctx) => ctx.setDocumentSettingsProjectId,
-  );
 
   /**
    * @type {import('react').ChangeEventHandler<HTMLInputElement>}
@@ -20,12 +17,6 @@ export default function SettingsProjectNameField() {
   function onChange(e) {
     let target = e.target;
     setDocumentTitle(documentId, target.value);
-  }
-
-  function onBlur() {
-    if (!documentSettingsProjectId) {
-      setDocumentSettingsProjectId(documentId, documentTitle);
-    }
   }
 
   return (
@@ -36,7 +27,6 @@ export default function SettingsProjectNameField() {
       required={true}
       value={documentTitle}
       onChange={onChange}
-      onBlur={onBlur}
       autoFocus={!documentSettingsProjectId}
       autoCapitalize="words"
     />

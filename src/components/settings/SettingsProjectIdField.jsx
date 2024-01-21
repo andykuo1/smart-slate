@@ -11,29 +11,34 @@ import { useRef, useState } from 'react';
 import LockIcon from '@material-symbols/svg-400/rounded/lock-fill.svg';
 import LockOpenIcon from '@material-symbols/svg-400/rounded/lock_open.svg';
 
+import { useResolveDocumentProjectId } from '@/serdes/UseResolveDocumentProjectId';
 import { getDocumentById } from '@/stores/document';
 import { getDocumentSettingsById } from '@/stores/document/get';
 import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentDocumentId } from '@/stores/user';
 import PopoverStyle from '@/styles/Popover.module.css';
 
-import { formatProjectId } from '../takes/TakeNameFormat';
 import SettingsFieldInput from './SettingsFieldInput';
 
 export default function SettingsProjectIdField() {
   const inputRef = useRef(/** @type {HTMLInputElement|null} */ (null));
+  const [inputText, setInputText] = useState('');
   const documentId = useCurrentDocumentId();
   const documentTitle = useDocumentStore(
     (ctx) => getDocumentById(ctx, documentId)?.documentTitle,
   );
-  const [projectId, setProjectId] = useState('');
   const documentSettingsProjectId = useDocumentStore(
     (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
   );
   const setDocumentSettingsProjectId = useDocumentStore(
     (ctx) => ctx.setDocumentSettingsProjectId,
   );
-  const defaultProjectId = formatProjectId(documentTitle);
+  const resolveDocumentProjectId = useResolveDocumentProjectId();
+  const projectId = resolveDocumentProjectId(
+    documentId,
+    documentTitle || inputText,
+    true,
+  );
   const isProjectIdLocked = Boolean(documentSettingsProjectId);
 
   /**
@@ -43,26 +48,27 @@ export default function SettingsProjectIdField() {
     const target = e.target;
     const value = target.value;
     if (!value || value.trim().length <= 0) {
-      setProjectId('');
+      setInputText('');
     } else {
-      setProjectId(formatProjectId(value));
+      setInputText(value);
     }
   }
 
   function onBlur() {
     if (!documentSettingsProjectId) {
+      console.log('[SettingsProjectIdField] Changed project id on blur!');
       setDocumentSettingsProjectId(documentId, projectId);
     }
   }
 
   function onLockClick() {
     if (!documentSettingsProjectId) {
+      console.log('[SettingsProjectIdField] Changed project id on lock!');
       // Lock the current value!
-      let value = documentSettingsProjectId || projectId || defaultProjectId;
-      setDocumentSettingsProjectId(documentId, value);
+      setDocumentSettingsProjectId(documentId, projectId);
     } else {
       // Unlock it for editing
-      setProjectId(documentSettingsProjectId);
+      setInputText(documentSettingsProjectId);
       setDocumentSettingsProjectId(documentId, '');
       inputRef.current?.focus();
     }
@@ -73,8 +79,8 @@ export default function SettingsProjectIdField() {
       <SettingsFieldInput
         title="Project ID:"
         id="project-id"
-        placeholder={defaultProjectId}
-        value={documentSettingsProjectId || projectId}
+        placeholder={projectId}
+        value={documentSettingsProjectId || inputText}
         onChange={onChange}
         disabled={isProjectIdLocked}
         inputRef={inputRef}

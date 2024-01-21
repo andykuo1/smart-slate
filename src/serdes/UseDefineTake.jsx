@@ -24,9 +24,8 @@ export function useDefineTake() {
     function _defineTake(documentId, sceneId, shotId, opts = {}) {
       const store = UNSAFE_getStore();
 
-      const takeShotHash = resolveTakeShotHash(store, documentId, shotId);
+      const takeShotHash = resolveTakeShotHash(documentId, shotId);
       const takeFileName = resolveTakeFileName(
-        store,
         documentId,
         sceneId,
         shotId,

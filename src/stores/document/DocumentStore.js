@@ -34,6 +34,7 @@ export function createDocument(documentId = uuid()) {
   return {
     documentId,
     documentTitle: '',
+    firstCreatedMillis: 0,
     lastUpdatedMillis: 0,
     lastDeletedMillis: 0,
     lastExportedMillis: 0,
@@ -179,6 +180,8 @@ export function cloneDocument(out, document) {
     out.documentId = document.documentId;
   if (typeof document.documentTitle !== 'undefined')
     out.documentTitle = document.documentTitle;
+  if (typeof document.firstCreatedMillis !== 'undefined')
+    out.firstCreatedMillis = document.firstCreatedMillis;
   if (typeof document.lastUpdatedMillis !== 'undefined')
     out.lastUpdatedMillis = document.lastUpdatedMillis;
   if (typeof document.lastDeletedMillis !== 'undefined')

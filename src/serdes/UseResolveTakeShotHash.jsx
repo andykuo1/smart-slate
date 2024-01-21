@@ -5,17 +5,17 @@ import { findNextAvailableShotHash } from '@/stores/document/get';
 import { useDocumentStore } from '@/stores/document/use';
 
 export function useResolveTakeShotHash() {
+  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const assignAvailableShotHash = useDocumentStore(
     (ctx) => ctx.assignAvailableShotHash,
   );
   const resolveTakeShotHash = useCallback(
     /**
-     * @param {import('@/stores/document/DocumentStore').Store} store
      * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
      * @param {import('@/stores/document/DocumentStore').ShotId} shotId
      */
-    function _resolveTakeShotHash(store, documentId, shotId) {
-      // NOTE: Generate the shot hash now-- since it may not exist.
+    function _resolveTakeShotHash(documentId, shotId) {
+      const store = UNSAFE_getStore();
       const shot = getShotById(store, documentId, shotId);
       if (!shot) {
         return '0000';
@@ -27,7 +27,7 @@ export function useResolveTakeShotHash() {
       }
       return result;
     },
-    [assignAvailableShotHash],
+    [UNSAFE_getStore, assignAvailableShotHash],
   );
   return resolveTakeShotHash;
 }

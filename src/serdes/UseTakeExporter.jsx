@@ -34,16 +34,14 @@ export function useTakeDownloader() {
      * @param {import('@/stores/document/DocumentStore').TakeId} takeId
      */
     async function _downloadTake(documentId, sceneId, shotId, takeId) {
-      const store = UNSAFE_getStore();
       const idbKey = getIDBKeyFromTakeId(takeId);
       const data = await getVideoBlob(documentId, idbKey);
       if (!data) {
         return;
       }
 
-      const shotHash = resolveTakeShotHash(store, documentId, shotId);
+      const shotHash = resolveTakeShotHash(documentId, shotId);
       const takeFileName = resolveTakeFileName(
-        store,
         documentId,
         sceneId,
         shotId,
@@ -81,16 +79,14 @@ export function useTakeGoogleDriveUploader() {
      * @param {import('@/stores/document/DocumentStore').TakeId} takeId
      */
     async function _uploadTake(documentId, sceneId, shotId, takeId) {
-      const store = UNSAFE_getStore();
       const idbKey = getIDBKeyFromTakeId(takeId);
       const data = await getVideoBlob(documentId, idbKey);
       if (!data) {
         return;
       }
 
-      const shotHash = resolveTakeShotHash(store, documentId, shotId);
+      const shotHash = resolveTakeShotHash(documentId, shotId);
       const takeFileName = resolveTakeFileName(
-        store,
         documentId,
         sceneId,
         shotId,
@@ -149,10 +145,8 @@ export function useTakeExporter() {
      */
     function exportTake(data, documentId, sceneId, shotId, opts = {}) {
       const store = UNSAFE_getStore();
-
-      const takeShotHash = resolveTakeShotHash(store, documentId, shotId);
+      const takeShotHash = resolveTakeShotHash(documentId, shotId);
       const takeFileName = resolveTakeFileName(
-        store,
         documentId,
         sceneId,
         shotId,
