@@ -1,4 +1,6 @@
-import { zi } from '../../ZustandImmerHelper';
+import { zi } from '@/stores/ZustandImmerHelper';
+
+import { getBlockById, getLastBlockIdInScene } from '../get';
 import { incrementDocumentRevisionNumber } from './DispatchDocuments';
 
 /**
@@ -12,6 +14,7 @@ export function createDispatchShots(set, get) {
     setShotReferenceImage: zi(set, setShotReferenceImage),
     moveShot: zi(set, moveShot),
     updateShot: zi(set, updateShot),
+    moveShotToScene: zi(set, moveShotToScene),
   };
 }
 
@@ -110,4 +113,28 @@ function moveShot(
   } else {
     shotIds.push(shotId);
   }
+}
+
+/**
+ * @param {import('../DocumentStore').Store} store
+ * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('../DocumentStore').BlockId} blockId
+ * @param {import('../DocumentStore').ShotId} shotId
+ * @param {import('../DocumentStore').SceneId} targetSceneId
+ */
+function moveShotToScene(store, documentId, blockId, shotId, targetSceneId) {
+  const document = store.documents[documentId];
+  const block = document.blocks[blockId];
+  const shotIds = block.shotIds;
+  const shotIndex = shotIds.indexOf(shotId);
+  const targetBlockId = getLastBlockIdInScene(store, documentId, targetSceneId);
+  const targetBlock = getBlockById(store, documentId, targetBlockId);
+  if (shotIndex < 0) {
+    return;
+  }
+  if (shotIds.length <= 0) {
+    return;
+  }
+  shotIds.splice(shotIndex, 1);
+  targetBlock.shotIds.push(shotId);
 }

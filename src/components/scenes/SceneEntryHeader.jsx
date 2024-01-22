@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 
 import { useSceneHeading, useSceneNumber } from '@/stores/document';
+import { useSceneShotCount } from '@/stores/document/use';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 
@@ -16,6 +17,7 @@ export default function SceneEntryHeader({ className, documentId, sceneId }) {
   const containerRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const [sceneHeading, setSceneHeading] = useSceneHeading(documentId, sceneId);
   const sceneNumber = useSceneNumber(documentId, sceneId);
+  const sceneShotCount = useSceneShotCount(documentId, sceneId);
   const currentCursor = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
   const isActive =
@@ -58,7 +60,11 @@ export default function SceneEntryHeader({ className, documentId, sceneId }) {
       }>
       <SceneNumber sceneNumber={sceneNumber} onClick={onClick} />
       <input
-        className="flex-1 w-full bg-transparent px-2 py-6 text-xl font-bold"
+        className={
+          'flex-1 w-full bg-transparent px-2 py-6 text-xl font-bold' +
+          ' ' +
+          (sceneShotCount <= 0 ? 'line-through' : '')
+        }
         type="text"
         list="sceneHeading"
         placeholder="INT/EXT. SCENE - DAY"

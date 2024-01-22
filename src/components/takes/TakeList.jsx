@@ -37,6 +37,7 @@ export default function TakeList({
       <TakeEntryNew
         documentId={documentId}
         sceneId={sceneId}
+        blockId={blockId}
         shotId={shotId}
         viewMode={viewMode}
       />
@@ -48,6 +49,7 @@ export default function TakeList({
             <TakeEntry
               documentId={documentId}
               sceneId={sceneId}
+              blockId={blockId}
               shotId={shotId}
               takeId={takeId}
               viewMode={viewMode}

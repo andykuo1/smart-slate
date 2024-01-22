@@ -7,6 +7,7 @@ import TakeEntryLayout from './TakeEntryLayout';
  * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
  * @param {'list'|'inline'} props.viewMode
@@ -15,6 +16,7 @@ export default function TakeEntry({
   className,
   documentId,
   sceneId,
+  blockId,
   shotId,
   takeId,
   viewMode,

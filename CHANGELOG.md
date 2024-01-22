@@ -11,6 +11,8 @@
 
 - Add import all or verified footage for scanner
 - Add take id to qr code key
+- Add move scene button for shots
+- Add strikethrough for scenes with no shots
 - Fix qr code aspect ratio
 
 # 0.1.14

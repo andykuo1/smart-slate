@@ -45,6 +45,19 @@ export function getFirstBlockIdInScene(store, documentId, sceneId) {
 }
 
 /**
+ * @param {import('../DocumentStore').Store} store
+ * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('../DocumentStore').SceneId} sceneId
+ */
+export function getLastBlockIdInScene(store, documentId, sceneId) {
+  let result = getSceneById(store, documentId, sceneId)?.blockIds;
+  if (!result || result.length <= 0) {
+    return '';
+  }
+  return result[result.length - 1];
+}
+
+/**
  * @param {import('@/stores/document/DocumentStore').Store} store
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {import('@/stores/document/DocumentStore').ShotId} shotId
