@@ -252,6 +252,10 @@ function findTakeWithDecodedQRCode(store, takeInfo, documentId, forceDocument) {
     if (documents.length <= 0) {
       throw new Error('No project found with same project id.');
     }
+    console.log(
+      '[SettingsFootageAnalyzeButton] Found for documents: ',
+      documents,
+    );
     document =
       documents.find((document) => document.documentId === documentId) ||
       (forceDocument ? documents[0] : null);
