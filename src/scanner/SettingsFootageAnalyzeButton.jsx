@@ -10,11 +10,11 @@ import {
   tryDecodeQRCodeKeyV1,
 } from '@/serdes/UseResolveTakeQRCodeKey';
 import {
+  findDocumentWithTakeId,
   findDocumentsWithProjectId,
   findShotWithShotHash,
   findTakeWithTakeNumber,
   getTakeById,
-  useSetTakePreviewImage,
 } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentDocumentId } from '@/stores/user';
@@ -26,6 +26,8 @@ import {
 
 import { scanVideoBlobForQRCodes } from './QRCodeReader';
 import {
+  attachTakeIdScanner,
+  attachTakeInfoScanner,
   createScannerChangeEvent,
   errorScanner,
   isScannerFailure,
@@ -45,7 +47,6 @@ export default function SettingsFootageAnalyzeButton({
 }) {
   const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
   const documentId = useCurrentDocumentId();
-  const setTakePreview = useSetTakePreviewImage();
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
 
   async function onClick() {
@@ -58,7 +59,9 @@ export default function SettingsFootageAnalyzeButton({
     // Scan videos
     await performScan(output, videoRef, onChange);
 
+    // Get all un/verified files for this project
     if (documentId) {
+      const store = UNSAFE_getStore();
       for (const key of Object.keys(output)) {
         let result = output[key];
         if (isScannerFailure(result)) {
@@ -70,22 +73,24 @@ export default function SettingsFootageAnalyzeButton({
           onChange(event);
           continue;
         }
-        const store = UNSAFE_getStore();
         try {
-          const take = findTakeWithQRCode(
+          const takeInfo = decodeTakeInfoFromQRCode(result.code);
+          attachTakeInfoScanner(result, takeInfo);
+          updateScannerStatus(result, '[UN-VERIFIED]');
+          onChange(event);
+
+          const take = findTakeWithDecodedQRCode(
             store,
-            result.code,
+            takeInfo,
             documentId,
             false,
           );
-
-          updateScannerStatus(result, '[IMPORTED]');
+          attachTakeIdScanner(result, take.takeId);
+          updateScannerStatus(result, '[VERIFIED]');
           onChange(event);
-
-          console.log('[TakeScanner] Found take with snapshot in project!');
-          setTakePreview(documentId, take.takeId, result.snapshot);
         } catch (e) {
-          errorScanner(result, e);
+          // NOTE: Failures to find take should not invalidate entry (could be resolved later).
+          errorScanner(result, e, false);
           onChange(event);
         }
       }
@@ -213,32 +218,55 @@ async function performScan(output, videoRef, onChange) {
 }
 
 /**
- * @param {import('@/stores/document/DocumentStore').Store} store
  * @param {string} qrCode
- * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
- * @param {boolean} forceDocument
  */
-function findTakeWithQRCode(store, qrCode, documentId, forceDocument) {
+function decodeTakeInfoFromQRCode(qrCode) {
   let result = tryDecodeQRCodeKeyV1(qrCode) || tryDecodeQRCodeKeyV0(qrCode);
   if (!result) {
     throw new Error('No supported qr code format.');
   }
-  const documents = findDocumentsWithProjectId(store, result.projectId);
-  if (documents.length <= 0) {
-    throw new Error('No project found with same project id.');
+  return result;
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {ReturnType<decodeTakeInfoFromQRCode>} takeInfo
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {boolean} forceDocument
+ */
+function findTakeWithDecodedQRCode(store, takeInfo, documentId, forceDocument) {
+  let result = takeInfo;
+  if (!result) {
+    throw new Error('No supported qr code format.');
   }
-  const document =
-    documents.find((document) => document.documentId === documentId) ||
-    (forceDocument ? documents[0] : null);
-  if (!document) {
-    throw new Error(
-      'Mismatched document id - found for another project though.',
-    );
+
+  // NOTE: Rely on take id first, as that is a uuid. Project IDs has the potential to change...
+  let document;
+  if ('takeId' in takeInfo) {
+    document = findDocumentWithTakeId(store, takeInfo.takeId);
+    if (!document) {
+      throw new Error('No project found with matching take id.');
+    }
+  } else {
+    const documents = findDocumentsWithProjectId(store, result.projectId);
+    if (documents.length <= 0) {
+      throw new Error('No project found with same project id.');
+    }
+    document =
+      documents.find((document) => document.documentId === documentId) ||
+      (forceDocument ? documents[0] : null);
+    if (!document) {
+      throw new Error(
+        'Mismatched document id - found for another project though.',
+      );
+    }
   }
+
   const shot = findShotWithShotHash(store, documentId, result.shotHash);
   if (!shot) {
     throw new Error('No shot found with same shot hash.');
   }
+
   const shotId = shot.shotId;
   if ('takeNumber' in result) {
     let take = findTakeWithTakeNumber(

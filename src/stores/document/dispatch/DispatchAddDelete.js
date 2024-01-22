@@ -54,6 +54,9 @@ export function addBlock(store, documentId, sceneId, block) {
   let scene = document.scenes[sceneId];
   document.blocks[block.blockId] = block;
   scene.blockIds.push(block.blockId);
+  if (!block.contentType) {
+    block.contentType = 'fountain-json';
+  }
   incrementDocumentRevisionNumber(document);
 }
 

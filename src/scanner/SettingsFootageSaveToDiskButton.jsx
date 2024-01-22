@@ -33,7 +33,7 @@ export default function SettingsFootageSaveToDiskButton({
   }
   return (
     <SettingsFieldButton Icon={SaveIcon} onClick={onClick} disabled={disabled}>
-      Save to disk
+      Rename files on disk
       {
         <span className="block w-[80%] mx-auto mt-4">
           NOTE: Only <b>Chrome</b> browsers currently support this step.

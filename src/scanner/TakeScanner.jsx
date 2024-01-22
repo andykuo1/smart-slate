@@ -9,6 +9,7 @@ import { useCurrentDocumentId } from '@/stores/user';
 import SettingsFootageAnalyzeButton from './SettingsFootageAnalyzeButton';
 import SettingsFootageDirectoryButton from './SettingsFootageDirectoryButton';
 import SettingsFootageExportCSVButton from './SettingsFootageExportCSVButton';
+import SettingsFootageProjectImportButton from './SettingsFootageProjectImportButton';
 import SettingsFootageSaveToDiskButton from './SettingsFootageSaveToDiskButton';
 
 /**
@@ -58,6 +59,11 @@ export default function TakeScanner({ className, onChange }) {
         outputRef={outputRef}
         onChange={onScannerChange}
         disabled={status !== 'scanned'}
+      />
+      <SettingsFootageProjectImportButton
+        outputRef={outputRef}
+        onChange={onScannerChange}
+        disabled={status !== 'analyzed'}
       />
       <SettingsFootageSaveToDiskButton
         outputRef={outputRef}

@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useRef } from 'react';
 
 import QRCode2AddIcon from '@material-symbols/svg-400/rounded/qr_code_2_add.svg';
-import QRCode from 'qrcode';
 
-import { drawElementToCanvasWithRespectToAspectRatio } from '@/recorder/snapshot/VideoSnapshot';
 import { useDefineTake } from '@/serdes/UseDefineTake';
 import { useResolveTakeQRCodeKey } from '@/serdes/UseResolveTakeQRCodeKey';
 import { getTakeById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import { useSetUserCursor } from '@/stores/user';
+
+import { useQRCodeCanvas } from './UseQRCodeCanvas';
 
 /**
  * @param {object} props
@@ -77,41 +77,7 @@ export default function ClapperQRCodeField({
 function QRCodeView({ className, data }) {
   const containerRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const canvasRef = useRef(/** @type {HTMLCanvasElement|null} */ (null));
-  useEffect(() => {
-    if (!data) {
-      return;
-    }
-    const buffer = document.createElement('canvas');
-    QRCode.toCanvas(buffer, data, { errorCorrectionLevel: 'L' });
-
-    let handle = requestAnimationFrame(onAnimationFrame);
-    function onAnimationFrame() {
-      if (handle === 0) {
-        return;
-      }
-      handle = requestAnimationFrame(onAnimationFrame);
-      const canvas = canvasRef.current;
-      const ctx = canvas?.getContext?.('2d');
-      const container = containerRef.current;
-      if (!canvas || !ctx || !container) {
-        return;
-      }
-      const rect = container.getBoundingClientRect();
-      drawElementToCanvasWithRespectToAspectRatio(
-        canvas,
-        buffer,
-        buffer.width,
-        buffer.height,
-        rect.width,
-        rect.height,
-      );
-    }
-    return () => {
-      const prevHandle = handle;
-      handle = 0;
-      cancelAnimationFrame(prevHandle);
-    };
-  }, [data]);
+  useQRCodeCanvas(data, containerRef, canvasRef);
   return (
     <div
       ref={containerRef}
