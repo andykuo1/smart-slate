@@ -20,10 +20,10 @@ export function getBlockIdsInOrder(store, documentId, sceneId) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').SceneId} sceneId
- * @param {import('../DocumentStore').BlockId} blockId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+ * @param {import('@/stores/document/DocumentStore').BlockId} blockId
  */
 export function getBlockIndex(store, documentId, sceneId, blockId) {
   const index = Number(
@@ -36,18 +36,18 @@ export function getBlockIndex(store, documentId, sceneId, blockId) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').SceneId} sceneId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
  */
 export function getFirstBlockIdInScene(store, documentId, sceneId) {
   return getSceneById(store, documentId, sceneId)?.blockIds?.[0] || '';
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').SceneId} sceneId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
  */
 export function getLastBlockIdInScene(store, documentId, sceneId) {
   let result = getSceneById(store, documentId, sceneId)?.blockIds;
@@ -55,6 +55,32 @@ export function getLastBlockIdInScene(store, documentId, sceneId) {
     return '';
   }
   return result[result.length - 1];
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+ * @param {import('@/stores/document/DocumentStore').BlockId} blockId
+ * @param {number} [offset]
+ */
+export function getNextBlockIdInScene(
+  store,
+  documentId,
+  sceneId,
+  blockId,
+  offset = 1,
+) {
+  let result = getSceneById(store, documentId, sceneId)?.blockIds;
+  if (!result || result.length <= 0) {
+    return '';
+  }
+  let index = result.indexOf(blockId);
+  let nextIndex = index + offset;
+  if (nextIndex < 0 || nextIndex >= result.length) {
+    return '';
+  }
+  return result[nextIndex];
 }
 
 /**

@@ -6,7 +6,6 @@
 - shot details focus experience
 - - nav takes on shotlist
 - - nav shots on edit mode
-- Be able to move shots across scenes
 - Be able to record QR code in recorder
 
 - Add import all or verified footage for scanner

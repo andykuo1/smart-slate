@@ -29,8 +29,8 @@ export function createDispatchDocuments(set, get) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  */
 function trashDocument(store, documentId) {
   const document = getDocumentById(store, documentId);
@@ -49,14 +49,14 @@ function trashDocument(store, documentId) {
 
 /**
  * @callback UpdateDocumentHandler
- * @param {import('../DocumentStore').Document} document
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').Document} document
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').Store} store
  */
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {UpdateDocumentHandler} handler
  */
 function updateDocument(store, documentId, handler) {
@@ -66,8 +66,8 @@ function updateDocument(store, documentId, handler) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {string} title
  */
 function setDocumentTitle(store, documentId, title) {
@@ -77,9 +77,9 @@ function setDocumentTitle(store, documentId, title) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').SceneId} sceneId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
  * @param {string} heading
  */
 function setSceneHeading(store, documentId, sceneId, heading) {
@@ -90,10 +90,10 @@ function setSceneHeading(store, documentId, sceneId, heading) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').BlockId} blockId
- * @param {import('../DocumentStore').BlockContentType} contentType
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').BlockId} blockId
+ * @param {import('@/stores/document/DocumentStore').BlockContentType} contentType
  * @param {string} content
  */
 function setBlockContent(store, documentId, blockId, contentType, content) {
@@ -105,7 +105,7 @@ function setBlockContent(store, documentId, blockId, contentType, content) {
 }
 
 /**
- * @param {import('../DocumentStore').Document} document
+ * @param {import('@/stores/document/DocumentStore').Document} document
  */
 export function incrementDocumentRevisionNumber(document) {
   document.revisionNumber += 1;
@@ -113,10 +113,10 @@ export function incrementDocumentRevisionNumber(document) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').ShotId} shotId
- * @param {import('../DocumentStore').ShotHash} shotHash
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ * @param {import('@/stores/document/DocumentStore').ShotHash} shotHash
  */
 function assignAvailableShotHash(store, documentId, shotId, shotHash) {
   let document = getDocumentById(store, documentId);
@@ -152,8 +152,8 @@ function applyDocument(store, documentId, document, force = false) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {number} millis
  */
 function setDocumentLastExportedMillis(store, documentId, millis) {
@@ -162,8 +162,8 @@ function setDocumentLastExportedMillis(store, documentId, millis) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {number} millis
  */
 function setDocumentLastDataExportedMillis(store, documentId, millis) {

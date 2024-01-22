@@ -2,7 +2,7 @@ import { getDocumentSettingsById } from '../get/GetDocumentSettings';
 import { useDocumentStore } from './UseDocumentStore';
 
 /**
- * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  */
 export function useProjectId(documentId) {
   return useDocumentStore(

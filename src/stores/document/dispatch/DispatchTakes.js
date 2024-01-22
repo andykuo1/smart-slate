@@ -20,9 +20,9 @@ export function createDispatchTakes(set, get) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').TakeId} takeId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
  * @param {string} fileId
  */
 function setTakeExportedGoogleDriveFileId(store, documentId, takeId, fileId) {
@@ -33,9 +33,9 @@ function setTakeExportedGoogleDriveFileId(store, documentId, takeId, fileId) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').TakeId} takeId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
  * @param {string} previewImage
  */
 function setTakePreviewImage(store, documentId, takeId, previewImage) {
@@ -46,9 +46,9 @@ function setTakePreviewImage(store, documentId, takeId, previewImage) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').TakeId} takeId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
  * @param {number} rating
  */
 function setTakeRating(store, documentId, takeId, rating) {
@@ -59,9 +59,9 @@ function setTakeRating(store, documentId, takeId, rating) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').TakeId} takeId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
  * @param {IDBValidKey} idbKey
  */
 function setTakeExportedIDBKey(store, documentId, takeId, idbKey) {
@@ -72,9 +72,9 @@ function setTakeExportedIDBKey(store, documentId, takeId, idbKey) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').TakeId} takeId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
  * @param {string} fileNameWithExt
  */
 function setTakeExportedFileName(store, documentId, takeId, fileNameWithExt) {
@@ -85,9 +85,9 @@ function setTakeExportedFileName(store, documentId, takeId, fileNameWithExt) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').TakeId} takeId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
  * @param {string} qrCodeKey
  */
 function setTakeExportedQRCodeKey(store, documentId, takeId, qrCodeKey) {
@@ -98,9 +98,9 @@ function setTakeExportedQRCodeKey(store, documentId, takeId, qrCodeKey) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').TakeId} takeId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
  */
 function toggleGoodTake(store, documentId, takeId) {
   let document = store.documents[documentId];

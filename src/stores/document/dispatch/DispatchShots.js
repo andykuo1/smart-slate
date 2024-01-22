@@ -15,21 +15,22 @@ export function createDispatchShots(set, get) {
     moveShot: zi(set, moveShot),
     updateShot: zi(set, updateShot),
     moveShotToScene: zi(set, moveShotToScene),
+    moveShotBy: zi(set, moveShotBy),
   };
 }
 
 /**
  * @callback UpdateShotHandler
- * @param {import('../DocumentStore').Shot} shot
- * @param {import('../DocumentStore').ShotId} shotId
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').Shot} shot
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').Store} store
  */
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').ShotId} shotId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
  * @param {UpdateShotHandler} handler
  */
 function updateShot(store, documentId, shotId, handler) {
@@ -40,9 +41,9 @@ function updateShot(store, documentId, shotId, handler) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').ShotId} shotId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
  * @param {string} shotType
  */
 function setShotType(store, documentId, shotId, shotType) {
@@ -53,9 +54,9 @@ function setShotType(store, documentId, shotId, shotType) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').ShotId} shotId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
  * @param {string} description
  */
 function setShotDescription(store, documentId, shotId, description) {
@@ -66,9 +67,9 @@ function setShotDescription(store, documentId, shotId, description) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').ShotId} shotId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
  * @param {string} referenceImageUrl
  */
 function setShotReferenceImage(store, documentId, shotId, referenceImageUrl) {
@@ -79,11 +80,11 @@ function setShotReferenceImage(store, documentId, shotId, referenceImageUrl) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').BlockId} blockId
- * @param {import('../DocumentStore').ShotId} shotId
- * @param {import('../DocumentStore').ShotId} targetId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').BlockId} blockId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ * @param {import('@/stores/document/DocumentStore').ShotId} targetId
  * @param {boolean} [before]
  */
 function moveShot(
@@ -116,11 +117,11 @@ function moveShot(
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').BlockId} blockId
- * @param {import('../DocumentStore').ShotId} shotId
- * @param {import('../DocumentStore').SceneId} targetSceneId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').BlockId} blockId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ * @param {import('@/stores/document/DocumentStore').SceneId} targetSceneId
  */
 function moveShotToScene(store, documentId, blockId, shotId, targetSceneId) {
   const document = store.documents[documentId];
@@ -137,4 +138,77 @@ function moveShotToScene(store, documentId, blockId, shotId, targetSceneId) {
   }
   shotIds.splice(shotIndex, 1);
   targetBlock.shotIds.push(shotId);
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+ * @param {import('@/stores/document/DocumentStore').BlockId} blockId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ * @param {number} offset
+ */
+function moveShotBy(store, documentId, sceneId, blockId, shotId, offset) {
+  throw new Error('Not yet implemented.');
+  /*
+  const document = store.documents[documentId];
+  const scene = document.scenes[sceneId];
+  const block = document.blocks[blockId];
+  const shot = document.shots[shotId];
+  const shotIds = block.shotIds;
+  const shotIndex = shotIds.indexOf(shotId);
+  if (shotIndex < 0) {
+    // Shot not found in block. Skip it.
+    return;
+  }
+  if (offset > 0) {
+    // Moving shot forward....
+    let targetBlockId = blockId;
+    let targetBlock = block;
+    let targetShotIds = shotIds;
+    let targetShotIndex = shotIndex + offset;
+    while (targetShotIndex > targetShotIds.length) {
+      // ...past this block into the next
+      targetShotIndex -= targetShotIds.length;
+      // ...get next block
+      let nextBlockId = getNextBlockIdInScene(
+        store,
+        documentId,
+        sceneId,
+        targetBlockId,
+        1,
+      );
+      if (!nextBlockId) {
+        break;
+      }
+      targetBlockId = nextBlockId;
+      targetBlock = getBlockById(store, documentId, targetBlockId);
+      targetShotIds = targetBlock.shotIds;
+    }
+    // Add it in!
+    targetShotIds.splice(targetShotIndex, 0, shotId);
+  } else {
+    // Moving shot backward...
+    let targetBlockId = blockId;
+    let targetBlock = block;
+    let targetShotIds = shotIds;
+    let targetShotIndex = shotIndex + offset;
+    while (targetShotIndex < 0) {
+      // ...before this block into the previous
+      targetShotIndex += targetShotIds.length;
+      // ...get previous block
+    }
+  }
+
+  const targetBlockId = getLastBlockIdInScene(store, documentId);
+  const targetBlock = getBlockById(store, documentId, targetBlockId);
+  if (shotIndex < 0) {
+    return;
+  }
+  if (shotIds.length <= 0) {
+    return;
+  }
+  shotIds.splice(shotIndex, 1);
+  targetBlock.shotIds.push(shotId);
+  */
 }

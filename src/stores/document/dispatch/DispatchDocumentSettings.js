@@ -28,11 +28,11 @@ export function createDispatchDocumentSettings(set, get) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  */
 function resolveDocumentSettingsById(store, documentId) {
-  /** @type {Partial<import('../DocumentStore').Document['settings']>} */
+  /** @type {Partial<import('@/stores/document/DocumentStore').Document['settings']>} */
   let settings = getDocumentSettingsById(store, documentId);
   if (!settings) {
     settings = {};
@@ -42,8 +42,8 @@ function resolveDocumentSettingsById(store, documentId) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {string} projectId
  */
 function setDocumentSettingsProjectId(store, documentId, projectId) {
@@ -56,8 +56,8 @@ function setDocumentSettingsProjectId(store, documentId, projectId) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {'16:9'|'4:3'} aspectRatio
  */
 function setDocumentSettingsAspectRatio(store, documentId, aspectRatio) {
@@ -66,8 +66,8 @@ function setDocumentSettingsAspectRatio(store, documentId, aspectRatio) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {'4K'|'HD'} videoResolution
  */
 function setDocumentSettingsVideoResolution(
@@ -80,8 +80,8 @@ function setDocumentSettingsVideoResolution(
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {string} name
  */
 function setDocumentSettingsDirectorName(store, documentId, name) {
@@ -90,8 +90,8 @@ function setDocumentSettingsDirectorName(store, documentId, name) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {string} name
  */
 function setDocumentSettingsCameraName(store, documentId, name) {
@@ -100,8 +100,8 @@ function setDocumentSettingsCameraName(store, documentId, name) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {'local'|'gdrive'} dest
  */
 function setDocumentSettingsAutoSaveTo(store, documentId, dest) {
@@ -110,8 +110,8 @@ function setDocumentSettingsAutoSaveTo(store, documentId, dest) {
 }
 
 /**
- * @param {import('../DocumentStore').Store} store
- * @param {import('../DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {string} fileId
  */
 function setDocumentSettingsAutoSaveGDriveFileId(store, documentId, fileId) {

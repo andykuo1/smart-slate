@@ -2,8 +2,8 @@ import { getShotById } from '../get/GetShots';
 import { useDocumentStore } from './UseDocumentStore';
 
 /**
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').ShotId} shotId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
  */
 export function useShotTakeCount(documentId, shotId) {
   return useDocumentStore(

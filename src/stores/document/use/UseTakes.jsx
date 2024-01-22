@@ -3,8 +3,8 @@ import { getTakeById } from '../get/GetTakes';
 import { useDocumentStore } from './UseDocumentStore';
 
 /**
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').ShotId} shotId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
  * @param {boolean} [referenceOnly]
  */
 export function useBestTakeImageForShotThumbnail(

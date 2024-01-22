@@ -4,8 +4,8 @@ import { getShotIdsInOrder } from '../get/GetShots';
 import { useDocumentStore } from './UseDocumentStore';
 
 /**
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').SceneId} sceneId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
  */
 export function useFirstBlockIdInScene(documentId, sceneId) {
   return useDocumentStore((ctx) =>
@@ -14,9 +14,9 @@ export function useFirstBlockIdInScene(documentId, sceneId) {
 }
 
 /**
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').SceneId} sceneId
- * @param {import('../DocumentStore').ShotId} shotId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
  */
 export function useBlockIdForShot(documentId, sceneId, shotId) {
   return useDocumentStore((ctx) =>
@@ -27,8 +27,8 @@ export function useBlockIdForShot(documentId, sceneId, shotId) {
 }
 
 /**
- * @param {import('../DocumentStore').DocumentId} documentId
- * @param {import('../DocumentStore').BlockId} blockId
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').BlockId} blockId
  */
 export function useBlockShotCount(documentId, blockId) {
   return useDocumentStore(

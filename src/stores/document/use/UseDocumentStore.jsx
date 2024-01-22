@@ -6,7 +6,7 @@ import { cloneStore, createStore } from '../DocumentStore';
 
 export const LOCAL_STORAGE_KEY = 'documentStore';
 
-/** @typedef {import('../DocumentStore').Store & import('../DocumentDispatch').Dispatch} StoreAndDispatch */
+/** @typedef {import('@/stores/document/DocumentStore').Store & import('../DocumentDispatch').Dispatch} StoreAndDispatch */
 
 /** @type {import('zustand').UseBoundStore<import('zustand').StoreApi<StoreAndDispatch>>} */
 export const useDocumentStore = create(
