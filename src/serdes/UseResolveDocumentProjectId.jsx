@@ -45,7 +45,7 @@ export function useResolveDocumentProjectId() {
       }
       return result;
     },
-    [setDocumentSettingsProjectId],
+    [UNSAFE_getStore, setDocumentSettingsProjectId],
   );
   return resolveDocumentProjectId;
 }

@@ -28,7 +28,6 @@ export default function ClapperQRCodeField({
     (ctx) => getTakeById(ctx, documentId, takeId)?.exportDetails?.qrCodeKey,
   );
   const defineTake = useDefineTake();
-  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const resolveTakeQRCodeKey = useResolveTakeQRCodeKey();
 
   const onClick = useCallback(
@@ -42,7 +41,6 @@ export default function ClapperQRCodeField({
       sceneId,
       shotId,
       takeId,
-      UNSAFE_getStore,
       defineTake,
       setUserCursor,
       resolveTakeQRCodeKey,
@@ -77,31 +75,51 @@ export default function ClapperQRCodeField({
  * @param {string} props.data
  */
 function QRCodeView({ className, data }) {
+  const containerRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const canvasRef = useRef(/** @type {HTMLCanvasElement|null} */ (null));
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext?.('2d');
-    if (!canvas || !ctx) {
-      return;
-    }
     if (!data) {
       return;
     }
     const buffer = document.createElement('canvas');
     QRCode.toCanvas(buffer, data, { errorCorrectionLevel: 'L' });
-    const rect = canvas.getBoundingClientRect();
-    drawElementToCanvasWithRespectToAspectRatio(
-      canvas,
-      buffer,
-      buffer.width,
-      buffer.height,
-      rect.width,
-      rect.height,
-    );
+
+    let handle = requestAnimationFrame(onAnimationFrame);
+    function onAnimationFrame() {
+      if (handle === 0) {
+        return;
+      }
+      handle = requestAnimationFrame(onAnimationFrame);
+      const canvas = canvasRef.current;
+      const ctx = canvas?.getContext?.('2d');
+      const container = containerRef.current;
+      if (!canvas || !ctx || !container) {
+        return;
+      }
+      const rect = container.getBoundingClientRect();
+      drawElementToCanvasWithRespectToAspectRatio(
+        canvas,
+        buffer,
+        buffer.width,
+        buffer.height,
+        rect.width,
+        rect.height,
+      );
+    }
+    return () => {
+      const prevHandle = handle;
+      handle = 0;
+      cancelAnimationFrame(prevHandle);
+    };
   }, [data]);
   return (
-    <div className={'w-full h-full flex items-center' + ' ' + className}>
-      <canvas ref={canvasRef} className="block mx-auto w-full h-full" />
+    <div
+      ref={containerRef}
+      className={'relative w-full h-full flex items-center' + ' ' + className}>
+      <canvas
+        ref={canvasRef}
+        className="absolute top-0 left-0 block mx-auto w-full h-full"
+      />
     </div>
   );
 }

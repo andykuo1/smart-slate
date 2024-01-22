@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import TakeScanner from '@/app/TakeScanner';
+import TakeScanner from '@/scanner/TakeScanner';
 
 import PageLayout from './PageLayout';
 
@@ -14,12 +14,9 @@ export default function ScanPage() {
   }
   return (
     <PageLayout>
-      <fieldset className="flex-1 flex flex-col items-center">
-        <TakeScanner
-          className="w-[80vw] m-2 p-2 border-2 border-black rounded bg-gray-300 disabled:opacity-30"
-          onChange={onChange}
-        />
-        <pre className="flex-1 w-[80vw] overflow-x-auto">
+      <fieldset className="flex-1 flex flex-col sm:flex-row mx-auto">
+        <TakeScanner className="p-4 w-80" onChange={onChange} />
+        <pre className="flex-1 overflow-x-auto w-[80vw]">
           <code>{state}</code>
         </pre>
       </fieldset>

@@ -22,7 +22,6 @@ import { useResolveTakeFileName } from './UseResolveTakeFileName';
 import { useResolveTakeShotHash } from './UseResolveTakeShotHash';
 
 export function useTakeDownloader() {
-  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const resolveTakeFileName = useResolveTakeFileName();
   const resolveTakeShotHash = useResolveTakeShotHash();
 
@@ -55,14 +54,13 @@ export function useTakeDownloader() {
       downloadURLImpl(takeFileName, dataURL);
       URL.revokeObjectURL(dataURL);
     },
-    [UNSAFE_getStore, resolveTakeShotHash, resolveTakeFileName],
+    [resolveTakeShotHash, resolveTakeFileName],
   );
 
   return downloadTake;
 }
 
 export function useTakeGoogleDriveUploader() {
-  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const resolveTakeFileName = useResolveTakeFileName();
   const resolveTakeShotHash = useResolveTakeShotHash();
 
@@ -110,7 +108,6 @@ export function useTakeGoogleDriveUploader() {
     },
     [
       token,
-      UNSAFE_getStore,
       resolveTakeShotHash,
       resolveTakeFileName,
       setTakeExportedGoogleDriveFileId,

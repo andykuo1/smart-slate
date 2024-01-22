@@ -4,7 +4,7 @@
  * @param {import('react').MouseEventHandler<HTMLButtonElement>} [props.onClick]
  * @param {boolean} [props.danger]
  * @param {boolean} [props.inverted]
- * @param {import('react').FC<any>} props.Icon
+ * @param {import('react').FC<any>} [props.Icon]
  * @param {import('react').ReactNode} props.children
  * @param {boolean} [props.disabled]
  */
@@ -34,7 +34,7 @@ export default function SettingsFieldButton({
       }
       onClick={onClick}
       disabled={disabled}>
-      <Icon className="w-6 h-6 fill-current" />
+      {Icon && <Icon className="w-6 h-6 fill-current" />}
       <span className="flex-1">{children}</span>
     </button>
   );
