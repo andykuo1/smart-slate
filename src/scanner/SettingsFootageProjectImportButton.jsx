@@ -6,6 +6,7 @@ import {
   findBlockWithShotId,
   findShotWithShotHash,
   getDocumentById,
+  getTakeById,
   useAddBlock,
   useAddScene,
   useAddShot,
@@ -121,7 +122,7 @@ export default function SettingsFootageSaveToDiskButton({
         onChange(event);
         continue;
       }
-      if (result.takeId) {
+      if (result.takeId && getTakeById(store, documentId, result.takeId)) {
         // This is a valid take. Just import it.
         try {
           setTakePreview(documentId, result.takeId, result.snapshot);
@@ -177,7 +178,7 @@ export default function SettingsFootageSaveToDiskButton({
         }
 
         // Resolve a valid take for this.
-        let take = createTake();
+        let take = createTake(result.takeId || undefined);
         take.previewImage = result.snapshot;
         addTake(documentId, shot.shotId, take);
 
