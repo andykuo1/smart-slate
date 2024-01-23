@@ -59,7 +59,7 @@ export default function ClapperQRCodeField({
       className="w-full h-full flex items-center outline"
       onClick={onClick}>
       {takeExportedQRCodeKey ? (
-        <QRCodeView className="m-auto" data={takeExportedQRCodeKey} />
+        <QRCodeView data={takeExportedQRCodeKey} />
       ) : (
         <div className="flex flex-col m-auto">
           <QRCode2AddIcon className="w-32 h-32 fill-current m-auto" />
@@ -84,7 +84,7 @@ function QRCodeView({ className, data }) {
       className={'relative w-full h-full flex items-center' + ' ' + className}>
       <canvas
         ref={canvasRef}
-        className="absolute top-0 left-0 block mx-auto w-full h-full"
+        className="absolute top-0 bottom-0 left-0 right-0 block mx-auto w-full h-full"
       />
     </div>
   );

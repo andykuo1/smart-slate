@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import QRCode from 'qrcode';
 
-// import { drawElementToCanvasWithRespectToAspectRatio } from '@/recorder/snapshot/VideoSnapshot';
+import { drawElementToCanvasWithRespectToAspectRatio } from '@/recorder/snapshot/VideoSnapshot';
 
 /**
  *
@@ -20,22 +20,8 @@ export function useQRCodeCanvas(qrCodeData, containerRef, canvasRef) {
     if (!canvas || !container) {
       return;
     }
-    QRCode.toCanvas(canvas, qrCodeData, { errorCorrectionLevel: 'L' });
-    /*
     const buffer = document.createElement('canvas');
-    QRCode.toCanvas(canvas, qrCodeData, { errorCorrectionLevel: 'L' });
-    const rect = container.getBoundingClientRect();
-    drawElementToCanvasWithRespectToAspectRatio(
-      canvas,
-      buffer,
-      buffer.width,
-      buffer.height,
-      rect.width,
-      rect.height,
-    );
-
-    // TODO: Fix this for mobile.
-    /*
+    QRCode.toCanvas(buffer, qrCodeData, { errorCorrectionLevel: 'L' });
     let handle = requestAnimationFrame(onAnimationFrame);
     function onAnimationFrame() {
       if (handle === 0) {
@@ -47,8 +33,6 @@ export function useQRCodeCanvas(qrCodeData, containerRef, canvasRef) {
       if (!canvas || !container) {
         return;
       }
-      const buffer = document.createElement('canvas');
-      QRCode.toCanvas(buffer, qrCodeData, { errorCorrectionLevel: 'L' });
       const rect = container.getBoundingClientRect();
       drawElementToCanvasWithRespectToAspectRatio(
         canvas,
@@ -64,6 +48,5 @@ export function useQRCodeCanvas(qrCodeData, containerRef, canvasRef) {
       handle = 0;
       cancelAnimationFrame(prevHandle);
     };
-    */
   }, [qrCodeData, canvasRef, containerRef]);
 }

@@ -17,6 +17,8 @@
 - Add move scene button for shots
 - Add strikethrough for scenes with no shots
 - Fix qr code aspect ratio
+- Fix missing take id for scanned footage
+- Fix qr code flickering for mobile
 
 # 0.1.14
 
