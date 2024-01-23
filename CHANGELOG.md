@@ -7,6 +7,10 @@
 - - nav takes on shotlist
 - - nav shots on edit mode
 - Be able to record QR code in recorder
+- GIF take preview
+- After recorded media - shot names should keep the same.
+- Ultrasound pairing
+- Make thumbnails smaller
 
 - Add import all or verified footage for scanner
 - Add take id to qr code key
