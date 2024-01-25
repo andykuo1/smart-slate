@@ -54,7 +54,13 @@ export default function ShotList({
           </Fragment>
         ))}
       </div>
-      {editable && <ShotEntryNew documentId={documentId} blockId={blockId} />}
+      {editable && (
+        <ShotEntryNew
+          documentId={documentId}
+          sceneId={sceneId}
+          blockId={blockId}
+        />
+      )}
       <ShotEntryDragged
         documentId={documentId}
         sceneId={sceneId}

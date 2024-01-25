@@ -37,7 +37,7 @@ export default function ShotName({
   const takeNumber = takeId ? takeIndex : takeCount + 1;
   return (
     <ShotNameLayout
-      scene={() => formatSceneNumber(sceneNumber)}
+      scene={() => formatSceneNumber(sceneNumber, false)}
       shot={() => formatShotNumber(shotNumber)}
       take={() => formatTakeNumber(takeNumber)}
       type={() =>

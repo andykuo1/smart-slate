@@ -4,7 +4,14 @@ import {
   createDocument,
   createScene,
   createShot,
+  createStore,
 } from '@/stores/document/DocumentStore';
+import {
+  addBlock,
+  addDocument,
+  addScene,
+  addShot,
+} from '@/stores/document/dispatch/DispatchAddDelete';
 
 import { createLexicalStateFromText } from './LexicalParser';
 
@@ -115,7 +122,7 @@ export function fountainToDocument(tokens) {
           currentBlock.content = token.text;
           currentBlock.contentStyle = 'action';
         }
-        currentShot = addShot(currentBlock);
+        currentShot = addShot(currentScene, currentBlock);
         currentShot.description = token.text;
         currentShot.shotType = token.style;
         break;
@@ -167,6 +174,7 @@ function setupFrontMatterParser(documentParser) {
     let result = documentParser.document;
     result.documentTitle = titleTitle || 'My Fountain Movie';
     result.settings.projectId = formatProjectId(result.documentTitle);
+    result.revisionNumber = 1; // Reset to default.
   }
 
   return {
@@ -176,39 +184,41 @@ function setupFrontMatterParser(documentParser) {
 }
 
 function setupDocumentParser() {
-  let result = createDocument();
+  const store = createStore();
+  const document = createDocument();
+  const documentId = document.documentId;
+  addDocument(store, document);
 
-  function addScene() {
-    let s = createScene();
-    result.scenes[s.sceneId] = s;
-    result.sceneOrder.push(s.sceneId);
-    return s;
+  function addSceneImpl() {
+    let scene = createScene();
+    addScene(store, documentId, scene);
+    return scene;
   }
 
   /**
    * @param {import('@/stores/document/DocumentStore').Scene} scene
    */
-  function addBlock(scene) {
-    let b = createBlock();
-    result.blocks[b.blockId] = b;
-    scene.blockIds.push(b.blockId);
-    return b;
+  function addBlockImpl(scene) {
+    let block = createBlock();
+    addBlock(store, documentId, scene.sceneId, block);
+    return block;
   }
 
   /**
+   * @param {import('@/stores/document/DocumentStore').Scene} scene
    * @param {import('@/stores/document/DocumentStore').Block} block
    */
-  function addShot(block) {
-    let s = createShot();
-    result.shots[s.shotId] = s;
-    block.shotIds.push(s.shotId);
-    return s;
+  function addShotImpl(scene, block) {
+    let shot = createShot();
+    addShot(store, documentId, scene.sceneId, block.blockId, shot);
+    return shot;
   }
 
   return {
-    document: result,
-    addScene,
-    addBlock,
-    addShot,
+    store,
+    document,
+    addScene: addSceneImpl,
+    addBlock: addBlockImpl,
+    addShot: addShotImpl,
   };
 }

@@ -12,6 +12,7 @@ export function createDispatchShots(set, get) {
     setShotType: zi(set, setShotType),
     setShotDescription: zi(set, setShotDescription),
     setShotReferenceImage: zi(set, setShotReferenceImage),
+    setShotName: zi(set, setShotName),
     moveShot: zi(set, moveShot),
     updateShot: zi(set, updateShot),
     moveShotToScene: zi(set, moveShotToScene),
@@ -76,6 +77,19 @@ function setShotReferenceImage(store, documentId, shotId, referenceImageUrl) {
   let document = store.documents[documentId];
   let shot = document.shots[shotId];
   shot.referenceImage = referenceImageUrl;
+  incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ * @param {string} shotName
+ */
+function setShotName(store, documentId, shotId, shotName) {
+  let document = store.documents[documentId];
+  let shot = document.shots[shotId];
+  shot.shotName = shotName;
   incrementDocumentRevisionNumber(document);
 }
 

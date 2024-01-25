@@ -15,6 +15,7 @@ export function createDispatchTakes(set, get) {
     setTakeRating: zi(set, setTakeRating),
     setTakeExportedFileName: zi(set, setTakeExportedFileName),
     setTakeExportedQRCodeKey: zi(set, setTakeExportedQRCodeKey),
+    setTakeNumber: zi(set, setTakeNumber),
     toggleGoodTake: zi(set, toggleGoodTake),
   };
 }
@@ -110,5 +111,18 @@ function toggleGoodTake(store, documentId, takeId) {
   } else {
     take.rating = 0;
   }
+  incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
+ * @param {number} takeNumber
+ */
+function setTakeNumber(store, documentId, takeId, takeNumber) {
+  let document = getDocumentById(store, documentId);
+  let take = getTakeById(store, documentId, takeId);
+  take.takeNumber = takeNumber;
   incrementDocumentRevisionNumber(document);
 }

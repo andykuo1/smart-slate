@@ -28,7 +28,7 @@ export default function SceneEntryNew({ className, documentId }) {
     let newShot = createShot();
     addScene(documentId, newScene);
     addBlock(documentId, newScene.sceneId, newBlock);
-    addShot(documentId, newBlock.blockId, newShot);
+    addShot(documentId, newScene.sceneId, newBlock.blockId, newShot);
   }
 
   if (hasActiveScene || hasActiveShot) {

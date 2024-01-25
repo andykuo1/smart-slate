@@ -1,6 +1,7 @@
 import { getDocumentById } from './GetDocuments';
 
-const MAX_SHOT_HASH_RANGE = 9999;
+export const MAX_SHOT_HASH_RANGE = 9999;
+export const SHOT_HASH_PATTERN = /^\d\d\d\d$/;
 
 /**
  * @param {import('@/stores/document/DocumentStore').Store} store

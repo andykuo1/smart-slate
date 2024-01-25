@@ -35,7 +35,11 @@ export function ShotBoard({ className, documentId, sceneId, blockId }) {
           end={index === array.length - 1}
         />
       ))}
-      <NewShotBoardEntry documentId={documentId} blockId={blockId} />
+      <NewShotBoardEntry
+        documentId={documentId}
+        sceneId={sceneId}
+        blockId={blockId}
+      />
     </ul>
   );
 }
@@ -77,14 +81,15 @@ function ShotBoardEntry({ documentId, sceneId, shotId, index, start, end }) {
 /**
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  */
-function NewShotBoardEntry({ documentId, blockId }) {
+function NewShotBoardEntry({ documentId, sceneId, blockId }) {
   const addShot = useDocumentStore((ctx) => ctx.addShot);
 
   function onClick() {
     let newShot = createShot();
-    addShot(documentId, blockId, newShot);
+    addShot(documentId, sceneId, blockId, newShot);
   }
 
   return (

@@ -1,4 +1,4 @@
-import { isBlockEmpty } from './GetBlocks';
+import { getBlockById, isBlockEmpty } from './GetBlocks';
 import { getDocumentById } from './GetDocuments';
 
 /**
@@ -70,4 +70,25 @@ export function isSceneEmpty(store, documentId, sceneId) {
     }
   }
   return true;
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+ */
+export function getSceneShotCount(store, documentId, sceneId) {
+  const scene = getSceneById(store, documentId, sceneId);
+  if (!scene) {
+    return 0;
+  }
+  let result = 0;
+  for (let blockId of scene.blockIds) {
+    let block = getBlockById(store, documentId, blockId);
+    if (!block) {
+      continue;
+    }
+    result += block.shotIds.length;
+  }
+  return result;
 }

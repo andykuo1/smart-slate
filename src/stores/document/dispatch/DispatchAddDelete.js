@@ -1,5 +1,7 @@
+import { formatShotNameByNumber } from '@/components/takes/TakeNameFormat';
 import { zi } from '@/stores/ZustandImmerHelper';
 
+import { getSceneNumber, getSceneShotCount } from '../get/GetScenes';
 import { incrementDocumentRevisionNumber } from './DispatchDocuments';
 
 /**
@@ -63,14 +65,23 @@ export function addBlock(store, documentId, sceneId, block) {
 /**
  * @param {import('@/stores/document/DocumentStore').Store} store
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} blockId
  * @param {import('@/stores/document/DocumentStore').Shot} shot
  */
-export function addShot(store, documentId, blockId, shot) {
+export function addShot(store, documentId, sceneId, blockId, shot) {
   let document = store.documents[documentId];
   let block = document.blocks[blockId];
   document.shots[shot.shotId] = shot;
   block.shotIds.push(shot.shotId);
+  let sceneNumber = getSceneNumber(store, documentId, sceneId);
+  // NOTE: We get the TOTAL shot count of the whole scene and
+  //  use that number even if this block is earlier in the scene.
+  //  This guarantees there are no duplicates.
+  let shotCount = getSceneShotCount(store, documentId, sceneId);
+  console.log(shotCount);
+  let shotName = formatShotNameByNumber(sceneNumber, shotCount, true);
+  shot.shotName = shotName;
   incrementDocumentRevisionNumber(document);
 }
 
@@ -84,7 +95,8 @@ export function addTake(store, documentId, shotId, take) {
   let document = store.documents[documentId];
   let shot = document.shots[shotId];
   document.takes[take.takeId] = take;
-  let takeNumber = shot.nextTakeNumber++;
+  let takeNumber = shot.nextTakeNumber;
+  shot.nextTakeNumber += 1;
   take.takeNumber = takeNumber;
   shot.takeIds.push(take.takeId);
   incrementDocumentRevisionNumber(document);

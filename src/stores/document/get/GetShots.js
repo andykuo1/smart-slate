@@ -26,7 +26,7 @@ export function getShotIdsInOrder(store, documentId, blockId) {
  * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
  * @param {import('@/stores/document/DocumentStore').ShotId} shotId
  */
-export function getShotNumber(store, documentId, sceneId, shotId) {
+export function findShotNumber(store, documentId, sceneId, shotId) {
   const scene = getSceneById(store, documentId, sceneId);
   const blockIds = scene?.blockIds;
   if (!blockIds) {

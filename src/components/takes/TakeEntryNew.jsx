@@ -20,7 +20,7 @@ export default function TakeEntryNew({
   return (
     <TakeEntryLayout viewMode={viewMode}>
       <TakeEntryHeaderNew
-        className="text-gray-400"
+        className="bg-gray-200 text-gray-400"
         documentId={documentId}
         sceneId={sceneId}
         shotId={shotId}

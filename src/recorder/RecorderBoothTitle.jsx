@@ -2,14 +2,14 @@ import ArrowForwardIcon from '@material-symbols/svg-400/rounded/arrow_forward.sv
 import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg';
 import ThumbUpIcon from '@material-symbols/svg-400/rounded/thumb_up.svg';
 
-import { formatShotNumber } from '@/components/takes/TakeNameFormat';
+import { useResolveShotName } from '@/serdes/UseResolveShotName';
+import { useResolveTakeNumber } from '@/serdes/UseResolveTakeNumber';
 import {
   useSceneHeading,
-  useShotNumber,
   useTakeNumber,
   useTakeRating,
 } from '@/stores/document';
-import { useShotTakeCount } from '@/stores/document/use';
+import { useDocumentStore, useShotTakeCount } from '@/stores/document/use';
 
 /**
  * @param {object} props
@@ -29,10 +29,15 @@ export default function RecorderBoothTitle({
   onGoodTake,
 }) {
   const takeCount = useShotTakeCount(documentId, shotId);
-  const shotNumber = useShotNumber(documentId, sceneId, shotId);
+  const resolveShotName = useResolveShotName();
+  const shotName = useDocumentStore((ctx) =>
+    resolveShotName(documentId, sceneId, shotId, true),
+  );
+  const resolveTakeNumber = useResolveTakeNumber();
+  const takeNumber = useDocumentStore((ctx) =>
+    resolveTakeNumber(documentId, shotId, takeId, true),
+  );
   const [sceneHeading] = useSceneHeading(documentId, sceneId);
-  const takeNumber =
-    useTakeNumber(documentId, shotId, takeId || '') || takeCount + 1;
   const prevTakeNumber = useTakeNumber(documentId, shotId, prevTakeId || '');
   const prevTakeRating = useTakeRating(documentId, prevTakeId || '');
   const isGood = prevTakeId ? prevTakeRating > 0 : false;
@@ -40,7 +45,7 @@ export default function RecorderBoothTitle({
     <>
       <span className="mx-2">{sceneHeading || 'INT/EXT. SCENE - DAY'}</span>
       <span className="flex-1" />
-      <span>Shot {formatShotNumber(shotNumber)}</span>
+      <span>Shot {shotName}</span>
       <span className="flex flex-row items-center mx-2">
         Take #{prevTakeId ? prevTakeNumber : takeNumber}
         {prevTakeId && (

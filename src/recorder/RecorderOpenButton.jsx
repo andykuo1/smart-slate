@@ -9,7 +9,7 @@ import { useOpenPreferredRecorder } from './UseOpenRecorder';
 export default function RecorderOpenButton({ className, children, onClick }) {
   const openRecorder = useOpenPreferredRecorder(onClick);
   return (
-    <button className={className} onClick={openRecorder}>
+    <button title="Record" className={className} onClick={openRecorder}>
       {children}
     </button>
   );

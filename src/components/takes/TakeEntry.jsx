@@ -24,6 +24,7 @@ export default function TakeEntry({
   return (
     <TakeEntryLayout className={className} viewMode={viewMode}>
       <TakeEntryHeader
+        className="bg-gray-200"
         documentId={documentId}
         sceneId={sceneId}
         shotId={shotId}

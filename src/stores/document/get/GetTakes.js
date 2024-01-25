@@ -6,7 +6,7 @@ import { getShotById } from './GetShots';
  * @param {import('@/stores/document/DocumentStore').TakeId} takeId
  */
 export function getTakeById(store, documentId, takeId) {
-  return store?.documents?.[documentId]?.takes[takeId];
+  return store?.documents?.[documentId]?.takes?.[takeId];
 }
 
 /**
@@ -67,11 +67,28 @@ export function getTakeNumber(store, documentId, shotId, takeId) {
  * @param {number} takeNumber
  */
 export function findTakeWithTakeNumber(store, documentId, shotId, takeNumber) {
-  const result = getShotById(store, documentId, shotId)?.takeIds?.[
-    takeNumber - 1
-  ];
-  if (!result) {
+  // Only positive take numbers are allowed.
+  if (takeNumber <= 0) {
     return null;
   }
-  return getTakeById(store, documentId, result);
+  let shot = getShotById(store, documentId, shotId);
+  if (!shot) {
+    return null;
+  }
+  // Look up each take with takeNumber.
+  for (let takeId of shot.takeIds) {
+    let take = getTakeById(store, documentId, takeId);
+    if (takeNumber === take.takeNumber) {
+      return take;
+    }
+  }
+  // ...no takeNumber, so go by index.
+  let takeIdByIndex = shot.takeIds[takeNumber - 1];
+  let takeByIndex = getTakeById(store, documentId, takeIdByIndex);
+  let takeNumberByIndex = takeByIndex.takeNumber;
+  // ...only if no takeNumber set.
+  if (takeNumberByIndex <= 0) {
+    return takeByIndex;
+  }
+  return null;
 }

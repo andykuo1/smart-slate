@@ -1,10 +1,9 @@
+import { useResolveShotName } from '@/serdes/UseResolveShotName';
 import {
   findBlockWithShotId,
   findSceneWithBlockId,
   useBlockIds,
-  useSceneNumber,
   useShotIds,
-  useShotNumber,
   useTakeIds,
 } from '@/stores/document';
 import {
@@ -14,10 +13,7 @@ import {
 } from '@/stores/document/use';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 
-import {
-  formatSceneShotNumber,
-  formatTakeNumber,
-} from '../components/takes/TakeNameFormat';
+import { formatTakeNumber } from '../components/takes/TakeNameFormat';
 import ClapperShotHashField from './ClapperShotHashField';
 import ClapperShotTypeField from './ClapperShotTypeField';
 
@@ -211,11 +207,9 @@ function SceneShotByBlockOptions({ documentId, sceneId, blockId }) {
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  */
 function SceneShotOption({ documentId, sceneId, shotId }) {
-  const sceneNumber = useSceneNumber(documentId, sceneId);
-  const shotNumber = useShotNumber(documentId, sceneId, shotId);
-  return (
-    <option value={shotId}>
-      {formatSceneShotNumber(sceneNumber, shotNumber, true)}
-    </option>
+  const resolveShotName = useResolveShotName();
+  const shotName = useDocumentStore((ctx) =>
+    resolveShotName(documentId, sceneId, shotId, true, { undecorated: true }),
   );
+  return <option value={shotId}>{shotName}</option>;
 }

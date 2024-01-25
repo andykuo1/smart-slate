@@ -1,45 +1,29 @@
 /**
  * @param {string} projectId
- * @param {number} sceneNumber
- * @param {number} shotNumber
+ * @param {string} shotName
  * @param {number} takeNumber
  * @param {string} shotHash
  * @param {string} [shotType]
  */
 export function formatTakeNameForFileExport(
   projectId,
-  sceneNumber,
-  shotNumber,
+  shotName,
   takeNumber,
   shotHash,
   shotType,
 ) {
-  if (sceneNumber <= 0) {
-    throw new Error('Invalid scene number - must be greater than 0.');
-  }
-  if (sceneNumber > 99) {
-    throw new Error('Invalid scene number - must be less than 100.');
-  }
-  if (shotNumber <= 0) {
-    throw new Error('Invalid shot number - must be greater than 0.');
-  }
-  if (shotNumber > 99) {
-    throw new Error('Invalid shot number - must be less than 100.');
-  }
   if (takeNumber <= 0) {
     throw new Error('Invalid take number - must be greater than 0.');
   }
   if (takeNumber > 99) {
     throw new Error('Invalid take number - must be less than 100.');
   }
-  const takePathStrings = getTakePathStrings(
-    projectId,
-    sceneNumber,
-    shotNumber,
-    takeNumber,
-  );
   return (
-    takePathStrings.join('_') +
+    [
+      formatProjectId(projectId),
+      formatShotName(shotName, false),
+      formatTakeNumber(takeNumber, false),
+    ].join('_') +
     (shotType ? `_${shotType}` : '') +
     `_${shotHash}`
   );
@@ -76,35 +60,63 @@ export function getDefaultProjectIdByDate(date) {
 }
 
 /**
- * @param {number} sceneNumber
- * @param {number} shotNumber
+ * @param {string} shotName
  * @param {boolean} [abbreviated]
  */
-export function formatSceneShotNumber(
-  sceneNumber,
-  shotNumber,
-  abbreviated = false,
-) {
-  const sceneString = sceneNumber > 0 ? String(sceneNumber) : '--';
-  const shotString = formatShotNumber(shotNumber);
-  if (abbreviated) {
-    return `${sceneString}${shotString}`;
+export function formatShotName(shotName, abbreviated = false) {
+  if (!shotName || shotName.length <= 0) {
+    if (abbreviated) {
+      return '0Z';
+    } else {
+      return '00Z';
+    }
   }
-  return `S${sceneString.padStart(2, '0')}${shotString}`;
+  let result = /^(\d+)([A-Z]+)$/i.exec(shotName);
+  if (!result) {
+    return shotName.toUpperCase();
+  }
+  let [_text, sceneNumber, shotAlphabet] = result;
+  sceneNumber = Number(sceneNumber).toString();
+  shotAlphabet = shotAlphabet.toUpperCase();
+  if (abbreviated) {
+    return `${sceneNumber}${shotAlphabet}`;
+  } else {
+    return `S${sceneNumber.padStart(2, '0')}${shotAlphabet}`;
+  }
 }
 
 /**
  * @param {number} sceneNumber
+ * @param {number} shotNumber
+ * @param {boolean} abbreviated
  */
-export function formatSceneNumber(sceneNumber) {
-  return sceneNumber > 0 ? String(sceneNumber).padStart(2, '0') : '--';
+export function formatShotNameByNumber(
+  sceneNumber,
+  shotNumber,
+  abbreviated = false,
+) {
+  let first = formatSceneNumber(sceneNumber, abbreviated);
+  let second = formatShotNumber(shotNumber);
+  return formatShotName(`${first}${second}`, abbreviated);
+}
+
+/**
+ * @param {number} sceneNumber
+ * @param {boolean} abbreviated
+ */
+export function formatSceneNumber(sceneNumber, abbreviated) {
+  if (abbreviated) {
+    return sceneNumber > 0 ? String(sceneNumber) : '0';
+  } else {
+    return sceneNumber > 0 ? String(sceneNumber).padStart(2, '0') : '00';
+  }
 }
 
 /**
  * @param {number} shotNumber
  */
 export function formatShotNumber(shotNumber) {
-  return shotNumber >= 0 ? numToChar(shotNumber) : '-';
+  return shotNumber > 0 ? numToChar(shotNumber) : 'Z';
 }
 
 /**
@@ -141,25 +153,6 @@ export function findDocumentTitleChar(documentTitle) {
   const documentTitleParts = documentTitle?.split(' ') || [];
   const documentLongestPart = longestString(documentTitleParts) || 'U';
   return documentLongestPart.charAt(0).toUpperCase();
-}
-
-/**
- * @param {string} projectId
- * @param {number} sceneNumber
- * @param {number} shotNumber
- * @param {number} takeNumber
- */
-export function getTakePathStrings(
-  projectId,
-  sceneNumber,
-  shotNumber,
-  takeNumber,
-) {
-  return [
-    formatProjectId(projectId),
-    formatSceneShotNumber(sceneNumber, shotNumber),
-    formatTakeNumber(takeNumber),
-  ];
 }
 
 /**

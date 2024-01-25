@@ -114,6 +114,13 @@ export function createShot(shotId = uuid()) {
      * @type {ShotHash}
      */
     shotHash: '',
+    /**
+     * The name when shot is "finalized", basically when
+     * any take is recorded.
+     *
+     * This is currently: scene number + shot alphabet-index
+     */
+    shotName: '',
     /** @type {string} */
     referenceImage: '',
     description: '',
@@ -129,6 +136,7 @@ export function createShot(shotId = uuid()) {
 export function createTake(takeId = uuid()) {
   return {
     takeId,
+    // NOTE: This should be -1.
     takeNumber: 0,
     comments: '',
     rating: 0,
@@ -288,6 +296,7 @@ export function cloneShot(out, shot) {
   if (typeof shot.shotId !== 'undefined') out.shotId = shot.shotId;
   if (typeof shot.shotType !== 'undefined') out.shotType = shot.shotType;
   if (typeof shot.shotHash !== 'undefined') out.shotHash = shot.shotHash;
+  if (typeof shot.shotName !== 'undefined') out.shotName = shot.shotName;
   if (typeof shot.referenceImage !== 'undefined')
     out.referenceImage = shot.referenceImage;
   if (typeof shot.description !== 'undefined')

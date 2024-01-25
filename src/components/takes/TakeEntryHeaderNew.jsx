@@ -29,7 +29,7 @@ export default function TakeEntryHeaderNew({
   const setUserCursor = useSetUserCursor();
   const listDecorationStyle = getListDecorationStyleByViewMode(viewMode);
   return (
-    <div className={'flex flex-row bg-gray-200' + ' ' + className}>
+    <div className={'flex flex-row' + ' ' + className}>
       <BoxDrawingCharacter
         className={'mx-2' + ' ' + listDecorationStyle}
         depth={1}

@@ -36,7 +36,7 @@ export default function BlockEntry({
 
   function onClick() {
     let shot = createShot();
-    addShot(documentId, blockId, shot);
+    addShot(documentId, sceneId, blockId, shot);
   }
 
   function onEditClick() {

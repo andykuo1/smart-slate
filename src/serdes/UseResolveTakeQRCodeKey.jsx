@@ -3,17 +3,28 @@ import { useCallback } from 'react';
 import { getDocumentSettingsById, getTakeById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 
-import { useResolveTakeShotHash } from './UseResolveTakeShotHash';
+import { useResolveShotHash } from './UseResolveShotHash';
+import { useResolveShotName } from './UseResolveShotName';
+import { useResolveTakeNumber } from './UseResolveTakeNumber';
 
-export const QR_CODE_KEY_V1_DECODED_PATTERN = /^(.+)\.(\d+)\.(.+)$/;
+export const QR_CODE_KEY_V1_DECODED_PATTERN =
+  /^(.+)_(\d+\w+)_(\d+)\.(\d+)\.(.+)$/;
 
 /**
  * @param {string} projectId
+ * @param {string} shotName
+ * @param {number} takeNumber
  * @param {string} shotHash
  * @param {string} takeId
  */
-export function tryEncodeQRCodeKeyV1(projectId, shotHash, takeId) {
-  const codeString = `${projectId}.${shotHash}.${takeId}`;
+export function tryEncodeQRCodeKeyV1(
+  projectId,
+  shotName,
+  takeNumber,
+  shotHash,
+  takeId,
+) {
+  const codeString = `${projectId}_${shotName}_${takeNumber}.${shotHash}.${takeId}`;
   const base64 = window.btoa(codeString);
   return `v1:${base64}`;
 }
@@ -30,9 +41,11 @@ export function tryDecodeQRCodeKeyV1(qrCodeKey) {
   if (!result) {
     return null;
   }
-  const [_, projectId, shotHash, takeId] = result;
+  const [_, projectId, shotName, takeNumber, shotHash, takeId] = result;
   return {
     projectId,
+    shotName,
+    takeNumber,
     shotHash,
     takeId,
   };
@@ -90,7 +103,9 @@ export function useResolveTakeQRCodeKey() {
   const setTakeExportedQRCodeKey = useDocumentStore(
     (ctx) => ctx.setTakeExportedQRCodeKey,
   );
-  const resolveTakeShotHash = useResolveTakeShotHash();
+  const resolveShotHash = useResolveShotHash();
+  const resolveShotName = useResolveShotName();
+  const resolveTakeNumber = useResolveTakeNumber();
   const resolveTakeQRCodeKey = useCallback(
     /**
      * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
@@ -114,14 +129,30 @@ export function useResolveTakeQRCodeKey() {
       }
       const documentSettings = getDocumentSettingsById(store, documentId);
       const projectId = documentSettings?.projectId || '';
-      const shotHash = resolveTakeShotHash(documentId, shotId);
-      result = tryEncodeQRCodeKeyV1(projectId, shotHash, takeId);
+      const shotHash = resolveShotHash(documentId, shotId, false);
+      const shotName = resolveShotName(documentId, sceneId, shotId, false, {
+        undecorated: true,
+      });
+      const takeNumber = resolveTakeNumber(documentId, shotId, takeId);
+      result = tryEncodeQRCodeKeyV1(
+        projectId,
+        shotName,
+        takeNumber,
+        shotHash,
+        takeId,
+      );
       if (!readonly && takeId) {
         setTakeExportedQRCodeKey(documentId, takeId, result);
       }
       return result;
     },
-    [UNSAFE_getStore, resolveTakeShotHash, setTakeExportedQRCodeKey],
+    [
+      UNSAFE_getStore,
+      resolveShotHash,
+      resolveShotName,
+      resolveTakeNumber,
+      setTakeExportedQRCodeKey,
+    ],
   );
   return resolveTakeQRCodeKey;
 }

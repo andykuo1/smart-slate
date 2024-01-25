@@ -8,16 +8,17 @@ import { ShotTypeSelector } from './options/ShotTypeSelector';
 /**
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  */
-export default function ShotEntryNew({ documentId, blockId }) {
+export default function ShotEntryNew({ documentId, sceneId, blockId }) {
   const containerRef = useRef(/** @type {HTMLLIElement|null} */ (null));
   const [shotType, setShotType] = useState('');
   const addShot = useDocumentStore((ctx) => ctx.addShot);
 
   function onClick() {
     let newShot = createShot();
-    addShot(documentId, blockId, newShot);
+    addShot(documentId, sceneId, blockId, newShot);
   }
 
   /** @type {import('react').ChangeEventHandler<any>} */
@@ -26,7 +27,7 @@ export default function ShotEntryNew({ documentId, blockId }) {
     setShotType(newShotType);
     let newShot = createShot();
     newShot.shotType = newShotType;
-    addShot(documentId, blockId, newShot);
+    addShot(documentId, sceneId, blockId, newShot);
   }
 
   return (

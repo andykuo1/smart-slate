@@ -1,9 +1,12 @@
 import PhotoIcon from '@material-symbols/svg-400/rounded/photo.svg';
 
-import { formatSceneShotNumber } from '@/components/takes/TakeNameFormat';
 import ImageWithCaption from '@/libs/ImageWithCaption';
-import { useSceneNumber, useShotNumber, useShotType } from '@/stores/document';
-import { useBestTakeImageForShotThumbnail } from '@/stores/document/use';
+import { useResolveShotName } from '@/serdes/UseResolveShotName';
+import { useShotType } from '@/stores/document';
+import {
+  useBestTakeImageForShotThumbnail,
+  useDocumentStore,
+} from '@/stores/document/use';
 
 import { getShotTypeIcon } from './ShotTypeIcon';
 
@@ -27,14 +30,16 @@ export default function ShotThumbnailImage({
     shotId,
     referenceOnly,
   );
-  const sceneNumber = useSceneNumber(documentId, sceneId);
-  const shotNumber = useShotNumber(documentId, sceneId, shotId);
+  const resolveShotName = useResolveShotName();
+  const shotName = useDocumentStore((ctx) =>
+    resolveShotName(documentId, sceneId, shotId, true),
+  );
   const shotType = useShotType(documentId, shotId);
   return (
     <ImageWithCaption
       src={image}
       alt="Shot reference image"
-      caption={formatSceneShotNumber(sceneNumber, shotNumber, true)}
+      caption={shotName}
       className={'max-w-sm w-[128px] h-[72px]' + ' ' + className}
       Icon={shotType ? getShotTypeIcon(shotType) : PhotoIcon}
     />

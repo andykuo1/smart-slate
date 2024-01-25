@@ -7,7 +7,6 @@ import StatMinusOneIcon from '@material-symbols/svg-400/rounded/stat_minus_1.svg
 import {
   getShotById,
   getShotIdsInOrder,
-  useSceneNumber,
   useShotNumber,
 } from '@/stores/document';
 import { useDocumentStore, useSceneShotCount } from '@/stores/document/use';
@@ -42,7 +41,6 @@ export function ShotEntry({
   collapsed,
 }) {
   const containerRef = useRef(/** @type {HTMLLIElement|null} */ (null));
-  const sceneNumber = useSceneNumber(documentId, sceneId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
   const shotCount = useSceneShotCount(documentId, sceneId);
   const currentCursor = useCurrentCursor();
@@ -129,8 +127,9 @@ export function ShotEntry({
         }>
         {!collapsed && (
           <ShotNumber
-            sceneNumber={sceneNumber}
-            shotNumber={shotNumber}
+            documentId={documentId}
+            sceneId={sceneId}
+            shotId={shotId}
             onClick={onShotFocusClick}
           />
         )}
@@ -186,8 +185,9 @@ export function ShotEntry({
         </div>
         {!collapsed && (
           <ShotNumber
-            sceneNumber={sceneNumber}
-            shotNumber={shotNumber}
+            documentId={documentId}
+            sceneId={sceneId}
+            shotId={shotId}
             onClick={onShotFocusClick}
           />
         )}

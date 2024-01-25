@@ -4,6 +4,7 @@ import PlaylistAddCheckIcon from '@material-symbols/svg-400/rounded/playlist_add
 import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
 import {
   findBlockWithShotId,
+  findSceneWithBlockId,
   findShotWithShotHash,
   getDocumentById,
   getTakeById,
@@ -110,6 +111,7 @@ export default function SettingsFootageSaveToDiskButton({
     let count = 0;
 
     let importedFootageBlock = null;
+    let importedFootageScene = null;
 
     for (const key of Object.keys(output)) {
       let result = output[key];
@@ -149,6 +151,7 @@ export default function SettingsFootageSaveToDiskButton({
         console.log('[TakeScanner] Importing unverified footage...');
 
         // Resolve a valid scene & shot for this.
+        let scene;
         let block;
         let shot;
         if (document.shotHashes.includes(result.takeInfo.shotHash)) {
@@ -159,12 +162,20 @@ export default function SettingsFootageSaveToDiskButton({
           );
           if (shot) {
             block = findBlockWithShotId(store, documentId, shot.shotId);
+            if (block) {
+              scene = findSceneWithBlockId(store, documentId, block.blockId);
+            }
           }
+        }
+        if (!scene) {
+          if (!importedFootageScene) {
+            importedFootageScene = createScene();
+            importedFootageScene.sceneHeading = 'IMPORTED FOOTAGE';
+          }
+          scene = importedFootageScene;
         }
         if (!block) {
           if (!importedFootageBlock) {
-            let scene = createScene();
-            scene.sceneHeading = 'IMPORTED FOOTAGE';
             importedFootageBlock = createBlock();
             addScene(documentId, scene);
             addBlock(documentId, scene.sceneId, importedFootageBlock);
@@ -174,7 +185,7 @@ export default function SettingsFootageSaveToDiskButton({
         if (!shot) {
           shot = createShot();
           shot.shotHash = result.takeInfo.shotHash;
-          addShot(documentId, block.blockId, shot);
+          addShot(documentId, scene.sceneId, block.blockId, shot);
         }
 
         // Resolve a valid take for this.

@@ -144,7 +144,7 @@ function NavSceneShotTake() {
               {projectId || '--'}
             </span>
           </td>
-          <td>{formatSceneNumber(sceneNumber)}</td>
+          <td>{formatSceneNumber(sceneNumber, false)}</td>
           <td>{formatShotNumber(shotNumber)}</td>
           <td>{formatTakeNumber(takeNumber)}</td>
         </tr>

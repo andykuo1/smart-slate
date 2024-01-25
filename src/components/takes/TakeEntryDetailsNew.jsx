@@ -112,7 +112,7 @@ function SceneSelectItem({ documentId, sceneId, disabled }) {
       className={SelectStyle.selectItem}
       value={sceneId}
       disabled={disabled}>
-      <span className="mr-1">{formatSceneNumber(sceneNumber)}</span>
+      <span className="mr-1">{formatSceneNumber(sceneNumber, false)}</span>
       <span>{sceneHeading || 'SCENE'}</span>
     </SelectItem>
   );

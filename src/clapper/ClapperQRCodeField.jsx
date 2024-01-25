@@ -32,7 +32,8 @@ export default function ClapperQRCodeField({
 
   const onClick = useCallback(
     function _onClick() {
-      const thisTakeId = takeId || defineTake(documentId, sceneId, shotId);
+      const thisTakeId =
+        takeId || defineTake(documentId, sceneId, shotId).takeId;
       resolveTakeQRCodeKey(documentId, sceneId, shotId, thisTakeId);
       setUserCursor(documentId, sceneId, shotId, thisTakeId);
     },
