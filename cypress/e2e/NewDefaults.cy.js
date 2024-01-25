@@ -15,12 +15,12 @@ describe('Creating new things with defaults', () => {
 
     // Create first new project
     cy.contains('New Project').click();
+    // Should then start project
+    cy.contains('Start!').click();
     // with document title
     cy.get('input[title="Project title"]')
       .should('be.visible')
       .should('have.value', 'My Movie');
-    // with document id
-    cy.contains('ID:').should('be.visible');
     // with "New Scene" button
     cy.contains('New Scene').should('be.visible');
 
@@ -34,13 +34,14 @@ describe('Creating new things with defaults', () => {
 
     // Create second new project
     cy.contains('New Project').click();
+    // Should then start project
+    cy.contains('Start!').click();
     // with document title
     cy.get('input[title="Project title"]')
       .should('be.visible')
       .should('have.value', 'My Movie')
+      .clear()
       .type('The Wild West');
-    // with document id
-    cy.contains('ID:').should('be.visible');
     // with "New Scene" button
     cy.contains('New Scene').should('be.visible');
 
@@ -59,106 +60,92 @@ describe('Creating new things with defaults', () => {
     // Setup
     cy.visit('/');
     cy.contains('New Project').click();
+    cy.contains('Start!').click();
+    cy.get('button[title="Shotlist"]').click();
 
     // Create first new scene
     cy.contains('New Scene').click();
-    cy.contains('Scene 01', { matchCase: false });
+    cy.contains('01', { matchCase: false });
+    cy.contains('01').parents('section').as('S1_root');
     // with default first shot
-    cy.contains('S01AT01--').should('be.visible');
+    cy.contains('1A').should('be.visible');
     cy.get('button[title="Record"]').should('be.visible');
+    cy.get('@S1_root').contains('New Shot').should('be.visible');
     // with default first take
-    cy.contains('Take 1').should('be.visible');
-    cy.contains('New Shot').should('be.visible');
+    cy.contains('T1').should('be.visible');
 
     // Create a new second scene
     cy.contains('New Scene').click();
+    cy.contains('02', { matchCase: false });
+    cy.contains('02').parents('section').as('S2_root');
     // with default first shot
-    cy.contains('S02AT01--').should('be.visible');
-    cy.contains('S02AT01--')
-      .parents('table')
-      .parents('li')
-      .as('scene2shot1_root');
-    cy.get('@scene2shot1_root')
-      .find('button[title="Record"]')
-      .should('be.visible');
-    cy.get('@scene2shot1_root')
-      .contains('button', 'New Shot')
-      .should('be.visible');
+    cy.contains('2A').should('exist');
+    cy.contains('2A').parents('li').as('S2A_root');
+    cy.get('@S2A_root').find('button[title="Record"]').should('exist');
+    cy.get('@S2_root').contains('New Shot').should('exist');
     // with default first take
-    cy.get('@scene2shot1_root').contains('Take 1').should('be.visible');
+    cy.get('@S2A_root').contains('T1').should('exist');
   });
 
   it('has expected new shots', () => {
     // Setup
     cy.visit('/');
     cy.contains('New Project').click();
+    cy.contains('Start!').click();
+    cy.get('button[title="Shotlist"]').click();
     cy.contains('New Scene').click();
+    cy.contains('01').parents('section').as('S1_root');
 
     // First already exists by default
-    cy.contains('S01AT01--').should('be.visible');
+    cy.contains('1A').should('be.visible');
 
     // Create a new second shot
     cy.contains('New Shot').click();
-    cy.contains('S01BT01--').should('be.visible');
-    cy.contains('S01BT01--')
-      .parents('table')
-      .parents('li')
-      .as('scene1shot2_root');
-    cy.get('@scene1shot2_root')
-      .find('button[title="Record"]')
-      .should('be.visible');
-    cy.get('@scene1shot2_root')
-      .contains('button', 'New Shot')
-      .should('be.visible');
+    cy.contains('1B').should('be.visible');
+    cy.contains('1B').parents('li').as('S1B_root');
+    cy.get('@S1B_root').find('button[title="Record"]').should('be.visible');
+    cy.get('@S1_root').contains('New Shot').should('exist');
     // with default first take
-    cy.get('@scene1shot2_root').contains('Take 1').should('be.visible');
+    cy.get('@S1B_root').contains('T1').should('be.visible');
   });
 
   it('has expected new takes', () => {
     // Setup
     cy.visit('/');
     cy.contains('New Project').click();
+    cy.contains('Start!').click();
+    cy.get('button[title="Shotlist"]').click();
     cy.contains('New Scene').click();
 
     // Record the first take
-    cy.contains('S01AT01--').should('be.visible');
-    cy.contains('S01AT01--')
-      .parents('table')
-      .parents('li')
-      .as('scene1shot1_root');
-    cy.get('@scene1shot1_root')
+    cy.contains('1A').should('be.visible');
+    cy.contains('1A').parents('li').as('S1A_root');
+    cy.get('@S1A_root')
       .find('button[title="Record"]')
       .should('be.visible')
-      .as('scene1shot1_record');
-    cy.get('@scene1shot1_root')
-      .find('ul[title="Take list"]')
-      .should('be.visible')
-      .as('scene1shot1_takelist');
+      .as('S1A_record');
+    cy.get('@S1A_root').find('ul').should('be.visible').as('S1A_takes');
     // with the default first take placeholder
-    cy.get('@scene1shot1_takelist').contains('Take 1').should('be.visible');
+    cy.get('@S1A_takes').contains('T1').should('be.visible');
     // and commence with the click!
-    cy.get('@scene1shot1_record').click();
+    cy.get('@S1A_record').click();
+    cy.get('button[title="Start recording"]').click();
     // and wait a few seconds
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(3_000);
     // and hit cut!
-    cy.get('button[title="Cut"]').click();
+    cy.get('button[title="Stop recording"]').click();
+    cy.contains('Back').click();
     // Should have a new take ready!
-    cy.contains('S01AT02--').should('be.visible');
-    cy.contains('S01AT02--')
-      .parents('table')
-      .parents('li')
-      .as('scene1shot1_root');
-    cy.get('@scene1shot1_root')
+    cy.contains('1A').should('be.visible');
+    cy.contains('1A').parents('li').as('S1A_root');
+    cy.get('@S1A_root')
       .find('button[title="Record"]')
       .should('be.visible')
-      .as('scene1shot1_record');
-    cy.get('@scene1shot1_root')
-      .find('ul[title="Take list"]')
-      .should('be.visible')
-      .as('scene1shot1_takelist');
+      .as('S1A_record');
+    cy.get('@S1A_root').find('ul').should('be.visible').as('S1A_takes');
     // with the first and second takes
-    cy.get('@scene1shot1_takelist').contains('Take 1').should('be.visible');
-    cy.get('@scene1shot1_takelist').contains('Take 2').should('be.visible');
+    cy.get('@S1A_takes').contains('T1').should('be.visible');
+    cy.get('@S1A_takes').contains('T2').should('be.visible');
   });
 });
