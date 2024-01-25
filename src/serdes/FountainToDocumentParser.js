@@ -9,7 +9,7 @@ import {
 import { createLexicalStateFromText } from './LexicalParser';
 
 /**
- * @param {Array<import('./FountainTokenizer').FountainToken>} tokens
+ * @param {Array<import('@/fountain/FountainTokenizer').FountainToken>} tokens
  */
 export function fountainToDocument(tokens) {
   const documentParser = setupDocumentParser();

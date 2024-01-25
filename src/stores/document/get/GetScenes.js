@@ -1,3 +1,4 @@
+import { isBlockEmpty } from './GetBlocks';
 import { getDocumentById } from './GetDocuments';
 
 /**
@@ -48,4 +49,25 @@ export function findSceneWithBlockId(store, documentId, blockId) {
     }
   }
   return null;
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+ */
+export function isSceneEmpty(store, documentId, sceneId) {
+  if (!sceneId) {
+    return true;
+  }
+  const scene = getSceneById(store, documentId, sceneId);
+  if (!scene) {
+    return true;
+  }
+  for (let blockId of scene.blockIds) {
+    if (!isBlockEmpty(store, documentId, blockId)) {
+      return false;
+    }
+  }
+  return true;
 }

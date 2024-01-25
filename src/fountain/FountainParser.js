@@ -1,4 +1,5 @@
-import { createToken, tokenize } from './FountainTokenizer';
+import { createToken } from './FountainTokenHelper';
+import { tokenize } from './FountainTokenizer';
 
 /**
  * @param {string} text

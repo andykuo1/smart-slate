@@ -100,3 +100,25 @@ export function findBlockWithShotId(store, documentId, shotId) {
   }
   return null;
 }
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').BlockId} blockId
+ */
+export function isBlockEmpty(store, documentId, blockId) {
+  if (!blockId) {
+    return true;
+  }
+  const block = getBlockById(store, documentId, blockId);
+  if (!block) {
+    return true;
+  }
+  if (block.shotIds.length > 0) {
+    return false;
+  }
+  if (block.content) {
+    return false;
+  }
+  return true;
+}

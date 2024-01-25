@@ -11,6 +11,7 @@
 - After recorded media - shot names should keep the same.
 - Ultrasound pairing
 - Make thumbnails smaller
+- Make scenes deletable
 
 - Add import all or verified footage for scanner
 - Add take id to qr code key

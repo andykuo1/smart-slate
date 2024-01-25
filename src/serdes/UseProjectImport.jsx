@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 
+import { parse } from '@/fountain/FountainParser';
 import { useAddDocument } from '@/stores/document';
 
-import { parse } from './FountainParser';
 import { fountainToDocument } from './FountainToDocumentParser';
 
 /**

@@ -1,5 +1,5 @@
-import ExampleScript from '@/serdes/BrickAndSteel.fountain?raw';
-import { parse } from '@/serdes/FountainParser';
+import ExampleScript from '@/fountain/BrickAndSteel.fountain?raw';
+import { parse } from '@/fountain/FountainParser';
 import { fountainToDocument } from '@/serdes/FountainToDocumentParser';
 import {
   getBlockById,
@@ -87,7 +87,14 @@ function Scene({ store, documentId, value }) {
  * @param {import('@/stores/document/DocumentStore').Block} props.value
  */
 function Block({ store, documentId, value }) {
-  let json = value.content ? JSON.parse(value.content) : null;
+  let json = value.content || null;
+  try {
+    if (json) {
+      json = JSON.parse(json);
+    }
+  } catch {
+    // Do nothing.
+  }
   if (!json) {
     return <p className="opacity-30">{'<empty>'}</p>;
   }
@@ -108,11 +115,20 @@ function Block({ store, documentId, value }) {
     case 'dialogue':
       style = 'ml-10';
       break;
+    // @ts-expect-error This is the unprocessed catch-all.
+    case 'unknown':
+      style = 'text-red-500';
+      break;
   }
   return (
     <div className="my-10">
       <p className={style}>
-        <pre>{json?.root?.children?.[0]?.children?.[0]?.text}</pre>
+        <pre>
+          {typeof json === 'object'
+            ? // @ts-expect-error json should be a lexical object.
+              json?.root?.children?.[0]?.children?.[0]?.text
+            : json}
+        </pre>
       </p>
       <ul>
         {Object.values(value.shotIds).map((shotId) => (

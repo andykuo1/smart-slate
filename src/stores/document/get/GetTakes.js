@@ -45,7 +45,7 @@ export function findNextAvailableTakeNumber(store, documentId, shotId) {
  */
 export function getTakeNumber(store, documentId, shotId, takeId) {
   let take = getTakeById(store, documentId, takeId);
-  if (take?.takeNumber) {
+  if (take?.takeNumber > 0) {
     return take.takeNumber;
   }
   // NOTE: For backward compatibility
