@@ -218,3 +218,24 @@ What I really want:
   - Probably a document list with then each file as a document itself.
 - Over time, each project update will that document file by itself.
   - Only the latest updated document is preferred.
+
+---
+
+SHOT HASH -> editing identifier
+SHOT NUMBER -> quick reference for the editor
+
+Sequence of shots are determined:
+
+- in storyboard
+  - useful to have shot info in app to relay on set.
+- or while editing
+  - useful to have shot info on screen for quick reference.
+
+moving shots between scenes are rare.
+
+- because it breaks continuity
+- usually just object close-ups (cause they don't have continuity)
+
+Once recorded it cannot rename.
+
+- On import, if it fails to find location, then just dump it. The editor will have to figure it out.

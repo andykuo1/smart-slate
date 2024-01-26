@@ -150,6 +150,8 @@ export default function SettingsFootageSaveToDiskButton({
 
         console.log('[TakeScanner] Importing unverified footage...');
 
+        // TODO: Disallow this?
+
         // Resolve a valid scene & shot for this.
         let scene;
         let block;
@@ -213,13 +215,13 @@ export default function SettingsFootageSaveToDiskButton({
         Icon={PlaylistAddCheckIcon}
         onClick={onImportVerified}
         disabled={!documentId || disabled}>
-        Import verified () into project
+        Import verified into project
       </SettingsFieldButton>
       <SettingsFieldButton
         Icon={PlaylistAddIcon}
         onClick={onImportAll}
-        disabled={!documentId || disabled}>
-        Import ALL () into project
+        disabled={true}>
+        Import ALL into project
       </SettingsFieldButton>
     </>
   );
