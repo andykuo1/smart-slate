@@ -59,7 +59,7 @@ export function getDefaultProjectIdByDate(date) {
   );
 }
 
-const SCENE_SHOT_NUMBER_PATTERN = /^(\d+)([A-Z-]+)$/i;
+const SCENE_SHOT_NUMBER_PATTERN = /^(\d+)([A-Z]+|-)$/i;
 
 /**
  * @param {string} sceneShotNumber
