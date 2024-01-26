@@ -8,15 +8,17 @@
 - - nav shots on edit mode
 - Be able to record QR code in recorder
 - GIF take preview
-- After recorded media - shot names should keep the same.
 - Ultrasound pairing
 - Make thumbnails smaller
-- Make scenes deletable
 
 - Add import all or verified footage for scanner
 - Add take id to qr code key
 - Add move scene button for shots
+- Add delete button for shots
+- Add renumber button for shots
 - Add strikethrough for scenes with no shots
+- Add parentheses on empty shot numbers
+
 - Fix qr code aspect ratio
 - Fix missing take id for scanned footage
 - Fix qr code flickering for mobile

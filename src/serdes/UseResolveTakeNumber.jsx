@@ -1,7 +1,17 @@
 import { useCallback } from 'react';
 
-import { getShotById, getTakeById } from '@/stores/document';
+import { getShotById, getTakeById, getTakeOrder } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
+
+/**
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ * @param {import('@/stores/document/DocumentStore').TakeId} [takeId]
+ */
+export function useTakeNumber(documentId, shotId, takeId) {
+  const resolve = useResolveTakeNumber();
+  return useDocumentStore((ctx) => resolve(documentId, shotId, takeId, true));
+}
 
 export function useResolveTakeNumber() {
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
@@ -19,7 +29,7 @@ export function useResolveTakeNumber() {
       if (!shot) {
         return -1;
       }
-      let result = -1;
+      let result;
       if (!takeId) {
         result = shot.takeIds.length + 1;
       } else {
@@ -27,15 +37,13 @@ export function useResolveTakeNumber() {
         result = take?.takeNumber;
         if (result > 0) {
           return result;
-        } else {
-          let index = Number(shot.takeIds.indexOf(takeId));
-          if (index < 0) {
-            return -1;
-          }
-          result = index + 1;
         }
+        const takeOrder = getTakeOrder(store, documentId, shotId, takeId);
+        if (takeOrder < 0) {
+          return -1;
+        }
+        result = takeOrder;
       }
-
       if (!readonly && takeId) {
         setTakeNumber(documentId, takeId, result);
       }

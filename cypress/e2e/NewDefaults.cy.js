@@ -40,8 +40,8 @@ describe('Creating new things with defaults', () => {
     cy.get('input[title="Project title"]')
       .should('be.visible')
       .should('have.value', 'My Movie')
-      .clear()
-      .type('The Wild West');
+      .clear();
+    cy.get('input[title="Project title"]').type('The Wild West');
     // with "New Scene" button
     cy.contains('New Scene').should('be.visible');
 

@@ -1,10 +1,7 @@
 import { useRef } from 'react';
 
-import {
-  isSceneEmpty,
-  useSceneHeading,
-  useSceneNumber,
-} from '@/stores/document';
+import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
+import { isSceneEmpty, useSceneHeading } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';

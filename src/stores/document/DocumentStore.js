@@ -27,6 +27,8 @@ export function createStore() {
   };
 }
 
+export const CURRENT_DOCUMENT_VERSION = 1;
+
 /**
  * @param {DocumentId} documentId
  */
@@ -34,13 +36,18 @@ export function createDocument(documentId = uuid()) {
   return {
     documentId,
     documentTitle: '',
+    documentVersion: CURRENT_DOCUMENT_VERSION,
+    // Timestamps for syncing
     firstCreatedMillis: 0,
     lastUpdatedMillis: 0,
     lastDeletedMillis: 0,
     lastExportedMillis: 0,
     // NOTE: To be used in the future, when we download project data separately.
     lastDataExportedMillis: 0,
+    // Check for changes.
     revisionNumber: 0,
+    // For creating scenes.
+    nextSceneNumber: 1,
     /** @type {DocumentSettings} */
     settings: createDocumentSettings(),
     /** @type {Array<SceneId>} */
@@ -80,8 +87,11 @@ export function createScene(sceneId = uuid()) {
   return {
     sceneId,
     sceneHeading: '',
+    /** The 1-indexed number of this scene. Per document. */
+    sceneNumber: 0,
     /** @type {Array<BlockId>} */
     blockIds: [],
+    nextShotNumber: 1,
   };
 }
 
@@ -114,13 +124,8 @@ export function createShot(shotId = uuid()) {
      * @type {ShotHash}
      */
     shotHash: '',
-    /**
-     * The name when shot is "finalized", basically when
-     * any take is recorded.
-     *
-     * This is currently: scene number + shot alphabet-index
-     */
-    shotName: '',
+    /** The 1-indexed number of this shot. Per scene. */
+    shotNumber: 0,
     /** @type {string} */
     referenceImage: '',
     description: '',
@@ -136,8 +141,8 @@ export function createShot(shotId = uuid()) {
 export function createTake(takeId = uuid()) {
   return {
     takeId,
-    // NOTE: This should be -1.
-    takeNumber: 0,
+    /** The 1-indexed number of this take. Per shot. */
+    takeNumber: 0, // NOTE: Should this be -1?
     comments: '',
     rating: 0,
     previewImage: '',
@@ -165,15 +170,17 @@ function createTakeExportDetails() {
  */
 export function cloneStore(out, store) {
   if (typeof store.documents !== 'undefined') {
-    let outDocuments = out.documents || {};
-    for (let document of Object.values(store.documents || {})) {
-      let outDocument =
-        outDocuments[document.documentId] ||
-        createDocument(document.documentId);
-      let newDocument = cloneDocument(outDocument, document);
-      outDocuments[newDocument.documentId] = newDocument;
+    let result = out.documents ?? {};
+    for (const key of Object.keys(store.documents)) {
+      let next = store.documents[key];
+      let prev = out.documents?.[key];
+      if (!prev) {
+        prev = createDocument(key);
+      }
+      let cloned = cloneDocument(prev, next);
+      result[cloned.documentId] = cloned;
     }
-    out.documents = outDocuments;
+    out.documents = result;
   }
   return /** @type {Store} */ (out);
 }
@@ -200,6 +207,8 @@ export function cloneDocument(out, document) {
     out.lastDataExportedMillis = document.lastDataExportedMillis;
   if (typeof document.revisionNumber !== 'undefined')
     out.revisionNumber = document.revisionNumber;
+  if (typeof document.nextSceneNumber !== 'undefined')
+    out.nextSceneNumber = document.nextSceneNumber;
   if (typeof document.sceneOrder !== 'undefined')
     out.sceneOrder = document.sceneOrder.slice();
   if (typeof document.shotHashes !== 'undefined')
@@ -211,47 +220,59 @@ export function cloneDocument(out, document) {
     };
 
   if (typeof document.scenes !== 'undefined') {
-    let outScenes = out.scenes || {};
-    for (let scene of Object.values(document.scenes)) {
-      let sceneId = scene.sceneId;
-      let outScene = outScenes[sceneId] || createScene(sceneId);
-      let newScene = cloneScene(outScene, scene);
-      outScenes[sceneId] = newScene;
+    let result = out.scenes ?? {};
+    for (const key of Object.keys(document.scenes)) {
+      let next = document.scenes[key];
+      let prev = out.scenes?.[key];
+      if (!prev) {
+        prev = createScene(key);
+      }
+      let cloned = cloneScene(prev, next);
+      result[cloned.sceneId] = cloned;
     }
-    out.scenes = outScenes;
+    out.scenes = result;
   }
 
   if (typeof document.blocks !== 'undefined') {
-    let outBlocks = out.blocks || {};
-    for (let block of Object.values(document.blocks)) {
-      let blockId = block.blockId;
-      let outBlock = outBlocks[blockId] || createBlock(blockId);
-      let newBlock = cloneBlock(outBlock, block);
-      outBlocks[blockId] = newBlock;
+    let result = out.blocks ?? {};
+    for (const key of Object.keys(document.blocks)) {
+      let next = document.blocks[key];
+      let prev = out.blocks?.[key];
+      if (!prev) {
+        prev = createBlock(key);
+      }
+      let cloned = cloneBlock(prev, next);
+      result[cloned.blockId] = cloned;
     }
-    out.blocks = outBlocks;
+    out.blocks = result;
   }
 
   if (typeof document.shots !== 'undefined') {
-    let outShots = out.shots || {};
-    for (let shot of Object.values(document.shots)) {
-      let shotId = shot.shotId;
-      let outShot = outShots[shotId] || createShot(shotId);
-      let newShot = cloneShot(outShot, shot);
-      outShots[shotId] = newShot;
+    let result = out.shots ?? {};
+    for (const key of Object.keys(document.shots)) {
+      let next = document.shots[key];
+      let prev = out.shots?.[key];
+      if (!prev) {
+        prev = createShot(key);
+      }
+      let cloned = cloneShot(prev, next);
+      result[cloned.shotId] = cloned;
     }
-    out.shots = outShots;
+    out.shots = result;
   }
 
   if (typeof document.takes !== 'undefined') {
-    let outTakes = out.takes || {};
-    for (let take of Object.values(document.takes)) {
-      let takeId = take.takeId;
-      let outTake = outTakes[takeId] || createTake(takeId);
-      let newTake = cloneTake(outTake, take);
-      outTakes[takeId] = newTake;
+    let result = out.takes ?? {};
+    for (const key of Object.keys(document.takes)) {
+      let next = document.takes[key];
+      let prev = out.takes?.[key];
+      if (!prev) {
+        prev = createTake(key);
+      }
+      let cloned = cloneTake(prev, next);
+      result[cloned.takeId] = cloned;
     }
-    out.takes = outTakes;
+    out.takes = result;
   }
 
   return /** @type {Document} */ (out);
@@ -264,10 +285,14 @@ export function cloneDocument(out, document) {
  */
 export function cloneScene(out, scene) {
   if (typeof scene.sceneId !== 'undefined') out.sceneId = scene.sceneId;
-  if (typeof scene.blockIds !== 'undefined')
-    out.blockIds = scene.blockIds.slice();
+  if (typeof scene.sceneNumber !== 'undefined')
+    out.sceneNumber = scene.sceneNumber;
   if (typeof scene.sceneHeading !== 'undefined')
     out.sceneHeading = scene.sceneHeading;
+  if (typeof scene.blockIds !== 'undefined')
+    out.blockIds = scene.blockIds.slice();
+  if (typeof scene.nextShotNumber !== 'undefined')
+    out.nextShotNumber = scene.nextShotNumber;
   return /** @type {Scene} */ (out);
 }
 
@@ -294,9 +319,9 @@ export function cloneBlock(out, block) {
  */
 export function cloneShot(out, shot) {
   if (typeof shot.shotId !== 'undefined') out.shotId = shot.shotId;
+  if (typeof shot.shotNumber !== 'undefined') out.shotNumber = shot.shotNumber;
   if (typeof shot.shotType !== 'undefined') out.shotType = shot.shotType;
   if (typeof shot.shotHash !== 'undefined') out.shotHash = shot.shotHash;
-  if (typeof shot.shotName !== 'undefined') out.shotName = shot.shotName;
   if (typeof shot.referenceImage !== 'undefined')
     out.referenceImage = shot.referenceImage;
   if (typeof shot.description !== 'undefined')

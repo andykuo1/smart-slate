@@ -4,12 +4,9 @@ import { useCallback } from 'react';
 import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg';
 import ThumbUpIcon from '@material-symbols/svg-400/rounded/thumb_up.svg';
 
-import {
-  getTakeNumber,
-  useSetTakeRating,
-  useTakeRating,
-} from '@/stores/document';
-import { useDocumentStore, useShotTakeCount } from '@/stores/document/use';
+import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
+import { useSetTakeRating, useTakeRating } from '@/stores/document';
+import { useShotTakeCount } from '@/stores/document/use';
 import MenuStyle from '@/styles/Menu.module.css';
 
 /**
@@ -23,9 +20,7 @@ export default function TakeRatingMenuItem({ documentId, shotId, takeId }) {
   const setTakeRating = useSetTakeRating();
 
   const shotTakeCount = useShotTakeCount(documentId, shotId);
-  const takeNumber = useDocumentStore((ctx) =>
-    getTakeNumber(ctx, documentId, shotId, takeId),
-  );
+  const takeNumber = useTakeNumber(documentId, shotId, takeId);
 
   const onGoodClick = useCallback(
     function _onGoodClick() {

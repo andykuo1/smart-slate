@@ -23,7 +23,7 @@ export function getSceneIdsInOrder(store, documentId) {
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
  */
-export function getSceneNumber(store, documentId, sceneId) {
+export function getSceneOrder(store, documentId, sceneId) {
   const index = Number(
     getDocumentById(store, documentId)?.sceneOrder?.indexOf?.(sceneId),
   );

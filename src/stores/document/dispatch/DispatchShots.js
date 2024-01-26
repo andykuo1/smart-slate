@@ -1,6 +1,12 @@
 import { zi } from '@/stores/ZustandImmerHelper';
 
-import { getBlockById, getLastBlockIdInScene } from '../get';
+import {
+  getBlockById,
+  getLastBlockIdInScene,
+  getSceneById,
+  getShotById,
+  isShotEmpty,
+} from '../get';
 import { incrementDocumentRevisionNumber } from './DispatchDocuments';
 
 /**
@@ -12,11 +18,12 @@ export function createDispatchShots(set, get) {
     setShotType: zi(set, setShotType),
     setShotDescription: zi(set, setShotDescription),
     setShotReferenceImage: zi(set, setShotReferenceImage),
-    setShotName: zi(set, setShotName),
+    setShotNumber: zi(set, setShotNumber),
     moveShot: zi(set, moveShot),
     updateShot: zi(set, updateShot),
     moveShotToScene: zi(set, moveShotToScene),
     moveShotBy: zi(set, moveShotBy),
+    reorderShots: zi(set, reorderShots),
   };
 }
 
@@ -84,12 +91,12 @@ function setShotReferenceImage(store, documentId, shotId, referenceImageUrl) {
  * @param {import('@/stores/document/DocumentStore').Store} store
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {import('@/stores/document/DocumentStore').ShotId} shotId
- * @param {string} shotName
+ * @param {number} shotNumber
  */
-function setShotName(store, documentId, shotId, shotName) {
+function setShotNumber(store, documentId, shotId, shotNumber) {
   let document = store.documents[documentId];
   let shot = document.shots[shotId];
-  shot.shotName = shotName;
+  shot.shotNumber = shotNumber;
   incrementDocumentRevisionNumber(document);
 }
 
@@ -152,6 +159,13 @@ function moveShotToScene(store, documentId, blockId, shotId, targetSceneId) {
   }
   shotIds.splice(shotIndex, 1);
   targetBlock.shotIds.push(shotId);
+
+  // Rename shot number
+  const targetShot = getShotById(store, documentId, shotId);
+  const targetScene = getSceneById(store, documentId, targetSceneId);
+  const shotNumber = targetScene.nextShotNumber;
+  targetScene.nextShotNumber += 1;
+  targetShot.shotNumber = shotNumber;
 }
 
 /**
@@ -225,4 +239,64 @@ function moveShotBy(store, documentId, sceneId, blockId, shotId, offset) {
   shotIds.splice(shotIndex, 1);
   targetBlock.shotIds.push(shotId);
   */
+}
+
+const MAX_ITERATIONS = 1_000;
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+ * @param {boolean} [emptyOnly]
+ */
+function reorderShots(store, documentId, sceneId, emptyOnly = true) {
+  let scene = getSceneById(store, documentId, sceneId);
+  scene.nextShotNumber = 1;
+  // Get all used numbers so we can avoid them...
+  /** @type {Array<number>} */
+  let usedNumbers = [];
+  if (emptyOnly) {
+    for (let blockId of scene.blockIds) {
+      let block = getBlockById(store, documentId, blockId);
+      for (let shotId of block.shotIds) {
+        if (!isShotEmpty(store, documentId, shotId)) {
+          let shot = getShotById(store, documentId, shotId);
+          usedNumbers.push(shot.shotNumber);
+        }
+      }
+    }
+    // Make sure we start off with a valid number...
+    nextAvailableShotNumber(scene, usedNumbers);
+  }
+
+  for (let blockId of scene.blockIds) {
+    let block = getBlockById(store, documentId, blockId);
+    for (let shotId of block.shotIds) {
+      if (emptyOnly && !isShotEmpty(store, documentId, shotId)) {
+        nextAvailableShotNumber(scene, usedNumbers);
+        continue;
+      }
+      let shot = getShotById(store, documentId, shotId);
+      shot.shotNumber = scene.nextShotNumber;
+      nextAvailableShotNumber(scene, usedNumbers);
+    }
+  }
+}
+/**
+ * @param {import('@/stores/document/DocumentStore').Scene} scene
+ * @param {Array<number>} used
+ */
+function nextAvailableShotNumber(scene, used) {
+  for (let i = 0; i < MAX_ITERATIONS; ++i) {
+    scene.nextShotNumber += 1;
+    let result = scene.nextShotNumber;
+    if (!used.includes(result)) {
+      return;
+    }
+  }
+  throw new Error(
+    '[DispatchShots] Failed to find valid shot number within ' +
+      MAX_ITERATIONS +
+      ' steps.',
+  );
 }

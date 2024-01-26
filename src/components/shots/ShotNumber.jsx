@@ -1,5 +1,4 @@
-import { useResolveShotName } from '@/serdes/UseResolveShotName';
-import { useDocumentStore } from '@/stores/document/use';
+import { useSceneShotNumber } from '@/serdes/UseResolveSceneShotNumber';
 
 /**
  * @param {object} props
@@ -9,15 +8,12 @@ import { useDocumentStore } from '@/stores/document/use';
  * @param {import('react').MouseEventHandler<HTMLButtonElement>} [props.onClick]
  */
 export default function ShotNumber({ documentId, sceneId, shotId, onClick }) {
-  const resolveShotName = useResolveShotName();
-  const shotName = useDocumentStore((ctx) =>
-    resolveShotName(documentId, sceneId, shotId, true),
-  );
+  const sceneShotNumber = useSceneShotNumber(documentId, sceneId, shotId);
   return (
     <button
       className="px-2 font-mono opacity-30 rounded-full"
       onClick={onClick}>
-      {shotName}
+      {sceneShotNumber}
     </button>
   );
 }

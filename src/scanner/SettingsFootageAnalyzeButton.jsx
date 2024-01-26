@@ -14,6 +14,7 @@ import {
   findDocumentsWithProjectId,
   findShotWithShotHash,
   findTakeWithTakeNumber,
+  getDocumentById,
   getTakeById,
 } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
@@ -219,6 +220,7 @@ async function performScan(output, videoRef, onChange) {
 
 /**
  * @param {string} qrCode
+ * @returns {ReturnType<tryDecodeQRCodeKeyV1>|ReturnType<tryDecodeQRCodeKeyV0>}
  */
 function decodeTakeInfoFromQRCode(qrCode) {
   let result = tryDecodeQRCodeKeyV1(qrCode) || tryDecodeQRCodeKeyV0(qrCode);
@@ -232,9 +234,9 @@ function decodeTakeInfoFromQRCode(qrCode) {
  * @param {import('@/stores/document/DocumentStore').Store} store
  * @param {ReturnType<decodeTakeInfoFromQRCode>} takeInfo
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
- * @param {boolean} forceDocument
+ * @param {boolean} forceImport
  */
-function findTakeWithDecodedQRCode(store, takeInfo, documentId, forceDocument) {
+function findTakeWithDecodedQRCode(store, takeInfo, documentId, forceImport) {
   let result = takeInfo;
   if (!result) {
     throw new Error('No supported qr code format.');
@@ -242,54 +244,76 @@ function findTakeWithDecodedQRCode(store, takeInfo, documentId, forceDocument) {
 
   // NOTE: Rely on take id first, as that is a uuid. Project IDs has the potential to change...
   let document;
-  if ('takeId' in takeInfo) {
-    document = findDocumentWithTakeId(store, takeInfo.takeId);
+  let take;
+
+  // Force import into this document
+  if (forceImport) {
+    document = getDocumentById(store, documentId);
+    // TODO: Should also resolve the other scene/shot/take elements.
+  }
+
+  // V1 decoder - uses take id
+  if ('takeId' in result) {
     if (!document) {
-      throw new Error('No project found with matching take id.');
+      document = findDocumentWithTakeId(store, result.takeId);
+      if (!document) {
+        throw new Error('No project found with take.');
+      }
     }
-  } else {
-    const documents = findDocumentsWithProjectId(store, result.projectId);
-    if (documents.length <= 0) {
-      throw new Error('No project found with same project id.');
-    }
-    console.log(
-      '[SettingsFootageAnalyzeButton] Found for documents: ',
-      documents,
-    );
-    document =
-      documents.find((document) => document.documentId === documentId) ||
-      (forceDocument ? documents[0] : null);
-    if (!document) {
-      throw new Error(
-        'Mismatched document id - found for another project though.',
-      );
+    if (document) {
+      take = getTakeById(store, document.documentId, result.takeId);
+      if (!take) {
+        throw new Error('No take found with same take id.');
+      }
     }
   }
 
-  const shot = findShotWithShotHash(store, documentId, result.shotHash);
-  if (!shot) {
-    throw new Error('No shot found with same shot hash.');
-  }
-
-  const shotId = shot.shotId;
+  // V0 decoder - uses take number
   if ('takeNumber' in result) {
-    let take = findTakeWithTakeNumber(
-      store,
-      documentId,
-      shotId,
-      result.takeNumber,
-    );
-    if (!take) {
-      throw new Error('No take found with same take number.');
+    if (!document) {
+      const documents = findDocumentsWithProjectId(store, result.projectId);
+      if (documents.length > 0) {
+        console.log(
+          '[SettingsFootageAnalyzeButton] Found for documents: ',
+          documents,
+        );
+        document = documents.find(
+          (document) => document.documentId === documentId,
+        );
+        if (!document) {
+          throw new Error(
+            'Mismatched document id - found for another project though.',
+          );
+        }
+      } else {
+        throw new Error('No project found with same project id');
+      }
     }
-    return take;
-  } else if ('takeId' in result) {
-    let take = getTakeById(store, documentId, result.takeId);
-    if (!take) {
-      throw new Error('No take found with same take id.');
+
+    if (document) {
+      const shot = findShotWithShotHash(
+        store,
+        document.documentId,
+        result.shotHash,
+      );
+      if (!shot) {
+        throw new Error('No shot found with same shot hash.');
+      }
+      take = findTakeWithTakeNumber(
+        store,
+        document.documentId,
+        shot.shotId,
+        result.takeNumber,
+      );
+      if (!take) {
+        throw new Error('No take found with same take number.');
+      }
     }
-    return take;
-  } else {
+  }
+
+  if (!take) {
     throw new Error('No supported take specifier available in qr code.');
   }
+
+  return take;
 }

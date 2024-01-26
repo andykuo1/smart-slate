@@ -7,7 +7,7 @@ import StatMinusOneIcon from '@material-symbols/svg-400/rounded/stat_minus_1.svg
 import {
   getShotById,
   getShotIdsInOrder,
-  useShotNumber,
+  useShotOrder,
 } from '@/stores/document';
 import { useDocumentStore, useSceneShotCount } from '@/stores/document/use';
 import { useDraggable, useIsDragging } from '@/stores/draggable';
@@ -41,7 +41,7 @@ export function ShotEntry({
   collapsed,
 }) {
   const containerRef = useRef(/** @type {HTMLLIElement|null} */ (null));
-  const shotNumber = useShotNumber(documentId, sceneId, shotId);
+  const shotOrder = useShotOrder(documentId, sceneId, shotId);
   const shotCount = useSceneShotCount(documentId, sceneId);
   const currentCursor = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
@@ -49,8 +49,8 @@ export function ShotEntry({
     currentCursor.documentId === documentId &&
     currentCursor.sceneId === sceneId &&
     currentCursor.shotId === shotId;
-  const isFirst = shotNumber <= 1;
-  const isLast = shotNumber >= shotCount;
+  const isFirst = shotOrder <= 1;
+  const isLast = shotOrder >= shotCount;
   const isDragging = useIsDragging(shotId);
   const { elementProps, handleProps } = useDraggable(blockId, shotId);
   const moveShot = useDocumentStore((ctx) => ctx.moveShot);

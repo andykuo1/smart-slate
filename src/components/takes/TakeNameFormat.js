@@ -1,13 +1,13 @@
 /**
  * @param {string} projectId
- * @param {string} shotName
+ * @param {string} sceneShotNumber
  * @param {number} takeNumber
  * @param {string} shotHash
  * @param {string} [shotType]
  */
 export function formatTakeNameForFileExport(
   projectId,
-  shotName,
+  sceneShotNumber,
   takeNumber,
   shotHash,
   shotType,
@@ -21,7 +21,7 @@ export function formatTakeNameForFileExport(
   return (
     [
       formatProjectId(projectId),
-      formatShotName(shotName, false),
+      formatSceneShotNumberString(sceneShotNumber),
       formatTakeNumber(takeNumber, false),
     ].join('_') +
     (shotType ? `_${shotType}` : '') +
@@ -59,23 +59,28 @@ export function getDefaultProjectIdByDate(date) {
   );
 }
 
+const SCENE_SHOT_NUMBER_PATTERN = /^(\d+)([A-Z-]+)$/i;
+
 /**
- * @param {string} shotName
+ * @param {string} sceneShotNumber
  * @param {boolean} [abbreviated]
  */
-export function formatShotName(shotName, abbreviated = false) {
-  if (!shotName || shotName.length <= 0) {
+export function formatSceneShotNumberString(
+  sceneShotNumber,
+  abbreviated = false,
+) {
+  if (!sceneShotNumber || sceneShotNumber.length <= 0) {
     if (abbreviated) {
       return '0Z';
     } else {
       return '00Z';
     }
   }
-  let result = /^(\d+)([A-Z]+)$/i.exec(shotName);
+  let result = SCENE_SHOT_NUMBER_PATTERN.exec(sceneShotNumber);
   if (!result) {
-    return shotName.toUpperCase();
+    return sceneShotNumber.toUpperCase();
   }
-  let [_text, sceneNumber, shotAlphabet] = result;
+  let [_, sceneNumber, shotAlphabet] = result;
   sceneNumber = Number(sceneNumber).toString();
   shotAlphabet = shotAlphabet.toUpperCase();
   if (abbreviated) {
@@ -90,14 +95,27 @@ export function formatShotName(shotName, abbreviated = false) {
  * @param {number} shotNumber
  * @param {boolean} abbreviated
  */
-export function formatShotNameByNumber(
+export function formatSceneShotNumber(
   sceneNumber,
   shotNumber,
   abbreviated = false,
 ) {
   let first = formatSceneNumber(sceneNumber, abbreviated);
   let second = formatShotNumber(shotNumber);
-  return formatShotName(`${first}${second}`, abbreviated);
+  return formatSceneShotNumberString(`${first}${second}`, abbreviated);
+}
+
+/**
+ * @param {ReturnType<formatSceneShotNumber>} sceneShotNumber
+ */
+export function parseSceneShotNumber(sceneShotNumber) {
+  const result = SCENE_SHOT_NUMBER_PATTERN.exec(sceneShotNumber);
+  if (!result) {
+    return [];
+  }
+  const [_, sceneNumber, shotAlphabet] = result;
+  const shotNumber = charToNum(shotAlphabet);
+  return [Number(sceneNumber), shotNumber];
 }
 
 /**
@@ -190,5 +208,23 @@ export function numToChar(num) {
     result = numToChar(Math.floor(num / CHAR_CODE_RANGE));
     num = num % CHAR_CODE_RANGE;
   }
-  return result + String.fromCharCode('A'.charCodeAt(0) + (num - 1));
+  return result + String.fromCharCode(FIRST_CHAR_CODE + (num - 1));
+}
+
+/**
+ * @param {string} char
+ */
+export function charToNum(char) {
+  let result = 0;
+  let pow = 1;
+  for (let i = char.length - 1; i >= 0; --i) {
+    let c = char.charCodeAt(i);
+    let code = c - FIRST_CHAR_CODE;
+    if (code < 0 || code >= CHAR_CODE_RANGE) {
+      continue;
+    }
+    result += code * pow;
+    pow *= CHAR_CODE_RANGE;
+  }
+  return result;
 }

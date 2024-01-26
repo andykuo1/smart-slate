@@ -38,7 +38,7 @@ export function createScannerResult(file) {
     value: '',
     status: '',
     takeId: '',
-    /** @type {{ projectId: string, shotHash: string }|null} */
+    /** @type {{ projectId: string, shotHash: string } | null} */
     takeInfo: null,
   };
 }
@@ -73,7 +73,7 @@ export function attachTakeIdScanner(out, takeId) {
 
 /**
  * @param {ScannerResult} out
- * @param {{ projectId: string, shotHash: string }} takeInfo
+ * @param {{ projectId: string, shotHash: string } | null} takeInfo
  */
 export function attachTakeInfoScanner(out, takeInfo) {
   out.takeInfo = takeInfo;

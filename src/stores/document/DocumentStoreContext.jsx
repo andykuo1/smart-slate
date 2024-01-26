@@ -1,15 +1,13 @@
 import { useShallow } from 'zustand/react/shallow';
 
 import {
-  findShotNumber,
   getBlockIdsInOrder,
   getSceneById,
-  getSceneNumber,
   getShotById,
   getShotIdsInOrder,
+  getShotOrder,
   getTakeById,
   getTakeIdsInOrder,
-  getTakeNumber,
 } from './get';
 import { useDocumentStore } from './use/UseDocumentStore';
 
@@ -55,30 +53,11 @@ export function useTakeIds(documentId, shotId) {
 /**
  * @param {import('./DocumentStore').DocumentId} documentId
  * @param {import('./DocumentStore').SceneId} sceneId
- */
-export function useSceneNumber(documentId, sceneId) {
-  return useDocumentStore((ctx) => getSceneNumber(ctx, documentId, sceneId));
-}
-
-/**
- * @param {import('./DocumentStore').DocumentId} documentId
- * @param {import('./DocumentStore').SceneId} sceneId
  * @param {import('./DocumentStore').ShotId} shotId
  */
-export function useShotNumber(documentId, sceneId, shotId) {
+export function useShotOrder(documentId, sceneId, shotId) {
   return useDocumentStore((ctx) =>
-    findShotNumber(ctx, documentId, sceneId, shotId),
-  );
-}
-
-/**
- * @param {import('./DocumentStore').DocumentId} documentId
- * @param {import('./DocumentStore').ShotId} shotId
- * @param {import('./DocumentStore').TakeId} takeId
- */
-export function useTakeNumber(documentId, shotId, takeId) {
-  return useDocumentStore((ctx) =>
-    getTakeNumber(ctx, documentId, shotId, takeId),
+    getShotOrder(ctx, documentId, sceneId, shotId),
   );
 }
 

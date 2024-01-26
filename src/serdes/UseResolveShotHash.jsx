@@ -4,6 +4,15 @@ import { getShotById } from '@/stores/document';
 import { findNextAvailableShotHash } from '@/stores/document/get';
 import { useDocumentStore } from '@/stores/document/use';
 
+/**
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ */
+export function useShotHash(documentId, shotId) {
+  const resolve = useResolveShotHash();
+  return useDocumentStore((ctx) => resolve(documentId, shotId, true));
+}
+
 export function useResolveShotHash() {
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const assignAvailableShotHash = useDocumentStore(

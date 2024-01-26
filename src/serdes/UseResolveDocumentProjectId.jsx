@@ -9,6 +9,15 @@ import { useDocumentStore } from '@/stores/document/use';
 
 export const COLLIDABLE_DEFAULT_PROJECT_IDS = ['UNTITLED', 'MYMOVIE'];
 
+/**
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {string} [documentTitle]
+ */
+export function useDocumentProjectId(documentId, documentTitle) {
+  const resolve = useResolveDocumentProjectId();
+  return useDocumentStore((ctx) => resolve(documentId, documentTitle, true));
+}
+
 export function useResolveDocumentProjectId() {
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const setDocumentSettingsProjectId = useDocumentStore(

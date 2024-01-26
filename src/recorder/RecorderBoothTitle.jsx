@@ -2,13 +2,12 @@ import ArrowForwardIcon from '@material-symbols/svg-400/rounded/arrow_forward.sv
 import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg';
 import ThumbUpIcon from '@material-symbols/svg-400/rounded/thumb_up.svg';
 
-import { useResolveShotName } from '@/serdes/UseResolveShotName';
-import { useResolveTakeNumber } from '@/serdes/UseResolveTakeNumber';
+import { useSceneShotNumber } from '@/serdes/UseResolveSceneShotNumber';
 import {
-  useSceneHeading,
+  useResolveTakeNumber,
   useTakeNumber,
-  useTakeRating,
-} from '@/stores/document';
+} from '@/serdes/UseResolveTakeNumber';
+import { useSceneHeading, useTakeRating } from '@/stores/document';
 import { useDocumentStore, useShotTakeCount } from '@/stores/document/use';
 
 /**
@@ -29,10 +28,7 @@ export default function RecorderBoothTitle({
   onGoodTake,
 }) {
   const takeCount = useShotTakeCount(documentId, shotId);
-  const resolveShotName = useResolveShotName();
-  const shotName = useDocumentStore((ctx) =>
-    resolveShotName(documentId, sceneId, shotId, true),
-  );
+  const sceneShotNumber = useSceneShotNumber(documentId, sceneId, shotId);
   const resolveTakeNumber = useResolveTakeNumber();
   const takeNumber = useDocumentStore((ctx) =>
     resolveTakeNumber(documentId, shotId, takeId, true),
@@ -45,7 +41,7 @@ export default function RecorderBoothTitle({
     <>
       <span className="mx-2">{sceneHeading || 'INT/EXT. SCENE - DAY'}</span>
       <span className="flex-1" />
-      <span>Shot {shotName}</span>
+      <span>Shot {sceneShotNumber}</span>
       <span className="flex flex-row items-center mx-2">
         Take #{prevTakeId ? prevTakeNumber : takeNumber}
         {prevTakeId && (

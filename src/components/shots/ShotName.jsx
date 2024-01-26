@@ -1,10 +1,7 @@
-import {
-  useSceneNumber,
-  useSetShotType,
-  useShotNumber,
-  useShotType,
-  useTakeNumber,
-} from '@/stores/document';
+import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
+import { useShotNumber } from '@/serdes/UseResolveShotNumber';
+import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
+import { useSetShotType, useShotType } from '@/stores/document';
 import { useShotTakeCount } from '@/stores/document/use';
 import { SHOT_TYPES } from '@/stores/document/value';
 

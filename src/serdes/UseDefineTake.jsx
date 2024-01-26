@@ -4,15 +4,15 @@ import { getShotById } from '@/stores/document';
 import { createTake } from '@/stores/document/DocumentStore';
 import { useDocumentStore } from '@/stores/document/use';
 
+import { useResolveSceneShotNumber } from './UseResolveSceneShotNumber';
 import { useResolveShotHash } from './UseResolveShotHash';
-import { useResolveShotName } from './UseResolveShotName';
 import { useResolveTakeFileName } from './UseResolveTakeFileName';
 
 export function useDefineTake() {
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const resolveTakeFileName = useResolveTakeFileName();
   const resolveShotHash = useResolveShotHash();
-  const resolveShotName = useResolveShotName();
+  const resolveSceneShotNumber = useResolveSceneShotNumber();
   const addTake = useDocumentStore((ctx) => ctx.addTake);
   const defineTake = useCallback(
     /**
@@ -30,7 +30,7 @@ export function useDefineTake() {
 
       // NOTE: Make sure these fields are defined whenever any take is
       //  created (most importantly, the first).
-      resolveShotName(documentId, sceneId, shotId, false);
+      resolveSceneShotNumber(documentId, sceneId, shotId, false);
       resolveShotHash(documentId, shotId, false);
 
       // Since the take isn't created yet, this can only be readonly.
@@ -58,7 +58,7 @@ export function useDefineTake() {
     [
       UNSAFE_getStore,
       addTake,
-      resolveShotName,
+      resolveSceneShotNumber,
       resolveShotHash,
       resolveTakeFileName,
     ],

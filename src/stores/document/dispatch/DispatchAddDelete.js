@@ -1,7 +1,5 @@
-import { formatShotNameByNumber } from '@/components/takes/TakeNameFormat';
 import { zi } from '@/stores/ZustandImmerHelper';
 
-import { getSceneNumber, getSceneShotCount } from '../get/GetScenes';
 import { incrementDocumentRevisionNumber } from './DispatchDocuments';
 
 /**
@@ -41,6 +39,11 @@ export function addDocument(store, document) {
 export function addScene(store, documentId, scene) {
   let document = store.documents[documentId];
   document.scenes[scene.sceneId] = scene;
+
+  let sceneNumber = document.nextSceneNumber;
+  document.nextSceneNumber += 1;
+  scene.sceneNumber = sceneNumber;
+
   document.sceneOrder.push(scene.sceneId);
   incrementDocumentRevisionNumber(document);
 }
@@ -71,17 +74,15 @@ export function addBlock(store, documentId, sceneId, block) {
  */
 export function addShot(store, documentId, sceneId, blockId, shot) {
   let document = store.documents[documentId];
-  let block = document.blocks[blockId];
   document.shots[shot.shotId] = shot;
+
+  let scene = document.scenes[sceneId];
+  let shotNumber = scene.nextShotNumber;
+  scene.nextShotNumber += 1;
+  shot.shotNumber = shotNumber;
+
+  let block = document.blocks[blockId];
   block.shotIds.push(shot.shotId);
-  let sceneNumber = getSceneNumber(store, documentId, sceneId);
-  // NOTE: We get the TOTAL shot count of the whole scene and
-  //  use that number even if this block is earlier in the scene.
-  //  This guarantees there are no duplicates.
-  let shotCount = getSceneShotCount(store, documentId, sceneId);
-  console.log(shotCount);
-  let shotName = formatShotNameByNumber(sceneNumber, shotCount, true);
-  shot.shotName = shotName;
   incrementDocumentRevisionNumber(document);
 }
 
@@ -93,11 +94,13 @@ export function addShot(store, documentId, sceneId, blockId, shot) {
  */
 export function addTake(store, documentId, shotId, take) {
   let document = store.documents[documentId];
-  let shot = document.shots[shotId];
   document.takes[take.takeId] = take;
+
+  let shot = document.shots[shotId];
   let takeNumber = shot.nextTakeNumber;
   shot.nextTakeNumber += 1;
   take.takeNumber = takeNumber;
+
   shot.takeIds.push(take.takeId);
   incrementDocumentRevisionNumber(document);
 }

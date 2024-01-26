@@ -26,16 +26,15 @@ export function getShotIdsInOrder(store, documentId, blockId) {
  * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
  * @param {import('@/stores/document/DocumentStore').ShotId} shotId
  */
-export function findShotNumber(store, documentId, sceneId, shotId) {
+export function getShotOrder(store, documentId, sceneId, shotId) {
   const scene = getSceneById(store, documentId, sceneId);
-  const blockIds = scene?.blockIds;
-  if (!blockIds) {
+  if (!scene) {
     return -1;
   }
-  // TODO: This doesn't respect block order!
+  // TODO: This doesn't respect block order...yet?
   let outOfBlocks = true;
   let currentIndex = 0;
-  for (let blockId of blockIds) {
+  for (let blockId of scene.blockIds) {
     const block = getBlockById(store, documentId, blockId);
     const index = block.shotIds.indexOf(shotId);
     if (index >= 0) {
@@ -83,4 +82,13 @@ export function findShotWithShotHash(store, documentId, shotHash) {
     }
   }
   return null;
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ */
+export function isShotEmpty(store, documentId, shotId) {
+  return getShotById(store, documentId, shotId)?.takeIds?.length <= 0;
 }

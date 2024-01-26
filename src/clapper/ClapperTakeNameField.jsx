@@ -1,4 +1,4 @@
-import { useResolveShotName } from '@/serdes/UseResolveShotName';
+import { useResolveSceneShotNumber } from '@/serdes/UseResolveSceneShotNumber';
 import {
   findBlockWithShotId,
   findSceneWithBlockId,
@@ -207,9 +207,9 @@ function SceneShotByBlockOptions({ documentId, sceneId, blockId }) {
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  */
 function SceneShotOption({ documentId, sceneId, shotId }) {
-  const resolveShotName = useResolveShotName();
-  const shotName = useDocumentStore((ctx) =>
-    resolveShotName(documentId, sceneId, shotId, true, { undecorated: true }),
+  const resolveSceneShotNumber = useResolveSceneShotNumber();
+  const sceneShotNumber = useDocumentStore((ctx) =>
+    resolveSceneShotNumber(documentId, sceneId, shotId, true),
   );
-  return <option value={shotId}>{shotName}</option>;
+  return <option value={shotId}>{sceneShotNumber}</option>;
 }

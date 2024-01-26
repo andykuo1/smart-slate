@@ -12,12 +12,10 @@ import {
   formatTakeNumber,
 } from '@/components/takes/TakeNameFormat';
 import { useFullscreen } from '@/libs/fullscreen';
-import {
-  getDocumentById,
-  useSceneNumber,
-  useShotNumber,
-  useTakeNumber,
-} from '@/stores/document';
+import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
+import { useShotNumber } from '@/serdes/UseResolveShotNumber';
+import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
+import { getDocumentById } from '@/stores/document';
 import { getDocumentSettingsById } from '@/stores/document/get';
 import { useDocumentStore } from '@/stores/document/use';
 import {

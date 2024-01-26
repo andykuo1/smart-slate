@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import url from 'url';
 
+// eslint-disable-next-line prettier/prettier
 import PackageJSON from './package.json' assert { type: 'json' };
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));

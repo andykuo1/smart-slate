@@ -1,6 +1,7 @@
 import { createDispatchAddDelete } from './dispatch/DispatchAddDelete';
 import { createDispatchDocumentSettings } from './dispatch/DispatchDocumentSettings';
 import { createDispatchDocuments } from './dispatch/DispatchDocuments';
+import { createDispatchScenes } from './dispatch/DispatchScenes';
 import { createDispatchShots } from './dispatch/DispatchShots';
 import { createDispatchTakes } from './dispatch/DispatchTakes';
 
@@ -17,6 +18,7 @@ export function createDispatch(set, get) {
     ...createDispatchAddDelete(set, get),
     ...createDispatchDocuments(set, get),
     ...createDispatchDocumentSettings(set, get),
+    ...createDispatchScenes(set, get),
     ...createDispatchShots(set, get),
     ...createDispatchTakes(set, get),
   };

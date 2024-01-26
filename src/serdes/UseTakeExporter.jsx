@@ -99,11 +99,7 @@ export function useTakeGoogleDriveUploader() {
 }
 
 export function useTakeExporter() {
-  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
-  const resolveTakeFileName = useResolveTakeFileName();
   const defineTake = useDefineTake();
-
-  const addTake = useDocumentStore((ctx) => ctx.addTake);
   const setTakeExportedGoogleDriveFileId =
     useSetTakeExportedGoogleDriveFileId();
   const setTakeExportedIDBKey = useSetTakeExportedIDBKey();
@@ -152,9 +148,7 @@ export function useTakeExporter() {
     [
       token,
       enableDriveSync,
-      UNSAFE_getStore,
-      addTake,
-      resolveTakeFileName,
+      defineTake,
       setTakeExportedGoogleDriveFileId,
       setTakeExportedIDBKey,
     ],

@@ -5,8 +5,8 @@ import { getDocumentById, getShotById, getTakeById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import { getVideoFileExtensionByMIMEType } from '@/values/RecorderValues';
 
+import { useResolveSceneShotNumber } from './UseResolveSceneShotNumber';
 import { useResolveShotHash } from './UseResolveShotHash';
-import { useResolveShotName } from './UseResolveShotName';
 import { useResolveTakeNumber } from './UseResolveTakeNumber';
 
 export function useResolveTakeFileName() {
@@ -15,7 +15,7 @@ export function useResolveTakeFileName() {
     (ctx) => ctx.setTakeExportedFileName,
   );
   const resolveShotHash = useResolveShotHash();
-  const resolveShotName = useResolveShotName();
+  const resolveSceneShotNumber = useResolveSceneShotNumber();
   const resolveTakeNumber = useResolveTakeNumber();
 
   const resolveTakeFileName = useCallback(
@@ -48,9 +48,12 @@ export function useResolveTakeFileName() {
         readonly,
       );
       const shotHash = resolveShotHash(documentId, shotId, readonly);
-      const shotName = resolveShotName(documentId, sceneId, shotId, readonly, {
-        undecorated: true,
-      });
+      const sceneShotNumber = resolveSceneShotNumber(
+        documentId,
+        sceneId,
+        shotId,
+        readonly,
+      );
       const ext = mimeType ? getVideoFileExtensionByMIMEType(mimeType) : '';
       const shot = getShotById(store, documentId, shotId);
       const shotType = shot?.shotType;
@@ -59,7 +62,7 @@ export function useResolveTakeFileName() {
         document?.settings?.projectId || document?.documentTitle || 'Untitled';
       const exportedTakeName = formatTakeNameForFileExport(
         projectId,
-        shotName,
+        sceneShotNumber,
         takeNumber,
         shotHash,
         shotType,
@@ -73,7 +76,7 @@ export function useResolveTakeFileName() {
     [
       UNSAFE_getStore,
       resolveShotHash,
-      resolveShotName,
+      resolveSceneShotNumber,
       resolveTakeNumber,
       setTakeExportedFileName,
     ],
