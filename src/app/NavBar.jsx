@@ -1,7 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import EditSquareIcon from '@material-symbols/svg-400/rounded/edit_square.svg';
-import ListAltIcon from '@material-symbols/svg-400/rounded/list_alt.svg';
 import RadioButtonCheckedIcon from '@material-symbols/svg-400/rounded/radio_button_checked.svg';
 import SubscriptionsIcon from '@material-symbols/svg-400/rounded/subscriptions.svg';
 import TuneIcon from '@material-symbols/svg-400/rounded/tune.svg';
@@ -36,9 +35,6 @@ export default function NavBar() {
         </li>
         <li className="flex-1 flex">
           <NavEditButton />
-        </li>
-        <li className="flex-1 flex">
-          <NavShotListButton />
         </li>
         <li className="flex-1 flex">
           <NavRecorderButton />
@@ -78,33 +74,6 @@ function NavRecorderButton() {
       Icon={RadioButtonCheckedIcon}
       onClick={onClick}
       disabled={!projectId || shotCount <= 0}
-    />
-  );
-}
-
-function NavShotListButton() {
-  const documentId = useCurrentDocumentId();
-  const projectId = useDocumentStore(
-    (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
-  );
-  const isShotListMode = useUserStore((ctx) => ctx.editMode === 'shotlist');
-  const setEditMode = useUserStore((ctx) => ctx.setEditMode);
-  const navigate = useNavigate();
-  const location = useLocation();
-  function onClick() {
-    setEditMode('shotlist');
-    if (!location.pathname.includes('/edit')) {
-      navigate('/edit');
-    }
-  }
-  return (
-    <NavButton
-      title="Shotlist"
-      abbr="Shot"
-      active={location.pathname.includes('/edit') && isShotListMode}
-      Icon={ListAltIcon}
-      onClick={onClick}
-      disabled={!projectId}
     />
   );
 }

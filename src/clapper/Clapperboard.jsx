@@ -12,7 +12,11 @@ import {
   getShotIdsInOrder,
 } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
-import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
+import {
+  useCurrentCursor,
+  useSetUserCursor,
+  useUserStore,
+} from '@/stores/user';
 
 import ClapperCameraNameField from './ClapperCameraNameField';
 import ClapperDateField from './ClapperDateField';
@@ -27,6 +31,7 @@ export default function Clapperboard() {
   const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const setUserCursor = useSetUserCursor();
+  const setEditMode = useUserStore((ctx) => ctx.setEditMode);
   const navigate = useNavigate();
   const { exitFullscreen } = useFullscreen();
 
@@ -55,6 +60,7 @@ export default function Clapperboard() {
   }, [documentId, sceneId, shotId, UNSAFE_getStore, setUserCursor]);
 
   function onBackClick() {
+    setEditMode('shotlist');
     navigate('/edit');
     exitFullscreen();
   }

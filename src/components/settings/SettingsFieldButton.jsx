@@ -5,13 +5,15 @@
  * @param {boolean} [props.danger]
  * @param {boolean} [props.inverted]
  * @param {import('react').FC<any>} [props.Icon]
- * @param {import('react').ReactNode} props.children
+ * @param {string} [props.title]
+ * @param {import('react').ReactNode} [props.children]
  * @param {boolean} [props.disabled]
  */
 export default function SettingsFieldButton({
   className,
   onClick,
   Icon,
+  title,
   children,
   danger,
   inverted,
@@ -20,9 +22,11 @@ export default function SettingsFieldButton({
   return (
     <button
       className={
-        'w-full flex flex-row items-center outline rounded p-2 my-4' +
+        'w-full flex flex-row items-center rounded p-2 mx-1 my-4' +
         ' ' +
         'disabled:opacity-30' +
+        ' ' +
+        (children ? 'outline' : '') +
         ' ' +
         (danger
           ? 'enabled:hover:bg-red-500 enabled:hover:text-white'
@@ -33,6 +37,7 @@ export default function SettingsFieldButton({
         className
       }
       onClick={onClick}
+      title={title}
       disabled={disabled}>
       {Icon && <Icon className="w-6 h-6 fill-current" />}
       <span className="flex-1">{children}</span>

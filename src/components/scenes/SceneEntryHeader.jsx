@@ -1,9 +1,15 @@
 import { useRef } from 'react';
 
+import SettingsSceneOpenClapperButton from '@/components/scenes/settings/SettingsSceneOpenClapperButton';
+import SettingsSceneShotsDetailButton from '@/components/scenes/settings/SettingsSceneShotsDetailButton';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { isSceneEmpty, useSceneHeading } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
-import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
+import {
+  useCurrentCursor,
+  useSetUserCursor,
+  useUserStore,
+} from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 
 import SceneNumber from './SceneNumber';
@@ -23,6 +29,7 @@ export default function SceneEntryHeader({ className, documentId, sceneId }) {
   );
   const currentCursor = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
+  const setEditMode = useUserStore((ctx) => ctx.setEditMode);
   const isActive =
     currentCursor.documentId === documentId &&
     currentCursor.sceneId === sceneId &&
@@ -40,6 +47,7 @@ export default function SceneEntryHeader({ className, documentId, sceneId }) {
     } else {
       setUserCursor(documentId, sceneId, '');
     }
+    setEditMode('story');
     // Debounce to wait for layout changes...
     setTimeout(
       () =>
@@ -79,7 +87,28 @@ export default function SceneEntryHeader({ className, documentId, sceneId }) {
         <option value="INT. " />
         <option value="EXT. " />
       </datalist>
+      <SceneStatus documentId={documentId} sceneId={sceneId} />
       <SceneNumber sceneNumber={sceneNumber} onClick={onClick} />
+    </div>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ */
+function SceneStatus({ documentId, sceneId }) {
+  return (
+    <div className="flex flex-row">
+      <SettingsSceneOpenClapperButton
+        documentId={documentId}
+        sceneId={sceneId}
+      />
+      <SettingsSceneShotsDetailButton
+        documentId={documentId}
+        sceneId={sceneId}
+      />
     </div>
   );
 }

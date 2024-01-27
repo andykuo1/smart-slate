@@ -10,14 +10,18 @@
 - GIF take preview
 - Ultrasound pairing
 - Make thumbnails smaller
+- What to do for lost footage or corrupted projects?
 
-- Add import all or verified footage for scanner
+- Add import verified footage for scanner
 - Add take id to qr code key
-- Add move scene button for shots
 - Add delete button for shots
 - Add renumber button for shots
 - Add strikethrough for scenes with no shots
 - Add parentheses on empty shot numbers
+- Add clapperboard button for scenes
+- Add shotlist button for scenes
+
+- Remove shotlist from nav bar (in favor of scene clapper)
 
 - Fix qr code aspect ratio
 - Fix missing take id for scanned footage
@@ -47,7 +51,7 @@
 - Add clapperboard
 - Add shot hash to clapperboard
 - Add shot type to clapperboard
-- Add clapboard option to shots
+- Add clapperboard option to shots
 
 - Change to full-width storyboard on smaller screens
 - Change `Record!` to include next take number

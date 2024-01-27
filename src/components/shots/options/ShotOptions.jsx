@@ -78,7 +78,7 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
     [setOpen, openRecorder],
   );
 
-  function onClapboardClick() {
+  function onClapperboardClick() {
     setOpen(false);
     setUserCursor(documentId, sceneId, shotId, '');
     setRecordMode('clapper');
@@ -134,9 +134,9 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
       </Button>
       <Button
         className="flex-1 p-1 flex items-center gap-2 rounded hover:bg-opacity-10 bg-opacity-0 bg-white disabled:opacity-30"
-        onClick={onClapboardClick}>
+        onClick={onClapperboardClick}>
         <MovieIcon className="w-6 h-6 fill-current" />
-        <span className="flex-1 text-right">Clapboard</span>
+        <span className="flex-1 text-right">Clapperboard</span>
       </Button>
       <div className="border" />
       <ShotTypeSelector
