@@ -11,7 +11,11 @@ import {
 } from '@/stores/document';
 import { useDocumentStore, useSceneShotCount } from '@/stores/document/use';
 import { useDraggable, useIsDragging } from '@/stores/draggable';
-import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
+import {
+  useCurrentCursor,
+  useSetUserCursor,
+  useUserStore,
+} from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 
@@ -45,6 +49,7 @@ export function ShotEntry({
   const shotCount = useSceneShotCount(documentId, sceneId);
   const currentCursor = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
+  const setEditMode = useUserStore((ctx) => ctx.setEditMode);
   const isActive =
     currentCursor.documentId === documentId &&
     currentCursor.sceneId === sceneId &&
@@ -94,8 +99,10 @@ export function ShotEntry({
   function onShotFocusClick() {
     if (isActive) {
       setUserCursor(documentId, '', '');
+      setEditMode('story');
     } else {
       setUserCursor(documentId, sceneId, shotId);
+      setEditMode('shotlist');
     }
     // Debounce to wait for layout changes...
     setTimeout(

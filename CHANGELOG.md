@@ -1,17 +1,5 @@
 # Upcoming
 
-- Photo recorder for story building
-- Put shots in text
-- Zoom requires it ZOOMS out before zooming back in?
-- shot details focus experience
-- - nav takes on shotlist
-- - nav shots on edit mode
-- Be able to record QR code in recorder
-- GIF take preview
-- Ultrasound pairing
-- Make thumbnails smaller
-- What to do for lost footage or corrupted projects?
-
 - Add import verified footage for scanner
 - Add take id to qr code key
 - Add delete button for shots
@@ -20,6 +8,7 @@
 - Add parentheses on empty shot numbers
 - Add clapperboard button for scenes
 - Add shotlist button for scenes
+- Add reference image capture on new shot button
 
 - Remove shotlist from nav bar (in favor of scene clapper)
 

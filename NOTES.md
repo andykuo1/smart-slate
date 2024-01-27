@@ -239,3 +239,21 @@ moving shots between scenes are rare.
 Once recorded it cannot rename.
 
 - On import, if it fails to find location, then just dump it. The editor will have to figure it out.
+
+---
+
+Possible next steps?
+
+- Photo recorder for story building
+- Put shots in text
+- Zoom requires it ZOOMS out before zooming back in?
+- shot details focus experience
+- - nav takes on shotlist
+- - nav shots on edit mode
+- Be able to record QR code in recorder
+- GIF take preview
+- Ultrasound pairing
+- Make thumbnails smaller
+- What to do for lost footage or corrupted projects?
+- - For each shot, we can have an "import footage" button that you upload takes.
+- - We currently have that, but we can use the qr code scanner to make it match.

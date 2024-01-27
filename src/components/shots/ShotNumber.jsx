@@ -13,7 +13,7 @@ export default function ShotNumber({ documentId, sceneId, shotId, onClick }) {
     <button
       className="px-2 font-mono opacity-30 rounded-full"
       onClick={onClick}>
-      {sceneShotNumber}
+      {sceneShotNumber === '0Z' ? '--' : sceneShotNumber}
     </button>
   );
 }
