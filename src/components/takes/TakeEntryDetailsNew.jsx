@@ -1,4 +1,3 @@
-import SettingsSceneShotsRenumberButton from '@/components/shots/settings/SettingsSceneShotsRenumberButton';
 import SettingsShotDeleteButton from '@/components/shots/settings/SettingsShotDeleteButton';
 import SettingsShotTakesImportButton from '@/components/shots/settings/SettingsShotTakesImportButton';
 import HorizontallySnappableDiv from '@/libs/HorizontallySnappableDiv';
@@ -35,10 +34,6 @@ export default function TakeEntryDetails({
           documentId={documentId}
           sceneId={sceneId}
           shotId={shotId}
-        />
-        <SettingsSceneShotsRenumberButton
-          documentId={documentId}
-          sceneId={sceneId}
         />
       </>
     </HorizontallySnappableDiv>
