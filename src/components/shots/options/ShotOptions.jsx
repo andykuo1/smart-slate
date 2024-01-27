@@ -21,6 +21,7 @@ import {
 } from '@/values/Resolutions';
 
 import { useShotTypeChange } from '../UseShotType';
+import SettingsShotDeleteButton from '../settings/SettingsShotDeleteButton';
 import { blobToDataURI } from './ShotThumbnailHelper';
 
 /**
@@ -157,6 +158,11 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
         <UploadIcon className="w-6 h-6 fill-current" />
         <span className="flex-1 text-right ml-2">From file</span>
       </Button>
+      <SettingsShotDeleteButton
+        documentId={documentId}
+        sceneId={sceneId}
+        shotId={shotId}
+      />
       <canvas ref={canvasRef} className="hidden" />
       <input
         ref={inputUploadRef}

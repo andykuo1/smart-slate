@@ -1,4 +1,3 @@
-import SettingsShotDeleteButton from '@/components/shots/settings/SettingsShotDeleteButton';
 import SettingsShotTakesImportButton from '@/components/shots/settings/SettingsShotTakesImportButton';
 import HorizontallySnappableDiv from '@/libs/HorizontallySnappableDiv';
 
@@ -26,11 +25,6 @@ export default function TakeEntryDetails({
     <HorizontallySnappableDiv className={className + ' ' + listDecorationStyle}>
       <>
         <SettingsShotTakesImportButton
-          documentId={documentId}
-          sceneId={sceneId}
-          shotId={shotId}
-        />
-        <SettingsShotDeleteButton
           documentId={documentId}
           sceneId={sceneId}
           shotId={shotId}
