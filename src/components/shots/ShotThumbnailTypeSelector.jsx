@@ -68,7 +68,7 @@ export default function ShotThumbnailTypeSelector({
         setShotReferenceImage(documentId, newShot.shotId, uri);
       });
     },
-    [documentId, sceneId, blockId, setShotReferenceImage],
+    [documentId, sceneId, blockId, addShot, setShotReferenceImage],
   );
 
   return (
