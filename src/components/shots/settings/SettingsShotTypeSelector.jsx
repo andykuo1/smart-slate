@@ -19,7 +19,7 @@ export default function SettingsShotTypeSelector({
 
   return (
     <SettingsFieldSelect
-      className={className}
+      className={'flex flex-row' + ' ' + className}
       title=""
       id="shot-type"
       value={shotType}

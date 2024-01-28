@@ -23,7 +23,7 @@ export default function SettingsFieldSelect({
     <SettingsField
       id={id}
       title={title}
-      className={'flex flex-row' + ' ' + className}
+      className={className}
       required={required}>
       <select
         id={id}
