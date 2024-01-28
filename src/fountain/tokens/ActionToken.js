@@ -53,9 +53,18 @@ export function ActionBlockToken(out, line) {
     return false;
   }
   // Append to the action.
-  if (prev.text.length > 0) {
-    prev.text += '\n';
+  if (prev.text.trim().length > 0) {
+    // ...is it a double newline?
+    if (prev.text.endsWith('\n')) {
+      // ...then create a new action block.
+      out.push(createToken(ACTION_TYPE, line, false));
+      return true;
+    } else {
+      // ...then add a newline...
+      prev.text += '\n';
+    }
   }
+  // ...and add it.
   prev.text += line;
   return true;
 }

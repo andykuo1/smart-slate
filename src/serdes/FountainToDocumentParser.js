@@ -43,7 +43,11 @@ export function fountainToDocument(tokens) {
       // Skip page breaks.
       continue;
     }
-    if (token.type === 'section' || token.type === 'synopsis') {
+    if (
+      token.type === 'section' ||
+      token.type === 'synopsis' ||
+      token.type === 'note'
+    ) {
       // Skip writer notes.
       continue;
     }
@@ -102,12 +106,6 @@ export function fountainToDocument(tokens) {
         currentBlock.content = token.text;
         currentBlock.contentStyle = 'lyric';
         break;
-      case 'note':
-        currentBlock = addBlock(currentScene);
-        currentBlock.contentType = 'fountain-json';
-        currentBlock.content = token.text;
-        currentBlock.contentStyle = 'note';
-        break;
       case 'transition':
         currentBlock = addBlock(currentScene);
         currentBlock.contentType = 'fountain-json';
@@ -144,8 +142,8 @@ export function fountainToDocument(tokens) {
  */
 function setupFrontMatterParser(documentParser) {
   // TODO: Title scenes (for now) will not be translated over. Let it die.
-  let titleScene = createScene(); // addScene()
-  let titleBlock = documentParser.addBlock(titleScene);
+  // let titleScene = documentParser.addScene();
+  let titleBlock = createBlock(); // documentParser.addBlock(titleScene);
   /** @type {Array<string>} */
   let titleLines = [];
   let titleTitle = '';
