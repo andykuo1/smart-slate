@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import UploadIcon from '@material-symbols/svg-400/rounded/upload-fill.svg';
 
-import FancyButton from '@/libs/FancyButton';
+import FancyButton from '@/buttons/FancyButton';
 import { useSingleFileInput } from '@/libs/UseSingleFileInput';
 import { useProjectImport } from '@/serdes/UseProjectImport';
 import { extname } from '@/utils/PathHelper';

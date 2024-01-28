@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import QRCode2Icon from '@material-symbols/svg-400/rounded/qr_code_2.svg';
 
-import FancyButton from '@/libs/FancyButton';
+import FancyButton from '@/buttons/FancyButton';
 
 export default function ScannerButton() {
   const navigate = useNavigate();
