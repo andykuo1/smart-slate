@@ -91,7 +91,7 @@ export default function SettingsPage() {
               <span className="flex-1">Dangerous Stuff</span>
               <ExpandMoreIcon className="w-6 h-6 fill-current" />
             </Disclosure>
-            <DisclosureContent className="py-4">
+            <DisclosureContent className="py-4 flex flex-col gap-4">
               <SettingsVideoCacheClearButton />
               <SettingsProjectDeleteButton />
             </DisclosureContent>

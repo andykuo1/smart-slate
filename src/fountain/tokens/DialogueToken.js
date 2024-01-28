@@ -35,7 +35,7 @@ export function DialogueBlockToken(out, line) {
       out.push(createToken(PARENTHETICAL_TYPE, line.trim(), false));
       // and continue a new dialogue.
       out.push(createToken(DIALOGUE_TYPE, '', false));
-    } else if (line.length > 0) {
+    } else if (line.trim().length > 0) {
       // ...or this should continue the dialogue.
       if (prev.text.length > 0) {
         prev.text += '\n';
