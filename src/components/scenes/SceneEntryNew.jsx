@@ -1,9 +1,5 @@
-import { useAddBlock, useAddScene, useAddShot } from '@/stores/document';
-import {
-  createBlock,
-  createScene,
-  createShot,
-} from '@/stores/document/DocumentStore';
+import { useAddBlock, useAddScene } from '@/stores/document';
+import { createBlock, createScene } from '@/stores/document/DocumentStore';
 import { useCurrentCursor } from '@/stores/user';
 
 /**
@@ -18,17 +14,14 @@ export default function SceneEntryNew({ className, documentId }) {
 
   const addScene = useAddScene();
   const addBlock = useAddBlock();
-  const addShot = useAddShot();
 
   function onClick() {
     let newScene = createScene();
     let newBlock = createBlock();
     // NOTE: This should be the default.
     newBlock.contentType = 'fountain-json';
-    let newShot = createShot();
     addScene(documentId, newScene);
     addBlock(documentId, newScene.sceneId, newBlock);
-    addShot(documentId, newScene.sceneId, newBlock.blockId, newShot);
   }
 
   if (hasActiveScene || hasActiveShot) {

@@ -4,13 +4,16 @@
 - Add take id to qr code key
 - Add delete button for shots
 - Add renumber button for shots
-- Add strikethrough for scenes with no shots
 - Add parentheses on empty shot numbers
 - Add clapperboard button for scenes
 - Add shotlist button for scenes
 - Add reference image capture on new shot button
+- Add "of" trim for fountain shot syntax
+- Add "--" as no shot types for fountain shot syntax
+- Add dictionary for WS, MS, and CU fountain shot syntax
 
 - Remove shotlist from nav bar (in favor of scene clapper)
+- Remove first default shot on new scene
 
 - Fix qr code aspect ratio
 - Fix missing take id for scanned footage
@@ -19,6 +22,7 @@
 - Fix front-matter causing errors while parsing
 - Fix notes showing up in script
 - Fix shot renumbering skipping a shot
+- Fix deleting focused shots missing target
 
 # 0.1.14
 

@@ -4,11 +4,9 @@ import { useNavigate } from 'react-router-dom';
 
 import ListAltIcon from '@material-symbols/svg-400/rounded/list_alt.svg';
 import MovieIcon from '@material-symbols/svg-400/rounded/movie.svg';
-import PhotoCameraIcon from '@material-symbols/svg-400/rounded/photo_camera.svg';
 import RadioButtonCheckedIcon from '@material-symbols/svg-400/rounded/radio_button_checked.svg';
-import UploadIcon from '@material-symbols/svg-400/rounded/upload.svg';
 
-import { ShotTypeSelector } from '@/components/shots/options/ShotTypeSelector';
+import SettingsShotTypeSelector from '@/components/shots/settings/SettingsShotTypeSelector';
 import { useFullscreen } from '@/libs/fullscreen';
 import { isInputCaptureSupported } from '@/recorder/MediaRecorderSupport';
 import { useOpenPreferredRecorder } from '@/recorder/UseOpenRecorder';
@@ -20,8 +18,8 @@ import {
   MAX_THUMBNAIL_WIDTH,
 } from '@/values/Resolutions';
 
-import { useShotTypeChange } from '../UseShotType';
 import SettingsShotDeleteButton from '../settings/SettingsShotDeleteButton';
+import SettingsShotReferenceImageField from '../settings/SettingsShotReferenceImageField';
 import { blobToDataURI } from './ShotThumbnailHelper';
 
 /**
@@ -36,11 +34,7 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
   const canvasRef = useRef(/** @type {HTMLCanvasElement|null} */ (null));
   const { setOpen = NOOP } = usePopoverContext() || {};
 
-  const [isCameraEnabled, setCameraEnabled] = useState(false);
-  const [activeShotType, onShotTypeChange] = useShotTypeChange(
-    documentId,
-    shotId,
-  );
+  const [_, setCameraEnabled] = useState(false);
   const shotTakeCount = useShotTakeCount(documentId, shotId);
   const setShotReferenceImage = useDocumentStore(
     (ctx) => ctx.setShotReferenceImage,
@@ -60,14 +54,6 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
 
   useEffect(() => {
     setCameraEnabled(isInputCaptureSupported());
-  }, []);
-
-  const onInputUploadClick = useCallback(function _onInputUploadClick() {
-    inputUploadRef.current?.click();
-  }, []);
-
-  const onInputCaptureClick = useCallback(function _onInputCaptureClick() {
-    inputCaptureRef.current?.click();
   }, []);
 
   const onRecordClick = useCallback(
@@ -140,24 +126,17 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
         <span className="flex-1 text-right">Clapperboard</span>
       </Button>
       <div className="border" />
-      <ShotTypeSelector
-        className="flex-1 flex flex-row items-center"
-        activeShotType={activeShotType}
-        onChange={onShotTypeChange}
+      <div className="flex flex-row">
+        <SettingsShotTypeSelector
+          className="flex-1"
+          documentId={documentId}
+          shotId={shotId}
+        />
+      </div>
+      <SettingsShotReferenceImageField
+        documentId={documentId}
+        shotId={shotId}
       />
-      <Button
-        className="flex-1 p-1 flex items-center rounded hover:bg-opacity-10 bg-opacity-0 bg-white disabled:opacity-30"
-        disabled={!isCameraEnabled}
-        onClick={onInputCaptureClick}>
-        <PhotoCameraIcon className="w-6 h-6 fill-current" />
-        <span className="flex-1 text-right ml-2">Take photo</span>
-      </Button>
-      <Button
-        className="flex-1 p-1 flex items-center rounded hover:bg-opacity-10 bg-opacity-0 bg-white disabled:opacity-30"
-        onClick={onInputUploadClick}>
-        <UploadIcon className="w-6 h-6 fill-current" />
-        <span className="flex-1 text-right ml-2">From file</span>
-      </Button>
       <SettingsShotDeleteButton
         documentId={documentId}
         sceneId={sceneId}

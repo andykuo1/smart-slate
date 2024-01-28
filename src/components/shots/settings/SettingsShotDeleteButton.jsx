@@ -3,7 +3,7 @@ import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
 import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
 import { isShotEmpty } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
-import { useSetUserCursor } from '@/stores/user';
+import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 
 /**
  * @param {object} props
@@ -20,11 +20,14 @@ export default function SettingsShotDeleteButton({
     isShotEmpty(ctx, documentId, shotId),
   );
   const deleteShot = useDocumentStore((ctx) => ctx.deleteShot);
+  const userCursor = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
 
   function onClick() {
     if (emptyShot) {
-      setUserCursor(documentId, sceneId, '', '');
+      if (userCursor.shotId) {
+        setUserCursor(documentId, sceneId, '', '');
+      }
       deleteShot(documentId, shotId);
     }
   }

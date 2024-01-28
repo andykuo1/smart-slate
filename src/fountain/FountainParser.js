@@ -24,8 +24,7 @@ export function parse(text) {
   };
 }
 
-const NOTE_SHOT_NOTYPE_PATTERN = /^!+[^!](.+)/;
-const NOTE_SHOT_TYPE_PATTERN = /^([A-Z]+)[\W](.+)/;
+const NOTE_SHOT_TYPE_PATTERN = /^([A-Z-]+)[^\w-](?:\s*(of|OF|Of|oF)\s+)*(.+)$/;
 
 const SHOT_FORCE_PATTERN = /^shot:/i;
 
@@ -43,31 +42,79 @@ function tokenizeNoteShots(noteToken) {
   const lines = text.split('\n');
   let prevShot = null;
   for (let line of lines) {
-    let shotType = '';
+    let shotType;
     let shotText;
     let trimmedLine = line.trim();
-    let noTypeMatched = NOTE_SHOT_NOTYPE_PATTERN.exec(trimmedLine);
-    if (noTypeMatched) {
-      const [_, desc] = noTypeMatched;
-      shotText = desc.trim();
+    if (prevShot && (line.startsWith('   ') || line.startsWith('\t'))) {
+      // TODO: Started with 3 whitespace or tab... so append!
+    }
+    const typeMatched = NOTE_SHOT_TYPE_PATTERN.exec(trimmedLine);
+    if (typeMatched) {
+      const [_, type, desc] = typeMatched;
+      shotType = reduceShotType(type);
+      shotText = reduceShotDescription(desc);
     } else {
-      if (prevShot && (line.startsWith('   ') || line.startsWith('\t'))) {
-        // TODO: Started with 3 whitespace or tab... so append!
-      }
-      let typeMatched = NOTE_SHOT_TYPE_PATTERN.exec(trimmedLine);
-      if (typeMatched) {
-        const [_, type, desc] = typeMatched;
-        shotType = type;
-        shotText = desc;
-      } else {
-        shotText = trimmedLine;
-      }
+      shotType = '';
+      shotText = trimmedLine;
     }
     if (shotText.length <= 0) {
       continue;
     }
-    // @ts-expect-error shot token type is Eagle-specific
-    result.push(createToken('shot', shotText, false, shotType));
+    result.push(
+      createToken(
+        // @ts-expect-error shot token type is Eagle-specific
+        'shot',
+        shotText,
+        false,
+        shotType,
+      ),
+    );
   }
   return result;
+}
+
+/**
+ * @param {string} shotType
+ */
+function reduceShotType(shotType) {
+  if (/^-+$/.test(shotType)) {
+    return '';
+  }
+  switch (shotType.toUpperCase()) {
+    case 'SHOT':
+    case 'S':
+      return '';
+    case 'WS':
+    case 'WIDE':
+    case 'W':
+      return 'WS';
+    case 'MS':
+    case 'MID':
+    case 'MEDIUM':
+    case 'M':
+      return 'MS';
+    case 'CU':
+    case 'CLOSEUP':
+    case 'CLOSE-UP':
+    case 'C':
+      return 'CU';
+    default:
+      return shotType.toUpperCase();
+  }
+}
+
+/**
+ * @param {string} shotDescription
+ */
+function reduceShotDescription(shotDescription) {
+  if (!shotDescription) {
+    return '';
+  }
+  let result = /^\s*of\s+(.+)/i.exec(shotDescription);
+  if (result) {
+    let [_, text] = result;
+    return text.trim();
+  } else {
+    return shotDescription.trim();
+  }
 }

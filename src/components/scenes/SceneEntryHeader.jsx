@@ -1,10 +1,8 @@
 import { useRef } from 'react';
 
 import SettingsSceneOpenClapperButton from '@/components/scenes/settings/SettingsSceneOpenClapperButton';
-import SettingsSceneShotsDetailButton from '@/components/scenes/settings/SettingsSceneShotsDetailButton';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
-import { isSceneEmpty, useSceneHeading } from '@/stores/document';
-import { useDocumentStore } from '@/stores/document/use';
+import { useSceneHeading } from '@/stores/document';
 import {
   useCurrentCursor,
   useSetUserCursor,
@@ -13,6 +11,7 @@ import {
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 
 import SceneNumber from './SceneNumber';
+import SettingsSceneShotsRenumberButton from './settings/SettingsSceneShotsRenumberButton';
 
 /**
  * @param {object} props
@@ -24,9 +23,6 @@ export default function SceneEntryHeader({ className, documentId, sceneId }) {
   const containerRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const [sceneHeading, setSceneHeading] = useSceneHeading(documentId, sceneId);
   const sceneNumber = useSceneNumber(documentId, sceneId);
-  const sceneEmpty = useDocumentStore((ctx) =>
-    isSceneEmpty(ctx, documentId, sceneId),
-  );
   const currentCursor = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
   const setEditMode = useUserStore((ctx) => ctx.setEditMode);
@@ -71,11 +67,7 @@ export default function SceneEntryHeader({ className, documentId, sceneId }) {
       }>
       <SceneNumber sceneNumber={sceneNumber} onClick={onClick} />
       <input
-        className={
-          'flex-1 w-full bg-transparent px-2 py-6 text-xl font-bold' +
-          ' ' +
-          (sceneEmpty ? 'line-through' : '')
-        }
+        className="flex-1 w-full bg-transparent px-2 py-6 text-xl font-bold"
         type="text"
         list="sceneHeading"
         placeholder="INT/EXT. SCENE - DAY"
@@ -101,11 +93,11 @@ export default function SceneEntryHeader({ className, documentId, sceneId }) {
 function SceneStatus({ documentId, sceneId }) {
   return (
     <div className="flex flex-row">
-      <SettingsSceneOpenClapperButton
+      <SettingsSceneShotsRenumberButton
         documentId={documentId}
         sceneId={sceneId}
       />
-      <SettingsSceneShotsDetailButton
+      <SettingsSceneOpenClapperButton
         documentId={documentId}
         sceneId={sceneId}
       />

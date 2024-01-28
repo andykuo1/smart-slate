@@ -20,8 +20,8 @@ export default function SettingsSceneShotsRenumberButton({
     <SettingsFieldButton
       className="w-auto"
       Icon={OneTwoThreeIcon}
-      onClick={onClick}>
-      Re-number shots
-    </SettingsFieldButton>
+      title="Re-number shots"
+      onClick={onClick}
+    />
   );
 }
