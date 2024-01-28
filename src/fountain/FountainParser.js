@@ -50,7 +50,7 @@ function tokenizeNoteShots(noteToken) {
     }
     const typeMatched = NOTE_SHOT_TYPE_PATTERN.exec(trimmedLine);
     if (typeMatched) {
-      const [_, type, desc] = typeMatched;
+      const [_, type, _delimiter, desc] = typeMatched;
       shotType = reduceShotType(type);
       shotText = reduceShotDescription(desc);
     } else {
