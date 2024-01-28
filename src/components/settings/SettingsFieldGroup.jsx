@@ -5,7 +5,7 @@
  */
 export default function SettingsFieldGroup({ title, children }) {
   return (
-    <fieldset>
+    <fieldset className="flex flex-col gap-2 pt-4">
       <legend>{title}</legend>
       {children}
     </fieldset>

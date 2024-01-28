@@ -64,7 +64,7 @@ export default function SettingsPage() {
             <SettingsVideoResolutionField />
             <br />
             <SettingsFieldGroup title="Data Settings">
-              <GoogleConnectButton className="mt-4 mb-2" />
+              <GoogleConnectButton className="mb-4" />
               <SettingsEnableGoogleDriveSyncToggle />
               <SettingsShareFilesButton />
               <SettingsProjectExportZIPButton />

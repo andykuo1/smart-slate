@@ -3,10 +3,9 @@
 - Add import verified footage for scanner
 - Add take id to qr code key
 - Add delete button for shots
-- Add renumber button for shots
 - Add parentheses on empty shot numbers
 - Add clapperboard button for scenes
-- Add shotlist button for scenes
+- Add renumber shots button for scenes
 - Add reference image capture on new shot button
 - Add "of" trim for fountain shot syntax
 - Add "--" as no shot types for fountain shot syntax

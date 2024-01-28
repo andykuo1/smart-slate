@@ -22,7 +22,7 @@ export default function SettingsFieldButton({
   return (
     <button
       className={
-        'w-full flex flex-row items-center rounded p-2 mx-1 my-4' +
+        'w-full flex flex-row items-center rounded p-2' +
         ' ' +
         'disabled:opacity-30' +
         ' ' +
