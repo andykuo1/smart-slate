@@ -15,6 +15,10 @@
 - Fix qr code aspect ratio
 - Fix missing take id for scanned footage
 - Fix qr code flickering for mobile
+- Fix renumber always starts with B
+- Fix front-matter causing errors while parsing
+- Fix notes showing up in script
+- Fix shot renumbering skipping a shot
 
 # 0.1.14
 

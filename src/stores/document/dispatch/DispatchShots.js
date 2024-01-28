@@ -251,7 +251,7 @@ const MAX_ITERATIONS = 1_000;
  */
 function reorderShots(store, documentId, sceneId, emptyOnly = true) {
   let scene = getSceneById(store, documentId, sceneId);
-  scene.nextShotNumber = 0;
+  scene.nextShotNumber = 1;
   // Get all used numbers so we can avoid them...
   /** @type {Array<number>} */
   let usedNumbers = [];
@@ -266,32 +266,33 @@ function reorderShots(store, documentId, sceneId, emptyOnly = true) {
       }
     }
   }
-  // Make sure we start off with a valid number...
-  nextAvailableShotNumber(scene, usedNumbers);
-
+  // Actually change the scene number...
   for (let blockId of scene.blockIds) {
     let block = getBlockById(store, documentId, blockId);
     for (let shotId of block.shotIds) {
       if (emptyOnly && !isShotEmpty(store, documentId, shotId)) {
-        nextAvailableShotNumber(scene, usedNumbers);
         continue;
       }
+      // ...but make sure it's a valid number...
+      let shotNumber = nextAvailableShotNumber(scene, usedNumbers);
       let shot = getShotById(store, documentId, shotId);
-      shot.shotNumber = scene.nextShotNumber;
-      nextAvailableShotNumber(scene, usedNumbers);
+      shot.shotNumber = shotNumber;
+      usedNumbers.push(shotNumber);
     }
   }
 }
+
 /**
  * @param {import('@/stores/document/DocumentStore').Scene} scene
  * @param {Array<number>} used
  */
 function nextAvailableShotNumber(scene, used) {
   for (let i = 0; i < MAX_ITERATIONS; ++i) {
-    scene.nextShotNumber += 1;
     let result = scene.nextShotNumber;
     if (!used.includes(result)) {
-      return;
+      return result;
+    } else {
+      scene.nextShotNumber += 1;
     }
   }
   throw new Error(
