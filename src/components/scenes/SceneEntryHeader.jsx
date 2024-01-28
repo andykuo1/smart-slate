@@ -11,6 +11,7 @@ import {
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 
 import SceneNumber from './SceneNumber';
+import SettingsSceneShotsDetailButton from './settings/SettingsSceneShotsDetailButton';
 import SettingsSceneShotsRenumberButton from './settings/SettingsSceneShotsRenumberButton';
 
 /**
@@ -98,6 +99,10 @@ function SceneStatus({ documentId, sceneId }) {
         sceneId={sceneId}
       />
       <SettingsSceneOpenClapperButton
+        documentId={documentId}
+        sceneId={sceneId}
+      />
+      <SettingsSceneShotsDetailButton
         documentId={documentId}
         sceneId={sceneId}
       />

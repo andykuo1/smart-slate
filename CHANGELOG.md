@@ -6,6 +6,7 @@
 - Add parentheses on empty shot numbers
 - Add clapperboard button for scenes
 - Add renumber shots button for scenes
+- Add shot details button for scenes
 - Add reference image capture on new shot button
 - Add "of" trim for fountain shot syntax
 - Add "--" as no shot types for fountain shot syntax

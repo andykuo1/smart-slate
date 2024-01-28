@@ -257,3 +257,5 @@ Possible next steps?
 - What to do for lost footage or corrupted projects?
 - - For each shot, we can have an "import footage" button that you upload takes.
 - - We currently have that, but we can use the qr code scanner to make it match.
+
+- Add thumbnails to export all button
