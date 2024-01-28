@@ -47,7 +47,7 @@ export default function BlockEntry({
     <BlockEntryLayout
       collapsed={collapsed}
       content={
-        <div className="group relative px-4 flex w-full h-full">
+        <div className="group relative px-4 flex w-full md:w-[60vw] h-full">
           <BlockContent
             className="flex-1"
             documentId={documentId}
