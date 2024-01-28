@@ -23,6 +23,7 @@
 - Fix notes showing up in script
 - Fix shot renumbering skipping a shot
 - Fix deleting focused shots missing target
+- Fix unmuted video while scanning
 
 # 0.1.14
 

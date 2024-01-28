@@ -175,7 +175,7 @@ async function performScan(output, videoRef, onChange) {
       /** @type {string[]} */
       let codes;
       try {
-        codes = await scanVideoBlobForQRCodes(videoFile);
+        codes = await scanVideoBlobForQRCodes(video, videoFile);
       } catch (e) {
         console.error('[TakeScanner] Failed scanning - ', e);
         codes = [];

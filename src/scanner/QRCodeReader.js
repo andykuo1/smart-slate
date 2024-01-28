@@ -17,14 +17,15 @@ export async function scanVideoForQRCodes(video) {
 }
 
 /**
+ * @param {HTMLVideoElement} video
  * @param {Blob} videoBlob
  */
-export async function scanVideoBlobForQRCodes(videoBlob) {
+export async function scanVideoBlobForQRCodes(video, videoBlob) {
   let results = [];
   const reader = new BrowserQRCodeReader();
   const url = URL.createObjectURL(videoBlob);
   try {
-    let result = await reader.decodeFromVideo(undefined, url);
+    let result = await reader.decodeFromVideo(video, url);
     results.push(result.getText());
   } catch (err) {
     if (err instanceof NotFoundException) {
