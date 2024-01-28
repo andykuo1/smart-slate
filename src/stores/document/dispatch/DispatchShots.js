@@ -251,7 +251,7 @@ const MAX_ITERATIONS = 1_000;
  */
 function reorderShots(store, documentId, sceneId, emptyOnly = true) {
   let scene = getSceneById(store, documentId, sceneId);
-  scene.nextShotNumber = 1;
+  scene.nextShotNumber = 0;
   // Get all used numbers so we can avoid them...
   /** @type {Array<number>} */
   let usedNumbers = [];
@@ -265,9 +265,9 @@ function reorderShots(store, documentId, sceneId, emptyOnly = true) {
         }
       }
     }
-    // Make sure we start off with a valid number...
-    nextAvailableShotNumber(scene, usedNumbers);
   }
+  // Make sure we start off with a valid number...
+  nextAvailableShotNumber(scene, usedNumbers);
 
   for (let blockId of scene.blockIds) {
     let block = getBlockById(store, documentId, blockId);
