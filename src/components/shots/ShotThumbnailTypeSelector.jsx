@@ -74,7 +74,7 @@ export default function ShotThumbnailTypeSelector({
   return (
     <div
       className={
-        'relative flex items-center border border-black text-gray-400' +
+        'relative flex items-center border border-black border-dashed text-gray-400' +
         ' ' +
         className
       }>
