@@ -39,7 +39,7 @@ export default function ShotEntryNew({
         }>
         {!collapsed && <ShotNumber documentId="" sceneId="" shotId="" />}
         <button
-          className="group h-full py-2.5 hover:text-white"
+          className="group h-full translate-x-1 py-2.5 hover:text-white"
           title="New shot"
           onClick={onClick}>
           <AddIcon className="w-6 h-full fill-current group-hover:bg-black" />
