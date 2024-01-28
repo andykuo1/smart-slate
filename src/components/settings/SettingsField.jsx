@@ -15,7 +15,7 @@ export default function SettingsField({
 }) {
   return (
     <div className={'relative my-2' + ' ' + (className || 'flex flex-col')}>
-      <label htmlFor={id} className="flex-1">
+      <label htmlFor={id} className="flex-1" hidden={!title}>
         {title}
         {required && <span className="text-red-500">*</span>}
       </label>

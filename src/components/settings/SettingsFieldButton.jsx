@@ -22,7 +22,7 @@ export default function SettingsFieldButton({
   return (
     <button
       className={
-        'w-full flex flex-row items-center rounded p-2' +
+        'flex flex-row items-center rounded p-2' +
         ' ' +
         'disabled:opacity-30' +
         ' ' +
@@ -34,7 +34,7 @@ export default function SettingsFieldButton({
             ? 'enabled:hover:bg-white enabled:hover:text-black bg-black text-white'
             : 'enabled:hover:bg-black enabled:hover:text-white') +
         ' ' +
-        className
+        (className ?? 'w-full')
       }
       onClick={onClick}
       title={title}

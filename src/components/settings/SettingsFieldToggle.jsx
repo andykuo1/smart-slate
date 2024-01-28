@@ -20,7 +20,7 @@ export default function SettingsFieldToggle({
 }) {
   return (
     <SettingsFieldButton
-      className={'flex flex-row fill-current' + ' ' + className}
+      className={'w-full' + ' ' + className}
       onClick={onClick}
       Icon={value ? ToggleOn : ToggleOff}
       disabled={disabled}>

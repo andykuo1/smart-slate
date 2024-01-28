@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import SettingsFieldSelect from '@/components/settings/SettingsFieldSelect';
 
 import { useShotTypeChange } from '../UseShotType';
 
@@ -15,14 +15,13 @@ export default function SettingsShotTypeSelector({
   documentId,
   shotId,
 }) {
-  const selectRef = useRef(/** @type {HTMLSelectElement|null} */ (null));
-
   const [shotType, onShotTypeChange] = useShotTypeChange(documentId, shotId);
 
   return (
-    <select
-      ref={selectRef}
-      className={'text-center bg-transparent rounded py-1' + ' ' + className}
+    <SettingsFieldSelect
+      className={className}
+      title=""
+      id="shot-type"
       value={shotType}
       onChange={onShotTypeChange}>
       {SHOT_TYPES.map((shotType) => (
@@ -33,6 +32,6 @@ export default function SettingsShotTypeSelector({
           {shotType}
         </option>
       ))}
-    </select>
+    </SettingsFieldSelect>
   );
 }

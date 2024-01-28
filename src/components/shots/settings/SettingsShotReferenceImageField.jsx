@@ -13,12 +13,10 @@ import { blobToDataURI } from '../options/ShotThumbnailHelper';
 
 /**
  * @param {object} props
- * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  */
 export default function SettingsShotReferenceImageField({
-  className,
   documentId,
   shotId,
 }) {
@@ -49,11 +47,12 @@ export default function SettingsShotReferenceImageField({
     [documentId, shotId, setShotReferenceImage],
   );
   return (
-    <SettingsFieldButton
-      className={'my-0' + ' ' + className}
-      Icon={AddPhotoAlternativeIcon}
-      onClick={() => inputCaptureRef.current?.click()}>
-      Reference image
+    <>
+      <SettingsFieldButton
+        className="w-auto"
+        Icon={AddPhotoAlternativeIcon}
+        onClick={() => inputCaptureRef.current?.click()}
+      />
       <input
         ref={inputCaptureRef}
         className="hidden"
@@ -63,6 +62,6 @@ export default function SettingsShotReferenceImageField({
         onChange={onInputChange}
       />
       <canvas ref={canvasRef} className="hidden" />
-    </SettingsFieldButton>
+    </>
   );
 }

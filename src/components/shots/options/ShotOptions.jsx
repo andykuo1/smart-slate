@@ -126,17 +126,17 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
         <span className="flex-1 text-right">Clapperboard</span>
       </Button>
       <div className="border" />
-      <div className="flex flex-row">
+      <div className="flex-1 flex flex-row gap-2">
         <SettingsShotTypeSelector
           className="flex-1"
           documentId={documentId}
           shotId={shotId}
         />
+        <SettingsShotReferenceImageField
+          documentId={documentId}
+          shotId={shotId}
+        />
       </div>
-      <SettingsShotReferenceImageField
-        documentId={documentId}
-        shotId={shotId}
-      />
       <SettingsShotDeleteButton
         documentId={documentId}
         sceneId={sceneId}
