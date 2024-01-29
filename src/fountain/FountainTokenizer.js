@@ -238,7 +238,7 @@ class FountainTokenizer {
         let remainder = line.substring(i, j + BLOCK_COMMENT_END_LENGTH);
         comments.push(remainder);
         let textAfterComment = line.substring(j + BLOCK_COMMENT_END_LENGTH);
-        line = textBeforeComment + ' ' + textAfterComment;
+        this.replaceLine(textBeforeComment + ' ' + textAfterComment);
         //...add comment token just-in-case...
         this.push(createToken(COMMENT_TYPE, comments.join('\n'), false));
         //...and continue processing like nothing happened.
