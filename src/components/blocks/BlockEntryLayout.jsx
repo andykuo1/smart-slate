@@ -2,30 +2,40 @@ import { useUserStore } from '@/stores/user';
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('react').ReactNode} props.content
  * @param {import('react').ReactNode} props.children
- * @param {boolean} [props.collapsed]
+ * @param {'faded'|'split'|'fullwidth'} [props.mode]
  */
-export default function BlockEntryLayout({ collapsed, content, children }) {
+export default function BlockEntryLayout({
+  className,
+  mode = 'fullwidth',
+  content,
+  children,
+}) {
+  const isWidthHalved = mode === 'split';
+  const isHeightFaded = mode === 'faded';
   const setEditMode = useUserStore((ctx) => ctx.setEditMode);
   return (
     <div
       className={
-        'flex' + ' ' + (!collapsed ? 'flex-col' : 'flex-col md:flex-row')
+        'flex' +
+        ' ' +
+        (isWidthHalved ? 'flex-row w-[50vw]' : 'flex-col') +
+        ' ' +
+        className
       }>
       <div
         className={
-          'relative' +
+          'relative w-full' +
           ' ' +
-          (!collapsed
-            ? 'max-h-[15vh] overflow-y-hidden'
-            : 'md:min-w-[50vw] md:max-w-[60vw]')
+          (isHeightFaded && 'max-h-[15vh] overflow-y-hidden')
         }>
         {content}
-        {!collapsed && (
+        {isHeightFaded && (
           <button
             className="absolute top-0 bottom-0 left-0 right-0 bg-gradient-to-t from-white to-transparent"
-            onClick={() => setEditMode('story')}
+            onClick={() => setEditMode('sequence')}
           />
         )}
       </div>

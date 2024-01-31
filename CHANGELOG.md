@@ -11,6 +11,7 @@
 - Add "of" trim for fountain shot syntax
 - Add "--" as no shot types for fountain shot syntax
 - Add dictionary for WS, MS, and CU fountain shot syntax
+- Add inline and sequence mode for shotlist content
 
 - Remove shotlist from nav bar (in favor of scene clapper)
 - Remove first default shot on new scene
@@ -24,6 +25,7 @@
 - Fix shot renumbering skipping a shot
 - Fix deleting focused shots missing target
 - Fix unmuted video while scanning
+- Fix boneyard comment in fountain parser
 
 # 0.1.14
 

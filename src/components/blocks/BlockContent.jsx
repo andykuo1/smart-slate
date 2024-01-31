@@ -113,13 +113,15 @@ function BlockContentFountainJSON({
     case 'dialogue': {
       const lines = content.split('\n');
       return (
-        <div className={'my-4 mx-20 whitespace-normal' + ' ' + className}>
-          <pre className="ml-16 font-bold whitespace-normal">{lines[0]}</pre>
+        <div className={'my-4 ml-[15%] whitespace-normal' + ' ' + className}>
+          <pre className="ml-[15%] font-bold whitespace-normal">{lines[0]}</pre>
           {lines.slice(1).map((line, index) => (
             <pre
               key={line + '.' + index}
               className={
-                'whitespace-normal' + ' ' + (line.startsWith('(') ? 'ml-4' : '')
+                'whitespace-normal' +
+                ' ' +
+                (line.startsWith('(') ? 'mx-[7%]' : '')
               }>
               {line}
             </pre>
@@ -129,10 +131,10 @@ function BlockContentFountainJSON({
       );
     }
     case 'transition':
-      contentClassName.push('text-right mr-10');
+      contentClassName.push('text-right');
       break;
     case 'lyric':
-      contentClassName.push('ml-10 italic');
+      contentClassName.push('italic');
       break;
     case 'note':
       contentClassName.push('opacity-30');

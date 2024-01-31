@@ -13,9 +13,8 @@ import { useShotEntryOnDragUpdate } from './UseShotEntryDraggable';
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
- * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  */
-export default function ShotEntryDragged({ documentId, sceneId, blockId }) {
+export default function ShotEntryDragged({ documentId, sceneId }) {
   const targetRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const draggedShotId = useDraggableTarget();
   const isAnyDragging = useIsAnyDragging();

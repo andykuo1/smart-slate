@@ -1,8 +1,6 @@
 import { useCurrentCursor } from '@/stores/user';
 
-import BlockEntryFocused from '../blocks/BlockEntryFocused';
-import BlockList from '../blocks/BlockList';
-import SceneEntryHeader from './SceneEntryHeader';
+import SceneEntryLayout from './SceneEntryLayout';
 
 /**
  * This works by escaping document flow as an overlay. Every
@@ -10,23 +8,16 @@ import SceneEntryHeader from './SceneEntryHeader';
  *
  * @param {object} props
  * @param {string} [props.className]
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('react').ReactNode} props.children
  */
-export default function SceneEntryFocused({ className, documentId }) {
-  const { sceneId, shotId } = useCurrentCursor();
+export default function SceneEntryFocused({ className, children }) {
+  const { sceneId } = useCurrentCursor();
   if (!sceneId) {
     return null;
   }
   return (
     <div className="absolute top-0 left-0 right-0 bottom-0 z-10 overflow-y-auto bg-white">
-      <section className={'flex flex-col mb-10' + ' ' + className}>
-        <SceneEntryHeader documentId={documentId} sceneId={sceneId} />
-        {!shotId ? (
-          <BlockList documentId={documentId} sceneId={sceneId} />
-        ) : (
-          <BlockEntryFocused documentId={documentId} />
-        )}
-      </section>
+      <SceneEntryLayout className={className}>{children}</SceneEntryLayout>
     </div>
   );
 }

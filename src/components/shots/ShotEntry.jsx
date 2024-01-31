@@ -1,15 +1,9 @@
 import { useRef } from 'react';
 
 import ArrowForwardIcon from '@material-symbols/svg-400/rounded/arrow_forward.svg';
-import StatOneIcon from '@material-symbols/svg-400/rounded/stat_1.svg';
-import StatMinusOneIcon from '@material-symbols/svg-400/rounded/stat_minus_1.svg';
 
-import {
-  getShotById,
-  getShotIdsInOrder,
-  useShotOrder,
-} from '@/stores/document';
-import { useDocumentStore, useSceneShotCount } from '@/stores/document/use';
+import { getShotById, useShotOrder } from '@/stores/document';
+import { useDocumentStore } from '@/stores/document/use';
 import { useDraggable, useIsDragging } from '@/stores/draggable';
 import {
   useCurrentCursor,
@@ -19,7 +13,7 @@ import {
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 
-import BoxDrawingCharacter from '../documents/BoxDrawingCharacter';
+import ShotMover from './ShotMover';
 import ShotNumber from './ShotNumber';
 import ShotThumbnail from './ShotThumbnail';
 
@@ -46,20 +40,16 @@ export function ShotEntry({
 }) {
   const containerRef = useRef(/** @type {HTMLLIElement|null} */ (null));
   const shotOrder = useShotOrder(documentId, sceneId, shotId);
-  const shotCount = useSceneShotCount(documentId, sceneId);
   const currentCursor = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
-  const setEditMode = useUserStore((ctx) => ctx.setEditMode);
+  const setShotListMode = useUserStore((ctx) => ctx.setShotListMode);
   const isActive =
     currentCursor.documentId === documentId &&
     currentCursor.sceneId === sceneId &&
     currentCursor.shotId === shotId;
   const isFirst = shotOrder <= 1;
-  const isLast = shotOrder >= shotCount;
   const isDragging = useIsDragging(shotId);
   const { elementProps, handleProps } = useDraggable(blockId, shotId);
-  const moveShot = useDocumentStore((ctx) => ctx.moveShot);
-  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
 
   const shotHash = useDocumentStore(
     (ctx) => getShotById(ctx, documentId, shotId)?.shotHash,
@@ -68,42 +58,13 @@ export function ShotEntry({
     (ctx) => getShotById(ctx, documentId, shotId)?.description,
   );
 
-  function onDownClick() {
-    const store = UNSAFE_getStore();
-    const shotIds = getShotIdsInOrder(store, documentId, blockId);
-    const i = shotIds.indexOf(shotId);
-    if (i < 0 || i >= shotIds.length) {
-      return;
-    }
-    const nextShotId = shotIds.at(i + 1);
-    if (!nextShotId) {
-      return;
-    }
-    moveShot(documentId, blockId, shotId, nextShotId);
-  }
-
-  function onUpClick() {
-    const store = UNSAFE_getStore();
-    const shotIds = getShotIdsInOrder(store, documentId, blockId);
-    const i = shotIds.indexOf(shotId);
-    if (i <= 0 || i >= shotIds.length) {
-      return;
-    }
-    const prevShotId = shotIds.at(i - 1);
-    if (!prevShotId) {
-      return;
-    }
-    moveShot(documentId, blockId, shotId, prevShotId, true);
-  }
-
   function onShotFocusClick() {
     if (isActive) {
-      setUserCursor(documentId, '', '');
-      setEditMode('story');
+      setUserCursor(documentId, sceneId, '');
     } else {
       setUserCursor(documentId, sceneId, shotId);
-      setEditMode('shotlist');
     }
+    setShotListMode('detail');
     // Debounce to wait for layout changes...
     setTimeout(
       () =>
@@ -140,27 +101,15 @@ export function ShotEntry({
             onClick={onShotFocusClick}
           />
         )}
-        <div className="flex flex-col items-center">
-          <button
-            onClick={onUpClick}
-            disabled={!editable || isFirst}
-            className="disabled:opacity-30">
-            <StatOneIcon className="w-6 h-6 fill-current" />
-          </button>
-          <BoxDrawingCharacter
-            className={!editable ? 'opacity-30' : 'cursor-grab'}
-            depth={0}
-            start={false}
-            end={isLast}
-            containerProps={{ ...(editable && collapsed ? handleProps : {}) }}
-          />
-          <button
-            onClick={onDownClick}
-            disabled={!editable || isLast}
-            className="disabled:opacity-30">
-            <StatMinusOneIcon className="w-6 h-6 fill-current" />
-          </button>
-        </div>
+        <ShotMover
+          documentId={documentId}
+          sceneId={sceneId}
+          blockId={blockId}
+          shotId={shotId}
+          handleProps={handleProps}
+          editable={editable}
+          collapsed={collapsed}
+        />
         <div className="relative">
           {shotHash && (
             <label className="absolute -top-2 left-0 z-10 px-1 bg-white text-black font-mono rounded">
@@ -176,7 +125,7 @@ export function ShotEntry({
           />
         </div>
         <div className="flex-1 flex flex-row items-center">
-          <div className="flex-1 flex flex-row">
+          <div className="flex-1">
             {collapsed && <ArrowForwardIcon className="w-6 h-6 fill-current" />}
           </div>
           {!collapsed &&

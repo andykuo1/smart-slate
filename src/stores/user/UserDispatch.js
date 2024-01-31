@@ -13,6 +13,7 @@ export function createDispatch(set, get) {
     setUserCursor: zi(set, setUserCursor),
     setRecorderActive: zi(set, setRecorderActive),
     setEditMode: zi(set, setEditMode),
+    setShotListMode: zi(set, setShotListMode),
     setRecordMode: zi(set, setRecordMode),
     setGoogleContextCredentialResponse: zi(
       set,
@@ -63,10 +64,19 @@ function setRecorderActive(store, active, forceStart) {
 
 /**
  * @param {import('./UserStore').Store} store
- * @param {'story'|'shotlist'} editMode
+ * @param {'inline'|'sequence'} editMode
  */
 function setEditMode(store, editMode) {
   store.editMode = editMode;
+}
+
+/**
+ *
+ * @param {import('./UserStore').Store} store
+ * @param {'detail'|'hidden'} shotListMode
+ */
+function setShotListMode(store, shotListMode) {
+  store.shotListMode = shotListMode;
 }
 
 /**

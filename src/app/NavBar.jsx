@@ -125,12 +125,11 @@ function NavEditButton() {
   const projectId = useDocumentStore(
     (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
   );
-  const isStoryMode = useUserStore((ctx) => ctx.editMode === 'story');
   const setEditMode = useUserStore((ctx) => ctx.setEditMode);
   const navigate = useNavigate();
   const location = useLocation();
   function onClick() {
-    setEditMode('story');
+    setEditMode('auto');
     if (!location.pathname.includes('/edit')) {
       navigate('/edit');
     }
@@ -140,7 +139,7 @@ function NavEditButton() {
       title="Edit"
       abbr="Edit"
       Icon={EditSquareIcon}
-      active={location.pathname.includes('/edit') && isStoryMode}
+      active={location.pathname.includes('/edit')}
       disabled={!projectId}
       onClick={onClick}
     />

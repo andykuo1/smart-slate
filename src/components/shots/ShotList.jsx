@@ -1,7 +1,6 @@
 import { Fragment } from 'react';
 
 import { useShotIds } from '@/stores/document';
-import { useFirstBlockIdInScene } from '@/stores/document/use';
 
 import TakeList from '../takes/TakeList';
 import GridStyle from './GridStyle.module.css';
@@ -27,8 +26,7 @@ export default function ShotList({
   collapsed = false,
 }) {
   const shotIds = useShotIds(documentId, blockId);
-  const firstBlockId = useFirstBlockIdInScene(documentId, sceneId);
-  if (firstBlockId !== blockId && collapsed && shotIds.length <= 0) {
+  if (shotIds.length <= 0) {
     return null;
   }
   return (
@@ -62,11 +60,7 @@ export default function ShotList({
           />
         )}
       </div>
-      <ShotEntryDragged
-        documentId={documentId}
-        sceneId={sceneId}
-        blockId={blockId}
-      />
+      <ShotEntryDragged documentId={documentId} sceneId={sceneId} />
     </ul>
   );
 }

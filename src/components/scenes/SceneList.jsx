@@ -1,10 +1,13 @@
 import { Fragment } from 'react';
 
 import { useSceneIds } from '@/stores/document/use';
+import { useCurrentCursor } from '@/stores/user';
 
-import SceneEntry from './SceneEntry';
+import BlockList from '../blocks/BlockList';
 import SceneEntryFocused from './SceneEntryFocused';
+import SceneEntryLayout from './SceneEntryLayout';
 import SceneEntryNew from './SceneEntryNew';
+import SceneHeader from './SceneHeader';
 
 /**
  * @param {object} props
@@ -12,15 +15,24 @@ import SceneEntryNew from './SceneEntryNew';
  */
 export default function SceneList({ documentId }) {
   const sceneIds = useSceneIds(documentId);
+  const { sceneId } = useCurrentCursor();
   return (
     <>
       {sceneIds.map((sceneId) => (
         <Fragment key={`scene-${sceneId}`}>
-          <SceneEntry documentId={documentId} sceneId={sceneId} />
+          <SceneEntryLayout>
+            <SceneHeader documentId={documentId} sceneId={sceneId} />
+            <BlockList documentId={documentId} sceneId={sceneId} />
+          </SceneEntryLayout>
         </Fragment>
       ))}
       <SceneEntryNew className="pb-20" documentId={documentId} />
-      <SceneEntryFocused documentId={documentId} />
+      {sceneId && (
+        <SceneEntryFocused>
+          <SceneHeader documentId={documentId} sceneId={sceneId} />
+          <BlockList documentId={documentId} sceneId={sceneId} />
+        </SceneEntryFocused>
+      )}
     </>
   );
 }

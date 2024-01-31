@@ -5,32 +5,34 @@ import EditDocumentIcon from '@material-symbols/svg-400/rounded/edit_note.svg';
 
 import { createShot } from '@/stores/document/DocumentStore';
 import { useBlockShotCount, useDocumentStore } from '@/stores/document/use';
-import { useUserStore } from '@/stores/user';
 
-import ShotList from '../shots/ShotList';
+import SettingsFieldButton from '../settings/SettingsFieldButton';
 import BlockContent from './BlockContent';
 import BlockEntryLayout from './BlockEntryLayout';
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  * @param {boolean} [props.editable]
- * @param {boolean} [props.collapsed]
+ * @param {'faded'|'split'|'fullwidth'} [props.mode]
+ * @param {import('react').ReactNode} props.children
  */
 export default function BlockEntry({
+  className,
   documentId,
   sceneId,
   blockId,
   editable = true,
-  collapsed = false,
+  mode = 'fullwidth',
+  children,
 }) {
   const [blockEditable, setBlockEditable] = useState(false);
   const addShot = useDocumentStore((ctx) => ctx.addShot);
-  const hasActiveShot = useUserStore((ctx) => Boolean(ctx.cursor?.shotId));
   const blockShotCount = useBlockShotCount(documentId, blockId);
-  if (!collapsed && blockShotCount <= 0) {
+  if (mode === 'faded' && blockShotCount <= 0) {
     return null;
   }
 
@@ -45,9 +47,10 @@ export default function BlockEntry({
 
   return (
     <BlockEntryLayout
-      collapsed={collapsed}
+      className={className}
+      mode={mode}
       content={
-        <div className="group relative px-4 flex w-full md:w-[60vw] h-full">
+        <div className="group px-4 flex hover:bg-gray-100">
           <BlockContent
             className="flex-1"
             documentId={documentId}
@@ -55,26 +58,21 @@ export default function BlockEntry({
             editable={editable && blockEditable}
             setEditable={setBlockEditable}
           />
-          <div className="absolute top-0 right-0 z-10 flex flex-col gap-2">
-            <button
-              className="flex flex-row items-center"
-              onClick={onEditClick}>
-              <EditDocumentIcon className="w-6 h-6 fill-current opacity-0 group-hover:opacity-100" />
-            </button>
-            <button className="flex flex-row items-center" onClick={onClick}>
-              <AddBoxIcon className="w-6 h-6 fill-current opacity-0 group-hover:opacity-100" />
-            </button>
+          <div className="absolute top-0 right-0 z-10 p-1 flex flex-col rounded group-hover:bg-opacity-60 group-hover:bg-white">
+            <SettingsFieldButton
+              className="opacity-0 p-0 group-hover:opacity-100"
+              Icon={EditDocumentIcon}
+              onClick={onEditClick}
+            />
+            <SettingsFieldButton
+              className="opacity-0 p-0 group-hover:opacity-100"
+              Icon={AddBoxIcon}
+              onClick={onClick}
+            />
           </div>
         </div>
       }>
-      <ShotList
-        className="flex-1"
-        documentId={documentId}
-        sceneId={sceneId}
-        blockId={blockId}
-        editable={editable && !hasActiveShot}
-        collapsed={collapsed}
-      />
+      {children}
     </BlockEntryLayout>
   );
 }

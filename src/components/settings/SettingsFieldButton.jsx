@@ -22,11 +22,11 @@ export default function SettingsFieldButton({
   return (
     <button
       className={
-        'flex flex-row items-center rounded p-2' +
+        'flex flex-row items-center rounded' +
         ' ' +
         'disabled:opacity-30' +
         ' ' +
-        (children ? 'outline' : '') +
+        (children ? 'outline p-2' : 'p-1') +
         ' ' +
         (danger
           ? 'enabled:hover:bg-red-500 enabled:hover:text-white'

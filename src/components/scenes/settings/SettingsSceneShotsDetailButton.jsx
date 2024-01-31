@@ -12,17 +12,17 @@ export default function SettingsSceneShotsDetailButton({
   documentId,
   sceneId,
 }) {
-  const editMode = useUserStore((ctx) => ctx.editMode);
-  const setEditMode = useUserStore((ctx) => ctx.setEditMode);
+  const shotListMode = useUserStore((ctx) => ctx.shotListMode);
+  const setShotListMode = useUserStore((ctx) => ctx.setShotListMode);
   const userCursor = useUserStore((ctx) => ctx.cursor);
   const setUserCursor = useSetUserCursor();
 
   function onClick() {
-    if (editMode !== 'shotlist' || userCursor.shotId !== '') {
-      setEditMode('shotlist');
+    if (shotListMode !== 'detail' || userCursor.shotId !== '') {
+      setShotListMode('detail');
       setUserCursor(documentId, sceneId, '');
     } else {
-      setEditMode('story');
+      setShotListMode('hidden');
       setUserCursor(documentId, '', '');
     }
   }

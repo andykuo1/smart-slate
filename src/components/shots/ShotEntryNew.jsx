@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-import AddIcon from '@material-symbols/svg-400/rounded/add.svg';
+import AddBoxIcon from '@material-symbols/svg-400/rounded/add_box.svg';
 
 import { createShot } from '@/stores/document/DocumentStore';
 import { useDocumentStore } from '@/stores/document/use';
@@ -33,19 +33,16 @@ export default function ShotEntryNew({
     <li
       ref={containerRef}
       className={'relative flex flex-col items-center mx-auto'}>
-      <div
-        className={
-          'flex flex-row items-center w-full h-[6rem] z-10 border-b border-gray-300 shadow'
-        }>
+      <div className={'flex flex-row items-center w-full h-[6rem] z-10'}>
         {!collapsed && <ShotNumber documentId="" sceneId="" shotId="" />}
         <button
-          className="group h-full translate-x-1 py-2.5 hover:text-white"
+          className="group h-full translate-x-1 py-2.5 text-gray-400 hover:text-white"
           title="New shot"
           onClick={onClick}>
-          <AddIcon className="w-6 h-full fill-current group-hover:bg-black" />
+          <AddBoxIcon className="w-6 h-full fill-current group-hover:bg-black" />
         </button>
         <div className="relative ml-2">
-          <label className="absolute -top-2 -left-1 z-10 px-1 bg-white text-black font-mono rounded">
+          <label className="absolute -top-2 -left-1 z-10 px-1 bg-white text-gray-400 font-mono rounded">
             *
           </label>
           <ShotThumbnailTypeSelector
@@ -55,7 +52,7 @@ export default function ShotEntryNew({
           />
         </div>
         <div className="flex-1 flex flex-row items-center">
-          <div className="flex-1 flex flex-row">
+          <div className="flex-1">
             {collapsed && <div className="w-6 h-6" />}
           </div>
           {!collapsed && (

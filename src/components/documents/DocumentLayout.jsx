@@ -5,15 +5,14 @@ import {
   useDraggableContainerAutoScroll,
 } from '@/stores/draggable';
 
-import SceneList from '../scenes/SceneList';
 import { useShotEntryOnDragComplete } from '../shots/UseShotEntryDraggable';
-import DocumentTitle from './DocumentTitle';
 
 /**
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('react').ReactNode} props.children
  */
-export default function DocumentEntry({ documentId }) {
+export default function DocumentLayout({ documentId, children }) {
   const containerRef = useRef(null);
   const onDragComplete = useShotEntryOnDragComplete(documentId);
   useDraggableContainer(onDragComplete);
@@ -22,8 +21,7 @@ export default function DocumentEntry({ documentId }) {
     <article
       ref={containerRef}
       className="w-full h-full overflow-x-hidden overflow-y-auto flex flex-col">
-      <DocumentTitle className="pt-20" documentId={documentId} />
-      <SceneList documentId={documentId} />
+      {children}
     </article>
   );
 }

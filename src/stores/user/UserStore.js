@@ -9,8 +9,10 @@ export function createStore() {
   return {
     cursor: createCursor(),
     recorder: createRecorder(),
-    /** @type {'shotlist'|'story'} */
-    editMode: 'story',
+    /** @type {'inline'|'sequence'} */
+    editMode: 'sequence',
+    /** @type {'detail'|'hidden'} */
+    shotListMode: 'hidden',
     /** @type {'recorder'|'clapper'} */
     recordMode: 'clapper',
     googleContext: createGoogleContext(),

@@ -31,7 +31,7 @@ export default function Clapperboard() {
   const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const setUserCursor = useSetUserCursor();
-  const setEditMode = useUserStore((ctx) => ctx.setEditMode);
+  const setShotListMode = useUserStore((ctx) => ctx.setShotListMode);
   const navigate = useNavigate();
   const { exitFullscreen } = useFullscreen();
 
@@ -60,7 +60,7 @@ export default function Clapperboard() {
   }, [documentId, sceneId, shotId, UNSAFE_getStore, setUserCursor]);
 
   function onBackClick() {
-    setEditMode('shotlist');
+    setShotListMode('detail');
     navigate('/edit');
     exitFullscreen();
   }

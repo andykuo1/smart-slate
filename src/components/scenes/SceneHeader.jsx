@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 
-import SettingsSceneOpenClapperButton from '@/components/scenes/settings/SettingsSceneOpenClapperButton';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useSceneHeading } from '@/stores/document';
 import {
@@ -10,9 +9,9 @@ import {
 } from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 
+import SceneCollapse from './SceneCollapse';
 import SceneNumber from './SceneNumber';
-import SettingsSceneShotsDetailButton from './settings/SettingsSceneShotsDetailButton';
-import SettingsSceneShotsRenumberButton from './settings/SettingsSceneShotsRenumberButton';
+import SceneStatus from './SceneStatus';
 
 /**
  * @param {object} props
@@ -20,13 +19,13 @@ import SettingsSceneShotsRenumberButton from './settings/SettingsSceneShotsRenum
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  */
-export default function SceneEntryHeader({ className, documentId, sceneId }) {
+export default function SceneHeader({ className, documentId, sceneId }) {
   const containerRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const [sceneHeading, setSceneHeading] = useSceneHeading(documentId, sceneId);
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const currentCursor = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
-  const setEditMode = useUserStore((ctx) => ctx.setEditMode);
+  const setShotListMode = useUserStore((ctx) => ctx.setShotListMode);
   const isActive =
     currentCursor.documentId === documentId &&
     currentCursor.sceneId === sceneId &&
@@ -44,7 +43,7 @@ export default function SceneEntryHeader({ className, documentId, sceneId }) {
     } else {
       setUserCursor(documentId, sceneId, '');
     }
-    setEditMode('story');
+    setShotListMode('hidden');
     // Debounce to wait for layout changes...
     setTimeout(
       () =>
@@ -67,6 +66,7 @@ export default function SceneEntryHeader({ className, documentId, sceneId }) {
         (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
       }>
       <SceneNumber sceneNumber={sceneNumber} onClick={onClick} />
+      <SceneCollapse documentId={documentId} sceneId={sceneId} />
       <input
         className="flex-1 w-full bg-transparent px-2 py-6 text-xl font-bold"
         type="text"
@@ -82,30 +82,6 @@ export default function SceneEntryHeader({ className, documentId, sceneId }) {
       </datalist>
       <SceneStatus documentId={documentId} sceneId={sceneId} />
       <SceneNumber sceneNumber={sceneNumber} onClick={onClick} />
-    </div>
-  );
-}
-
-/**
- * @param {object} props
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
- */
-function SceneStatus({ documentId, sceneId }) {
-  return (
-    <div className="flex flex-row">
-      <SettingsSceneShotsRenumberButton
-        documentId={documentId}
-        sceneId={sceneId}
-      />
-      <SettingsSceneOpenClapperButton
-        documentId={documentId}
-        sceneId={sceneId}
-      />
-      <SettingsSceneShotsDetailButton
-        documentId={documentId}
-        sceneId={sceneId}
-      />
     </div>
   );
 }
