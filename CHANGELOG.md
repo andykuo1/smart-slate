@@ -12,6 +12,7 @@
 - Add "--" as no shot types for fountain shot syntax
 - Add dictionary for WS, MS, and CU fountain shot syntax
 - Add inline and sequence mode for shotlist content
+- Add shot moves between blocks
 
 - Remove shotlist from nav bar (in favor of scene clapper)
 - Remove first default shot on new scene

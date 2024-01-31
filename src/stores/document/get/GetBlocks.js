@@ -64,7 +64,7 @@ export function getLastBlockIdInScene(store, documentId, sceneId) {
  * @param {import('@/stores/document/DocumentStore').BlockId} blockId
  * @param {number} [offset]
  */
-export function getNextBlockIdInScene(
+export function getOffsetBlockIdInScene(
   store,
   documentId,
   sceneId,
@@ -81,6 +81,44 @@ export function getNextBlockIdInScene(
     return '';
   }
   return result[nextIndex];
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+ * @param {import('@/stores/document/DocumentStore').BlockId} blockId
+ * @param {number} [offset]
+ */
+export function getOffsetBlockIdWithShotsInScene(
+  store,
+  documentId,
+  sceneId,
+  blockId,
+  offset = 1,
+) {
+  if (offset === 0) {
+    throw new Error('Cannot get 0 offset for block id with shots in scene.');
+  }
+  let result = getSceneById(store, documentId, sceneId)?.blockIds;
+  if (!result || result.length <= 0) {
+    return '';
+  }
+  let index = result.indexOf(blockId);
+  let nextIndex = index + offset;
+  if (nextIndex < 0 || nextIndex >= result.length) {
+    return '';
+  }
+  while (nextIndex >= 0 && nextIndex < result.length) {
+    let nextBlockId = result[nextIndex];
+    let shotCount = getBlockById(store, documentId, nextBlockId)?.shotIds
+      ?.length;
+    if (shotCount > 0) {
+      return nextBlockId;
+    }
+    nextIndex += offset;
+  }
+  return '';
 }
 
 /**

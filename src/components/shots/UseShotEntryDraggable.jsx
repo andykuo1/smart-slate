@@ -26,7 +26,7 @@ export function useShotEntryOnDragUpdate(targetRef) {
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  */
 export function useShotEntryOnDragComplete(documentId) {
-  const moveShot = useDocumentStore((ctx) => ctx.moveShot);
+  const moveShotToBlock = useDocumentStore((ctx) => ctx.moveShotToBlock);
 
   /** @type {import('@/stores/draggable').OnDragCompleteCallback} */
   const onDragComplete = useCallback(
@@ -76,10 +76,6 @@ export function useShotEntryOnDragComplete(documentId) {
         overId = nearestId;
         isBefore = nearestBefore;
       } else {
-        if (targetContainerId !== overContainerId) {
-          // If there is something over, it should be in the same container.
-          return;
-        }
         const overElement = document.querySelector(
           `[data-draggable="${overId}"]`,
         );
@@ -89,10 +85,16 @@ export function useShotEntryOnDragComplete(documentId) {
           isBefore = x < overX;
         }
       }
-
-      moveShot(documentId, targetContainerId, targetId, overId, isBefore);
+      moveShotToBlock(
+        documentId,
+        targetContainerId,
+        targetId,
+        overContainerId,
+        overId,
+        isBefore,
+      );
     },
-    [documentId, moveShot],
+    [documentId, moveShotToBlock],
   );
   return onDragComplete;
 }

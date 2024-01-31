@@ -1,8 +1,10 @@
 import { zi } from '@/stores/ZustandImmerHelper';
 
 import {
+  findSceneWithBlockId,
   getBlockById,
   getLastBlockIdInScene,
+  getOffsetBlockIdWithShotsInScene,
   getSceneById,
   getShotById,
   isShotEmpty,
@@ -19,10 +21,12 @@ export function createDispatchShots(set, get) {
     setShotDescription: zi(set, setShotDescription),
     setShotReferenceImage: zi(set, setShotReferenceImage),
     setShotNumber: zi(set, setShotNumber),
-    moveShot: zi(set, moveShot),
     updateShot: zi(set, updateShot),
+    moveShot: zi(set, moveShot),
     moveShotToScene: zi(set, moveShotToScene),
-    moveShotBy: zi(set, moveShotBy),
+    moveShotToBlock: zi(set, moveShotToBlock),
+    moveShotUp: zi(set, moveShotUp),
+    moveShotDown: zi(set, moveShotDown),
     reorderShots: zi(set, reorderShots),
   };
 }
@@ -142,6 +146,54 @@ function moveShot(
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {import('@/stores/document/DocumentStore').BlockId} blockId
  * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ * @param {import('@/stores/document/DocumentStore').BlockId} targetBlockId
+ * @param {import('@/stores/document/DocumentStore').ShotId} targetShotId
+ * @param {boolean} [before]
+ */
+function moveShotToBlock(
+  store,
+  documentId,
+  blockId,
+  shotId,
+  targetBlockId,
+  targetShotId,
+  before = false,
+) {
+  // Can only move shots within the same scene...
+  const scene = findSceneWithBlockId(store, documentId, blockId);
+  const targetScene = findSceneWithBlockId(store, documentId, targetBlockId);
+  if (scene !== targetScene) {
+    return;
+  }
+  const document = store.documents[documentId];
+  const block = document.blocks[blockId];
+  const shotIds = block.shotIds;
+  const shotIndex = shotIds.indexOf(shotId);
+  if (shotIndex < 0) {
+    return;
+  }
+  if (shotIds.length <= 0) {
+    return;
+  }
+  shotIds.splice(shotIndex, 1);
+
+  const targetBlock = document.blocks[targetBlockId];
+  const targetShotIds = targetBlock.shotIds;
+  const targetShotIndex = targetShotIds.indexOf(targetShotId);
+  if (before) {
+    targetShotIds.splice(targetShotIndex, 0, shotId);
+  } else if (targetShotIndex + 1 < targetBlock.shotIds.length) {
+    targetShotIds.splice(targetShotIndex + 1, 0, shotId);
+  } else {
+    targetShotIds.push(shotId);
+  }
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').BlockId} blockId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
  * @param {import('@/stores/document/DocumentStore').SceneId} targetSceneId
  */
 function moveShotToScene(store, documentId, blockId, shotId, targetSceneId) {
@@ -174,71 +226,108 @@ function moveShotToScene(store, documentId, blockId, shotId, targetSceneId) {
  * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} blockId
  * @param {import('@/stores/document/DocumentStore').ShotId} shotId
- * @param {number} offset
  */
-function moveShotBy(store, documentId, sceneId, blockId, shotId, offset) {
-  throw new Error('Not yet implemented.');
-  /*
+function moveShotUp(store, documentId, sceneId, blockId, shotId) {
   const document = store.documents[documentId];
-  const scene = document.scenes[sceneId];
+  if (!document) {
+    // No document. Skip it.
+    return;
+  }
   const block = document.blocks[blockId];
-  const shot = document.shots[shotId];
+  if (!block) {
+    // No block. Skip it.
+    return;
+  }
+
   const shotIds = block.shotIds;
   const shotIndex = shotIds.indexOf(shotId);
   if (shotIndex < 0) {
     // Shot not found in block. Skip it.
     return;
   }
-  if (offset > 0) {
-    // Moving shot forward....
-    let targetBlockId = blockId;
-    let targetBlock = block;
-    let targetShotIds = shotIds;
-    let targetShotIndex = shotIndex + offset;
-    while (targetShotIndex > targetShotIds.length) {
-      // ...past this block into the next
-      targetShotIndex -= targetShotIds.length;
-      // ...get next block
-      let nextBlockId = getNextBlockIdInScene(
-        store,
-        documentId,
-        sceneId,
-        targetBlockId,
-        1,
-      );
-      if (!nextBlockId) {
-        break;
-      }
-      targetBlockId = nextBlockId;
-      targetBlock = getBlockById(store, documentId, targetBlockId);
-      targetShotIds = targetBlock.shotIds;
+
+  let targetBlockId = blockId;
+  let targetBlock = block;
+  let targetShotIds = shotIds;
+  let targetShotIndex = shotIndex - 1;
+  if (targetShotIndex < 0) {
+    // ...get prev block
+    let prevBlockId = getOffsetBlockIdWithShotsInScene(
+      store,
+      documentId,
+      sceneId,
+      targetBlockId,
+      -1,
+    );
+    if (!prevBlockId) {
+      // No valid block to put this in.
+      return;
     }
-    // Add it in!
-    targetShotIds.splice(targetShotIndex, 0, shotId);
-  } else {
-    // Moving shot backward...
-    let targetBlockId = blockId;
-    let targetBlock = block;
-    let targetShotIds = shotIds;
-    let targetShotIndex = shotIndex + offset;
-    while (targetShotIndex < 0) {
-      // ...before this block into the previous
-      targetShotIndex += targetShotIds.length;
-      // ...get previous block
-    }
+    targetBlockId = prevBlockId;
+    targetBlock = getBlockById(store, documentId, targetBlockId);
+    targetShotIds = targetBlock.shotIds;
+    // ...past this block into the prev
+    targetShotIndex = targetShotIds.length;
+  }
+  // Remove the original...
+  shotIds.splice(shotIndex, 1);
+  // ... and add it in the new place!
+  targetShotIds.splice(targetShotIndex, 0, shotId);
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+ * @param {import('@/stores/document/DocumentStore').BlockId} blockId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ */
+function moveShotDown(store, documentId, sceneId, blockId, shotId) {
+  const document = store.documents[documentId];
+  if (!document) {
+    // No document. Skip it.
+    return;
+  }
+  const block = document.blocks[blockId];
+  if (!block) {
+    // No block. Skip it.
+    return;
   }
 
-  const targetBlockId = getLastBlockIdInScene(store, documentId);
-  const targetBlock = getBlockById(store, documentId, targetBlockId);
+  const shotIds = block.shotIds;
+  const shotIndex = shotIds.indexOf(shotId);
   if (shotIndex < 0) {
+    // Shot not found in block. Skip it.
     return;
   }
-  if (shotIds.length <= 0) {
-    return;
+
+  let targetBlockId = blockId;
+  let targetBlock = block;
+  let targetShotIds = shotIds;
+  let targetShotIndex = shotIndex + 1;
+  if (targetShotIndex >= targetShotIds.length) {
+    // ...get next block
+    let nextBlockId = getOffsetBlockIdWithShotsInScene(
+      store,
+      documentId,
+      sceneId,
+      targetBlockId,
+      1,
+    );
+    if (!nextBlockId) {
+      // No valid block to put this in.
+      return;
+    }
+    targetBlockId = nextBlockId;
+    targetBlock = getBlockById(store, documentId, targetBlockId);
+    targetShotIds = targetBlock?.shotIds;
+    // ...past this block into the next
+    targetShotIndex = 0;
   }
+  // Remove the original...
   shotIds.splice(shotIndex, 1);
-  targetBlock.shotIds.push(shotId);
-  */
+  // ... and add it in the new place!
+  targetShotIds.splice(targetShotIndex, 0, shotId);
 }
 
 const MAX_ITERATIONS = 1_000;

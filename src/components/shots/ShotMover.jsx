@@ -1,7 +1,7 @@
 import StatOneIcon from '@material-symbols/svg-400/rounded/stat_1.svg';
 import StatMinusOneIcon from '@material-symbols/svg-400/rounded/stat_minus_1.svg';
 
-import { getShotIdsInOrder, useShotOrder } from '@/stores/document';
+import { useShotOrder } from '@/stores/document';
 import { useDocumentStore, useSceneShotCount } from '@/stores/document/use';
 
 import BoxDrawingCharacter from '../documents/BoxDrawingCharacter';
@@ -28,39 +28,19 @@ export default function ShotEntry({
   editable,
   collapsed,
 }) {
-  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
-  const moveShot = useDocumentStore((ctx) => ctx.moveShot);
+  const moveShotUp = useDocumentStore((ctx) => ctx.moveShotUp);
+  const moveShotDown = useDocumentStore((ctx) => ctx.moveShotDown);
   const shotOrder = useShotOrder(documentId, sceneId, shotId);
   const shotCount = useSceneShotCount(documentId, sceneId);
   const isFirst = shotOrder <= 1;
   const isLast = shotOrder >= shotCount;
 
   function onDownClick() {
-    const store = UNSAFE_getStore();
-    const shotIds = getShotIdsInOrder(store, documentId, blockId);
-    const i = shotIds.indexOf(shotId);
-    if (i < 0 || i >= shotIds.length) {
-      return;
-    }
-    const nextShotId = shotIds.at(i + 1);
-    if (!nextShotId) {
-      return;
-    }
-    moveShot(documentId, blockId, shotId, nextShotId);
+    moveShotDown(documentId, sceneId, blockId, shotId);
   }
 
   function onUpClick() {
-    const store = UNSAFE_getStore();
-    const shotIds = getShotIdsInOrder(store, documentId, blockId);
-    const i = shotIds.indexOf(shotId);
-    if (i <= 0 || i >= shotIds.length) {
-      return;
-    }
-    const prevShotId = shotIds.at(i - 1);
-    if (!prevShotId) {
-      return;
-    }
-    moveShot(documentId, blockId, shotId, prevShotId, true);
+    moveShotUp(documentId, sceneId, blockId, shotId);
   }
 
   return (
