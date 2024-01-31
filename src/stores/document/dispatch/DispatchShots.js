@@ -27,7 +27,7 @@ export function createDispatchShots(set, get) {
     moveShotToBlock: zi(set, moveShotToBlock),
     moveShotUp: zi(set, moveShotUp),
     moveShotDown: zi(set, moveShotDown),
-    reorderShots: zi(set, reorderShots),
+    renumberShots: zi(set, renumberShots),
   };
 }
 
@@ -338,7 +338,7 @@ const MAX_ITERATIONS = 1_000;
  * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
  * @param {boolean} [emptyOnly]
  */
-function reorderShots(store, documentId, sceneId, emptyOnly = true) {
+function renumberShots(store, documentId, sceneId, emptyOnly = true) {
   let scene = getSceneById(store, documentId, sceneId);
   scene.nextShotNumber = 1;
   // Get all used numbers so we can avoid them...
@@ -350,7 +350,9 @@ function reorderShots(store, documentId, sceneId, emptyOnly = true) {
       for (let shotId of block.shotIds) {
         if (!isShotEmpty(store, documentId, shotId)) {
           let shot = getShotById(store, documentId, shotId);
-          usedNumbers.push(shot.shotNumber);
+          if (shot) {
+            usedNumbers.push(shot.shotNumber);
+          }
         }
       }
     }

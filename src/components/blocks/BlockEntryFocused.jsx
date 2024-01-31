@@ -18,21 +18,12 @@ export default function BlockEntryFocused({ documentId }) {
   const blockId = useBlockIdForShot(documentId, sceneId, shotId);
   const inlineMode = useUserStore((ctx) => ctx.editMode === 'inline');
   const sequenceMode = useUserStore((ctx) => ctx.editMode === 'sequence');
-  const shotListMode = useUserStore((ctx) => ctx.shotListMode === 'detail');
   if (!sceneId || !blockId || !shotId) {
     return null;
   }
   return (
     <BlockEntryLayout
-      mode={
-        shotListMode
-          ? 'faded'
-          : sequenceMode
-            ? 'split'
-            : inlineMode
-              ? 'fullwidth'
-              : 'fullwidth'
-      }
+      mode={sequenceMode ? 'split' : inlineMode ? 'faded' : 'fullwidth'}
       content={
         <BlockContent
           documentId={documentId}
@@ -47,7 +38,7 @@ export default function BlockEntryFocused({ documentId }) {
         sceneId={sceneId}
         blockId={blockId}
         shotId={shotId}
-        collapsed={!shotListMode}>
+        collapsed={false}>
         <TakeList
           documentId={documentId}
           sceneId={sceneId}

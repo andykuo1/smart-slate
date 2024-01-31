@@ -66,7 +66,11 @@ export default function SceneHeader({ className, documentId, sceneId }) {
         (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
       }>
       <SceneNumber sceneNumber={sceneNumber} onClick={onClick} />
-      <SceneCollapse documentId={documentId} sceneId={sceneId} />
+      <SceneCollapse
+        containerRef={containerRef}
+        documentId={documentId}
+        sceneId={sceneId}
+      />
       <input
         className="flex-1 w-full bg-transparent px-2 py-6 text-xl font-bold"
         type="text"

@@ -12,9 +12,9 @@ export default function SettingsSceneShotsRenumberButton({
   documentId,
   sceneId,
 }) {
-  const reorderShots = useDocumentStore((ctx) => ctx.reorderShots);
+  const renumberShots = useDocumentStore((ctx) => ctx.renumberShots);
   function onClick() {
-    reorderShots(documentId, sceneId, true);
+    renumberShots(documentId, sceneId, true);
   }
   return (
     <SettingsFieldButton
