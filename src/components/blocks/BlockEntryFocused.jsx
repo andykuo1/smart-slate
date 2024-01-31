@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { useBlockIdForShot } from '@/stores/document/use';
-import { useCurrentCursor, useUserStore } from '@/stores/user';
+import { useCurrentCursor } from '@/stores/user';
 
 import { ShotEntry } from '../shots/ShotEntry';
 import TakeList from '../takes/TakeList';
@@ -16,14 +16,12 @@ export default function BlockEntryFocused({ documentId }) {
   const { sceneId, shotId } = useCurrentCursor();
   const [blockEditable, setBlockEditable] = useState(false);
   const blockId = useBlockIdForShot(documentId, sceneId, shotId);
-  const inlineMode = useUserStore((ctx) => ctx.editMode === 'inline');
-  const sequenceMode = useUserStore((ctx) => ctx.editMode === 'sequence');
   if (!sceneId || !blockId || !shotId) {
     return null;
   }
   return (
     <BlockEntryLayout
-      mode={sequenceMode ? 'split' : inlineMode ? 'faded' : 'fullwidth'}
+      mode="faded"
       content={
         <BlockContent
           documentId={documentId}
