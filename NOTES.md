@@ -259,3 +259,4 @@ Possible next steps?
 - - We currently have that, but we can use the qr code scanner to make it match.
 
 - Add thumbnails to export all button
+- Allow inline and sequence shots to affect shotlist details

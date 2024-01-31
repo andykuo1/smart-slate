@@ -125,11 +125,9 @@ function NavEditButton() {
   const projectId = useDocumentStore(
     (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
   );
-  const setEditMode = useUserStore((ctx) => ctx.setEditMode);
   const navigate = useNavigate();
   const location = useLocation();
   function onClick() {
-    setEditMode('auto');
     if (!location.pathname.includes('/edit')) {
       navigate('/edit');
     }
