@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@ariakit/react": "^0.3.9",
+    "@ffmpeg/ffmpeg": "^0.12.10",
+    "@ffmpeg/util": "^0.12.1",
     "@lexical/react": "^0.12.5",
     "@material-symbols/svg-400": "^0.14.2",
     "@react-oauth/google": "^0.12.1",

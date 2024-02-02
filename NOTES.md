@@ -245,11 +245,7 @@ Once recorded it cannot rename.
 Possible next steps?
 
 - Photo recorder for story building
-- Put shots in text
 - Zoom requires it ZOOMS out before zooming back in?
-- shot details focus experience
-- - nav takes on shotlist
-- - nav shots on edit mode
 - Be able to record QR code in recorder
 - GIF take preview
 - Ultrasound pairing
@@ -257,6 +253,5 @@ Possible next steps?
 - What to do for lost footage or corrupted projects?
 - - For each shot, we can have an "import footage" button that you upload takes.
 - - We currently have that, but we can use the qr code scanner to make it match.
-
 - Add thumbnails to export all button
 - Allow inline and sequence shots to affect shotlist details
