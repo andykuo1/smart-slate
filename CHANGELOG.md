@@ -13,6 +13,8 @@
 - Add dictionary for WS, MS, and CU fountain shot syntax
 - Add inline and sequence mode for shotlist content
 - Add shot moves between blocks
+- Add editable shot descriptions
+- Add return to screenplay button
 
 - Remove shotlist from nav bar (in favor of scene clapper)
 - Remove first default shot on new scene

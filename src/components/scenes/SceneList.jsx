@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 
 import { useSceneIds } from '@/stores/document/use';
-import { useCurrentCursor } from '@/stores/user';
+import { useUserStore } from '@/stores/user';
 
 import BlockList from '../blocks/BlockList';
 import SceneEntryFocused from './SceneEntryFocused';
@@ -15,24 +15,45 @@ import SceneHeader from './SceneHeader';
  */
 export default function SceneList({ documentId }) {
   const sceneIds = useSceneIds(documentId);
-  const { sceneId } = useCurrentCursor();
+  const activeSceneId = useUserStore((ctx) => ctx.cursor?.sceneId);
   return (
     <>
-      {sceneIds.map((sceneId) => (
-        <Fragment key={`scene-${sceneId}`}>
+      <PerScene sceneIds={sceneIds}>
+        {(sceneId) => (
           <SceneEntryLayout>
             <SceneHeader documentId={documentId} sceneId={sceneId} />
             <BlockList documentId={documentId} sceneId={sceneId} />
           </SceneEntryLayout>
-        </Fragment>
-      ))}
+        )}
+      </PerScene>
       <SceneEntryNew className="pb-20" documentId={documentId} />
-      {sceneId && (
-        <SceneEntryFocused>
-          <SceneHeader documentId={documentId} sceneId={sceneId} />
-          <BlockList documentId={documentId} sceneId={sceneId} />
+      {activeSceneId && (
+        <SceneEntryFocused documentId={documentId}>
+          <SceneHeader documentId={documentId} sceneId={activeSceneId} />
+          <BlockList documentId={documentId} sceneId={activeSceneId} />
         </SceneEntryFocused>
       )}
+    </>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {Array<import('@/stores/document/DocumentStore').SceneId>} props.sceneIds
+ * @param {(
+ * blockId: import('@/stores/document/DocumentStore').SceneId,
+ * index: number,
+ * array: Array<import('@/stores/document/DocumentStore').SceneId>
+ * ) => import('react').ReactNode} props.children
+ */
+function PerScene({ sceneIds, children }) {
+  return (
+    <>
+      {sceneIds.map((sceneId, index, array) => (
+        <Fragment key={`scene-${sceneId}`}>
+          {children(sceneId, index, array)}
+        </Fragment>
+      ))}
     </>
   );
 }

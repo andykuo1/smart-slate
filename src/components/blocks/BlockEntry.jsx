@@ -47,6 +47,8 @@ export default function BlockEntry({
 
   return (
     <BlockEntryLayout
+      documentId={documentId}
+      sceneId={sceneId}
       className={className}
       mode={mode}
       content={

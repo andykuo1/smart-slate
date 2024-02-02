@@ -21,6 +21,8 @@ export default function BlockEntryFocused({ documentId }) {
   }
   return (
     <BlockEntryLayout
+      documentId={documentId}
+      sceneId={sceneId}
       mode="faded"
       content={
         <BlockContent

@@ -2,11 +2,7 @@ import { useRef } from 'react';
 
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useSceneHeading } from '@/stores/document';
-import {
-  useCurrentCursor,
-  useSetUserCursor,
-  useUserStore,
-} from '@/stores/user';
+import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 
 import SceneCollapse from './SceneCollapse';
@@ -25,7 +21,6 @@ export default function SceneHeader({ className, documentId, sceneId }) {
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const currentCursor = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
-  const setShotListMode = useUserStore((ctx) => ctx.setShotListMode);
   const isActive =
     currentCursor.documentId === documentId &&
     currentCursor.sceneId === sceneId &&
@@ -43,7 +38,6 @@ export default function SceneHeader({ className, documentId, sceneId }) {
     } else {
       setUserCursor(documentId, sceneId, '');
     }
-    setShotListMode('hidden');
     // Debounce to wait for layout changes...
     setTimeout(
       () =>

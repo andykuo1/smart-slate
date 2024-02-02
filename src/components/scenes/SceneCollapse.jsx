@@ -24,7 +24,7 @@ export default function SceneCollapse({ containerRef, documentId, sceneId }) {
       () =>
         containerRef.current?.scrollIntoView?.({
           block: 'start',
-          behavior: 'instant',
+          behavior: 'smooth',
         }),
       0,
     );

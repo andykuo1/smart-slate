@@ -1,10 +1,11 @@
+import { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
 import { getBlockIdsInOrder } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
-import { useCurrentCursor, useUserStore } from '@/stores/user';
+import { useUserStore } from '@/stores/user';
+import { tryGetWindow } from '@/utils/BrowserFeatures';
 
-import SceneShotList from '../shots/SceneShotList';
 import ShotList from '../shots/ShotList';
 import BlockEntry from './BlockEntry';
 import BlockEntryFocused from './BlockEntryFocused';
@@ -26,58 +27,78 @@ export default function BlockList({ documentId, sceneId }) {
   const blockIds = useDocumentStore(
     useShallow((ctx) => getBlockIdsInOrder(ctx, documentId, sceneId)),
   );
-  const hasActiveShot = useUserStore((ctx) => Boolean(ctx.cursor?.shotId));
-
+  const activeShotId = useUserStore((ctx) => ctx.cursor?.shotId);
+  const smallMedia = useMatchMedia('(max-width: 640px)');
   const inlineMode = useUserStore((ctx) => ctx.editMode === 'inline');
   const sequenceMode = useUserStore((ctx) => ctx.editMode === 'sequence');
   const shotListMode = useUserStore((ctx) => ctx.shotListMode === 'detail');
+  const blockViewMode = activeShotId
+    ? 'faded'
+    : sequenceMode
+      ? 'split'
+      : inlineMode
+        ? 'fullwidth'
+        : 'fullwidth';
 
   const showSceneLevelShotList = sequenceMode;
-  const showBlockLevelShotList = inlineMode || shotListMode;
+  const showBlockLevelShotList = inlineMode;
 
-  const isCollapsed = !shotListMode && !hasActiveShot;
-  const { shotId } = useCurrentCursor();
-  if (shotId) {
+  const isCollapsed = !shotListMode && !activeShotId;
+  if (activeShotId) {
     return <BlockEntryFocused documentId={documentId} />;
   }
   return (
     <div className="flex flex-row">
       <div className="flex-1 flex flex-col">
-        {blockIds.map((blockId, index) => (
+        {blockIds.map((blockId) => (
           <BlockEntry
             key={`block-${blockId}`}
             documentId={documentId}
             sceneId={sceneId}
             blockId={blockId}
-            mode={
-              shotListMode || hasActiveShot
-                ? 'faded'
-                : sequenceMode
-                  ? 'split'
-                  : inlineMode
-                    ? 'fullwidth'
-                    : 'fullwidth'
-            }>
-            {showBlockLevelShotList && (
-              <ShotList
-                className="flex-1"
-                documentId={documentId}
-                sceneId={sceneId}
-                blockId={blockId}
-                editable={!hasActiveShot}
-                collapsed={isCollapsed}
-              />
-            )}
+            mode={blockViewMode}>
+            <ShotList
+              className="flex-1 max-w-[100vw] overflow-x-hidden"
+              documentId={documentId}
+              sceneId={sceneId}
+              blockId={blockId}
+              editable={!activeShotId}
+              collapsed={isCollapsed}
+              hidden={!showBlockLevelShotList}
+            />
           </BlockEntry>
         ))}
       </div>
-      {showSceneLevelShotList && (
-        <SceneShotList
-          className="flex-1"
-          documentId={documentId}
-          sceneId={sceneId}
-        />
-      )}
+      <ShotList
+        className="flex-1 max-w-[50vw] overflow-x-hidden"
+        documentId={documentId}
+        sceneId={sceneId}
+        collapsed={smallMedia || isCollapsed}
+        hidden={!showSceneLevelShotList}
+      />
     </div>
   );
+}
+
+/**
+ * @param {string} mediaQueryString
+ */
+function useMatchMedia(mediaQueryString) {
+  const [state, setState] = useState(false);
+  useEffect(() => {
+    const window = tryGetWindow();
+    const matcher = window.matchMedia(mediaQueryString);
+    const result = matcher.matches;
+    if (result !== state) {
+      setState(result);
+      return;
+    }
+    /** @param {MediaQueryListEvent} e */
+    function onChange(e) {
+      setState(e.matches);
+    }
+    matcher.addEventListener('change', onChange);
+    return () => matcher.removeEventListener('change', onChange);
+  }, [mediaQueryString, state, setState]);
+  return state;
 }

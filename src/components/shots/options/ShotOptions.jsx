@@ -77,7 +77,6 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
     function _onFocusClick() {
       setOpen(false);
       setUserCursor(documentId, sceneId, shotId);
-      setShotListMode('detail');
     },
     [setUserCursor, documentId, sceneId, shotId, setOpen, setShotListMode],
   );

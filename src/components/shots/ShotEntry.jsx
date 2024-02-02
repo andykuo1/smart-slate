@@ -2,14 +2,10 @@ import { useRef } from 'react';
 
 import ArrowForwardIcon from '@material-symbols/svg-400/rounded/arrow_forward.svg';
 
-import { getShotById, useShotOrder } from '@/stores/document';
+import { getShotById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import { useDraggable, useIsDragging } from '@/stores/draggable';
-import {
-  useCurrentCursor,
-  useSetUserCursor,
-  useUserStore,
-} from '@/stores/user';
+import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 
@@ -27,6 +23,7 @@ import ShotThumbnail from './ShotThumbnail';
  * @param {import('react').ReactNode} [props.children]
  * @param {boolean} [props.editable]
  * @param {boolean} [props.collapsed]
+ * @param {boolean} [props.showDescriptionWhenSmall]
  */
 export function ShotEntry({
   className,
@@ -37,25 +34,20 @@ export function ShotEntry({
   children,
   editable,
   collapsed,
+  showDescriptionWhenSmall = true,
 }) {
   const containerRef = useRef(/** @type {HTMLLIElement|null} */ (null));
-  const shotOrder = useShotOrder(documentId, sceneId, shotId);
   const currentCursor = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
-  const setShotListMode = useUserStore((ctx) => ctx.setShotListMode);
   const isActive =
     currentCursor.documentId === documentId &&
     currentCursor.sceneId === sceneId &&
     currentCursor.shotId === shotId;
-  const isFirst = shotOrder <= 1;
   const isDragging = useIsDragging(shotId);
   const { elementProps, handleProps } = useDraggable(blockId, shotId);
 
   const shotHash = useDocumentStore(
     (ctx) => getShotById(ctx, documentId, shotId)?.shotHash,
-  );
-  const shotDescription = useDocumentStore(
-    (ctx) => getShotById(ctx, documentId, shotId)?.description,
   );
 
   function onShotFocusClick() {
@@ -64,7 +56,6 @@ export function ShotEntry({
     } else {
       setUserCursor(documentId, sceneId, shotId);
     }
-    setShotListMode('detail');
     // Debounce to wait for layout changes...
     setTimeout(
       () =>
@@ -95,6 +86,7 @@ export function ShotEntry({
         }>
         {!collapsed && (
           <ShotNumber
+            className="hidden sm:block"
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
@@ -124,23 +116,23 @@ export function ShotEntry({
             editable={true}
           />
         </div>
-        <div className="flex-1 flex flex-row items-center">
-          <div className="flex-1">
-            {collapsed && <ArrowForwardIcon className="w-6 h-6 fill-current" />}
-          </div>
-          {!collapsed &&
-            (shotDescription ? (
-              <p className="flex-1 text-xs overflow-auto">{shotDescription}</p>
-            ) : (
-              <div className="flex-1 opacity-30 text-xs hidden sm:block">
-                {isFirst
-                  ? '<- Tap the ◉ to record'
-                  : choosePlaceholderRandomly(shotId)}
-              </div>
-            ))}
+        <div className="flex-1 h-full flex flex-row items-center p-2">
+          {collapsed && <ArrowForwardIcon className="w-6 h-6 fill-current" />}
+          {!collapsed && (
+            <ShotDescription
+              className={
+                'flex-1 w-full h-full bg-transparent p-2 font-mono italic' +
+                ' ' +
+                (!showDescriptionWhenSmall ? 'hidden sm:block' : '')
+              }
+              documentId={documentId}
+              shotId={shotId}
+            />
+          )}
         </div>
         {!collapsed && (
           <ShotNumber
+            className="hidden sm:block"
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
@@ -150,5 +142,32 @@ export function ShotEntry({
       </div>
       {!collapsed && <div className="flex-1 w-full">{children}</div>}
     </li>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ */
+function ShotDescription({ className, documentId, shotId }) {
+  const shotDescription = useDocumentStore(
+    (ctx) => getShotById(ctx, documentId, shotId)?.description,
+  );
+  const setShotDescription = useDocumentStore((ctx) => ctx.setShotDescription);
+  return (
+    <textarea
+      placeholder={choosePlaceholderRandomly(shotId)}
+      value={shotDescription}
+      onInput={(e) =>
+        setShotDescription(
+          documentId,
+          shotId,
+          /** @type {HTMLTextAreaElement} */ (e.target).value,
+        )
+      }
+      className={'resize-none' + ' ' + className}
+    />
   );
 }
