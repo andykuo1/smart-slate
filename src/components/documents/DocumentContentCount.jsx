@@ -2,10 +2,8 @@ import { getDocumentById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 
 /**
- *
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @returns
  */
 export default function DocumentContentCount({ documentId }) {
   const sceneCount = useDocumentStore(
@@ -18,7 +16,7 @@ export default function DocumentContentCount({ documentId }) {
     (ctx) => Object.keys(getDocumentById(ctx, documentId)?.takes || {}).length,
   );
   return (
-    <output className="text-xs opacity-30 flex gap-1 mx-auto">
+    <output className="text-xs opacity-30 flex gap-1 mx-auto whitespace-nowrap">
       <span>{sceneCount} scenes</span>
       <span>/</span>
       <span>{shotCount} shots</span>

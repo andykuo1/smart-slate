@@ -254,4 +254,23 @@ Possible next steps?
 - - For each shot, we can have an "import footage" button that you upload takes.
 - - We currently have that, but we can use the qr code scanner to make it match.
 - Add thumbnails to export all button
-- Allow inline and sequence shots to affect shotlist details
+
+- Add take count for shot thumbnail
+- Takes label
+- Shots label
+
+- Scene List Collapses All/ Expand All
+- How to get back to clapperboard
+
+- Collapse setting groups
+- Firefox click button doesn't work.
+- Save custom project id on blur
+
+- Expand the text box to the full height 30%
+- Read more for Scene text
+
+- Scrub through scenes in numbers
+
+- index in drawer
+
+- Collections button
