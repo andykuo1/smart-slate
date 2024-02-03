@@ -28,7 +28,7 @@ export default function SettingsReturnHomeField() {
 
   return (
     <SettingsFieldButton
-      className="w-full outline-none my-1"
+      className="w-full outline-none my-1 bg-gray-300"
       Icon={BackIcon}
       onClick={onClick}>
       Exit to home
