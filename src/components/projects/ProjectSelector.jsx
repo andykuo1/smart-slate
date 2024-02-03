@@ -29,7 +29,7 @@ export default function ProjectSelector({ className }) {
       <label className="flex flex-row items-center mx-auto my-2 text-gray-400">
         Or open an existing project...
       </label>
-      <div className="relative mx-auto w-[60%] max-w-[60%] text-xs text-white">
+      <div className="relative mx-auto w-[60%] max-w-[60%] text-xs mt-4 text-white">
         <div className="h-1" />
         <ProjectListStatusButton className="absolute -right-2 -bottom-5 z-10 rounded-xl mx-2 p-2 bg-black" />
       </div>

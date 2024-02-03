@@ -13,17 +13,17 @@ export default function DrawerLayout({ content, children }) {
   return (
     <>
       <button
-        className="fixed bottom-20 right-0 z-30 bg-white rounded-full p-2 m-1"
+        className="fixed bottom-0 right-0 z-50 bg-white rounded-full p-2 m-4 shadow-md"
         onClick={() => setOpen((prev) => !prev)}>
         <GridViewIcon className="fill-current" />
       </button>
       <div
         className={
-          'fixed top-0 bottom-20 right-0 z-20 overflow-y-auto' +
+          'fixed top-0 bottom-0 right-0 z-40 overflow-y-auto' +
           ' ' +
           'shadow-xl bg-gray-200' +
           ' ' +
-          'w-[90vw] sm:w-[40vw]' +
+          'w-[90vw] sm:w-[60vmin] min-w-[40vw]' +
           ' ' +
           'transition-transform' +
           ' ' +

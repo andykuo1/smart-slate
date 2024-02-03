@@ -15,6 +15,8 @@ export function createStore() {
     shotListMode: 'hidden',
     /** @type {'recorder'|'clapper'} */
     recordMode: 'clapper',
+    /** @type {'overview'|'detail'} */
+    outlineMode: 'overview',
     googleContext: createGoogleContext(),
   };
 }

@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 
 import QRCode2Icon from '@material-symbols/svg-400/rounded/qr_code_2.svg';
 
-import NavBarLayout from '@/app/NavBarLayout';
 import SettingsAspectRatioField from '@/components/settings/SettingsAspectRatioField';
 import SettingsAutoSaveLastTimeField from '@/components/settings/SettingsAutoSaveLastTimeField';
 import SettingsAutoSaveToField from '@/components/settings/SettingsAutoSaveToField';
@@ -33,55 +32,53 @@ export default function SettingsPage() {
   const navigate = useNavigate();
   return (
     <PageLayout>
-      <NavBarLayout>
-        <fieldset className="flex-1 flex flex-col gap-2">
-          <legend className="py-4">
-            <h3 className="text-xl">Configure your project</h3>
-            <p className="text-xs opacity-30">
-              Change to whatever floats your boat :)
-            </p>
-          </legend>
-          <SettingsProjectNameField />
-          <SettingsProjectIdField />
-          <SettingsAutoSaveToField />
-          <SettingsAutoSaveLastTimeField />
+      <fieldset className="mx-auto flex flex-col gap-2">
+        <legend className="py-4">
+          <h3 className="text-xl">Configure your project</h3>
+          <p className="text-xs opacity-30">
+            Change to whatever floats your boat :)
+          </p>
+        </legend>
+        <SettingsProjectNameField />
+        <SettingsProjectIdField />
+        <SettingsAutoSaveToField />
+        <SettingsAutoSaveLastTimeField />
+        <br />
+        <SettingsProjectStartButton />
+        <SettingsReturnHomeField />
+        <SettingsProjectInstallField />
+        <br />
+        <SettingsFieldGroupDiscloseable title="More Settings">
+          <GoogleConnectButton />
+          <SettingsFieldButton
+            Icon={QRCode2Icon}
+            onClick={() => navigate('/scan')}>
+            Have QR codes?
+          </SettingsFieldButton>
           <br />
-          <SettingsProjectStartButton />
-          <SettingsReturnHomeField />
-          <SettingsProjectInstallField />
-          <br />
-          <SettingsFieldGroupDiscloseable title="More Settings">
-            <GoogleConnectButton />
-            <SettingsFieldButton
-              Icon={QRCode2Icon}
-              onClick={() => navigate('/scan')}>
-              Have QR codes?
-            </SettingsFieldButton>
-            <br />
-            <SettingsFieldGroupDiscloseable title="Data Settings">
-              <SettingsEnableGoogleDriveSyncToggle />
-              <SettingsShareFilesButton />
-              <SettingsProjectExportZIPButton />
-              <SettingsProjectExportJSONButton />
-            </SettingsFieldGroupDiscloseable>
-            <SettingsFieldGroupDiscloseable title="Recorder Settings">
-              <SettingsAspectRatioField />
-              <SettingsVideoResolutionField />
-              <div className="h-0" />
-              <SettingsPreferNativeRecorderToggle />
-              <SettingsPreferPersistedMediaStreamToggle />
-              <SettingsEnableRecorderReferenceToggle />
-              <SettingsEnableRecorderLiveAudioToggle />
-              <div className="h-0" />
-              <SettingsNerdInfoButton />
-            </SettingsFieldGroupDiscloseable>
-            <SettingsFieldGroupDiscloseable title="Dangerous Stuff">
-              <SettingsVideoCacheClearButton />
-              <SettingsProjectDeleteButton />
-            </SettingsFieldGroupDiscloseable>
+          <SettingsFieldGroupDiscloseable title="Data Settings">
+            <SettingsEnableGoogleDriveSyncToggle />
+            <SettingsShareFilesButton />
+            <SettingsProjectExportZIPButton />
+            <SettingsProjectExportJSONButton />
           </SettingsFieldGroupDiscloseable>
-        </fieldset>
-      </NavBarLayout>
+          <SettingsFieldGroupDiscloseable title="Recorder Settings">
+            <SettingsAspectRatioField />
+            <SettingsVideoResolutionField />
+            <div className="h-0" />
+            <SettingsPreferNativeRecorderToggle />
+            <SettingsPreferPersistedMediaStreamToggle />
+            <SettingsEnableRecorderReferenceToggle />
+            <SettingsEnableRecorderLiveAudioToggle />
+            <div className="h-0" />
+            <SettingsNerdInfoButton />
+          </SettingsFieldGroupDiscloseable>
+          <SettingsFieldGroupDiscloseable title="Dangerous Stuff">
+            <SettingsVideoCacheClearButton />
+            <SettingsProjectDeleteButton />
+          </SettingsFieldGroupDiscloseable>
+        </SettingsFieldGroupDiscloseable>
+      </fieldset>
     </PageLayout>
   );
 }

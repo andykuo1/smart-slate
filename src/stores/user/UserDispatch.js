@@ -15,6 +15,7 @@ export function createDispatch(set, get) {
     setEditMode: zi(set, setEditMode),
     setShotListMode: zi(set, setShotListMode),
     setRecordMode: zi(set, setRecordMode),
+    setOutlineMode: zi(set, setOutlineMode),
     setGoogleContextCredentialResponse: zi(
       set,
       setGoogleContextCredentialResponse,
@@ -85,6 +86,15 @@ function setShotListMode(store, shotListMode) {
  */
 function setRecordMode(store, recordMode) {
   store.recordMode = recordMode;
+}
+
+/**
+ *
+ * @param {import('./UserStore').Store} store
+ * @param {'overview'|'detail'} outlineMode
+ */
+function setOutlineMode(store, outlineMode) {
+  store.outlineMode = outlineMode;
 }
 
 /**

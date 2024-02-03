@@ -1,5 +1,4 @@
 import SettingsSceneOpenClapperButton from './settings/SettingsSceneOpenClapperButton';
-import SettingsSceneShotsDetailButton from './settings/SettingsSceneShotsDetailButton';
 import SettingsSceneShotsRenumberButton from './settings/SettingsSceneShotsRenumberButton';
 
 /**
@@ -15,10 +14,6 @@ export default function SceneStatus({ documentId, sceneId }) {
         sceneId={sceneId}
       />
       <SettingsSceneOpenClapperButton
-        documentId={documentId}
-        sceneId={sceneId}
-      />
-      <SettingsSceneShotsDetailButton
         documentId={documentId}
         sceneId={sceneId}
       />

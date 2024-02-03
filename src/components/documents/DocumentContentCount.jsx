@@ -3,9 +3,10 @@ import { useDocumentStore } from '@/stores/document/use';
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  */
-export default function DocumentContentCount({ documentId }) {
+export default function DocumentContentCount({ className, documentId }) {
   const sceneCount = useDocumentStore(
     (ctx) => getDocumentById(ctx, documentId)?.sceneOrder?.length,
   );
@@ -16,7 +17,12 @@ export default function DocumentContentCount({ documentId }) {
     (ctx) => Object.keys(getDocumentById(ctx, documentId)?.takes || {}).length,
   );
   return (
-    <output className="text-xs opacity-30 flex gap-1 mx-auto whitespace-nowrap">
+    <output
+      className={
+        'text-xs opacity-30 flex gap-1 mx-auto whitespace-nowrap' +
+        ' ' +
+        className
+      }>
       <span>{sceneCount} scenes</span>
       <span>/</span>
       <span>{shotCount} shots</span>

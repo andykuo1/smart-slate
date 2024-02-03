@@ -1,13 +1,9 @@
 import { useState } from 'react';
 
-import AddBoxIcon from '@material-symbols/svg-400/rounded/add_box.svg';
-import EditDocumentIcon from '@material-symbols/svg-400/rounded/edit_note.svg';
+import { useBlockShotCount } from '@/stores/document/use';
 
-import { createShot } from '@/stores/document/DocumentStore';
-import { useBlockShotCount, useDocumentStore } from '@/stores/document/use';
-
-import SettingsFieldButton from '../settings/SettingsFieldButton';
 import BlockContent from './BlockContent';
+import BlockContentToolbar from './BlockContentToolbar';
 import BlockEntryLayout from './BlockEntryLayout';
 
 /**
@@ -30,19 +26,9 @@ export default function BlockEntry({
   children,
 }) {
   const [blockEditable, setBlockEditable] = useState(false);
-  const addShot = useDocumentStore((ctx) => ctx.addShot);
   const blockShotCount = useBlockShotCount(documentId, blockId);
   if (mode === 'faded' && blockShotCount <= 0) {
     return null;
-  }
-
-  function onClick() {
-    let shot = createShot();
-    addShot(documentId, sceneId, blockId, shot);
-  }
-
-  function onEditClick() {
-    setBlockEditable((prev) => !prev);
   }
 
   return (
@@ -62,18 +48,12 @@ export default function BlockEntry({
             editable={editable && blockEditable}
             setEditable={setBlockEditable}
           />
-          <div className="absolute top-0 right-0 z-10 p-1 flex flex-col rounded group-hover:bg-opacity-60 group-hover:bg-white">
-            <SettingsFieldButton
-              className="opacity-0 p-0 group-hover:opacity-100"
-              Icon={EditDocumentIcon}
-              onClick={onEditClick}
-            />
-            <SettingsFieldButton
-              className="opacity-0 p-0 group-hover:opacity-100"
-              Icon={AddBoxIcon}
-              onClick={onClick}
-            />
-          </div>
+          <BlockContentToolbar
+            documentId={documentId}
+            sceneId={sceneId}
+            blockId={blockId}
+            setEditable={setBlockEditable}
+          />
         </div>
       }>
       {children}
