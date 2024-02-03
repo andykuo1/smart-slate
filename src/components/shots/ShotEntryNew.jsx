@@ -52,9 +52,7 @@ export default function ShotEntryNew({
           />
         </div>
         <div className="flex-1 flex flex-row items-center">
-          <div className="flex-1">
-            {collapsed && <div className="w-6 h-6" />}
-          </div>
+          {<div className="w-6 h-6" />}
           {!collapsed && (
             <div className="flex-1 opacity-30 text-xs hidden sm:block">
               {'<- Tap + to create a shot'}
