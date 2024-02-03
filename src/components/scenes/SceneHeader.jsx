@@ -25,8 +25,7 @@ export default function SceneHeader({ className, documentId, sceneId }) {
   const scrollIntoView = useScrollIntoView(containerRef);
   const isActive =
     currentCursor.documentId === documentId &&
-    currentCursor.sceneId === sceneId &&
-    !currentCursor.shotId;
+    currentCursor.sceneId === sceneId;
 
   /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
   function onChange(e) {

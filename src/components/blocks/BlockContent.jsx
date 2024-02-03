@@ -143,11 +143,7 @@ function BlockContentFountainJSON({
   return (
     <pre
       className={
-        'my-4 whitespace-normal' +
-        ' ' +
-        contentClassName.join(' ') +
-        ' ' +
-        className
+        'whitespace-normal' + ' ' + contentClassName.join(' ') + ' ' + className
       }>
       {content || (
         <span className="opacity-30">
