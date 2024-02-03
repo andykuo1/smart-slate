@@ -68,15 +68,11 @@ export default function ShotList({
  * ) => import('react').ReactNode} props.children
  */
 function PerBlock({ blockIds, children }) {
-  return (
-    <>
-      {blockIds.map((blockId, index, array) => (
-        <Fragment key={`block-${blockId}`}>
-          {children(blockId, index, array)}
-        </Fragment>
-      ))}
-    </>
-  );
+  return blockIds.map((blockId, index, array) => (
+    <Fragment key={`block-${blockId}`}>
+      {children(blockId, index, array)}
+    </Fragment>
+  ));
 }
 
 /**
@@ -99,7 +95,7 @@ function ShotsByBlock({
   showNew,
 }) {
   const shotIds = useShotIds(documentId, blockId);
-  if (shotIds.length <= 0) {
+  if (!showNew && shotIds.length <= 0) {
     return null;
   }
   return (
