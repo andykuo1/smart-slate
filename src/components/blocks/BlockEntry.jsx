@@ -54,7 +54,7 @@ export default function BlockEntry({
       content={
         <div className="group px-4 flex hover:bg-gray-100">
           <BlockContent
-            className="flex-1"
+            className={blockEditable ? 'min-h-[20vh]' : ''}
             documentId={documentId}
             blockId={blockId}
             editable={editable && blockEditable}

@@ -23,7 +23,7 @@ export default function BlockEntryLayout({
   return (
     <div
       className={
-        'flex' +
+        'flex-1 flex' +
         ' ' +
         (isWidthHalved ? 'flex-row w-[50vw]' : 'flex-col') +
         ' ' +

@@ -181,6 +181,7 @@ function BlockContentFountainJSONInput({
   useEffect(() => {
     inputRef.current?.focus();
   });
+  // TOOD: This should grow with content :(
   return (
     <>
       <textarea
@@ -191,7 +192,12 @@ function BlockContentFountainJSONInput({
         value={content}
         placeholder="< What happened? >"
         onChange={(e) =>
-          setBlockContent(documentId, blockId, 'fountain-json', e.target.value)
+          setBlockContent(
+            documentId,
+            blockId,
+            'fountain-json',
+            /** @type {HTMLTextAreaElement} */ (e.target).value,
+          )
         }
         onBlur={(e) => setEditable?.(false)}
       />
