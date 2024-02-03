@@ -1,3 +1,4 @@
+import DocumentDivider from '@/components/documents/DocumentDivider';
 import { useAddBlock, useAddScene } from '@/stores/document';
 import { createBlock, createScene } from '@/stores/document/DocumentStore';
 import { useCurrentCursor } from '@/stores/user';
@@ -28,12 +29,8 @@ export default function SceneEntryNew({ className, documentId }) {
     return null;
   }
   return (
-    <li className={'flex flex-row items-center px-4 my-8' + ' ' + className}>
-      <span className="flex-1 text-center border-t-2 border-dotted border-black" />
-      <button className="mx-4" onClick={onClick}>
-        + New Scene
-      </button>
-      <span className="flex-1 text-center border-t-2 border-dotted border-black" />
+    <li className={'flex my-8' + ' ' + className}>
+      <DocumentDivider onClick={onClick}>+ New Scene</DocumentDivider>
     </li>
   );
 }

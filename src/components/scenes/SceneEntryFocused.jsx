@@ -2,6 +2,7 @@ import ExpandMoreIcon from '@material-symbols/svg-400/rounded/expand_more.svg';
 
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 
+import DocumentDivider from '../documents/DocumentDivider';
 import SceneEntryLayout from './SceneEntryLayout';
 
 /**
@@ -22,15 +23,13 @@ export default function SceneEntryFocused({ className, documentId, children }) {
   return (
     <div className="absolute top-0 left-0 right-0 bottom-0 z-10 overflow-y-auto bg-white">
       <SceneEntryLayout className={className}>{children}</SceneEntryLayout>
-      <button
-        className="w-full flex items-center from-transparent to-white bg-gradient-to-b"
+      <DocumentDivider
+        className="opacity-30"
         onClick={() => setUserCursor(documentId, '', '', '')}>
-        <span className="mx-auto flex items-center p-2">
-          <ExpandMoreIcon className="w-6 h-6 fill-current" />
-          <span className="px-4">Return to screenplay</span>
-          <ExpandMoreIcon className="w-6 h-6 fill-current" />
-        </span>
-      </button>
+        <ExpandMoreIcon className="w-6 h-6 fill-current" />
+        <span className="px-4">Return to screenplay</span>
+        <ExpandMoreIcon className="w-6 h-6 fill-current" />
+      </DocumentDivider>
     </div>
   );
 }
