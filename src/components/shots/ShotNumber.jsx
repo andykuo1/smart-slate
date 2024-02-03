@@ -19,7 +19,8 @@ export default function ShotNumber({
   return (
     <button
       className={'px-2 font-mono opacity-30 rounded-full' + ' ' + className}
-      onClick={onClick}>
+      onClick={onClick}
+      disabled={sceneShotNumber === '0Z'}>
       {sceneShotNumber === '0Z' ? '--' : sceneShotNumber}
     </button>
   );
