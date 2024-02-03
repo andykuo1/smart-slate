@@ -30,7 +30,8 @@ export default function ShotList({
 }) {
   const hasActiveShot = useUserStore((ctx) => Boolean(ctx.cursor?.shotId));
   const blockIds = useBlockIds(documentId, sceneId);
-  const lastBlockId = blockId || blockIds.at(-1);
+  const targetBlockId = blockId;
+  const lastBlockId = blockIds.at(-1);
   return (
     <ul
       className={
@@ -48,7 +49,15 @@ export default function ShotList({
               editable={editable}
               collapsed={collapsed}
               showTakes={hasActiveShot}
-              showNew={editable && lastBlockId === blockId}
+              showNew={
+                editable
+                  ? !targetBlockId
+                    ? blockId === lastBlockId
+                    : blockId === lastBlockId
+                      ? true
+                      : undefined
+                  : false
+              }
             />
           )}
         </PerBlock>
@@ -83,7 +92,7 @@ function PerBlock({ blockIds, children }) {
  * @param {boolean} props.editable
  * @param {boolean} props.collapsed
  * @param {boolean} props.showTakes
- * @param {boolean} props.showNew
+ * @param {boolean} [props.showNew]
  */
 function ShotsByBlock({
   documentId,
@@ -92,11 +101,14 @@ function ShotsByBlock({
   editable,
   collapsed,
   showTakes,
-  showNew,
+  showNew = undefined,
 }) {
   const shotIds = useShotIds(documentId, blockId);
   if (!showNew && shotIds.length <= 0) {
     return null;
+  }
+  if (typeof showNew === 'undefined' && shotIds.length > 0) {
+    showNew = editable;
   }
   return (
     <>
