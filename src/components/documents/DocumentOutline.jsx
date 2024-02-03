@@ -121,6 +121,7 @@ export default function DocumentOutline({ documentId }) {
       <ul className="flex flex-col">
         {sceneIds.map((sceneId) => (
           <IndexScene
+            key={sceneId}
             documentId={documentId}
             sceneId={sceneId}
             isActive={sceneId === activeSceneId}
@@ -166,9 +167,7 @@ function IndexScene({ documentId, sceneId, isActive }) {
         }
         onClick={onClick}>
         <div>
-          <label
-            htmlFor={listId}
-            className="font-bold pointer-events-none whitespace-nowrap">
+          <label className="font-bold pointer-events-none whitespace-nowrap">
             Scene {formatSceneNumber(sceneNumber, false)}
           </label>
           <SceneContentCount
@@ -185,6 +184,7 @@ function IndexScene({ documentId, sceneId, isActive }) {
       <ul id={listId} className="w-full flex flex-col">
         {blockIds.map((blockId) => (
           <IndexBlock
+            key={blockId}
             documentId={documentId}
             sceneId={sceneId}
             blockId={blockId}
@@ -206,6 +206,7 @@ function IndexBlock({ documentId, sceneId, blockId }) {
   const activeShotId = useUserStore((ctx) => ctx.cursor?.shotId);
   return shotIds.map((shotId, index, array) => (
     <IndexShot
+      key={shotId}
       documentId={documentId}
       sceneId={sceneId}
       blockId={blockId}

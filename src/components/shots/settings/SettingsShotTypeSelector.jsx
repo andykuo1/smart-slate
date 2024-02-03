@@ -17,11 +17,12 @@ export default function SettingsShotTypeSelector({
 }) {
   const [shotType, onShotTypeChange] = useShotTypeChange(documentId, shotId);
 
+  const selectId = 'shotType-' + shotId;
   return (
     <SettingsFieldSelect
       className={'flex flex-row' + ' ' + className}
       title=""
-      id="shot-type"
+      id={selectId}
       value={shotType}
       onChange={onShotTypeChange}>
       {SHOT_TYPES.map((shotType) => (

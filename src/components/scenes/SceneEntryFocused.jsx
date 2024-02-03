@@ -17,11 +17,13 @@ import SceneEntryLayout from './SceneEntryLayout';
 export default function SceneEntryFocused({ className, documentId, children }) {
   const { sceneId } = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
-  if (!sceneId) {
-    return null;
-  }
   return (
-    <div className="absolute top-0 left-0 right-0 bottom-0 z-10 overflow-y-auto bg-white">
+    <div
+      className={
+        'absolute top-0 left-0 right-0 bottom-0 z-10 overflow-y-auto bg-white' +
+        ' ' +
+        (!sceneId ? 'hidden' : '')
+      }>
       <SceneEntryLayout className={className}>{children}</SceneEntryLayout>
       <DocumentDivider
         className="opacity-30"

@@ -35,9 +35,7 @@ export default function ShotList({
   return (
     <ul
       className={
-        hidden
-          ? /* NOTE: Quick hideaway to not lag. */ 'invisible absolute top-0 left-0 -z-10'
-          : className
+        hidden ? /* NOTE: Quick hideaway to not lag. */ 'hidden' : className
       }>
       <div className={collapsed ? GridStyle.grid : ''}>
         <PerBlock blockIds={blockId ? [blockId] : blockIds}>

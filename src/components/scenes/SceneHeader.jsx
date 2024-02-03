@@ -44,6 +44,7 @@ export default function SceneHeader({ className, documentId, sceneId }) {
     });
   }
 
+  const dataListId = 'sceneHeading-' + sceneId;
   return (
     <div
       ref={containerRef}
@@ -63,13 +64,13 @@ export default function SceneHeader({ className, documentId, sceneId }) {
       <input
         className="flex-1 w-full bg-transparent px-2 py-6 text-xl font-bold"
         type="text"
-        list="sceneHeading"
+        list={dataListId}
         placeholder="INT/EXT. SCENE - DAY"
         value={sceneHeading}
         onChange={onChange}
         autoCapitalize="characters"
       />
-      <datalist id="sceneHeading">
+      <datalist id={dataListId}>
         <option value="INT. " />
         <option value="EXT. " />
       </datalist>

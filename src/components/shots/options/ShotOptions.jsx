@@ -102,6 +102,10 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
     [documentId, shotId, setShotReferenceImage],
   );
 
+  if (!shotId) {
+    return null;
+  }
+
   return (
     <div className="flex flex-col gap-2">
       <Button
