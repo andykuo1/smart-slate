@@ -36,7 +36,7 @@ export default function SettingsProjectIdField() {
   const resolveDocumentProjectId = useResolveDocumentProjectId();
   const projectId = resolveDocumentProjectId(
     documentId,
-    documentTitle || inputText,
+    inputText || documentTitle,
     true,
   );
   const isProjectIdLocked = Boolean(documentSettingsProjectId);
