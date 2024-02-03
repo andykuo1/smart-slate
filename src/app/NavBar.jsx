@@ -1,7 +1,8 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import EditSquareIcon from '@material-symbols/svg-400/rounded/edit_square.svg';
-import RadioButtonCheckedIcon from '@material-symbols/svg-400/rounded/radio_button_checked.svg';
+import MovieIcon from '@material-symbols/svg-400/rounded/movie.svg';
+// import RadioButtonCheckedIcon from '@material-symbols/svg-400/rounded/radio_button_checked.svg';
 import SubscriptionsIcon from '@material-symbols/svg-400/rounded/subscriptions.svg';
 import TuneIcon from '@material-symbols/svg-400/rounded/tune.svg';
 
@@ -37,7 +38,7 @@ export default function NavBar() {
           <NavEditButton />
         </li>
         <li className="flex-1 flex">
-          <NavRecorderButton />
+          <NavRecordButton />
         </li>
         <li className="flex-1 flex">
           <NavButton title="Visualize" abbr="Vis" Icon={SubscriptionsIcon} />
@@ -47,7 +48,7 @@ export default function NavBar() {
   );
 }
 
-function NavRecorderButton() {
+function NavRecordButton() {
   const documentId = useCurrentDocumentId();
   const projectId = useDocumentStore(
     (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
@@ -68,10 +69,10 @@ function NavRecorderButton() {
   }
   return (
     <NavButton
-      title="Recorder"
-      abbr="Rec"
+      title="Slate"
+      abbr="Slate"
       active={location.pathname.includes('/rec')}
-      Icon={RadioButtonCheckedIcon}
+      Icon={MovieIcon /* RadioButtonCheckedIcon */}
       onClick={onClick}
       disabled={!projectId || shotCount <= 0}
     />

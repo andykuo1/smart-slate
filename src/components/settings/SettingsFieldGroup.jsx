@@ -1,6 +1,6 @@
 /**
  * @param {object} props
- * @param {string} props.title
+ * @param {string|import('react').ReactNode} props.title
  * @param {import('react').ReactNode} props.children
  */
 export default function SettingsFieldGroup({ title, children }) {

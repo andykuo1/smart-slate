@@ -2,6 +2,7 @@ import FiberManualRecordIcon from '@material-symbols/svg-400/rounded/fiber_manua
 import VerticalSplitIcon from '@material-symbols/svg-400/rounded/vertical_split.svg';
 import ViewDayIcon from '@material-symbols/svg-400/rounded/view_day.svg';
 
+import { useScrollIntoView } from '@/libs/UseScrollIntoView';
 import { useUserStore } from '@/stores/user';
 
 import SettingsFieldButton from '../settings/SettingsFieldButton';
@@ -16,19 +17,13 @@ export default function SceneCollapse({ containerRef, documentId, sceneId }) {
   const editMode = useUserStore((ctx) => ctx.editMode);
   const setEditMode = useUserStore((ctx) => ctx.setEditMode);
   const EditModeIcon = getEditModeIcon(editMode);
+  const scrollIntoView = useScrollIntoView(containerRef);
 
   function onClick() {
     setEditMode(editMode === 'inline' ? 'sequence' : 'inline');
-    // Debounce to wait for layout changes...
-    setTimeout(
-      () =>
-        containerRef.current?.scrollIntoView?.({
-          block: 'start',
-          behavior: 'smooth',
-        }),
-      0,
-    );
+    scrollIntoView();
   }
+
   return (
     <div className="flex flex-row">
       <SettingsFieldButton Icon={EditModeIcon} onClick={onClick} />

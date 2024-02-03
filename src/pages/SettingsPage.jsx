@@ -1,11 +1,5 @@
-import {
-  Disclosure,
-  DisclosureContent,
-  DisclosureProvider,
-} from '@ariakit/react';
 import { useNavigate } from 'react-router-dom';
 
-import ExpandMoreIcon from '@material-symbols/svg-400/rounded/expand_more.svg';
 import QRCode2Icon from '@material-symbols/svg-400/rounded/qr_code_2.svg';
 
 import NavBarLayout from '@/app/NavBarLayout';
@@ -16,7 +10,7 @@ import SettingsEnableGoogleDriveSyncToggle from '@/components/settings/SettingsE
 import SettingsEnableRecorderLiveAudioToggle from '@/components/settings/SettingsEnableRecorderLiveAudioToggle';
 import SettingsEnableRecorderReferenceToggle from '@/components/settings/SettingsEnableRecorderReferenceToggle';
 import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
-import SettingsFieldGroup from '@/components/settings/SettingsFieldGroup';
+import SettingsFieldGroupDiscloseable from '@/components/settings/SettingsFieldGroupDiscloseable';
 import SettingsNerdInfoButton from '@/components/settings/SettingsNerdInfoButton';
 import SettingsPreferNativeRecorderToggle from '@/components/settings/SettingsPreferNativeRecorderToggle';
 import SettingsPreferPersistedMediaStreamToggle from '@/components/settings/SettingsPreferPersistedMediaStreamToggle';
@@ -40,7 +34,7 @@ export default function SettingsPage() {
   return (
     <PageLayout>
       <NavBarLayout>
-        <fieldset className="flex-1">
+        <fieldset className="flex-1 flex flex-col gap-2">
           <legend className="py-4">
             <h3 className="text-xl">Configure your project</h3>
             <p className="text-xs opacity-30">
@@ -50,53 +44,42 @@ export default function SettingsPage() {
           <SettingsProjectNameField />
           <SettingsProjectIdField />
           <SettingsAutoSaveToField />
-          <SettingsAutoSaveLastTimeField className="-mt-2 mb-4" />
-          <SettingsProjectInstallField />
+          <SettingsAutoSaveLastTimeField />
+          <br />
           <SettingsProjectStartButton />
           <SettingsReturnHomeField />
-          <fieldset>
-            <legend className="w-full py-4">
-              <h4 className="text-center border-b-2 border-black">
-                More Settings
-              </h4>
-            </legend>
-            <SettingsAspectRatioField />
-            <SettingsVideoResolutionField />
+          <SettingsProjectInstallField />
+          <br />
+          <SettingsFieldGroupDiscloseable title="More Settings">
+            <GoogleConnectButton />
+            <SettingsFieldButton
+              Icon={QRCode2Icon}
+              onClick={() => navigate('/scan')}>
+              Have QR codes?
+            </SettingsFieldButton>
             <br />
-            <SettingsFieldGroup title="Data Settings">
-              <GoogleConnectButton className="mb-4" />
+            <SettingsFieldGroupDiscloseable title="Data Settings">
               <SettingsEnableGoogleDriveSyncToggle />
               <SettingsShareFilesButton />
               <SettingsProjectExportZIPButton />
               <SettingsProjectExportJSONButton />
-              <SettingsFieldButton
-                Icon={QRCode2Icon}
-                onClick={() => navigate('/scan')}>
-                Have QR codes?
-              </SettingsFieldButton>
-            </SettingsFieldGroup>
-            <br />
-            <SettingsFieldGroup title="Recorder Settings">
+            </SettingsFieldGroupDiscloseable>
+            <SettingsFieldGroupDiscloseable title="Recorder Settings">
+              <SettingsAspectRatioField />
+              <SettingsVideoResolutionField />
+              <div className="h-0" />
               <SettingsPreferNativeRecorderToggle />
               <SettingsPreferPersistedMediaStreamToggle />
               <SettingsEnableRecorderReferenceToggle />
               <SettingsEnableRecorderLiveAudioToggle />
-            </SettingsFieldGroup>
-            <br />
-            <SettingsNerdInfoButton />
-            <br />
-          </fieldset>
-          <DisclosureProvider>
-            <Disclosure className="w-full flex items-center border-b-2 border-black">
-              <span className="flex-1">Dangerous Stuff</span>
-              <ExpandMoreIcon className="w-6 h-6 fill-current" />
-            </Disclosure>
-            <DisclosureContent className="py-4 flex flex-col gap-4">
+              <div className="h-0" />
+              <SettingsNerdInfoButton />
+            </SettingsFieldGroupDiscloseable>
+            <SettingsFieldGroupDiscloseable title="Dangerous Stuff">
               <SettingsVideoCacheClearButton />
               <SettingsProjectDeleteButton />
-            </DisclosureContent>
-          </DisclosureProvider>
-          <br />
+            </SettingsFieldGroupDiscloseable>
+          </SettingsFieldGroupDiscloseable>
         </fieldset>
       </NavBarLayout>
     </PageLayout>

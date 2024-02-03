@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 
+import { useScrollIntoView } from '@/libs/UseScrollIntoView';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useSceneHeading } from '@/stores/document';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
@@ -21,6 +22,7 @@ export default function SceneHeader({ className, documentId, sceneId }) {
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const currentCursor = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
+  const scrollIntoView = useScrollIntoView(containerRef);
   const isActive =
     currentCursor.documentId === documentId &&
     currentCursor.sceneId === sceneId &&
@@ -38,15 +40,9 @@ export default function SceneHeader({ className, documentId, sceneId }) {
     } else {
       setUserCursor(documentId, sceneId, '');
     }
-    // Debounce to wait for layout changes...
-    setTimeout(
-      () =>
-        containerRef.current?.scrollIntoView({
-          block: 'start',
-          behavior: 'instant',
-        }),
-      0,
-    );
+    scrollIntoView({
+      behavior: 'instant',
+    });
   }
 
   return (

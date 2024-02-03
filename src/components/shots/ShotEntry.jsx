@@ -2,6 +2,7 @@ import { useRef } from 'react';
 
 import ArrowForwardIcon from '@material-symbols/svg-400/rounded/arrow_forward.svg';
 
+import { useScrollIntoView } from '@/libs/UseScrollIntoView';
 import { getShotById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import { useDraggable, useIsDragging } from '@/stores/draggable';
@@ -45,6 +46,7 @@ export function ShotEntry({
     currentCursor.shotId === shotId;
   const isDragging = useIsDragging(shotId);
   const { elementProps, handleProps } = useDraggable(blockId, shotId);
+  const scrollIntoView = useScrollIntoView(containerRef);
 
   const shotHash = useDocumentStore(
     (ctx) => getShotById(ctx, documentId, shotId)?.shotHash,
@@ -56,15 +58,7 @@ export function ShotEntry({
     } else {
       setUserCursor(documentId, sceneId, shotId);
     }
-    // Debounce to wait for layout changes...
-    setTimeout(
-      () =>
-        containerRef.current?.scrollIntoView({
-          block: 'center',
-          behavior: 'instant',
-        }),
-      0,
-    );
+    scrollIntoView({ block: 'center', behavior: 'instant' });
   }
 
   return (
