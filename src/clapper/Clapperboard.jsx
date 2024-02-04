@@ -15,6 +15,7 @@ import { useShotHash } from '@/serdes/UseResolveShotHash';
 import { useShotNumber } from '@/serdes/UseResolveShotNumber';
 import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
 import {
+  findShotWithTakeId,
   getDocumentIds,
   getFirstEmptyShotInDocument,
   getFirstEmptyShotInScene,
@@ -40,6 +41,7 @@ export default function Clapperboard() {
     let newDocumentId = documentId;
     let newSceneId = sceneId;
     let newShotId = shotId;
+    let newTakeId = takeId;
     if (!documentId) {
       newDocumentId = getDocumentIds(store)?.[0] || '';
     }
@@ -50,21 +52,31 @@ export default function Clapperboard() {
       );
       newSceneId = sceneId;
       newShotId = shotId;
+      newTakeId = '';
     }
     if (newDocumentId && newSceneId && !shotId) {
-      const { shotId } = getFirstEmptyShotInScene(
-        store,
-        newDocumentId,
-        newSceneId,
-      );
-      newShotId = shotId;
+      if (takeId) {
+        // Take exists, just find the parent shot.
+        let shot = findShotWithTakeId(store, documentId, takeId);
+        newShotId = shot?.shotId || '';
+      } else {
+        // Take doesn't exist, so let's find a new shot that will take one.
+        const { shotId } = getFirstEmptyShotInScene(
+          store,
+          newDocumentId,
+          newSceneId,
+        );
+        newShotId = shotId;
+        newTakeId = '';
+      }
     }
     if (
       newDocumentId !== documentId ||
       newSceneId !== sceneId ||
-      newShotId !== shotId
+      newShotId !== shotId ||
+      newTakeId !== takeId
     ) {
-      setUserCursor(newDocumentId, newSceneId, newShotId, '');
+      setUserCursor(newDocumentId, newSceneId, newShotId, newTakeId);
     }
   }, [documentId, sceneId, shotId, takeId, UNSAFE_getStore, setUserCursor]);
 

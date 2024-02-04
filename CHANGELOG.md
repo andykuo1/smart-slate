@@ -2,6 +2,7 @@
 
 - Add shot and take list labels
 - Add take count pips to shot thumbnail
+- Add new take for empty shot list on slate
 
 # v0.1.15
 

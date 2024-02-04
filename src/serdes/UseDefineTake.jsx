@@ -1,7 +1,11 @@
 import { useCallback } from 'react';
 
-import { getShotById } from '@/stores/document';
-import { createTake } from '@/stores/document/DocumentStore';
+import { getLastBlockIdInScene, getShotById } from '@/stores/document';
+import {
+  createBlock,
+  createShot,
+  createTake,
+} from '@/stores/document/DocumentStore';
 import { useDocumentStore } from '@/stores/document/use';
 
 import { useResolveSceneShotNumber } from './UseResolveSceneShotNumber';
@@ -14,6 +18,9 @@ export function useDefineTake() {
   const resolveShotHash = useResolveShotHash();
   const resolveSceneShotNumber = useResolveSceneShotNumber();
   const addTake = useDocumentStore((ctx) => ctx.addTake);
+  const addShot = useDocumentStore((ctx) => ctx.addShot);
+  const addBlock = useDocumentStore((cxt) => cxt.addBlock);
+
   const defineTake = useCallback(
     /**
      * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
@@ -27,6 +34,21 @@ export function useDefineTake() {
      */
     function _defineTake(documentId, sceneId, shotId, opts = {}) {
       const store = UNSAFE_getStore();
+
+      let shot = null;
+      if (!shotId) {
+        let blockId = getLastBlockIdInScene(store, documentId, sceneId);
+        if (!blockId) {
+          let block = createBlock();
+          blockId = block.blockId;
+          addBlock(documentId, sceneId, block);
+        }
+        shot = createShot();
+        shotId = shot.shotId;
+        addShot(documentId, sceneId, blockId, shot);
+      } else {
+        shot = getShotById(store, documentId, shotId);
+      }
 
       // NOTE: Make sure these fields are defined whenever any take is
       //  created (most importantly, the first).
@@ -43,7 +65,6 @@ export function useDefineTake() {
         true,
       );
 
-      const shot = getShotById(store, documentId, shotId);
       let newTake = createTake();
       newTake.exportDetails.fileName = takeFileName;
       newTake.exportDetails.timestampMillis = Date.now();
