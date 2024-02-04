@@ -39,7 +39,7 @@ export default function SettingsFieldButton({
       onClick={onClick}
       title={title}
       disabled={disabled}>
-      {Icon && <Icon className="w-6 h-6 fill-current" />}
+      {Icon && <Icon className="w-[2em] h-[2em] fill-current" />}
       <span className="flex-1">{children}</span>
     </button>
   );

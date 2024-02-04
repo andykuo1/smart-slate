@@ -1,6 +1,5 @@
-import DrawerLayout from '@/app/DrawerLayout';
+import DocumentDrawer from '@/components/documents/DocumentDrawer';
 import DocumentLayout from '@/components/documents/DocumentLayout';
-import DocumentOutline from '@/components/documents/DocumentOutline';
 import DocumentTitle from '@/components/documents/DocumentTitle';
 import SceneList from '@/components/scenes/SceneList';
 import { useCurrentDocumentId } from '@/stores/user';
@@ -11,12 +10,12 @@ export default function EditPage() {
   const documentId = useCurrentDocumentId();
   return (
     <PageLayout>
-      <DrawerLayout content={() => <DocumentOutline documentId={documentId} />}>
+      <DocumentDrawer documentId={documentId}>
         <DocumentLayout documentId={documentId}>
           <DocumentTitle className="pt-20" documentId={documentId} />
           <SceneList documentId={documentId} />
         </DocumentLayout>
-      </DrawerLayout>
+      </DocumentDrawer>
     </PageLayout>
   );
 }

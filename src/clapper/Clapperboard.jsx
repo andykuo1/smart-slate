@@ -1,39 +1,40 @@
-// NOTE: https://www.studiobinder.com/blog/how-to-use-a-film-slate/
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-import ArrowBackIcon from '@material-symbols/svg-400/rounded/arrow_back.svg';
+import AddIcon from '@material-symbols/svg-400/rounded/add.svg';
+import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg';
+import ThumbUpIcon from '@material-symbols/svg-400/rounded/thumb_up.svg';
 
-import { useFullscreen } from '@/libs/fullscreen';
+import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import {
+  formatSceneNumber,
+  formatShotNumber,
+  formatTakeNumber,
+} from '@/components/takes/TakeNameFormat';
+import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
+import { useShotHash } from '@/serdes/UseResolveShotHash';
+import { useShotNumber } from '@/serdes/UseResolveShotNumber';
+import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
 import {
   getDocumentIds,
   getFirstBlockIdInScene,
   getSceneIdsInOrder,
   getShotIdsInOrder,
+  useTakeRating,
 } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
-import {
-  useCurrentCursor,
-  useSetUserCursor,
-  useUserStore,
-} from '@/stores/user';
+import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 
 import ClapperCameraNameField from './ClapperCameraNameField';
 import ClapperDateField from './ClapperDateField';
 import ClapperDirectorNameField from './ClapperDirectorNameField';
-import ClapperMoreFields from './ClapperMoreFields';
 import ClapperProductionTitleField from './ClapperProductionTitleField';
 import ClapperQRCodeField from './ClapperQRCodeField';
-import ClapperTakeNameField from './ClapperTakeNameField';
 import ClapperVerticalLabel from './ClapperVerticalLabel';
 
 export default function Clapperboard() {
   const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const setUserCursor = useSetUserCursor();
-  const setShotListMode = useUserStore((ctx) => ctx.setShotListMode);
-  const navigate = useNavigate();
-  const { exitFullscreen } = useFullscreen();
 
   useEffect(() => {
     const store = UNSAFE_getStore();
@@ -59,25 +60,23 @@ export default function Clapperboard() {
     }
   }, [documentId, sceneId, shotId, UNSAFE_getStore, setUserCursor]);
 
-  function onBackClick() {
-    setShotListMode('detail');
-    navigate('/edit');
-    exitFullscreen();
-  }
-
   return (
     <fieldset className="relative w-full h-full flex flex-col text-white text-[5vmin] font-mono overflow-hidden">
-      <button
-        className="absolute left-1 top-1 bg-black rounded"
-        onClick={onBackClick}>
-        <ArrowBackIcon className="w-6 h-6 fill-current" />
-      </button>
-      <div className="grid grid-cols-2 text-md">
-        <ul>
-          <ClapperTakeNameField
-            className="border-r-4"
-            documentId={documentId}
-          />
+      <div className="flex-1 grid grid-cols-2 text-md">
+        <ul className="flex flex-col">
+          <li className="flex items-center">
+            <ClapperIdentifierFields
+              className="flex-1"
+              documentId={documentId}
+              sceneId={sceneId}
+              shotId={shotId}
+              takeId={takeId}
+            />
+          </li>
+          <li className="flex items-center">
+            <ClapperVerticalLabel>DATE</ClapperVerticalLabel>
+            <ClapperDateField />
+          </li>
           <li className="flex items-center">
             <ClapperVerticalLabel>PROD</ClapperVerticalLabel>
             <ClapperProductionTitleField
@@ -99,34 +98,219 @@ export default function Clapperboard() {
               documentId={documentId}
             />
           </li>
+          <li className="flex-1 flex">
+            <textarea
+              className="flex-1 resize-none p-2 bg-transparent"
+              placeholder="Comments"
+            />
+          </li>
         </ul>
 
-        <div className="overflow-hidden">
-          <ClapperQRCodeField
+        <div className="flex flex-col">
+          <div className="flex-1 overflow-hidden">
+            <ClapperQRCodeField
+              documentId={documentId}
+              sceneId={sceneId}
+              shotId={shotId}
+              takeId={takeId}
+            />
+          </div>
+          <ClapperControlFields
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
             takeId={takeId}
           />
         </div>
-
-        <div className="col-span-2 flex flex-row">
-          <div className="flex-1 flex items-center">
-            <ClapperVerticalLabel>DATE</ClapperVerticalLabel>
-            <ClapperDateField />
-          </div>
-          <div className="relative flex-1 flex items-center">
-            <ClapperVerticalLabel>ETC</ClapperVerticalLabel>
-            <ClapperMoreFields className="flex-1" documentId={documentId} />
-          </div>
-        </div>
       </div>
-      <div className="flex-1 flex flex-row">
-        <textarea
-          className="flex-1 resize-none p-2 bg-transparent"
-          placeholder="Comments"
+    </fieldset>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
+ */
+function ClapperControlFields({
+  className,
+  documentId,
+  sceneId,
+  shotId,
+  takeId,
+}) {
+  const takeRating = useTakeRating(documentId, takeId);
+  const toggleGoodTake = useDocumentStore((ctx) => ctx.toggleGoodTake);
+  const setUserCursor = useSetUserCursor();
+
+  function onNextClick() {
+    setUserCursor(documentId, sceneId, shotId, '');
+  }
+
+  function onPrintClick() {
+    toggleGoodTake(documentId, takeId);
+  }
+
+  return (
+    <div className="w-full flex items-center">
+      <ClapperVerticalLabel>CTRL</ClapperVerticalLabel>
+      <div className="flex-1 flex flex-col items-start gap-2 p-2">
+        <SettingsFieldButton
+          className="w-full text-left"
+          Icon={AddIcon}
+          title="New take"
+          onClick={onNextClick}
+          disabled={!takeId}>
+          <span className="ml-2">New take</span>
+        </SettingsFieldButton>
+        <SettingsFieldButton
+          className={
+            'w-[50%] text-left outline-none' +
+            ' ' +
+            (takeRating <= 0 ? 'line-through' : '')
+          }
+          Icon={takeRating > 0 ? ThumbUpFillIcon : ThumbUpIcon}
+          title="Mark good take"
+          onClick={onPrintClick}
+          disabled={!takeId}>
+          <span className="ml-2">PRINT</span>
+        </SettingsFieldButton>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
+ */
+function ClapperIdentifierFields({
+  className,
+  documentId,
+  sceneId,
+  shotId,
+  takeId,
+}) {
+  return (
+    <fieldset
+      className={
+        'flex items-center border-2 rounded-xl m-1 overflow-hidden' +
+        ' ' +
+        className
+      }>
+      <div className="flex flex-col border-r-2 px-2">
+        <ClapperSceneShotNumberField
+          documentId={documentId}
+          sceneId={sceneId}
+          shotId={shotId}
+        />
+        <ClapperShotHashField documentId={documentId} shotId={shotId} />
+      </div>
+      <div className="flex flex-row px-1 mx-auto">
+        <ClapperTakeNumberField
+          documentId={documentId}
+          sceneId={sceneId}
+          shotId={shotId}
+          takeId={takeId}
         />
       </div>
     </fieldset>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
+ */
+function ClapperTakeNumberField({ documentId, sceneId, shotId, takeId }) {
+  const takeNumber = useTakeNumber(documentId, shotId, takeId);
+  const takeOutputId = 'clapTakeNo-' + takeId;
+  return (
+    <div className="flex flex-col">
+      <ClapperLabel htmlFor={takeOutputId} className="text-center">
+        TAKE
+      </ClapperLabel>
+      <output
+        id={takeOutputId}
+        style={{ lineHeight: '1.5em' }}
+        className="text-[10vw] scale-y-150 whitespace-nowrap">
+        {formatTakeNumber(takeNumber, true).padStart(2, '0')}
+      </output>
+    </div>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ */
+function ClapperSceneShotNumberField({ documentId, sceneId, shotId }) {
+  const sceneNumber = useSceneNumber(documentId, sceneId);
+  const shotNumber = useShotNumber(documentId, sceneId, shotId);
+
+  const sceneOutputId = 'clapSceneNo-' + sceneId;
+  const shotOutputId = 'clapShotNo-' + shotId;
+  return (
+    <div className="flex flex-row gap-1">
+      <div className="flex flex-col items-end">
+        <ClapperLabel htmlFor={sceneOutputId}>SCENE</ClapperLabel>
+        <output
+          id={sceneOutputId}
+          style={{ lineHeight: '1em' }}
+          className="text-[10vw] whitespace-nowrap">
+          {formatSceneNumber(sceneNumber, true).padStart(3, '0')}
+        </output>
+      </div>
+      <div className="flex flex-col items-start">
+        <ClapperLabel htmlFor={shotOutputId}>SHOT</ClapperLabel>
+        <output
+          id={shotOutputId}
+          style={{ lineHeight: '1em' }}
+          className="text-[10vw] whitespace-nowrap">
+          {formatShotNumber(shotNumber)}
+        </output>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ */
+function ClapperShotHashField({ documentId, shotId }) {
+  const shotHash = useShotHash(documentId, shotId);
+  return (
+    <output
+      style={{ lineHeight: '1em' }}
+      className="text-[5vw] text-right mx-1">
+      #{shotHash}
+    </output>
+  );
+}
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ * @param {string} [props.htmlFor]
+ * @param {import('react').ReactNode} [props.children]
+ */
+function ClapperLabel({ className, htmlFor, children }) {
+  return (
+    <label className={'text-[2vw] px-1' + ' ' + className} htmlFor={htmlFor}>
+      {children}
+    </label>
   );
 }

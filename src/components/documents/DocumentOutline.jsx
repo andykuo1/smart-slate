@@ -1,8 +1,11 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@material-symbols/svg-400/rounded/arrow_back.svg';
+import CheckBoxIcon from '@material-symbols/svg-400/rounded/check_box-fill.svg';
+import CheckBoxOutlineBlankIcon from '@material-symbols/svg-400/rounded/check_box_outline_blank.svg';
 import GridViewIcon from '@material-symbols/svg-400/rounded/grid_view.svg';
 import HomeIcon from '@material-symbols/svg-400/rounded/home.svg';
+import IndeterminateCheckBoxIcon from '@material-symbols/svg-400/rounded/indeterminate_check_box.svg';
 import InfoFillIcon from '@material-symbols/svg-400/rounded/info-fill.svg';
 import InfoIcon from '@material-symbols/svg-400/rounded/info.svg';
 import ListAltIcon from '@material-symbols/svg-400/rounded/list_alt.svg';
@@ -13,15 +16,21 @@ import DocumentContentCount from '@/components/documents/DocumentContentCount';
 import {
   formatSceneNumber,
   formatSceneShotNumber,
+  formatTakeNumber,
 } from '@/components/takes/TakeNameFormat';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useShotNumber } from '@/serdes/UseResolveShotNumber';
+import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
 import {
   getSceneById,
+  getShotById,
+  getTakeById,
   useBlockIds,
   useSceneHeading,
   useShotDescription,
   useShotIds,
+  useShotType,
+  useTakeIds,
 } from '@/stores/document';
 import {
   useDocumentTitle,
@@ -34,6 +43,7 @@ import { useSetUserCursor, useUserStore } from '@/stores/user';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 
 import SettingsFieldButton from '../settings/SettingsFieldButton';
+import { getShotTypeColor } from '../shots/ShotColors';
 import DocumentDivider from './DocumentDivider';
 
 /**
@@ -42,15 +52,14 @@ import DocumentDivider from './DocumentDivider';
  */
 export default function DocumentOutline({ documentId }) {
   const sceneIds = useSceneIds(documentId);
-  const activeSceneId = useUserStore((ctx) =>
-    ctx.cursor?.shotId ? '' : ctx.cursor?.sceneId,
-  );
+  const activeSceneId = useUserStore((ctx) => ctx.cursor?.sceneId);
   const [documentTitle] = useDocumentTitle(documentId);
   const detailMode = useUserStore((ctx) => ctx.outlineMode === 'detail');
   const boardMode = useUserStore((ctx) => ctx.shotListMode === 'hidden');
   const setOutlineMode = useUserStore((ctx) => ctx.setOutlineMode);
   const setShotListMode = useUserStore((ctx) => ctx.setShotListMode);
   const navigate = useNavigate();
+  const location = useLocation();
   const isBackToHome = location.pathname.includes('/edit');
 
   function onShotListModeClick() {
@@ -76,7 +85,7 @@ export default function DocumentOutline({ documentId }) {
   }
 
   return (
-    <nav>
+    <nav className="font-mono">
       <div className="sticky top-0 z-10 w-full flex p-2 bg-gray-200 shadow">
         <div className="flex-1">
           <SettingsFieldButton
@@ -236,9 +245,21 @@ function IndexShot({
 }) {
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
+  const shotType = useShotType(documentId, shotId);
+  const shotHasGoodTake = useDocumentStore((ctx) =>
+    getShotById(ctx, documentId, shotId).takeIds.reduceRight(
+      (prev, takeId) => prev || getTakeById(ctx, documentId, takeId).rating > 0,
+      false,
+    ),
+  );
+  const shotHasTakes = useDocumentStore(
+    (ctx) => getShotById(ctx, documentId, shotId).takeIds.length > 0,
+  );
   const description = useShotDescription(documentId, shotId);
   const detailMode = useUserStore((ctx) => ctx.outlineMode === 'detail');
+  const activeTakeId = useUserStore((ctx) => ctx.cursor.takeId);
   const setUserCursor = useSetUserCursor();
+  const takeIds = useTakeIds(documentId, shotId);
 
   function onClick() {
     if (!isActive) {
@@ -252,17 +273,33 @@ function IndexShot({
     <li className="w-full flex flex-col">
       <button
         className={
-          'w-full flex flex-row gap-2 px-6 text-left' +
+          'w-full flex flex-row gap-2 px-6 text-left text-xs' +
           ' ' +
           (isActive ? 'bg-black text-white' : 'hover:bg-gray-300')
         }
         onClick={onClick}>
         <BoxDrawingCharacter start={false} end={isLastShot} depth={0} />
 
+        <div className="-mx-1">
+          {shotHasGoodTake ? (
+            <CheckBoxIcon className="w-4 h-4 fill-current" />
+          ) : shotHasTakes ? (
+            <IndeterminateCheckBoxIcon className="w-4 h-4 fill-current" />
+          ) : (
+            <CheckBoxOutlineBlankIcon className="w-4 h-4 fill-current" />
+          )}
+        </div>
+
         <div className="flex flex-col">
-          <label className="pointer-events-none whitespace-nowrap">
-            Shot {formatSceneShotNumber(sceneNumber, shotNumber, true)}
-          </label>
+          <span className="pointer-events-none whitespace-nowrap">
+            Shot {formatSceneShotNumber(sceneNumber, shotNumber, true)}{' '}
+            <span
+              className={
+                'rounded px-1 text-black' + ' ' + getShotTypeColor(shotType)
+              }>
+              {shotType || '--'}
+            </span>
+          </span>
           <ShotContentCount
             className={!detailMode ? 'invisible' : ''}
             documentId={documentId}
@@ -277,6 +314,73 @@ function IndexShot({
           }>
           {description || choosePlaceholderRandomly(shotId)}
         </p>
+      </button>
+      {isActive && (
+        <ul className="flex flex-col-reverse">
+          {takeIds.map((takeId, index, array) => (
+            <IndexTake
+              key={takeId}
+              documentId={documentId}
+              sceneId={sceneId}
+              blockId={blockId}
+              shotId={shotId}
+              takeId={takeId}
+              isActive={activeTakeId === takeId}
+              isLastTake={/* NOTE: Cause the order is reversed. */ index <= 0}
+            />
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
+ * @param {boolean} props.isActive
+ * @param {boolean} props.isLastTake
+ */
+function IndexTake({
+  documentId,
+  sceneId,
+  blockId,
+  shotId,
+  takeId,
+  isActive,
+  isLastTake,
+}) {
+  const takeNumber = useTakeNumber(documentId, shotId, takeId);
+  const setUserCursor = useSetUserCursor();
+
+  function onClick() {
+    if (!isActive) {
+      setUserCursor(documentId, sceneId, shotId, takeId);
+    } else {
+      setUserCursor(documentId, sceneId, shotId, '');
+    }
+  }
+
+  return (
+    <li className="w-full flex flex-col">
+      <button
+        className={
+          'w-full flex flex-row gap-2 px-20 text-left text-xs' +
+          ' ' +
+          (isActive ? 'bg-black text-white' : 'hover:bg-gray-300')
+        }
+        onClick={onClick}>
+        <BoxDrawingCharacter
+          className="text-sm"
+          start={false}
+          end={isLastTake}
+          depth={1}
+        />
+        <div>Take {formatTakeNumber(takeNumber, true)}</div>
       </button>
     </li>
   );
@@ -296,9 +400,7 @@ function SceneContentCount({ className, documentId, sceneId }) {
   return (
     <output
       className={
-        'text-xs opacity-30 flex gap-1 mx-auto whitespace-nowrap' +
-        ' ' +
-        className
+        'text-xs opacity-30 flex gap-1 ml-2 whitespace-nowrap' + ' ' + className
       }>
       <span>{blockCount} blocks</span>
       <span>/</span>
@@ -318,9 +420,7 @@ function ShotContentCount({ className, documentId, shotId }) {
   return (
     <output
       className={
-        'text-xs opacity-30 flex gap-1 mx-auto whitespace-nowrap' +
-        ' ' +
-        className
+        'text-xs opacity-30 flex gap-1 ml-2 whitespace-nowrap' + ' ' + className
       }>
       <span>{takeCount} takes</span>
     </output>

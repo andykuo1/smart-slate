@@ -17,6 +17,7 @@ export default function ClapperProductionTitleField({ className, documentId }) {
       type="text"
       name="production-title"
       value={productionTitle}
+      onChange={() => {}}
       placeholder="Production title"
       disabled={true}
     />

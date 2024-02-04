@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
 
 import Clapperboard from '@/clapper/Clapperboard';
+import DocumentDrawer from '@/components/documents/DocumentDrawer';
 import RecorderBooth from '@/recorder/RecorderBooth';
-import { useUserStore } from '@/stores/user';
+import { useCurrentDocumentId, useUserStore } from '@/stores/user';
 
 import PageLayout from './PageLayout';
 
 export default function RecordPage() {
+  const documentId = useCurrentDocumentId();
   const recordMode = useUserStore((ctx) => ctx.recordMode);
   const isRecorderMode = recordMode === 'recorder';
   useEffect(() => {
@@ -17,7 +19,9 @@ export default function RecordPage() {
   }, []);
   return (
     <PageLayout>
-      {isRecorderMode ? <RecorderBooth /> : <Clapperboard />}
+      <DocumentDrawer darkMode={true} documentId={documentId}>
+        {isRecorderMode ? <RecorderBooth /> : <Clapperboard />}
+      </DocumentDrawer>
     </PageLayout>
   );
 }

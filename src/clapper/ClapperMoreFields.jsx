@@ -1,3 +1,4 @@
+// NOTE: https://www.studiobinder.com/blog/how-to-use-a-film-slate/
 import { useState } from 'react';
 
 import Style from './ClapperMoreFields.module.css';
