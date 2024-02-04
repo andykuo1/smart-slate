@@ -79,6 +79,8 @@ export function useDefineTake() {
     [
       UNSAFE_getStore,
       addTake,
+      addBlock,
+      addShot,
       resolveSceneShotNumber,
       resolveShotHash,
       resolveTakeFileName,
