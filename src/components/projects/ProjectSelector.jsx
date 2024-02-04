@@ -19,25 +19,22 @@ export default function ProjectSelector({ className }) {
 
   if (documentIds.length <= 0) {
     return (
-      <label className={'mx-auto my-2 text-gray-400' + ' ' + className}>
-        Pick one to get started!
-      </label>
+      <div className={'flex flex-col items-center' + ' ' + className}>
+        <label className="my-2 opacity-50">Pick one to get started!</label>
+      </div>
     );
   }
   return (
-    <>
-      <label className="flex flex-row items-center mx-auto my-2 text-gray-400">
-        Or open an existing project...
-      </label>
-      <div className="relative mx-auto w-[60%] max-w-[60%] text-xs mt-4 text-white">
-        <div className="h-1" />
-        <ProjectListStatusButton className="absolute -right-2 -bottom-5 z-10 rounded-xl mx-2 p-2 bg-black" />
+    <div className={'flex flex-col items-center' + ' ' + className}>
+      <div className="relative flex items-end w-full max-w-[80vw] mb-2">
+        <label className="flex-1 mx-2 opacity-30 text-center truncate">
+          Or open project
+        </label>
+        <ProjectListStatusButton className="absolute right-0 top-0 translate-y-5 z-10 rounded-xl p-2 -mt-2 bg-black text-white" />
       </div>
       <HorizontallyScrollableDiv
         className={
-          'w-[60%] max-w-[60%] rounded-xl bg-black border-x-8 border-y-4 border-black' +
-          ' ' +
-          className
+          'w-full max-w-[80vw] rounded-xl bg-black border-x-8 border-y-4 border-black'
         }>
         <ul className="flex flex-row">
           <div className="flex-1 min-w-[2rem] text-white text-right my-auto">
@@ -51,15 +48,16 @@ export default function ProjectSelector({ className }) {
           </div>
         </ul>
       </HorizontallyScrollableDiv>
-    </>
+    </div>
   );
 }
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  */
-function ProjectSelectorOption({ documentId }) {
+function ProjectSelectorOption({ className, documentId }) {
   const title = useDocumentStore(
     (ctx) => getDocumentById(ctx, documentId)?.documentTitle,
   );
@@ -97,11 +95,13 @@ function ProjectSelectorOption({ documentId }) {
   return (
     <li
       className={
-        'relative overflow-hidden text-center w-[8rem] min-w-[8rem] max-w-[8rem]' +
+        'relative overflow-hidden text-center w-[8rem] min-w-[8rem] max-w-[8rem] max-h-[30vmin]' +
         ' ' +
         'bg-gray-100 rounded-xl mx-2 my-4 p-2' +
         ' ' +
-        'hover:bg-white hover:cursor-pointer'
+        'hover:bg-white hover:cursor-pointer' +
+        ' ' +
+        className
       }
       title={`Open "${titleWithPlaceholder}" Project`}
       onClick={onClick}>

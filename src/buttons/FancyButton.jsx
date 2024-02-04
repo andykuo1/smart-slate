@@ -5,6 +5,7 @@
  * @param {string} [props.className]
  * @param {boolean} [props.disabled]
  * @param {string|import('react').ReactNode} [props.label]
+ * @param {boolean} [props.inverted]
  * @param {import('react').ReactNode} [props.children]
  */
 export default function FancyButton({
@@ -12,6 +13,7 @@ export default function FancyButton({
   onClick,
   className,
   label = title,
+  inverted = false,
   disabled = !onClick,
   children,
 }) {
@@ -21,15 +23,17 @@ export default function FancyButton({
       onClick={onClick}
       disabled={disabled}
       className={
-        'group flex flex-row items-center' +
+        'group flex flex-row items-center px-4' +
         ' ' +
-        'text-gray-800 bg-gradient-to-br from-transparent to-gray-100 px-4' +
+        (inverted
+          ? 'text-white from-black to-gray-900 disabled:text-gray-400 disabled:border-gray-700'
+          : 'text-gray-800 from-white to-gray-100 disabled:text-gray-600 disabled:border-gray-200') +
         ' ' +
-        'rounded-full' +
+        'bg-gradient-to-br rounded-full' +
         ' ' +
         'transition-shadow enabled:hover:shadow-xl enabled:hover:cursor-pointer' +
         ' ' +
-        'disabled:text-gray-600 disabled:border-2 disabled:border-gray-200 disabled:opacity-30' +
+        'disabled:border-2 disabled:opacity-30' +
         ' ' +
         className
       }>

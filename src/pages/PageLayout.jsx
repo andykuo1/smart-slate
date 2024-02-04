@@ -5,7 +5,10 @@
  */
 export default function PageLayout({ className, children }) {
   return (
-    <main className={'w-full h-full flex flex-col' + ' ' + className}>
+    <main
+      className={
+        'overflow-hidden w-full h-full flex flex-col' + ' ' + className
+      }>
       {children}
     </main>
   );
