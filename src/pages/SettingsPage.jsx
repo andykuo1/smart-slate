@@ -36,7 +36,7 @@ export default function SettingsPage() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   return (
-    <PageLayout>
+    <PageLayout className="overflow-y-auto">
       <fieldset className="mx-auto flex flex-col gap-2">
         <legend className="py-4">
           <h3 className="text-xl">Configure your project</h3>
@@ -67,13 +67,14 @@ export default function SettingsPage() {
             <SettingsProjectExportZIPButton />
             <SettingsProjectExportJSONButton />
           </SettingsFieldGroupDiscloseable>
-          <SettingsFieldGroupDiscloseable title="Recorder Settings">
+          <SettingsFieldGroupDiscloseable title="Rec & Slate Settings">
             <SettingsAspectRatioField />
             <SettingsVideoResolutionField />
             <div className="h-0" />
+            <SettingsEnableRecorderReferenceToggle />
+            <div className="h-0" />
             <SettingsPreferNativeRecorderToggle />
             <SettingsPreferPersistedMediaStreamToggle />
-            <SettingsEnableRecorderReferenceToggle />
             <SettingsEnableRecorderLiveAudioToggle />
             <div className="h-0" />
             <SettingsNerdInfoButton />
