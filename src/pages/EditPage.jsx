@@ -10,7 +10,7 @@ export default function EditPage() {
   const documentId = useCurrentDocumentId();
   return (
     <PageLayout>
-      <DocumentDrawer documentId={documentId}>
+      <DocumentDrawer darkMode={false} documentId={documentId}>
         <DocumentLayout documentId={documentId}>
           <DocumentTitle className="pt-20" documentId={documentId} />
           <SceneList documentId={documentId} />

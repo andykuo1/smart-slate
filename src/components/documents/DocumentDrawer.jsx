@@ -13,7 +13,7 @@ import DocumentOutline from './DocumentOutline';
 /**
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {boolean} props.darkMode
+ * @param {boolean} [props.darkMode]
  * @param {import('react').ReactNode} props.children
  */
 export default function DocumentDrawer({ documentId, darkMode, children }) {

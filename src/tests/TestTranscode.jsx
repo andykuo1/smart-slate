@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 
 import { FFmpeg } from '@ffmpeg/ffmpeg';
-import { fetchFile, toBlobURL } from '@ffmpeg/util';
+import { fetchFile } from '@ffmpeg/util';
 
 export default function TestTranscode() {
   const [loaded, setLoaded] = useState(false);
@@ -12,7 +12,7 @@ export default function TestTranscode() {
 
   async function load() {
     console.log('[FFMPEGTranscoder] Loading...');
-    const baseURL = 'https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/umd';
+    // const baseURL = 'https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/umd';
     const ffmpeg = ffmpegRef.current;
     ffmpeg.on('log', ({ message }) => {
       console.log('[FFMPEGTranscoder] Log:', message);
@@ -23,18 +23,8 @@ export default function TestTranscode() {
     ffmpeg.on('progress', ({ progress }) => {
       console.log('[FFMPEGTranscoder] Progress:', progress);
     });
-    await ffmpeg.load({
-      coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
-      wasmURL: await toBlobURL(
-        `${baseURL}/ffmpeg-core.wasm`,
-        'application/wasm',
-      ),
-      workerURL: await toBlobURL(
-        `${baseURL}/ffmpeg-core.worker.js`,
-        'text/javascript',
-      ),
-    });
-    console.log('[FFMPEGTranscoder] ...loaded!');
+    let result = await ffmpeg.load();
+    console.log('[FFMPEGTranscoder] ...loaded!', result);
     setLoaded(true);
   }
 
@@ -56,11 +46,19 @@ export default function TestTranscode() {
   function onChange() {}
 
   async function onLoadClick() {
-    await load();
+    try {
+      await load();
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   async function onTranscodeClick() {
-    await transcode();
+    try {
+      await transcode();
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   return (

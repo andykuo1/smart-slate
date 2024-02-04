@@ -1,7 +1,7 @@
 /**
  * @param {object} props
  * @param {string} [props.className]
- * @param {import('react').RefObject<HTMLElement>} props.containerRef
+ * @param {import('react').RefObject<HTMLElement>} [props.containerRef]
  * @param {import('react').ReactNode} props.children
  */
 export default function SceneEntryLayout({

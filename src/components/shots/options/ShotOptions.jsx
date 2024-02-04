@@ -40,7 +40,6 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
     (ctx) => ctx.setShotReferenceImage,
   );
   const setUserCursor = useSetUserCursor();
-  const setShotListMode = useUserStore((ctx) => ctx.setShotListMode);
   const onRecorderOpen = useCallback(
     function _onRecorderOpen() {
       setUserCursor(documentId, sceneId, shotId);
@@ -78,7 +77,7 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
       setOpen(false);
       setUserCursor(documentId, sceneId, shotId);
     },
-    [setUserCursor, documentId, sceneId, shotId, setOpen, setShotListMode],
+    [setUserCursor, documentId, sceneId, shotId, setOpen],
   );
 
   const onInputChange = useCallback(

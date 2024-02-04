@@ -19,6 +19,6 @@ export function useIntersectionObserver(elementRef, rootMargin) {
       observer.observe(element);
       return () => observer.unobserve(element);
     }
-  }, []);
+  }, [elementRef, rootMargin]);
   return visible;
 }

@@ -10,7 +10,7 @@ import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
  * @param {import('react').ReactNode} props.toolbar
  * @param {import('react').ReactNode} props.content
  * @param {import('react').ReactNode} props.children
- * @param {boolean} props.darkMode
+ * @param {boolean} [props.darkMode]
  */
 export default function DrawerLayout({ toolbar, content, children, darkMode }) {
   const [open, setOpen] = useState(false);
