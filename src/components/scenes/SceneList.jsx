@@ -1,5 +1,6 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 
+import { useIntersectionObserver } from '@/libs/UseIntersectionObserver';
 import { useSceneIds } from '@/stores/document/use';
 import { useUserStore } from '@/stores/user';
 
@@ -19,12 +20,7 @@ export default function SceneList({ documentId }) {
   return (
     <>
       <PerScene sceneIds={sceneIds}>
-        {(sceneId) => (
-          <SceneEntryLayout>
-            <SceneHeader documentId={documentId} sceneId={sceneId} />
-            <BlockList documentId={documentId} sceneId={sceneId} />
-          </SceneEntryLayout>
-        )}
+        {(sceneId) => <SceneEntry documentId={documentId} sceneId={sceneId} />}
       </PerScene>
       <SceneEntryNew className="pb-20" documentId={documentId} />
       {activeSceneId && (
@@ -34,6 +30,44 @@ export default function SceneList({ documentId }) {
         </SceneEntryFocused>
       )}
     </>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ */
+function SceneEntry({ documentId, sceneId }) {
+  const containerRef = useRef(null);
+  const contentRef = useRef(/** @type {HTMLDivElement|null} */ (null));
+  const [height, setHeight] = useState(0);
+  const visible = useIntersectionObserver(containerRef, '0px');
+  useEffect(() => {
+    const content = contentRef.current;
+    if (!content) {
+      return;
+    }
+    if (visible) {
+      const bounding = content.getBoundingClientRect();
+      setHeight(bounding.height);
+    }
+  }, [visible]);
+
+  return (
+    <SceneEntryLayout containerRef={containerRef}>
+      <SceneHeader documentId={documentId} sceneId={sceneId} />
+      {visible ? (
+        <BlockList
+          containerRef={contentRef}
+          documentId={documentId}
+          sceneId={sceneId}
+        />
+      ) : (
+        /* Placeholder container */
+        <div style={{ height: `${height}px` }} className={`w-full`} />
+      )}
+    </SceneEntryLayout>
   );
 }
 
