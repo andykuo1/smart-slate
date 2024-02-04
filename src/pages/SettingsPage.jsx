@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import QRCode2Icon from '@material-symbols/svg-400/rounded/qr_code_2.svg';
@@ -24,11 +25,15 @@ import SettingsReturnHomeField from '@/components/settings/SettingsReturnHomeFie
 import SettingsShareFilesButton from '@/components/settings/SettingsShareFilesButton';
 import SettingsVideoCacheClearButton from '@/components/settings/SettingsVideoCacheClearButton';
 import SettingsVideoResolutionField from '@/components/settings/SettingsVideoResolutionField';
+import DrawerButton from '@/drawer/DrawerButton';
+import DrawerToolbarLayout from '@/drawer/DrawerToolbarLayout';
 import GoogleConnectButton from '@/libs/googleapi/auth/GoogleConnectButton';
+import SettingsDocumentNavButton from '@/outline/SettingsDocumentNavButton';
 
 import PageLayout from './PageLayout';
 
 export default function SettingsPage() {
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   return (
     <PageLayout>
@@ -79,6 +84,12 @@ export default function SettingsPage() {
           </SettingsFieldGroupDiscloseable>
         </SettingsFieldGroupDiscloseable>
       </fieldset>
+      <DrawerToolbarLayout open={open} toolbar={<SettingsDocumentNavButton />}>
+        <DrawerButton
+          inverted={false}
+          onClick={() => setOpen((prev) => !prev)}
+        />
+      </DrawerToolbarLayout>
     </PageLayout>
   );
 }

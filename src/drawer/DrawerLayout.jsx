@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
-import GridViewIcon from '@material-symbols/svg-400/rounded/grid_view.svg';
-
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import DrawerButton from './DrawerButton';
+import DrawerToolbarLayout from './DrawerToolbarLayout';
 
 /**
  *
@@ -36,32 +35,15 @@ export default function DrawerLayout({ toolbar, content, children, darkMode }) {
 
   return (
     <>
-      <div
-        ref={toolbarRef}
-        className="fixed bottom-0 right-0 m-4 z-50 flex flex-row-reverse text-2xl gap-2 pointer-events-none">
-        <SettingsFieldButton
-          className={
-            'pointer-events-auto rounded-full p-2 z-10 shadow-md' +
-            ' ' +
-            (darkMode ? 'bg-black' : 'bg-white')
-          }
-          inverted={darkMode}
-          Icon={GridViewIcon}
+      <DrawerToolbarLayout
+        containerRef={toolbarRef}
+        open={open}
+        toolbar={toolbar}>
+        <DrawerButton
+          inverted={Boolean(darkMode)}
           onClick={() => setOpen((prev) => !prev)}
         />
-        <div
-          className={
-            'flex flex-row-reverse gap-2 pointer-events-auto' +
-            ' ' +
-            'transition-transform' +
-            ' ' +
-            (open
-              ? 'translate-x-0 opacity-100'
-              : 'translate-x-[200%] opacity-0')
-          }>
-          {toolbar}
-        </div>
-      </div>
+      </DrawerToolbarLayout>
       <div
         ref={drawerRef}
         className={

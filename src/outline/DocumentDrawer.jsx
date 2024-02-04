@@ -1,4 +1,4 @@
-import DrawerLayout from '@/app/DrawerLayout';
+import DrawerLayout from '@/drawer/DrawerLayout';
 
 import DocumentOutline from './DocumentOutline';
 import DocumentToolbar from './DocumentToolbar';
