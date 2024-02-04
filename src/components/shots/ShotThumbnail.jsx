@@ -5,6 +5,7 @@ import {
   PopoverProvider,
 } from '@ariakit/react';
 
+import { useShotTakeCount } from '@/stores/document/use';
 import PopoverStyle from '@/styles/Popover.module.css';
 
 import ShotOptions from './options/ShotOptions';
@@ -32,6 +33,7 @@ export default function ShotThumbnail({
       className={
         'relative flex items-center border border-black' + ' ' + className
       }>
+      <ShotTakeCountAsPips documentId={documentId} shotId={shotId} />
       <PopoverProvider>
         <ShotThumbnailImage
           className={'flex-1 bg-gray-300'}
@@ -53,6 +55,27 @@ export default function ShotThumbnail({
           />
         </Popover>
       </PopoverProvider>
+    </div>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ */
+function ShotTakeCountAsPips({ documentId, shotId }) {
+  const takeCount = useShotTakeCount(documentId, shotId);
+  if (takeCount <= 0) {
+    return null;
+  }
+  return (
+    <div
+      className={
+        'absolute -bottom-2 -left-2 z-10 text-xs px-1 rounded bg-white text-black'
+      }>
+      {'■'.repeat(Math.min(takeCount, 3))}
+      {takeCount > 3 ? '...' : ''}
     </div>
   );
 }

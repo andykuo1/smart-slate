@@ -23,40 +23,42 @@ export default function TakeList({
   viewMode,
 }) {
   const takeIds = useTakeIds(documentId, shotId);
-
   return (
-    <ul
-      className={
-        // TODO: This has the wrong box sizing (going to force it with screen at the moment)
-        'bg-gray-100 w-screen' +
-        ' ' +
-        getUnorderedListStyleByViewMode(viewMode) +
-        ' ' +
-        className
-      }>
-      <TakeEntryNew
-        documentId={documentId}
-        sceneId={sceneId}
-        blockId={blockId}
-        shotId={shotId}
-        viewMode={viewMode}
-      />
-      {takeIds
-        .slice()
-        .reverse()
-        .map((takeId) => (
-          <Fragment key={`take-${takeId}`}>
-            <TakeEntry
-              documentId={documentId}
-              sceneId={sceneId}
-              blockId={blockId}
-              shotId={shotId}
-              takeId={takeId}
-              viewMode={viewMode}
-            />
-          </Fragment>
-        ))}
-    </ul>
+    <fieldset className={'relative m-0 w-screen' + ' ' + className}>
+      <legend className="absolute top-0 left-0 right-0 z-10 text-center -translate-y-[50%]">
+        <button className="mx-auto px-2 bg-white rounded text-xl shadow-xl">
+          Take List
+        </button>
+      </legend>
+      <ul
+        className={
+          // TODO: This has the wrong box sizing (going to force it with screen at the moment)
+          'bg-gray-100' + ' ' + getUnorderedListStyleByViewMode(viewMode)
+        }>
+        <TakeEntryNew
+          documentId={documentId}
+          sceneId={sceneId}
+          blockId={blockId}
+          shotId={shotId}
+          viewMode={viewMode}
+        />
+        {takeIds
+          .slice()
+          .reverse()
+          .map((takeId) => (
+            <Fragment key={`take-${takeId}`}>
+              <TakeEntry
+                documentId={documentId}
+                sceneId={sceneId}
+                blockId={blockId}
+                shotId={shotId}
+                takeId={takeId}
+                viewMode={viewMode}
+              />
+            </Fragment>
+          ))}
+      </ul>
+    </fieldset>
   );
 }
 

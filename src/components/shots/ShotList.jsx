@@ -30,38 +30,58 @@ export default function ShotList({
 }) {
   const hasActiveShot = useUserStore((ctx) => Boolean(ctx.cursor?.shotId));
   const blockIds = useBlockIds(documentId, sceneId);
+  const shotIds = useShotIds(documentId, blockId || '');
   const targetBlockId = blockId;
   const lastBlockId = blockIds.at(-1);
+  const isNonEmptyShotList =
+    !blockId || blockId === lastBlockId || shotIds?.length > 0;
+
   return (
-    <ul
+    <fieldset
       className={
-        hidden ? /* NOTE: Quick hideaway to not lag. */ 'hidden' : className
+        'relative m-0 w-screen' +
+        ' ' +
+        (isNonEmptyShotList ? 'my-6 py-4' : '') +
+        ' ' +
+        (hidden ? /* NOTE: Quick hideaway to not lag. */ 'hidden' : className)
       }>
-      <div className={collapsed ? GridStyle.grid : ''}>
-        <PerBlock blockIds={blockId ? [blockId] : blockIds}>
-          {(blockId) => (
-            <ShotsByBlock
-              documentId={documentId}
-              sceneId={sceneId}
-              blockId={blockId}
-              editable={editable}
-              collapsed={collapsed}
-              showTakes={hasActiveShot}
-              showNew={
-                editable
-                  ? !targetBlockId
-                    ? blockId === lastBlockId
-                    : blockId === lastBlockId
-                      ? true
-                      : undefined
-                  : false
-              }
-            />
-          )}
-        </PerBlock>
-      </div>
-      <ShotEntryDragged documentId={documentId} sceneId={sceneId} />
-    </ul>
+      <legend className="absolute top-0 left-0 right-0 z-10 ml-2 -translate-y-[50%]">
+        <button
+          className={
+            'mx-auto px-2 rounded text-xl italic bg-white opacity-30' +
+            ' ' +
+            (!isNonEmptyShotList && 'hidden')
+          }>
+          [[shot: ...]]
+        </button>
+      </legend>
+      <ul>
+        <div className={collapsed ? GridStyle.grid : ''}>
+          <PerBlock blockIds={blockId ? [blockId] : blockIds}>
+            {(blockId) => (
+              <ShotsByBlock
+                documentId={documentId}
+                sceneId={sceneId}
+                blockId={blockId}
+                editable={editable}
+                collapsed={collapsed}
+                showTakes={hasActiveShot}
+                showNew={
+                  editable
+                    ? !targetBlockId
+                      ? blockId === lastBlockId
+                      : blockId === lastBlockId
+                        ? true
+                        : undefined
+                    : false
+                }
+              />
+            )}
+          </PerBlock>
+        </div>
+        <ShotEntryDragged documentId={documentId} sceneId={sceneId} />
+      </ul>
+    </fieldset>
   );
 }
 

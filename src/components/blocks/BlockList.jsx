@@ -59,7 +59,7 @@ export default function BlockList({ containerRef, documentId, sceneId }) {
             blockId={blockId}
             mode={blockViewMode}>
             <ShotList
-              className="flex-1 max-w-[100vw] overflow-x-hidden"
+              className="flex-1 max-w-[100vw]"
               documentId={documentId}
               sceneId={sceneId}
               blockId={blockId}
@@ -71,7 +71,7 @@ export default function BlockList({ containerRef, documentId, sceneId }) {
         ))}
       </div>
       <ShotList
-        className="flex-1 max-w-[50vw] overflow-x-hidden"
+        className="flex-1 max-w-[50vw]"
         documentId={documentId}
         sceneId={sceneId}
         collapsed={smallMedia || isCollapsed}

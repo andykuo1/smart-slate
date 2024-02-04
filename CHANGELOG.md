@@ -1,5 +1,8 @@
 # Upcoming
 
+- Add shot and take list labels
+- Add take count pips to shot thumbnail
+
 # v0.1.15
 
 - Add import verified footage for scanner
@@ -21,7 +24,12 @@
 - Add new take button to slate
 - Add drawer index for easy navigation
 - Add good take indicators for shot index
+- Add good take indicators for take index
 - Add lazy loading for long scene list
+- Add home button to drawer
+- Add settings button to drawer
+- Add collapsible setting groups
+- Add background to exit button
 
 - Remove nav bar
 - Remove first default shot on new scene
@@ -37,6 +45,8 @@
 - Fix unmuted video while scanning
 - Fix boneyard comment in fountain parser
 - Fix QR code not responding on initial open
+- Fix small textbox for block content
+- Fix welcome sync status overriding top space
 
 # 0.1.14
 
