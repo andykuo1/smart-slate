@@ -1,11 +1,11 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@material-symbols/svg-400/rounded/arrow_back.svg';
-import CheckBoxIcon from '@material-symbols/svg-400/rounded/check_box-fill.svg';
+import CheckBoxFillIcon from '@material-symbols/svg-400/rounded/check_box-fill.svg';
+import CheckBoxIcon from '@material-symbols/svg-400/rounded/check_box.svg';
 import CheckBoxOutlineBlankIcon from '@material-symbols/svg-400/rounded/check_box_outline_blank.svg';
 import GridViewIcon from '@material-symbols/svg-400/rounded/grid_view.svg';
 import HomeIcon from '@material-symbols/svg-400/rounded/home.svg';
-import IndeterminateCheckBoxIcon from '@material-symbols/svg-400/rounded/indeterminate_check_box.svg';
 import InfoFillIcon from '@material-symbols/svg-400/rounded/info-fill.svg';
 import InfoIcon from '@material-symbols/svg-400/rounded/info.svg';
 import ListAltIcon from '@material-symbols/svg-400/rounded/list_alt.svg';
@@ -284,9 +284,9 @@ function IndexShot({
 
         <div className="-mx-1">
           {shotHasGoodTake ? (
-            <CheckBoxIcon className="w-4 h-4 fill-current" />
+            <CheckBoxFillIcon className="w-4 h-4 fill-current" />
           ) : shotHasTakes ? (
-            <IndeterminateCheckBoxIcon className="w-4 h-4 fill-current" />
+            <CheckBoxIcon className="w-4 h-4 fill-current" />
           ) : (
             <CheckBoxOutlineBlankIcon className="w-4 h-4 fill-current" />
           )}

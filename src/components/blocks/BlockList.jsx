@@ -20,11 +20,17 @@ import BlockEntryFocused from './BlockEntryFocused';
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('react').MutableRefObject<HTMLDivElement|null>} [props.containerRef]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  */
-export default function BlockList({ containerRef, documentId, sceneId }) {
+export default function BlockList({
+  className,
+  containerRef,
+  documentId,
+  sceneId,
+}) {
   const blockIds = useDocumentStore(
     useShallow((ctx) => getBlockIdsInOrder(ctx, documentId, sceneId)),
   );
@@ -49,7 +55,7 @@ export default function BlockList({ containerRef, documentId, sceneId }) {
     return <BlockEntryFocused documentId={documentId} />;
   }
   return (
-    <div ref={containerRef} className="flex flex-row">
+    <div ref={containerRef} className={'flex flex-row' + ' ' + className}>
       <div className="flex-1 flex flex-col">
         {blockIds.map((blockId) => (
           <BlockEntry

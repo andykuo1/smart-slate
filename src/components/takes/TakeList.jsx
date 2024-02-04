@@ -4,6 +4,7 @@ import { useTakeIds } from '@/stores/document';
 
 import TakeEntry from './TakeEntry';
 import TakeEntryNew from './TakeEntryNew';
+import TakeListButton from './TakeListButton';
 
 /**
  * @param {object} props
@@ -26,9 +27,12 @@ export default function TakeList({
   return (
     <fieldset className={'relative m-0 w-screen' + ' ' + className}>
       <legend className="absolute top-0 left-0 right-0 z-10 text-center -translate-y-[50%]">
-        <button className="mx-auto px-2 bg-white rounded text-xl shadow-xl">
-          Take List
-        </button>
+        <TakeListButton
+          documentId={documentId}
+          sceneId={sceneId}
+          blockId={blockId}
+          shotId={shotId}
+        />
       </legend>
       <ul
         className={

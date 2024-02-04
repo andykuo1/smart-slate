@@ -33,12 +33,13 @@ export default function BlockEntryLayout({
         className={
           'relative w-full' +
           ' ' +
-          (isHeightFaded && 'max-h-[15vh] overflow-y-hidden')
+          (isHeightFaded &&
+            'min-h-[10vh] max-h-[20vh] overflow-y-hidden bg-black text-white')
         }>
         {content}
         {isHeightFaded && (
           <button
-            className="absolute top-0 bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-white to-transparent"
+            className="absolute top-0 bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black to-transparent"
             onClick={() => {
               setUserCursor(documentId, sceneId, '', '');
             }}

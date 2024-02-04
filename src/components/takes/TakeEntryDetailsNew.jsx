@@ -1,4 +1,3 @@
-import SettingsShotTakesImportButton from '@/components/shots/settings/SettingsShotTakesImportButton';
 import HorizontallySnappableDiv from '@/libs/HorizontallySnappableDiv';
 
 import { getListDecorationStyleByViewMode } from './TakeListViewMode';
@@ -23,13 +22,7 @@ export default function TakeEntryDetails({
   const listDecorationStyle = getListDecorationStyleByViewMode(viewMode);
   return (
     <HorizontallySnappableDiv className={className + ' ' + listDecorationStyle}>
-      <>
-        <SettingsShotTakesImportButton
-          documentId={documentId}
-          sceneId={sceneId}
-          shotId={shotId}
-        />
-      </>
+      <></>
     </HorizontallySnappableDiv>
   );
 }

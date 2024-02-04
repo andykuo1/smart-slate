@@ -7,7 +7,6 @@ import { getShotById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import { useDraggable, useIsDragging } from '@/stores/draggable';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
-import BarberpoleStyle from '@/styles/Barberpole.module.css';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 
 import ShotMover from './ShotMover';
@@ -74,9 +73,9 @@ export function ShotEntry({
       {...elementProps}>
       <div
         className={
-          'flex flex-row items-center w-full h-[6rem] z-10 border-b border-gray-300 shadow' +
+          'flex flex-row items-center w-full h-[6rem] border-b border-gray-300 shadow' +
           ' ' +
-          (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
+          (isActive && 'bg-black text-white')
         }>
         {!collapsed && (
           <ShotNumber

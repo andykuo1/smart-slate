@@ -8,6 +8,7 @@ import GridStyle from './GridStyle.module.css';
 import { ShotEntry } from './ShotEntry';
 import ShotEntryDragged from './ShotEntryDragged';
 import ShotEntryNew from './ShotEntryNew';
+import ShotListButton from './ShotListButton';
 
 /**
  * @param {object} props
@@ -46,14 +47,12 @@ export default function ShotList({
         (hidden ? /* NOTE: Quick hideaway to not lag. */ 'hidden' : className)
       }>
       <legend className="absolute top-0 left-0 right-0 z-10 ml-2 -translate-y-[50%]">
-        <button
-          className={
-            'mx-auto px-2 rounded text-xl italic bg-white opacity-30' +
-            ' ' +
-            (!isNonEmptyShotList && 'hidden')
-          }>
-          [[shot: ...]]
-        </button>
+        <ShotListButton
+          className={' ' + (!isNonEmptyShotList && 'hidden')}
+          documentId={documentId}
+          sceneId={sceneId}
+          blockId={blockId || ''}
+        />
       </legend>
       <ul>
         <div className={collapsed ? GridStyle.grid : ''}>

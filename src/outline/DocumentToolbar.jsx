@@ -19,30 +19,24 @@ export default function DocumentToolbar({ documentId }) {
   const { enterFullscreen, exitFullscreen } = useFullscreen();
   const setShotListMode = useUserStore((ctx) => ctx.setShotListMode);
 
-  function onSlateClick() {
-    setRecordMode('clapper');
-    enterFullscreen();
-    navigate('/rec');
+  function onNavClick() {
+    if (!location.pathname.includes('/edit')) {
+      setShotListMode('detail');
+      exitFullscreen();
+      navigate('/edit');
+    } else {
+      setRecordMode('clapper');
+      enterFullscreen();
+      navigate('/rec');
+    }
   }
 
-  function onDocumentClick() {
-    setShotListMode('detail');
-    exitFullscreen();
-    navigate('/edit');
-  }
   return (
     <>
       <SettingsFieldButton
         className={'bg-white rounded-full p-2 shadow-md'}
-        Icon={MovieIcon}
-        disabled={location.pathname.includes('/rec')}
-        onClick={onSlateClick}
-      />
-      <SettingsFieldButton
-        className={'bg-white rounded-full p-2 shadow-md'}
-        Icon={EditSquareIcon}
-        disabled={location.pathname.includes('/edit')}
-        onClick={onDocumentClick}
+        Icon={!location.pathname.includes('/edit') ? EditSquareIcon : MovieIcon}
+        onClick={onNavClick}
       />
     </>
   );

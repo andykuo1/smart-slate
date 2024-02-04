@@ -5,7 +5,11 @@ import {
   PopoverProvider,
 } from '@ariakit/react';
 
-import { useShotTakeCount } from '@/stores/document/use';
+import CheckBoxFillIcon from '@material-symbols/svg-400/rounded/check_box-fill.svg';
+import CheckBoxIcon from '@material-symbols/svg-400/rounded/check_box.svg';
+
+import { getShotById, getTakeById } from '@/stores/document';
+import { useDocumentStore } from '@/stores/document/use';
 import PopoverStyle from '@/styles/Popover.module.css';
 
 import ShotOptions from './options/ShotOptions';
@@ -33,7 +37,7 @@ export default function ShotThumbnail({
       className={
         'relative flex items-center border border-black' + ' ' + className
       }>
-      <ShotTakeCountAsPips documentId={documentId} shotId={shotId} />
+      <ShotTakeCountAsCheck documentId={documentId} shotId={shotId} />
       <PopoverProvider>
         <ShotThumbnailImage
           className={'flex-1 bg-gray-300'}
@@ -64,18 +68,24 @@ export default function ShotThumbnail({
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  */
-function ShotTakeCountAsPips({ documentId, shotId }) {
-  const takeCount = useShotTakeCount(documentId, shotId);
-  if (takeCount <= 0) {
-    return null;
-  }
+function ShotTakeCountAsCheck({ documentId, shotId }) {
+  const shotHasGoodTake = useDocumentStore((ctx) =>
+    getShotById(ctx, documentId, shotId)?.takeIds?.reduceRight?.(
+      (prev, takeId) =>
+        prev || getTakeById(ctx, documentId, takeId)?.rating > 0,
+      false,
+    ),
+  );
+  const shotHasTakes = useDocumentStore(
+    (ctx) => getShotById(ctx, documentId, shotId)?.takeIds?.length > 0,
+  );
   return (
-    <div
-      className={
-        'absolute -bottom-2 -left-2 z-10 text-xs px-1 rounded bg-white text-black'
-      }>
-      {'■'.repeat(Math.min(takeCount, 3))}
-      {takeCount > 3 ? '...' : ''}
+    <div className="absolute bottom-0 left-0 z-10">
+      {shotHasGoodTake ? (
+        <CheckBoxFillIcon className="w-6 h-6 fill-current" />
+      ) : shotHasTakes ? (
+        <CheckBoxIcon className="w-6 h-6 fill-current" />
+      ) : null}
     </div>
   );
 }

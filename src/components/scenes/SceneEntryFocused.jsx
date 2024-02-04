@@ -26,7 +26,7 @@ export default function SceneEntryFocused({ className, documentId, children }) {
       }>
       <SceneEntryLayout className={className}>{children}</SceneEntryLayout>
       <DocumentDivider
-        className="opacity-30"
+        className="sticky bottom-0 py-4 bg-gradient-to-t from-white from-50% to-transparent"
         onClick={() => setUserCursor(documentId, '', '', '')}>
         <ExpandMoreIcon className="w-6 h-6 fill-current" />
         <span className="px-4">Return to screenplay</span>
