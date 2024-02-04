@@ -1,8 +1,11 @@
 # Upcoming
 
 - Add shot and take list labels
-- Add take count pips to shot thumbnail
+- Add good/take count check to shot thumbnail
 - Add new take for empty shot list on slate
+- Add shot/take list label context menu
+- Add reference image to clapperboard
+- Add drawer toolbar to settings page
 
 # v0.1.15
 

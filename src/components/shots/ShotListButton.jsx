@@ -5,6 +5,7 @@ import {
   PopoverProvider,
 } from '@ariakit/react';
 
+import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import PopoverStyle from '@/styles/Popover.module.css';
 
 import SettingsSceneShotsDetailButton from '../scenes/settings/SettingsSceneShotsDetailButton';
@@ -23,6 +24,7 @@ export default function ShotListButton({
   sceneId,
   blockId,
 }) {
+  const sceneNumber = useSceneNumber(documentId, sceneId);
   return (
     <PopoverProvider>
       <PopoverDisclosure
@@ -31,7 +33,7 @@ export default function ShotListButton({
           ' ' +
           className
         }>
-        {'[[shot: ...]]'}
+        {'Shot List ' + sceneNumber}
       </PopoverDisclosure>
       <Popover className={PopoverStyle.popover} modal={true}>
         <PopoverArrow className={PopoverStyle.arrow} />

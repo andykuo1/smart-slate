@@ -5,6 +5,7 @@ import {
   PopoverProvider,
 } from '@ariakit/react';
 
+import { useSceneShotNumber } from '@/serdes/UseResolveSceneShotNumber';
 import PopoverStyle from '@/styles/Popover.module.css';
 
 import SettingsShotTakesImportButton from '../shots/settings/SettingsShotTakesImportButton';
@@ -24,13 +25,14 @@ export default function TakeListButton({
   blockId,
   shotId,
 }) {
+  const sceneShotNumber = useSceneShotNumber(documentId, sceneId, shotId);
   return (
     <PopoverProvider>
       <PopoverDisclosure
         className={
           'mx-auto px-2 bg-white rounded text-xl shadow-xl' + ' ' + className
         }>
-        <span className="opacity-30">{'[[take:...]]'}</span>
+        <span className="opacity-30">Take List {sceneShotNumber}</span>
       </PopoverDisclosure>
       <Popover className={PopoverStyle.popover} modal={true}>
         <PopoverArrow className={PopoverStyle.arrow} />
