@@ -1,5 +1,7 @@
 # Upcoming
 
+# v0.1.15
+
 - Add import verified footage for scanner
 - Add take id to qr code key
 - Add delete button for shots
