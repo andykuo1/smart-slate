@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import Clapperboard from '@/clapper/Clapperboard';
-import DocumentDrawer from '@/components/documents/DocumentDrawer';
+import DocumentDrawer from '@/outline/DocumentDrawer';
 import RecorderBooth from '@/recorder/RecorderBooth';
 import { useCurrentDocumentId, useUserStore } from '@/stores/user';
 

@@ -44,9 +44,9 @@ import { useDocumentStore } from '@/stores/document/use';
 import { useSetUserCursor, useUserStore } from '@/stores/user';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 
-import SettingsFieldButton from '../settings/SettingsFieldButton';
-import { getShotTypeColor } from '../shots/ShotColors';
-import DocumentDivider from './DocumentDivider';
+import DocumentDivider from '../components/documents/DocumentDivider';
+import SettingsFieldButton from '../components/settings/SettingsFieldButton';
+import { getShotTypeColor } from '../components/shots/ShotColors';
 
 /**
  * @param {object} props
@@ -404,7 +404,7 @@ function SceneContentCount({ className, documentId, sceneId }) {
   return (
     <output
       className={
-        'text-xs opacity-30 flex gap-1 ml-2 whitespace-nowrap' + ' ' + className
+        'text-xs opacity-50 flex gap-1 ml-2 whitespace-nowrap' + ' ' + className
       }>
       <span>{blockCount} blocks</span>
       <span>/</span>
@@ -424,7 +424,7 @@ function ShotContentCount({ className, documentId, shotId }) {
   return (
     <output
       className={
-        'text-xs opacity-30 flex gap-1 ml-2 whitespace-nowrap' + ' ' + className
+        'text-xs opacity-50 flex gap-1 ml-2 whitespace-nowrap' + ' ' + className
       }>
       <span>{takeCount} takes</span>
     </output>
