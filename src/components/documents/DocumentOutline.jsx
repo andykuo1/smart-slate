@@ -9,6 +9,7 @@ import IndeterminateCheckBoxIcon from '@material-symbols/svg-400/rounded/indeter
 import InfoFillIcon from '@material-symbols/svg-400/rounded/info-fill.svg';
 import InfoIcon from '@material-symbols/svg-400/rounded/info.svg';
 import ListAltIcon from '@material-symbols/svg-400/rounded/list_alt.svg';
+import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg';
 import TuneIcon from '@material-symbols/svg-400/rounded/tune.svg';
 
 import BoxDrawingCharacter from '@/components/documents/BoxDrawingCharacter';
@@ -31,6 +32,7 @@ import {
   useShotIds,
   useShotType,
   useTakeIds,
+  useTakeRating,
 } from '@/stores/document';
 import {
   useDocumentTitle,
@@ -354,6 +356,7 @@ function IndexTake({
   isActive,
   isLastTake,
 }) {
+  const takeRating = useTakeRating(documentId, takeId);
   const takeNumber = useTakeNumber(documentId, shotId, takeId);
   const setUserCursor = useSetUserCursor();
 
@@ -381,6 +384,7 @@ function IndexTake({
           depth={1}
         />
         <div>Take {formatTakeNumber(takeNumber, true)}</div>
+        {takeRating > 0 && <ThumbUpFillIcon className="w-4 h-4 fill-current" />}
       </button>
     </li>
   );

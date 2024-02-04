@@ -15,13 +15,18 @@
 - Add shot moves between blocks
 - Add editable shot descriptions
 - Add return to screenplay button
+- Add print button to slate
+- Add new take button to slate
+- Add drawer index for easy navigation
+- Add good take indicators for shot index
+- Add lazy loading for long scene list
 
-- Remove shotlist from nav bar (in favor of scene clapper)
+- Remove nav bar
 - Remove first default shot on new scene
 
 - Fix qr code aspect ratio
-- Fix missing take id for scanned footage
 - Fix qr code flickering for mobile
+- Fix missing take id for scanned footage
 - Fix renumber always starts with B
 - Fix front-matter causing errors while parsing
 - Fix notes showing up in script
@@ -29,6 +34,7 @@
 - Fix deleting focused shots missing target
 - Fix unmuted video while scanning
 - Fix boneyard comment in fountain parser
+- Fix QR code not responding on initial open
 
 # 0.1.14
 
