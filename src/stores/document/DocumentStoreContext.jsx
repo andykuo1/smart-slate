@@ -4,7 +4,7 @@ import {
   getBlockIdsInOrder,
   getSceneById,
   getShotById,
-  getShotIdsInOrder,
+  getShotIdsInBlockOrder,
   getShotOrder,
   getTakeById,
   getTakeIdsInOrder,
@@ -36,7 +36,7 @@ export function useBlockIds(documentId, sceneId) {
  */
 export function useShotIds(documentId, blockId) {
   return useDocumentStore(
-    useShallow((ctx) => getShotIdsInOrder(ctx, documentId, blockId)),
+    useShallow((ctx) => getShotIdsInBlockOrder(ctx, documentId, blockId)),
   );
 }
 

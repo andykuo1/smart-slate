@@ -16,10 +16,92 @@ export function getShotById(store, documentId, shotId) {
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {import('@/stores/document/DocumentStore').BlockId} blockId
  */
-export function getShotIdsInOrder(store, documentId, blockId) {
+export function getShotIdsInBlockOrder(store, documentId, blockId) {
   return getBlockById(store, documentId, blockId)?.shotIds || [];
 }
 
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+ */
+export function getShotIdsInSceneOrder(store, documentId, sceneId) {
+  /** @type {Array<import('@/stores/document/DocumentStore').ShotId>} */
+  let result = [];
+  let scene = getSceneById(store, documentId, sceneId);
+  if (!scene) {
+    return result;
+  }
+  for (let blockId of scene.blockIds) {
+    let block = getBlockById(store, documentId, blockId);
+    if (block?.shotIds?.length > 0) {
+      result.push(...block.shotIds);
+    }
+  }
+  return result;
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ */
+export function getFirstEmptyShotInDocument(store, documentId) {
+  let document = getDocumentById(store, documentId);
+  let lastSceneId = '';
+  let lastBlockId = '';
+  let lastShotId = '';
+  for (let sceneId of document.sceneOrder) {
+    lastSceneId = sceneId;
+    lastBlockId = '';
+    lastShotId = '';
+    let scene = getSceneById(store, documentId, sceneId);
+    for (let blockId of scene.blockIds) {
+      lastBlockId = blockId;
+      lastShotId = '';
+      let block = getBlockById(store, documentId, blockId);
+      for (let shotId of block.shotIds) {
+        lastShotId = shotId;
+        if (isShotEmpty(store, documentId, shotId)) {
+          return { documentId, sceneId, blockId, shotId };
+        }
+      }
+    }
+  }
+  return {
+    documentId,
+    sceneId: lastSceneId,
+    blockId: lastBlockId,
+    shotId: lastShotId,
+  };
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+ */
+export function getFirstEmptyShotInScene(store, documentId, sceneId) {
+  let scene = getSceneById(store, documentId, sceneId);
+  let lastBlockId = '';
+  let lastShotId = '';
+  for (let blockId of scene.blockIds) {
+    lastBlockId = blockId;
+    lastShotId = '';
+    let block = getBlockById(store, documentId, blockId);
+    for (let shotId of block.shotIds) {
+      lastShotId = shotId;
+      if (isShotEmpty(store, documentId, shotId)) {
+        return { documentId, sceneId, blockId, shotId };
+      }
+    }
+  }
+  return {
+    documentId,
+    sceneId,
+    blockId: lastBlockId,
+    shotId: lastShotId,
+  };
+}
 /**
  * @param {import('@/stores/document/DocumentStore').Store} store
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId

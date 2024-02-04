@@ -1,7 +1,7 @@
 import { useShallow } from 'zustand/react/shallow';
 
 import { getSceneById, getSceneIdsInOrder } from '../get/GetScenes';
-import { getShotIdsInOrder } from '../get/GetShots';
+import { getShotIdsInBlockOrder } from '../get/GetShots';
 import { useDocumentStore } from './UseDocumentStore';
 
 /**
@@ -12,7 +12,7 @@ export function useSceneShotCount(documentId, sceneId) {
   return useDocumentStore((ctx) =>
     getSceneById(ctx, documentId, sceneId).blockIds.reduce(
       (prev, blockId) =>
-        prev + getShotIdsInOrder(ctx, documentId, blockId)?.length || 0,
+        prev + getShotIdsInBlockOrder(ctx, documentId, blockId)?.length || 0,
       0,
     ),
   );

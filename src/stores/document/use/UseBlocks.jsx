@@ -1,6 +1,6 @@
 import { getBlockById, getFirstBlockIdInScene } from '../get/GetBlocks';
 import { getSceneById } from '../get/GetScenes';
-import { getShotIdsInOrder } from '../get/GetShots';
+import { getShotIdsInBlockOrder } from '../get/GetShots';
 import { useDocumentStore } from './UseDocumentStore';
 
 /**
@@ -32,6 +32,6 @@ export function useBlockIdForShot(documentId, sceneId, shotId) {
  */
 export function useBlockShotCount(documentId, blockId) {
   return useDocumentStore(
-    (ctx) => getShotIdsInOrder(ctx, documentId, blockId).length,
+    (ctx) => getShotIdsInBlockOrder(ctx, documentId, blockId).length,
   );
 }

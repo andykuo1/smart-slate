@@ -16,9 +16,8 @@ import { useShotNumber } from '@/serdes/UseResolveShotNumber';
 import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
 import {
   getDocumentIds,
-  getFirstBlockIdInScene,
-  getSceneIdsInOrder,
-  getShotIdsInOrder,
+  getFirstEmptyShotInDocument,
+  getFirstEmptyShotInScene,
   useTakeRating,
 } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
@@ -45,11 +44,20 @@ export default function Clapperboard() {
       newDocumentId = getDocumentIds(store)?.[0] || '';
     }
     if (newDocumentId && !sceneId) {
-      newSceneId = getSceneIdsInOrder(store, newDocumentId)?.[0] || '';
+      const { sceneId, shotId } = getFirstEmptyShotInDocument(
+        store,
+        newDocumentId,
+      );
+      newSceneId = sceneId;
+      newShotId = shotId;
     }
     if (newDocumentId && newSceneId && !shotId) {
-      let blockId = getFirstBlockIdInScene(store, newDocumentId, newSceneId);
-      newShotId = getShotIdsInOrder(store, newDocumentId, blockId)?.[0] || '';
+      const { shotId } = getFirstEmptyShotInScene(
+        store,
+        newDocumentId,
+        newSceneId,
+      );
+      newShotId = shotId;
     }
     if (
       newDocumentId !== documentId ||
@@ -58,7 +66,7 @@ export default function Clapperboard() {
     ) {
       setUserCursor(newDocumentId, newSceneId, newShotId, '');
     }
-  }, [documentId, sceneId, shotId, UNSAFE_getStore, setUserCursor]);
+  }, [documentId, sceneId, shotId, takeId, UNSAFE_getStore, setUserCursor]);
 
   return (
     <fieldset className="relative w-full h-full flex flex-col text-white text-[5vmin] font-mono overflow-hidden">
