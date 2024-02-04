@@ -40,13 +40,13 @@ export default function ShotList({
   return (
     <fieldset
       className={
-        'relative m-0 w-screen' +
+        'w-screen' +
         ' ' +
-        (isNonEmptyShotList ? 'my-6 py-4' : '') +
+        (isNonEmptyShotList ? '' : '') +
         ' ' +
         (hidden ? /* NOTE: Quick hideaway to not lag. */ 'hidden' : className)
       }>
-      <legend className="absolute top-0 left-0 right-0 z-10 ml-2 -translate-y-[50%]">
+      <legend>
         <ShotListButton
           className={' ' + (!isNonEmptyShotList && 'hidden')}
           documentId={documentId}
