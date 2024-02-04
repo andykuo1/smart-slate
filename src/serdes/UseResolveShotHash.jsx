@@ -28,11 +28,14 @@ export function useResolveShotHash() {
       const store = UNSAFE_getStore();
       const shot = getShotById(store, documentId, shotId);
       if (!shot) {
-        return '0000';
+        return '----';
       }
       let result = shot.shotHash;
       if (result?.length > 0) {
         return result;
+      }
+      if (readonly) {
+        return '----';
       }
       result = findNextAvailableShotHash(store, documentId);
       if (!readonly && shotId) {

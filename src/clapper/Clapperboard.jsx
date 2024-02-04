@@ -5,6 +5,7 @@ import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg
 import ThumbUpIcon from '@material-symbols/svg-400/rounded/thumb_up.svg';
 
 import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import ShotThumbnail from '@/components/shots/ShotThumbnail';
 import {
   formatSceneNumber,
   formatShotNumber,
@@ -22,6 +23,7 @@ import {
   useTakeRating,
 } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
+import { useSettingsStore } from '@/stores/settings';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 
 import ClapperCameraNameField from './ClapperCameraNameField';
@@ -35,6 +37,9 @@ export default function Clapperboard() {
   const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const setUserCursor = useSetUserCursor();
+  const enableThumbnailWhileRecording = useSettingsStore(
+    (ctx) => ctx.user.enableThumbnailWhileRecording,
+  );
 
   useEffect(() => {
     const store = UNSAFE_getStore();
@@ -143,6 +148,18 @@ export default function Clapperboard() {
           />
         </div>
       </div>
+      {enableThumbnailWhileRecording && (
+        <div className="absolute left-0 bottom-0 text-base">
+          <ShotThumbnail
+            className="shadow-md"
+            documentId={documentId}
+            sceneId={sceneId}
+            shotId={shotId}
+            editable={false}
+            referenceOnly={true}
+          />
+        </div>
+      )}
     </fieldset>
   );
 }
@@ -312,7 +329,7 @@ function ClapperSceneShotNumberField({ documentId, sceneId, shotId }) {
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  */
 function ClapperShotHashField({ documentId, shotId }) {
-  const shotHash = useShotHash(documentId, shotId);
+  let shotHash = useShotHash(documentId, shotId);
   return (
     <output
       style={{ lineHeight: '1em' }}

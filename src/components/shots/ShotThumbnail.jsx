@@ -35,7 +35,9 @@ export default function ShotThumbnail({
   return (
     <div
       className={
-        'relative flex items-center border border-black' + ' ' + className
+        'relative flex items-center border border-black text-black' +
+        ' ' +
+        className
       }>
       <ShotTakeCountAsCheck documentId={documentId} shotId={shotId} />
       <PopoverProvider>
