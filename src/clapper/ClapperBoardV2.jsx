@@ -36,7 +36,7 @@ import ClapperVerticalLabel from './ClapperVerticalLabel';
 export default function ClapperBoardV2() {
   const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
   return (
-    <div className="grid grid-cols-1 grid-rows-2 gap-4 sm:grid-cols-2 sm:grid-rows-1 m-auto p-4 border-2 border-red-500">
+    <div className="grid grid-cols-1 grid-rows-1 gap-4 sm:grid-cols-2 sm:grid-rows-1 m-auto p-4">
       <div>
         <ClapperProductionTitleField
           className="w-full text-center text-[3em] my-1"
@@ -48,21 +48,23 @@ export default function ClapperBoardV2() {
           shotId={shotId}
           takeId={takeId}
         />
-        <ClapperCommentField
-          className="w-full px-4 py-1 my-1"
-          documentId={documentId}
-          sceneId={sceneId}
-          shotId={shotId}
-        />
-        <ClapperAdditionalFields
-          documentId={documentId}
-          sceneId={sceneId}
-          shotId={shotId}
-          takeId={takeId}
-        />
+        <div className="hidden sm:block">
+          <ClapperCommentField
+            className="w-full px-4 py-1 my-1"
+            documentId={documentId}
+            sceneId={sceneId}
+            shotId={shotId}
+          />
+          <ClapperAdditionalFields
+            documentId={documentId}
+            sceneId={sceneId}
+            shotId={shotId}
+            takeId={takeId}
+          />
+        </div>
       </div>
       <div className="flex flex-col">
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 min-h-[40vh]">
           <ClapperQRCodeField
             documentId={documentId}
             sceneId={sceneId}
@@ -75,6 +77,14 @@ export default function ClapperBoardV2() {
           sceneId={sceneId}
           shotId={shotId}
           takeId={takeId}
+        />
+      </div>
+      <div className="block sm:hidden">
+        <ClapperCommentField
+          className="w-full px-4 py-1 my-1"
+          documentId={documentId}
+          sceneId={sceneId}
+          shotId={shotId}
         />
       </div>
     </div>
@@ -111,7 +121,7 @@ function ClapperControlFields({
   return (
     <div className="mx-auto flex items-center">
       <ClapperVerticalLabel>CTRL</ClapperVerticalLabel>
-      <div className="flex-1 flex flex-col items-start gap-2 p-2">
+      <div className="flex-1 flex flex-row sm:flex-col items-start gap-2 p-2">
         <SettingsFieldButton
           className={
             'outline-none' + ' ' + (takeRating <= 0 ? 'line-through' : '')
@@ -128,7 +138,7 @@ function ClapperControlFields({
           title="New take"
           onClick={onNextClick}
           disabled={!takeId}>
-          <span className="ml-2">NEW TAKE</span>
+          <span className="ml-2 whitespace-nowrap">NEW TAKE</span>
         </SettingsFieldButton>
       </div>
     </div>
@@ -206,7 +216,7 @@ function ClapperCommentField({ className, documentId, sceneId, shotId }) {
       />
       {enableThumbnailWhileRecording && (
         <ShotThumbnail
-          className="text-base rounded-xl overflow-hidden m-1 mr-4"
+          className="text-base rounded overflow-hidden m-1 mr-4"
           documentId={documentId}
           sceneId={sceneId}
           shotId={shotId}
@@ -303,7 +313,7 @@ function ClapperSceneShotNumberField({ documentId, sceneId, shotId }) {
           id={shotOutputId}
           style={{ lineHeight: '1em' }}
           className="text-[3em] whitespace-nowrap">
-          {'A' + formatShotNumber(shotNumber)}
+          {formatShotNumber(shotNumber)}
         </output>
       </div>
     </div>
@@ -327,7 +337,7 @@ function ClapperTakeNumberField({ className, documentId, shotId, takeId }) {
         id={takeOutputId}
         style={{ lineHeight: '1em' }}
         className="text-[3em] pb-[0.5em] scale-y-150 translate-y-[25%] whitespace-nowrap">
-        {'00' + formatTakeNumber(takeNumber, true)}
+        {formatTakeNumber(takeNumber, true)}
       </output>
     </div>
   );

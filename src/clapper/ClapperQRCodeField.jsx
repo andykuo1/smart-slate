@@ -12,12 +12,14 @@ import { useQRCodeCanvas } from './UseQRCodeCanvas';
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
  */
 export default function ClapperQRCodeField({
+  className,
   documentId,
   sceneId,
   shotId,
@@ -57,7 +59,7 @@ export default function ClapperQRCodeField({
 
   return (
     <button
-      className="w-full h-full flex items-center outline"
+      className={'w-full h-full flex items-center' + ' ' + className}
       onClick={onClick}>
       {takeExportedQRCodeKey ? (
         <QRCodeView data={takeExportedQRCodeKey} />
