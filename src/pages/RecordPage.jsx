@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import Clapperboard from '@/clapper/Clapperboard';
 import DocumentDrawer from '@/outline/DocumentDrawer';
 import RecorderBooth from '@/recorder/RecorderBooth';
@@ -11,14 +9,8 @@ export default function RecordPage() {
   const documentId = useCurrentDocumentId();
   const recordMode = useUserStore((ctx) => ctx.recordMode);
   const isRecorderMode = recordMode === 'recorder';
-  useEffect(() => {
-    document.body.style.background = 'black';
-    return () => {
-      document.body.style.removeProperty('background');
-    };
-  }, []);
   return (
-    <PageLayout>
+    <PageLayout className="overflow-hidden overscroll-none bg-black">
       <DocumentDrawer darkMode={true} documentId={documentId}>
         {isRecorderMode ? <RecorderBooth /> : <Clapperboard />}
       </DocumentDrawer>

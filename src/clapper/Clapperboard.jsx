@@ -20,6 +20,8 @@ import {
   getDocumentIds,
   getFirstEmptyShotInDocument,
   getFirstEmptyShotInScene,
+  useShotDescription,
+  useShotType,
   useTakeRating,
 } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
@@ -86,7 +88,7 @@ export default function Clapperboard() {
   }, [documentId, sceneId, shotId, takeId, UNSAFE_getStore, setUserCursor]);
 
   return (
-    <fieldset className="relative w-full h-full flex flex-col text-white text-[5vmin] font-mono overflow-hidden">
+    <fieldset className="relative w-full h-full p-[2vmin] flex flex-col text-white text-[5vmin] font-mono overflow-hidden">
       <div className="flex-1 grid grid-cols-2 text-md">
         <ul className="flex flex-col">
           <li className="flex items-center">
@@ -123,11 +125,17 @@ export default function Clapperboard() {
               documentId={documentId}
             />
           </li>
-          <li className="flex-1 flex">
-            <textarea
-              className="flex-1 resize-none p-2 bg-transparent"
-              placeholder="Comments"
-            />
+          <li className="flex-1 flex flex-col-reverse sm:flex-row gap-1">
+            {enableThumbnailWhileRecording && (
+              <ShotThumbnail
+                documentId={documentId}
+                sceneId={sceneId}
+                shotId={shotId}
+                editable={false}
+                referenceOnly={true}
+              />
+            )}
+            <ClapperCommentField documentId={documentId} shotId={shotId} />
           </li>
         </ul>
 
@@ -148,19 +156,28 @@ export default function Clapperboard() {
           />
         </div>
       </div>
-      {enableThumbnailWhileRecording && (
-        <div className="absolute left-0 bottom-0 text-base">
-          <ShotThumbnail
-            className="shadow-md"
-            documentId={documentId}
-            sceneId={sceneId}
-            shotId={shotId}
-            editable={false}
-            referenceOnly={true}
-          />
-        </div>
-      )}
     </fieldset>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ */
+function ClapperCommentField({ documentId, shotId }) {
+  const description = useShotDescription(documentId, shotId);
+  const shotType = useShotType(documentId, shotId);
+  const hasShotText = shotType && description;
+  return (
+    <textarea
+      className="flex-1 resize-none p-1 bg-transparent"
+      placeholder={
+        !hasShotText
+          ? 'Comments'
+          : shotType + (description ? ` of ${description}` : '')
+      }
+    />
   );
 }
 

@@ -19,6 +19,7 @@ import {
   formatSceneShotNumber,
   formatTakeNumber,
 } from '@/components/takes/TakeNameFormat';
+import { useFullscreen } from '@/libs/fullscreen';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useShotNumber } from '@/serdes/UseResolveShotNumber';
 import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
@@ -62,6 +63,7 @@ export default function DocumentOutline({ documentId }) {
   const setShotListMode = useUserStore((ctx) => ctx.setShotListMode);
   const navigate = useNavigate();
   const location = useLocation();
+  const { exitFullscreen } = useFullscreen();
   const isBackToHome = location.pathname.includes('/edit');
 
   function onShotListModeClick() {
@@ -74,6 +76,7 @@ export default function DocumentOutline({ documentId }) {
 
   function onProjectSettingsClick() {
     if (!location.pathname.includes('/settings')) {
+      exitFullscreen();
       navigate('/settings');
     }
   }

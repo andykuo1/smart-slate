@@ -36,7 +36,7 @@ export default function SettingsPage() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   return (
-    <PageLayout className="overflow-y-auto">
+    <PageLayout className="overflow-y-auto bg-white">
       <fieldset className="mx-auto flex flex-col gap-2">
         <legend className="py-4">
           <h3 className="text-xl">Configure your project</h3>
