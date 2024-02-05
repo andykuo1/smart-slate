@@ -4,7 +4,7 @@ import { useInterval } from '@/libs/UseInterval';
 import { formatYearMonthDay } from '@/utils/StringFormat';
 
 export default function ClapperDateString() {
-  const [dateString, setDateString] = useState('----.--.--');
+  const [dateString, setDateString] = useState('----/--/--');
 
   const onInterval = useCallback(
     function _onInterval() {

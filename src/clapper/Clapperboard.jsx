@@ -18,6 +18,7 @@ import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
 import {
   findShotWithTakeId,
   getDocumentIds,
+  getDocumentSettingsById,
   getFirstEmptyShotInDocument,
   getFirstEmptyShotInScene,
   useShotDescription,
@@ -111,23 +112,12 @@ export default function Clapperboard() {
               documentId={documentId}
             />
           </li>
-          <li className="flex items-center">
-            <ClapperVerticalLabel>DIR</ClapperVerticalLabel>
-            <ClapperDirectorNameField
-              className="mx-1 w-full uppercase bg-transparent h-[50%]"
-              documentId={documentId}
-            />
-          </li>
-          <li className="flex items-center">
-            <ClapperVerticalLabel>CAM</ClapperVerticalLabel>
-            <ClapperCameraNameField
-              className="mx-1 w-full uppercase bg-transparent h-[50%]"
-              documentId={documentId}
-            />
-          </li>
+          <ClapperDirectorNameEntry documentId={documentId} />
+          <ClapperCameraNameEntry documentId={documentId} />
           <li className="flex-1 flex flex-col-reverse sm:flex-row gap-1">
             {enableThumbnailWhileRecording && (
               <ShotThumbnail
+                className="text-base"
                 documentId={documentId}
                 sceneId={sceneId}
                 shotId={shotId}
@@ -157,6 +147,50 @@ export default function Clapperboard() {
         </div>
       </div>
     </fieldset>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ */
+function ClapperCameraNameEntry({ documentId }) {
+  const cameraName = useDocumentStore(
+    (ctx) => getDocumentSettingsById(ctx, documentId)?.cameraName,
+  );
+  if (!cameraName) {
+    return null;
+  }
+  return (
+    <li className="flex items-center">
+      <ClapperVerticalLabel>CAM</ClapperVerticalLabel>
+      <ClapperCameraNameField
+        className="mx-1 w-full uppercase bg-transparent h-[50%]"
+        documentId={documentId}
+      />
+    </li>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ */
+function ClapperDirectorNameEntry({ documentId }) {
+  const directorName = useDocumentStore(
+    (ctx) => getDocumentSettingsById(ctx, documentId)?.directorName,
+  );
+  if (!directorName) {
+    return null;
+  }
+  return (
+    <li className="flex items-center">
+      <ClapperVerticalLabel>DIR</ClapperVerticalLabel>
+      <ClapperDirectorNameField
+        className="mx-1 w-full uppercase bg-transparent h-[50%]"
+        documentId={documentId}
+      />
+    </li>
   );
 }
 

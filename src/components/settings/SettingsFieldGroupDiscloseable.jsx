@@ -24,7 +24,7 @@ export default function SettingsFieldGroupDiscloseable({
   const scrollIntoView = useScrollIntoView(containerRef);
 
   function onClick() {
-    scrollIntoView();
+    scrollIntoView({ block: 'center' });
   }
 
   return (

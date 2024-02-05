@@ -5,6 +5,8 @@ import QRCode2Icon from '@material-symbols/svg-400/rounded/qr_code_2.svg';
 import SettingsAspectRatioField from '@/components/settings/SettingsAspectRatioField';
 import SettingsAutoSaveLastTimeField from '@/components/settings/SettingsAutoSaveLastTimeField';
 import SettingsAutoSaveToField from '@/components/settings/SettingsAutoSaveToField';
+import SettingsCameraNameField from '@/components/settings/SettingsCameraNameField';
+import SettingsDirectorNameField from '@/components/settings/SettingsDirectorNameField';
 import SettingsEnableGoogleDriveSyncToggle from '@/components/settings/SettingsEnableGoogleDriveSyncToggle';
 import SettingsEnableRecorderLiveAudioToggle from '@/components/settings/SettingsEnableRecorderLiveAudioToggle';
 import SettingsEnableRecorderReferenceToggle from '@/components/settings/SettingsEnableRecorderReferenceToggle';
@@ -28,23 +30,33 @@ export default function ProjectSettingsDrawer() {
   const navigate = useNavigate();
   return (
     <div className="flex flex-col gap-2">
-      <SettingsProjectNameField />
-      <SettingsProjectIdField />
-      <SettingsAutoSaveToField />
-      <SettingsAutoSaveLastTimeField />
       <SettingsProjectInstallField />
       <SettingsFieldButton Icon={QRCode2Icon} onClick={() => navigate('/scan')}>
         Have QR codes?
       </SettingsFieldButton>
       <br />
+      <SettingsFieldGroupDiscloseable title="Project Settings">
+        <SettingsProjectNameField />
+        <SettingsProjectIdField />
+      </SettingsFieldGroupDiscloseable>
+      <br />
+      <SettingsFieldGroupDiscloseable title="Credits">
+        <SettingsDirectorNameField />
+        <SettingsCameraNameField />
+      </SettingsFieldGroupDiscloseable>
+      <br />
       <SettingsFieldGroupDiscloseable title="Data Settings">
         <GoogleConnectButton />
+        <div className="h-0" />
+        <SettingsAutoSaveToField />
+        <SettingsAutoSaveLastTimeField />
         <div className="h-0" />
         <SettingsEnableGoogleDriveSyncToggle />
         <SettingsShareFilesButton />
         <SettingsProjectExportZIPButton />
         <SettingsProjectExportJSONButton />
       </SettingsFieldGroupDiscloseable>
+      <br />
       <SettingsFieldGroupDiscloseable title="Rec & Slate Settings">
         <SettingsAspectRatioField />
         <SettingsVideoResolutionField />
@@ -57,6 +69,7 @@ export default function ProjectSettingsDrawer() {
         <div className="h-0" />
         <SettingsNerdInfoButton />
       </SettingsFieldGroupDiscloseable>
+      <br />
       <SettingsFieldGroupDiscloseable title="Dangerous Stuff">
         <SettingsVideoCacheClearButton />
         <SettingsProjectDeleteButton />
