@@ -21,10 +21,11 @@ export default function ProjectNewButton() {
       newDocument.lastUpdatedMillis = newDocument.firstCreatedMillis;
       addDocument(newDocument);
       setUserCursor(newDocument.documentId, '', '', '');
-      navigate('/settings');
+      navigate('/new');
     },
     [addDocument, setUserCursor, navigate],
   );
+
   return (
     <FancyButton title="New Project" className="mx-1 px-12" onClick={onClick}>
       <AddIcon className="inline w-6 fill-current" />

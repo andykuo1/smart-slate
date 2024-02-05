@@ -17,6 +17,8 @@ export function createStore() {
     recordMode: 'clapper',
     /** @type {'overview'|'detail'} */
     outlineMode: 'overview',
+    /** @type {'outline'|'clapperSettings'|'projectSettings'} */
+    drawerMode: 'outline',
     googleContext: createGoogleContext(),
   };
 }

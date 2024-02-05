@@ -25,10 +25,10 @@ import SettingsReturnHomeField from '@/components/settings/SettingsReturnHomeFie
 import SettingsShareFilesButton from '@/components/settings/SettingsShareFilesButton';
 import SettingsVideoCacheClearButton from '@/components/settings/SettingsVideoCacheClearButton';
 import SettingsVideoResolutionField from '@/components/settings/SettingsVideoResolutionField';
-import DrawerButton from '@/drawer/DrawerButton';
-import DrawerToolbarLayout from '@/drawer/DrawerToolbarLayout';
+import SettingsDocumentNavButton from '@/drawer/SettingsDocumentNavButton';
+import DrawerButton from '@/drawer/layout/DrawerButton';
+import DrawerToolbarLayout from '@/drawer/layout/DrawerToolbarLayout';
 import GoogleConnectButton from '@/libs/googleapi/auth/GoogleConnectButton';
-import SettingsDocumentNavButton from '@/outline/SettingsDocumentNavButton';
 
 import PageLayout from './PageLayout';
 

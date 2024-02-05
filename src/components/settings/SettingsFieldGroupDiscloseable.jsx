@@ -12,9 +12,14 @@ import { useScrollIntoView } from '@/libs/UseScrollIntoView';
 /**
  * @param {object} props
  * @param {string} props.title
+ * @param {boolean} [props.defaultOpen]
  * @param {import('react').ReactNode} props.children
  */
-export default function SettingsFieldGroupDiscloseable({ title, children }) {
+export default function SettingsFieldGroupDiscloseable({
+  title,
+  defaultOpen,
+  children,
+}) {
   const containerRef = useRef(null);
   const scrollIntoView = useScrollIntoView(containerRef);
 
@@ -23,7 +28,7 @@ export default function SettingsFieldGroupDiscloseable({ title, children }) {
   }
 
   return (
-    <DisclosureProvider>
+    <DisclosureProvider defaultOpen={defaultOpen}>
       <Disclosure
         ref={containerRef}
         className="w-full flex items-center border-b-2 border-black"

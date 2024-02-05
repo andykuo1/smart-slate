@@ -1,25 +1,17 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-
-import ArrowBackIcon from '@material-symbols/svg-400/rounded/arrow_back.svg';
 import CheckBoxFillIcon from '@material-symbols/svg-400/rounded/check_box-fill.svg';
 import CheckBoxIcon from '@material-symbols/svg-400/rounded/check_box.svg';
 import CheckBoxOutlineBlankIcon from '@material-symbols/svg-400/rounded/check_box_outline_blank.svg';
-import GridViewIcon from '@material-symbols/svg-400/rounded/grid_view.svg';
-import HomeIcon from '@material-symbols/svg-400/rounded/home.svg';
 import InfoFillIcon from '@material-symbols/svg-400/rounded/info-fill.svg';
 import InfoIcon from '@material-symbols/svg-400/rounded/info.svg';
-import ListAltIcon from '@material-symbols/svg-400/rounded/list_alt.svg';
 import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg';
-import TuneIcon from '@material-symbols/svg-400/rounded/tune.svg';
 
 import BoxDrawingCharacter from '@/components/documents/BoxDrawingCharacter';
-import DocumentContentCount from '@/components/documents/DocumentContentCount';
+import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
 import {
   formatSceneNumber,
   formatSceneShotNumber,
   formatTakeNumber,
 } from '@/components/takes/TakeNameFormat';
-import { useFullscreen } from '@/libs/fullscreen';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useShotNumber } from '@/serdes/UseResolveShotNumber';
 import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
@@ -36,101 +28,42 @@ import {
   useTakeRating,
 } from '@/stores/document';
 import {
-  useDocumentTitle,
   useSceneIds,
   useSceneShotCount,
   useShotTakeCount,
 } from '@/stores/document/use';
 import { useDocumentStore } from '@/stores/document/use';
-import { useSetUserCursor, useUserStore } from '@/stores/user';
+import {
+  useCurrentDocumentId,
+  useSetUserCursor,
+  useUserStore,
+} from '@/stores/user';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 
 import DocumentDivider from '../components/documents/DocumentDivider';
-import SettingsFieldButton from '../components/settings/SettingsFieldButton';
 import { getShotTypeColor } from '../components/shots/ShotColors';
 
-/**
- * @param {object} props
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- */
-export default function DocumentOutline({ documentId }) {
+export default function OutlineDrawer() {
+  const setOutlineMode = useUserStore((ctx) => ctx.setOutlineMode);
+  const detailMode = useUserStore((ctx) => ctx.outlineMode === 'detail');
+  const documentId = useCurrentDocumentId();
   const sceneIds = useSceneIds(documentId);
   const activeSceneId = useUserStore((ctx) => ctx.cursor?.sceneId);
-  const [documentTitle] = useDocumentTitle(documentId);
-  const detailMode = useUserStore((ctx) => ctx.outlineMode === 'detail');
-  const boardMode = useUserStore((ctx) => ctx.shotListMode === 'hidden');
-  const setOutlineMode = useUserStore((ctx) => ctx.setOutlineMode);
-  const setShotListMode = useUserStore((ctx) => ctx.setShotListMode);
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { exitFullscreen } = useFullscreen();
-  const isBackToHome = location.pathname.includes('/edit');
-
-  function onShotListModeClick() {
-    setShotListMode(!boardMode ? 'hidden' : 'detail');
-  }
-
   function onInfoClick() {
     setOutlineMode(!detailMode ? 'detail' : 'overview');
   }
-
-  function onProjectSettingsClick() {
-    if (!location.pathname.includes('/settings')) {
-      exitFullscreen();
-      navigate('/settings');
-    }
-  }
-
-  function onBackClick() {
-    if (isBackToHome) {
-      navigate('/');
-    } else {
-      navigate('/edit');
-    }
-  }
-
   return (
-    <nav className="font-mono">
-      <div className="sticky top-0 z-10 w-full flex p-2 bg-gray-200 shadow">
-        <div className="flex-1">
-          <SettingsFieldButton
-            className="mr-auto"
-            Icon={isBackToHome ? HomeIcon : ArrowBackIcon}
-            onClick={onBackClick}
-          />
-        </div>
-        <div className="flex flex-col items-center">
-          <h3 className="text-center">
-            <span className="underline">{documentTitle}</span>
-          </h3>
-          <DocumentContentCount
-            className={!detailMode ? 'invisible' : ''}
-            documentId={documentId}
-          />
-          <div className="outline rounded flex flex-row mt-2">
-            <SettingsFieldButton
-              Icon={!detailMode ? InfoIcon : InfoFillIcon}
-              onClick={onInfoClick}
-            />
-            <SettingsFieldButton
-              Icon={ListAltIcon}
-              disabled={!boardMode}
-              onClick={onShotListModeClick}
-            />
-            <SettingsFieldButton
-              Icon={GridViewIcon}
-              disabled={boardMode}
-              onClick={onShotListModeClick}
-            />
-          </div>
-        </div>
-        <div className="flex-1">
-          <SettingsFieldButton
-            className="ml-auto"
-            Icon={TuneIcon}
-            onClick={onProjectSettingsClick}
-          />
-        </div>
+    <>
+      <div className="relative p-4">
+        <h3 className="text-xl">Screenplay outline</h3>
+        <p className="text-xs opacity-30">
+          A quick overview of the whole story
+        </p>
+        <SettingsFieldButton
+          className="absolute top-4 right-4"
+          Icon={!detailMode ? InfoIcon : InfoFillIcon}
+          onClick={onInfoClick}
+        />
       </div>
       <ul className="flex flex-col">
         {sceneIds.map((sceneId) => (
@@ -145,7 +78,7 @@ export default function DocumentOutline({ documentId }) {
           <DocumentDivider>The End</DocumentDivider>
         </li>
       </ul>
-    </nav>
+    </>
   );
 }
 

@@ -16,6 +16,7 @@ export function createDispatch(set, get) {
     setShotListMode: zi(set, setShotListMode),
     setRecordMode: zi(set, setRecordMode),
     setOutlineMode: zi(set, setOutlineMode),
+    setDrawerMode: zi(set, setDrawerMode),
     setGoogleContextCredentialResponse: zi(
       set,
       setGoogleContextCredentialResponse,
@@ -95,6 +96,14 @@ function setRecordMode(store, recordMode) {
  */
 function setOutlineMode(store, outlineMode) {
   store.outlineMode = outlineMode;
+}
+
+/**
+ * @param {import('./UserStore').Store} store
+ * @param {'outline'|'clapperSettings'|'projectSettings'} drawerMode
+ */
+function setDrawerMode(store, drawerMode) {
+  store.drawerMode = drawerMode;
 }
 
 /**

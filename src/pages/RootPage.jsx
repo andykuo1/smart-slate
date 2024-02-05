@@ -15,7 +15,7 @@ export default function RootPage() {
     <PageLayout className="items-center">
       <AppTitle className="mt-auto" />
       <div className="flex flex-row text-center mx-auto">
-        <div className="absolute top-2 right-2">
+        <div className="absolute top-2 right-2 bg-white">
           <GoogleConnectButton />
         </div>
         <ProjectNewButton />
