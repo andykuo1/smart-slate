@@ -5,6 +5,7 @@ import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg
 import ThumbUpIcon from '@material-symbols/svg-400/rounded/thumb_up.svg';
 
 import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import ShotThumbnail from '@/components/shots/ShotThumbnail';
 import {
   formatSceneNumber,
   formatShotNumber,
@@ -21,6 +22,7 @@ import {
   useTakeRating,
 } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
+import { useSettingsStore } from '@/stores/settings';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 
 import ClapperCameraNameField from './ClapperCameraNameField';
@@ -49,6 +51,7 @@ export default function ClapperBoardV2() {
         <ClapperCommentField
           className="w-full px-4 py-1 my-1"
           documentId={documentId}
+          sceneId={sceneId}
           shotId={shotId}
         />
         <ClapperAdditionalFields
@@ -179,23 +182,39 @@ function ClapperRollField() {
  * @param {object} props
  * @param {string} props.className
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  */
-function ClapperCommentField({ className, documentId, shotId }) {
+function ClapperCommentField({ className, documentId, sceneId, shotId }) {
   const description = useShotDescription(documentId, shotId);
   const shotType = useShotType(documentId, shotId);
+  const enableThumbnailWhileRecording = useSettingsStore(
+    (ctx) => ctx.user.enableThumbnailWhileRecording,
+  );
   const hasShotText = shotType && description;
   return (
-    <textarea
-      className={
-        'flex-1 font-mono resize-none bg-transparent' + ' ' + className
-      }
-      placeholder={
-        !hasShotText
-          ? 'Comments'
-          : shotType + (description ? ` of ${description}` : '')
-      }
-    />
+    <div className="flex-1 flex flex-row">
+      <textarea
+        className={
+          'flex-1 font-mono resize-none bg-transparent' + ' ' + className
+        }
+        placeholder={
+          !hasShotText
+            ? 'Comments'
+            : shotType + (description ? ` of ${description}` : '')
+        }
+      />
+      {enableThumbnailWhileRecording && (
+        <ShotThumbnail
+          className="text-base rounded-xl overflow-hidden m-1 mr-4"
+          documentId={documentId}
+          sceneId={sceneId}
+          shotId={shotId}
+          editable={false}
+          referenceOnly={true}
+        />
+      )}
+    </div>
   );
 }
 
