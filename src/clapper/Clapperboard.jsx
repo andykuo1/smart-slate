@@ -108,7 +108,7 @@ export default function Clapperboard() {
           <li className="flex items-center">
             <ClapperVerticalLabel>PROD</ClapperVerticalLabel>
             <ClapperProductionTitleField
-              className="mx-1 w-full uppercase bg-transparent h-[50%]"
+              className="mx-1 w-full bg-transparent h-[50%]"
               documentId={documentId}
             />
           </li>
@@ -165,7 +165,7 @@ function ClapperCameraNameEntry({ documentId }) {
     <li className="flex items-center">
       <ClapperVerticalLabel>CAM</ClapperVerticalLabel>
       <ClapperCameraNameField
-        className="mx-1 w-full uppercase bg-transparent h-[50%]"
+        className="mx-1 w-full bg-transparent h-[50%]"
         documentId={documentId}
       />
     </li>
@@ -187,7 +187,7 @@ function ClapperDirectorNameEntry({ documentId }) {
     <li className="flex items-center">
       <ClapperVerticalLabel>DIR</ClapperVerticalLabel>
       <ClapperDirectorNameField
-        className="mx-1 w-full uppercase bg-transparent h-[50%]"
+        className="mx-1 w-full bg-transparent h-[50%]"
         documentId={documentId}
       />
     </li>

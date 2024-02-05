@@ -54,7 +54,7 @@ export default function DrawerLayout({ toolbar, content, children, darkMode }) {
         className={
           'fixed top-0 bottom-0 right-0 z-40 pb-20 overflow-y-auto overscroll-none' +
           ' ' +
-          'shadow-xl bg-gray-200' +
+          'shadow-xl bg-gray-200 text-black' +
           ' ' +
           'w-[90vw] sm:w-[60vmin] min-w-[50vw]' +
           ' ' +

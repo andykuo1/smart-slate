@@ -1,6 +1,8 @@
 import { getDocumentSettingsById } from '@/stores/document/get';
 import { useDocumentStore } from '@/stores/document/use';
 
+import ClapperInput from './ClapperInput';
+
 /**
  * @param {object} props
  * @param {string} [props.className]
@@ -23,13 +25,13 @@ export default function ClapperDirectorNameField({ className, documentId }) {
   }
 
   return (
-    <input
+    <ClapperInput
       className={className}
-      type="text"
       name="director-name"
-      value={directorName}
+      value={directorName || ''}
       onChange={onChange}
-      placeholder="Director's name"
+      placeholder="BILL PRESTON ESQ."
+      autoCapitalize="characters"
     />
   );
 }

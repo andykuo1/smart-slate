@@ -1,6 +1,8 @@
 import { getDocumentSettingsById } from '@/stores/document/get';
 import { useDocumentStore } from '@/stores/document/use';
 
+import ClapperInput from './ClapperInput';
+
 /**
  * @param {object} props
  * @param {string} [props.className]
@@ -10,15 +12,13 @@ export default function ClapperProductionTitleField({ className, documentId }) {
   const productionTitle = useDocumentStore(
     (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
   );
-
   return (
-    <input
+    <ClapperInput
       className={className}
-      type="text"
       name="production-title"
-      value={productionTitle}
+      value={productionTitle || ''}
+      placeholder="MY PRODUCTION"
       onChange={() => {}}
-      placeholder="Production title"
       disabled={true}
     />
   );

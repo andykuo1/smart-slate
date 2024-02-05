@@ -3,7 +3,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { useInterval } from '@/libs/UseInterval';
 import { formatYearMonthDay } from '@/utils/StringFormat';
 
-export default function ClapperDateString() {
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ */
+export default function ClapperDateString({ className }) {
   const [dateString, setDateString] = useState('----/--/--');
 
   const onInterval = useCallback(
@@ -16,5 +20,11 @@ export default function ClapperDateString() {
   // NOTE: Run once at the start.
   useEffect(onInterval, [onInterval]);
 
-  return <output className="uppercase">{dateString}</output>;
+  return (
+    <output
+      style={{ lineHeight: '1em' }}
+      className={'uppercase my-[1px]' + ' ' + className}>
+      {dateString}
+    </output>
+  );
 }

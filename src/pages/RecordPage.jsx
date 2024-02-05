@@ -1,4 +1,4 @@
-import Clapperboard from '@/clapper/Clapperboard';
+import ClapperBoardV2 from '@/clapper/ClapperBoardV2';
 import Drawer from '@/drawer/Drawer';
 import RecorderBooth from '@/recorder/RecorderBooth';
 import { useUserStore } from '@/stores/user';
@@ -9,9 +9,9 @@ export default function RecordPage() {
   const recordMode = useUserStore((ctx) => ctx.recordMode);
   const isRecorderMode = recordMode === 'recorder';
   return (
-    <PageLayout className="overflow-hidden overscroll-none bg-black">
+    <PageLayout className="overflow-hidden overscroll-none bg-black text-white">
       <Drawer darkMode={true}>
-        {isRecorderMode ? <RecorderBooth /> : <Clapperboard />}
+        {isRecorderMode ? <RecorderBooth /> : <ClapperBoardV2 />}
       </Drawer>
     </PageLayout>
   );

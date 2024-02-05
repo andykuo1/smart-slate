@@ -32,8 +32,8 @@ export default function ClapperDirectorNameField({ className }) {
       id="director-name"
       value={directorName}
       onChange={onChange}
-      placeholder="Bill Preston Esq."
-      autoCapitalize="words"
+      placeholder="BILL PRESTON ESQ."
+      autoCapitalize="characters"
     />
   );
 }

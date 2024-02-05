@@ -1,6 +1,8 @@
 import { getDocumentSettingsById } from '@/stores/document/get';
 import { useDocumentStore } from '@/stores/document/use';
 
+import ClapperInput from './ClapperInput';
+
 /**
  * @param {object} props
  * @param {string} [props.className]
@@ -23,13 +25,13 @@ export default function ClapperCameraNameField({ className, documentId }) {
   }
 
   return (
-    <input
+    <ClapperInput
       className={className}
-      type="text"
       name="camera-name"
-      value={cameraName}
+      value={cameraName || ''}
       onChange={onChange}
-      placeholder="DP's name"
+      placeholder="TED LOGAN"
+      autoCapitalize="characters"
     />
   );
 }

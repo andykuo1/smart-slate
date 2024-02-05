@@ -32,8 +32,8 @@ export default function ClapperCameraNameField({ className }) {
       id="camera-name"
       value={cameraName}
       onChange={onChange}
-      placeholder="Ted Logan"
-      autoCapitalize="words"
+      placeholder="TED LOGAN"
+      autoCapitalize="characters"
     />
   );
 }
