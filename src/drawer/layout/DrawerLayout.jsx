@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
+import { useUserStore } from '@/stores/user';
+
 import DrawerButton from './DrawerButton';
 import DrawerToolbarLayout from './DrawerToolbarLayout';
 
@@ -15,6 +17,12 @@ export default function DrawerLayout({ toolbar, content, children, darkMode }) {
   const [open, setOpen] = useState(false);
   const drawerRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const toolbarRef = useRef(/** @type {HTMLDivElement|null} */ (null));
+  const setDrawerMode = useUserStore((ctx) => ctx.setDrawerMode);
+
+  function onClick() {
+    setOpen((prev) => !prev);
+    setDrawerMode('outline');
+  }
 
   useEffect(() => {
     /** @param {Event} e */
@@ -39,10 +47,7 @@ export default function DrawerLayout({ toolbar, content, children, darkMode }) {
         containerRef={toolbarRef}
         open={open}
         toolbar={toolbar}>
-        <DrawerButton
-          inverted={Boolean(darkMode)}
-          onClick={() => setOpen((prev) => !prev)}
-        />
+        <DrawerButton inverted={Boolean(darkMode)} onClick={onClick} />
       </DrawerToolbarLayout>
       <div
         ref={drawerRef}
