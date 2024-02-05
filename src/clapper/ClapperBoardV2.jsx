@@ -36,7 +36,7 @@ import ClapperVerticalLabel from './ClapperVerticalLabel';
 export default function ClapperBoardV2() {
   const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
   return (
-    <div className="grid grid-cols-1 grid-rows-1 gap-4 sm:grid-cols-2 sm:grid-rows-1 m-auto p-4">
+    <div className="grid grid-cols-1 grid-rows-1 gap-4 sm:grid-cols-2 sm:grid-rows-1 portrait:grid-cols-1 portrait:grid-rows-1 m-auto p-4">
       <div>
         <ClapperProductionTitleField
           className="w-full text-center text-[3em] my-1"
@@ -48,7 +48,7 @@ export default function ClapperBoardV2() {
           shotId={shotId}
           takeId={takeId}
         />
-        <div className="hidden sm:block">
+        <div className="hidden sm:block portrait:hidden">
           <ClapperCommentField
             className="w-full px-4 py-1 my-1"
             documentId={documentId}
@@ -79,7 +79,7 @@ export default function ClapperBoardV2() {
           takeId={takeId}
         />
       </div>
-      <div className="block sm:hidden">
+      <div className="block sm:hidden portrait:block">
         <ClapperCommentField
           className="w-full px-4 py-1 my-1"
           documentId={documentId}
