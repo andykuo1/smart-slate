@@ -15,6 +15,7 @@ import {
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useShotNumber } from '@/serdes/UseResolveShotNumber';
 import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
+import { useCurrentTakeId } from '@/slugs';
 import {
   getSceneById,
   getShotById,
@@ -195,7 +196,7 @@ function IndexShot({
   );
   const description = useShotDescription(documentId, shotId);
   const detailMode = useUserStore((ctx) => ctx.outlineMode === 'detail');
-  const activeTakeId = useUserStore((ctx) => ctx.cursor.takeId);
+  const activeTakeId = useCurrentTakeId();
   const setUserCursor = useSetUserCursor();
   const takeIds = useTakeIds(documentId, shotId);
 

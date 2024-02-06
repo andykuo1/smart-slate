@@ -1,13 +1,13 @@
-import { useUserStore } from './UseUserStore';
+import { useSlug } from '@/slugs';
 
-export function useCurrentDocumentId() {
-  return useUserStore((ctx) => ctx.cursor?.documentId);
-}
+export { useCurrentDocumentId } from '@/slugs';
 
 export function useSetUserCursor() {
-  return useUserStore((ctx) => ctx.setUserCursor);
+  const { changeCurrentSlug } = useSlug();
+  return changeCurrentSlug;
 }
 
 export function useCurrentCursor() {
-  return useUserStore((ctx) => ctx.cursor);
+  const { currentSlug } = useSlug();
+  return currentSlug;
 }

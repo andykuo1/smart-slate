@@ -1,5 +1,5 @@
-import { createContext } from '@/utils/ReactContextHelper';
+import { createTypedContext } from '@/utils/ReactContextHelper';
 
 import { useVideoCacheContextValue } from './VideoCacheContextValue';
 
-export const VideoCacheContext = createContext(useVideoCacheContextValue);
+export const VideoCacheContext = createTypedContext(useVideoCacheContextValue);

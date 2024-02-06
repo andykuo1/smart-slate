@@ -1,8 +1,8 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 
 import { useIntersectionObserver } from '@/libs/UseIntersectionObserver';
+import { useCurrentSceneId } from '@/slugs';
 import { useSceneIds } from '@/stores/document/use';
-import { useUserStore } from '@/stores/user';
 
 import BlockList from '../blocks/BlockList';
 import SceneEntryFocused from './SceneEntryFocused';
@@ -16,7 +16,7 @@ import SceneHeader from './SceneHeader';
  */
 export default function SceneList({ documentId }) {
   const sceneIds = useSceneIds(documentId);
-  const activeSceneId = useUserStore((ctx) => ctx.cursor?.sceneId);
+  const activeSceneId = useCurrentSceneId();
   return (
     <>
       <PerScene sceneIds={sceneIds}>

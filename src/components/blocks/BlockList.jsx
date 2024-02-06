@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
+import { useCurrentShotId } from '@/slugs';
 import { getBlockIdsInOrder } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import { useUserStore } from '@/stores/user';
@@ -34,7 +35,7 @@ export default function BlockList({
   const blockIds = useDocumentStore(
     useShallow((ctx) => getBlockIdsInOrder(ctx, documentId, sceneId)),
   );
-  const activeShotId = useUserStore((ctx) => ctx.cursor?.shotId);
+  const activeShotId = useCurrentShotId();
   const smallMedia = useMatchMedia('(max-width: 640px)');
   const inlineMode = useUserStore((ctx) => ctx.editMode === 'inline');
   const sequenceMode = useUserStore((ctx) => ctx.editMode === 'sequence');

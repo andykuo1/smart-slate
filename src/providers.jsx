@@ -4,11 +4,11 @@ import {
   GAPI_CLIENT_ID,
   GoogleAPIProvider,
 } from '@/libs/googleapi';
-
-import GoogleDriveSyncProvider from './libs/googleapi/sync/GoogleDriveSyncProvider';
-import { InputCaptureProvider } from './libs/inputcapture';
-import RecorderContextProvider from './recorder/RecorderContextProvider';
-import { VideoCacheProvider } from './recorder/cache';
+import GoogleDriveSyncProvider from '@/libs/googleapi/sync/GoogleDriveSyncProvider';
+import { InputCaptureProvider } from '@/libs/inputcapture';
+import RecorderContextProvider from '@/recorder/RecorderContextProvider';
+import { VideoCacheProvider } from '@/recorder/cache';
+import { SlugContextProvider } from '@/slugs';
 
 /**
  * @param {object} props
@@ -16,16 +16,18 @@ import { VideoCacheProvider } from './recorder/cache';
  */
 export default function Providers({ children }) {
   return (
-    <GoogleAPIProvider apiKey={GAPI_API_KEY} clientId={GAPI_CLIENT_ID}>
-      <GoogleDriveSyncProvider>
-        <VideoCacheProvider>
-          <FullscreenProvider>
-            <InputCaptureProvider>
-              <RecorderContextProvider>{children}</RecorderContextProvider>
-            </InputCaptureProvider>
-          </FullscreenProvider>
-        </VideoCacheProvider>
-      </GoogleDriveSyncProvider>
-    </GoogleAPIProvider>
+    <SlugContextProvider>
+      <GoogleAPIProvider apiKey={GAPI_API_KEY} clientId={GAPI_CLIENT_ID}>
+        <GoogleDriveSyncProvider>
+          <VideoCacheProvider>
+            <FullscreenProvider>
+              <InputCaptureProvider>
+                <RecorderContextProvider>{children}</RecorderContextProvider>
+              </InputCaptureProvider>
+            </FullscreenProvider>
+          </VideoCacheProvider>
+        </GoogleDriveSyncProvider>
+      </GoogleAPIProvider>
+    </SlugContextProvider>
   );
 }

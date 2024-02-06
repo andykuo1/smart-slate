@@ -20,6 +20,6 @@ export function createProvider(Context, useValue) {
  * @template T
  * @param {() => T} useValue
  */
-export function createContext(useValue) {
+export function createTypedContext(useValue) {
   return createContextImpl(/** @type {T} */ (null));
 }
