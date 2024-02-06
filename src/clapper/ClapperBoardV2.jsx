@@ -36,7 +36,7 @@ import ClapperVerticalLabel from './ClapperVerticalLabel';
 export default function ClapperBoardV2() {
   const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
   return (
-    <div className="grid grid-cols-1 grid-rows-1 gap-4 sm:grid-cols-2 sm:grid-rows-1 portrait:grid-cols-1 portrait:grid-rows-1 m-auto p-4">
+    <div className="w-full h-full text-[3vmin] flex flex-col gap-4 sm:grid sm:grid-cols-2 sm:grid-rows-1 portrait:flex portrait:flex-col p-4">
       <div>
         <ClapperProductionTitleField
           className="w-full text-center text-[3em] my-1"
@@ -55,15 +55,16 @@ export default function ClapperBoardV2() {
             sceneId={sceneId}
             shotId={shotId}
           />
-          <ClapperAdditionalFields
-            documentId={documentId}
-            sceneId={sceneId}
-            shotId={shotId}
-            takeId={takeId}
-          />
         </div>
+        <ClapperAdditionalFields
+          className="w-full my-2 sm:my-0 portrait:my-2"
+          documentId={documentId}
+          sceneId={sceneId}
+          shotId={shotId}
+          takeId={takeId}
+        />
       </div>
-      <div className="flex flex-col">
+      <div className="flex-1 flex flex-col">
         <div className="flex-1 min-h-[40vh]">
           <ClapperQRCodeField
             documentId={documentId}
@@ -121,7 +122,7 @@ function ClapperControlFields({
   return (
     <div className="mx-auto flex items-center">
       <ClapperVerticalLabel>CTRL</ClapperVerticalLabel>
-      <div className="flex-1 flex flex-row sm:flex-col items-start gap-2 p-2">
+      <div className="flex-1 flex flex-row sm:flex-col portrait:flex-row items-start gap-2 p-2">
         <SettingsFieldButton
           className={
             'outline-none' + ' ' + (takeRating <= 0 ? 'line-through' : '')
@@ -215,14 +216,16 @@ function ClapperCommentField({ className, documentId, sceneId, shotId }) {
         }
       />
       {enableThumbnailWhileRecording && (
-        <ShotThumbnail
-          className="text-base rounded overflow-hidden m-1 mr-4"
-          documentId={documentId}
-          sceneId={sceneId}
-          shotId={shotId}
-          editable={false}
-          referenceOnly={true}
-        />
+        <div className="flex flex-col items-center p-2">
+          <ShotThumbnail
+            className="m-auto text-base rounded overflow-hidden"
+            documentId={documentId}
+            sceneId={sceneId}
+            shotId={shotId}
+            editable={false}
+            referenceOnly={true}
+          />
+        </div>
       )}
     </div>
   );
@@ -313,7 +316,7 @@ function ClapperSceneShotNumberField({ documentId, sceneId, shotId }) {
           id={shotOutputId}
           style={{ lineHeight: '1em' }}
           className="text-[3em] whitespace-nowrap">
-          {formatShotNumber(shotNumber)}
+          {shotNumber <= 0 ? '-' : formatShotNumber(shotNumber)}
         </output>
       </div>
     </div>
