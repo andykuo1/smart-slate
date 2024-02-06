@@ -13,6 +13,7 @@ import SettingsEnableRecorderReferenceToggle from '@/components/settings/Setting
 import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
 import SettingsFieldGroupDiscloseable from '@/components/settings/SettingsFieldGroupDiscloseable';
 import SettingsNerdInfoButton from '@/components/settings/SettingsNerdInfoButton';
+import SettingsPreferFullscreenRecorderToggle from '@/components/settings/SettingsPreferFullscreenRecorderToggle';
 import SettingsPreferNativeRecorderToggle from '@/components/settings/SettingsPreferNativeRecorderToggle';
 import SettingsPreferPersistedMediaStreamToggle from '@/components/settings/SettingsPreferPersistedMediaStreamToggle';
 import SettingsProjectDeleteButton from '@/components/settings/SettingsProjectDeleteButton';
@@ -63,6 +64,7 @@ export default function ProjectSettingsDrawer() {
         <div className="h-0" />
         <SettingsEnableRecorderReferenceToggle />
         <div className="h-0" />
+        <SettingsPreferFullscreenRecorderToggle />
         <SettingsPreferNativeRecorderToggle />
         <SettingsPreferPersistedMediaStreamToggle />
         <SettingsEnableRecorderLiveAudioToggle />

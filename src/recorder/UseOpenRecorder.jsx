@@ -41,6 +41,9 @@ export function useOpenPreferredRecorder(onClick) {
 function useOpenMediaRecorder(onClick) {
   const { onStop, initMediaStream } = useContext(RecorderContext);
   const { enterFullscreen, exitFullscreen } = useFullscreen();
+  const preferFullscreenRecorder = useSettingsStore(
+    (ctx) => ctx.user.preferFullscreenRecorder,
+  );
   const navigate = useNavigate();
   const preferPersistedMediaStream = useSettingsStore(
     (ctx) => ctx.user.preferPersistedMediaStream,
@@ -61,7 +64,9 @@ function useOpenMediaRecorder(onClick) {
         // Step 2. Do something in the middle.
         onClick?.(e);
         // Step 3. Navigate to page.
-        enterFullscreen();
+        if (preferFullscreenRecorder) {
+          enterFullscreen();
+        }
         setRecordMode('recorder');
         navigate('/rec');
       } catch (e) {
@@ -78,6 +83,7 @@ function useOpenMediaRecorder(onClick) {
     },
     [
       preferPersistedMediaStream,
+      preferFullscreenRecorder,
       setRecordMode,
       initMediaStream,
       onStop,

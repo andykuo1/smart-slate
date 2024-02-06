@@ -11,6 +11,7 @@ import { useFullscreen } from '@/libs/fullscreen';
 import { isInputCaptureSupported } from '@/recorder/MediaRecorderSupport';
 import { useOpenPreferredRecorder } from '@/recorder/UseOpenRecorder';
 import { useDocumentStore, useShotTakeCount } from '@/stores/document/use';
+import { useSettingsStore } from '@/stores/settings';
 import { useSetUserCursor, useUserStore } from '@/stores/user';
 import { NOOP } from '@/values/Functions';
 import {
@@ -50,6 +51,9 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
   const navigate = useNavigate();
   const setRecordMode = useUserStore((ctx) => ctx.setRecordMode);
   const { enterFullscreen } = useFullscreen();
+  const preferFullscreenRecorder = useSettingsStore(
+    (ctx) => ctx.user.preferFullscreenRecorder,
+  );
 
   useEffect(() => {
     setCameraEnabled(isInputCaptureSupported());
@@ -69,7 +73,9 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
     setUserCursor(documentId, sceneId, shotId, '');
     setRecordMode('clapper');
     navigate('/rec');
-    enterFullscreen();
+    if (preferFullscreenRecorder) {
+      enterFullscreen();
+    }
   }
 
   const onFocusClick = useCallback(

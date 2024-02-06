@@ -18,6 +18,7 @@ import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
 import { getDocumentById } from '@/stores/document';
 import { getDocumentSettingsById } from '@/stores/document/get';
 import { useDocumentStore } from '@/stores/document/use';
+import { useSettingsStore } from '@/stores/settings';
 import {
   useCurrentCursor,
   useCurrentDocumentId,
@@ -60,9 +61,15 @@ function NavRecordButton() {
   const navigate = useNavigate();
   const location = useLocation();
   const { enterFullscreen } = useFullscreen();
+  const preferFullscreenRecorder = useSettingsStore(
+    (ctx) => ctx.user.preferFullscreenRecorder,
+  );
+
   function onClick() {
     setRecordMode('clapper');
-    enterFullscreen();
+    if (preferFullscreenRecorder) {
+      enterFullscreen();
+    }
     if (!location.pathname.includes('/rec')) {
       navigate('/rec');
     }

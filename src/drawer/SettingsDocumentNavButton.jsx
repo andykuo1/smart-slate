@@ -7,6 +7,7 @@ import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
 import { useFullscreen } from '@/libs/fullscreen';
 import { getDocumentSettingsById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
+import { useSettingsStore } from '@/stores/settings';
 import { useCurrentDocumentId, useUserStore } from '@/stores/user';
 
 /**
@@ -18,6 +19,9 @@ export default function SettingsDocumentNavButton({ className }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { enterFullscreen, exitFullscreen } = useFullscreen();
+  const preferFullscreenRecorder = useSettingsStore(
+    (ctx) => ctx.user.preferFullscreenRecorder,
+  );
   const setShotListMode = useUserStore((ctx) => ctx.setShotListMode);
   // NOTE: Since this is clickable in settings, project id might not exist yet.
   const documentId = useCurrentDocumentId();
@@ -32,7 +36,9 @@ export default function SettingsDocumentNavButton({ className }) {
       navigate('/edit');
     } else {
       setRecordMode('clapper');
-      enterFullscreen();
+      if (preferFullscreenRecorder) {
+        enterFullscreen();
+      }
       navigate('/rec');
     }
   }

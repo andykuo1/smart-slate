@@ -16,5 +16,6 @@ export function createSettings() {
     enableThumbnailWhileRecording: true,
     enableDriveSync: false,
     preferPersistedMediaStream: false,
+    preferFullscreenRecorder: true,
   };
 }

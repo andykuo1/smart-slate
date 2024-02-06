@@ -4,6 +4,7 @@ import MovieIcon from '@material-symbols/svg-400/rounded/movie.svg';
 
 import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
 import { useFullscreen } from '@/libs/fullscreen';
+import { useSettingsStore } from '@/stores/settings';
 import { useSetUserCursor, useUserStore } from '@/stores/user';
 
 /**
@@ -19,12 +20,17 @@ export default function SettingsSceneOpenClapperButton({
   const navigate = useNavigate();
   const setRecordMode = useUserStore((ctx) => ctx.setRecordMode);
   const { enterFullscreen } = useFullscreen();
+  const preferFullscreenRecorder = useSettingsStore(
+    (ctx) => ctx.user.preferFullscreenRecorder,
+  );
 
   function onClick() {
     setUserCursor(documentId, sceneId, '', '');
     setRecordMode('clapper');
     navigate('/rec');
-    enterFullscreen();
+    if (preferFullscreenRecorder) {
+      enterFullscreen();
+    }
   }
 
   return (
