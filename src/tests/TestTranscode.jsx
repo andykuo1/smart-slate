@@ -12,9 +12,11 @@ export default function TestTranscode() {
   const inputRef = useRef(/** @type {HTMLInputElement|null} */ (null));
   const outputRef = useRef(/** @type {HTMLOutputElement|null} */ (null));
 
-  async function load() {
+  async function load(multithreaded = false) {
     console.log('[FFMPEGTranscoder] Loading...', window.isSecureContext);
-    const baseURL = 'https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm';
+    const baseURL = multithreaded
+      ? 'https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm'
+      : 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
     const ffmpeg = ffmpegRef.current;
     ffmpeg.on('log', ({ message }) => {
       console.log('[FFMPEGTranscoder] Log:', message);
@@ -27,17 +29,22 @@ export default function TestTranscode() {
     });
     // toBlobURL is used to bypass CORS issue, urls with the same
     // domain can be used directly.
-    let result = await ffmpeg.load({
+    let opts = {
       coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
       wasmURL: await toBlobURL(
         `${baseURL}/ffmpeg-core.wasm`,
         'application/wasm',
       ),
-      workerURL: await toBlobURL(
-        `${baseURL}/ffmpeg-core.worker.js`,
-        'text/javascript',
-      ),
-    });
+      ...(multithreaded
+        ? {
+            workerURL: await toBlobURL(
+              `${baseURL}/ffmpeg-core.worker.js`,
+              'text/javascript',
+            ),
+          }
+        : {}),
+    };
+    let result = await ffmpeg.load(opts);
     console.log('[FFMPEGTranscoder] ...loaded!', result);
     setLoaded(true);
   }
@@ -90,6 +97,14 @@ export default function TestTranscode() {
     }
   }
 
+  async function onLoadMTClick() {
+    try {
+      await load(true);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   async function onTranscodeClick() {
     try {
       await transcode();
@@ -106,7 +121,8 @@ export default function TestTranscode() {
       <ul className="border p-4">
         <li>
           <div>Step 1</div>
-          <button onClick={onLoadClick}>Load</button>
+          <button onClick={onLoadMTClick}>Load Multi-threaded</button>
+          <button onClick={onLoadClick}>Load Single-threaded</button>
         </li>
         <li>
           <div>Step 2</div>
