@@ -9,17 +9,23 @@ export function createStore() {
   return {
     cursor: createCursor(),
     recorder: createRecorder(),
+    drawer: createDrawer(),
     /** @type {'inline'|'sequence'|'solo'} */
     editMode: 'sequence',
     /** @type {'detail'|'hidden'} */
     shotListMode: 'hidden',
     /** @type {'recorder'|'clapper'} */
     recordMode: 'clapper',
-    /** @type {'overview'|'detail'} */
-    outlineMode: 'overview',
-    /** @type {'outline'|'clapperSettings'|'projectSettings'} */
-    drawerMode: 'outline',
     googleContext: createGoogleContext(),
+  };
+}
+
+export function createDrawer() {
+  return {
+    open: false,
+    /** @type {'outline'|'settings'} */
+    activeTab: 'outline',
+    showDetails: false,
   };
 }
 

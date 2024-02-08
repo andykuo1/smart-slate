@@ -15,13 +15,14 @@ export function createDispatch(set, get) {
     setEditMode: zi(set, setEditMode),
     setShotListMode: zi(set, setShotListMode),
     setRecordMode: zi(set, setRecordMode),
-    setOutlineMode: zi(set, setOutlineMode),
-    setDrawerMode: zi(set, setDrawerMode),
     setGoogleContextCredentialResponse: zi(
       set,
       setGoogleContextCredentialResponse,
     ),
     setGoogleContextTokenResponse: zi(set, setGoogleContextTokenResponse),
+    toggleDrawer: zi(set, toggleDrawer),
+    setDrawerActiveTab: zi(set, setDrawerActiveTab),
+    setDrawerShowDetails: zi(set, setDrawerShowDetails),
   };
 }
 
@@ -90,20 +91,27 @@ function setRecordMode(store, recordMode) {
 }
 
 /**
- *
  * @param {import('./UserStore').Store} store
- * @param {'overview'|'detail'} outlineMode
+ * @param {boolean} [force]
  */
-function setOutlineMode(store, outlineMode) {
-  store.outlineMode = outlineMode;
+function toggleDrawer(store, force = undefined) {
+  store.drawer.open = typeof force !== 'undefined' ? force : !store.drawer.open;
 }
 
 /**
  * @param {import('./UserStore').Store} store
- * @param {'outline'|'clapperSettings'|'projectSettings'} drawerMode
+ * @param {'outline'|'settings'} tabName
  */
-function setDrawerMode(store, drawerMode) {
-  store.drawerMode = drawerMode;
+function setDrawerActiveTab(store, tabName) {
+  store.drawer.activeTab = tabName;
+}
+
+/**
+ * @param {import('./UserStore').Store} store
+ * @param {boolean} enabled
+ */
+function setDrawerShowDetails(store, enabled) {
+  store.drawer.showDetails = enabled;
 }
 
 /**

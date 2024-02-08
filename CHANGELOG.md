@@ -8,6 +8,7 @@
 - Add drawer toolbar to settings page
 - Add roll name to take
 - Add take time to drawer details
+- Add session-persistant drawer state
 
 # v0.1.15
 

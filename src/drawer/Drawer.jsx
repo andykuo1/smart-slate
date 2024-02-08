@@ -36,16 +36,16 @@ function DrawerToolbar() {
 }
 
 function DrawerNavBar() {
-  const setDrawerMode = useUserStore((ctx) => ctx.setDrawerMode);
-  const drawerMode = useUserStore((ctx) => ctx.drawerMode);
+  const drawerActiveTab = useUserStore((ctx) => ctx.drawer.activeTab);
+  const setDrawerActiveTab = useUserStore((ctx) => ctx.setDrawerActiveTab);
   function onOutlineClick() {
-    if (drawerMode !== 'outline') {
-      setDrawerMode('outline');
+    if (drawerActiveTab !== 'outline') {
+      setDrawerActiveTab('outline');
     }
   }
   function onTuneClick() {
-    if (drawerMode !== 'clapperSettings') {
-      setDrawerMode('clapperSettings');
+    if (drawerActiveTab !== 'settings') {
+      setDrawerActiveTab('settings');
     }
   }
   return (
@@ -59,12 +59,17 @@ function DrawerNavBar() {
 function DrawerContent() {
   const documentId = useCurrentDocumentId();
   const [documentTitle] = useDocumentTitle(documentId);
-  const drawerMode = useUserStore((ctx) => ctx.drawerMode);
+  const drawerActiveTab = useUserStore((ctx) => ctx.drawer.activeTab);
+  const toggleDrawer = useUserStore((ctx) => ctx.toggleDrawer);
   const navigate = useNavigate();
   const location = useLocation();
   const isBackToHome = location.pathname.includes('/edit');
 
   function onBackClick() {
+    toggleDrawer(false);
+  }
+
+  function onHomeClick() {
     if (isBackToHome) {
       navigate('/');
     } else {
@@ -78,7 +83,7 @@ function DrawerContent() {
         <div className="flex-1">
           <SettingsFieldButton
             className="mr-auto"
-            Icon={isBackToHome ? HomeIcon : ArrowBackIcon}
+            Icon={ArrowBackIcon}
             onClick={onBackClick}
           />
         </div>
@@ -90,12 +95,16 @@ function DrawerContent() {
           <DrawerNavBar />
         </div>
         <div className="flex-1">
-          <SettingsFieldButton className="ml-auto" Icon={TuneIcon} />
+          <SettingsFieldButton
+            className="mr-auto"
+            Icon={HomeIcon}
+            onClick={onHomeClick}
+          />
         </div>
       </div>
       <div className="w-full">
-        {drawerMode === 'outline' && <OutlineDrawer />}
-        {drawerMode === 'clapperSettings' && <SettingsDrawer />}
+        {drawerActiveTab === 'outline' && <OutlineDrawer />}
+        {drawerActiveTab === 'settings' && <SettingsDrawer />}
       </div>
     </nav>
   );

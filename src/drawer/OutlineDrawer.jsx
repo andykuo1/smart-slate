@@ -45,13 +45,13 @@ import DocumentDivider from '../components/documents/DocumentDivider';
 import { getShotTypeColor } from '../components/shots/ShotColors';
 
 export default function OutlineDrawer() {
-  const setOutlineMode = useUserStore((ctx) => ctx.setOutlineMode);
-  const detailMode = useUserStore((ctx) => ctx.outlineMode === 'detail');
+  const setDrawerShowDetails = useUserStore((ctx) => ctx.setDrawerShowDetails);
+  const drawerShowDetails = useUserStore((ctx) => ctx.drawer.showDetails);
   const documentId = useCurrentDocumentId();
   const sceneIds = useSceneIds(documentId);
   const activeSceneId = useUserStore((ctx) => ctx.cursor?.sceneId);
   function onInfoClick() {
-    setOutlineMode(!detailMode ? 'detail' : 'overview');
+    setDrawerShowDetails(!drawerShowDetails);
   }
   return (
     <>
@@ -62,7 +62,7 @@ export default function OutlineDrawer() {
         </p>
         <SettingsFieldButton
           className="absolute top-4 right-4"
-          Icon={!detailMode ? InfoIcon : InfoFillIcon}
+          Icon={!drawerShowDetails ? InfoIcon : InfoFillIcon}
           onClick={onInfoClick}
         />
       </div>
@@ -94,7 +94,7 @@ function IndexScene({ documentId, sceneId, isActive }) {
   const sceneNumber = useSceneNumber(documentId, sceneId);
   const [sceneHeading] = useSceneHeading(documentId, sceneId);
   const listId = 'blocklist-' + sceneId;
-  const detailMode = useUserStore((ctx) => ctx.outlineMode === 'detail');
+  const detailMode = useUserStore((ctx) => ctx.drawer.showDetails);
   const setUserCursor = useSetUserCursor();
 
   function onClick() {
@@ -195,7 +195,7 @@ function IndexShot({
     (ctx) => getShotById(ctx, documentId, shotId).takeIds.length > 0,
   );
   const description = useShotDescription(documentId, shotId);
-  const detailMode = useUserStore((ctx) => ctx.outlineMode === 'detail');
+  const detailMode = useUserStore((ctx) => ctx.drawer.showDetails);
   const activeTakeId = useUserStore((ctx) => ctx.cursor.takeId);
   const setUserCursor = useSetUserCursor();
   const takeIds = useTakeIds(documentId, shotId);
@@ -302,7 +302,7 @@ function IndexTake({
     (ctx) =>
       getTakeExportDetailsById(ctx, documentId, takeId)?.timestampMillis || 0,
   );
-  const detailMode = useUserStore((ctx) => ctx.outlineMode === 'detail');
+  const detailMode = useUserStore((ctx) => ctx.drawer.showDetails);
   const setUserCursor = useSetUserCursor();
 
   function onClick() {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useUserStore } from '@/stores/user';
 
@@ -14,26 +14,27 @@ import DrawerToolbarLayout from './DrawerToolbarLayout';
  * @param {boolean} [props.darkMode]
  */
 export default function DrawerLayout({ toolbar, content, children, darkMode }) {
-  const [open, setOpen] = useState(false);
   const drawerRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const toolbarRef = useRef(/** @type {HTMLDivElement|null} */ (null));
-  const setDrawerMode = useUserStore((ctx) => ctx.setDrawerMode);
+  const drawerOpen = useUserStore((ctx) => ctx.drawer.open);
+  const setDrawerActiveTab = useUserStore((ctx) => ctx.setDrawerActiveTab);
+  const toggleDrawer = useUserStore((ctx) => ctx.toggleDrawer);
 
   function onClick() {
-    setOpen((prev) => !prev);
-    setDrawerMode('outline');
+    toggleDrawer();
+    setDrawerActiveTab('outline');
   }
 
   useEffect(() => {
     /** @param {Event} e */
     function onClick(e) {
-      if (open) {
+      if (drawerOpen) {
         const target = /** @type {HTMLElement} */ (e.target);
         if (
           !drawerRef.current?.contains(target) &&
           !toolbarRef.current?.contains(target)
         ) {
-          setOpen(false);
+          toggleDrawer(false);
         }
       }
     }
@@ -45,7 +46,7 @@ export default function DrawerLayout({ toolbar, content, children, darkMode }) {
     <>
       <DrawerToolbarLayout
         containerRef={toolbarRef}
-        open={open}
+        open={drawerOpen}
         toolbar={toolbar}>
         <DrawerButton inverted={Boolean(darkMode)} onClick={onClick} />
       </DrawerToolbarLayout>
@@ -60,7 +61,7 @@ export default function DrawerLayout({ toolbar, content, children, darkMode }) {
           ' ' +
           'transition-transform' +
           ' ' +
-          (open ? 'translate-x-0' : 'translate-x-[100%]')
+          (drawerOpen ? 'translate-x-0' : 'translate-x-[100%]')
         }>
         {content}
       </div>
