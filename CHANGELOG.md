@@ -6,6 +6,8 @@
 - Add shot/take list label context menu
 - Add reference image to clapperboard
 - Add drawer toolbar to settings page
+- Add roll name to take
+- Add take time to drawer details
 
 # v0.1.15
 

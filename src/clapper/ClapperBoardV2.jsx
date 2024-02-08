@@ -383,9 +383,9 @@ function ClapperShotDescriptionField({
   return (
     <div className={'flex flex-row gap-2' + ' ' + className}>
       <p
-        className="flex-1 font-mono break-words overflow-y-hidden"
-        hidden={!hasShotText}>
-        {shotType + (description ? ` of ${description}` : '')}
+        className="font-mono max-h-[72px] overflow-auto"
+        hidden={!shotType && !description}>
+        {shotType + (hasShotText ? ' of ' : '') + description}
       </p>
       {enableThumbnailWhileRecording && (
         <div className="flex flex-col items-end">
