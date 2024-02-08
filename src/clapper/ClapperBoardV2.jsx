@@ -53,12 +53,13 @@ export default function ClapperBoardV2() {
         ' ' +
         portraitStyle
       }>
-      <div>
+      <div className="flex flex-col">
         <ClapperProductionTitleField
           className="w-full text-center text-[3em] mb-1 -mt-2 disabled:opacity-100"
           documentId={documentId}
         />
         <ClapperIdentifierFields
+          className="w-full"
           documentId={documentId}
           sceneId={sceneId}
           shotId={shotId}
@@ -130,7 +131,7 @@ function ClapperControlFields({
   return (
     <div className={'flex items-center' + ' ' + className}>
       <ClapperVerticalLabel>CTRL</ClapperVerticalLabel>
-      <div className="flex-1 flex flex-row items-start gap-2 p-2">
+      <div className="flex-1 flex flex-row sm:flex-col portrait:flex-row landscape:flex-col items-start gap-2 p-2">
         <SettingsFieldButton
           className={
             'outline-none' + ' ' + (takeRating <= 0 ? 'line-through' : '')
@@ -142,7 +143,7 @@ function ClapperControlFields({
           <span className="ml-2 whitespace-nowrap">PRINT THIS</span>
         </SettingsFieldButton>
         <SettingsFieldButton
-          className="flex-1 text-left"
+          className="flex-1 w-full text-left"
           Icon={AddIcon}
           title="New take"
           onClick={onNextClick}
@@ -163,6 +164,10 @@ function ClapperControlFields({
  * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
  */
 function ClapperAdditionalFields({ className, documentId }) {
+  const hasAdditionalFields = useDocumentStore((ctx) => {
+    const settings = getDocumentSettingsById(ctx, documentId);
+    return settings?.directorName || settings?.cameraName;
+  });
   return (
     <fieldset
       className={
@@ -171,7 +176,8 @@ function ClapperAdditionalFields({ className, documentId }) {
         className
       }>
       <ClapperDateField />
-      <ul className="flex-1 my-auto flex flex-col items-end">
+      <ul className="flex-1 my-auto flex flex-col items-center">
+        {!hasAdditionalFields && <div>...</div>}
         <ClapperDirectorNameEntry documentId={documentId} />
         <ClapperCameraNameEntry documentId={documentId} />
       </ul>
@@ -183,12 +189,12 @@ function ClapperAdditionalFields({ className, documentId }) {
 function ClapperDateField() {
   const { year, month, day } = useRealTimeDate();
   return (
-    <div className="flex flex-col">
-      <div className="flex flex-row gap-1 text-lg">
+    <div className="flex flex-col items-center m-auto">
+      <div className="flex flex-row gap-1 text-[1.5em]">
         <span>{getMonthString(month)}</span>
         <span>{String(day).padStart(2, '0')}</span>
       </div>
-      <div className="text-2xl">{year}</div>
+      <div className="text-[2em]">{year}</div>
     </div>
   );
 }
@@ -294,7 +300,7 @@ function ClapperCommentField({ className, documentId, sceneId, shotId }) {
       {enableThumbnailWhileRecording && (
         <div className="flex flex-col items-center p-2">
           <ShotThumbnail
-            className="m-auto text-base rounded overflow-hidden"
+            className="mx-auto text-base rounded overflow-hidden"
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
