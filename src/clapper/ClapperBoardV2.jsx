@@ -38,59 +38,9 @@ import ClapperProductionTitleField from './ClapperProductionTitleField';
 import ClapperQRCodeField from './ClapperQRCodeField';
 import ClapperVerticalLabel from './ClapperVerticalLabel';
 
-function useCursorResolver() {
-  const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
-  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
-  const setUserCursor = useSetUserCursor();
-
-  useEffect(() => {
-    const store = UNSAFE_getStore();
-    let newDocumentId = documentId;
-    let newSceneId = sceneId;
-    let newShotId = shotId;
-    let newTakeId = takeId;
-    if (!documentId) {
-      newDocumentId = getDocumentIds(store)?.[0] || '';
-    }
-    if (newDocumentId && !sceneId) {
-      const { sceneId, shotId } = getFirstEmptyShotInDocument(
-        store,
-        newDocumentId,
-      );
-      newSceneId = sceneId;
-      newShotId = shotId;
-      newTakeId = '';
-    }
-    if (newDocumentId && newSceneId && !shotId) {
-      if (takeId) {
-        // Take exists, just find the parent shot.
-        let shot = findShotWithTakeId(store, documentId, takeId);
-        newShotId = shot?.shotId || '';
-      } else {
-        // Take doesn't exist, so let's find a new shot that will take one.
-        const { shotId } = getFirstEmptyShotInScene(
-          store,
-          newDocumentId,
-          newSceneId,
-        );
-        newShotId = shotId;
-        newTakeId = '';
-      }
-    }
-    if (
-      newDocumentId !== documentId ||
-      newSceneId !== sceneId ||
-      newShotId !== shotId ||
-      newTakeId !== takeId
-    ) {
-      setUserCursor(newDocumentId, newSceneId, newShotId, newTakeId);
-    }
-  }, [documentId, sceneId, shotId, takeId, UNSAFE_getStore, setUserCursor]);
-}
-
 export default function ClapperBoardV2() {
-  const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
-  useCursorResolver();
+  const { documentId, sceneId, shotId, takeId } =
+    useNiceDefaultCursorResolver();
 
   const [state, setState] = useState('');
   const rollName = useDocumentStore(
@@ -112,6 +62,13 @@ export default function ClapperBoardV2() {
     },
     [documentId, takeId, setRollName, setState],
   );
+
+  function onNewTake() {
+    // TODO: Would be nice to just keep the name of LAST seen (not just new take?)
+    if (!state && rollName) {
+      setState(rollName);
+    }
+  }
 
   const portraitStyle = 'portrait:flex portrait:flex-col';
   const landscapeStyle =
@@ -180,6 +137,7 @@ export default function ClapperBoardV2() {
           sceneId={sceneId}
           shotId={shotId}
           takeId={takeId}
+          onNewTake={onNewTake}
         />
       </div>
     </div>
@@ -193,6 +151,7 @@ export default function ClapperBoardV2() {
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
+ * @param {() => void} props.onNewTake
  */
 function ClapperControlFields({
   className,
@@ -200,6 +159,7 @@ function ClapperControlFields({
   sceneId,
   shotId,
   takeId,
+  onNewTake,
 }) {
   const takeRating = useTakeRating(documentId, takeId);
   const toggleGoodTake = useDocumentStore((ctx) => ctx.toggleGoodTake);
@@ -207,6 +167,7 @@ function ClapperControlFields({
 
   function onNextClick() {
     setUserCursor(documentId, sceneId, shotId, '');
+    onNewTake();
   }
 
   function onPrintClick() {
@@ -578,4 +539,61 @@ function ClapperDirectorNameEntry({ documentId }) {
       <ClapperDirectorNameField className="truncate" documentId={documentId} />
     </li>
   );
+}
+
+function useNiceDefaultCursorResolver() {
+  const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
+  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
+  const setUserCursor = useSetUserCursor();
+
+  useEffect(() => {
+    const store = UNSAFE_getStore();
+    let newDocumentId = documentId;
+    let newSceneId = sceneId;
+    let newShotId = shotId;
+    let newTakeId = takeId;
+    if (!documentId) {
+      newDocumentId = getDocumentIds(store)?.[0] || '';
+    }
+    if (newDocumentId && !sceneId) {
+      const { sceneId, shotId } = getFirstEmptyShotInDocument(
+        store,
+        newDocumentId,
+      );
+      newSceneId = sceneId;
+      newShotId = shotId;
+      newTakeId = '';
+    }
+    if (newDocumentId && newSceneId && !shotId) {
+      if (takeId) {
+        // Take exists, just find the parent shot.
+        let shot = findShotWithTakeId(store, documentId, takeId);
+        newShotId = shot?.shotId || '';
+      } else {
+        // Take doesn't exist, so let's find a new shot that will take one.
+        const { shotId } = getFirstEmptyShotInScene(
+          store,
+          newDocumentId,
+          newSceneId,
+        );
+        newShotId = shotId;
+        newTakeId = '';
+      }
+    }
+    if (
+      newDocumentId !== documentId ||
+      newSceneId !== sceneId ||
+      newShotId !== shotId ||
+      newTakeId !== takeId
+    ) {
+      setUserCursor(newDocumentId, newSceneId, newShotId, newTakeId);
+    }
+  }, [documentId, sceneId, shotId, takeId, UNSAFE_getStore, setUserCursor]);
+
+  return {
+    documentId,
+    sceneId,
+    shotId,
+    takeId,
+  };
 }
