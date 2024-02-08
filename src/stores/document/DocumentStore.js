@@ -161,6 +161,7 @@ function createTakeExportDetails() {
     /** @type {IDBValidKey} */
     idbKey: '',
     qrCodeKey: '',
+    rollName: '',
   };
 }
 

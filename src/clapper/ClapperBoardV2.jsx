@@ -18,6 +18,7 @@ import { useShotNumber } from '@/serdes/UseResolveShotNumber';
 import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
 import {
   getDocumentSettingsById,
+  getTakeExportDetailsById,
   useShotDescription,
   useShotType,
   useTakeRating,
@@ -40,6 +41,28 @@ export default function ClapperBoardV2() {
     'landscape:grid landscape:grid-cols-2 landscape:grid-rows-1';
   const smallestStyle = 'flex flex-col';
   const smallStyle = 'sm:grid sm:grid-cols-2 sm:grid-rows-1';
+
+  const [state, setState] = useState('');
+  const rollName = useDocumentStore(
+    (ctx) => getTakeExportDetailsById(ctx, documentId, takeId)?.rollName,
+  );
+  const setRollName = useDocumentStore(
+    (ctx) => ctx.setTakeExportDetailRollName,
+  );
+  const onRollNameChange = useCallback(
+    /**
+     * @param {string} value
+     */
+    function _onRollNameChange(value) {
+      if (takeId) {
+        setRollName(documentId, takeId, value);
+      } else {
+        setState(value);
+      }
+    },
+    [documentId, takeId, setRollName, setState],
+  );
+
   return (
     <div
       className={
@@ -78,6 +101,8 @@ export default function ClapperBoardV2() {
             sceneId={sceneId}
             shotId={shotId}
             takeId={takeId}
+            rollName={takeId ? rollName || '' : state}
+            onRollNameChange={onRollNameChange}
           />
         </div>
       </div>
@@ -88,6 +113,10 @@ export default function ClapperBoardV2() {
             sceneId={sceneId}
             shotId={shotId}
             takeId={takeId}
+            onChange={(newTakeId) => {
+              setRollName(documentId, newTakeId, state);
+              setState('');
+            }}
           />
         </div>
         <ClapperControlFields
@@ -162,8 +191,15 @@ function ClapperControlFields({
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
+ * @param {string} props.rollName
+ * @param {(value: string) => void} props.onRollNameChange
  */
-function ClapperAdditionalFields({ className, documentId }) {
+function ClapperAdditionalFields({
+  className,
+  documentId,
+  rollName,
+  onRollNameChange,
+}) {
   const hasAdditionalFields = useDocumentStore((ctx) => {
     const settings = getDocumentSettingsById(ctx, documentId);
     return settings?.directorName || settings?.cameraName;
@@ -181,7 +217,7 @@ function ClapperAdditionalFields({ className, documentId }) {
         <ClapperDirectorNameEntry documentId={documentId} />
         <ClapperCameraNameEntry documentId={documentId} />
       </ul>
-      <ClapperRollField />
+      <ClapperRollField value={rollName} onChange={onRollNameChange} />
     </fieldset>
   );
 }
@@ -253,18 +289,24 @@ function useRealTimeDate() {
   return date;
 }
 
-function ClapperRollField() {
-  const [state, setState] = useState('');
+/**
+ * @param {object} props
+ * @param {string} props.value
+ * @param {(value: string) => void} props.onChange
+ */
+function ClapperRollField({ value, onChange }) {
   return (
     <div className="flex-1 flex flex-col items-center">
       <ClapperLabel className="text-[1em]">ROLL</ClapperLabel>
       <ClapperInput
         className="w-full text-center text-[2em] scale-y-150 translate-y-[25%]"
         name="camera-roll"
-        value={state}
-        onChange={(e) =>
-          setState(/** @type {HTMLInputElement} */ (e.target).value)
-        }
+        value={value}
+        onChange={(e) => {
+          const value = /** @type {HTMLInputElement} */ (e.target).value;
+          onChange(value);
+        }}
+        onFocus={(e) => e.target.select()}
         autoCapitalize="characters"
       />
     </div>

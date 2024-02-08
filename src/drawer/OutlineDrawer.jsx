@@ -19,6 +19,7 @@ import {
   getSceneById,
   getShotById,
   getTakeById,
+  getTakeExportDetailsById,
   useBlockIds,
   useSceneHeading,
   useShotDescription,
@@ -294,6 +295,9 @@ function IndexTake({
 }) {
   const takeRating = useTakeRating(documentId, takeId);
   const takeNumber = useTakeNumber(documentId, shotId, takeId);
+  const takeRoll = useDocumentStore(
+    (ctx) => getTakeExportDetailsById(ctx, documentId, takeId)?.rollName,
+  );
   const setUserCursor = useSetUserCursor();
 
   function onClick() {
@@ -321,6 +325,7 @@ function IndexTake({
         />
         <div>Take {formatTakeNumber(takeNumber, true)}</div>
         {takeRating > 0 && <ThumbUpFillIcon className="w-4 h-4 fill-current" />}
+        {takeRoll && `[ROLL ${takeRoll}]`}
       </button>
     </li>
   );

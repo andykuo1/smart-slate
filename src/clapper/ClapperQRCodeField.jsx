@@ -17,6 +17,7 @@ import { useQRCodeCanvas } from './UseQRCodeCanvas';
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
+ * @param {(newTakeId: import('@/stores/document/DocumentStore').TakeId, prevTakeId: import('@/stores/document/DocumentStore').TakeId) => void} [props.onChange]
  */
 export default function ClapperQRCodeField({
   className,
@@ -24,6 +25,7 @@ export default function ClapperQRCodeField({
   sceneId,
   shotId,
   takeId,
+  onChange,
 }) {
   const setUserCursor = useSetUserCursor();
   const takeExportedQRCodeKey = useDocumentStore(
@@ -38,6 +40,10 @@ export default function ClapperQRCodeField({
         takeId || defineTake(documentId, sceneId, shotId).takeId;
       resolveTakeQRCodeKey(documentId, sceneId, shotId, thisTakeId);
       setUserCursor(documentId, sceneId, shotId, thisTakeId);
+      // Only call for CHANGED takes
+      if (takeId !== thisTakeId) {
+        onChange?.(thisTakeId, takeId);
+      }
     },
     [
       documentId,

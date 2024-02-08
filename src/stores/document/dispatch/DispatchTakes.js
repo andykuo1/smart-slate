@@ -17,6 +17,7 @@ export function createDispatchTakes(set, get) {
     setTakeExportedQRCodeKey: zi(set, setTakeExportedQRCodeKey),
     setTakeNumber: zi(set, setTakeNumber),
     toggleGoodTake: zi(set, toggleGoodTake),
+    setTakeExportDetailRollName: zi(set, setTakeExportDetailRollName),
   };
 }
 
@@ -124,5 +125,18 @@ function setTakeNumber(store, documentId, takeId, takeNumber) {
   let document = getDocumentById(store, documentId);
   let take = getTakeById(store, documentId, takeId);
   take.takeNumber = takeNumber;
+  incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').TakeId} takeId
+ * @param {string} rollName
+ */
+function setTakeExportDetailRollName(store, documentId, takeId, rollName) {
+  let document = getDocumentById(store, documentId);
+  let take = getTakeById(store, documentId, takeId);
+  take.exportDetails.rollName = rollName;
   incrementDocumentRevisionNumber(document);
 }
