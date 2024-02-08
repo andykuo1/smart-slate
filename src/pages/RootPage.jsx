@@ -12,7 +12,7 @@ import PageLayout from './PageLayout';
 
 export default function RootPage() {
   return (
-    <PageLayout className="items-center">
+    <PageLayout className="items-center bg-white text-black">
       <AppTitle className="mt-auto" />
       <div className="flex flex-row text-center mx-auto">
         <div className="absolute top-2 right-2 bg-white">

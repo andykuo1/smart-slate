@@ -30,7 +30,7 @@ export default function TakeScanner({ className, onChange }) {
 
   function onBackClick() {
     if (documentId) {
-      navigate('/settings');
+      navigate('/edit');
     } else {
       navigate('/');
     }

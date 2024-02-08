@@ -13,7 +13,7 @@ export default function ScanPage() {
     setState(JSON.stringify(e.target.value, null, 4));
   }
   return (
-    <PageLayout>
+    <PageLayout className="bg-white text-black">
       <fieldset className="flex-1 flex flex-col sm:flex-row mx-auto">
         <TakeScanner className="p-4 w-80" onChange={onChange} />
         <pre className="flex-1 overflow-x-auto w-[50vw]">

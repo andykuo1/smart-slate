@@ -9,7 +9,7 @@ import PageLayout from './PageLayout';
 export default function EditPage() {
   const documentId = useCurrentDocumentId();
   return (
-    <PageLayout>
+    <PageLayout className="bg-white text-black">
       <Drawer darkMode={false}>
         <DocumentLayout documentId={documentId}>
           <DocumentTitle className="pt-20" documentId={documentId} />

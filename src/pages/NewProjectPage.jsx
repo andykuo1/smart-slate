@@ -30,7 +30,7 @@ export default function NewProjectPage() {
   }, [documentId, addDocument, setUserCursor]);
 
   return (
-    <PageLayout className="overflow-y-auto py-10">
+    <PageLayout className="bg-white text-black overflow-y-auto py-10">
       <fieldset className="m-auto flex flex-col gap-2">
         <legend className="py-4">
           <h3 className="text-xl">Create your project</h3>

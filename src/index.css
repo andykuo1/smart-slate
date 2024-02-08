@@ -33,14 +33,6 @@ body,
 }
 
 body {
-  color: black;
-  background-color: white;
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    /** TODO: Always be on the light-side... for now.*/
-    color: black;
-    background-color: white;
-  }
+  color: white;
+  background-color: black;
 }
