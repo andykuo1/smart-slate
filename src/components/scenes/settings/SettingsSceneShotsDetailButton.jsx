@@ -1,4 +1,5 @@
-import ListAltIcon from '@material-symbols/svg-400/rounded/list_alt.svg';
+import ShotTextIcon from '@material-symbols/svg-400/rounded/table_rows.svg';
+import ShotImageIcon from '@material-symbols/svg-400/rounded/window.svg';
 
 import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
 import { useUserStore } from '@/stores/user';
@@ -26,11 +27,10 @@ export default function SettingsSceneShotsDetailButton({
 
   return (
     <SettingsFieldButton
-      className="w-auto"
-      Icon={ListAltIcon}
+      className="w-auto hidden sm:block"
+      Icon={shotListMode === 'detail' ? ShotTextIcon : ShotImageIcon}
       title="Toggle shot text"
-      onClick={onClick}>
-      Toggle shot text
-    </SettingsFieldButton>
+      onClick={onClick}
+    />
   );
 }

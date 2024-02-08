@@ -1,4 +1,6 @@
-import OneTwoThreeIcon from '@material-symbols/svg-400/rounded/123.svg';
+import { usePopoverContext } from '@ariakit/react';
+
+import OneTwoThreeIcon from '@material-symbols/svg-400/rounded/format_list_numbered.svg';
 
 import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
 import { useDocumentStore } from '@/stores/document/use';
@@ -12,9 +14,11 @@ export default function SettingsSceneShotsRenumberButton({
   documentId,
   sceneId,
 }) {
+  const store = usePopoverContext();
   const renumberShots = useDocumentStore((ctx) => ctx.renumberShots);
   function onClick() {
     renumberShots(documentId, sceneId, true);
+    store?.hide();
   }
   return (
     <SettingsFieldButton

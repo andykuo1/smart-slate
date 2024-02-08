@@ -46,7 +46,7 @@ export default function ShotList({
         ' ' +
         (hidden ? /* NOTE: Quick hideaway to not lag. */ 'hidden' : className)
       }>
-      <legend>
+      <legend className="w-full">
         <ShotListButton
           className={' ' + (!isNonEmptyShotList && 'hidden')}
           documentId={documentId}
