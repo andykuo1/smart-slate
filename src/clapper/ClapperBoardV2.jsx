@@ -17,7 +17,11 @@ import { useShotHash } from '@/serdes/UseResolveShotHash';
 import { useShotNumber } from '@/serdes/UseResolveShotNumber';
 import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
 import {
+  findShotWithTakeId,
+  getDocumentIds,
   getDocumentSettingsById,
+  getFirstEmptyShotInDocument,
+  getFirstEmptyShotInScene,
   getTakeExportDetailsById,
   useShotDescription,
   useShotType,
@@ -34,13 +38,59 @@ import ClapperProductionTitleField from './ClapperProductionTitleField';
 import ClapperQRCodeField from './ClapperQRCodeField';
 import ClapperVerticalLabel from './ClapperVerticalLabel';
 
+function useCursorResolver() {
+  const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
+  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
+  const setUserCursor = useSetUserCursor();
+
+  useEffect(() => {
+    const store = UNSAFE_getStore();
+    let newDocumentId = documentId;
+    let newSceneId = sceneId;
+    let newShotId = shotId;
+    let newTakeId = takeId;
+    if (!documentId) {
+      newDocumentId = getDocumentIds(store)?.[0] || '';
+    }
+    if (newDocumentId && !sceneId) {
+      const { sceneId, shotId } = getFirstEmptyShotInDocument(
+        store,
+        newDocumentId,
+      );
+      newSceneId = sceneId;
+      newShotId = shotId;
+      newTakeId = '';
+    }
+    if (newDocumentId && newSceneId && !shotId) {
+      if (takeId) {
+        // Take exists, just find the parent shot.
+        let shot = findShotWithTakeId(store, documentId, takeId);
+        newShotId = shot?.shotId || '';
+      } else {
+        // Take doesn't exist, so let's find a new shot that will take one.
+        const { shotId } = getFirstEmptyShotInScene(
+          store,
+          newDocumentId,
+          newSceneId,
+        );
+        newShotId = shotId;
+        newTakeId = '';
+      }
+    }
+    if (
+      newDocumentId !== documentId ||
+      newSceneId !== sceneId ||
+      newShotId !== shotId ||
+      newTakeId !== takeId
+    ) {
+      setUserCursor(newDocumentId, newSceneId, newShotId, newTakeId);
+    }
+  }, [documentId, sceneId, shotId, takeId, UNSAFE_getStore, setUserCursor]);
+}
+
 export default function ClapperBoardV2() {
   const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
-  const portraitStyle = 'portrait:flex portrait:flex-col';
-  const landscapeStyle =
-    'landscape:grid landscape:grid-cols-2 landscape:grid-rows-1';
-  const smallestStyle = 'flex flex-col';
-  const smallStyle = 'sm:grid sm:grid-cols-2 sm:grid-rows-1';
+  useCursorResolver();
 
   const [state, setState] = useState('');
   const rollName = useDocumentStore(
@@ -62,6 +112,12 @@ export default function ClapperBoardV2() {
     },
     [documentId, takeId, setRollName, setState],
   );
+
+  const portraitStyle = 'portrait:flex portrait:flex-col';
+  const landscapeStyle =
+    'landscape:grid landscape:grid-cols-2 landscape:grid-rows-1';
+  const smallestStyle = 'flex flex-col';
+  const smallStyle = 'sm:grid sm:grid-cols-2 sm:grid-rows-1';
 
   return (
     <div

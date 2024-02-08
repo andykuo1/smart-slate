@@ -51,15 +51,15 @@ export function getFirstEmptyShotInDocument(store, documentId) {
   let lastBlockId = '';
   let lastShotId = '';
   for (let sceneId of document.sceneOrder) {
-    lastSceneId = sceneId;
-    lastBlockId = '';
-    lastShotId = '';
+    let thisSceneId = sceneId;
+    let thisBlockId = '';
     let scene = getSceneById(store, documentId, sceneId);
     for (let blockId of scene.blockIds) {
-      lastBlockId = blockId;
-      lastShotId = '';
+      thisBlockId = blockId;
       let block = getBlockById(store, documentId, blockId);
       for (let shotId of block.shotIds) {
+        lastSceneId = thisSceneId;
+        lastBlockId = thisBlockId;
         lastShotId = shotId;
         if (isShotEmpty(store, documentId, shotId)) {
           return { documentId, sceneId, blockId, shotId };
@@ -85,10 +85,10 @@ export function getFirstEmptyShotInScene(store, documentId, sceneId) {
   let lastBlockId = '';
   let lastShotId = '';
   for (let blockId of scene.blockIds) {
-    lastBlockId = blockId;
-    lastShotId = '';
+    let thisBlockId = blockId;
     let block = getBlockById(store, documentId, blockId);
     for (let shotId of block.shotIds) {
+      lastBlockId = thisBlockId;
       lastShotId = shotId;
       if (isShotEmpty(store, documentId, shotId)) {
         return { documentId, sceneId, blockId, shotId };
