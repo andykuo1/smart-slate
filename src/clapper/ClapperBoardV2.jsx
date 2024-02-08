@@ -303,7 +303,9 @@ function ClapperRollField({ value, onChange }) {
         name="camera-roll"
         value={value}
         onChange={(e) => {
-          const value = /** @type {HTMLInputElement} */ (e.target).value;
+          const value = /** @type {HTMLInputElement} */ (
+            e.target
+          ).value.toUpperCase();
           onChange(value);
         }}
         onFocus={(e) => e.target.select()}
