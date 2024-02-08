@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import AddIcon from '@material-symbols/svg-400/rounded/add.svg';
 import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg';
@@ -11,6 +11,7 @@ import {
   formatShotNumber,
   formatTakeNumber,
 } from '@/components/takes/TakeNameFormat';
+import { useInterval } from '@/libs/UseInterval';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useShotHash } from '@/serdes/UseResolveShotHash';
 import { useShotNumber } from '@/serdes/UseResolveShotNumber';
@@ -26,7 +27,6 @@ import { useSettingsStore } from '@/stores/settings';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 
 import ClapperCameraNameField from './ClapperCameraNameField';
-import ClapperDateString from './ClapperDateField';
 import ClapperDirectorNameField from './ClapperDirectorNameField';
 import ClapperInput from './ClapperInput';
 import ClapperProductionTitleField from './ClapperProductionTitleField';
@@ -35,11 +35,27 @@ import ClapperVerticalLabel from './ClapperVerticalLabel';
 
 export default function ClapperBoardV2() {
   const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
+  const portraitStyle = 'portrait:flex portrait:flex-col';
+  const landscapeStyle =
+    'landscape:grid landscape:grid-cols-2 landscape:grid-rows-1';
+  const smallestStyle = 'flex flex-col';
+  const smallStyle = 'sm:grid sm:grid-cols-2 sm:grid-rows-1';
   return (
-    <div className="w-full h-full text-[3vmin] flex flex-col gap-4 sm:grid sm:grid-cols-2 sm:grid-rows-1 portrait:flex portrait:flex-col p-4">
+    <div
+      className={
+        'w-full h-full text-[3vmin] flex flex-col gap-x-4 gap-y-0 p-4' +
+        ' ' +
+        smallestStyle +
+        ' ' +
+        smallStyle +
+        ' ' +
+        landscapeStyle +
+        ' ' +
+        portraitStyle
+      }>
       <div>
         <ClapperProductionTitleField
-          className="w-full text-center text-[3em] my-1"
+          className="w-full text-center text-[3em] mb-1 -mt-2 disabled:opacity-100"
           documentId={documentId}
         />
         <ClapperIdentifierFields
@@ -48,21 +64,21 @@ export default function ClapperBoardV2() {
           shotId={shotId}
           takeId={takeId}
         />
-        <div className="hidden sm:block portrait:hidden">
-          <ClapperCommentField
-            className="w-full px-4 py-1 my-1"
-            documentId={documentId}
-            sceneId={sceneId}
-            shotId={shotId}
-          />
-        </div>
-        <ClapperAdditionalFields
-          className="w-full my-2 sm:my-0 portrait:my-2"
+        <ClapperCommentField
+          className="w-full px-4 py-1 my-1"
           documentId={documentId}
           sceneId={sceneId}
           shotId={shotId}
-          takeId={takeId}
         />
+        <div className="hidden sm:block portrait:hidden landscape:block">
+          <ClapperAdditionalFields
+            className="w-full my-2 sm:my-0 portrait:my-2 landscape:my-0"
+            documentId={documentId}
+            sceneId={sceneId}
+            shotId={shotId}
+            takeId={takeId}
+          />
+        </div>
       </div>
       <div className="flex-1 flex flex-col">
         <div className="flex-1 min-h-[40vh]">
@@ -78,14 +94,6 @@ export default function ClapperBoardV2() {
           sceneId={sceneId}
           shotId={shotId}
           takeId={takeId}
-        />
-      </div>
-      <div className="block sm:hidden portrait:block">
-        <ClapperCommentField
-          className="w-full px-4 py-1 my-1"
-          documentId={documentId}
-          sceneId={sceneId}
-          shotId={shotId}
         />
       </div>
     </div>
@@ -120,9 +128,9 @@ function ClapperControlFields({
   }
 
   return (
-    <div className="mx-auto flex items-center">
+    <div className={'flex items-center' + ' ' + className}>
       <ClapperVerticalLabel>CTRL</ClapperVerticalLabel>
-      <div className="flex-1 flex flex-row sm:flex-col portrait:flex-row items-start gap-2 p-2">
+      <div className="flex-1 flex flex-row items-start gap-2 p-2">
         <SettingsFieldButton
           className={
             'outline-none' + ' ' + (takeRating <= 0 ? 'line-through' : '')
@@ -134,7 +142,7 @@ function ClapperControlFields({
           <span className="ml-2 whitespace-nowrap">PRINT THIS</span>
         </SettingsFieldButton>
         <SettingsFieldButton
-          className="w-full text-left"
+          className="flex-1 text-left"
           Icon={AddIcon}
           title="New take"
           onClick={onNextClick}
@@ -158,26 +166,94 @@ function ClapperAdditionalFields({ className, documentId }) {
   return (
     <fieldset
       className={
-        'flex flex-row gap-4 mx-auto font-mono overflow-hidden border-2 rounded-xl' +
+        'flex flex-row gap-4 px-4 mx-auto font-mono overflow-hidden border-2 rounded-xl' +
         ' ' +
         className
       }>
-      <ul className="flex-1 flex flex-col items-start p-4">
-        <ClapperRollField />
-        <ClapperDateStringEntry />
+      <ClapperDateField />
+      <ul className="flex-1 my-auto flex flex-col items-end">
         <ClapperDirectorNameEntry documentId={documentId} />
         <ClapperCameraNameEntry documentId={documentId} />
       </ul>
+      <ClapperRollField />
     </fieldset>
   );
+}
+
+function ClapperDateField() {
+  const { year, month, day } = useRealTimeDate();
+  return (
+    <div className="flex flex-col">
+      <div className="flex flex-row gap-1 text-lg">
+        <span>{getMonthString(month)}</span>
+        <span>{String(day).padStart(2, '0')}</span>
+      </div>
+      <div className="text-2xl">{year}</div>
+    </div>
+  );
+}
+
+/**
+ * @param {number} month
+ */
+function getMonthString(month) {
+  switch (month) {
+    case 0:
+      return 'JAN';
+    case 1:
+      return 'FEB';
+    case 2:
+      return 'MAR';
+    case 3:
+      return 'APR';
+    case 4:
+      return 'MAY';
+    case 5:
+      return 'JUN';
+    case 6:
+      return 'JUL';
+    case 7:
+      return 'AUG';
+    case 8:
+      return 'SEP';
+    case 9:
+      return 'OCT';
+    case 10:
+      return 'NOV';
+    case 11:
+      return 'DEC';
+    default:
+      return '---';
+  }
+}
+
+function useRealTimeDate() {
+  const [date, setDate] = useState({ year: 0, month: 0, day: 0 });
+
+  const onInterval = useCallback(
+    function _onInterval() {
+      let now = new Date();
+      setDate({
+        year: now.getFullYear(),
+        month: now.getMonth(),
+        day: now.getDate(),
+      });
+    },
+    [setDate],
+  );
+  useInterval(onInterval, 1_000);
+  // NOTE: Run once at the start.
+  useEffect(onInterval, [onInterval]);
+  return date;
 }
 
 function ClapperRollField() {
   const [state, setState] = useState('');
   return (
-    <li className="flex text-[1.5em] gap-1">
-      <ClapperLabel>ROLL:</ClapperLabel>
+    <div className="flex-1 flex flex-col items-center text-[1.5em]">
+      <ClapperLabel>ROLL</ClapperLabel>
       <ClapperInput
+        className="w-full text-center text-[2em]"
         name="camera-roll"
         value={state}
         onChange={(e) =>
@@ -185,7 +261,7 @@ function ClapperRollField() {
         }
         autoCapitalize="characters"
       />
-    </li>
+    </div>
   );
 }
 
@@ -360,15 +436,6 @@ function ClapperLabel({ className, htmlFor, children }) {
   );
 }
 
-function ClapperDateStringEntry() {
-  return (
-    <li className="flex gap-1 items-end">
-      <ClapperLabel className="text-[0.5em]">DATE</ClapperLabel>
-      <ClapperDateString />
-    </li>
-  );
-}
-
 /**
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
@@ -381,9 +448,9 @@ function ClapperCameraNameEntry({ documentId }) {
     return null;
   }
   return (
-    <li className="flex gap-1 items-end">
-      <ClapperLabel className="text-[0.5em]">DP</ClapperLabel>
-      <ClapperCameraNameField className="" documentId={documentId} />
+    <li className="flex gap-1 items-center">
+      <ClapperLabel className="text-[0.4em]">DP</ClapperLabel>
+      <ClapperCameraNameField className="truncate" documentId={documentId} />
     </li>
   );
 }
@@ -400,9 +467,9 @@ function ClapperDirectorNameEntry({ documentId }) {
     return null;
   }
   return (
-    <li className="flex gap-1 items-end">
-      <ClapperLabel className="text-[0.5em]">DIR</ClapperLabel>
-      <ClapperDirectorNameField className="" documentId={documentId} />
+    <li className="flex gap-1 items-center">
+      <ClapperLabel className="text-[0.4em]">DIR</ClapperLabel>
+      <ClapperDirectorNameField className="truncate" documentId={documentId} />
     </li>
   );
 }

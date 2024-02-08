@@ -25,13 +25,13 @@ export default function ProjectSelector({ className }) {
     );
   }
   return (
-    <div className={'flex flex-col items-center' + ' ' + className}>
-      <div className="relative flex items-end w-full max-w-[80vw] mb-2">
+    <div className={'relative flex flex-col items-center' + ' ' + className}>
+      <div className="flex items-end w-full max-w-[80vw] mb-2">
         <label className="flex-1 mx-2 opacity-30 text-center truncate">
           Or open project
         </label>
-        <ProjectListStatusButton className="absolute right-0 top-0 translate-y-5 z-10 rounded-xl p-2 -mt-2 bg-black text-white" />
       </div>
+      <ProjectListStatusButton className="absolute bottom-0 right-0 translate-y-5 z-10 rounded-xl p-2 -mt-2 bg-black text-white" />
       <HorizontallyScrollableDiv
         className={
           'w-full max-w-[80vw] rounded-xl bg-black border-x-8 border-y-4 border-black'

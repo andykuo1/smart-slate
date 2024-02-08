@@ -14,7 +14,7 @@ export default function DrawerToolbarLayout({
   return (
     <div
       ref={containerRef}
-      className="fixed bottom-0 right-0 m-4 z-50 flex flex-row-reverse text-2xl gap-2 pointer-events-none text-black">
+      className="fixed bottom-0 right-0 m-2 z-50 flex flex-row-reverse text-2xl gap-2 pointer-events-none text-black">
       {children}
       <div
         className={

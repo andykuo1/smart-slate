@@ -6,8 +6,8 @@ import ProjectSelector from '@/components/projects/ProjectSelector';
 import GoogleConnectButton from '@/libs/googleapi/auth/GoogleConnectButton';
 import AppTitle from '@/welcome/AppTitle';
 import MadeWithLove from '@/welcome/MadeWithLove';
-import ProfilePopover from '@/welcome/ProfilePopover';
 
+// import ProfilePopover from '@/welcome/ProfilePopover';
 import PageLayout from './PageLayout';
 
 export default function RootPage() {
@@ -25,7 +25,7 @@ export default function RootPage() {
       </div>
       <ProjectSelector className="mt-2 mb-auto" />
       <MadeWithLove />
-      <ProfilePopover />
+      {/* <ProfilePopover /> */}
     </PageLayout>
   );
 }
