@@ -36,7 +36,6 @@ import ClapperDirectorNameField from './ClapperDirectorNameField';
 import ClapperInput from './ClapperInput';
 import ClapperProductionTitleField from './ClapperProductionTitleField';
 import ClapperQRCodeField from './ClapperQRCodeField';
-import ClapperVerticalLabel from './ClapperVerticalLabel';
 
 export default function ClapperBoardV2() {
   const { documentId, sceneId, shotId, takeId } =
@@ -79,7 +78,7 @@ export default function ClapperBoardV2() {
   return (
     <div
       className={
-        'w-full h-full text-[3vmin] flex flex-col gap-x-4 gap-y-0 p-4' +
+        'w-full h-full text-[3vmin] flex flex-col gap-x-4 gap-y-0 p-[2em]' +
         ' ' +
         smallestStyle +
         ' ' +
@@ -91,7 +90,7 @@ export default function ClapperBoardV2() {
       }>
       <div className="flex flex-col">
         <ClapperProductionTitleField
-          className="w-full text-center text-[3em] mb-1 -mt-2 disabled:opacity-100"
+          className="w-full text-center text-[3em] mb-1 -mt-2 disabled:opacity-100 truncate"
           documentId={documentId}
         />
         <ClapperIdentifierFields
@@ -101,21 +100,28 @@ export default function ClapperBoardV2() {
           shotId={shotId}
           takeId={takeId}
         />
-        <ClapperCommentField
-          className="w-full px-4 py-1 my-1"
+        <ClapperShotDescriptionField
+          className="w-full px-2 my-2"
           documentId={documentId}
           sceneId={sceneId}
           shotId={shotId}
         />
-        <div className="hidden sm:block portrait:hidden landscape:block">
+        <div className="flex-1 hidden sm:flex portrait:hidden landscape:flex flex-col">
           <ClapperAdditionalFields
-            className="w-full my-2 sm:my-0 portrait:my-2 landscape:my-0"
+            className="w-full"
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
             takeId={takeId}
             rollName={takeId ? rollName || '' : state}
             onRollNameChange={onRollNameChange}
+          />
+          <ClapperCommentField
+            className="flex-1 w-full"
+            documentId={documentId}
+            sceneId={sceneId}
+            shotId={shotId}
+            takeId={takeId}
           />
         </div>
       </div>
@@ -151,6 +157,46 @@ export default function ClapperBoardV2() {
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
+ */
+function ClapperPrintButton({
+  className,
+  documentId,
+  sceneId,
+  shotId,
+  takeId,
+}) {
+  const takeRating = useTakeRating(documentId, takeId);
+  const toggleGoodTake = useDocumentStore((ctx) => ctx.toggleGoodTake);
+
+  function onPrintClick() {
+    toggleGoodTake(documentId, takeId);
+  }
+
+  return (
+    <SettingsFieldButton
+      className={
+        'outline-none' +
+        ' ' +
+        (takeRating <= 0 ? 'line-through' : '') +
+        ' ' +
+        className
+      }
+      Icon={takeRating > 0 ? ThumbUpFillIcon : ThumbUpIcon}
+      title="Mark good take"
+      onClick={onPrintClick}
+      disabled={!takeId}>
+      <span className="whitespace-nowrap">PRINT</span>
+    </SettingsFieldButton>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
  * @param {() => void} props.onNewTake
  */
 function ClapperControlFields({
@@ -161,8 +207,6 @@ function ClapperControlFields({
   takeId,
   onNewTake,
 }) {
-  const takeRating = useTakeRating(documentId, takeId);
-  const toggleGoodTake = useDocumentStore((ctx) => ctx.toggleGoodTake);
   const setUserCursor = useSetUserCursor();
 
   function onNextClick() {
@@ -170,33 +214,18 @@ function ClapperControlFields({
     onNewTake();
   }
 
-  function onPrintClick() {
-    toggleGoodTake(documentId, takeId);
-  }
-
   return (
     <div className={'flex items-center' + ' ' + className}>
-      <ClapperVerticalLabel>CTRL</ClapperVerticalLabel>
-      <div className="flex-1 flex flex-row sm:flex-col portrait:flex-row landscape:flex-col items-start gap-2 p-2">
-        <SettingsFieldButton
-          className={
-            'outline-none' + ' ' + (takeRating <= 0 ? 'line-through' : '')
-          }
-          Icon={takeRating > 0 ? ThumbUpFillIcon : ThumbUpIcon}
-          title="Mark good take"
-          onClick={onPrintClick}
-          disabled={!takeId}>
-          <span className="ml-2 whitespace-nowrap">PRINT THIS</span>
-        </SettingsFieldButton>
-        <SettingsFieldButton
-          className="flex-1 w-full text-left"
-          Icon={AddIcon}
-          title="New take"
-          onClick={onNextClick}
-          disabled={!takeId}>
-          <span className="ml-2 whitespace-nowrap">NEW TAKE</span>
-        </SettingsFieldButton>
-      </div>
+      <div className="flex-1" />
+      <SettingsFieldButton
+        className="flex-1 w-full text-left px-4 my-4"
+        Icon={AddIcon}
+        title="New take"
+        onClick={onNextClick}
+        disabled={!takeId}>
+        <span className="ml-2 whitespace-nowrap">NEW TAKE</span>
+      </SettingsFieldButton>
+      <div className="flex-1" />
     </div>
   );
 }
@@ -339,7 +368,12 @@ function ClapperRollField({ value, onChange }) {
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  */
-function ClapperCommentField({ className, documentId, sceneId, shotId }) {
+function ClapperShotDescriptionField({
+  className,
+  documentId,
+  sceneId,
+  shotId,
+}) {
   const description = useShotDescription(documentId, shotId);
   const shotType = useShotType(documentId, shotId);
   const enableThumbnailWhileRecording = useSettingsStore(
@@ -347,21 +381,16 @@ function ClapperCommentField({ className, documentId, sceneId, shotId }) {
   );
   const hasShotText = shotType && description;
   return (
-    <div className="flex-1 flex flex-row">
-      <textarea
-        className={
-          'flex-1 font-mono resize-none bg-transparent' + ' ' + className
-        }
-        placeholder={
-          !hasShotText
-            ? 'Comments'
-            : shotType + (description ? ` of ${description}` : '')
-        }
-      />
+    <div className={'flex flex-row gap-2' + ' ' + className}>
+      <p
+        className="flex-1 font-mono break-words overflow-y-hidden"
+        hidden={!hasShotText}>
+        {shotType + (description ? ` of ${description}` : '')}
+      </p>
       {enableThumbnailWhileRecording && (
-        <div className="flex flex-col items-center p-2">
+        <div className="flex flex-col items-end">
           <ShotThumbnail
-            className="mx-auto text-base rounded overflow-hidden"
+            className="text-base rounded overflow-hidden"
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
@@ -370,6 +399,42 @@ function ClapperCommentField({ className, documentId, sceneId, shotId }) {
           />
         </div>
       )}
+    </div>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {string} props.className
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
+ */
+function ClapperCommentField({
+  className,
+  documentId,
+  sceneId,
+  shotId,
+  takeId,
+}) {
+  const [comments, setComments] = useState('');
+  return (
+    <div className={'flex flex-row gap-1' + ' ' + className}>
+      <textarea
+        style={{ lineHeight: '1em' }}
+        className="w-full text-[1.5em] font-mono resize-none bg-transparent p-2 my-1 rounded-xl placeholder:opacity-30"
+        value={comments}
+        onChange={(e) => setComments(e.target.value)}
+        placeholder="Comments"
+      />
+      <ClapperPrintButton
+        className="vertical-lr"
+        documentId={documentId}
+        sceneId={sceneId}
+        shotId={shotId}
+        takeId={takeId}
+      />
     </div>
   );
 }
@@ -516,8 +581,13 @@ function ClapperCameraNameEntry({ documentId }) {
   }
   return (
     <li className="flex gap-1 items-center">
-      <ClapperLabel className="text-[0.4em]">DP</ClapperLabel>
-      <ClapperCameraNameField className="truncate" documentId={documentId} />
+      <ClapperLabel className="text-right text-[0.5em] self-end">
+        DP
+      </ClapperLabel>
+      <ClapperCameraNameField
+        className="flex-1 text-left truncate"
+        documentId={documentId}
+      />
     </li>
   );
 }
@@ -535,8 +605,13 @@ function ClapperDirectorNameEntry({ documentId }) {
   }
   return (
     <li className="flex gap-1 items-center">
-      <ClapperLabel className="text-[0.4em]">DIR</ClapperLabel>
-      <ClapperDirectorNameField className="truncate" documentId={documentId} />
+      <ClapperLabel className="text-right text-[0.5em] self-end">
+        DIR
+      </ClapperLabel>
+      <ClapperDirectorNameField
+        className="flex-1 text-left truncate"
+        documentId={documentId}
+      />
     </li>
   );
 }
