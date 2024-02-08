@@ -298,6 +298,11 @@ function IndexTake({
   const takeRoll = useDocumentStore(
     (ctx) => getTakeExportDetailsById(ctx, documentId, takeId)?.rollName,
   );
+  const timestampMillis = useDocumentStore(
+    (ctx) =>
+      getTakeExportDetailsById(ctx, documentId, takeId)?.timestampMillis || 0,
+  );
+  const detailMode = useUserStore((ctx) => ctx.outlineMode === 'detail');
   const setUserCursor = useSetUserCursor();
 
   function onClick() {
@@ -325,7 +330,16 @@ function IndexTake({
         />
         <div>Take {formatTakeNumber(takeNumber, true)}</div>
         {takeRating > 0 && <ThumbUpFillIcon className="w-4 h-4 fill-current" />}
-        {takeRoll && `[ROLL ${takeRoll}]`}
+        <div className="flex-1 my-auto border-b-2 border-gray-400 border-dotted" />
+        <span className="opacity-50">
+          {takeRoll && `[${takeRoll}] `}
+          {timestampMillis > 0 &&
+            `${
+              detailMode
+                ? new Date(timestampMillis).toLocaleString()
+                : new Date(timestampMillis).toLocaleDateString()
+            }`}
+        </span>
       </button>
     </li>
   );
