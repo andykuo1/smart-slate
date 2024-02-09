@@ -6,6 +6,7 @@ import { toBlobURL } from '@ffmpeg/util';
 import { scanImageURLForQRCode } from '@/scanner/QRCodeReader';
 
 /*
+// "@diffusion-studio/ffmpeg-js": "^0.2.3",
 import { FFmpeg } from '@diffusion-studio/ffmpeg-js';
 
 async function load() {
@@ -57,6 +58,7 @@ export default function TestTranscode() {
 
   async function load() {
     const ffmpeg = new FFmpeg();
+    // const baseURL = 'https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm';
     const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
     ffmpeg.on('log', (e) => {
       switch (e.type) {
@@ -75,6 +77,12 @@ export default function TestTranscode() {
         `${baseURL}/ffmpeg-core.wasm`,
         'application/wasm',
       ),
+      /*
+      workerURL: await toBlobURL(
+        `${baseURL}/ffmpeg-core.worker.js`,
+        'text/javascript',
+      ),
+      */
     });
     await ffmpeg.exec(['-help']);
 
@@ -149,6 +157,7 @@ export default function TestTranscode() {
       excludeAcceptAllOption: true,
       multiple: false,
     });
+    const startTime = Date.now();
     const file = await fileHandle.getFile();
 
     const inputDir = '/input';
@@ -264,7 +273,16 @@ export default function TestTranscode() {
     ffmpeg.unmount(inputDir);
     ffmpeg.deleteDir(inputDir);
 
-    outputProgressLinesRef.current.push('DONE!');
+    const stopTime = Date.now();
+
+    const deltaTime = (stopTime - startTime) / 1_000;
+    outputProgressLinesRef.current.push(
+      'DONE! Took ' +
+        deltaTime +
+        ' seconds for ' +
+        durationSecs +
+        ' seconds of footage.',
+    );
     if (outputProgressRef.current) {
       outputProgressRef.current.textContent =
         outputProgressLinesRef.current.join('\n');
@@ -302,7 +320,7 @@ export default function TestTranscode() {
             <h3 className="font-bold text-md">Supported Video Codecs</h3>
             <pre
               ref={outputSupportedVideoCodecsRef}
-              className="overflow-y-auto h-32">
+              className="overflow-auto w-64 h-32">
               --empty--
             </pre>
           </div>
