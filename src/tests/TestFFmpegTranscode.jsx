@@ -52,6 +52,8 @@ export default function TestFFmpegTranscode() {
   const [enableSnapshot, setEnableSnapshot] = useState(false);
   const ffmpegRef = useRef(/** @type {FFmpeg|null} */ (null));
   const ffmpegLoggingRef = useRef(/** @type {FFmpegLogging|null} */ (null));
+  const fileDataRef = useRef(/** @type {File|null} */ (null));
+  const videoRef = useRef(/** @type {HTMLVideoElement|null} */ (null));
 
   return (
     <fieldset className="relative my-4 border">
@@ -99,23 +101,16 @@ export default function TestFFmpegTranscode() {
         }}
       />
       <TestStep
-        title="Step 2 - Transcode files"
+        title="Step 2 - Select video file"
         onExecute={async function* () {
-          const ffmpeg = ffmpegRef.current;
-          if (!ffmpeg) {
-            yield 'FFmpeg is not yet loaded.';
-            return;
-          }
-
           yield 'Opening file picker...';
-
           // @ts-ignore
           const [fileHandle] = await window.showOpenFilePicker({
             types: [
               {
                 description: 'Input videos',
                 accept: {
-                  'image/*': [
+                  'video/*': [
                     '.mp4',
                     '.m4v',
                     '.webm',
@@ -130,11 +125,69 @@ export default function TestFFmpegTranscode() {
             excludeAcceptAllOption: true,
             multiple: false,
           });
-
           yield 'Loading file...';
-          const startTime = Date.now();
+          /** @type {File} */
           const file = await fileHandle.getFile();
+          fileDataRef.current = file;
+        }}
+      />
+      <TestStep
+        title="Step 3 - Test video"
+        onExecute={async function* () {
+          const video = videoRef.current;
+          if (!video) {
+            yield 'Video element not yet loaded.';
+            return;
+          }
+          const file = fileDataRef.current;
+          if (!file) {
+            yield 'No file selected.';
+            return;
+          }
+          let result = false;
+          let blobUrl = '';
+          try {
+            blobUrl = URL.createObjectURL(file);
+            let event = new Promise((resolve, reject) => {
+              video.addEventListener('loadedmetadata', () => {
+                resolve('loadedmetadata');
+              });
+              video.src = blobUrl;
+              video.play().then(resolve).catch(reject);
+            });
+            yield `Got result: ${await event}`;
+            result = true;
+          } catch (e) {
+            let err = /** @type {any} */ (e);
+            yield `ERROR ${err.name}: ${err.message}`;
+            result = false;
+          } finally {
+            URL.revokeObjectURL(blobUrl);
+          }
+          if (result) {
+            yield '\nCOMPLETE! This is a playable video. We should skip transcoding.\n';
+          } else {
+            yield '\nCOMPLETE! This is NOT a playable video. We should use FFmpeg to transcode.\n';
+          }
+        }}>
+        <video className="outline" ref={videoRef} muted={true} />
+      </TestStep>
+      <TestStep
+        title="Step 4 - Transcode video"
+        onExecute={async function* () {
+          const ffmpeg = ffmpegRef.current;
+          if (!ffmpeg) {
+            yield 'FFmpeg is not yet loaded.';
+            return;
+          }
 
+          const file = fileDataRef.current;
+          if (!file) {
+            yield 'No file selected.';
+            return;
+          }
+
+          const startTime = Date.now();
           const inputDir = '/input';
           const inputName = inputDir + '/' + file.name;
 
@@ -182,23 +235,28 @@ export default function TestFFmpegTranscode() {
             await ffmpeg.deleteFile(outputName);
 
             let blob = new Blob([result], { type: outputType });
-            let blobUrl = URL.createObjectURL(blob);
-            yield `...to blob ${blobUrl}.`;
+            let blobUrl = '';
+            try {
+              blobUrl = URL.createObjectURL(blob);
+              yield `...to blob ${blobUrl}.`;
 
-            yield `Scanning frame...`;
-            if (enableSnapshot) {
-              yield `...and downloading snapshot...`;
-              downloadURLImpl('at_' + i + '_' + outputName, blobUrl);
-            }
+              yield `Scanning frame...`;
+              if (enableSnapshot) {
+                yield `...and downloading snapshot...`;
+                downloadURLImpl('at_' + i + '_' + outputName, blobUrl);
+              }
 
-            const qrCodeText = await scanImageURLForQRCode(blobUrl);
-            if (!qrCodeText) {
-              yield `...no qr code not found :( keep going...`;
-            } else {
-              yield `...FOUND QR CODE! :D => '${qrCodeText}'...`;
-              qrCodes.push(qrCodeText);
-              yield '...stop scanning now.';
-              break;
+              const qrCodeText = await scanImageURLForQRCode(blobUrl);
+              if (!qrCodeText) {
+                yield `...no qr code not found :( keep going...`;
+              } else {
+                yield `...FOUND QR CODE! :D => '${qrCodeText}'...`;
+                qrCodes.push(qrCodeText);
+                yield '...stop scanning now.';
+                break;
+              }
+            } finally {
+              URL.revokeObjectURL(blobUrl);
             }
           }
           yield '...scanning stopped.';

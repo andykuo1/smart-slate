@@ -17,7 +17,7 @@ export default function TestPage() {
     sessionStorage.getItem(TEST_STORAGE_KEY) || '',
   );
   return (
-    <main className="w-full h-full flex flex-col items-center py-20 bg-white text-black">
+    <main className="w-full h-full flex flex-col items-center py-20 bg-white text-black overflow-y-auto">
       <div className="fixed top-0 left-0 z-50 flex flex-row rounded-ee-full bg-gray-200 overflow-hidden">
         <p className="bg-green-300 rounded-full px-2 m-1">
           {TEST_VERSION} @ {TEST_CONFIGTIME}
