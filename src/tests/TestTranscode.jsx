@@ -158,6 +158,7 @@ export default function TestTranscode() {
     let { duration } = await getFFmpegVideoMetadata(ffmpeg, inputName);
     console.log('[TestTranscode] Duration: ', duration, ' seconds');
 
+    // scrub and scan for qr code
     let qrCodes = [];
     for (let i = 0; i < duration; ++i) {
       console.log('[TestTranscode] Getting frame at ' + i + ' sec');
@@ -171,8 +172,8 @@ export default function TestTranscode() {
       let hours = String(Math.floor(i / 60 / 60)).padStart(2, '0');
       let timeString = `${hours}:${mins}:${secs}`;
 
-      const outputName = 'output.png';
-      const outputType = 'image/png';
+      const outputName = 'output.jpg';
+      const outputType = 'image/jpg';
       console.log('[TestTranscode] ', timeString);
       await ffmpeg.exec([
         '-ss',
