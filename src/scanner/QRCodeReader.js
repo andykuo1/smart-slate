@@ -1,6 +1,20 @@
 import { BrowserQRCodeReader, NotFoundException } from '@zxing/library';
 
 /**
+ * @param {string} imageUrl
+ */
+export async function scanImageURLForQRCode(imageUrl) {
+  const reader = new BrowserQRCodeReader();
+  try {
+    let result = await reader.decodeFromImageUrl(imageUrl);
+    return result.getText();
+  } catch (e) {
+    console.error('[QRCodeReader] ', e);
+  }
+  return '';
+}
+
+/**
  * @param {HTMLVideoElement} video
  */
 export async function scanVideoForQRCodes(video) {
