@@ -340,7 +340,6 @@ const MAX_ITERATIONS = 1_000;
  */
 function renumberShots(store, documentId, sceneId, emptyOnly = true) {
   let scene = getSceneById(store, documentId, sceneId);
-  scene.nextShotNumber = 1;
   // Get all used numbers so we can avoid them...
   /** @type {Array<number>} */
   let usedNumbers = [];
@@ -358,6 +357,7 @@ function renumberShots(store, documentId, sceneId, emptyOnly = true) {
     }
   }
   // Actually change the scene number...
+  scene.nextShotNumber = 1;
   for (let blockId of scene.blockIds) {
     let block = getBlockById(store, documentId, blockId);
     for (let shotId of block.shotIds) {

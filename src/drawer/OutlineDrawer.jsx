@@ -1,6 +1,17 @@
+import {
+  Popover,
+  PopoverArrow,
+  PopoverDisclosure,
+  PopoverProvider,
+  usePopoverContext,
+} from '@ariakit/react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import AddIcon from '@material-symbols/svg-400/rounded/add.svg';
 import CheckBoxFillIcon from '@material-symbols/svg-400/rounded/check_box-fill.svg';
 import CheckBoxIcon from '@material-symbols/svg-400/rounded/check_box.svg';
 import CheckBoxOutlineBlankIcon from '@material-symbols/svg-400/rounded/check_box_outline_blank.svg';
+import EditSquareIcon from '@material-symbols/svg-400/rounded/edit_square.svg';
 import InfoFillIcon from '@material-symbols/svg-400/rounded/info-fill.svg';
 import InfoIcon from '@material-symbols/svg-400/rounded/info.svg';
 import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg';
@@ -16,7 +27,7 @@ import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useShotNumber } from '@/serdes/UseResolveShotNumber';
 import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
 import {
-  getSceneById,
+  getLastBlockIdInScene,
   getShotById,
   getTakeById,
   getTakeExportDetailsById,
@@ -28,6 +39,7 @@ import {
   useTakeIds,
   useTakeRating,
 } from '@/stores/document';
+import { createShot } from '@/stores/document/DocumentStore';
 import {
   useSceneIds,
   useSceneShotCount,
@@ -39,6 +51,7 @@ import {
   useSetUserCursor,
   useUserStore,
 } from '@/stores/user';
+import PopoverStyle from '@/styles/Popover.module.css';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 
 import DocumentDivider from '../components/documents/DocumentDivider';
@@ -125,8 +138,17 @@ function IndexScene({ documentId, sceneId, isActive }) {
           />
         </div>
         <div
-          className={'font-bold' + ' ' + (!sceneHeading ? 'opacity-30' : '')}>
+          className={
+            'flex-1 font-bold' + ' ' + (!sceneHeading ? 'opacity-30' : '')
+          }>
           {sceneHeading || 'INT/EXT. SCENE - DAY'}
+        </div>
+        <div
+          className={
+            'flex flex-row items-center -mt-1' + ' ' + (!isActive && 'hidden')
+          }>
+          <EditSceneButton documentId={documentId} sceneId={sceneId} />
+          <AddShotButton documentId={documentId} sceneId={sceneId} />
         </div>
       </button>
       <ul id={listId} className="w-full flex flex-col">
@@ -147,22 +169,140 @@ function IndexScene({ documentId, sceneId, isActive }) {
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ */
+function EditSceneButton({ documentId, sceneId }) {
+  const toggleDrawer = useUserStore((ctx) => ctx.toggleDrawer);
+  const setUserCursor = useSetUserCursor();
+  const location = useLocation();
+  const navigate = useNavigate();
+  return (
+    <SettingsFieldButton
+      inverted={true}
+      Icon={EditSquareIcon}
+      title="Edit scene"
+      onClick={(e) => {
+        toggleDrawer(false);
+        setUserCursor(documentId, sceneId, '', '');
+        if (!location.pathname.includes('/edit')) {
+          navigate('/edit');
+        }
+        e.stopPropagation();
+      }}
+    />
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ */
+function AddShotButton({ documentId, sceneId }) {
+  const setUserCursor = useSetUserCursor();
+  const addShot = useDocumentStore((ctx) => ctx.addShot);
+  const lastBlockId = useDocumentStore((ctx) =>
+    getLastBlockIdInScene(ctx, documentId, sceneId),
+  );
+  return (
+    <PopoverProvider>
+      <AddShotDisclosure documentId={documentId} sceneId={sceneId} />
+      <Popover className={PopoverStyle.popover}>
+        <PopoverArrow className={PopoverStyle.arrow} />
+        <button
+          onClick={(e) => {
+            let shot = createShot();
+            shot.shotType = 'WS';
+            addShot(documentId, sceneId, lastBlockId, shot);
+            setUserCursor(documentId, sceneId, shot.shotId, '');
+            e.stopPropagation();
+          }}>
+          WS
+        </button>
+        <button
+          onClick={(e) => {
+            let shot = createShot();
+            shot.shotType = 'MS';
+            addShot(documentId, sceneId, lastBlockId, shot);
+            setUserCursor(documentId, sceneId, shot.shotId, '');
+            e.stopPropagation();
+          }}>
+          MS
+        </button>
+        <button
+          onClick={(e) => {
+            let shot = createShot();
+            shot.shotType = 'CU';
+            addShot(documentId, sceneId, lastBlockId, shot);
+            setUserCursor(documentId, sceneId, shot.shotId, '');
+            e.stopPropagation();
+          }}>
+          CU
+        </button>
+      </Popover>
+    </PopoverProvider>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ */
+function AddShotDisclosure({ documentId, sceneId }) {
+  const store = usePopoverContext();
+  const setUserCursor = useSetUserCursor();
+  const addShot = useDocumentStore((ctx) => ctx.addShot);
+  const lastBlockId = useDocumentStore((ctx) =>
+    getLastBlockIdInScene(ctx, documentId, sceneId),
+  );
+  return (
+    <PopoverDisclosure>
+      <SettingsFieldButton
+        inverted={true}
+        Icon={AddIcon}
+        title="Add new shot to scene"
+        onClick={(e) => {
+          let shot = createShot();
+          addShot(documentId, sceneId, lastBlockId, shot);
+          setUserCursor(documentId, sceneId, shot.shotId, '');
+          e.stopPropagation();
+        }}
+        onContextMenu={(e) => {
+          if (store) {
+            store.show();
+          }
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+      />
+    </PopoverDisclosure>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  */
 function IndexBlock({ documentId, sceneId, blockId }) {
   const shotIds = useShotIds(documentId, blockId);
   const activeShotId = useUserStore((ctx) => ctx.cursor?.shotId);
-  return shotIds.map((shotId, index, array) => (
-    <IndexShot
-      key={shotId}
-      documentId={documentId}
-      sceneId={sceneId}
-      blockId={blockId}
-      shotId={shotId}
-      isLastShot={index >= array.length - 1}
-      isActive={activeShotId === shotId}
-    />
-  ));
+  return (
+    <>
+      {shotIds.map((shotId, index, array) => (
+        <IndexShot
+          key={shotId}
+          documentId={documentId}
+          sceneId={sceneId}
+          blockId={blockId}
+          shotId={shotId}
+          isLastShot={index >= array.length - 1}
+          isActive={activeShotId === shotId}
+        />
+      ))}
+    </>
+  );
 }
 
 /**
@@ -352,17 +492,12 @@ function IndexTake({
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  */
 function SceneContentCount({ className, documentId, sceneId }) {
-  const blockCount = useDocumentStore(
-    (ctx) => getSceneById(ctx, documentId, sceneId)?.blockIds?.length,
-  );
   const shotCount = useSceneShotCount(documentId, sceneId);
   return (
     <output
       className={
         'text-xs opacity-50 flex gap-1 ml-2 whitespace-nowrap' + ' ' + className
       }>
-      <span>{blockCount} blocks</span>
-      <span>/</span>
       <span>{shotCount} shots</span>
     </output>
   );

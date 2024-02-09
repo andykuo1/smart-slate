@@ -2,6 +2,7 @@
  * @param {object} props
  * @param {string} [props.className]
  * @param {import('react').MouseEventHandler<HTMLButtonElement>} [props.onClick]
+ * @param {import('react').MouseEventHandler<HTMLButtonElement>} [props.onContextMenu]
  * @param {boolean} [props.danger]
  * @param {boolean} [props.inverted]
  * @param {import('react').FC<any>} [props.Icon]
@@ -12,6 +13,7 @@
 export default function SettingsFieldButton({
   className,
   onClick,
+  onContextMenu,
   Icon,
   title,
   children,
@@ -37,6 +39,7 @@ export default function SettingsFieldButton({
         (className ?? 'w-full')
       }
       onClick={onClick}
+      onContextMenu={onContextMenu}
       title={title}
       disabled={disabled}>
       {Icon && <Icon className="w-[2em] h-[2em] fill-current" />}

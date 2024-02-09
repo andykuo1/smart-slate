@@ -29,7 +29,11 @@ import {
 } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import { useSettingsStore } from '@/stores/settings';
-import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
+import {
+  useCurrentCursor,
+  useSetUserCursor,
+  useUserStore,
+} from '@/stores/user';
 
 import ClapperCameraNameField from './ClapperCameraNameField';
 import ClapperDirectorNameField from './ClapperDirectorNameField';
@@ -454,13 +458,18 @@ function ClapperIdentifierFields({
   shotId,
   takeId,
 }) {
+  const toggleDrawer = useUserStore((ctx) => ctx.toggleDrawer);
+  function onClick() {
+    toggleDrawer();
+  }
   return (
     <fieldset
       className={
         'flex flex-row gap-4 mx-auto text-[1em] font-mono overflow-hidden' +
         ' ' +
         className
-      }>
+      }
+      onClick={onClick}>
       <div className="flex-1 flex flex-col items-center px-2 border-2 rounded-xl">
         <div className="flex flex-col items-end">
           <ClapperSceneShotNumberField
@@ -507,6 +516,7 @@ function ClapperSceneShotNumberField({ documentId, sceneId, shotId }) {
 
   const sceneOutputId = 'clapSceneNo-' + sceneId;
   const shotOutputId = 'clapShotNo-' + shotId;
+
   return (
     <div className="flex flex-row gap-1">
       <div className="flex flex-col items-end">
