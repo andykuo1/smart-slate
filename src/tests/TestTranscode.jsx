@@ -49,6 +49,7 @@ import { downloadURLImpl } from '@/utils/Downloader';
 export default function TestTranscode() {
   const [enableSnapshot, setEnableSnapshot] = useState(false);
   const ffmpegRef = useRef(/** @type {FFmpeg|null} */ (null));
+  const ffmpegLoggingRef = useRef(/** @type {FFmpegLogging|null} */ (null));
   const outputQRCodesRef = useRef(/** @type {HTMLPreElement|null} */ (null));
   const outputProgressRef = useRef(/** @type {HTMLPreElement|null} */ (null));
   const outputProgressLinesRef = useRef(/** @type {Array<string>} */ ([]));
@@ -60,17 +61,8 @@ export default function TestTranscode() {
     const ffmpeg = new FFmpeg();
     // const baseURL = 'https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm';
     const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
-    ffmpeg.on('log', (e) => {
-      switch (e.type) {
-        case 'stdout':
-          console.log('[FFMPEG] ', e.message);
-          break;
-        case 'stderr':
-        default:
-          console.error('[FFMPEG] ', e.message);
-          break;
-      }
-    });
+    const logging = new FFmpegLogging(ffmpeg, true);
+
     await ffmpeg.load({
       coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
       wasmURL: await toBlobURL(
@@ -84,40 +76,29 @@ export default function TestTranscode() {
       ),
       */
     });
-    await ffmpeg.exec(['-help']);
 
-    /** @type {Array<string>} */
-    let lines = [];
-    /**
-     * @param {any} e
-     */
-    function onFFMPEGLog(e) {
-      lines.push(e.message.trim());
+    if ((await getFFmpegHelp(ffmpeg)).length <= 0) {
+      console.error('[TestTranscode] Failed to start ffmpeg!');
+    } else {
+      console.log('[TestTranscode] FFmpeg is ready!');
     }
-    ffmpeg.on('log', onFFMPEGLog);
-    await ffmpeg.exec(['-codecs']);
-    ffmpeg.off('log', onFFMPEGLog);
-    let i = lines.indexOf('-------');
-    if (i >= 0) {
-      let results = [];
-      for (let j = i; j < lines.length; ++j) {
-        let line = lines[j];
-        if (line.startsWith('D') && line.charAt(2) === 'V') {
-          results.push(line);
-        }
-      }
-      console.log(
-        '[TestTranscode] Supports video codecs: ',
-        results.join('\n'),
-      );
-      let outputSupportedVideoCodecs = outputSupportedVideoCodecsRef.current;
-      if (outputSupportedVideoCodecs) {
-        outputSupportedVideoCodecs.textContent =
-          'TOTAL: ' + results.length + ' codecs\n\n' + results.join('\n');
-      }
+
+    let supportedCodecs = await getFFmpegSupportedCodecs(ffmpeg);
+    console.log(
+      '[TestTranscode] Supports video codecs: ',
+      supportedCodecs.join('\n'),
+    );
+    let outputSupportedVideoCodecs = outputSupportedVideoCodecsRef.current;
+    if (outputSupportedVideoCodecs) {
+      outputSupportedVideoCodecs.textContent =
+        'TOTAL: ' +
+        supportedCodecs.length +
+        ' codecs\n\n' +
+        supportedCodecs.join('\n');
     }
 
     ffmpegRef.current = ffmpeg;
+    ffmpegLoggingRef.current = logging;
   }
 
   async function transcode() {
@@ -174,33 +155,11 @@ export default function TestTranscode() {
     );
 
     // get metadata
-    let logs = /** @type {Array<string>} */ ([]);
-    /** @param {any} e */
-    function onFFMPEGLog(e) {
-      logs.push(e.message);
-    }
-    ffmpeg.on('log', onFFMPEGLog);
-    await ffmpeg.exec(['-i', inputName]);
-    ffmpeg.off('log', onFFMPEGLog);
-    let durationLog = logs.find((line) => line.includes('Duration'));
-    if (!durationLog) {
-      console.error('[TestTranscode] ======= did not work :(');
-      return;
-    }
-    const DURATION = 'Duration:';
-    let i = durationLog.indexOf(DURATION) + DURATION.length;
-    let j = durationLog.indexOf(',', i);
-    if (i < 0 || j < 0) {
-      console.error('[TestTranscode] ====== could not find duration.');
-      return;
-    }
-    let durationTimeString = durationLog.substring(i, j).trim();
-    const [hours, mins, secs] = durationTimeString.split(':');
-    let durationSecs = (Number(hours) * 60 + Number(mins)) * 60 + Number(secs);
-    console.log('[TestTranscode] ====== ' + durationSecs);
+    let { duration } = await getFFmpegVideoMetadata(ffmpeg, inputName);
+    console.log('[TestTranscode] Duration: ', duration, ' seconds');
 
     let qrCodes = [];
-    for (let i = 0; i < durationSecs; ++i) {
+    for (let i = 0; i < duration; ++i) {
       console.log('[TestTranscode] Getting frame at ' + i + ' sec');
       outputProgressLinesRef.current.push('Getting frame at ' + i + ' sec...');
       if (outputProgressRef.current) {
@@ -260,13 +219,15 @@ export default function TestTranscode() {
           outputProgressRef.current.textContent =
             outputProgressLinesRef.current.join('\n');
         }
+        console.log('[TestTranscode] Stopping now...');
+        break;
       }
     }
 
     let outputQRCode = outputQRCodesRef.current;
     if (outputQRCode) {
       outputQRCode.textContent =
-        'TOTAL: ' + qrCodes.length + ' qr codes\n\n' + qrCodes.join('\n');
+        'TOTAL: ' + qrCodes.length + ' qr code(s)\n\n' + qrCodes.join('\n');
     }
 
     // Clean-up
@@ -280,7 +241,7 @@ export default function TestTranscode() {
       'DONE! Took ' +
         deltaTime +
         ' seconds for ' +
-        durationSecs +
+        duration +
         ' seconds of footage.',
     );
     if (outputProgressRef.current) {
@@ -348,4 +309,137 @@ export default function TestTranscode() {
       </ul>
     </fieldset>
   );
+}
+
+/**
+ * @param {FFmpeg} ffmpeg
+ * @param {string} fsFileName
+ */
+async function getFFmpegVideoMetadata(ffmpeg, fsFileName) {
+  let logging = new FFmpegLogging(ffmpeg);
+  logging.startCapturing();
+  await ffmpeg.exec(['-i', fsFileName]);
+  let lines = logging.stopCapturing();
+
+  let result = {
+    duration: -1,
+  };
+  const DURATION_DELIMITER = 'Duration:';
+  for (let line of lines) {
+    let i = line.indexOf(DURATION_DELIMITER);
+    if (i < 0) {
+      // No duration here...
+      continue;
+    }
+    i += DURATION_DELIMITER.length;
+    let j = line.indexOf(',', i);
+    if (j < 0) {
+      // There's no end?
+      continue;
+    }
+    let durationString = line.substring(i, j).trim();
+    let [hours, mins, secs] = durationString.split(':');
+    let totalSeconds = (Number(hours) * 60 + Number(mins)) * 60 + Number(secs);
+    result.duration = totalSeconds;
+  }
+  return result;
+}
+
+/**
+ * @param {FFmpeg} ffmpeg
+ */
+async function getFFmpegHelp(ffmpeg) {
+  let logging = new FFmpegLogging(ffmpeg);
+  logging.startCapturing();
+  await ffmpeg.exec(['-help']);
+  return logging.stopCapturing();
+}
+
+/**
+ * @param {FFmpeg} ffmpeg
+ */
+async function getFFmpegSupportedCodecs(ffmpeg) {
+  let logging = new FFmpegLogging(ffmpeg);
+  logging.startCapturing();
+  await ffmpeg.exec(['-codecs']);
+  let lines = logging.stopCapturing();
+
+  /** @type {Array<string>} */
+  let results = [];
+  let startIndex = lines.indexOf('-------');
+  if (startIndex < 0) {
+    return [];
+  }
+  for (let i = startIndex; i < lines.length; ++i) {
+    let line = lines[i];
+    // NOTE: If it has a decoder and is a video codec
+    //  from the DEVILS acronym :P
+    if (line.charAt(0) === 'D' && line.charAt(2) === 'V') {
+      results.push(line);
+    }
+  }
+  return results;
+}
+
+class FFmpegLogging {
+  /**
+   *
+   * @param {FFmpeg} ffmpeg
+   * @param {boolean} [redirect]
+   */
+  constructor(ffmpeg, redirect = false) {
+    /** @readonly */
+    this.ffmpeg = ffmpeg;
+    /** @readonly */
+    this.redirect = redirect;
+
+    /**
+     * @private
+     * @type {Array<string>}
+     */
+    this.captured = [];
+    /** @private */
+    this.capturing = false;
+
+    /** @private */
+    this.onLog = this.onLog.bind(this);
+
+    this.ffmpeg.on('log', this.onLog);
+  }
+
+  destroy() {
+    this.ffmpeg.off('log', this.onLog);
+  }
+
+  /**
+   * @param {Array<string>} output
+   */
+  startCapturing(output = []) {
+    this.capturing = true;
+    this.captured = output;
+  }
+
+  stopCapturing() {
+    let result = this.captured;
+    this.capturing = false;
+    this.captured = [];
+    return result;
+  }
+
+  /**
+   * @private
+   * @param {{ type: string, message: string }} e
+   */
+  onLog(e) {
+    if (this.redirect) {
+      if (e.type === 'stdout') {
+        console.debug('[FFmpeg]', ' ', e.message);
+      } else {
+        console.error('[FFmpeg]', ' ', e.message);
+      }
+    }
+    if (this.capturing) {
+      this.captured.push(e.message.trim());
+    }
+  }
 }
