@@ -33,7 +33,7 @@ export default function TestCRUDSync() {
   const [configB, setConfigB] = useState(createConfiguration());
   const [output, setOutput] = useState({});
   return (
-    <div className="w-full">
+    <div className="w-[80%]">
       <div className="flex flex-col gap-2 items-start">
         <button
           onClick={() => {

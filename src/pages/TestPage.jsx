@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
 import TestCRUDSync from '@/tests/TestCRUDSync';
+import TestFFmpegTranscode from '@/tests/TestFFmpegTranscode';
 import TestLexicalMarkdown from '@/tests/TestLexicalMarkdown';
 import TestScreenplay from '@/tests/TestScreenplay';
 import TestSnapshot from '@/tests/TestSnapshot';
-import TestTranscode from '@/tests/TestTranscode';
 import TestVideoConstraints from '@/tests/TestVideoConstraints';
 
 const TEST_VERSION = 'v16';
@@ -36,7 +36,7 @@ export default function TestPage() {
           <option value="videoconstraints">Video Constraints Test</option>
           <option value="lexicalmarkdown">Lexical Markdown Test</option>
           <option value="crudsync">CRUD Sync Test</option>
-          <option value="transcode">FFMPEG Transcode Test</option>
+          <option value="ffmpegtranscode">FFMPEG Transcode Test</option>
         </select>
       </div>
       {test === 'screenplay' && <TestScreenplay />}
@@ -44,7 +44,7 @@ export default function TestPage() {
       {test === 'videoconstraints' && <TestVideoConstraints />}
       {test === 'lexicalmarkdown' && <TestLexicalMarkdown />}
       {test === 'crudsync' && <TestCRUDSync />}
-      {test === 'transcode' && <TestTranscode />}
+      {test === 'ffmpegtranscode' && <TestFFmpegTranscode />}
     </main>
   );
 }
