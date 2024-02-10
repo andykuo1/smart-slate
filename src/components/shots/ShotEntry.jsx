@@ -7,6 +7,7 @@ import { useDraggable, useIsDragging } from '@/stores/draggable';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 
+import { getShotFocusId } from './ShotFocus';
 import ShotMover from './ShotMover';
 import ShotNumber from './ShotNumber';
 import ShotThumbnail from './ShotThumbnail';
@@ -60,6 +61,7 @@ export function ShotEntry({
 
   return (
     <li
+      id={getShotFocusId(shotId)}
       ref={containerRef}
       className={
         'relative flex flex-col items-center mx-auto' +

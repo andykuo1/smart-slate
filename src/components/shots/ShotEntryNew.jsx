@@ -1,5 +1,3 @@
-import { useRef } from 'react';
-
 import AddBoxIcon from '@material-symbols/svg-400/rounded/add_box.svg';
 
 import { createShot } from '@/stores/document/DocumentStore';
@@ -21,7 +19,6 @@ export default function ShotEntryNew({
   blockId,
   collapsed,
 }) {
-  const containerRef = useRef(/** @type {HTMLLIElement|null} */ (null));
   const addShot = useDocumentStore((ctx) => ctx.addShot);
 
   function onClick() {
@@ -30,9 +27,7 @@ export default function ShotEntryNew({
   }
 
   return (
-    <li
-      ref={containerRef}
-      className={'relative flex flex-col items-center mx-auto'}>
+    <li className={'relative flex flex-col items-center mx-auto'}>
       <div className={'flex flex-row items-center w-full h-[6rem] z-10'}>
         {!collapsed && <ShotNumber documentId="" sceneId="" shotId="" />}
         <button

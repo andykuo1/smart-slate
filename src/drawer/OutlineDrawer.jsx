@@ -16,8 +16,10 @@ import InfoIcon from '@material-symbols/svg-400/rounded/info.svg';
 import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg';
 
 import BoxDrawingCharacter from '@/components/documents/BoxDrawingCharacter';
+import { scrollSceneFocusIntoView } from '@/components/scenes/SceneFocus';
 import SettingsSceneOpenClapperButton from '@/components/scenes/settings/SettingsSceneOpenClapperButton';
 import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import { scrollShotFocusIntoView } from '@/components/shots/ShotFocus';
 import {
   formatSceneNumber,
   formatSceneShotNumber,
@@ -114,6 +116,7 @@ function IndexScene({ documentId, sceneId, isActive }) {
   function onClick() {
     if (!isActive) {
       setUserCursor(documentId, sceneId, '', '');
+      scrollSceneFocusIntoView(sceneId);
     } else {
       setUserCursor(documentId, '', '', '');
     }
@@ -194,6 +197,7 @@ function AddShotButton({ documentId, sceneId }) {
             shot.shotType = 'WS';
             addShot(documentId, sceneId, lastBlockId, shot);
             setUserCursor(documentId, sceneId, shot.shotId, '');
+            scrollShotFocusIntoView(shot.shotId);
             e.stopPropagation();
           }}>
           WS
@@ -204,6 +208,7 @@ function AddShotButton({ documentId, sceneId }) {
             shot.shotType = 'MS';
             addShot(documentId, sceneId, lastBlockId, shot);
             setUserCursor(documentId, sceneId, shot.shotId, '');
+            scrollShotFocusIntoView(shot.shotId);
             e.stopPropagation();
           }}>
           MS
@@ -214,6 +219,7 @@ function AddShotButton({ documentId, sceneId }) {
             shot.shotType = 'CU';
             addShot(documentId, sceneId, lastBlockId, shot);
             setUserCursor(documentId, sceneId, shot.shotId, '');
+            scrollShotFocusIntoView(shot.shotId);
             e.stopPropagation();
           }}>
           CU
@@ -245,6 +251,7 @@ function AddShotDisclosure({ documentId, sceneId }) {
           let shot = createShot();
           addShot(documentId, sceneId, lastBlockId, shot);
           setUserCursor(documentId, sceneId, shot.shotId, '');
+          scrollShotFocusIntoView(shot.shotId);
           e.stopPropagation();
         }}
         onContextMenu={(e) => {
@@ -324,8 +331,10 @@ function IndexShot({
   function onClick() {
     if (!isActive || activeTakeId) {
       setUserCursor(documentId, sceneId, shotId, '');
+      scrollShotFocusIntoView(shotId);
     } else {
       setUserCursor(documentId, sceneId, '', '');
+      scrollSceneFocusIntoView(sceneId);
     }
   }
 
@@ -333,8 +342,10 @@ function IndexShot({
   function onShowTakesClick(e) {
     if (activeTakeId) {
       setUserCursor(documentId, sceneId, shotId, '');
+      scrollShotFocusIntoView(shotId);
     } else {
       setUserCursor(documentId, sceneId, shotId, takeIds.at(-1) || '');
+      scrollShotFocusIntoView(shotId);
     }
     e.stopPropagation();
   }
@@ -447,8 +458,10 @@ function IndexTake({
   function onClick() {
     if (!isActive) {
       setUserCursor(documentId, sceneId, shotId, takeId);
+      scrollShotFocusIntoView(shotId);
     } else {
       setUserCursor(documentId, sceneId, shotId, '');
+      scrollShotFocusIntoView(shotId);
     }
   }
 

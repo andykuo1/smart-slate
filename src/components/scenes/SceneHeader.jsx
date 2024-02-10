@@ -7,6 +7,7 @@ import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 
 import SceneCollapse from './SceneCollapse';
+import { getSceneFocusId } from './SceneFocus';
 import SceneNumber from './SceneNumber';
 import SceneStatus from './SceneStatus';
 
@@ -49,6 +50,7 @@ export default function SceneHeader({ className, documentId, sceneId }) {
   return (
     <div
       ref={containerRef}
+      id={getSceneFocusId(sceneId)}
       className={
         'relative flex flex-row items-center' +
         ' ' +
