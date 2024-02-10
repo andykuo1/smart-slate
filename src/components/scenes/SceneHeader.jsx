@@ -38,10 +38,11 @@ export default function SceneHeader({ className, documentId, sceneId }) {
       setUserCursor(documentId, '', '');
     } else {
       setUserCursor(documentId, sceneId, '');
+      scrollIntoView({
+        block: 'start',
+        behavior: 'smooth',
+      });
     }
-    scrollIntoView({
-      behavior: 'instant',
-    });
   }
 
   const dataListId = 'sceneHeading-' + sceneId;

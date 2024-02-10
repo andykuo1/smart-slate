@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@material-symbols/svg-400/rounded/arrow_back.svg';
+import DoorOpenIcon from '@material-symbols/svg-400/rounded/door_open.svg';
 import HomeIcon from '@material-symbols/svg-400/rounded/home.svg';
 import ReceiptLongIcon from '@material-symbols/svg-400/rounded/receipt_long.svg';
 import TuneIcon from '@material-symbols/svg-400/rounded/tune.svg';
@@ -111,7 +112,7 @@ function DrawerContent() {
         <div className="flex-1">
           <SettingsFieldButton
             className="ml-auto"
-            Icon={HomeIcon}
+            Icon={isBackToHome ? DoorOpenIcon : HomeIcon}
             onClick={onHomeClick}
           />
         </div>

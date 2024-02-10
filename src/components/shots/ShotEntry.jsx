@@ -57,7 +57,7 @@ export function ShotEntry({
     } else {
       setUserCursor(documentId, sceneId, shotId);
     }
-    scrollIntoView({ block: 'center', behavior: 'instant' });
+    scrollIntoView({ block: 'center', behavior: 'smooth' });
   }
 
   return (
