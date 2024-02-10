@@ -1,7 +1,6 @@
 import DocumentDivider from '@/components/documents/DocumentDivider';
 import { useAddBlock, useAddScene } from '@/stores/document';
 import { createBlock, createScene } from '@/stores/document/DocumentStore';
-import { useCurrentCursor } from '@/stores/user';
 
 /**
  * @param {object} props
@@ -9,9 +8,8 @@ import { useCurrentCursor } from '@/stores/user';
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  */
 export default function SceneEntryNew({ className, documentId }) {
-  const userCursor = useCurrentCursor();
-  const hasActiveShot = Boolean(userCursor.shotId);
-  const hasActiveScene = Boolean(userCursor.sceneId);
+  const hasActiveShot = false; // Boolean(userCursor.shotId);
+  const hasActiveScene = false; // Boolean(userCursor.sceneId);
 
   const addScene = useAddScene();
   const addBlock = useAddBlock();

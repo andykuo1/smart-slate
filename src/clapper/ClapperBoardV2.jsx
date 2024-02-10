@@ -350,7 +350,7 @@ function ClapperRollField({ value, onChange }) {
     <div className="flex-1 flex flex-col items-center">
       <ClapperLabel className="text-[1em]">ROLL</ClapperLabel>
       <ClapperInput
-        className="w-full text-center text-[2em] scale-y-150 translate-y-[25%]"
+        className="w-full text-center text-[2em] scale-y-150 translate-y-[25%] rounded-xl bg-gray-900"
         name="camera-roll"
         value={value}
         onChange={(e) => {
