@@ -40,7 +40,7 @@ function SceneEntry({ documentId, sceneId }) {
   const containerRef = useRef(null);
   const contentRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const [height, setHeight] = useState(0);
-  const visible = useIntersectionObserver(containerRef, '300px');
+  const visible = useIntersectionObserver(containerRef, '0px');
   useEffect(() => {
     const content = contentRef.current;
     if (!content) {
@@ -63,7 +63,7 @@ function SceneEntry({ documentId, sceneId }) {
         />
       ) : (
         /* Placeholder container */
-        <div style={{ height: `${height}px` }} className={`w-full`} />
+        <div style={{ height: `${height}px` }} className="w-full bg-white" />
       )}
     </SceneEntryLayout>
   );

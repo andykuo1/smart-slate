@@ -4,6 +4,7 @@ import SubjectIcon from '@material-symbols/svg-400/rounded/subject.svg';
 import VerticalSplitIcon from '@material-symbols/svg-400/rounded/vertical_split.svg';
 import ViewDayIcon from '@material-symbols/svg-400/rounded/view_day.svg';
 
+import FieldButtonAndMenu from '@/components/FieldButtonAndMenu';
 import { useScrollIntoView } from '@/libs/UseScrollIntoView';
 import { useUserStore } from '@/stores/user';
 
@@ -18,35 +19,74 @@ import SettingsFieldButton from '../settings/SettingsFieldButton';
 export default function SceneCollapse({ containerRef }) {
   const editMode = useUserStore((ctx) => ctx.editMode);
   const setEditMode = useUserStore((ctx) => ctx.setEditMode);
-  const EditModeIcon = getEditModeIcon(editMode);
+  const EditModeIcon = getScreenplayViewIcon(editMode);
   const scrollIntoView = useScrollIntoView(containerRef);
 
-  function onClick() {
-    setEditMode(
-      editMode === 'inline'
-        ? 'sequence'
-        : editMode === 'sequence'
-          ? 'shotonly'
-          : editMode === 'shotonly'
-            ? 'textonly'
-            : editMode === 'textonly'
-              ? 'inline'
-              : 'inline',
-    );
+  /** @param {ScreenplayView} mode */
+  function changeView(mode) {
+    setEditMode(mode);
     scrollIntoView();
   }
 
   return (
-    <div className="flex flex-row">
-      <SettingsFieldButton Icon={EditModeIcon} onClick={onClick} />
-    </div>
+    <FieldButtonAndMenu
+      title="Edit Mode"
+      Icon={EditModeIcon}
+      onClick={() =>
+        changeView(
+          editMode === 'inline'
+            ? 'sequence'
+            : editMode === 'sequence'
+              ? 'shotonly'
+              : editMode === 'shotonly'
+                ? 'textonly'
+                : editMode === 'textonly'
+                  ? 'inline'
+                  : 'inline',
+        )
+      }
+      items={SCREEPLAY_VIEWS.map((mode) => (
+        <SettingsFieldButton
+          className="outline-none w-full h-8 text-right"
+          title={mode}
+          Icon={getScreenplayViewIcon(mode)}
+          onClick={() => changeView(mode)}>
+          <span className="text-xs ml-4">
+            {getScreenplayViewLocaleString(mode)}
+          </span>
+        </SettingsFieldButton>
+      ))}
+    />
   );
+}
+
+/** @typedef {'textonly'|'inline'|'sequence'|'shotonly'} ScreenplayView */
+
+/** @type {Array<ScreenplayView>} */
+const SCREEPLAY_VIEWS = ['textonly', 'inline', 'sequence', 'shotonly'];
+
+/**
+ * @param {string} editMode
+ */
+function getScreenplayViewLocaleString(editMode) {
+  switch (editMode) {
+    case 'textonly':
+      return 'Text-only';
+    case 'inline':
+      return 'Inline';
+    case 'sequence':
+      return 'Sequence';
+    case 'shotonly':
+      return 'Shot-only';
+    default:
+      return 'Unknown';
+  }
 }
 
 /**
  * @param {string} editMode
  */
-function getEditModeIcon(editMode) {
+function getScreenplayViewIcon(editMode) {
   switch (editMode) {
     case 'inline':
       return ViewDayIcon;

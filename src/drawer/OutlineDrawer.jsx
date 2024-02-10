@@ -1,11 +1,3 @@
-import {
-  Popover,
-  PopoverArrow,
-  PopoverDisclosure,
-  PopoverProvider,
-  usePopoverContext,
-} from '@ariakit/react';
-
 import AddIcon from '@material-symbols/svg-400/rounded/add.svg';
 import CheckBoxFillIcon from '@material-symbols/svg-400/rounded/check_box-fill.svg';
 import CheckBoxIcon from '@material-symbols/svg-400/rounded/check_box.svg';
@@ -15,11 +7,17 @@ import InfoFillIcon from '@material-symbols/svg-400/rounded/info-fill.svg';
 import InfoIcon from '@material-symbols/svg-400/rounded/info.svg';
 import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg';
 
+import FieldButtonAndMenu from '@/components/FieldButtonAndMenu';
 import BoxDrawingCharacter from '@/components/documents/BoxDrawingCharacter';
+import DocumentDivider from '@/components/documents/DocumentDivider';
 import { scrollSceneFocusIntoView } from '@/components/scenes/SceneFocus';
 import SettingsSceneOpenClapperButton from '@/components/scenes/settings/SettingsSceneOpenClapperButton';
 import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
-import { scrollShotFocusIntoView } from '@/components/shots/ShotFocus';
+import { getShotTypeColor } from '@/components/shots/ShotColors';
+import {
+  getShotFocusIdForDrawer,
+  scrollShotFocusIntoView,
+} from '@/components/shots/ShotFocus';
 import {
   formatSceneNumber,
   formatSceneShotNumber,
@@ -48,16 +46,13 @@ import {
   useShotTakeCount,
 } from '@/stores/document/use';
 import { useDocumentStore } from '@/stores/document/use';
+import { SHOT_TYPES } from '@/stores/document/value';
 import {
   useCurrentDocumentId,
   useSetUserCursor,
   useUserStore,
 } from '@/stores/user';
-import PopoverStyle from '@/styles/Popover.module.css';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
-
-import DocumentDivider from '../components/documents/DocumentDivider';
-import { getShotTypeColor } from '../components/shots/ShotColors';
 
 export default function OutlineDrawer() {
   const setDrawerShowDetails = useUserStore((ctx) => ctx.setDrawerShowDetails);
@@ -128,7 +123,7 @@ function IndexScene({ documentId, sceneId, isActive }) {
         className={
           'w-full flex flex-row gap-2 px-4 pt-2 text-left' +
           ' ' +
-          (isActive ? 'bg-black text-white' : 'hover:bg-gray-300')
+          (isActive ? 'bg-black text-white' : 'bg-gray-200 hover:bg-gray-300')
         }
         onClick={onClick}>
         <div>
@@ -186,83 +181,39 @@ function AddShotButton({ documentId, sceneId }) {
   const lastBlockId = useDocumentStore((ctx) =>
     getLastBlockIdInScene(ctx, documentId, sceneId),
   );
-  return (
-    <PopoverProvider>
-      <AddShotDisclosure documentId={documentId} sceneId={sceneId} />
-      <Popover className={PopoverStyle.popover}>
-        <PopoverArrow className={PopoverStyle.arrow} />
-        <button
-          onClick={(e) => {
-            let shot = createShot();
-            shot.shotType = 'WS';
-            addShot(documentId, sceneId, lastBlockId, shot);
-            setUserCursor(documentId, sceneId, shot.shotId, '');
-            scrollShotFocusIntoView(shot.shotId);
-            e.stopPropagation();
-          }}>
-          WS
-        </button>
-        <button
-          onClick={(e) => {
-            let shot = createShot();
-            shot.shotType = 'MS';
-            addShot(documentId, sceneId, lastBlockId, shot);
-            setUserCursor(documentId, sceneId, shot.shotId, '');
-            scrollShotFocusIntoView(shot.shotId);
-            e.stopPropagation();
-          }}>
-          MS
-        </button>
-        <button
-          onClick={(e) => {
-            let shot = createShot();
-            shot.shotType = 'CU';
-            addShot(documentId, sceneId, lastBlockId, shot);
-            setUserCursor(documentId, sceneId, shot.shotId, '');
-            scrollShotFocusIntoView(shot.shotId);
-            e.stopPropagation();
-          }}>
-          CU
-        </button>
-      </Popover>
-    </PopoverProvider>
-  );
-}
 
-/**
- * @param {object} props
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
- */
-function AddShotDisclosure({ documentId, sceneId }) {
-  const store = usePopoverContext();
-  const setUserCursor = useSetUserCursor();
-  const addShot = useDocumentStore((ctx) => ctx.addShot);
-  const lastBlockId = useDocumentStore((ctx) =>
-    getLastBlockIdInScene(ctx, documentId, sceneId),
-  );
+  /**
+   * @param {string} shotType
+   */
+  function addNewShot(shotType) {
+    let shot = createShot();
+    shot.shotType = shotType;
+    addShot(documentId, sceneId, lastBlockId, shot);
+    // NOTE: Debounce so the shot is added before we focus.
+    setTimeout(() => {
+      setUserCursor(documentId, sceneId, shot.shotId, '');
+      scrollShotFocusIntoView(shot.shotId);
+    });
+  }
+
   return (
-    <PopoverDisclosure>
-      <SettingsFieldButton
-        inverted={true}
-        Icon={AddIcon}
-        title="Add new shot to scene"
-        onClick={(e) => {
-          let shot = createShot();
-          addShot(documentId, sceneId, lastBlockId, shot);
-          setUserCursor(documentId, sceneId, shot.shotId, '');
-          scrollShotFocusIntoView(shot.shotId);
-          e.stopPropagation();
-        }}
-        onContextMenu={(e) => {
-          if (store) {
-            store.show();
-          }
-          e.preventDefault();
-          e.stopPropagation();
-        }}
-      />
-    </PopoverDisclosure>
+    <FieldButtonAndMenu
+      inverted={true}
+      title="Add new shot to scene"
+      Icon={AddIcon}
+      onClick={() => addNewShot('')}
+      items={SHOT_TYPES.map(
+        (shotType) =>
+          shotType && (
+            <SettingsFieldButton
+              className="outline-none"
+              title={shotType}
+              onClick={() => addNewShot(shotType)}>
+              {shotType}
+            </SettingsFieldButton>
+          ),
+      )}
+    />
   );
 }
 
@@ -351,7 +302,7 @@ function IndexShot({
   }
 
   return (
-    <li className="w-full flex flex-col">
+    <li id={getShotFocusIdForDrawer(shotId)} className="w-full flex flex-col">
       <div
         className={
           'w-full flex flex-row gap-2 px-6 text-left text-xs' +

@@ -16,6 +16,7 @@
 - Add show take button for drawer
 - Add text-only and shot-only scene modes
 
+- Remove shot details button
 - Remove scene and shot focus screens
 
 - Fix scene renumbering not skipping last index

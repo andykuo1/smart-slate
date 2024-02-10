@@ -1,10 +1,12 @@
-import { Button, usePopoverContext } from '@ariakit/react';
+import { usePopoverContext } from '@ariakit/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import MovieIcon from '@material-symbols/svg-400/rounded/movie.svg';
 import RadioButtonCheckedIcon from '@material-symbols/svg-400/rounded/radio_button_checked.svg';
 
+import SettingsSceneShotsDetailButton from '@/components/scenes/settings/SettingsSceneShotsDetailButton';
+import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
 import SettingsShotTypeSelector from '@/components/shots/settings/SettingsShotTypeSelector';
 import { useFullscreen } from '@/libs/fullscreen';
 import { isInputCaptureSupported } from '@/recorder/MediaRecorderSupport';
@@ -104,20 +106,22 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
 
   return (
     <div className="flex flex-col gap-2">
-      <Button
-        className="flex-1 p-1 flex items-center gap-2 rounded hover:bg-opacity-10 bg-opacity-0 bg-white disabled:opacity-30"
+      <SettingsFieldButton
+        className="outline-none text-right h-8"
+        Icon={RadioButtonCheckedIcon}
         onClick={onRecordClick}>
-        <RadioButtonCheckedIcon className="w-6 h-6 fill-current" />
-        <span className="flex-1 text-right">
-          Record Take #{shotTakeCount + 1}
-        </span>
-      </Button>
-      <Button
-        className="flex-1 p-1 flex items-center gap-2 rounded hover:bg-opacity-10 bg-opacity-0 bg-white disabled:opacity-30"
+        <span className="pl-4">Record Take #{shotTakeCount + 1}</span>
+      </SettingsFieldButton>
+      <SettingsFieldButton
+        className="outline-none text-right h-8"
+        Icon={MovieIcon}
         onClick={onClapperboardClick}>
-        <MovieIcon className="w-6 h-6 fill-current" />
-        <span className="flex-1 text-right">Clapperboard</span>
-      </Button>
+        Open Slate
+      </SettingsFieldButton>
+      <SettingsSceneShotsDetailButton
+        className="outline-none text-right h-8"
+        onClick={(e) => setOpen(false)}
+      />
       <div className="border" />
       <div className="flex-1 flex flex-row gap-2">
         <SettingsShotTypeSelector

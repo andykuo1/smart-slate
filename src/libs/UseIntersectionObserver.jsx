@@ -12,7 +12,7 @@ export function useIntersectionObserver(elementRef, rootMargin) {
       ([entry]) => {
         setVisible(entry.isIntersecting);
       },
-      { rootMargin },
+      { rootMargin, threshold: 0 },
     );
     const element = elementRef.current;
     if (element) {

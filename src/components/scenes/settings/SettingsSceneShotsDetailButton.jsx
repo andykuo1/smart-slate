@@ -6,31 +6,33 @@ import { useUserStore } from '@/stores/user';
 
 /**
  * @param {object} props
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {string} [props.className]
+ * @param {import('react').MouseEventHandler<HTMLButtonElement>} [props.onClick]
  */
-export default function SettingsSceneShotsDetailButton({
-  documentId,
-  sceneId,
-}) {
+export default function SettingsSceneShotsDetailButton({ className, onClick }) {
   const shotListMode = useUserStore((ctx) => ctx.shotListMode);
   const setShotListMode = useUserStore((ctx) => ctx.setShotListMode);
   const hasActiveShot = false; // useUserStore((ctx) => Boolean(ctx.cursor?.shotId));
 
-  function onClick() {
+  /**
+   * @type {import('react').MouseEventHandler<HTMLButtonElement>}
+   */
+  function handleClick(e) {
     if (shotListMode !== 'detail' || hasActiveShot) {
       setShotListMode('detail');
     } else {
       setShotListMode('hidden');
     }
+    onClick?.(e);
   }
 
   return (
     <SettingsFieldButton
-      className="w-auto hidden sm:block"
+      className={className}
       Icon={shotListMode === 'detail' ? ShotTextIcon : ShotImageIcon}
-      title="Toggle shot text"
-      onClick={onClick}
-    />
+      title="Change shotlist view"
+      onClick={handleClick}>
+      Change View
+    </SettingsFieldButton>
   );
 }
