@@ -14,9 +14,9 @@ export default function ScanPage() {
   }
   return (
     <PageLayout className="bg-white text-black">
-      <fieldset className="flex-1 flex flex-col sm:flex-row mx-auto">
+      <fieldset className="flex-1 flex flex-col h-full sm:flex-row mx-auto">
         <TakeScanner className="p-4 w-80" onChange={onChange} />
-        <pre className="flex-1 overflow-x-auto w-[50vw]">
+        <pre className="flex-1 overflow-auto w-[50vw]">
           <code>{state}</code>
         </pre>
       </fieldset>

@@ -47,7 +47,12 @@ export default function TakeScanner({ className, onChange }) {
     typeof window.showDirectoryPicker !== 'undefined';
 
   return (
-    <div className={'mx-auto flex flex-col items-center' + ' ' + className}>
+    <div
+      className={
+        'mx-auto flex flex-col gap-4 items-center overflow-y-auto' +
+        ' ' +
+        className
+      }>
       <SettingsFieldButton Icon={ArrowBackIcon} onClick={onBackClick}>
         Back
       </SettingsFieldButton>
