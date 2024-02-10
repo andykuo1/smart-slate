@@ -10,6 +10,7 @@ import AddIcon from '@material-symbols/svg-400/rounded/add.svg';
 import CheckBoxFillIcon from '@material-symbols/svg-400/rounded/check_box-fill.svg';
 import CheckBoxIcon from '@material-symbols/svg-400/rounded/check_box.svg';
 import CheckBoxOutlineBlankIcon from '@material-symbols/svg-400/rounded/check_box_outline_blank.svg';
+import HistoryIcon from '@material-symbols/svg-400/rounded/history.svg';
 import InfoFillIcon from '@material-symbols/svg-400/rounded/info-fill.svg';
 import InfoIcon from '@material-symbols/svg-400/rounded/info.svg';
 import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg';
@@ -321,16 +322,26 @@ function IndexShot({
   const takeIds = useTakeIds(documentId, shotId);
 
   function onClick() {
-    if (!isActive) {
+    if (!isActive || activeTakeId) {
       setUserCursor(documentId, sceneId, shotId, '');
     } else {
       setUserCursor(documentId, sceneId, '', '');
     }
   }
 
+  /** @type {import('react').MouseEventHandler<HTMLButtonElement>} */
+  function onShowTakesClick(e) {
+    if (activeTakeId) {
+      setUserCursor(documentId, sceneId, shotId, '');
+    } else {
+      setUserCursor(documentId, sceneId, shotId, takeIds.at(-1) || '');
+    }
+    e.stopPropagation();
+  }
+
   return (
     <li className="w-full flex flex-col">
-      <button
+      <div
         className={
           'w-full flex flex-row gap-2 px-6 text-left text-xs' +
           ' ' +
@@ -373,8 +384,16 @@ function IndexShot({
           }>
           {description || choosePlaceholderRandomly(shotId)}
         </p>
-      </button>
-      {isActive && (
+        <div className={'ml-auto' + ' ' + (!isActive && 'hidden')}>
+          <SettingsFieldButton
+            inverted={isActive}
+            Icon={HistoryIcon}
+            onClick={onShowTakesClick}
+            disabled={takeIds.length <= 0}
+          />
+        </div>
+      </div>
+      {isActive && activeTakeId && (
         <ul className="flex flex-col-reverse">
           {takeIds.map((takeId, index, array) => (
             <IndexTake

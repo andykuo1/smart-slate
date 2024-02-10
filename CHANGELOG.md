@@ -12,6 +12,10 @@
 - Add new shot button to drawer
 - Add edit scene button to drawer
 - Add home button to navigate to edit without focus
+- Add navbar back :D
+- Add show take button for drawer
+
+- Remove scene and shot focus screens
 
 - Fix scene renumbering not skipping last index
 

@@ -273,9 +273,6 @@ Export list to csv
 
 - Add previs
 
-- Button Unhide past take QR codes
-- print button bigger
-
 - Move takes to recorder
 
 - Scanner revamp ui
