@@ -25,7 +25,7 @@ export default function SettingsFieldButton({
     <button
       style={{ lineHeight: '1em' }}
       className={
-        'relative flex flex-row items-center rounded select-none' +
+        'flex flex-row items-center rounded select-none' +
         ' ' +
         'disabled:opacity-30' +
         ' ' +
@@ -37,7 +37,7 @@ export default function SettingsFieldButton({
             ? 'enabled:hover:bg-white enabled:hover:text-black bg-black text-white'
             : 'enabled:hover:bg-black enabled:hover:text-white') +
         ' ' +
-        (className ?? 'w-full')
+        (className ?? 'relative w-full')
       }
       onClick={onClick}
       onContextMenu={onContextMenu}

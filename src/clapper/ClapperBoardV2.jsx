@@ -129,8 +129,13 @@ export default function ClapperBoardV2() {
           />
         </div>
       </div>
-      <div className="flex-1 flex flex-col">
-        <div className="flex-1 min-h-[40vh]">
+      <div
+        className={
+          'flex-1 flex flex-row gap-4' +
+          ' ' +
+          'portrait:flex-col landscape:flex-row sm:flex-row'
+        }>
+        <div className="flex-1 min-h-[40vh] bg-white text-black rounded-xl overflow-hidden">
           <ClapperQRCodeField
             documentId={documentId}
             sceneId={sceneId}
@@ -143,6 +148,7 @@ export default function ClapperBoardV2() {
           />
         </div>
         <ClapperControlFields
+          className="font-bold rounded-xl landscape:vertical-rl"
           documentId={documentId}
           sceneId={sceneId}
           shotId={shotId}
@@ -151,45 +157,6 @@ export default function ClapperBoardV2() {
         />
       </div>
     </div>
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} [props.className]
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
- * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
- * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
- */
-function ClapperPrintButton({ className, documentId, takeId }) {
-  const takeRating = useTakeRating(documentId, takeId);
-  const toggleGoodTake = useDocumentStore((ctx) => ctx.toggleGoodTake);
-
-  function onPrintClick() {
-    toggleGoodTake(documentId, takeId);
-  }
-
-  return (
-    <SettingsFieldButton
-      className={
-        'outline-none text-[2em] mt-auto flex pb-[0.5em] flex-col' +
-        ' ' +
-        className
-      }
-      Icon={takeRating > 0 ? ThumbUpFillIcon : ThumbUpIcon}
-      title="Mark good take"
-      onClick={onPrintClick}
-      disabled={!takeId}>
-      <span
-        className={
-          'absolute bottom-0 left-0 right-0 text-[0.5em] translate-y-[25%]' +
-          ' ' +
-          (takeRating <= 0 ? 'line-through' : '')
-        }>
-        PRINT
-      </span>
-    </SettingsFieldButton>
   );
 }
 
@@ -218,18 +185,53 @@ function ClapperControlFields({
   }
 
   return (
-    <div className={'flex items-center' + ' ' + className}>
-      <div className="flex-1" />
-      <SettingsFieldButton
-        className="flex-1 w-full text-left px-4 my-4"
-        Icon={AddIcon}
-        title="New take"
-        onClick={onNextClick}
-        disabled={!takeId}>
-        <span className="ml-2 whitespace-nowrap">NEW TAKE</span>
-      </SettingsFieldButton>
-      <div className="flex-1" />
-    </div>
+    <SettingsFieldButton
+      className={className}
+      Icon={AddIcon}
+      title="New take"
+      onClick={onNextClick}
+      disabled={!takeId}>
+      <span className="ml-2 whitespace-nowrap">NEW TAKE</span>
+    </SettingsFieldButton>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
+ */
+function ClapperPrintButton({ className, documentId, takeId }) {
+  const takeRating = useTakeRating(documentId, takeId);
+  const toggleGoodTake = useDocumentStore((ctx) => ctx.toggleGoodTake);
+
+  function onPrintClick() {
+    toggleGoodTake(documentId, takeId);
+  }
+
+  return (
+    <SettingsFieldButton
+      className={
+        'relative outline-none text-[2em] mt-auto flex pb-[0.5em] flex-col' +
+        ' ' +
+        className
+      }
+      Icon={takeRating > 0 ? ThumbUpFillIcon : ThumbUpIcon}
+      title="Mark good take"
+      onClick={onPrintClick}
+      disabled={!takeId}>
+      <span
+        className={
+          'absolute bottom-0 left-0 right-0 text-[0.5em] translate-y-[25%]' +
+          ' ' +
+          (takeRating <= 0 ? 'line-through' : '')
+        }>
+        PRINT
+      </span>
+    </SettingsFieldButton>
   );
 }
 

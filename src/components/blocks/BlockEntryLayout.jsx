@@ -7,7 +7,7 @@ import { useSetUserCursor } from '@/stores/user';
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('react').ReactNode} props.content
  * @param {import('react').ReactNode} props.children
- * @param {'faded'|'split'|'fullwidth'|'solowidth'} [props.mode]
+ * @param {'faded'|'split'|'fullwidth'|'solowidth'|'childonly'} [props.mode]
  */
 export default function BlockEntryLayout({
   className,

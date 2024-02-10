@@ -4,7 +4,6 @@ import { useScrollIntoView } from '@/libs/UseScrollIntoView';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useSceneHeading } from '@/stores/document';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
-import BarberpoleStyle from '@/styles/Barberpole.module.css';
 
 import SceneCollapse from './SceneCollapse';
 import { getSceneFocusId } from './SceneFocus';
@@ -56,7 +55,7 @@ export default function SceneHeader({ className, documentId, sceneId }) {
         ' ' +
         className +
         ' ' +
-        (isActive && 'bg-black text-white' + ' ' + BarberpoleStyle.barberpole)
+        (isActive && 'bg-black text-white')
       }>
       <SceneNumber sceneNumber={sceneNumber} onClick={onClick} />
       <SceneCollapse

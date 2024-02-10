@@ -17,6 +17,7 @@ import {
 
 import SettingsFieldButton from '../components/settings/SettingsFieldButton';
 import OutlineDrawer from './OutlineDrawer';
+import SettingsDocumentNavButton from './SettingsDocumentNavButton';
 import SettingsDrawer from './SettingsDrawer';
 
 /**
@@ -36,7 +37,7 @@ export default function Drawer({ darkMode, children }) {
 }
 
 function DrawerToolbar() {
-  return null; // <SettingsDocumentNavButton />;
+  return <SettingsDocumentNavButton />;
 }
 
 function DrawerNavBar() {

@@ -42,7 +42,7 @@ export default function BlockList({
   const blockViewMode = textOnlyMode
     ? 'solowidth'
     : shotOnlyMode
-      ? 'faded'
+      ? 'childonly'
       : sequenceMode
         ? 'split'
         : inlineMode

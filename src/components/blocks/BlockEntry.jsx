@@ -13,7 +13,7 @@ import BlockEntryLayout from './BlockEntryLayout';
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  * @param {boolean} [props.editable]
- * @param {'faded'|'split'|'fullwidth'|'solowidth'} [props.mode]
+ * @param {'faded'|'split'|'fullwidth'|'solowidth'|'childonly'} [props.mode]
  * @param {import('react').ReactNode} props.children
  */
 export default function BlockEntry({
@@ -38,23 +38,25 @@ export default function BlockEntry({
       className={className}
       mode={mode}
       content={
-        <div className="group w-full h-full flex hover:bg-gray-100">
-          <BlockContent
-            className={
-              'flex-1 p-2 px-4' + ' ' + (blockEditable ? 'min-h-[20vh]' : '')
-            }
-            documentId={documentId}
-            blockId={blockId}
-            editable={editable && blockEditable}
-            setEditable={setBlockEditable}
-          />
-          <BlockContentToolbar
-            documentId={documentId}
-            sceneId={sceneId}
-            blockId={blockId}
-            setEditable={setBlockEditable}
-          />
-        </div>
+        mode !== 'childonly' && (
+          <div className="group w-full h-full flex hover:bg-gray-100">
+            <BlockContent
+              className={
+                'flex-1 p-2 px-4' + ' ' + (blockEditable ? 'min-h-[20vh]' : '')
+              }
+              documentId={documentId}
+              blockId={blockId}
+              editable={editable && blockEditable}
+              setEditable={setBlockEditable}
+            />
+            <BlockContentToolbar
+              documentId={documentId}
+              sceneId={sceneId}
+              blockId={blockId}
+              setEditable={setBlockEditable}
+            />
+          </div>
+        )
       }>
       {mode !== 'solowidth' && children}
     </BlockEntryLayout>

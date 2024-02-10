@@ -271,8 +271,6 @@ Export list to csv
 
 --
 
-- Add previs
-
 - Move takes to recorder
 
 - Scanner revamp ui
