@@ -192,7 +192,7 @@ function AddShotButton({ documentId, sceneId }) {
     // NOTE: Debounce so the shot is added before we focus.
     setTimeout(() => {
       setUserCursor(documentId, sceneId, shot.shotId, '');
-      scrollShotFocusIntoView(shot.shotId);
+      scrollShotFocusIntoView(sceneId, shot.shotId);
     });
   }
 
@@ -282,7 +282,7 @@ function IndexShot({
   function onClick() {
     if (!isActive || activeTakeId) {
       setUserCursor(documentId, sceneId, shotId, '');
-      scrollShotFocusIntoView(shotId);
+      scrollShotFocusIntoView(sceneId, shotId);
     } else {
       setUserCursor(documentId, sceneId, '', '');
       scrollSceneFocusIntoView(sceneId);
@@ -293,10 +293,10 @@ function IndexShot({
   function onShowTakesClick(e) {
     if (activeTakeId) {
       setUserCursor(documentId, sceneId, shotId, '');
-      scrollShotFocusIntoView(shotId);
+      scrollShotFocusIntoView(sceneId, shotId);
     } else {
       setUserCursor(documentId, sceneId, shotId, takeIds.at(-1) || '');
-      scrollShotFocusIntoView(shotId);
+      scrollShotFocusIntoView(sceneId, shotId);
     }
     e.stopPropagation();
   }
@@ -409,10 +409,10 @@ function IndexTake({
   function onClick() {
     if (!isActive) {
       setUserCursor(documentId, sceneId, shotId, takeId);
-      scrollShotFocusIntoView(shotId);
+      scrollShotFocusIntoView(sceneId, shotId);
     } else {
       setUserCursor(documentId, sceneId, shotId, '');
-      scrollShotFocusIntoView(shotId);
+      scrollShotFocusIntoView(sceneId, shotId);
     }
   }
 
