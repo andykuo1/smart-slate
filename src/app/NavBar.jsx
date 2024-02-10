@@ -12,24 +12,53 @@ import { useDocumentStore } from '@/stores/document/use';
 import { useSettingsStore } from '@/stores/settings';
 import { useCurrentDocumentId, useUserStore } from '@/stores/user';
 
-export default function NavBar() {
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ * @param {import('react').ReactNode} props.children
+ */
+export default function NavBar({ className, children }) {
   return (
-    <nav className="fixed bottom-0 w-full h-20 flex flex-col z-40">
-      <ul className="flex-1 flex flex-row bg-black text-white">
-        <li className="flex-1 flex">
-          <NavTuneButton />
-        </li>
-        <li className="flex-1 flex">
-          <NavEditButton />
-        </li>
-        <li className="flex-1 flex">
-          <NavRecordButton />
-        </li>
-        <li className="flex-1 flex">
-          <NavButton title="Visualize" abbr="Vis" Icon={SubscriptionsIcon} />
-        </li>
-      </ul>
-    </nav>
+    <NavBarLayout
+      className={className}
+      items={[
+        <NavTuneButton />,
+        <NavEditButton />,
+        <NavRecordButton />,
+        <NavButton title="Visualize" abbr="Vis" Icon={SubscriptionsIcon} />,
+      ]}>
+      {children}
+    </NavBarLayout>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ * @param {Array<import('react').ReactNode>} props.items
+ * @param {import('react').ReactNode} props.children
+ */
+function NavBarLayout({ className, items, children }) {
+  return (
+    <>
+      <div
+        className={
+          'relative w-full h-full flex flex-col items-center overflow-y-auto mb-20' +
+          ' ' +
+          className
+        }>
+        {children}
+      </div>
+      <nav className="fixed bottom-0 w-full h-20 flex flex-col z-40">
+        <ul className="flex-1 flex flex-row bg-black text-white">
+          {items.map((item, index) => (
+            <li key={'nav-' + index} className="flex-1 flex">
+              {item}
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </>
   );
 }
 

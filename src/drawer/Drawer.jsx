@@ -54,8 +54,16 @@ function DrawerNavBar() {
   }
   return (
     <div className="outline rounded flex flex-row mt-2">
-      <SettingsFieldButton Icon={ReceiptLongIcon} onClick={onOutlineClick} />
-      <SettingsFieldButton Icon={TuneIcon} onClick={onTuneClick} />
+      <SettingsFieldButton
+        Icon={ReceiptLongIcon}
+        onClick={onOutlineClick}
+        disabled={true}
+      />
+      <SettingsFieldButton
+        Icon={TuneIcon}
+        onClick={onTuneClick}
+        disabled={true}
+      />
     </div>
   );
 }
@@ -102,7 +110,7 @@ function DrawerContent() {
         </div>
         <div className="flex-1">
           <SettingsFieldButton
-            className="mr-auto"
+            className="ml-auto"
             Icon={HomeIcon}
             onClick={onHomeClick}
           />

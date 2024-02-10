@@ -1,4 +1,4 @@
-import NavBarLayout from '@/app/NavBarLayout';
+import NavBar from '@/app/NavBar';
 import DocumentLayout from '@/components/documents/DocumentLayout';
 import DocumentTitle from '@/components/documents/DocumentTitle';
 import SceneList from '@/components/scenes/SceneList';
@@ -11,14 +11,14 @@ export default function EditPage() {
   const documentId = useCurrentDocumentId();
   return (
     <PageLayout className="bg-white text-black">
-      <NavBarLayout>
+      <NavBar>
         <Drawer darkMode={false}>
           <DocumentLayout documentId={documentId}>
             <DocumentTitle className="pt-20" documentId={documentId} />
             <SceneList documentId={documentId} />
           </DocumentLayout>
         </Drawer>
-      </NavBarLayout>
+      </NavBar>
     </PageLayout>
   );
 }
