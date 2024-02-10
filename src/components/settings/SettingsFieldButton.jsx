@@ -44,7 +44,11 @@ export default function SettingsFieldButton({
       title={title}
       disabled={disabled}>
       {Icon && <Icon className="w-[2em] h-[2em] fill-current" />}
-      <span className="flex-1">{children}</span>
+      {typeof children === 'string' ? (
+        <div className="flex-1 text-center">{children}</div>
+      ) : (
+        <div className="flex-1 flex items-center">{children}</div>
+      )}
     </button>
   );
 }

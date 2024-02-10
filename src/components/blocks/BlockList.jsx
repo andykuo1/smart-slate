@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
+import { useMatchMedia } from '@/libs/UseMatchMedia';
 import { getBlockIdsInOrder } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import { useUserStore } from '@/stores/user';
-import { tryGetWindow } from '@/utils/BrowserFeatures';
 
 import ShotList from '../shots/ShotList';
 import BlockEntry from './BlockEntry';
@@ -89,27 +88,4 @@ export default function BlockList({
       />
     </div>
   );
-}
-
-/**
- * @param {string} mediaQueryString
- */
-function useMatchMedia(mediaQueryString) {
-  const [state, setState] = useState(false);
-  useEffect(() => {
-    const window = tryGetWindow();
-    const matcher = window.matchMedia(mediaQueryString);
-    const result = matcher.matches;
-    if (result !== state) {
-      setState(result);
-      return;
-    }
-    /** @param {MediaQueryListEvent} e */
-    function onChange(e) {
-      setState(e.matches);
-    }
-    matcher.addEventListener('change', onChange);
-    return () => matcher.removeEventListener('change', onChange);
-  }, [mediaQueryString, state, setState]);
-  return state;
 }

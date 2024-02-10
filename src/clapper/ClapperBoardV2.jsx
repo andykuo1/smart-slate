@@ -121,7 +121,7 @@ export default function ClapperBoardV2() {
             onRollNameChange={onRollNameChange}
           />
           <ClapperCommentField
-            className="flex-1 w-full"
+            className="flex-1 w-full short:hidden"
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
@@ -148,7 +148,7 @@ export default function ClapperBoardV2() {
           />
         </div>
         <ClapperControlFields
-          className="font-bold rounded-xl landscape:vertical-rl"
+          className="font-bold rounded-xl"
           documentId={documentId}
           sceneId={sceneId}
           shotId={shotId}
@@ -186,12 +186,12 @@ function ClapperControlFields({
 
   return (
     <SettingsFieldButton
-      className={className}
+      className={'flex items-center gap-2 landscape:flex-col' + ' ' + className}
       Icon={AddIcon}
       title="New take"
       onClick={onNextClick}
       disabled={!takeId}>
-      <span className="ml-2 whitespace-nowrap">NEW TAKE</span>
+      <div className="whitespace-nowrap landscape:vertical-rl">NEW TAKE</div>
     </SettingsFieldButton>
   );
 }

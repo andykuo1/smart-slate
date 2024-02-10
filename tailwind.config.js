@@ -3,7 +3,12 @@ import plugin from 'tailwindcss/plugin';
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
-  theme: {},
+  theme: {
+    screens: {
+      short: { raw: '(max-height: 400px)' },
+      tall: { raw: '(min-height: 400px)' },
+    },
+  },
   plugins: [
     plugin(function ({ addUtilities, addComponents, e, prefix, config }) {
       addUtilities({
