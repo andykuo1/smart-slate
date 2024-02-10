@@ -8,7 +8,6 @@ import { tryGetWindow } from '@/utils/BrowserFeatures';
 
 import ShotList from '../shots/ShotList';
 import BlockEntry from './BlockEntry';
-import BlockEntryFocused from './BlockEntryFocused';
 
 /*
 # Different Modes 
@@ -34,7 +33,7 @@ export default function BlockList({
   const blockIds = useDocumentStore(
     useShallow((ctx) => getBlockIdsInOrder(ctx, documentId, sceneId)),
   );
-  const activeShotId = useUserStore((ctx) => ctx.cursor?.shotId);
+  const activeShotId = false; // useUserStore((ctx) => ctx.cursor?.shotId);
   const smallMedia = useMatchMedia('(max-width: 640px)');
   const inlineMode = useUserStore((ctx) => ctx.editMode === 'inline');
   const sequenceMode = useUserStore((ctx) => ctx.editMode === 'sequence');
@@ -51,9 +50,11 @@ export default function BlockList({
   const showBlockLevelShotList = inlineMode;
 
   const isCollapsed = !shotListMode && !activeShotId;
+  /*
   if (activeShotId) {
     return <BlockEntryFocused documentId={documentId} />;
   }
+  */
   return (
     <div ref={containerRef} className={'flex flex-row' + ' ' + className}>
       <div className="flex-1 flex flex-col">

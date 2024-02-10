@@ -1,7 +1,6 @@
 import { Fragment } from 'react';
 
 import { useBlockIds, useShotIds } from '@/stores/document';
-import { useUserStore } from '@/stores/user';
 
 import TakeList from '../takes/TakeList';
 import GridStyle from './GridStyle.module.css';
@@ -29,7 +28,7 @@ export default function ShotList({
   collapsed = false,
   hidden = false,
 }) {
-  const hasActiveShot = useUserStore((ctx) => Boolean(ctx.cursor?.shotId));
+  const hasActiveShot = false; // useUserStore((ctx) => Boolean(ctx.cursor?.shotId));
   const blockIds = useBlockIds(documentId, sceneId);
   const shotIds = useShotIds(documentId, blockId || '');
   const targetBlockId = blockId;

@@ -2,10 +2,8 @@ import { Fragment, useEffect, useRef, useState } from 'react';
 
 import { useIntersectionObserver } from '@/libs/UseIntersectionObserver';
 import { useSceneIds } from '@/stores/document/use';
-import { useUserStore } from '@/stores/user';
 
 import BlockList from '../blocks/BlockList';
-import SceneEntryFocused from './SceneEntryFocused';
 import SceneEntryLayout from './SceneEntryLayout';
 import SceneEntryNew from './SceneEntryNew';
 import SceneHeader from './SceneHeader';
@@ -16,19 +14,19 @@ import SceneHeader from './SceneHeader';
  */
 export default function SceneList({ documentId }) {
   const sceneIds = useSceneIds(documentId);
-  const activeSceneId = useUserStore((ctx) => ctx.cursor?.sceneId);
+  // const activeSceneId = useUserStore((ctx) => ctx.cursor?.sceneId);
   return (
     <>
       <PerScene sceneIds={sceneIds}>
         {(sceneId) => <SceneEntry documentId={documentId} sceneId={sceneId} />}
       </PerScene>
       <SceneEntryNew className="pb-20" documentId={documentId} />
-      {activeSceneId && (
+      {/*activeSceneId && (
         <SceneEntryFocused documentId={documentId}>
           <SceneHeader documentId={documentId} sceneId={activeSceneId} />
           <BlockList documentId={documentId} sceneId={activeSceneId} />
         </SceneEntryFocused>
-      )}
+      )*/}
     </>
   );
 }
