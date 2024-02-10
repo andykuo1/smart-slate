@@ -5,18 +5,17 @@ import {
   PopoverProvider,
   usePopoverContext,
 } from '@ariakit/react';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 import AddIcon from '@material-symbols/svg-400/rounded/add.svg';
 import CheckBoxFillIcon from '@material-symbols/svg-400/rounded/check_box-fill.svg';
 import CheckBoxIcon from '@material-symbols/svg-400/rounded/check_box.svg';
 import CheckBoxOutlineBlankIcon from '@material-symbols/svg-400/rounded/check_box_outline_blank.svg';
-import EditSquareIcon from '@material-symbols/svg-400/rounded/edit_square.svg';
 import InfoFillIcon from '@material-symbols/svg-400/rounded/info-fill.svg';
 import InfoIcon from '@material-symbols/svg-400/rounded/info.svg';
 import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg';
 
 import BoxDrawingCharacter from '@/components/documents/BoxDrawingCharacter';
+import SettingsSceneOpenClapperButton from '@/components/scenes/settings/SettingsSceneOpenClapperButton';
 import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
 import {
   formatSceneNumber,
@@ -128,8 +127,8 @@ function IndexScene({ documentId, sceneId, isActive }) {
         }
         onClick={onClick}>
         <div>
-          <label className="font-bold pointer-events-none whitespace-nowrap">
-            Scene {formatSceneNumber(sceneNumber, false)}
+          <label className="pointer-events-none whitespace-nowrap">
+            SCENE {formatSceneNumber(sceneNumber, false)}
           </label>
           <SceneContentCount
             className={!detailMode ? 'invisible' : ''}
@@ -147,48 +146,27 @@ function IndexScene({ documentId, sceneId, isActive }) {
           className={
             'flex flex-row items-center -mt-1' + ' ' + (!isActive && 'hidden')
           }>
-          <EditSceneButton documentId={documentId} sceneId={sceneId} />
+          <SettingsSceneOpenClapperButton
+            documentId={documentId}
+            sceneId={sceneId}
+            inverted={true}
+            onClick={(e) => e.stopPropagation()}
+          />
           <AddShotButton documentId={documentId} sceneId={sceneId} />
         </div>
       </button>
       <ul id={listId} className="w-full flex flex-col">
-        {blockIds.map((blockId) => (
+        {blockIds.map((blockId, index, array) => (
           <IndexBlock
             key={blockId}
             documentId={documentId}
             sceneId={sceneId}
             blockId={blockId}
+            isLastBlock={index >= array.length - 1}
           />
         ))}
       </ul>
     </li>
-  );
-}
-
-/**
- * @param {object} props
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
- */
-function EditSceneButton({ documentId, sceneId }) {
-  const toggleDrawer = useUserStore((ctx) => ctx.toggleDrawer);
-  const setUserCursor = useSetUserCursor();
-  const location = useLocation();
-  const navigate = useNavigate();
-  return (
-    <SettingsFieldButton
-      inverted={true}
-      Icon={EditSquareIcon}
-      title="Edit scene"
-      onClick={(e) => {
-        toggleDrawer(false);
-        setUserCursor(documentId, sceneId, '', '');
-        if (!location.pathname.includes('/edit')) {
-          navigate('/edit');
-        }
-        e.stopPropagation();
-      }}
-    />
   );
 }
 
@@ -284,8 +262,9 @@ function AddShotDisclosure({ documentId, sceneId }) {
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
+ * @param {boolean} props.isLastBlock
  */
-function IndexBlock({ documentId, sceneId, blockId }) {
+function IndexBlock({ documentId, sceneId, blockId, isLastBlock }) {
   const shotIds = useShotIds(documentId, blockId);
   const activeShotId = useUserStore((ctx) => ctx.cursor?.shotId);
   return (

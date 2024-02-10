@@ -380,10 +380,9 @@ function renumberShots(store, documentId, sceneId, emptyOnly = true) {
 function nextAvailableShotNumber(scene, used) {
   for (let i = 0; i < MAX_ITERATIONS; ++i) {
     let result = scene.nextShotNumber;
+    scene.nextShotNumber += 1;
     if (!used.includes(result)) {
       return result;
-    } else {
-      scene.nextShotNumber += 1;
     }
   }
   throw new Error(

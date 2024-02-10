@@ -1,4 +1,5 @@
 import SettingsSceneOpenClapperButton from './settings/SettingsSceneOpenClapperButton';
+import SettingsSceneShotsRenumberButton from './settings/SettingsSceneShotsRenumberButton';
 
 /**
  * @param {object} props
@@ -8,6 +9,10 @@ import SettingsSceneOpenClapperButton from './settings/SettingsSceneOpenClapperB
 export default function SceneStatus({ documentId, sceneId }) {
   return (
     <div className="flex flex-row">
+      <SettingsSceneShotsRenumberButton
+        documentId={documentId}
+        sceneId={sceneId}
+      />
       <SettingsSceneOpenClapperButton
         documentId={documentId}
         sceneId={sceneId}

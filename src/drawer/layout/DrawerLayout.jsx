@@ -28,14 +28,15 @@ export default function DrawerLayout({ toolbar, content, children, darkMode }) {
   useEffect(() => {
     /** @param {Event} e */
     function onClick(e) {
-      if (drawerOpen) {
-        const target = /** @type {HTMLElement} */ (e.target);
-        if (
-          !drawerRef.current?.contains(target) &&
-          !toolbarRef.current?.contains(target)
-        ) {
-          toggleDrawer(false);
-        }
+      if (!drawerOpen) {
+        return;
+      }
+      const target = /** @type {HTMLElement} */ (e.target);
+      if (
+        !drawerRef.current?.contains(target) &&
+        !toolbarRef.current?.contains(target)
+      ) {
+        toggleDrawer(false);
       }
     }
     document.addEventListener('click', onClick, true);

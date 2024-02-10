@@ -9,6 +9,10 @@
 - Add roll name to take
 - Add take time to drawer details
 - Add session-persistant drawer state
+- Add new shot button to drawer
+- Add edit scene button to drawer
+
+- Fix scene renumbering not skipping last index
 
 # v0.1.15
 

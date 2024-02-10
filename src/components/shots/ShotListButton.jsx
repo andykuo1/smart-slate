@@ -11,7 +11,6 @@ import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import PopoverStyle from '@/styles/Popover.module.css';
 
 import SettingsSceneShotsDetailButton from '../scenes/settings/SettingsSceneShotsDetailButton';
-import SettingsSceneShotsRenumberButton from '../scenes/settings/SettingsSceneShotsRenumberButton';
 
 /**
  * @param {object} props
@@ -44,10 +43,7 @@ export default function ShotListButton({
         </PopoverDisclosure>
         <Popover className={PopoverStyle.popover} modal={true}>
           <PopoverArrow className={PopoverStyle.arrow} />
-          <SettingsSceneShotsRenumberButton
-            documentId={documentId}
-            sceneId={sceneId}
-          />
+          <p>{'Hello <3 this is still under construction.'}</p>
         </Popover>
       </PopoverProvider>
       <span className="flex-1" />

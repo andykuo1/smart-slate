@@ -258,8 +258,3 @@ Possible next steps?
 - Scrub through scenes in numbers
 
 - Collections button
-
----
-
-- create shot in drawer?
-- open drawer on scene/shot/take click
