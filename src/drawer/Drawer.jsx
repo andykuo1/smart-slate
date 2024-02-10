@@ -17,7 +17,6 @@ import {
 
 import SettingsFieldButton from '../components/settings/SettingsFieldButton';
 import OutlineDrawer from './OutlineDrawer';
-import SettingsDocumentNavButton from './SettingsDocumentNavButton';
 import SettingsDrawer from './SettingsDrawer';
 
 /**
@@ -37,7 +36,7 @@ export default function Drawer({ darkMode, children }) {
 }
 
 function DrawerToolbar() {
-  return <SettingsDocumentNavButton />;
+  return null; // <SettingsDocumentNavButton />;
 }
 
 function DrawerNavBar() {
@@ -86,6 +85,7 @@ function DrawerContent() {
   function onHomeClick() {
     if (isBackToHome) {
       navigate('/');
+      setUserCursor('', '', '', '');
     } else {
       navigate('/edit');
       setUserCursor(documentId, '', '', '');

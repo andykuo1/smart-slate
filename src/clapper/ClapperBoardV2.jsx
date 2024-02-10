@@ -162,13 +162,7 @@ export default function ClapperBoardV2() {
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {import('@/stores/document/DocumentStore').TakeId} props.takeId
  */
-function ClapperPrintButton({
-  className,
-  documentId,
-  sceneId,
-  shotId,
-  takeId,
-}) {
+function ClapperPrintButton({ className, documentId, takeId }) {
   const takeRating = useTakeRating(documentId, takeId);
   const toggleGoodTake = useDocumentStore((ctx) => ctx.toggleGoodTake);
 
@@ -179,9 +173,7 @@ function ClapperPrintButton({
   return (
     <SettingsFieldButton
       className={
-        'outline-none' +
-        ' ' +
-        (takeRating <= 0 ? 'line-through' : '') +
+        'outline-none text-[2em] mt-auto flex pb-[0.5em] flex-col' +
         ' ' +
         className
       }
@@ -189,7 +181,14 @@ function ClapperPrintButton({
       title="Mark good take"
       onClick={onPrintClick}
       disabled={!takeId}>
-      <span className="whitespace-nowrap">PRINT</span>
+      <span
+        className={
+          'absolute bottom-0 left-0 right-0 text-[0.5em] translate-y-[25%]' +
+          ' ' +
+          (takeRating <= 0 ? 'line-through' : '')
+        }>
+        PRINT
+      </span>
     </SettingsFieldButton>
   );
 }
@@ -387,7 +386,7 @@ function ClapperShotDescriptionField({
   return (
     <div className={'flex flex-row gap-2' + ' ' + className}>
       <p
-        className="font-mono max-h-[72px] overflow-auto"
+        className="flex-1 font-mono max-h-[72px] overflow-auto"
         hidden={!shotType && !description}>
         {shotType + (hasShotText ? ' of ' : '') + description}
       </p>
@@ -433,7 +432,6 @@ function ClapperCommentField({
         placeholder="Comments"
       />
       <ClapperPrintButton
-        className="vertical-lr"
         documentId={documentId}
         sceneId={sceneId}
         shotId={shotId}

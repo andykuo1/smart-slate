@@ -72,11 +72,12 @@ export default function OutlineDrawer() {
         <p className="text-xs opacity-30">
           A quick overview of the whole story
         </p>
-        <SettingsFieldButton
-          className="absolute top-4 right-4"
-          Icon={!drawerShowDetails ? InfoIcon : InfoFillIcon}
-          onClick={onInfoClick}
-        />
+        <div className="absolute top-4 right-4">
+          <SettingsFieldButton
+            Icon={!drawerShowDetails ? InfoIcon : InfoFillIcon}
+            onClick={onInfoClick}
+          />
+        </div>
       </div>
       <ul className="flex flex-col">
         {sceneIds.map((sceneId) => (
@@ -119,7 +120,7 @@ function IndexScene({ documentId, sceneId, isActive }) {
 
   return (
     <li className="w-full flex flex-col">
-      <button
+      <div
         className={
           'w-full flex flex-row gap-2 px-4 pt-2 text-left' +
           ' ' +
@@ -154,7 +155,7 @@ function IndexScene({ documentId, sceneId, isActive }) {
           />
           <AddShotButton documentId={documentId} sceneId={sceneId} />
         </div>
-      </button>
+      </div>
       <ul id={listId} className="w-full flex flex-col">
         {blockIds.map((blockId, index, array) => (
           <IndexBlock

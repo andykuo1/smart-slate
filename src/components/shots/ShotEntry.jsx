@@ -1,7 +1,5 @@
 import { useRef } from 'react';
 
-import ArrowForwardIcon from '@material-symbols/svg-400/rounded/arrow_forward.svg';
-
 import { useScrollIntoView } from '@/libs/UseScrollIntoView';
 import { getShotById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
@@ -94,6 +92,7 @@ export function ShotEntry({
           handleProps={handleProps}
           editable={editable}
           collapsed={collapsed}
+          isRightArrow={false}
         />
         <div className="relative">
           {shotHash && (
@@ -109,12 +108,23 @@ export function ShotEntry({
             editable={true}
           />
         </div>
-        <div className="flex-1 h-full flex flex-row items-center p-2">
-          {collapsed && <ArrowForwardIcon className="w-6 h-6 fill-current" />}
+        <div className="flex-1 h-full flex flex-row items-center">
+          {collapsed && (
+            <ShotMover
+              documentId={documentId}
+              sceneId={sceneId}
+              blockId={blockId}
+              shotId={shotId}
+              handleProps={handleProps}
+              editable={editable}
+              collapsed={collapsed}
+              isRightArrow={true}
+            />
+          )}
           {!collapsed && (
             <ShotDescription
               className={
-                'flex-1 w-full h-full bg-transparent p-2 font-mono italic' +
+                'flex-1 w-full h-full bg-transparent p-2 mx-2 font-mono italic' +
                 ' ' +
                 (!showDescriptionWhenSmall ? 'hidden sm:block' : '')
               }

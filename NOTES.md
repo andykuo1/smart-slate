@@ -271,12 +271,7 @@ Export list to csv
 
 --
 
-- Remove focus
-- Add navbar
 - Add previs
-
-- Remove drag handles
-- Change arrows to up/down => left/right
 
 - Button Unhide past take QR codes
 - print button bigger

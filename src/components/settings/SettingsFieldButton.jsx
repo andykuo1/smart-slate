@@ -23,8 +23,9 @@ export default function SettingsFieldButton({
 }) {
   return (
     <button
+      style={{ lineHeight: '1em' }}
       className={
-        'flex flex-row items-center rounded select-none' +
+        'relative flex flex-row items-center rounded select-none' +
         ' ' +
         'disabled:opacity-30' +
         ' ' +
