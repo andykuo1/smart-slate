@@ -8,7 +8,11 @@ import TuneIcon from '@material-symbols/svg-400/rounded/tune.svg';
 import DocumentContentCount from '@/components/documents/DocumentContentCount';
 import DrawerLayout from '@/drawer/layout/DrawerLayout';
 import { useDocumentTitle } from '@/stores/document/use';
-import { useCurrentDocumentId, useUserStore } from '@/stores/user';
+import {
+  useCurrentDocumentId,
+  useSetUserCursor,
+  useUserStore,
+} from '@/stores/user';
 
 import SettingsFieldButton from '../components/settings/SettingsFieldButton';
 import OutlineDrawer from './OutlineDrawer';
@@ -64,6 +68,7 @@ function DrawerContent() {
   const navigate = useNavigate();
   const location = useLocation();
   const isBackToHome = location.pathname.includes('/edit');
+  const setUserCursor = useSetUserCursor();
 
   function onBackClick() {
     toggleDrawer(false);
@@ -74,6 +79,7 @@ function DrawerContent() {
       navigate('/');
     } else {
       navigate('/edit');
+      setUserCursor(documentId, '', '', '');
     }
   }
 

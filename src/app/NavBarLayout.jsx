@@ -16,8 +16,6 @@ export default function NavBarLayout({ className, children }) {
         }>
         {children}
       </div>
-      {/* NOTE: Add some scrollable whitespace, because <NavBar/> is a floating element. */}
-      <div className={'w-full h-20' /* TODO: Used to be h-24 */} />
       <NavBar />
     </>
   );

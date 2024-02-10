@@ -258,3 +258,30 @@ Possible next steps?
 - Scrub through scenes in numbers
 
 - Collections button
+
+---
+
+BACK
+Scan directory
+Analyze files
+Transcode files
+Import to project
+Rename files on disk
+Export list to csv
+
+--
+
+- Remove focus
+- Add navbar
+- Add previs
+
+- Remove drag handles
+- Change arrows to up/down => left/right
+
+- Button Unhide past take QR codes
+- print button bigger
+
+- Move takes to recorder
+
+- Scanner revamp ui
+- Integrate FFmpeg

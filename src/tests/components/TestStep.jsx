@@ -1,5 +1,7 @@
 import { useCallback, useState } from 'react';
 
+import TestButton from './TestButton';
+
 /**
  * @param {object} props
  * @param {string} [props.className]
@@ -37,11 +39,7 @@ export default function TestStep({ className, title, onExecute, children }) {
     <section className={'flex flex-col p-4 my-4' + ' ' + className}>
       <h2 className="text-xl font-bold">{title}</h2>
       {children}
-      <button
-        className="block outline rounded p-2 m-2 bg-gray-100"
-        onClick={onClick}>
-        Execute
-      </button>
+      <TestButton onClick={onClick}>Execute</TestButton>
       <hr />
       <fieldset className="relative flex-1 flex">
         <legend className="absolute top-0 right-0 opacity-30 font-bold">

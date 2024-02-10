@@ -11,6 +11,7 @@
 - Add session-persistant drawer state
 - Add new shot button to drawer
 - Add edit scene button to drawer
+- Add home button to navigate to edit without focus
 
 - Fix scene renumbering not skipping last index
 

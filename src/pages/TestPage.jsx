@@ -5,6 +5,7 @@ import TestFFmpegTranscode from '@/tests/TestFFmpegTranscode';
 import TestLexicalMarkdown from '@/tests/TestLexicalMarkdown';
 import TestScreenplay from '@/tests/TestScreenplay';
 import TestSnapshot from '@/tests/TestSnapshot';
+import TestTakeScanner from '@/tests/TestTakeScanner';
 import TestVideoConstraints from '@/tests/TestVideoConstraints';
 
 const TEST_VERSION = 'v16';
@@ -37,6 +38,7 @@ export default function TestPage() {
           <option value="lexicalmarkdown">Lexical Markdown Test</option>
           <option value="crudsync">CRUD Sync Test</option>
           <option value="ffmpegtranscode">FFMPEG Transcode Test</option>
+          <option value="takescanner">Take Scanner Test</option>
         </select>
       </div>
       {test === 'screenplay' && <TestScreenplay />}
@@ -45,6 +47,7 @@ export default function TestPage() {
       {test === 'lexicalmarkdown' && <TestLexicalMarkdown />}
       {test === 'crudsync' && <TestCRUDSync />}
       {test === 'ffmpegtranscode' && <TestFFmpegTranscode />}
+      {test === 'takescanner' && <TestTakeScanner />}
     </main>
   );
 }

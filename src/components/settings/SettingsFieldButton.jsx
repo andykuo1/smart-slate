@@ -24,7 +24,7 @@ export default function SettingsFieldButton({
   return (
     <button
       className={
-        'flex flex-row items-center rounded' +
+        'flex flex-row items-center rounded select-none' +
         ' ' +
         'disabled:opacity-30' +
         ' ' +

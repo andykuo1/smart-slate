@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { useUserStore } from '@/stores/user';
 
@@ -19,6 +20,8 @@ export default function DrawerLayout({ toolbar, content, children, darkMode }) {
   const drawerOpen = useUserStore((ctx) => ctx.drawer.open);
   const setDrawerActiveTab = useUserStore((ctx) => ctx.setDrawerActiveTab);
   const toggleDrawer = useUserStore((ctx) => ctx.toggleDrawer);
+  const location = useLocation();
+  const hasNavBar = location.pathname.includes('/edit');
 
   function onClick() {
     toggleDrawer();
@@ -41,11 +44,12 @@ export default function DrawerLayout({ toolbar, content, children, darkMode }) {
     }
     document.addEventListener('click', onClick, true);
     return () => document.removeEventListener('click', onClick, true);
-  }, [open]);
+  }, [drawerOpen]);
 
   return (
     <>
       <DrawerToolbarLayout
+        className={hasNavBar ? 'bottom-20' : ''}
         containerRef={toolbarRef}
         open={drawerOpen}
         toolbar={toolbar}>
@@ -62,7 +66,9 @@ export default function DrawerLayout({ toolbar, content, children, darkMode }) {
           ' ' +
           'transition-transform' +
           ' ' +
-          (drawerOpen ? 'translate-x-0' : 'translate-x-[100%]')
+          (drawerOpen ? 'translate-x-0' : 'translate-x-[100%]') +
+          ' ' +
+          (hasNavBar ? 'bottom-20' : '')
         }>
         {content}
       </div>

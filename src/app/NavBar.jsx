@@ -2,35 +2,19 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import EditSquareIcon from '@material-symbols/svg-400/rounded/edit_square.svg';
 import MovieIcon from '@material-symbols/svg-400/rounded/movie.svg';
-// import RadioButtonCheckedIcon from '@material-symbols/svg-400/rounded/radio_button_checked.svg';
 import SubscriptionsIcon from '@material-symbols/svg-400/rounded/subscriptions.svg';
 import TuneIcon from '@material-symbols/svg-400/rounded/tune.svg';
 
-import {
-  formatSceneNumber,
-  formatShotNumber,
-  formatTakeNumber,
-} from '@/components/takes/TakeNameFormat';
 import { useFullscreen } from '@/libs/fullscreen';
-import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
-import { useShotNumber } from '@/serdes/UseResolveShotNumber';
-import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
 import { getDocumentById } from '@/stores/document';
 import { getDocumentSettingsById } from '@/stores/document/get';
 import { useDocumentStore } from '@/stores/document/use';
 import { useSettingsStore } from '@/stores/settings';
-import {
-  useCurrentCursor,
-  useCurrentDocumentId,
-  useUserStore,
-} from '@/stores/user';
+import { useCurrentDocumentId, useUserStore } from '@/stores/user';
 
 export default function NavBar() {
   return (
-    <nav className="fixed bottom-0 w-full h-20 flex flex-col z-30">
-      {false /* TODO: Don't show until we have something better */ && (
-        <NavSceneShotTake />
-      )}
+    <nav className="fixed bottom-0 w-full h-20 flex flex-col z-40">
       <ul className="flex-1 flex flex-row bg-black text-white">
         <li className="flex-1 flex">
           <NavTuneButton />
@@ -83,48 +67,6 @@ function NavRecordButton() {
       onClick={onClick}
       disabled={!projectId || shotCount <= 0}
     />
-  );
-}
-
-function NavSceneShotTake() {
-  const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
-  const projectId = useDocumentStore(
-    (ctx) => getDocumentSettingsById(ctx, documentId)?.projectId,
-  );
-  const sceneNumber = useSceneNumber(documentId, sceneId);
-  const shotNumber = useShotNumber(documentId, sceneId, shotId);
-  const takeNumber = useTakeNumber(documentId, shotId, takeId);
-  return (
-    <table className="bg-black text-white">
-      <thead>
-        <tr className="text-xs opacity-60">
-          <th scope="col" className="w-[55%]">
-            Project
-          </th>
-          <th scope="col" className="w-[15%]">
-            Scene
-          </th>
-          <th scope="col" className="w-[15%]">
-            Shot
-          </th>
-          <th scope="col" className="w-[15%]">
-            Take
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr className="text-center">
-          <td>
-            <span className="inline-block w-[55vw] overflow-hidden overflow-ellipsis whitespace-nowrap">
-              {projectId || '--'}
-            </span>
-          </td>
-          <td>{formatSceneNumber(sceneNumber, false)}</td>
-          <td>{formatShotNumber(shotNumber)}</td>
-          <td>{formatTakeNumber(takeNumber)}</td>
-        </tr>
-      </tbody>
-    </table>
   );
 }
 

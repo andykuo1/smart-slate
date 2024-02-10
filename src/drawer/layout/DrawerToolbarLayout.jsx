@@ -1,11 +1,13 @@
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('react').MutableRefObject<HTMLDivElement|null>} [props.containerRef]
  * @param {boolean} [props.open]
  * @param {import('react').ReactNode} [props.toolbar]
  * @param {import('react').ReactNode} props.children
  */
 export default function DrawerToolbarLayout({
+  className,
   containerRef,
   open = false,
   toolbar,
@@ -14,7 +16,13 @@ export default function DrawerToolbarLayout({
   return (
     <div
       ref={containerRef}
-      className="fixed bottom-0 right-0 m-2 z-50 flex flex-row-reverse text-2xl gap-2 pointer-events-none text-black">
+      className={
+        'fixed bottom-0 right-0' +
+        ' ' +
+        'm-2 z-50 flex flex-row-reverse text-2xl gap-2 pointer-events-none text-black' +
+        ' ' +
+        className
+      }>
       {children}
       <div
         className={
