@@ -13,7 +13,7 @@ import BlockEntryLayout from './BlockEntryLayout';
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  * @param {boolean} [props.editable]
- * @param {'faded'|'split'|'fullwidth'} [props.mode]
+ * @param {'faded'|'split'|'fullwidth'|'solowidth'} [props.mode]
  * @param {import('react').ReactNode} props.children
  */
 export default function BlockEntry({
@@ -56,7 +56,7 @@ export default function BlockEntry({
           />
         </div>
       }>
-      {children}
+      {mode !== 'solowidth' && children}
     </BlockEntryLayout>
   );
 }

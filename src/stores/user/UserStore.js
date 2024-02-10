@@ -10,7 +10,7 @@ export function createStore() {
     cursor: createCursor(),
     recorder: createRecorder(),
     drawer: createDrawer(),
-    /** @type {'inline'|'sequence'|'solo'} */
+    /** @type {'inline'|'sequence'|'textonly'|'shotonly'} */
     editMode: 'sequence',
     /** @type {'detail'|'hidden'} */
     shotListMode: 'hidden',

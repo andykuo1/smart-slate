@@ -7,7 +7,7 @@ import { useSetUserCursor } from '@/stores/user';
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('react').ReactNode} props.content
  * @param {import('react').ReactNode} props.children
- * @param {'faded'|'split'|'fullwidth'} [props.mode]
+ * @param {'faded'|'split'|'fullwidth'|'solowidth'} [props.mode]
  */
 export default function BlockEntryLayout({
   className,
@@ -33,13 +33,12 @@ export default function BlockEntryLayout({
         className={
           'relative w-full' +
           ' ' +
-          (isHeightFaded &&
-            'min-h-[10vh] max-h-[20vh] overflow-y-hidden bg-black text-white')
+          (isHeightFaded && 'min-h-[10vh] max-h-[20vh] overflow-y-hidden')
         }>
         {content}
         {isHeightFaded && (
           <button
-            className="absolute top-0 bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black to-transparent"
+            className="absolute top-0 bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-white to-transparent"
             onClick={() => {
               setUserCursor(documentId, sceneId, '', '');
             }}

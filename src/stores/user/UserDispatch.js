@@ -67,7 +67,7 @@ function setRecorderActive(store, active, forceStart) {
 
 /**
  * @param {import('./UserStore').Store} store
- * @param {'inline'|'sequence'|'solo'} editMode
+ * @param {'inline'|'sequence'|'textonly'|'shotonly'} editMode
  */
 function setEditMode(store, editMode) {
   store.editMode = editMode;

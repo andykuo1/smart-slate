@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 
 import QRCode2Icon from '@material-symbols/svg-400/rounded/qr_code_2.svg';
 
-import NavBar from '@/app/NavBar';
 import SettingsAspectRatioField from '@/components/settings/SettingsAspectRatioField';
 import SettingsAutoSaveLastTimeField from '@/components/settings/SettingsAutoSaveLastTimeField';
 import SettingsAutoSaveToField from '@/components/settings/SettingsAutoSaveToField';
@@ -27,6 +26,7 @@ import SettingsShareFilesButton from '@/components/settings/SettingsShareFilesBu
 import SettingsVideoCacheClearButton from '@/components/settings/SettingsVideoCacheClearButton';
 import SettingsVideoResolutionField from '@/components/settings/SettingsVideoResolutionField';
 import GoogleConnectButton from '@/libs/googleapi/auth/GoogleConnectButton';
+import NavBar from '@/navbar/NavBar';
 
 import PageLayout from './PageLayout';
 

@@ -5,6 +5,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import EditPage from '@/pages/EditPage';
 import ErrorPage from '@/pages/ErrorPage';
 import NewProjectPage from '@/pages/NewProjectPage';
+import PreviewPage from '@/pages/PreviewPage';
 import RecordPage from '@/pages/RecordPage';
 import RootPage from '@/pages/RootPage';
 import ScanPage from '@/pages/ScanPage';
@@ -57,6 +58,11 @@ const router = createBrowserRouter(
     {
       path: '/new',
       element: <NewProjectPage />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: '/pre',
+      element: <PreviewPage />,
       errorElement: <ErrorPage />,
     },
   ],

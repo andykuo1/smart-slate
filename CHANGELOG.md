@@ -14,6 +14,7 @@
 - Add home button to navigate to edit without focus
 - Add navbar back :D
 - Add show take button for drawer
+- Add text-only and shot-only scene modes
 
 - Remove scene and shot focus screens
 

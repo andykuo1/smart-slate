@@ -25,7 +25,7 @@ export default function NavBar({ className, children }) {
         <NavTuneButton />,
         <NavEditButton />,
         <NavRecordButton />,
-        <NavButton title="Visualize" abbr="Vis" Icon={SubscriptionsIcon} />,
+        <NavPreviewButton />,
       ]}>
       {children}
     </NavBarLayout>
@@ -138,6 +138,26 @@ function NavTuneButton() {
       Icon={TuneIcon}
       active={location.pathname.includes('/settings')}
       onClick={onClick}
+    />
+  );
+}
+
+function NavPreviewButton() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  function onClick() {
+    if (!location.pathname.includes('/pre')) {
+      navigate('/pre');
+    }
+  }
+  return (
+    <NavButton
+      title="Visualize"
+      abbr="Vis"
+      Icon={SubscriptionsIcon}
+      active={location.pathname.includes('/pre')}
+      onClick={onClick}
+      disabled={true}
     />
   );
 }

@@ -33,23 +33,26 @@ export default function BlockList({
   const blockIds = useDocumentStore(
     useShallow((ctx) => getBlockIdsInOrder(ctx, documentId, sceneId)),
   );
-  const activeShotId = false; // useUserStore((ctx) => ctx.cursor?.shotId);
   const smallMedia = useMatchMedia('(max-width: 640px)');
   const inlineMode = useUserStore((ctx) => ctx.editMode === 'inline');
   const sequenceMode = useUserStore((ctx) => ctx.editMode === 'sequence');
+  const textOnlyMode = useUserStore((ctx) => ctx.editMode === 'textonly');
+  const shotOnlyMode = useUserStore((ctx) => ctx.editMode === 'shotonly');
   const shotListMode = useUserStore((ctx) => ctx.shotListMode === 'detail');
-  const blockViewMode = activeShotId
-    ? 'faded'
-    : sequenceMode
-      ? 'split'
-      : inlineMode
-        ? 'fullwidth'
-        : 'fullwidth';
+  const blockViewMode = textOnlyMode
+    ? 'solowidth'
+    : shotOnlyMode
+      ? 'faded'
+      : sequenceMode
+        ? 'split'
+        : inlineMode
+          ? 'fullwidth'
+          : 'fullwidth';
 
   const showSceneLevelShotList = sequenceMode;
-  const showBlockLevelShotList = inlineMode;
+  const showBlockLevelShotList = inlineMode || shotOnlyMode;
 
-  const isCollapsed = !shotListMode && !activeShotId;
+  const isCollapsed = !shotListMode;
   /*
   if (activeShotId) {
     return <BlockEntryFocused documentId={documentId} />;
@@ -70,7 +73,7 @@ export default function BlockList({
               documentId={documentId}
               sceneId={sceneId}
               blockId={blockId}
-              editable={!activeShotId}
+              editable={true}
               collapsed={isCollapsed}
               hidden={!showBlockLevelShotList}
             />

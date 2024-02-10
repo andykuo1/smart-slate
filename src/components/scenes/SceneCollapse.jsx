@@ -1,4 +1,6 @@
 import FiberManualRecordIcon from '@material-symbols/svg-400/rounded/fiber_manual_record-fill.svg';
+import PostIcon from '@material-symbols/svg-400/rounded/post.svg';
+import SubjectIcon from '@material-symbols/svg-400/rounded/subject.svg';
 import VerticalSplitIcon from '@material-symbols/svg-400/rounded/vertical_split.svg';
 import ViewDayIcon from '@material-symbols/svg-400/rounded/view_day.svg';
 
@@ -13,14 +15,24 @@ import SettingsFieldButton from '../settings/SettingsFieldButton';
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  */
-export default function SceneCollapse({ containerRef, documentId, sceneId }) {
+export default function SceneCollapse({ containerRef }) {
   const editMode = useUserStore((ctx) => ctx.editMode);
   const setEditMode = useUserStore((ctx) => ctx.setEditMode);
   const EditModeIcon = getEditModeIcon(editMode);
   const scrollIntoView = useScrollIntoView(containerRef);
 
   function onClick() {
-    setEditMode(editMode === 'inline' ? 'sequence' : 'inline');
+    setEditMode(
+      editMode === 'inline'
+        ? 'sequence'
+        : editMode === 'sequence'
+          ? 'shotonly'
+          : editMode === 'shotonly'
+            ? 'textonly'
+            : editMode === 'textonly'
+              ? 'inline'
+              : 'inline',
+    );
     scrollIntoView();
   }
 
@@ -40,6 +52,10 @@ function getEditModeIcon(editMode) {
       return ViewDayIcon;
     case 'sequence':
       return VerticalSplitIcon;
+    case 'textonly':
+      return SubjectIcon;
+    case 'shotonly':
+      return PostIcon;
     default:
       return FiberManualRecordIcon;
   }

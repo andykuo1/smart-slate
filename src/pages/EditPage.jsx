@@ -1,8 +1,8 @@
-import NavBar from '@/app/NavBar';
 import DocumentLayout from '@/components/documents/DocumentLayout';
 import DocumentTitle from '@/components/documents/DocumentTitle';
 import SceneList from '@/components/scenes/SceneList';
 import Drawer from '@/drawer/Drawer';
+import NavBar from '@/navbar/NavBar';
 import { useCurrentDocumentId } from '@/stores/user';
 
 import PageLayout from './PageLayout';
