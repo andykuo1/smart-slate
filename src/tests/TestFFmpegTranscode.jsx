@@ -104,7 +104,7 @@ export default function TestFFmpegTranscode() {
         title="Step 2 - Select video file"
         onExecute={async function* () {
           yield 'Opening file picker...';
-          // @ts-ignore
+          // @ts-expect-error showOpenFilePicker is supported in chrome.
           const [fileHandle] = await window.showOpenFilePicker({
             types: [
               {
@@ -193,7 +193,7 @@ export default function TestFFmpegTranscode() {
 
           await ffmpeg.createDir(inputDir);
           await ffmpeg.mount(
-            // @ts-ignore
+            // @ts-expect-error WORKERFS is supported in chrome.
             'WORKERFS',
             {
               files: [file],

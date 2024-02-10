@@ -2,7 +2,6 @@ import { Button, usePopoverContext } from '@ariakit/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import ListAltIcon from '@material-symbols/svg-400/rounded/list_alt.svg';
 import MovieIcon from '@material-symbols/svg-400/rounded/movie.svg';
 import RadioButtonCheckedIcon from '@material-symbols/svg-400/rounded/radio_button_checked.svg';
 
@@ -78,14 +77,6 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
     }
   }
 
-  const onFocusClick = useCallback(
-    function _onFocusClick() {
-      setOpen(false);
-      setUserCursor(documentId, sceneId, shotId);
-    },
-    [setUserCursor, documentId, sceneId, shotId, setOpen],
-  );
-
   const onInputChange = useCallback(
     /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
     function _onInputChange(e) {
@@ -120,12 +111,6 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
         <span className="flex-1 text-right">
           Record Take #{shotTakeCount + 1}
         </span>
-      </Button>
-      <Button
-        className="flex-1 p-1 flex items-center gap-2 rounded hover:bg-opacity-10 bg-opacity-0 bg-white disabled:opacity-30"
-        onClick={onFocusClick}>
-        <ListAltIcon className="w-6 h-6 fill-current" />
-        <span className="flex-1 text-right">Shot Details</span>
       </Button>
       <Button
         className="flex-1 p-1 flex items-center gap-2 rounded hover:bg-opacity-10 bg-opacity-0 bg-white disabled:opacity-30"

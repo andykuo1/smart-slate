@@ -53,6 +53,7 @@ export default function ClapperQRCodeField({
       defineTake,
       setUserCursor,
       resolveTakeQRCodeKey,
+      onChange,
     ],
   );
 

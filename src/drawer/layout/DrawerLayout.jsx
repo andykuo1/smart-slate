@@ -44,7 +44,7 @@ export default function DrawerLayout({ toolbar, content, children, darkMode }) {
     }
     document.addEventListener('click', onClick, true);
     return () => document.removeEventListener('click', onClick, true);
-  }, [drawerOpen]);
+  }, [drawerOpen, toggleDrawer]);
 
   return (
     <>

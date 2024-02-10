@@ -1,3 +1,15 @@
+import {
+  formatSceneNumber,
+  formatShotNumber,
+  formatTakeNumber,
+} from '@/components/takes/TakeNameFormat';
+import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
+import { useShotNumber } from '@/serdes/UseResolveShotNumber';
+import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
+import { getDocumentSettingsById } from '@/stores/document';
+import { useDocumentStore } from '@/stores/document/use';
+import { useCurrentCursor } from '@/stores/user';
+
 export default function NavSlugBar() {
   const { documentId, sceneId, shotId, takeId } = useCurrentCursor();
   const projectId = useDocumentStore(
