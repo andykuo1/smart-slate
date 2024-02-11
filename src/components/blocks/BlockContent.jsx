@@ -117,14 +117,14 @@ function BlockContentFountainJSON({
           className={
             'my-4 ml-[15%] mr-[20%] whitespace-normal' + ' ' + className
           }>
-          <pre className="mx-[15%] whitespace-normal font-bold">{lines[0]}</pre>
+          <pre className="mx-[30%] whitespace-normal font-bold">{lines[0]}</pre>
           {lines.slice(1).map((line, index) => (
             <pre
               key={line + '.' + index}
               className={
                 'whitespace-normal' +
                 ' ' +
-                (line.startsWith('(') ? 'mx-[7%]' : '')
+                (line.startsWith('(') ? 'ml-[15%]' : '')
               }>
               {line}
             </pre>
