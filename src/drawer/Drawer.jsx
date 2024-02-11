@@ -65,7 +65,7 @@ function DrawerContent() {
 
   return (
     <nav className="w-full font-mono">
-      <div className="sticky top-0 z-10 flex w-full bg-gray-200 p-2 shadow">
+      <div className="sticky top-0 z-10 flex w-full bg-gray-200 p-2 shadow dark:bg-gray-800">
         <div className="flex-1">
           <FieldButton
             className="mr-auto"

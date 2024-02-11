@@ -31,13 +31,13 @@ export default function ShotEntryNew({
       <div className={'z-10 flex h-[6rem] w-full flex-row items-center'}>
         {!collapsed && <ShotNumber documentId="" sceneId="" shotId="" />}
         <button
-          className="group h-full translate-x-1 py-2.5 text-gray-400 hover:text-white"
+          className="group h-full translate-x-1 py-2.5 text-gray-400 hover:text-white dark:text-gray-900"
           title="New shot"
           onClick={onClick}>
           <AddBoxIcon className="h-full w-6 fill-current group-hover:bg-black" />
         </button>
         <div className="relative ml-2">
-          <label className="absolute -left-1 -top-2 z-10 rounded bg-white px-1 font-mono text-gray-400">
+          <label className="absolute -left-1 -top-2 z-10 rounded bg-white px-1 font-mono text-gray-400 dark:bg-gray-900 dark:text-gray-700">
             *
           </label>
           <ShotThumbnailTypeSelector

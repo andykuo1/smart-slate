@@ -123,7 +123,9 @@ function IndexScene({ documentId, sceneId, isActive }) {
         className={
           'flex w-full flex-row gap-2 px-4 pt-2 text-left' +
           ' ' +
-          (isActive ? 'bg-black text-white' : 'bg-gray-200 hover:bg-gray-300')
+          (isActive
+            ? 'bg-black text-white dark:bg-gray-700 dark:text-white'
+            : 'bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-600')
         }
         onClick={onClick}>
         <div>
@@ -307,7 +309,9 @@ function IndexShot({
         className={
           'flex w-full flex-row gap-2 px-6 text-left text-xs' +
           ' ' +
-          (isActive ? 'bg-black text-white' : 'hover:bg-gray-300')
+          (isActive
+            ? 'bg-black text-white dark:bg-gray-700 dark:text-white'
+            : 'hover:bg-gray-300 dark:hover:bg-gray-600')
         }
         onClick={onClick}>
         <BoxDrawingCharacter start={false} end={isLastShot} depth={0} />

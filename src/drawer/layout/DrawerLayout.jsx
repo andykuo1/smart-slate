@@ -60,7 +60,7 @@ export default function DrawerLayout({ toolbar, content, children, darkMode }) {
         className={
           'fixed bottom-0 right-0 top-0 z-40 overflow-y-auto overscroll-none pb-20' +
           ' ' +
-          'bg-gray-200 text-black shadow-xl' +
+          'bg-gray-200 text-black shadow-xl dark:bg-gray-800 dark:text-white' +
           ' ' +
           'w-[90vw] min-w-[50vw] sm:w-[60vmin]' +
           ' ' +

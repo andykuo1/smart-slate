@@ -25,7 +25,7 @@ export default function ShotListButton({
   return (
     <div
       className={
-        'mx-4 my-2 flex items-center gap-2 rounded-xl bg-gray-100 px-2 italic' +
+        'mx-4 my-2 flex items-center gap-2 rounded-xl bg-gray-100 px-2 italic dark:bg-gray-800' +
         ' ' +
         className
       }>

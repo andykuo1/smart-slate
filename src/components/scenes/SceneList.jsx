@@ -7,6 +7,7 @@ import BlockList from '../blocks/BlockList';
 import SceneEntryLayout from './SceneEntryLayout';
 import SceneEntryNew from './SceneEntryNew';
 import SceneHeader from './SceneHeader';
+import ScenePlaceholder from './ScenePlaceholder';
 
 /**
  * @param {object} props
@@ -62,8 +63,7 @@ function SceneEntry({ documentId, sceneId }) {
           sceneId={sceneId}
         />
       ) : (
-        /* Placeholder container */
-        <div style={{ height: `${height}px` }} className="w-full bg-white" />
+        <ScenePlaceholder height={height} />
       )}
     </SceneEntryLayout>
   );

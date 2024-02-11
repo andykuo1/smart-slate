@@ -33,7 +33,7 @@ import PageLayout from './PageLayout';
 export default function SettingsPage() {
   const navigate = useNavigate();
   return (
-    <PageLayout className="bg-white text-black">
+    <PageLayout className="bg-white text-black dark:bg-slate-900 dark:text-white">
       <NavBar>
         <fieldset className="mx-auto flex flex-col gap-2">
           <legend className="py-4">

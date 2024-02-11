@@ -31,7 +31,7 @@ export default function FieldGroupDiscloseable({
     <DisclosureProvider defaultOpen={defaultOpen}>
       <Disclosure
         ref={containerRef}
-        className="flex w-full items-center border-b-2 border-black"
+        className="flex w-full items-center border-b-2"
         onClick={onClick}>
         <span className="flex-1">{title}</span>
         <ExpandMoreIcon className="h-6 w-6 fill-current" />

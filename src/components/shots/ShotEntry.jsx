@@ -98,7 +98,7 @@ export function ShotEntry({
         />
         <div className="relative">
           {shotHash && (
-            <label className="absolute -top-2 left-0 z-10 rounded bg-white px-1 font-mono text-black">
+            <label className="absolute -top-2 left-0 z-10 rounded bg-white px-1 font-mono text-black dark:bg-black dark:text-white">
               {shotHash}
             </label>
           )}

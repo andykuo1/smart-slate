@@ -39,7 +39,7 @@ export default function BlockEntry({
       mode={mode}
       content={
         mode !== 'childonly' && (
-          <div className="group flex h-full w-full hover:bg-gray-100">
+          <div className="group flex h-full w-full hover:bg-gray-100 dark:hover:bg-gray-800">
             <BlockContent
               className={
                 'flex-1 p-2 px-4' + ' ' + (blockEditable ? 'min-h-[20vh]' : '')

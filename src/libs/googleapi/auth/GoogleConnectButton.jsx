@@ -80,7 +80,7 @@ export default function GoogleConnectButton({ className, children }) {
   return (
     <button
       className={
-        'flex-1 rounded border p-2 text-black shadow hover:bg-black hover:text-white' +
+        'flex-1 rounded border p-2 text-black shadow hover:bg-black hover:text-white dark:text-white dark:hover:bg-white dark:hover:text-black' +
         ' ' +
         className
       }

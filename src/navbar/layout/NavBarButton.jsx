@@ -47,7 +47,7 @@ export default function NavButton({
           (active ? 'bg-white' : '')
         }
       />
-      <label className="pointer-events-none absolute top-[50%] z-20 my-auto ml-6 hidden -translate-y-[70%] text-black sm:inline">
+      <label className="pointer-events-none absolute top-[50%] z-20 my-auto ml-6 hidden -translate-y-[70%] sm:inline">
         <span className="hidden lg:inline">{title}</span>
         <span className="inline lg:hidden">{abbr}</span>
       </label>

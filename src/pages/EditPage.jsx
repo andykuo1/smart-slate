@@ -11,7 +11,7 @@ import PageLayout from './PageLayout';
 export default function EditPage() {
   const documentId = useCurrentDocumentId();
   return (
-    <PageLayout className="bg-white text-black">
+    <PageLayout className="bg-white text-black dark:bg-gray-900 dark:text-white">
       <NavBar>
         <Drawer darkMode={false}>
           <Toolbar />
