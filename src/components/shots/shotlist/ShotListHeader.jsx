@@ -8,6 +8,7 @@ import {
 import SettingsSceneShotsDetailButton from '@/components/scenes/settings/SettingsSceneShotsDetailButton';
 import SettingsSceneShotsRenumberButton from '@/components/scenes/settings/SettingsSceneShotsRenumberButton';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
+import { useUserStore } from '@/stores/user';
 import PopoverStyle from '@/styles/Popover.module.css';
 
 import ShotListAddButton from './ShotListAddButton';
@@ -27,6 +28,7 @@ export default function ShotListHeader({
   blockId,
 }) {
   const sceneNumber = useSceneNumber(documentId, sceneId);
+  const sequenceMode = useUserStore((ctx) => ctx.editMode === 'sequence');
   return (
     <div
       className={
@@ -36,7 +38,7 @@ export default function ShotListHeader({
       }>
       <span className="flex-1" />
       <PopoverProvider>
-        <PopoverDisclosure className="flex gap-1 italic">
+        <PopoverDisclosure className="flex gap-1 whitespace-nowrap italic">
           {'Shot List ' + sceneNumber}
         </PopoverDisclosure>
         <Popover className={PopoverStyle.popover} modal={true}>
@@ -45,7 +47,12 @@ export default function ShotListHeader({
         </Popover>
       </PopoverProvider>
       <span className="flex-1" />
-      <div className="hidden flex-row gap-2 rounded-full bg-gray-300 px-4 text-gray-400 sm:flex">
+      <div
+        className={
+          'hidden flex-row gap-2 rounded-full bg-gray-300 px-4 text-gray-400' +
+          ' ' +
+          (sequenceMode ? 'lg:flex' : 'sm:flex')
+        }>
         <div className="h-8 w-8 rounded hover:text-black dark:hover:text-white">
           <ShotListAddButton
             documentId={documentId}

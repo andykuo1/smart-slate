@@ -36,41 +36,64 @@ export default function ShotListInDocumentOrder({
       editable={editable}
       collapsed={collapsed}
       hidden={hidden}>
-      {sceneIds.map((sceneId) => (
-        <PerUseArray
-          arrayName="scene"
-          useArray={() => useBlockIds(documentId, sceneId)}>
-          {(blockId) => (
-            <ShotListShots
-              documentId={documentId}
-              sceneId={sceneId}
-              blockId={blockId}
-              editable={editable}
-              collapsed={collapsed}
-            />
-          )}
-        </PerUseArray>
-      ))}
+      <PerSceneBlock documentId={documentId}>
+        {(sceneId, blockId) => (
+          <ShotListShots
+            documentId={documentId}
+            sceneId={sceneId}
+            blockId={blockId}
+            editable={editable}
+            collapsed={collapsed}
+          />
+        )}
+      </PerSceneBlock>
     </ShotListLayout>
   );
 }
 
 /**
- * @template T
  * @param {object} props
- * @param {string} props.arrayName
- * @param {() => Array<T>} props.useArray
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {(
- * value: T,
+ * sceneId: import('@/stores/document/DocumentStore').SceneId,
+ * blockId: import('@/stores/document/DocumentStore').BlockId,
  * index: number,
- * array: Array<T>
+ * array: Array<import('@/stores/document/DocumentStore').BlockId>
  * ) => import('react').ReactNode} props.children
  */
-function PerUseArray({ arrayName, useArray, children }) {
-  const result = useArray();
-  return result.map((value, index, array) => (
-    <Fragment key={`${arrayName}-${value}`}>
-      {children(value, index, array)}
-    </Fragment>
-  ));
+export function PerSceneBlock({ documentId, children }) {
+  const sceneIds = useSceneIds(documentId);
+  return (
+    <>
+      {sceneIds.map((sceneId) => (
+        <PerSceneBlockInner documentId={documentId} sceneId={sceneId}>
+          {children}
+        </PerSceneBlockInner>
+      ))}
+    </>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {(
+ * sceneId: import('@/stores/document/DocumentStore').SceneId,
+ * blockId: import('@/stores/document/DocumentStore').BlockId,
+ * index: number,
+ * array: Array<import('@/stores/document/DocumentStore').BlockId>
+ * ) => import('react').ReactNode} props.children
+ */
+function PerSceneBlockInner({ documentId, sceneId, children }) {
+  const blockIds = useBlockIds(documentId, sceneId);
+  return (
+    <>
+      {blockIds.map((blockId, index, array) => (
+        <Fragment key={`block-${blockId}`}>
+          {children(sceneId, blockId, index, array)}
+        </Fragment>
+      ))}
+    </>
+  );
 }
