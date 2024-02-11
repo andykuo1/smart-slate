@@ -4,6 +4,7 @@ import Toolbar from '@/components/Toolbar';
 import DocumentLayout from '@/components/documents/DocumentLayout';
 import DocumentTitle from '@/components/documents/DocumentTitle';
 import { SceneEntry } from '@/components/scenes/SceneList';
+import ShotListInDocumentOrder from '@/components/shots/shotlist/ShotListInDocumentOrder';
 import ShotListInSceneOrder from '@/components/shots/shotlist/ShotListInSceneOrder';
 import Drawer from '@/drawer/Drawer';
 import { useMatchMedia } from '@/libs/UseMatchMedia';
@@ -15,7 +16,6 @@ import PageLayout from './PageLayout';
 
 export default function EditPage() {
   const documentId = useCurrentDocumentId();
-  const sceneIds = useSceneIds(documentId);
   return (
     <PageLayout className="bg-white text-black dark:bg-gray-900 dark:text-white">
       <NavBar>
@@ -26,18 +26,55 @@ export default function EditPage() {
           <Toolbar />
           <DocumentLayout documentId={documentId}>
             <DocumentTitle className="pt-20" documentId={documentId} />
-            <PerScene sceneIds={sceneIds}>
-              {(sceneId) => (
-                <div className="flex flex-row">
-                  <SceneTextBlocks documentId={documentId} sceneId={sceneId} />
-                  <SceneShotLists documentId={documentId} sceneId={sceneId} />
-                </div>
-              )}
-            </PerScene>
+            <div className="flex">
+              <DocumentByScene documentId={documentId} />
+              <DocumentByShot documentId={documentId} />
+            </div>
           </DocumentLayout>
         </Drawer>
       </NavBar>
     </PageLayout>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ */
+function DocumentByScene({ documentId }) {
+  const sceneIds = useSceneIds(documentId);
+  const shotOnlyMode = useUserStore((ctx) => ctx.editMode === 'shotonly');
+  const hidden = shotOnlyMode;
+  return (
+    <div className={'flex-1' + ' ' + (hidden && 'hidden')}>
+      <PerScene sceneIds={sceneIds}>
+        {(sceneId) => (
+          <div className="flex flex-row">
+            <SceneTextBlocks documentId={documentId} sceneId={sceneId} />
+            <SceneShotLists documentId={documentId} sceneId={sceneId} />
+          </div>
+        )}
+      </PerScene>
+    </div>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ */
+function DocumentByShot({ documentId }) {
+  const shotListMode = useUserStore((ctx) => ctx.shotListMode === 'detail');
+  const shotOnlyMode = useUserStore((ctx) => ctx.editMode === 'shotonly');
+  const hidden = !shotOnlyMode;
+  return (
+    <div className={'flex-1' + ' ' + (hidden && 'hidden')}>
+      <ShotListInDocumentOrder
+        className="mx-auto"
+        documentId={documentId}
+        collapsed={!shotListMode}
+      />
+    </div>
   );
 }
 
@@ -74,7 +111,7 @@ function SceneShotLists({ documentId, sceneId }) {
   return (
     <div className={'flex-1' + ' ' + (hidden && 'hidden')}>
       <ShotListInSceneOrder
-        className="mx-auto flex-1"
+        className="mx-auto"
         documentId={documentId}
         sceneId={sceneId}
         collapsed={smallMedia || !shotListMode}

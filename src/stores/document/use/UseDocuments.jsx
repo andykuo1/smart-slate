@@ -16,7 +16,7 @@ export function useDocumentSceneCount(documentId) {
  */
 export function useDocumentShotCount(documentId) {
   return useDocumentStore(
-    (ctx) => Object.keys(getDocumentById(ctx, documentId)?.takes || []).length,
+    (ctx) => Object.keys(getDocumentById(ctx, documentId)?.shots || []).length,
   );
 }
 
