@@ -1,3 +1,4 @@
+import ShotUnknownIcon from '@material-symbols/svg-400/rounded/help.svg';
 import ShotTextIcon from '@material-symbols/svg-400/rounded/table_rows.svg';
 import ShotDayIcon from '@material-symbols/svg-400/rounded/view_array.svg';
 import ShotImageIcon from '@material-symbols/svg-400/rounded/window.svg';
@@ -49,5 +50,7 @@ function getShotListViewIcon(mode) {
       return ShotImageIcon;
     case 'group':
       return ShotDayIcon;
+    default:
+      return ShotUnknownIcon;
   }
 }
