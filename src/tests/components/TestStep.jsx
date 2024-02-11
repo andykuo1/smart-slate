@@ -36,18 +36,18 @@ export default function TestStep({ className, title, onExecute, children }) {
   );
 
   return (
-    <section className={'flex flex-col p-4 my-4' + ' ' + className}>
+    <section className={'my-4 flex flex-col p-4' + ' ' + className}>
       <h2 className="text-xl font-bold">{title}</h2>
       {children}
       <TestButton onClick={onClick}>Execute</TestButton>
       <hr />
-      <fieldset className="relative flex-1 flex">
-        <legend className="absolute top-0 right-0 opacity-30 font-bold">
+      <fieldset className="relative flex flex-1">
+        <legend className="absolute right-0 top-0 font-bold opacity-30">
           OUTPUT
         </legend>
         <output
           id={title + '-output'}
-          className="flex-1 overflow-auto w-80 max-h-40">
+          className="max-h-40 w-80 flex-1 overflow-auto">
           <pre className=" whitespace-pre-line">{output || '--empty--'}</pre>
         </output>
       </fieldset>

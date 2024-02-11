@@ -17,7 +17,7 @@ export default function TestScreenplay() {
     },
   };
   return (
-    <div className="py-20 w-full">
+    <div className="w-full py-20">
       <output>
         {tokens.map((token) => (
           <pre>
@@ -25,7 +25,7 @@ export default function TestScreenplay() {
           </pre>
         ))}
       </output>
-      <h2 className="text-2xl font-bold text-center">
+      <h2 className="text-center text-2xl font-bold">
         {document.documentTitle}
       </h2>
       <div className="flex flex-col">

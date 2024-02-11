@@ -27,7 +27,7 @@ export default function SettingsFieldSelect({
       required={required}>
       <select
         id={id}
-        className="flex-1 rounded m-1 outline outline-offset-2 bg-transparent disabled:opacity-30"
+        className="m-1 flex-1 rounded bg-transparent outline outline-offset-2 disabled:opacity-30"
         value={value}
         onChange={onChange}
         disabled={!onChange}>

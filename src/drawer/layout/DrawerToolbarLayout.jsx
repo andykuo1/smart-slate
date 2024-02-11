@@ -19,14 +19,14 @@ export default function DrawerToolbarLayout({
       className={
         'fixed bottom-0 right-0' +
         ' ' +
-        'm-2 z-50 flex flex-row-reverse text-2xl gap-2 pointer-events-none text-black' +
+        'pointer-events-none z-50 m-2 flex flex-row-reverse gap-2 text-2xl text-black' +
         ' ' +
         className
       }>
       {children}
       <div
         className={
-          'flex flex-row-reverse gap-2 pointer-events-auto' +
+          'pointer-events-auto flex flex-row-reverse gap-2' +
           ' ' +
           'transition-transform' +
           ' ' +

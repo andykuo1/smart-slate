@@ -43,18 +43,18 @@ export default function NerdInfoMenuItem() {
         open={open}
         onClose={() => setOpen(false)}>
         <div className="flex flex-row">
-          <DialogDismiss className="text-2xl text-left flex-1">
+          <DialogDismiss className="flex-1 text-left text-2xl">
             {'<-'} Back
           </DialogDismiss>
           <Button className="flex-1 text-right" onClick={onCopy}>
-            <ContentCopy className="inline-block w-6 h-6 fill-white" /> Copy to
+            <ContentCopy className="inline-block h-6 w-6 fill-white" /> Copy to
             Clipboard
           </Button>
         </div>
-        <DialogHeading className="text-4xl text-center my-4">
+        <DialogHeading className="my-4 text-center text-4xl">
           Nerd Info
         </DialogHeading>
-        <DialogDescription className="text-gray-400 text-center">
+        <DialogDescription className="text-center text-gray-400">
           Share this with your fellow nerd :3
         </DialogDescription>
         <MarkdownArea value={nerdInfo} />

@@ -53,17 +53,17 @@ export default function TakeCacheMenuItem({
   return (
     <div className="flex flex-row">
       <MenuItem
-        className={MenuStyle.menuItem + ' ' + 'flex-1 flex flex-row'}
+        className={MenuStyle.menuItem + ' ' + 'flex flex-1 flex-row'}
         onClick={onDownloadClick}
         disabled={!idbKey || !videoBlob}>
         <span className="flex-1">Export to</span>
-        <DownloadIcon className="w-6 h-6 fill-current" />
+        <DownloadIcon className="h-6 w-6 fill-current" />
       </MenuItem>
       <MenuItem
         className={MenuStyle.menuItem}
         onClick={onGoogleDriveClick}
         disabled={!videoBlob || !googleStatus}>
-        <AddToDriveIcon className="w-6 h-6 fill-current" />
+        <AddToDriveIcon className="h-6 w-6 fill-current" />
       </MenuItem>
     </div>
   );

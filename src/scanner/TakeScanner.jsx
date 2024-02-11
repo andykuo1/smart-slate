@@ -49,7 +49,7 @@ export default function TakeScanner({ className, onChange }) {
   return (
     <div
       className={
-        'mx-auto flex flex-col gap-4 items-center overflow-y-auto' +
+        'mx-auto flex flex-col items-center gap-4 overflow-y-auto' +
         ' ' +
         className
       }>

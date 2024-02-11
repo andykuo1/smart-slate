@@ -89,8 +89,8 @@ export default function Clapperboard() {
   }, [documentId, sceneId, shotId, takeId, UNSAFE_getStore, setUserCursor]);
 
   return (
-    <fieldset className="relative w-full h-full p-[2vmin] flex flex-col text-white text-[5vmin] font-mono overflow-hidden">
-      <div className="flex-1 grid grid-cols-2 text-md">
+    <fieldset className="relative flex h-full w-full flex-col overflow-hidden p-[2vmin] font-mono text-[5vmin] text-white">
+      <div className="text-md grid flex-1 grid-cols-2">
         <ul className="flex flex-col">
           <li className="flex items-center">
             <ClapperIdentifierFields
@@ -108,13 +108,13 @@ export default function Clapperboard() {
           <li className="flex items-center">
             <ClapperVerticalLabel>PROD</ClapperVerticalLabel>
             <ClapperProductionTitleField
-              className="mx-1 w-full bg-transparent h-[50%]"
+              className="mx-1 h-[50%] w-full bg-transparent"
               documentId={documentId}
             />
           </li>
           <ClapperDirectorNameEntry documentId={documentId} />
           <ClapperCameraNameEntry documentId={documentId} />
-          <li className="flex-1 flex flex-col-reverse sm:flex-row gap-1">
+          <li className="sm:flex-row flex flex-1 flex-col-reverse gap-1">
             {enableThumbnailWhileRecording && (
               <ShotThumbnail
                 className="text-base"
@@ -165,7 +165,7 @@ function ClapperCameraNameEntry({ documentId }) {
     <li className="flex items-center">
       <ClapperVerticalLabel>CAM</ClapperVerticalLabel>
       <ClapperCameraNameField
-        className="mx-1 w-full bg-transparent h-[50%]"
+        className="mx-1 h-[50%] w-full bg-transparent"
         documentId={documentId}
       />
     </li>
@@ -187,7 +187,7 @@ function ClapperDirectorNameEntry({ documentId }) {
     <li className="flex items-center">
       <ClapperVerticalLabel>DIR</ClapperVerticalLabel>
       <ClapperDirectorNameField
-        className="mx-1 w-full bg-transparent h-[50%]"
+        className="mx-1 h-[50%] w-full bg-transparent"
         documentId={documentId}
       />
     </li>
@@ -205,7 +205,7 @@ function ClapperCommentField({ documentId, shotId }) {
   const hasShotText = shotType && description;
   return (
     <textarea
-      className="flex-1 resize-none p-1 bg-transparent"
+      className="flex-1 resize-none bg-transparent p-1"
       placeholder={
         !hasShotText
           ? 'Comments'
@@ -243,9 +243,9 @@ function ClapperControlFields({
   }
 
   return (
-    <div className="w-full flex items-center">
+    <div className="flex w-full items-center">
       <ClapperVerticalLabel>CTRL</ClapperVerticalLabel>
-      <div className="flex-1 flex flex-col items-start gap-2 p-2">
+      <div className="flex flex-1 flex-col items-start gap-2 p-2">
         <SettingsFieldButton
           className="w-full text-left"
           Icon={AddIcon}
@@ -289,7 +289,7 @@ function ClapperIdentifierFields({
   return (
     <fieldset
       className={
-        'flex items-center border-2 rounded-xl m-1 overflow-hidden' +
+        'm-1 flex items-center overflow-hidden rounded-xl border-2' +
         ' ' +
         className
       }>
@@ -301,7 +301,7 @@ function ClapperIdentifierFields({
         />
         <ClapperShotHashField documentId={documentId} shotId={shotId} />
       </div>
-      <div className="flex flex-row px-1 mx-auto">
+      <div className="mx-auto flex flex-row px-1">
         <ClapperTakeNumberField
           documentId={documentId}
           sceneId={sceneId}
@@ -331,7 +331,7 @@ function ClapperTakeNumberField({ documentId, sceneId, shotId, takeId }) {
       <output
         id={takeOutputId}
         style={{ lineHeight: '1.5em' }}
-        className="text-[10vw] scale-y-150 whitespace-nowrap">
+        className="scale-y-150 whitespace-nowrap text-[10vw]">
         {formatTakeNumber(takeNumber, true).padStart(2, '0')}
       </output>
     </div>
@@ -357,7 +357,7 @@ function ClapperSceneShotNumberField({ documentId, sceneId, shotId }) {
         <output
           id={sceneOutputId}
           style={{ lineHeight: '1em' }}
-          className="text-[10vw] whitespace-nowrap">
+          className="whitespace-nowrap text-[10vw]">
           {formatSceneNumber(sceneNumber, true).padStart(3, '0')}
         </output>
       </div>
@@ -366,7 +366,7 @@ function ClapperSceneShotNumberField({ documentId, sceneId, shotId }) {
         <output
           id={shotOutputId}
           style={{ lineHeight: '1em' }}
-          className="text-[10vw] whitespace-nowrap">
+          className="whitespace-nowrap text-[10vw]">
           {formatShotNumber(shotNumber)}
         </output>
       </div>
@@ -384,7 +384,7 @@ function ClapperShotHashField({ documentId, shotId }) {
   return (
     <output
       style={{ lineHeight: '1em' }}
-      className="text-[5vw] text-right mx-1">
+      className="mx-1 text-right text-[5vw]">
       #{shotHash}
     </output>
   );
@@ -397,7 +397,7 @@ function ClapperShotHashField({ documentId, shotId }) {
  */
 function ClapperLabel({ className, htmlFor, children }) {
   return (
-    <label className={'text-[2vw] px-1' + ' ' + className} htmlFor={htmlFor}>
+    <label className={'px-1 text-[2vw]' + ' ' + className} htmlFor={htmlFor}>
       {children}
     </label>
   );

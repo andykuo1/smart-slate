@@ -22,7 +22,7 @@ export default function SettingsVideoCacheClearButton() {
 
   return (
     <SettingsFieldButton Icon={DeleteIcon} onClick={handleClick}>
-      <div className="flex-1 px-2 flex flex-col">
+      <div className="flex flex-1 flex-col px-2">
         <span>Clear video cache</span>
         <VideoCacheUsageProgress />
       </div>
@@ -54,14 +54,14 @@ function VideoCacheUsageProgress({ className }) {
   return (
     <div className={'relative flex items-center' + ' ' + className}>
       <progress
-        className="flex-1 rounded-full overflow-hidden h-6"
+        className="h-6 flex-1 overflow-hidden rounded-full"
         value={usage}
         max={quota}
       />
-      <output className="absolute left-2 font-mono text-white text-xs">
+      <output className="absolute left-2 font-mono text-xs text-white">
         {percent}
       </output>
-      <output className="absolute right-2 font-mono text-white text-xs">
+      <output className="absolute right-2 font-mono text-xs text-white">
         {formatBytes(usage)}/{formatBytes(quota)}
       </output>
     </div>

@@ -20,17 +20,17 @@ export default function SceneEntryFocused({ className, documentId, children }) {
   return (
     <div
       className={
-        'absolute top-0 left-0 right-0 bottom-0 z-10 overflow-y-auto bg-white' +
+        'absolute bottom-0 left-0 right-0 top-0 z-10 overflow-y-auto bg-white' +
         ' ' +
         (!sceneId ? 'hidden' : '')
       }>
       <SceneEntryLayout className={className}>{children}</SceneEntryLayout>
       <DocumentDivider
-        className="sticky bottom-0 py-4 bg-gradient-to-t from-white from-50% to-transparent"
+        className="sticky bottom-0 bg-gradient-to-t from-white from-50% to-transparent py-4"
         onClick={() => setUserCursor(documentId, '', '', '')}>
-        <ExpandMoreIcon className="w-6 h-6 fill-current" />
+        <ExpandMoreIcon className="h-6 w-6 fill-current" />
         <span className="px-4">Return to screenplay</span>
-        <ExpandMoreIcon className="w-6 h-6 fill-current" />
+        <ExpandMoreIcon className="h-6 w-6 fill-current" />
       </DocumentDivider>
     </div>
   );

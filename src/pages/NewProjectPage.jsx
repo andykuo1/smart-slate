@@ -30,7 +30,7 @@ export default function NewProjectPage() {
   }, [documentId, addDocument, setUserCursor]);
 
   return (
-    <PageLayout className="bg-white text-black overflow-y-auto py-10">
+    <PageLayout className="overflow-y-auto bg-white py-10 text-black">
       <fieldset className="m-auto flex flex-col gap-2">
         <legend className="py-4">
           <h3 className="text-xl">Create your project</h3>
@@ -47,7 +47,7 @@ export default function NewProjectPage() {
         <SettingsProjectInstallField />
         <br />
       </fieldset>
-      <div className="absolute top-2 right-2 bg-white">
+      <div className="absolute right-2 top-2 bg-white">
         <GoogleConnectButton />
       </div>
     </PageLayout>

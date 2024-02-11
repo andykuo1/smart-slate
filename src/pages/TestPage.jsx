@@ -18,13 +18,13 @@ export default function TestPage() {
     sessionStorage.getItem(TEST_STORAGE_KEY) || '',
   );
   return (
-    <main className="w-full h-full flex flex-col items-center py-20 bg-white text-black overflow-y-auto">
-      <div className="fixed top-0 left-0 z-50 flex flex-row rounded-ee-full bg-gray-200 overflow-hidden">
-        <p className="bg-green-300 rounded-full px-2 m-1">
+    <main className="flex h-full w-full flex-col items-center overflow-y-auto bg-white py-20 text-black">
+      <div className="fixed left-0 top-0 z-50 flex flex-row overflow-hidden rounded-ee-full bg-gray-200">
+        <p className="m-1 rounded-full bg-green-300 px-2">
           {TEST_VERSION} @ {TEST_CONFIGTIME}
         </p>
         <select
-          className="bg-transparent outline-none mr-4"
+          className="mr-4 bg-transparent outline-none"
           value={test}
           onChange={(e) => {
             const value = e.target.value;

@@ -70,7 +70,7 @@ export default function OutlineDrawer() {
         <p className="text-xs opacity-30">
           A quick overview of the whole story
         </p>
-        <div className="absolute top-4 right-4">
+        <div className="absolute right-4 top-4">
           <SettingsFieldButton
             Icon={!drawerShowDetails ? InfoIcon : InfoFillIcon}
             onClick={onInfoClick}
@@ -118,10 +118,10 @@ function IndexScene({ documentId, sceneId, isActive }) {
   }
 
   return (
-    <li className="w-full flex flex-col">
+    <li className="flex w-full flex-col">
       <div
         className={
-          'w-full flex flex-row gap-2 px-4 pt-2 text-left' +
+          'flex w-full flex-row gap-2 px-4 pt-2 text-left' +
           ' ' +
           (isActive ? 'bg-black text-white' : 'bg-gray-200 hover:bg-gray-300')
         }
@@ -144,7 +144,7 @@ function IndexScene({ documentId, sceneId, isActive }) {
         </div>
         <div
           className={
-            'flex flex-row items-center -mt-1' + ' ' + (!isActive && 'hidden')
+            '-mt-1 flex flex-row items-center' + ' ' + (!isActive && 'hidden')
           }>
           <SettingsSceneOpenClapperButton
             documentId={documentId}
@@ -155,7 +155,7 @@ function IndexScene({ documentId, sceneId, isActive }) {
           <AddShotButton documentId={documentId} sceneId={sceneId} />
         </div>
       </div>
-      <ul id={listId} className="w-full flex flex-col">
+      <ul id={listId} className="flex w-full flex-col">
         {blockIds.map((blockId, index, array) => (
           <IndexBlock
             key={blockId}
@@ -302,10 +302,10 @@ function IndexShot({
   }
 
   return (
-    <li id={getShotFocusIdForDrawer(shotId)} className="w-full flex flex-col">
+    <li id={getShotFocusIdForDrawer(shotId)} className="flex w-full flex-col">
       <div
         className={
-          'w-full flex flex-row gap-2 px-6 text-left text-xs' +
+          'flex w-full flex-row gap-2 px-6 text-left text-xs' +
           ' ' +
           (isActive ? 'bg-black text-white' : 'hover:bg-gray-300')
         }
@@ -314,11 +314,11 @@ function IndexShot({
 
         <div className="-mx-1">
           {shotHasGoodTake ? (
-            <CheckBoxFillIcon className="w-4 h-4 fill-current" />
+            <CheckBoxFillIcon className="h-4 w-4 fill-current" />
           ) : shotHasTakes ? (
-            <CheckBoxIcon className="w-4 h-4 fill-current" />
+            <CheckBoxIcon className="h-4 w-4 fill-current" />
           ) : (
-            <CheckBoxOutlineBlankIcon className="w-4 h-4 fill-current" />
+            <CheckBoxOutlineBlankIcon className="h-4 w-4 fill-current" />
           )}
         </div>
 
@@ -340,7 +340,7 @@ function IndexShot({
         </div>
         <p
           className={
-            'italic max-h-[10vh] truncate' +
+            'max-h-[10vh] truncate italic' +
             ' ' +
             (!description ? 'opacity-30' : '')
           }>
@@ -417,10 +417,10 @@ function IndexTake({
   }
 
   return (
-    <li className="w-full flex flex-col">
+    <li className="flex w-full flex-col">
       <button
         className={
-          'w-full flex flex-row gap-2 px-20 text-left text-xs' +
+          'flex w-full flex-row gap-2 px-20 text-left text-xs' +
           ' ' +
           (isActive ? 'bg-black text-white' : 'hover:bg-gray-300')
         }
@@ -432,8 +432,8 @@ function IndexTake({
           depth={1}
         />
         <div>Take {formatTakeNumber(takeNumber, true)}</div>
-        {takeRating > 0 && <ThumbUpFillIcon className="w-4 h-4 fill-current" />}
-        <div className="flex-1 my-auto border-b-2 border-gray-400 border-dotted" />
+        {takeRating > 0 && <ThumbUpFillIcon className="h-4 w-4 fill-current" />}
+        <div className="my-auto flex-1 border-b-2 border-dotted border-gray-400" />
         <span className="opacity-50">
           {takeRoll && `[${takeRoll}] `}
           {timestampMillis > 0 &&
@@ -459,7 +459,7 @@ function SceneContentCount({ className, documentId, sceneId }) {
   return (
     <output
       className={
-        'text-xs opacity-50 flex gap-1 ml-2 whitespace-nowrap' + ' ' + className
+        'ml-2 flex gap-1 whitespace-nowrap text-xs opacity-50' + ' ' + className
       }>
       <span>{shotCount} shots</span>
     </output>
@@ -477,7 +477,7 @@ function ShotContentCount({ className, documentId, shotId }) {
   return (
     <output
       className={
-        'text-xs opacity-50 flex gap-1 ml-2 whitespace-nowrap' + ' ' + className
+        'ml-2 flex gap-1 whitespace-nowrap text-xs opacity-50' + ' ' + className
       }>
       <span>{takeCount} takes</span>
     </output>

@@ -19,7 +19,7 @@ export default function DocumentContentCount({ className, documentId }) {
   return (
     <output
       className={
-        'text-xs opacity-30 flex gap-1 mx-auto whitespace-nowrap' +
+        'mx-auto flex gap-1 whitespace-nowrap text-xs opacity-30' +
         ' ' +
         className
       }>

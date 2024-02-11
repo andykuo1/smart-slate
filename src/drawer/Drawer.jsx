@@ -54,7 +54,7 @@ function DrawerNavBar() {
     }
   }
   return (
-    <div className="outline rounded flex flex-row mt-2">
+    <div className="mt-2 flex flex-row rounded outline">
       <SettingsFieldButton
         Icon={ReceiptLongIcon}
         onClick={onOutlineClick}
@@ -95,7 +95,7 @@ function DrawerContent() {
 
   return (
     <nav className="w-full font-mono">
-      <div className="sticky top-0 z-10 w-full flex p-2 bg-gray-200 shadow">
+      <div className="sticky top-0 z-10 flex w-full bg-gray-200 p-2 shadow">
         <div className="flex-1">
           <SettingsFieldButton
             className="mr-auto"

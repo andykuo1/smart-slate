@@ -34,7 +34,7 @@ export default function TestCRUDSync() {
   const [output, setOutput] = useState({});
   return (
     <div className="w-[80%]">
-      <div className="flex flex-col gap-2 items-start">
+      <div className="flex flex-col items-start gap-2">
         <button
           onClick={() => {
             setConfigA(createConfiguration());
@@ -106,7 +106,7 @@ export default function TestCRUDSync() {
         </button>
       </div>
       <hr className="my-4" />
-      <div className="text-xs flex flex-row">
+      <div className="flex flex-row text-xs">
         <div className="flex-1">
           <h2>LOCAL CACHE</h2>
           <pre>

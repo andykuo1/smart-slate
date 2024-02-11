@@ -60,7 +60,7 @@ export default function TakeEntryHeader({
           title={takeName}
           caption={takeCaption}>
           {isGood && (
-            <ThumbUpIcon className="absolute top-1 right-1 w-6 h-6 fill-white bg-black rounded-full p-1 pointer-events-none" />
+            <ThumbUpIcon className="pointer-events-none absolute right-1 top-1 h-6 w-6 rounded-full bg-black fill-white p-1" />
           )}
         </TakePreview>
       </TakeOptions>

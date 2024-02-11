@@ -64,7 +64,7 @@ export default function SceneHeader({ className, documentId, sceneId }) {
         sceneId={sceneId}
       />
       <input
-        className="flex-1 w-full bg-transparent px-2 py-6 text-xl font-bold"
+        className="w-full flex-1 bg-transparent px-2 py-6 text-xl font-bold"
         type="text"
         list={dataListId}
         placeholder="INT/EXT. SCENE - DAY"

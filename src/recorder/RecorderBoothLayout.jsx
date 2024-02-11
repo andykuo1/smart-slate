@@ -72,9 +72,9 @@ export default function RecorderBoothLayout({
   return (
     <div
       className={
-        'absolute w-full h-full top-0 left-0 flex py-10' + ' ' + className
+        'absolute left-0 top-0 flex h-full w-full py-10' + ' ' + className
       }>
-      <div className={yMarginClassName + ' ' + 'top-0 left-0'}>{top?.()}</div>
+      <div className={yMarginClassName + ' ' + 'left-0 top-0'}>{top?.()}</div>
       <div className={xMarginClassName}>{left?.()}</div>
       <div ref={parentRef} className="relative flex-1 overflow-hidden">
         <div

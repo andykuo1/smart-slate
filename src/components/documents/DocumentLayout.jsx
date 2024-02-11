@@ -23,7 +23,7 @@ export default function DocumentLayout({ className, documentId, children }) {
     <article
       ref={containerRef}
       className={
-        'w-full h-full mx-auto overflow-x-hidden overflow-y-auto flex flex-col' +
+        'mx-auto flex h-full w-full flex-col overflow-y-auto overflow-x-hidden' +
         ' ' +
         className
       }>

@@ -22,16 +22,16 @@ export default function TakeEntryDetails({
   return (
     <HorizontallySnappableDiv className={listDecorationStyle}>
       {/* PANEL 1 */}
-      <div className="flex-1 flex flex-row">
-        <p className="flex-1 opacity-30 whitespace-nowrap overflow-x-auto text-center">
+      <div className="flex flex-1 flex-row">
+        <p className="flex-1 overflow-x-auto whitespace-nowrap text-center opacity-30">
           {!timestampMillis || timestampMillis <= 0
             ? '--'
             : new Date(timestampMillis).toLocaleString()}
         </p>
       </div>
       {/* PANEL 2 */}
-      <div className="flex-1 flex flex-row">
-        <p className="flex-1 opacity-30 overflow-x-auto text-center">
+      <div className="flex flex-1 flex-row">
+        <p className="flex-1 overflow-x-auto text-center opacity-30">
           {fileName}
         </p>
       </div>

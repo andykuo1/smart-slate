@@ -47,11 +47,11 @@ export default function SceneCollapse({ containerRef }) {
       }
       items={SCREEPLAY_VIEWS.map((mode) => (
         <SettingsFieldButton
-          className="outline-none w-full h-8 text-right"
+          className="h-8 w-full text-right outline-none"
           title={mode}
           Icon={getScreenplayViewIcon(mode)}
           onClick={() => changeView(mode)}>
-          <span className="text-xs ml-4">
+          <span className="ml-4 text-xs">
             {getScreenplayViewLocaleString(mode)}
           </span>
         </SettingsFieldButton>

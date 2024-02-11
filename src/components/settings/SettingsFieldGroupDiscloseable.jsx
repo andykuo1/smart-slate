@@ -31,12 +31,12 @@ export default function SettingsFieldGroupDiscloseable({
     <DisclosureProvider defaultOpen={defaultOpen}>
       <Disclosure
         ref={containerRef}
-        className="w-full flex items-center border-b-2 border-black"
+        className="flex w-full items-center border-b-2 border-black"
         onClick={onClick}>
         <span className="flex-1">{title}</span>
-        <ExpandMoreIcon className="w-6 h-6 fill-current" />
+        <ExpandMoreIcon className="h-6 w-6 fill-current" />
       </Disclosure>
-      <DisclosureContent className="py-4 flex flex-col gap-4">
+      <DisclosureContent className="flex flex-col gap-4 py-4">
         {children}
       </DisclosureContent>
     </DisclosureProvider>

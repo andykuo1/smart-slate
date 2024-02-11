@@ -37,17 +37,17 @@ export default function TakeRatingMenuItem({ documentId, shotId, takeId }) {
   return (
     <div className="flex flex-row items-center">
       <MenuItem
-        className={MenuStyle.menuItem + ' ' + 'flex-1 flex flex-row'}
+        className={MenuStyle.menuItem + ' ' + 'flex flex-1 flex-row'}
         onClick={onGoodClick}
         hideOnClick={false}>
         <span>Take</span>
-        <output className="font-mono flex-1">
+        <output className="flex-1 font-mono">
           #{takeNumber}/{shotTakeCount}
         </output>
         {isGood ? (
-          <ThumbUpFillIcon className="w-6 h-6 fill-current" />
+          <ThumbUpFillIcon className="h-6 w-6 fill-current" />
         ) : (
-          <ThumbUpIcon className="w-6 h-6 fill-current" />
+          <ThumbUpIcon className="h-6 w-6 fill-current" />
         )}
       </MenuItem>
     </div>

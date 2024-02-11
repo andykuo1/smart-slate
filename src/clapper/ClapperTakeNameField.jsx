@@ -27,15 +27,15 @@ export default function ClapperTakeNameField({ className, documentId }) {
   return (
     <table
       className={
-        'table-fixed text-center border-y-4 border-white overflow-hidden text-[20vmin]' +
+        'table-fixed overflow-hidden border-y-4 border-white text-center text-[20vmin]' +
         ' ' +
         className
       }>
       <thead>
         <tr>
-          <th className="border-r-4 border-white w-[33%] text-xs">ROLL</th>
-          <th className="border-x-4 border-white w-[33%] text-xs">SCENE</th>
-          <th className="border-l-4 border-white w-[33%] text-xs">TAKE</th>
+          <th className="w-[33%] border-r-4 border-white text-xs">ROLL</th>
+          <th className="w-[33%] border-x-4 border-white text-xs">SCENE</th>
+          <th className="w-[33%] border-l-4 border-white text-xs">TAKE</th>
         </tr>
       </thead>
       <tbody>
@@ -54,7 +54,7 @@ export default function ClapperTakeNameField({ className, documentId }) {
               shotId={shotId}
             />
             <ClapperShotHashField
-              className="absolute text-[5vmin] bottom-0 left-0 right-0"
+              className="absolute bottom-0 left-0 right-0 text-[5vmin]"
               documentId={documentId}
               shotId={shotId}
             />
@@ -62,7 +62,7 @@ export default function ClapperTakeNameField({ className, documentId }) {
           <td className="relative border-l-4 border-white">
             <TakeSelector />
             <ClapperShotTypeField
-              className="absolute text-[5vmin] bottom-0 left-0 right-0"
+              className="absolute bottom-0 left-0 right-0 text-[5vmin]"
               documentId={documentId}
               shotId={shotId}
             />
@@ -139,7 +139,7 @@ function SceneShotSelector({ className, documentId, sceneId, shotId }) {
   }
   return (
     <select
-      className={'text-center bg-transparent outline-none' + ' ' + className}
+      className={'bg-transparent text-center outline-none' + ' ' + className}
       value={shotId}
       onChange={onChange}>
       {sceneIds.map((sceneId) => (

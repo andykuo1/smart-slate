@@ -59,7 +59,7 @@ export default function BlockList({
   */
   return (
     <div ref={containerRef} className={'flex flex-row' + ' ' + className}>
-      <div className="flex-1 flex flex-col">
+      <div className="flex flex-1 flex-col">
         {blockIds.map((blockId) => (
           <BlockEntry
             key={`block-${blockId}`}
@@ -68,7 +68,7 @@ export default function BlockList({
             blockId={blockId}
             mode={blockViewMode}>
             <ShotList
-              className="flex-1 max-w-[100vw]"
+              className="max-w-[100vw] flex-1"
               documentId={documentId}
               sceneId={sceneId}
               blockId={blockId}
@@ -80,7 +80,7 @@ export default function BlockList({
         ))}
       </div>
       <ShotList
-        className="flex-1 max-w-[50vw]"
+        className="max-w-[50vw] flex-1"
         documentId={documentId}
         sceneId={sceneId}
         collapsed={smallMedia || isCollapsed}

@@ -43,16 +43,16 @@ function NavBarLayout({ className, items, children }) {
     <>
       <div
         className={
-          'relative w-full h-full flex flex-col items-center overflow-y-auto mb-20' +
+          'relative mb-20 flex h-full w-full flex-col items-center overflow-y-auto' +
           ' ' +
           className
         }>
         {children}
       </div>
-      <nav className="fixed bottom-0 w-full h-20 flex flex-col z-40">
-        <ul className="flex-1 flex flex-row bg-black text-white">
+      <nav className="fixed bottom-0 z-40 flex h-20 w-full flex-col">
+        <ul className="flex flex-1 flex-row bg-black text-white">
           {items.map((item, index) => (
-            <li key={'nav-' + index} className="flex-1 flex">
+            <li key={'nav-' + index} className="flex flex-1">
               {item}
             </li>
           ))}
@@ -199,10 +199,10 @@ function NavButton({
       onClick={onClick}
       disabled={disabled}>
       {children}
-      <Icon className="w-10 h-10 fill-current m-auto pointer-events-none" />
+      <Icon className="pointer-events-none m-auto h-10 w-10 fill-current" />
       <div
         className={
-          'absolute w-10 h-10 z-10 -right-5 top-0 bottom-0 my-auto rotate-45 scale-50' +
+          'absolute -right-5 bottom-0 top-0 z-10 my-auto h-10 w-10 rotate-45 scale-50' +
           ' ' +
           'pointer-events-none' +
           ' ' +
@@ -211,9 +211,9 @@ function NavButton({
           (active ? 'bg-white' : '')
         }
       />
-      <label className="hidden sm:inline absolute top-[50%] -translate-y-[50%] z-20 ml-6 my-auto text-black pointer-events-none">
-        <span className="hidden lg:inline">{title}</span>
-        <span className="inline lg:hidden">{abbr}</span>
+      <label className="sm:inline pointer-events-none absolute top-[50%] z-20 my-auto ml-6 hidden -translate-y-[50%] text-black">
+        <span className="lg:inline hidden">{title}</span>
+        <span className="lg:hidden inline">{abbr}</span>
       </label>
     </button>
   );

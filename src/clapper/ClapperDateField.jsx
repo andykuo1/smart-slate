@@ -23,7 +23,7 @@ export default function ClapperDateString({ className }) {
   return (
     <output
       style={{ lineHeight: '1em' }}
-      className={'uppercase my-[1px]' + ' ' + className}>
+      className={'my-[1px] uppercase' + ' ' + className}>
       {dateString}
     </output>
   );

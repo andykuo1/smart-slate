@@ -107,23 +107,23 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
   return (
     <div className="flex flex-col gap-2">
       <SettingsFieldButton
-        className="outline-none text-right h-8"
+        className="h-8 text-right outline-none"
         Icon={RadioButtonCheckedIcon}
         onClick={onRecordClick}>
         <span className="pl-4">Record Take #{shotTakeCount + 1}</span>
       </SettingsFieldButton>
       <SettingsFieldButton
-        className="outline-none text-right h-8"
+        className="h-8 text-right outline-none"
         Icon={MovieIcon}
         onClick={onClapperboardClick}>
         Open Slate
       </SettingsFieldButton>
       <SettingsSceneShotsDetailButton
-        className="outline-none text-right h-8"
+        className="h-8 text-right outline-none"
         onClick={(e) => setOpen(false)}
       />
       <div className="border" />
-      <div className="flex-1 flex flex-row gap-2">
+      <div className="flex flex-1 flex-row gap-2">
         <SettingsShotTypeSelector
           className="flex-1"
           documentId={documentId}

@@ -37,7 +37,7 @@ export default function RecorderToolbar({
   const [open, setOpen] = useState(false);
 
   return (
-    <div className={'w-20 h-full flex flex-col items-center' + ' ' + className}>
+    <div className={'flex h-full w-20 flex-col items-center' + ' ' + className}>
       <div className="flex-1" />
       <DialogProvider>
         <Button onClick={() => setOpen(true)}>
@@ -47,36 +47,36 @@ export default function RecorderToolbar({
           className={DialogStyle.dialog}
           open={open}
           onClose={() => setOpen(false)}>
-          <DialogDismiss className="text-xl text-left">Back</DialogDismiss>
-          <DialogHeading className="text-4xl text-center">
+          <DialogDismiss className="text-left text-xl">Back</DialogDismiss>
+          <DialogHeading className="text-center text-4xl">
             Settings
           </DialogHeading>
-          <DialogDescription className="text-gray-400 text-center">
+          <DialogDescription className="text-center text-gray-400">
             The configurations for the recorder.
           </DialogDescription>
           <fieldset className="my-4">
-            <div className="flex flex-row gap-2 my-1">
+            <div className="my-1 flex flex-row gap-2">
               <label className="whitespace-nowrap">Video Source:</label>
               <MediaStreamVideoDeviceSelector
                 className="flex-1"
                 onChange={() => {}}
               />
             </div>
-            <div className="flex flex-row gap-2 my-1">
+            <div className="my-1 flex flex-row gap-2">
               <label className="whitespace-nowrap">Audio Source:</label>
               <MediaStreamAudioDeviceSelector
                 className="flex-1"
                 onChange={() => {}}
               />
             </div>
-            <div className="flex flex-row gap-2 my-1">
+            <div className="my-1 flex flex-row gap-2">
               <label className="whitespace-nowrap">Resolution:</label>
               <MediaStreamVideoResolutionSelector
                 className="flex-1"
                 onChange={() => {}}
               />
             </div>
-            <div className="flex flex-row gap-2 my-1">
+            <div className="my-1 flex flex-row gap-2">
               <label className="whitespace-nowrap">Zoom:</label>
               <button
                 className="flex-1 rounded bg-gray-600"
@@ -114,7 +114,7 @@ export default function RecorderToolbar({
       </DialogProvider>
       <div className="flex-1" />
       <MediaRecorderStartStop
-        className="text-red-500 text-4xl"
+        className="text-4xl text-red-500"
         mediaRecorderOptions={MEDIA_RECORDER_OPTIONS}
         blobOptions={MEDIA_BLOB_OPTIONS}
         onStop={(recorder, blob) => {

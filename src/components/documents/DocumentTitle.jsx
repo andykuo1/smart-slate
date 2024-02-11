@@ -26,17 +26,17 @@ export default function DocumentTitle({ className, documentId }) {
   );
 
   return (
-    <h2 className={'flex flex-col text-center my-2' + ' ' + className}>
-      <div className="flex-1 flex flex-row underline mx-2">
+    <h2 className={'my-2 flex flex-col text-center' + ' ' + className}>
+      <div className="mx-2 flex flex-1 flex-row underline">
         <input
-          className="flex-1 text-center text-2xl bg-transparent"
+          className="flex-1 bg-transparent text-center text-2xl"
           title="Project title"
           value={documentTitle}
           placeholder="Untitled"
           onChange={onDocumentTitleChange}
         />
       </div>
-      <label className="text-xs opacity-30 flex flex-col">
+      <label className="flex flex-col text-xs opacity-30">
         <output>{projectId}</output>
       </label>
       <DocumentContentCount documentId={documentId} />

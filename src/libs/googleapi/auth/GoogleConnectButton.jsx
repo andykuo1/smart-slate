@@ -80,7 +80,7 @@ export default function GoogleConnectButton({ className, children }) {
   return (
     <button
       className={
-        'flex-1 border p-2 rounded text-black hover:bg-black hover:text-white shadow' +
+        'flex-1 rounded border p-2 text-black shadow hover:bg-black hover:text-white' +
         ' ' +
         className
       }
@@ -102,14 +102,14 @@ function GoogleConnectStatus({ status }) {
     case 'connected':
       return (
         <>
-          <LogoutIcon className="inline-block w-6 h-6 mr-2 fill-current" />
+          <LogoutIcon className="mr-2 inline-block h-6 w-6 fill-current" />
           Disconnect from Google Drive
         </>
       );
     case 'disconnected':
       return (
         <>
-          <AddToDriveIcon className="inline-block w-6 h-6 mr-2 fill-current" />
+          <AddToDriveIcon className="mr-2 inline-block h-6 w-6 fill-current" />
           Connect to Google Drive
         </>
       );
@@ -117,14 +117,14 @@ function GoogleConnectStatus({ status }) {
     case 'error':
       return (
         <>
-          <AddToDriveIcon className="inline-block w-6 h-6 mr-2 fill-current" />
+          <AddToDriveIcon className="mr-2 inline-block h-6 w-6 fill-current" />
           Error! Please reconnect
         </>
       );
     default:
       return (
         <>
-          <AddToDriveIcon className="inline-block w-6 h-6 mr-2 fill-current" />
+          <AddToDriveIcon className="mr-2 inline-block h-6 w-6 fill-current" />
           Reconnect to Google Drive
         </>
       );

@@ -26,7 +26,7 @@ export default function TakeList({
   const takeIds = useTakeIds(documentId, shotId);
   return (
     <fieldset className={'relative m-0 w-screen' + ' ' + className}>
-      <legend className="absolute top-0 left-0 right-0 z-10 text-center -translate-y-[50%]">
+      <legend className="absolute left-0 right-0 top-0 z-10 -translate-y-[50%] text-center">
         <TakeListButton
           documentId={documentId}
           sceneId={sceneId}

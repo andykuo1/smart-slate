@@ -58,11 +58,11 @@ export default function DrawerLayout({ toolbar, content, children, darkMode }) {
       <div
         ref={drawerRef}
         className={
-          'fixed top-0 bottom-0 right-0 z-40 pb-20 overflow-y-auto overscroll-none' +
+          'fixed bottom-0 right-0 top-0 z-40 overflow-y-auto overscroll-none pb-20' +
           ' ' +
-          'shadow-xl bg-gray-200 text-black' +
+          'bg-gray-200 text-black shadow-xl' +
           ' ' +
-          'w-[90vw] sm:w-[60vmin] min-w-[50vw]' +
+          'sm:w-[60vmin] w-[90vw] min-w-[50vw]' +
           ' ' +
           'transition-transform' +
           ' ' +

@@ -5,7 +5,7 @@
 export default function MarkdownContent({ value }) {
   return value.split('\n').map((text, i) =>
     text && text.startsWith('#') ? (
-      <h3 key={`${i}:${text}`} className="text-xl my-4">
+      <h3 key={`${i}:${text}`} className="my-4 text-xl">
         {text}
       </h3>
     ) : (

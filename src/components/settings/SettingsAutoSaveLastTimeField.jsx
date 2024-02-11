@@ -51,7 +51,7 @@ export default function SettingsAutoSaveLastTimeField({ className }) {
           ) : (
             <>
               Last synced on {date.toLocaleString()}
-              {!disabled && <SyncIcon className="mx-1 w-4 h-4 fill-current" />}
+              {!disabled && <SyncIcon className="mx-1 h-4 w-4 fill-current" />}
             </>
           )}
         </button>

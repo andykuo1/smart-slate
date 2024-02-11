@@ -3,8 +3,8 @@ import TestStep from './components/TestStep';
 
 export default function TestFFmpegTranscode() {
   return (
-    <fieldset className="relative my-4 outline flex">
-      <legend className="absolute -top-4 left-2 text-xl bg-white border rounded px-2">
+    <fieldset className="relative my-4 flex outline">
+      <legend className="absolute -top-4 left-2 rounded border bg-white px-2 text-xl">
         TestTakeScanner
       </legend>
       <div className="border-r-2 border-gray-100 shadow-xl">

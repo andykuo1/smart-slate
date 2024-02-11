@@ -42,7 +42,7 @@ export default function TakeOptions({
         onClick={click}
         disabled={disabled}>
         {children}
-        {showButton && <MoreVertIcon className="w-6 h-6" />}
+        {showButton && <MoreVertIcon className="h-6 w-6" />}
       </MenuButton>
       <Menu className={MenuStyle.menu}>
         <TakeRatingMenuItem

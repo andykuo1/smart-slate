@@ -28,7 +28,7 @@ export default function SettingsReturnHomeField() {
 
   return (
     <SettingsFieldButton
-      className="w-full outline-none my-1 bg-gray-300"
+      className="my-1 w-full bg-gray-300 outline-none"
       Icon={BackIcon}
       onClick={onClick}>
       Exit to home
@@ -57,9 +57,9 @@ function SettingsProjectBackButton() {
 
   return (
     <button
-      className="text-sm items-center flex text-blue-500 hover:underline cursor-pointer"
+      className="flex cursor-pointer items-center text-sm text-blue-500 hover:underline"
       onClick={onClick}>
-      <BackIcon className="inline-block w-6 h-6 fill-current pointer-events-none" />
+      <BackIcon className="pointer-events-none inline-block h-6 w-6 fill-current" />
       Not the project you are looking for?
     </button>
   );

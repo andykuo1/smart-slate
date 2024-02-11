@@ -89,12 +89,12 @@ export default function SettingsProjectIdField() {
           className="absolute right-0 top-0 rounded disabled:opacity-30"
           onClick={onLockClick}>
           {isProjectIdLocked ? (
-            <LockIcon className="w-6 h-6 fill-current" />
+            <LockIcon className="h-6 w-6 fill-current" />
           ) : (
-            <LockOpenIcon className="w-6 h-6 fill-current" />
+            <LockOpenIcon className="h-6 w-6 fill-current" />
           )}
         </button>
-        <PopoverDisclosure className="text-left text-sm text-blue-500 hover:underline cursor-pointer">
+        <PopoverDisclosure className="cursor-pointer text-left text-sm text-blue-500 hover:underline">
           What is this used for?
         </PopoverDisclosure>
         <Popover className={PopoverStyle.popover} modal={true}>

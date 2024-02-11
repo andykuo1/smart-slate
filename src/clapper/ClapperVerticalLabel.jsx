@@ -6,7 +6,7 @@
 export default function ClapperVerticalLabel({ className, children }) {
   return (
     <label
-      className={'text-[2vmin] upright-rl py-1 text-center' + ' ' + className}>
+      className={'py-1 text-center text-[2vmin] upright-rl' + ' ' + className}>
       {children}
     </label>
   );

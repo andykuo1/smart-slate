@@ -21,7 +21,7 @@ export function ShotBoard({ className, documentId, sceneId, blockId }) {
   return (
     <ul
       className={
-        'grid md:grid-cols-4 grid-cols-2 auto-rows-min auto-cols-min' +
+        'md:grid-cols-4 grid auto-cols-min auto-rows-min grid-cols-2' +
         ' ' +
         className
       }>
@@ -57,8 +57,8 @@ function ShotBoardEntry({ documentId, sceneId, shotId, index, start, end }) {
   return (
     <li key={`story-${shotId}`} className="relative px-6">
       {start && (
-        <span className="absolute top-0 bottom-0 left-0 flex items-center pointer-events-none">
-          <RedoIcon className="w-6 h-6 fill-current -translate-y-1 -scale-y-100" />
+        <span className="pointer-events-none absolute bottom-0 left-0 top-0 flex items-center">
+          <RedoIcon className="h-6 w-6 -translate-y-1 -scale-y-100 fill-current" />
         </span>
       )}
       <ShotThumbnail
@@ -67,11 +67,11 @@ function ShotBoardEntry({ documentId, sceneId, shotId, index, start, end }) {
         shotId={shotId}
         editable={true}
       />
-      <span className="absolute top-0 bottom-0 right-0 flex items-center pointer-events-none">
+      <span className="pointer-events-none absolute bottom-0 right-0 top-0 flex items-center">
         {index >= 0 ? (
-          <ArrowForwardIcon className="w-6 h-6 fill-current" />
+          <ArrowForwardIcon className="h-6 w-6 fill-current" />
         ) : end ? (
-          <UndoIcon className="w-6 h-6 fill-current translate-y-1.5 -scale-y-100" />
+          <UndoIcon className="h-6 w-6 translate-y-1.5 -scale-y-100 fill-current" />
         ) : null}
       </span>
     </li>
@@ -95,9 +95,9 @@ function NewShotBoardEntry({ documentId, sceneId, blockId }) {
   return (
     <li className="relative px-6">
       <button
-        className="w-full h-full border-4 border-dashed flex items-center m-auto"
+        className="m-auto flex h-full w-full items-center border-4 border-dashed"
         onClick={onClick}>
-        <AddIcon className="w-6 h-6 fill-current flex-1" />
+        <AddIcon className="h-6 w-6 flex-1 fill-current" />
       </button>
     </li>
   );

@@ -26,24 +26,24 @@ export default function ProjectSelector({ className }) {
   }
   return (
     <div className={'relative flex flex-col items-center' + ' ' + className}>
-      <div className="flex items-end w-full max-w-[80vw] mb-2">
-        <label className="flex-1 mx-2 opacity-30 text-center truncate">
+      <div className="mb-2 flex w-full max-w-[80vw] items-end">
+        <label className="mx-2 flex-1 truncate text-center opacity-30">
           Or open project
         </label>
       </div>
-      <ProjectListStatusButton className="absolute bottom-0 right-0 translate-y-5 z-10 rounded-xl p-2 -mt-2 bg-black text-white" />
+      <ProjectListStatusButton className="absolute bottom-0 right-0 z-10 -mt-2 translate-y-5 rounded-xl bg-black p-2 text-white" />
       <HorizontallyScrollableDiv
         className={
-          'w-full max-w-[80vw] rounded-xl bg-black border-x-8 border-y-4 border-black'
+          'w-full max-w-[80vw] rounded-xl border-x-8 border-y-4 border-black bg-black'
         }>
         <ul className="flex flex-row">
-          <div className="flex-1 min-w-[2rem] text-white text-right my-auto">
+          <div className="my-auto min-w-[2rem] flex-1 text-right text-white">
             |
           </div>
           {documentIds.map((documentId) => (
             <ProjectSelectorOption key={documentId} documentId={documentId} />
           ))}
-          <div className="flex-1 min-w-[2rem] text-white text-left my-auto">
+          <div className="my-auto min-w-[2rem] flex-1 text-left text-white">
             |
           </div>
         </ul>
@@ -95,11 +95,11 @@ function ProjectSelectorOption({ className, documentId }) {
   return (
     <li
       className={
-        'relative overflow-hidden text-center w-[8rem] min-w-[8rem] max-w-[8rem] max-h-[30vmin]' +
+        'relative max-h-[30vmin] w-[8rem] min-w-[8rem] max-w-[8rem] overflow-hidden text-center' +
         ' ' +
-        'bg-gray-100 rounded-xl mx-2 my-4 p-2' +
+        'mx-2 my-4 rounded-xl bg-gray-100 p-2' +
         ' ' +
-        'hover:bg-white hover:cursor-pointer' +
+        'hover:cursor-pointer hover:bg-white' +
         ' ' +
         className
       }
@@ -115,7 +115,7 @@ function ProjectSelectorOption({ className, documentId }) {
         </p>
       </div>
       <ProjectSyncStatus
-        className="absolute top-1 right-1 text-gray-600"
+        className="absolute right-1 top-1 text-gray-600"
         documentId={documentId}
       />
     </li>

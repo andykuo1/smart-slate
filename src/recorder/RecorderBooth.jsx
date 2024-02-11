@@ -174,10 +174,10 @@ export default function RecorderBooth() {
           />
           {/* 4:3 box */}
           {isAspectRatio43 && (
-            <div className="absolute mx-auto left-0 right-0 -top-1 -bottom-1 w-[75%] border-x-4 pointer-events-none" />
+            <div className="pointer-events-none absolute -bottom-1 -top-1 left-0 right-0 mx-auto w-[75%] border-x-4" />
           )}
           {enableThumbnailWhileRecording && (
-            <div className="absolute left-0 bottom-0">
+            <div className="absolute bottom-0 left-0">
               <ShotThumbnail
                 className="shadow-md"
                 documentId={documentId}
@@ -216,7 +216,7 @@ export default function RecorderBooth() {
 function BackButton({ className, onClick }) {
   return (
     <button
-      className={'rounded-full mx-2 px-2 bg-white text-black' + ' ' + className}
+      className={'mx-2 rounded-full bg-white px-2 text-black' + ' ' + className}
       onClick={onClick}>
       {'<-'}Back
     </button>

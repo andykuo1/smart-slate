@@ -27,17 +27,17 @@ export default function ShotEntryNew({
   }
 
   return (
-    <li className={'relative flex flex-col items-center mx-auto'}>
-      <div className={'flex flex-row items-center w-full h-[6rem] z-10'}>
+    <li className={'relative mx-auto flex flex-col items-center'}>
+      <div className={'z-10 flex h-[6rem] w-full flex-row items-center'}>
         {!collapsed && <ShotNumber documentId="" sceneId="" shotId="" />}
         <button
           className="group h-full translate-x-1 py-2.5 text-gray-400 hover:text-white"
           title="New shot"
           onClick={onClick}>
-          <AddBoxIcon className="w-6 h-full fill-current group-hover:bg-black" />
+          <AddBoxIcon className="h-full w-6 fill-current group-hover:bg-black" />
         </button>
         <div className="relative ml-2">
-          <label className="absolute -top-2 -left-1 z-10 px-1 bg-white text-gray-400 font-mono rounded">
+          <label className="absolute -left-1 -top-2 z-10 rounded bg-white px-1 font-mono text-gray-400">
             *
           </label>
           <ShotThumbnailTypeSelector
@@ -46,10 +46,10 @@ export default function ShotEntryNew({
             blockId={blockId}
           />
         </div>
-        <div className="flex-1 flex flex-row items-center">
-          {<div className="w-6 h-6" />}
+        <div className="flex flex-1 flex-row items-center">
+          {<div className="h-6 w-6" />}
           {!collapsed && (
-            <div className="flex-1 opacity-30 text-xs hidden sm:block">
+            <div className="sm:block hidden flex-1 text-xs opacity-30">
               {'<- Tap + to create a shot'}
             </div>
           )}

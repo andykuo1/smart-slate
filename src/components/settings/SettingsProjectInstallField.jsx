@@ -8,8 +8,8 @@ const DeviceInstallIcon = getDeviceInstallIcon();
 export default function SettingsProjectInstallField() {
   return (
     <AutoInstallPopover autoDisclose={false}>
-      <PopoverButton className="flex mb-2 text-sm items-center text-blue-500 cursor-pointer hover:underline">
-        <DeviceInstallIcon className="inline-block w-6 h-6 fill-current pointer-events-none" />
+      <PopoverButton className="mb-2 flex cursor-pointer items-center text-sm text-blue-500 hover:underline">
+        <DeviceInstallIcon className="pointer-events-none inline-block h-6 w-6 fill-current" />
         <span className="ml-1">Try installing me as a web app!</span>
       </PopoverButton>
     </AutoInstallPopover>

@@ -19,7 +19,7 @@ export default function ShotNotes({ className, documentId, shotId }) {
   return (
     <textarea
       className={
-        'resize-none m-1 p-2 bg-transparent overflow-x-hidden overflow-y-auto' +
+        'm-1 resize-none overflow-y-auto overflow-x-hidden bg-transparent p-2' +
         ' ' +
         className
       }

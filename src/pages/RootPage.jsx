@@ -14,8 +14,8 @@ export default function RootPage() {
   return (
     <PageLayout className="items-center bg-white text-black">
       <AppTitle className="mt-auto" />
-      <div className="flex flex-row text-center mx-auto">
-        <div className="absolute top-2 right-2 bg-white">
+      <div className="mx-auto flex flex-row text-center">
+        <div className="absolute right-2 top-2 bg-white">
           <GoogleConnectButton />
         </div>
         <ProjectNewButton />
@@ -23,7 +23,7 @@ export default function RootPage() {
         <ChangelogButton />
         <ScannerButton />
       </div>
-      <ProjectSelector className="mt-2 mb-auto" />
+      <ProjectSelector className="mb-auto mt-2" />
       <MadeWithLove />
       {/* <ProfilePopover /> */}
     </PageLayout>

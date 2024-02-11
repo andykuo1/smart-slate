@@ -16,7 +16,7 @@ export default function BoxDrawingCharacter({
 }) {
   return (
     <span
-      className={'font-mono text-2xl my-auto select-none' + ' ' + className}
+      className={'my-auto select-none font-mono text-2xl' + ' ' + className}
       {...containerProps}>
       {getCharacter(depth === 0, !start || !end, end)}
     </span>

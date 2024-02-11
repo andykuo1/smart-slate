@@ -61,7 +61,7 @@ export default function TakeCacheMenuItem({ documentId, takeId }) {
         hideOnClick={false}
         onClick={onDeleteClick}
         disabled={!videoBlob}>
-        <DeleteIcon className="w-6 h-6 fill-current" />
+        <DeleteIcon className="h-6 w-6 fill-current" />
       </MenuItem>
     </div>
   );

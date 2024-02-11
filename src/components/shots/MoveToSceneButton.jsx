@@ -40,8 +40,8 @@ export default function MoveToSceneButton({
   }
   return (
     <SelectProvider value={sceneId} setValue={onSceneChange}>
-      <Select className="flex flex-row p-2 ml-2 outline rounded text-gray-400 hover:text-black">
-        <MoveItemIcon className="w-6 h-6 fill-current ml-auto" />
+      <Select className="ml-2 flex flex-row rounded p-2 text-gray-400 outline hover:text-black">
+        <MoveItemIcon className="ml-auto h-6 w-6 fill-current" />
         <span className="mr-auto">Move to scene</span>
       </Select>
       <SelectPopover

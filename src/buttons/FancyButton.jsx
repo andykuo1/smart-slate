@@ -26,12 +26,12 @@ export default function FancyButton({
         'group flex flex-row items-center px-4' +
         ' ' +
         (inverted
-          ? 'text-white from-black to-gray-900 disabled:text-gray-400 disabled:border-gray-700'
-          : 'text-gray-800 from-white to-gray-100 disabled:text-gray-600 disabled:border-gray-200') +
+          ? 'from-black to-gray-900 text-white disabled:border-gray-700 disabled:text-gray-400'
+          : 'from-white to-gray-100 text-gray-800 disabled:border-gray-200 disabled:text-gray-600') +
         ' ' +
-        'bg-gradient-to-br rounded-full' +
+        'rounded-full bg-gradient-to-br' +
         ' ' +
-        'transition-shadow enabled:hover:shadow-xl enabled:hover:cursor-pointer' +
+        'transition-shadow enabled:hover:cursor-pointer enabled:hover:shadow-xl' +
         ' ' +
         'disabled:border-2 disabled:opacity-30' +
         ' ' +

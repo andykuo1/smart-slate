@@ -9,14 +9,14 @@ export default function HorizontallySnappableDiv({ className, children }) {
   return (
     <div
       className={
-        'flex flex-row items-center w-full' +
+        'flex w-full flex-row items-center' +
         ' ' +
-        'overflow-x-auto overflow-y-hidden snap-x snap-mandatory overscroll-x-none' +
+        'snap-x snap-mandatory overflow-x-auto overflow-y-hidden overscroll-x-none' +
         ' ' +
         className
       }>
       {Children.map(children, (child, index) => (
-        <div className="w-full lg:max-w-[50%] flex-shrink-0 flex flex-row snap-start">
+        <div className="lg:max-w-[50%] flex w-full flex-shrink-0 snap-start flex-row">
           {child}
         </div>
       ))}

@@ -13,7 +13,7 @@ export default function ShotTakeCountAsPips({ documentId, shotId }) {
   return (
     <div
       className={
-        'absolute -bottom-2 -left-2 z-10 text-xs px-1 rounded bg-white text-black'
+        'absolute -bottom-2 -left-2 z-10 rounded bg-white px-1 text-xs text-black'
       }>
       {'■'.repeat(Math.min(takeCount, 3))}
       {takeCount > 3 ? '...' : ''}

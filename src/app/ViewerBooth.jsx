@@ -43,7 +43,7 @@ export default function ViewerBooth() {
 function BackButton({ className, onClick }) {
   return (
     <button
-      className={'rounded-full mx-2 px-2 bg-white text-black' + ' ' + className}
+      className={'mx-2 rounded-full bg-white px-2 text-black' + ' ' + className}
       onClick={onClick}>
       {'<-'}Back
     </button>

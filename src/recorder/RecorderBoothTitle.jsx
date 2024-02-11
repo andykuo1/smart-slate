@@ -42,17 +42,17 @@ export default function RecorderBoothTitle({
       <span className="mx-2">{sceneHeading || 'INT/EXT. SCENE - DAY'}</span>
       <span className="flex-1" />
       <span>Shot {sceneShotNumber}</span>
-      <span className="flex flex-row items-center mx-2">
+      <span className="mx-2 flex flex-row items-center">
         Take #{prevTakeId ? prevTakeNumber : takeNumber}
         {prevTakeId && (
           <button className="flex flex-row items-center" onClick={onGoodTake}>
-            <ArrowForwardIcon className="inline-block w-3 h-3 fill-current" />
+            <ArrowForwardIcon className="inline-block h-3 w-3 fill-current" />
             <span className="opacity-60">{takeCount + 1}</span>
-            <span className="my-auto mx-2">
+            <span className="mx-2 my-auto">
               {!isGood ? (
-                <ThumbUpIcon className="w-6 h-6 fill-current" />
+                <ThumbUpIcon className="h-6 w-6 fill-current" />
               ) : (
-                <ThumbUpFillIcon className="w-6 h-6 fill-current" />
+                <ThumbUpFillIcon className="h-6 w-6 fill-current" />
               )}
             </span>
           </button>

@@ -25,16 +25,16 @@ export default function SettingsFieldButton({
     <button
       style={{ lineHeight: '1em' }}
       className={
-        'flex flex-row items-center rounded select-none' +
+        'flex select-none flex-row items-center rounded' +
         ' ' +
         'disabled:opacity-30' +
         ' ' +
-        (children ? 'outline p-2' : 'p-1') +
+        (children ? 'p-2 outline' : 'p-1') +
         ' ' +
         (danger
           ? 'enabled:hover:bg-red-500 enabled:hover:text-white'
           : inverted
-            ? 'enabled:hover:bg-white enabled:hover:text-black bg-black text-white'
+            ? 'bg-black text-white enabled:hover:bg-white enabled:hover:text-black'
             : 'enabled:hover:bg-black enabled:hover:text-white') +
         ' ' +
         (className ?? 'relative w-full')
@@ -43,11 +43,11 @@ export default function SettingsFieldButton({
       onContextMenu={onContextMenu}
       title={title}
       disabled={disabled}>
-      {Icon && <Icon className="w-[2em] h-[2em] fill-current" />}
+      {Icon && <Icon className="h-[2em] w-[2em] fill-current" />}
       {typeof children === 'string' ? (
         <div className="flex-1 text-center">{children}</div>
       ) : (
-        <div className="flex-1 flex items-center">{children}</div>
+        <div className="flex flex-1 items-center">{children}</div>
       )}
     </button>
   );

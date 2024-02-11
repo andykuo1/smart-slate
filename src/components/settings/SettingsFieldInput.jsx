@@ -41,7 +41,7 @@ export default function SettingsFieldInput({
         ref={inputRef}
         id={id}
         className={
-          'flex-1 rounded m-1 px-1 outline outline-offset-2 bg-transparent disabled:opacity-30' +
+          'm-1 flex-1 rounded bg-transparent px-1 outline outline-offset-2 disabled:opacity-30' +
           ' ' +
           (autoCapitalize === 'characters' ? 'uppercase' : '')
         }

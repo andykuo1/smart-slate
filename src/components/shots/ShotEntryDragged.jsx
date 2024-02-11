@@ -23,7 +23,7 @@ export default function ShotEntryDragged({ documentId, sceneId }) {
   return (
     <div
       className={
-        'absolute top-0 left-0 z-50 flex' +
+        'absolute left-0 top-0 z-50 flex' +
         ' ' +
         'pointer-events-none opacity-30' +
         ' ' +

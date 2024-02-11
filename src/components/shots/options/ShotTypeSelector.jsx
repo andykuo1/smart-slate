@@ -68,7 +68,7 @@ function MoreShotTypeSelector({ className, activeShotType, onChange }) {
     <select
       ref={selectRef}
       className={
-        'text-center bg-transparent rounded py-1' +
+        'rounded bg-transparent py-1 text-center' +
         ' ' +
         (isActive && getShotTypeColor(activeShotType)) +
         ' ' +
@@ -97,7 +97,7 @@ function ShotTypeButton({ shotType, className, onClick, isActive = false }) {
   return (
     <button
       className={
-        'p-1 rounded' +
+        'rounded p-1' +
         ' ' +
         (isActive && getShotTypeColor(shotType)) +
         ' ' +
@@ -107,7 +107,7 @@ function ShotTypeButton({ shotType, className, onClick, isActive = false }) {
       value={shotType}
       onClick={onClick}
       disabled={!onClick}>
-      <Icon className="w-6 h-6 fill-current pointer-events-none mx-auto" />
+      <Icon className="pointer-events-none mx-auto h-6 w-6 fill-current" />
     </button>
   );
 }

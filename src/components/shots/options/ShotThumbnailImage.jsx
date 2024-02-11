@@ -40,7 +40,7 @@ export default function ShotThumbnailImage({
       src={image}
       alt="Shot reference image"
       caption={emptyShot ? `(${sceneShotNumber})` : sceneShotNumber}
-      className={'max-w-sm w-[128px] h-[72px]' + ' ' + className}
+      className={'h-[72px] w-[128px] max-w-sm' + ' ' + className}
       Icon={shotType ? getShotTypeIcon(shotType) : PhotoIcon}
     />
   );

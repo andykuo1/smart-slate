@@ -23,9 +23,9 @@ export default function BlockEntryLayout({
   return (
     <div
       className={
-        'flex-1 flex' +
+        'flex flex-1' +
         ' ' +
-        (isWidthHalved ? 'flex-row w-[50vw]' : 'flex-col') +
+        (isWidthHalved ? 'w-[50vw] flex-row' : 'flex-col') +
         ' ' +
         className
       }>
@@ -33,12 +33,12 @@ export default function BlockEntryLayout({
         className={
           'relative w-full' +
           ' ' +
-          (isHeightFaded && 'min-h-[10vh] max-h-[20vh] overflow-y-hidden')
+          (isHeightFaded && 'max-h-[20vh] min-h-[10vh] overflow-y-hidden')
         }>
         {content}
         {isHeightFaded && (
           <button
-            className="absolute top-0 bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-white to-transparent"
+            className="absolute bottom-0 left-0 right-0 top-0 z-10 bg-gradient-to-t from-white to-transparent"
             onClick={() => {
               setUserCursor(documentId, sceneId, '', '');
             }}

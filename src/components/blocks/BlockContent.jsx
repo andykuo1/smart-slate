@@ -114,7 +114,7 @@ function BlockContentFountainJSON({
       const lines = content.split('\n');
       return (
         <div className={'my-4 ml-[15%] whitespace-normal' + ' ' + className}>
-          <pre className="ml-[15%] font-bold whitespace-normal">{lines[0]}</pre>
+          <pre className="ml-[15%] whitespace-normal font-bold">{lines[0]}</pre>
           {lines.slice(1).map((line, index) => (
             <pre
               key={line + '.' + index}
@@ -183,7 +183,7 @@ function BlockContentFountainJSONInput({
       <textarea
         ref={inputRef}
         className={
-          'font-mono bg-transparent resize-none w-full' + ' ' + className
+          'w-full resize-none bg-transparent font-mono' + ' ' + className
         }
         value={content}
         placeholder="< What happened? >"
@@ -250,7 +250,7 @@ function BlockContentLexical({
         <PlainTextPlugin
           contentEditable={<ContentEditable className="p-2" />}
           placeholder={
-            <div className="absolute top-2 left-2 opacity-30 pointer-events-none">
+            <div className="pointer-events-none absolute left-2 top-2 opacity-30">
               {editable && 'What happens?...'}
             </div>
           }

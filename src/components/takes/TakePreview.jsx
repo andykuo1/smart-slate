@@ -21,7 +21,7 @@ export default function TakePreview({
 }) {
   return (
     <ImageWithCaption
-      className={'w-32 h-[4.5rem]' + ' ' + className}
+      className={'h-[4.5rem] w-32' + ' ' + className}
       src={previewImage}
       alt={title}
       caption={caption}

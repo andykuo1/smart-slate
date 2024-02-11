@@ -19,17 +19,17 @@ export default function ChangelogButton() {
   return (
     <>
       <Button onClick={() => setOpen(true)}>
-        <InfoIcon className="w-6 h-6 opacity-30" />
+        <InfoIcon className="h-6 w-6 opacity-30" />
       </Button>
       <Dialog
         className={DialogStyle.dialog}
         open={open}
         onClose={() => setOpen(false)}>
-        <DialogDismiss className="text-xl text-left">{'<-'} Back</DialogDismiss>
-        <DialogHeading className="text-4xl text-center my-4">
+        <DialogDismiss className="text-left text-xl">{'<-'} Back</DialogDismiss>
+        <DialogHeading className="my-4 text-center text-4xl">
           Changelog
         </DialogHeading>
-        <DialogDescription className="text-gray-400 text-center">
+        <DialogDescription className="text-center text-gray-400">
           A list of what has changed since the beginning!
         </DialogDescription>
         <MarkdownArea value={CHANGELOG} />

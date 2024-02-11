@@ -30,7 +30,7 @@ export default function TakeListButton({
     <PopoverProvider>
       <PopoverDisclosure
         className={
-          'mx-auto px-2 bg-white rounded text-xl shadow-xl' + ' ' + className
+          'mx-auto rounded bg-white px-2 text-xl shadow-xl' + ' ' + className
         }>
         <span className="opacity-30">Take List {sceneShotNumber}</span>
       </PopoverDisclosure>

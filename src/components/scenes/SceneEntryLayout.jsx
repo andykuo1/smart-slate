@@ -12,7 +12,7 @@ export default function SceneEntryLayout({
   return (
     <section
       ref={containerRef}
-      className={'flex flex-col mb-10' + ' ' + className}>
+      className={'mb-10 flex flex-col' + ' ' + className}>
       {children}
     </section>
   );

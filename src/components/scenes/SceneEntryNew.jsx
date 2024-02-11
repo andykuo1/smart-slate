@@ -27,7 +27,7 @@ export default function SceneEntryNew({ className, documentId }) {
     return null;
   }
   return (
-    <section className={'flex my-8' + ' ' + className}>
+    <section className={'my-8 flex' + ' ' + className}>
       <DocumentDivider onClick={onClick}>+ New Scene</DocumentDivider>
     </section>
   );

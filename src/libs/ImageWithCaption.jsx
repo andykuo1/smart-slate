@@ -34,7 +34,7 @@ export default function ImageWithCaption({
         <Icon className="flex-1 fill-gray-400" />
       ) : null}
       {caption && (
-        <figcaption className="absolute right-2 bottom-0 text-right font-mono [text-shadow:_-1px_-1px_2px_white,_-1px_1px_2px_white,_1px_1px_2px_white,_1px_-1px_2px_white]">
+        <figcaption className="absolute bottom-0 right-2 text-right font-mono [text-shadow:_-1px_-1px_2px_white,_-1px_1px_2px_white,_1px_1px_2px_white,_1px_-1px_2px_white]">
           {caption}
         </figcaption>
       )}

@@ -72,14 +72,14 @@ export default function TestLexicalMarkdown() {
   }
 
   return (
-    <article className="w-full h-full flex flex-col">
+    <article className="flex h-full w-full flex-col">
       <h2 className="font-bold">Lexical Markdown Test</h2>
       <p className="flex-1">
         <LexicalComposer initialConfig={initialConfig}>
           <RichTextPlugin
             contentEditable={<ContentEditable className="p-2" />}
             placeholder={
-              <div className="absolute top-2 left-2 opacity-30 pointer-events-none">
+              <div className="pointer-events-none absolute left-2 top-2 opacity-30">
                 What happens?...
               </div>
             }
@@ -90,7 +90,7 @@ export default function TestLexicalMarkdown() {
           <OnChangePlugin onChange={onChange} />
         </LexicalComposer>
       </p>
-      <pre className="text-xs h-[50%] overflow-y-auto">
+      <pre className="h-[50%] overflow-y-auto text-xs">
         <code>{JSON.stringify(JSON.parse(state), null, 4)}</code>
       </pre>
     </article>

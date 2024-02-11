@@ -57,7 +57,7 @@ export default function TestFFmpegTranscode() {
 
   return (
     <fieldset className="relative my-4 border">
-      <legend className="absolute -top-4 left-2 text-xl bg-white border rounded px-2">
+      <legend className="absolute -top-4 left-2 rounded border bg-white px-2 text-xl">
         TestFFmpegTranscode
       </legend>
       <TestStep
@@ -274,7 +274,7 @@ export default function TestFFmpegTranscode() {
           yield `COMPLETE! Took ${deltaTime} seconds for ${duration} seconds of video.`;
         }}>
         <button
-          className="block outline rounded p-2 m-2 bg-gray-100"
+          className="m-2 block rounded bg-gray-100 p-2 outline"
           onClick={() => setEnableSnapshot((prev) => !prev)}>
           {enableSnapshot ? 'Download' : 'Ignore'} snapshots
         </button>

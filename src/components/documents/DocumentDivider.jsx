@@ -14,20 +14,20 @@ export default function DocumentDivider({
   return (
     <div
       className={
-        'w-full flex flex-row items-center px-4 my-4' +
+        'my-4 flex w-full flex-row items-center px-4' +
         ' ' +
         (disabled ? 'opacity-30' : '') +
         ' ' +
         className
       }>
-      <span className="flex-1 text-center border-t-2 border-dotted border-black" />
+      <span className="flex-1 border-t-2 border-dotted border-black text-center" />
       <button
         className="mx-4 flex flex-row"
         onClick={onClick}
         disabled={disabled}>
         {children}
       </button>
-      <span className="flex-1 text-center border-t-2 border-dotted border-black" />
+      <span className="flex-1 border-t-2 border-dotted border-black text-center" />
     </div>
   );
 }

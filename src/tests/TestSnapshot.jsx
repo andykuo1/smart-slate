@@ -41,7 +41,7 @@ export default function TestSnapshot() {
   }
   return (
     <fieldset className="relative my-4">
-      <legend className="absolute -top-4 left-2 text-xl bg-white border rounded px-2">
+      <legend className="absolute -top-4 left-2 rounded border bg-white px-2 text-xl">
         TestSnapshot
       </legend>
       <ul className="border p-4">
@@ -65,7 +65,7 @@ export default function TestSnapshot() {
           />
           <button
             onClick={onClick}
-            className="border rounded px-2 py-1 bg-gray-300">
+            className="rounded border bg-gray-300 px-2 py-1">
             Take Snapshot
           </button>
         </li>

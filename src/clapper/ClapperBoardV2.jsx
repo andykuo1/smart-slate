@@ -82,7 +82,7 @@ export default function ClapperBoardV2() {
   return (
     <div
       className={
-        'w-full h-full text-[3vmin] flex flex-col gap-x-4 gap-y-0 p-[2em]' +
+        'flex h-full w-full flex-col gap-x-4 gap-y-0 p-[2em] text-[3vmin]' +
         ' ' +
         smallestStyle +
         ' ' +
@@ -94,7 +94,7 @@ export default function ClapperBoardV2() {
       }>
       <div className="flex flex-col">
         <ClapperProductionTitleField
-          className="w-full text-center text-[3em] mb-1 -mt-2 disabled:opacity-100 truncate"
+          className="-mt-2 mb-1 w-full truncate text-center text-[3em] disabled:opacity-100"
           documentId={documentId}
         />
         <ClapperIdentifierFields
@@ -105,12 +105,12 @@ export default function ClapperBoardV2() {
           takeId={takeId}
         />
         <ClapperShotDescriptionField
-          className="w-full px-2 my-2"
+          className="my-2 w-full px-2"
           documentId={documentId}
           sceneId={sceneId}
           shotId={shotId}
         />
-        <div className="flex-1 hidden sm:flex portrait:hidden landscape:flex flex-col">
+        <div className="sm:flex hidden flex-1 flex-col portrait:hidden landscape:flex">
           <ClapperAdditionalFields
             className="w-full"
             documentId={documentId}
@@ -121,7 +121,7 @@ export default function ClapperBoardV2() {
             onRollNameChange={onRollNameChange}
           />
           <ClapperCommentField
-            className="flex-1 w-full short:hidden"
+            className="w-full flex-1 short:hidden"
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
@@ -131,11 +131,11 @@ export default function ClapperBoardV2() {
       </div>
       <div
         className={
-          'flex-1 flex flex-row gap-4' +
+          'flex flex-1 flex-row gap-4' +
           ' ' +
-          'portrait:flex-col landscape:flex-row sm:flex-row'
+          'sm:flex-row portrait:flex-col landscape:flex-row'
         }>
-        <div className="flex-1 min-h-[40vh] bg-white text-black rounded-xl overflow-hidden">
+        <div className="min-h-[40vh] flex-1 overflow-hidden rounded-xl bg-white text-black">
           <ClapperQRCodeField
             documentId={documentId}
             sceneId={sceneId}
@@ -148,7 +148,7 @@ export default function ClapperBoardV2() {
           />
         </div>
         <ClapperControlFields
-          className="font-bold rounded-xl"
+          className="rounded-xl font-bold"
           documentId={documentId}
           sceneId={sceneId}
           shotId={shotId}
@@ -215,7 +215,7 @@ function ClapperPrintButton({ className, documentId, takeId }) {
   return (
     <SettingsFieldButton
       className={
-        'relative outline-none text-[2em] mt-auto flex pb-[0.5em] flex-col' +
+        'relative mt-auto flex flex-col pb-[0.5em] text-[2em] outline-none' +
         ' ' +
         className
       }
@@ -225,7 +225,7 @@ function ClapperPrintButton({ className, documentId, takeId }) {
       disabled={!takeId}>
       <span
         className={
-          'absolute bottom-0 left-0 right-0 text-[0.5em] translate-y-[25%]' +
+          'absolute bottom-0 left-0 right-0 translate-y-[25%] text-[0.5em]' +
           ' ' +
           (takeRating <= 0 ? 'line-through' : '')
         }>
@@ -258,12 +258,12 @@ function ClapperAdditionalFields({
   return (
     <fieldset
       className={
-        'flex flex-row gap-4 px-4 mx-auto font-mono overflow-hidden border-2 rounded-xl' +
+        'mx-auto flex flex-row gap-4 overflow-hidden rounded-xl border-2 px-4 font-mono' +
         ' ' +
         className
       }>
       <ClapperDateField />
-      <ul className="flex-1 my-auto flex flex-col items-center">
+      <ul className="my-auto flex flex-1 flex-col items-center">
         {!hasAdditionalFields && <div>...</div>}
         <ClapperDirectorNameEntry documentId={documentId} />
         <ClapperCameraNameEntry documentId={documentId} />
@@ -276,7 +276,7 @@ function ClapperAdditionalFields({
 function ClapperDateField() {
   const { year, month, day } = useRealTimeDate();
   return (
-    <div className="flex flex-col items-center m-auto">
+    <div className="m-auto flex flex-col items-center">
       <div className="flex flex-row gap-1 text-[1.5em]">
         <span>{getMonthString(month)}</span>
         <span>{String(day).padStart(2, '0')}</span>
@@ -347,10 +347,10 @@ function useRealTimeDate() {
  */
 function ClapperRollField({ value, onChange }) {
   return (
-    <div className="flex-1 flex flex-col items-center">
+    <div className="flex flex-1 flex-col items-center">
       <ClapperLabel className="text-[1em]">ROLL</ClapperLabel>
       <ClapperInput
-        className="w-full text-center text-[2em] scale-y-150 translate-y-[25%] rounded-xl bg-gray-900"
+        className="w-full translate-y-[25%] scale-y-150 rounded-xl bg-gray-900 text-center text-[2em]"
         name="camera-roll"
         value={value}
         onChange={(e) => {
@@ -388,14 +388,14 @@ function ClapperShotDescriptionField({
   return (
     <div className={'flex flex-row gap-2' + ' ' + className}>
       <p
-        className="flex-1 font-mono max-h-[72px] overflow-auto"
+        className="max-h-[72px] flex-1 overflow-auto font-mono"
         hidden={!shotType && !description}>
         {shotType + (hasShotText ? ' of ' : '') + description}
       </p>
       {enableThumbnailWhileRecording && (
         <div className="flex flex-col items-end">
           <ShotThumbnail
-            className="text-base rounded overflow-hidden"
+            className="overflow-hidden rounded text-base"
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
@@ -428,7 +428,7 @@ function ClapperCommentField({
     <div className={'flex flex-row gap-1' + ' ' + className}>
       <textarea
         style={{ lineHeight: '1em' }}
-        className="w-full text-[1.5em] font-mono resize-none bg-transparent p-2 my-1 rounded-xl placeholder:opacity-30"
+        className="my-1 w-full resize-none rounded-xl bg-transparent p-2 font-mono text-[1.5em] placeholder:opacity-30"
         value={comments}
         onChange={(e) => setComments(e.target.value)}
         placeholder="Comments"
@@ -465,12 +465,12 @@ function ClapperIdentifierFields({
   return (
     <fieldset
       className={
-        'flex flex-row gap-4 mx-auto text-[1em] font-mono overflow-hidden' +
+        'mx-auto flex flex-row gap-4 overflow-hidden font-mono text-[1em]' +
         ' ' +
         className
       }
       onClick={onClick}>
-      <div className="flex-1 flex flex-col items-center px-2 border-2 rounded-xl">
+      <div className="flex flex-1 flex-col items-center rounded-xl border-2 px-2">
         <div className="flex flex-col items-end">
           <ClapperSceneShotNumberField
             documentId={documentId}
@@ -481,7 +481,7 @@ function ClapperIdentifierFields({
         </div>
       </div>
       <ClapperTakeNumberField
-        className="flex-1 px-2 border-2 rounded-xl"
+        className="flex-1 rounded-xl border-2 px-2"
         documentId={documentId}
         shotId={shotId}
         takeId={takeId}
@@ -524,7 +524,7 @@ function ClapperSceneShotNumberField({ documentId, sceneId, shotId }) {
         <output
           id={sceneOutputId}
           style={{ lineHeight: '1em' }}
-          className="text-[3em] whitespace-nowrap">
+          className="whitespace-nowrap text-[3em]">
           {formatSceneNumber(sceneNumber, true).padStart(3, '0')}
         </output>
       </div>
@@ -533,7 +533,7 @@ function ClapperSceneShotNumberField({ documentId, sceneId, shotId }) {
         <output
           id={shotOutputId}
           style={{ lineHeight: '1em' }}
-          className="text-[3em] whitespace-nowrap">
+          className="whitespace-nowrap text-[3em]">
           {shotNumber <= 0 ? '-' : formatShotNumber(shotNumber)}
         </output>
       </div>
@@ -557,7 +557,7 @@ function ClapperTakeNumberField({ className, documentId, shotId, takeId }) {
       <output
         id={takeOutputId}
         style={{ lineHeight: '1em' }}
-        className="text-[3em] pb-[0.5em] scale-y-150 translate-y-[25%] whitespace-nowrap">
+        className="translate-y-[25%] scale-y-150 whitespace-nowrap pb-[0.5em] text-[3em]">
         {formatTakeNumber(takeNumber, true)}
       </output>
     </div>
@@ -590,12 +590,12 @@ function ClapperCameraNameEntry({ documentId }) {
     return null;
   }
   return (
-    <li className="flex gap-1 items-center">
-      <ClapperLabel className="text-right text-[0.5em] self-end">
+    <li className="flex items-center gap-1">
+      <ClapperLabel className="self-end text-right text-[0.5em]">
         DP
       </ClapperLabel>
       <ClapperCameraNameField
-        className="flex-1 text-left truncate"
+        className="flex-1 truncate text-left"
         documentId={documentId}
       />
     </li>
@@ -614,12 +614,12 @@ function ClapperDirectorNameEntry({ documentId }) {
     return null;
   }
   return (
-    <li className="flex gap-1 items-center">
-      <ClapperLabel className="text-right text-[0.5em] self-end">
+    <li className="flex items-center gap-1">
+      <ClapperLabel className="self-end text-right text-[0.5em]">
         DIR
       </ClapperLabel>
       <ClapperDirectorNameField
-        className="flex-1 text-left truncate"
+        className="flex-1 truncate text-left"
         documentId={documentId}
       />
     </li>

@@ -27,9 +27,9 @@ export default function SettingsProjectDeleteButton() {
 
   return (
     <button
-      className="w-full flex flex-row items-center outline rounded p-2 hover:bg-red-500 hover:text-white"
+      className="flex w-full flex-row items-center rounded p-2 outline hover:bg-red-500 hover:text-white"
       onClick={handleClick}>
-      <DeleteIcon className="w-6 h-6 fill-current" />
+      <DeleteIcon className="h-6 w-6 fill-current" />
       <span className="flex-1">Delete entire project</span>
     </button>
   );

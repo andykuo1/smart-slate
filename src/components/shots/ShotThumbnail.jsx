@@ -49,7 +49,7 @@ export default function ShotThumbnail({
           referenceOnly={referenceOnly}
         />
         <PopoverDisclosure
-          className="absolute left-0 top-0 bottom-0 right-0"
+          className="absolute bottom-0 left-0 right-0 top-0"
           disabled={!editable}
         />
         <Popover className={PopoverStyle.popover} modal={true}>
@@ -84,9 +84,9 @@ function ShotTakeCountAsCheck({ documentId, shotId }) {
   return (
     <div className="absolute bottom-0 left-0 z-10">
       {shotHasGoodTake ? (
-        <CheckBoxFillIcon className="w-6 h-6 fill-current" />
+        <CheckBoxFillIcon className="h-6 w-6 fill-current" />
       ) : shotHasTakes ? (
-        <CheckBoxIcon className="w-6 h-6 fill-current" />
+        <CheckBoxIcon className="h-6 w-6 fill-current" />
       ) : null}
     </div>
   );

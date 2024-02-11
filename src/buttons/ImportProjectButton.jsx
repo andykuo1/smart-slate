@@ -54,7 +54,7 @@ export default function ImportProjectButton({
   return (
     <FancyButton title="Import" className="mx-1 px-12" onClick={click}>
       {render()}
-      <UploadIcon className="inline w-6 h-6 fill-current" />
+      <UploadIcon className="inline h-6 w-6 fill-current" />
     </FancyButton>
   );
 }

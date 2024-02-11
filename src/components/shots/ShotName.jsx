@@ -62,23 +62,23 @@ function ShotNameLayout({ className, scene, shot, take, type = undefined }) {
   return (
     <table
       className={
-        'relative text-center group flex flex-col items-center my-auto' +
+        'group relative my-auto flex flex-col items-center text-center' +
         ' ' +
         className
       }>
-      <tbody className="flex-1 w-full h-full flex">
-        <tr className="flex-1 text-xl scale-y-125 whitespace-nowrap self-center">
-          <td className="font-mono text-right">{scene?.()}</td>
-          <td className="font-mono text-left">{shot?.()}</td>
-          <td className="font-mono px-2">{take?.()}</td>
+      <tbody className="flex h-full w-full flex-1">
+        <tr className="flex-1 scale-y-125 self-center whitespace-nowrap text-xl">
+          <td className="text-right font-mono">{scene?.()}</td>
+          <td className="text-left font-mono">{shot?.()}</td>
+          <td className="px-2 font-mono">{take?.()}</td>
           <td className="font-mono">{type?.()}</td>
         </tr>
       </tbody>
-      <tfoot className="absolute -bottom-3 w-full flex">
-        <tr className="flex-1 text-xs select-none transition-opacity opacity-0 group-hover:opacity-30">
+      <tfoot className="absolute -bottom-3 flex w-full">
+        <tr className="flex-1 select-none text-xs opacity-0 transition-opacity group-hover:opacity-30">
           <th className="font-normal">scene</th>
           <th className="font-normal">shot</th>
-          <th className="font-normal px-2">take</th>
+          <th className="px-2 font-normal">take</th>
           <th className="font-normal">type</th>
         </tr>
       </tfoot>
@@ -103,7 +103,7 @@ function ShotTypesMore({ documentId, shotId }) {
 
   return (
     <select
-      className="text-center bg-transparent -mx-1"
+      className="-mx-1 bg-transparent text-center"
       value={shotType}
       onChange={onShotTypeChange}>
       {SHOT_TYPES.map((shotType) => (

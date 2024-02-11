@@ -64,7 +64,7 @@ export function ShotEntry({
       id={getShotFocusId(shotId)}
       ref={containerRef}
       className={
-        'relative flex flex-col items-center mx-auto' +
+        'relative mx-auto flex flex-col items-center' +
         ' ' +
         (isDragging ? 'opacity-30' : '') +
         ' ' +
@@ -73,13 +73,13 @@ export function ShotEntry({
       {...elementProps}>
       <div
         className={
-          'flex flex-row items-center w-full h-[6rem] border-b border-gray-300 shadow' +
+          'flex h-[6rem] w-full flex-row items-center border-b border-gray-300 shadow' +
           ' ' +
           (isActive && 'bg-black text-white')
         }>
         {!collapsed && (
           <ShotNumber
-            className="hidden sm:block"
+            className="sm:block hidden"
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
@@ -98,7 +98,7 @@ export function ShotEntry({
         />
         <div className="relative">
           {shotHash && (
-            <label className="absolute -top-2 left-0 z-10 px-1 bg-white text-black font-mono rounded">
+            <label className="absolute -top-2 left-0 z-10 rounded bg-white px-1 font-mono text-black">
               {shotHash}
             </label>
           )}
@@ -110,7 +110,7 @@ export function ShotEntry({
             editable={true}
           />
         </div>
-        <div className="flex-1 h-full flex flex-row items-center">
+        <div className="flex h-full flex-1 flex-row items-center">
           {collapsed && (
             <ShotMover
               documentId={documentId}
@@ -126,9 +126,9 @@ export function ShotEntry({
           {!collapsed && (
             <ShotDescription
               className={
-                'flex-1 w-full h-full bg-transparent p-2 mx-2 font-mono italic' +
+                'mx-2 h-full w-full flex-1 bg-transparent p-2 font-mono italic' +
                 ' ' +
-                (!showDescriptionWhenSmall ? 'hidden sm:block' : '')
+                (!showDescriptionWhenSmall ? 'sm:block hidden' : '')
               }
               documentId={documentId}
               shotId={shotId}
@@ -137,7 +137,7 @@ export function ShotEntry({
         </div>
         {!collapsed && (
           <ShotNumber
-            className="hidden sm:block"
+            className="sm:block hidden"
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
@@ -145,7 +145,7 @@ export function ShotEntry({
           />
         )}
       </div>
-      {!collapsed && <div className="flex-1 w-full">{children}</div>}
+      {!collapsed && <div className="w-full flex-1">{children}</div>}
     </li>
   );
 }

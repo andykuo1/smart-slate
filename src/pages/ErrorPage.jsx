@@ -6,10 +6,10 @@ export default function ErrorPage() {
     console.error(error);
   }
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full gap-10 bg-white text-black">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-10 bg-white text-black">
       <h1 className="text-6xl font-bold">Jinkies! :(</h1>
       <p>Sorry, an unexpected error has occurred.</p>
-      <p className="text-gray-400 max-w-[60vw] break-all overflow-y-auto">
+      <p className="max-w-[60vw] overflow-y-auto break-all text-gray-400">
         <i>
           {
             // @ts-expect-error `useRouterError()` is unknown, but should be an Error.

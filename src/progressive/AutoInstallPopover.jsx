@@ -38,7 +38,7 @@ export default function AutoInstallPopover({
   return (
     <PopoverProvider>
       {autoDisclose && <PopoverAutoDisclosure />}
-      <PopoverAnchor className="fixed top-0 right-0" />
+      <PopoverAnchor className="fixed right-0 top-0" />
       <Popover className={PopoverStyle.popover}>
         <PopoverArrow className={PopoverStyle.arrow} />
         {isAppleMobileDevice() ? (
@@ -70,16 +70,16 @@ function PopoverContentUnknown() {
           You can install this app on:
           <span className="block">
             -{' '}
-            <InstallDesktopIcon className="inline-block fill-white w-6 h-6 mx-1" />{' '}
+            <InstallDesktopIcon className="mx-1 inline-block h-6 w-6 fill-white" />{' '}
             Desktop
           </span>
           <span className="block">
             -{' '}
-            <InstallMobileIcon className="inline-block fill-white w-6 h-6 mx-1" />{' '}
+            <InstallMobileIcon className="mx-1 inline-block h-6 w-6 fill-white" />{' '}
             Mobile
           </span>
           <span className="block">
-            - Or even iOS (in <SquareAndArrowUp className="inline-block mx-1" />{' '}
+            - Or even iOS (in <SquareAndArrowUp className="mx-1 inline-block" />{' '}
             Share)
           </span>
         </span>
@@ -98,11 +98,11 @@ function PopoverContentDesktop() {
         <span className="block">
           <span className="mx-2">1.</span>
           Click{' '}
-          <InstallDesktopIcon className="inline-block fill-white w-6 h-6 mx-1" />
+          <InstallDesktopIcon className="mx-1 inline-block h-6 w-6 fill-white" />
         </span>
         <span className="block">
           <span className="mx-2">2.</span>
-          Select <span className="border rounded-full px-2">Install</span>
+          Select <span className="rounded-full border px-2">Install</span>
         </span>
         <span className="block">
           <span className="mx-2">3.</span>
@@ -120,11 +120,11 @@ function PopoverContentApple() {
       <PopoverDescription>
         <span className="block">
           <span className="mx-2">1.</span>
-          Tap <SquareAndArrowUp className="inline-block mx-1" /> Share and
+          Tap <SquareAndArrowUp className="mx-1 inline-block" /> Share and
         </span>
         <span className="block">
           <span className="mx-2">2.</span>
-          Pick <PlusSquare className="inline-block mx-1" /> Add to Home Screen
+          Pick <PlusSquare className="mx-1 inline-block" /> Add to Home Screen
         </span>
         <span className="block">
           <span className="mx-2">3.</span>
@@ -143,13 +143,13 @@ function PopoverContentAndroid() {
         <span className="block">
           <span className="mx-2">1.</span>
           Open{' '}
-          <MoreVertIcon className="inline-block fill-white w-6 h-6 -mx-1" />{' '}
+          <MoreVertIcon className="-mx-1 inline-block h-6 w-6 fill-white" />{' '}
           Menu
         </span>
         <span className="block">
           <span className="mx-2">2.</span>
           Pick{' '}
-          <InstallMobileIcon className="inline-block fill-white w-6 h-6 mx-1" />{' '}
+          <InstallMobileIcon className="mx-1 inline-block h-6 w-6 fill-white" />{' '}
           Install app
         </span>
         <span className="block">

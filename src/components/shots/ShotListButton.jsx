@@ -27,14 +27,14 @@ export default function ShotListButton({
   return (
     <div
       className={
-        'flex gap-2 items-center mx-4 my-2 px-2 rounded-xl italic bg-gray-100 opacity-60' +
+        'mx-4 my-2 flex items-center gap-2 rounded-xl bg-gray-100 px-2 italic opacity-60' +
         ' ' +
         className
       }>
       <span className="flex-1" />
       <PopoverProvider>
-        <PopoverDisclosure className="italic flex gap-1">
-          <ListAltIcon className="inline-block w-6 h-6 fill-current" />
+        <PopoverDisclosure className="flex gap-1 italic">
+          <ListAltIcon className="inline-block h-6 w-6 fill-current" />
           {'Shot List ' + sceneNumber}
         </PopoverDisclosure>
         <Popover className={PopoverStyle.popover} modal={true}>

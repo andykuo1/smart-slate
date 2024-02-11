@@ -79,30 +79,30 @@ export default function ShotThumbnailTypeSelector({
         alt="New shot"
         Icon={null}
         className={
-          'flex-1 grid grid-cols-2 grid-rows-2 max-w-sm w-[128px] h-[72px]'
+          'grid h-[72px] w-[128px] max-w-sm flex-1 grid-cols-2 grid-rows-2'
         }>
         <button
-          className="w-full h-full border-b border-r hover:text-black"
+          className="h-full w-full border-b border-r hover:text-black"
           title="New wide shot"
           onClick={() => onShotTypeClick('WS')}>
-          <WideShotIcon className="w-full h-full fill-current" />
+          <WideShotIcon className="h-full w-full fill-current" />
         </button>
         <button
-          className="w-full h-full border-b border-l hover:text-black"
+          className="h-full w-full border-b border-l hover:text-black"
           title="New medium shot"
           onClick={() => onShotTypeClick('MS')}>
-          <MediumShotIcon className="w-full h-full fill-current" />
+          <MediumShotIcon className="h-full w-full fill-current" />
         </button>
         <button
-          className="w-full h-full border-t border-r hover:text-black"
+          className="h-full w-full border-r border-t hover:text-black"
           title="New close-up shot"
           onClick={() => onShotTypeClick('CU')}>
-          <CloseUpIcon className="w-full h-full fill-current" />
+          <CloseUpIcon className="h-full w-full fill-current" />
         </button>
         <button
-          className="relative w-full h-full border-t border-l hover:text-black"
+          className="relative h-full w-full border-l border-t hover:text-black"
           onClick={() => inputCaptureRef.current?.click()}>
-          <AddPhotoAlternativeIcon className="w-full h-full fill-current" />
+          <AddPhotoAlternativeIcon className="h-full w-full fill-current" />
         </button>
       </ImageWithCaption>
       <input

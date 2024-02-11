@@ -17,7 +17,7 @@ export default function SettingsEnableGoogleDriveSyncToggle() {
       onClick={() => setEnabled(!enabled)}
       disabled={!googleStatus}>
       <span>Enable</span>
-      <AddToDriveIcon className="inline-block w-6 h-6 fill-current mx-1" />
+      <AddToDriveIcon className="mx-1 inline-block h-6 w-6 fill-current" />
       <span>video sync</span>
     </SettingsFieldToggle>
   );

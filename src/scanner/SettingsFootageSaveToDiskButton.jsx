@@ -35,7 +35,7 @@ export default function SettingsFootageSaveToDiskButton({
     <SettingsFieldButton Icon={SaveIcon} onClick={onClick} disabled={disabled}>
       Rename files on disk
       {
-        <span className="block w-[80%] mx-auto mt-4">
+        <span className="mx-auto mt-4 block w-[80%]">
           NOTE: Only <b>Chrome</b> browsers currently support this step.
           Otherwise, download the CSV file below and use a batch rename tool.
         </span>

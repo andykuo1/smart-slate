@@ -7,7 +7,7 @@ export default function SceneNumber({ sceneNumber, onClick }) {
   const result = sceneNumber < 0 ? '??' : String(sceneNumber).padStart(2, '0');
   return (
     <button
-      className="px-2 font-mono font-bold text-xl opacity-30 rounded-full"
+      className="rounded-full px-2 font-mono text-xl font-bold opacity-30"
       onClick={onClick}>
       {result}
     </button>

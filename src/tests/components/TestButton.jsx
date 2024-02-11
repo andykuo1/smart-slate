@@ -8,7 +8,7 @@ export default function TestButton({ onClick, disabled = !onClick, children }) {
   return (
     <button
       className={
-        'block outline rounded p-2 m-2 bg-gray-100' +
+        'm-2 block rounded bg-gray-100 p-2 outline' +
         ' ' +
         'enabled:hover:bg-black enabled:hover:text-white enabled:hover:outline-white' +
         ' ' +

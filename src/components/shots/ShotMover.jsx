@@ -51,7 +51,7 @@ export default function ShotEntry({
   return (
     <div
       className={
-        'group h-full flex flex-col items-center translate-x-1 py-2.5' +
+        'group flex h-full translate-x-1 flex-col items-center py-2.5' +
         ' ' +
         className
       }>
@@ -60,7 +60,7 @@ export default function ShotEntry({
           onClick={onUpClick}
           disabled={!editable || isFirst}
           className="my-auto disabled:opacity-30">
-          <UpIcon className="w-6 h-6 fill-current" />
+          <UpIcon className="h-6 w-6 fill-current" />
         </button>
       )}
       {(!collapsed || isRightArrow) && (
@@ -68,7 +68,7 @@ export default function ShotEntry({
           onClick={onDownClick}
           disabled={!editable || isLast}
           className="my-auto disabled:opacity-30">
-          <DownIcon className="w-6 h-6 fill-current" />
+          <DownIcon className="h-6 w-6 fill-current" />
         </button>
       )}
     </div>

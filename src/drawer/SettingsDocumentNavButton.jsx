@@ -46,7 +46,7 @@ export default function SettingsDocumentNavButton({ className }) {
   return (
     <>
       <SettingsFieldButton
-        className={'bg-white rounded-full p-2 shadow-md' + ' ' + className}
+        className={'rounded-full bg-white p-2 shadow-md' + ' ' + className}
         Icon={!location.pathname.includes('/edit') ? EditSquareIcon : MovieIcon}
         onClick={onNavClick}
         disabled={!projectId}

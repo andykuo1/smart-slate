@@ -6,11 +6,11 @@ export default function AppTitle({ className }) {
   return (
     <h1
       className={
-        'pt-[10vmin] px-[10vmin]' +
+        'px-[10vmin] pt-[10vmin]' +
         ' ' +
-        'text-center text-6xl md:text-8xl lg:text-9xl' +
+        'md:text-8xl lg:text-9xl text-center text-6xl' +
         ' ' +
-        'underline pointer-events-none whitespace-nowrap mb-4 lg:mb-20' +
+        'lg:mb-20 pointer-events-none mb-4 whitespace-nowrap underline' +
         ' ' +
         className
       }>
