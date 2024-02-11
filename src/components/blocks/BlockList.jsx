@@ -1,8 +1,6 @@
 import { useShallow } from 'zustand/react/shallow';
 
 import ShotListInBlockOrder from '@/components/shots/shotlist/ShotListInBlockOrder';
-import ShotListInSceneOrder from '@/components/shots/shotlist/ShotListInSceneOrder';
-import { useMatchMedia } from '@/libs/UseMatchMedia';
 import { getBlockIdsInOrder } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import { useUserStore } from '@/stores/user';
@@ -33,7 +31,6 @@ export default function BlockList({
   const blockIds = useDocumentStore(
     useShallow((ctx) => getBlockIdsInOrder(ctx, documentId, sceneId)),
   );
-  const smallMedia = useMatchMedia('(max-width: 640px)');
   const inlineMode = useUserStore((ctx) => ctx.editMode === 'inline');
   const sequenceMode = useUserStore((ctx) => ctx.editMode === 'sequence');
   const textOnlyMode = useUserStore((ctx) => ctx.editMode === 'textonly');
@@ -48,45 +45,28 @@ export default function BlockList({
         : inlineMode
           ? 'fullwidth'
           : 'fullwidth';
-
-  const showSceneLevelShotList = sequenceMode;
-  const showBlockLevelShotList = inlineMode || shotOnlyMode;
-
+  const showBlockLevelShotList = inlineMode;
   const isCollapsed = !shotListMode;
-  /*
-  if (activeShotId) {
-    return <BlockEntryFocused documentId={documentId} />;
-  }
-  */
+
   return (
-    <div ref={containerRef} className={'flex flex-row' + ' ' + className}>
-      <div className="flex flex-1 flex-col">
-        {blockIds.map((blockId) => (
-          <BlockEntry
-            key={`block-${blockId}`}
+    <div ref={containerRef} className={'flex flex-col' + ' ' + className}>
+      {blockIds.map((blockId) => (
+        <BlockEntry
+          key={`block-${blockId}`}
+          documentId={documentId}
+          sceneId={sceneId}
+          blockId={blockId}
+          mode={blockViewMode}>
+          <ShotListInBlockOrder
             documentId={documentId}
             sceneId={sceneId}
             blockId={blockId}
-            mode={blockViewMode}>
-            <ShotListInBlockOrder
-              className="max-w-[100vw] flex-1"
-              documentId={documentId}
-              sceneId={sceneId}
-              blockId={blockId}
-              editable={true}
-              collapsed={isCollapsed}
-              hidden={!showBlockLevelShotList}
-            />
-          </BlockEntry>
-        ))}
-      </div>
-      <ShotListInSceneOrder
-        className="max-w-[50vw] flex-1"
-        documentId={documentId}
-        sceneId={sceneId}
-        collapsed={smallMedia || isCollapsed}
-        hidden={!showSceneLevelShotList}
-      />
+            editable={true}
+            collapsed={isCollapsed}
+            hidden={!showBlockLevelShotList}
+          />
+        </BlockEntry>
+      ))}
     </div>
   );
 }

@@ -34,10 +34,12 @@ export default function SceneList({ documentId }) {
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {boolean} [props.hidden]
  */
-function SceneEntry({ documentId, sceneId }) {
+export function SceneEntry({ className, documentId, sceneId, hidden = false }) {
   const containerRef = useRef(null);
   const contentRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const [height, setHeight] = useState(0);
@@ -54,7 +56,11 @@ function SceneEntry({ documentId, sceneId }) {
   }, [visible]);
 
   return (
-    <SceneEntryLayout containerRef={containerRef}>
+    <SceneEntryLayout
+      className={
+        hidden ? /* NOTE: Quick hideaway to not lag. */ 'hidden' : className
+      }
+      containerRef={containerRef}>
       <SceneHeader documentId={documentId} sceneId={sceneId} />
       {visible ? (
         <BlockList
@@ -78,7 +84,7 @@ function SceneEntry({ documentId, sceneId }) {
  * array: Array<import('@/stores/document/DocumentStore').SceneId>
  * ) => import('react').ReactNode} props.children
  */
-function PerScene({ sceneIds, children }) {
+export function PerScene({ sceneIds, children }) {
   return (
     <>
       {sceneIds.map((sceneId, index, array) => (

@@ -25,7 +25,7 @@ export default function BlockEntryLayout({
       className={
         'flex flex-1' +
         ' ' +
-        (isWidthHalved ? 'w-[50vw] flex-row' : 'flex-col') +
+        (isWidthHalved ? /* w-[50vw]*/ 'flex-row' : 'flex-col') +
         ' ' +
         className
       }>

@@ -276,8 +276,5 @@ Export list to csv
 - Scanner revamp ui
 - Integrate FFmpeg
 
-- Home button should close drawer
-- Back button swap with home button
-- Previs doesn't work
-
 - Import by paste
+- Fixed width editor

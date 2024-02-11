@@ -113,8 +113,8 @@ function BlockContentFountainJSON({
     case 'dialogue': {
       const lines = content.split('\n');
       return (
-        <div className={'my-4 ml-[15%] whitespace-normal' + ' ' + className}>
-          <pre className="ml-[15%] whitespace-normal font-bold">{lines[0]}</pre>
+        <div className={'mx-[15%] my-4 whitespace-normal' + ' ' + className}>
+          <pre className="mx-[15%] whitespace-normal font-bold">{lines[0]}</pre>
           {lines.slice(1).map((line, index) => (
             <pre
               key={line + '.' + index}

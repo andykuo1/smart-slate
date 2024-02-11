@@ -39,7 +39,7 @@ export default function ShotListLayout({
   return (
     <fieldset
       className={
-        'w-screen' +
+        'w-full' +
         ' ' +
         (isNonEmptyShotList ? '' : '') +
         ' ' +

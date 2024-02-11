@@ -18,7 +18,6 @@ export default function DocumentLayout({ className, documentId, children }) {
   const onDragComplete = useShotEntryOnDragComplete(documentId);
   useDraggableContainer(onDragComplete);
   useDraggableContainerAutoScroll(containerRef);
-  // const inlineMode = useUserStore((ctx) => ctx.editMode === 'inline');
   return (
     <article
       ref={containerRef}
