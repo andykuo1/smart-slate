@@ -21,13 +21,13 @@ export default function Toolbar() {
   return (
     <div
       className={
-        'fixed top-4 z-30 flex flex-row items-center overflow-x-auto rounded-r-full border-2 border-white bg-white shadow' +
+        'fixed top-4 z-30 flex flex-row overflow-x-auto rounded-r-full border-2 border-white bg-white shadow' +
         ' ' +
         (!open ? '-left-2 right-auto' : '-left-2 right-2 md:right-auto')
       }>
-      <div className={'flex items-center' + ' ' + (!open ? 'hidden' : '')}>
+      <div className={'flex' + ' ' + (!open ? 'hidden' : '')}>
         <title
-          className="sticky left-2 z-10 mr-2 flex h-full cursor-pointer select-none gap-2 bg-white pl-2 font-mono font-bold"
+          className="sticky left-0 z-10 mr-2 flex h-full cursor-pointer select-none items-center gap-2 bg-white pl-4 font-mono font-bold"
           onClick={() => navigate('/')}>
           <LogoIcon className="inline-block h-6 w-6" />
           EagleStudio
@@ -42,8 +42,8 @@ export default function Toolbar() {
           <SettingsSceneShotsDetailButton className="" />
           <FieldButton className="" Icon={SearchIcon} />
           <FieldButton className="" Icon={MenuIcon} />
+          <ToolbarDivider className="mx-2" />
         </div>
-        <ToolbarDivider className="mx-2" />
       </div>
       <div className="flex-1" />
       <FieldButton

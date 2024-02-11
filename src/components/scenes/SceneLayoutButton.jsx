@@ -30,7 +30,7 @@ export default function SceneLayoutButton({ className, documentId, sceneId }) {
   return (
     <FieldButtonAndMenu
       className={className}
-      title="Edit Mode"
+      title="Change scene view"
       Icon={EditModeIcon}
       onClick={() =>
         changeView(
