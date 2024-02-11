@@ -12,12 +12,15 @@ import { useDocumentStore } from '@/stores/document/use';
 import { useSettingsStore } from '@/stores/settings';
 import { useCurrentDocumentId, useUserStore } from '@/stores/user';
 
+import NavBarButton from './layout/NavBarButton';
+import NavBarLayout from './layout/NavBarLayout';
+
 /**
  * @param {object} props
  * @param {string} [props.className]
  * @param {import('react').ReactNode} props.children
  */
-export default function NavBar({ className, children }) {
+export default function Navbar({ className, children }) {
   return (
     <NavBarLayout
       className={className}
@@ -29,36 +32,6 @@ export default function NavBar({ className, children }) {
       ]}>
       {children}
     </NavBarLayout>
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} [props.className]
- * @param {Array<import('react').ReactNode>} props.items
- * @param {import('react').ReactNode} props.children
- */
-function NavBarLayout({ className, items, children }) {
-  return (
-    <>
-      <div
-        className={
-          'relative mb-20 flex h-full w-full flex-col items-center overflow-y-auto' +
-          ' ' +
-          className
-        }>
-        {children}
-      </div>
-      <nav className="fixed bottom-0 z-40 flex h-20 w-full flex-col">
-        <ul className="flex flex-1 flex-row bg-black text-white">
-          {items.map((item, index) => (
-            <li key={'nav-' + index} className="flex flex-1">
-              {item}
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </>
   );
 }
 
@@ -88,7 +61,7 @@ function NavRecordButton() {
     }
   }
   return (
-    <NavButton
+    <NavBarButton
       title="Slate"
       abbr="Slate"
       active={location.pathname.includes('/rec')}
@@ -112,7 +85,7 @@ function NavEditButton() {
     }
   }
   return (
-    <NavButton
+    <NavBarButton
       title="Edit"
       abbr="Edit"
       Icon={EditSquareIcon}
@@ -132,7 +105,7 @@ function NavTuneButton() {
     }
   }
   return (
-    <NavButton
+    <NavBarButton
       title="Project"
       abbr="Proj"
       Icon={TuneIcon}
@@ -151,7 +124,7 @@ function NavPreviewButton() {
     }
   }
   return (
-    <NavButton
+    <NavBarButton
       title="Visualize"
       abbr="Vis"
       Icon={SubscriptionsIcon}
@@ -159,62 +132,5 @@ function NavPreviewButton() {
       onClick={onClick}
       disabled={true}
     />
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} [props.className]
- * @param {string} props.title
- * @param {string} props.abbr
- * @param {import('react').ReactNode} [props.children]
- * @param {() => void} [props.onClick]
- * @param {import('react').FC<any>} props.Icon
- * @param {boolean} [props.active]
- * @param {boolean} [props.disabled]
- */
-function NavButton({
-  className,
-  title,
-  abbr,
-  children,
-  onClick,
-  Icon,
-  active,
-  disabled = !onClick,
-}) {
-  return (
-    <button
-      className={
-        // NOTE: This is pb-5, since pb-2 collides with iOS menu bar
-        'group relative flex-1 p-2 pb-5' +
-        ' ' +
-        'enabled:cursor-pointer enabled:hover:bg-white enabled:hover:text-black disabled:opacity-30' +
-        ' ' +
-        (active ? 'bg-white text-black' : '') +
-        ' ' +
-        className
-      }
-      title={title}
-      onClick={onClick}
-      disabled={disabled}>
-      {children}
-      <Icon className="pointer-events-none m-auto h-10 w-10 fill-current" />
-      <div
-        className={
-          'absolute -right-5 bottom-0 top-0 z-10 my-auto h-10 w-10 rotate-45 scale-50' +
-          ' ' +
-          'pointer-events-none' +
-          ' ' +
-          'bg-black group-enabled:group-hover:bg-white' +
-          ' ' +
-          (active ? 'bg-white' : '')
-        }
-      />
-      <label className="pointer-events-none absolute top-[50%] z-20 my-auto ml-6 hidden -translate-y-[50%] text-black sm:inline">
-        <span className="hidden lg:inline">{title}</span>
-        <span className="inline lg:hidden">{abbr}</span>
-      </label>
-    </button>
   );
 }
