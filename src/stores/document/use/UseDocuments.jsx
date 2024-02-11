@@ -11,6 +11,15 @@ export function useDocumentSceneCount(documentId) {
   return useDocumentStore((ctx) => getSceneIdsInOrder(ctx, documentId).length);
 }
 
+/**
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ */
+export function useDocumentShotCount(documentId) {
+  return useDocumentStore(
+    (ctx) => Object.keys(getDocumentById(ctx, documentId)?.takes || []).length,
+  );
+}
+
 export function useDocumentIds() {
   return useDocumentStore(useShallow((ctx) => getDocumentIds(ctx)));
 }

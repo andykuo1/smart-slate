@@ -130,7 +130,6 @@ function NavPreviewButton() {
       Icon={SubscriptionsIcon}
       active={location.pathname.includes('/pre')}
       onClick={onClick}
-      disabled={true}
     />
   );
 }

@@ -1,11 +1,12 @@
 import { useShallow } from 'zustand/react/shallow';
 
+import ShotListInBlockOrder from '@/components/shots/shotlist/ShotListInBlockOrder';
+import ShotListInSceneOrder from '@/components/shots/shotlist/ShotListInSceneOrder';
 import { useMatchMedia } from '@/libs/UseMatchMedia';
 import { getBlockIdsInOrder } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import { useUserStore } from '@/stores/user';
 
-import ShotList from '../shots/ShotList';
 import BlockEntry from './BlockEntry';
 
 /*
@@ -67,7 +68,7 @@ export default function BlockList({
             sceneId={sceneId}
             blockId={blockId}
             mode={blockViewMode}>
-            <ShotList
+            <ShotListInBlockOrder
               className="max-w-[100vw] flex-1"
               documentId={documentId}
               sceneId={sceneId}
@@ -79,7 +80,7 @@ export default function BlockList({
           </BlockEntry>
         ))}
       </div>
-      <ShotList
+      <ShotListInSceneOrder
         className="max-w-[50vw] flex-1"
         documentId={documentId}
         sceneId={sceneId}
