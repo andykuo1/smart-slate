@@ -31,8 +31,7 @@ export default function SettingsSceneShotsDetailButton({ className, onClick }) {
       className={className}
       Icon={shotListMode === 'detail' ? ShotTextIcon : ShotImageIcon}
       title="Change shotlist view"
-      onClick={handleClick}>
-      Change View
-    </SettingsFieldButton>
+      onClick={handleClick}
+    />
   );
 }

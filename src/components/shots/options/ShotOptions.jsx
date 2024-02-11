@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import MovieIcon from '@material-symbols/svg-400/rounded/movie.svg';
 import RadioButtonCheckedIcon from '@material-symbols/svg-400/rounded/radio_button_checked.svg';
 
-import SettingsSceneShotsDetailButton from '@/components/scenes/settings/SettingsSceneShotsDetailButton';
 import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
 import SettingsShotTypeSelector from '@/components/shots/settings/SettingsShotTypeSelector';
 import { useFullscreen } from '@/libs/fullscreen';
@@ -107,21 +106,17 @@ export default function ShotOptions({ documentId, sceneId, shotId }) {
   return (
     <div className="flex flex-col gap-2">
       <SettingsFieldButton
-        className="h-8 text-right outline-none"
+        className="h-8 outline-none"
         Icon={RadioButtonCheckedIcon}
         onClick={onRecordClick}>
-        <span className="pl-4">Record Take #{shotTakeCount + 1}</span>
+        <span className="ml-auto pl-4">Record Take #{shotTakeCount + 1}</span>
       </SettingsFieldButton>
       <SettingsFieldButton
-        className="h-8 text-right outline-none"
+        className="h-8 outline-none"
         Icon={MovieIcon}
         onClick={onClapperboardClick}>
-        Open Slate
+        <span className="ml-auto">Open Slate</span>
       </SettingsFieldButton>
-      <SettingsSceneShotsDetailButton
-        className="h-8 text-right outline-none"
-        onClick={(e) => setOpen(false)}
-      />
       <div className="border" />
       <div className="flex flex-1 flex-row gap-2">
         <SettingsShotTypeSelector

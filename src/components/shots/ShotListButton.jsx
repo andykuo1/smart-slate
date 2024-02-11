@@ -5,10 +5,10 @@ import {
   PopoverProvider,
 } from '@ariakit/react';
 
-import ListAltIcon from '@material-symbols/svg-400/rounded/list_alt.svg';
-
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import PopoverStyle from '@/styles/Popover.module.css';
+
+import SettingsSceneShotsDetailButton from '../scenes/settings/SettingsSceneShotsDetailButton';
 
 /**
  * @param {object} props
@@ -27,14 +27,14 @@ export default function ShotListButton({
   return (
     <div
       className={
-        'mx-4 my-2 flex items-center gap-2 rounded-xl bg-gray-100 px-2 italic opacity-60' +
+        'mx-4 my-2 flex items-center gap-2 rounded-xl bg-gray-100 px-2 italic' +
         ' ' +
         className
       }>
       <span className="flex-1" />
+      <SettingsSceneShotsDetailButton className="" />
       <PopoverProvider>
         <PopoverDisclosure className="flex gap-1 italic">
-          <ListAltIcon className="inline-block h-6 w-6 fill-current" />
           {'Shot List ' + sceneNumber}
         </PopoverDisclosure>
         <Popover className={PopoverStyle.popover} modal={true}>

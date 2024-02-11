@@ -39,35 +39,6 @@ function DrawerToolbar() {
   return <SettingsDocumentNavButton />;
 }
 
-function DrawerNavBar() {
-  const drawerActiveTab = useUserStore((ctx) => ctx.drawer.activeTab);
-  const setDrawerActiveTab = useUserStore((ctx) => ctx.setDrawerActiveTab);
-  function onOutlineClick() {
-    if (drawerActiveTab !== 'outline') {
-      setDrawerActiveTab('outline');
-    }
-  }
-  function onTuneClick() {
-    if (drawerActiveTab !== 'settings') {
-      setDrawerActiveTab('settings');
-    }
-  }
-  return (
-    <div className="mt-2 flex flex-row rounded outline">
-      <SettingsFieldButton
-        Icon={ReceiptLongIcon}
-        onClick={onOutlineClick}
-        disabled={true}
-      />
-      <SettingsFieldButton
-        Icon={TuneIcon}
-        onClick={onTuneClick}
-        disabled={true}
-      />
-    </div>
-  );
-}
-
 function DrawerContent() {
   const documentId = useCurrentDocumentId();
   const [documentTitle] = useDocumentTitle(documentId);
@@ -121,5 +92,34 @@ function DrawerContent() {
         {drawerActiveTab === 'outline' && <OutlineDrawer />}
       </div>
     </nav>
+  );
+}
+
+function DrawerNavBar() {
+  const drawerActiveTab = useUserStore((ctx) => ctx.drawer.activeTab);
+  const setDrawerActiveTab = useUserStore((ctx) => ctx.setDrawerActiveTab);
+  function onOutlineClick() {
+    if (drawerActiveTab !== 'outline') {
+      setDrawerActiveTab('outline');
+    }
+  }
+  function onTuneClick() {
+    if (drawerActiveTab !== 'settings') {
+      setDrawerActiveTab('settings');
+    }
+  }
+  return (
+    <div className="mt-2 flex flex-row rounded outline">
+      <SettingsFieldButton
+        Icon={ReceiptLongIcon}
+        onClick={onOutlineClick}
+        disabled={true}
+      />
+      <SettingsFieldButton
+        Icon={TuneIcon}
+        onClick={onTuneClick}
+        disabled={true}
+      />
+    </div>
   );
 }
