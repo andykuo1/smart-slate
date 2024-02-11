@@ -12,7 +12,7 @@ export function createStore() {
     drawer: createDrawer(),
     /** @type {'inline'|'sequence'|'textonly'|'shotonly'} */
     editMode: 'sequence',
-    /** @type {'detail'|'hidden'} */
+    /** @type {'group'|'detail'|'hidden'} */
     shotListMode: 'hidden',
     /** @type {'recorder'|'clapper'} */
     recordMode: 'clapper',

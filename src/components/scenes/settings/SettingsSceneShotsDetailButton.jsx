@@ -1,4 +1,5 @@
 import ShotTextIcon from '@material-symbols/svg-400/rounded/table_rows.svg';
+import ShotDayIcon from '@material-symbols/svg-400/rounded/view_array.svg';
 import ShotImageIcon from '@material-symbols/svg-400/rounded/window.svg';
 
 import FieldButton from '@/fields/FieldButton';
@@ -12,14 +13,15 @@ import { useUserStore } from '@/stores/user';
 export default function SettingsSceneShotsDetailButton({ className, onClick }) {
   const shotListMode = useUserStore((ctx) => ctx.shotListMode);
   const setShotListMode = useUserStore((ctx) => ctx.setShotListMode);
-  const hasActiveShot = false; // useUserStore((ctx) => Boolean(ctx.cursor?.shotId));
 
   /**
    * @type {import('react').MouseEventHandler<HTMLButtonElement>}
    */
   function handleClick(e) {
-    if (shotListMode !== 'detail' || hasActiveShot) {
+    if (shotListMode === 'hidden') {
       setShotListMode('detail');
+    } else if (shotListMode === 'detail') {
+      setShotListMode('group');
     } else {
       setShotListMode('hidden');
     }
@@ -29,9 +31,23 @@ export default function SettingsSceneShotsDetailButton({ className, onClick }) {
   return (
     <FieldButton
       className={className}
-      Icon={shotListMode === 'detail' ? ShotTextIcon : ShotImageIcon}
+      Icon={getShotListViewIcon(shotListMode)}
       title="Change shotlist view"
       onClick={handleClick}
     />
   );
+}
+
+/**
+ * @param {string} mode
+ */
+function getShotListViewIcon(mode) {
+  switch (mode) {
+    case 'detail':
+      return ShotTextIcon;
+    case 'hidden':
+      return ShotImageIcon;
+    case 'group':
+      return ShotDayIcon;
+  }
 }

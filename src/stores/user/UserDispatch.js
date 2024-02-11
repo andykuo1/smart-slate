@@ -76,7 +76,7 @@ function setEditMode(store, editMode) {
 /**
  *
  * @param {import('./UserStore').Store} store
- * @param {'detail'|'hidden'} shotListMode
+ * @param {'group'|'detail'|'hidden'} shotListMode
  */
 function setShotListMode(store, shotListMode) {
   store.shotListMode = shotListMode;

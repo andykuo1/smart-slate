@@ -22,6 +22,7 @@
 - Remove shot details button
 - Remove scene and shot focus views
 
+- Fix screenplay margins to match
 - Fix scene renumbering not skipping last index
 
 # v0.1.15
