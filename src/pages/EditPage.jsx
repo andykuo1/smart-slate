@@ -1,3 +1,4 @@
+import Toolbar from '@/components/Toolbar';
 import DocumentLayout from '@/components/documents/DocumentLayout';
 import DocumentTitle from '@/components/documents/DocumentTitle';
 import SceneList from '@/components/scenes/SceneList';
@@ -13,6 +14,7 @@ export default function EditPage() {
     <PageLayout className="bg-white text-black">
       <NavBar>
         <Drawer darkMode={false}>
+          <Toolbar />
           <DocumentLayout documentId={documentId}>
             <DocumentTitle className="pt-20" documentId={documentId} />
             <SceneList documentId={documentId} />

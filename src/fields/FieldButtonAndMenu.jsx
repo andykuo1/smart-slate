@@ -11,6 +11,7 @@ import PopoverStyle from '@/styles/Popover.module.css';
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {boolean} [props.inverted]
  * @param {string} props.title
  * @param {import('react').FC<any>} [props.Icon]
@@ -19,6 +20,7 @@ import PopoverStyle from '@/styles/Popover.module.css';
  * @param {import('react').ReactNode} [props.children]
  */
 export default function FieldButtonAndMenu({
+  className,
   inverted,
   title,
   Icon,
@@ -29,11 +31,13 @@ export default function FieldButtonAndMenu({
   return (
     <PopoverProvider>
       <FieldButtonAndMenuDisclosure
+        className={className}
         inverted={inverted}
         Icon={Icon}
         title={title}
-        onClick={onClick}
-      />
+        onClick={onClick}>
+        {children}
+      </FieldButtonAndMenuDisclosure>
       <Popover className={PopoverStyle.popover}>
         <PopoverArrow className={PopoverStyle.arrow} />
         <FieldButtonAndMenuContent title={title} items={items} />
@@ -44,6 +48,7 @@ export default function FieldButtonAndMenu({
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {boolean} [props.inverted]
  * @param {import('react').FC<any>} [props.Icon]
  * @param {string} [props.title]
@@ -51,6 +56,7 @@ export default function FieldButtonAndMenu({
  * @param {import('react').ReactNode} [props.children]
  */
 function FieldButtonAndMenuDisclosure({
+  className,
   inverted,
   Icon,
   title,
@@ -61,6 +67,7 @@ function FieldButtonAndMenuDisclosure({
   return (
     <PopoverDisclosure toggleOnClick={false}>
       <FieldButton
+        className={className}
         inverted={inverted}
         Icon={Icon}
         title={title}

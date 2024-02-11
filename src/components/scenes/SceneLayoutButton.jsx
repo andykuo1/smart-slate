@@ -4,32 +4,32 @@ import SubjectIcon from '@material-symbols/svg-400/rounded/subject.svg';
 import VerticalSplitIcon from '@material-symbols/svg-400/rounded/vertical_split.svg';
 import ViewDayIcon from '@material-symbols/svg-400/rounded/view_day.svg';
 
+import FieldButton from '@/fields/FieldButton';
 import FieldButtonAndMenu from '@/fields/FieldButtonAndMenu';
-import { useScrollIntoView } from '@/libs/UseScrollIntoView';
 import { useUserStore } from '@/stores/user';
 
-import FieldButton from '../../fields/FieldButton';
+import { scrollSceneFocusIntoView } from './SceneFocus';
 
 /**
  * @param {object} props
- * @param {import('react').RefObject<HTMLDivElement>} props.containerRef
+ * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  */
-export default function SceneCollapse({ containerRef }) {
+export default function SceneLayoutButton({ className, documentId, sceneId }) {
   const editMode = useUserStore((ctx) => ctx.editMode);
   const setEditMode = useUserStore((ctx) => ctx.setEditMode);
   const EditModeIcon = getScreenplayViewIcon(editMode);
-  const scrollIntoView = useScrollIntoView(containerRef);
 
   /** @param {ScreenplayView} mode */
   function changeView(mode) {
     setEditMode(mode);
-    scrollIntoView();
+    scrollSceneFocusIntoView(sceneId);
   }
 
   return (
     <FieldButtonAndMenu
+      className={className}
       title="Edit Mode"
       Icon={EditModeIcon}
       onClick={() =>
