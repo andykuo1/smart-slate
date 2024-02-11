@@ -1,7 +1,8 @@
 import GridStyle from '@/components/shots/GridStyle.module.css';
 import ShotEntryDragged from '@/components/shots/ShotEntryDragged';
 import ShotEntryNew from '@/components/shots/ShotEntryNew';
-import ShotListButton from '@/components/shots/ShotListButton';
+
+import ShotListHeader from './ShotListHeader';
 
 /**
  * @param {object} props
@@ -46,7 +47,7 @@ export default function ShotListLayout({
         (hidden ? /* NOTE: Quick hideaway to not lag. */ 'hidden' : className)
       }>
       <legend className="w-full">
-        <ShotListButton
+        <ShotListHeader
           className={' ' + (!isNonEmptyShotList && 'hidden')}
           documentId={documentId}
           sceneId={sceneId}

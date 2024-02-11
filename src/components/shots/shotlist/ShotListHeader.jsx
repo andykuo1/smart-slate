@@ -5,10 +5,9 @@ import {
   PopoverProvider,
 } from '@ariakit/react';
 
+import SettingsSceneShotsRenumberButton from '@/components/scenes/settings/SettingsSceneShotsRenumberButton';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import PopoverStyle from '@/styles/Popover.module.css';
-
-import SettingsSceneShotsRenumberButton from '../scenes/settings/SettingsSceneShotsRenumberButton';
 
 /**
  * @param {object} props
@@ -17,7 +16,7 @@ import SettingsSceneShotsRenumberButton from '../scenes/settings/SettingsSceneSh
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  */
-export default function ShotListButton({
+export default function ShotListHeader({
   className,
   documentId,
   sceneId,
