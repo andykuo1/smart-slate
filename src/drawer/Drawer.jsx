@@ -18,7 +18,6 @@ import {
 import SettingsFieldButton from '../components/settings/SettingsFieldButton';
 import OutlineDrawer from './OutlineDrawer';
 import SettingsDocumentNavButton from './SettingsDocumentNavButton';
-import SettingsDrawer from './SettingsDrawer';
 
 /**
  * @param {object} props
@@ -120,7 +119,6 @@ function DrawerContent() {
       </div>
       <div className="w-full">
         {drawerActiveTab === 'outline' && <OutlineDrawer />}
-        {drawerActiveTab === 'settings' && <SettingsDrawer />}
       </div>
     </nav>
   );

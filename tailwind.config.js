@@ -4,9 +4,11 @@ import plugin from 'tailwindcss/plugin';
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    screens: {
-      short: { raw: '(max-height: 400px)' },
-      tall: { raw: '(min-height: 400px)' },
+    extend: {
+      screens: {
+        short: { raw: '(max-height: 400px)' },
+        tall: { raw: '(min-height: 400px)' },
+      },
     },
   },
   plugins: [
