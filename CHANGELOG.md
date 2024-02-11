@@ -16,8 +16,8 @@
 - Add show take button for drawer
 - Add text-only and shot-only scene modes
 - Add toolbar
-- Add preview page
 - Add dark mode
+- Add fixed width to screenplay text
 
 - Remove shot details button
 - Remove scene and shot focus views

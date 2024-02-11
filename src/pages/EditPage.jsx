@@ -89,7 +89,7 @@ function SceneTextBlocks({ documentId, sceneId }) {
   return (
     <div className={'flex-1' + ' ' + (hidden && 'hidden')}>
       <SceneEntry
-        className="mx-auto max-w-xl"
+        className="mx-auto max-w-[6in]"
         documentId={documentId}
         sceneId={sceneId}
       />
