@@ -6,7 +6,6 @@ import { useSceneHeading } from '@/stores/document';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 
 import { getSceneFocusId } from './SceneFocus';
-import SceneLayoutButton from './SceneLayoutButton';
 import SceneNumber from './SceneNumber';
 import SceneStatus from './SceneStatus';
 
@@ -58,7 +57,6 @@ export default function SceneHeader({ className, documentId, sceneId }) {
         (isActive && 'bg-black text-white')
       }>
       <SceneNumber sceneNumber={sceneNumber} onClick={onClick} />
-      <SceneLayoutButton documentId={documentId} sceneId={sceneId} />
       <input
         className="w-full flex-1 bg-transparent px-2 py-6 text-xl font-bold"
         type="text"

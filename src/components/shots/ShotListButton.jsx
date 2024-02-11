@@ -8,8 +8,6 @@ import {
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import PopoverStyle from '@/styles/Popover.module.css';
 
-import SettingsSceneShotsDetailButton from '../scenes/settings/SettingsSceneShotsDetailButton';
-
 /**
  * @param {object} props
  * @param {string} [props.className]
@@ -32,7 +30,6 @@ export default function ShotListButton({
         className
       }>
       <span className="flex-1" />
-      <SettingsSceneShotsDetailButton className="" />
       <PopoverProvider>
         <PopoverDisclosure className="flex gap-1 italic">
           {'Shot List ' + sceneNumber}
