@@ -1,3 +1,5 @@
+import AddIcon from '@material-symbols/svg-400/rounded/add.svg';
+
 import { createShot } from '@/stores/document/DocumentStore';
 import { useDocumentStore } from '@/stores/document/use';
 
@@ -28,7 +30,7 @@ export default function ShotListAddButton({
     addShot(documentId, sceneId, blockId, newShot);
   }
 
-  const ShotIcon = getShotTypeIcon(shotType);
+  const ShotIcon = !shotType ? AddIcon : getShotTypeIcon(shotType);
   return (
     <button
       className={'h-full w-full' + ' ' + className}
