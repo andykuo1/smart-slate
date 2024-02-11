@@ -10,7 +10,7 @@ export default function PreviewPage() {
   const documentId = useCurrentDocumentId();
   const shotListMode = useUserStore((ctx) => ctx.shotListMode === 'detail');
   return (
-    <PageLayout className="bg-white text-black">
+    <PageLayout className="bg-white text-black dark:bg-gray-900 dark:text-white">
       <NavBar>
         <Drawer darkMode={false}>
           <Toolbar />
