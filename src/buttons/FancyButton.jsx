@@ -27,7 +27,7 @@ export default function FancyButton({
         ' ' +
         (inverted
           ? 'from-black to-gray-900 text-white disabled:border-gray-700 disabled:text-gray-400'
-          : 'from-white to-gray-100 text-gray-800 disabled:border-gray-200 disabled:text-gray-600') +
+          : 'from-white to-gray-100 text-gray-800 disabled:border-gray-200 disabled:text-gray-600 dark:from-gray-800 dark:to-gray-700 dark:text-white dark:disabled:border-gray-700 dark:disabled:text-gray-400') +
         ' ' +
         'rounded-full bg-gradient-to-br' +
         ' ' +

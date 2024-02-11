@@ -97,9 +97,9 @@ function ProjectSelectorOption({ className, documentId }) {
       className={
         'relative max-h-[30vmin] w-[8rem] min-w-[8rem] max-w-[8rem] overflow-hidden text-center' +
         ' ' +
-        'mx-2 my-4 rounded-xl bg-gray-100 p-2' +
+        'mx-2 my-4 rounded-xl bg-gray-100 p-2 dark:bg-gray-800' +
         ' ' +
-        'hover:cursor-pointer hover:bg-white' +
+        'hover:cursor-pointer hover:bg-white dark:hover:bg-gray-700' +
         ' ' +
         className
       }

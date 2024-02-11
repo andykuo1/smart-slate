@@ -18,6 +18,18 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // NOTE: https://tailwindcss.com/docs/dark-mode#supporting-system-preference-and-manual-selection
+      if (
+        localStorage.getItem('theme') === 'dark' ||
+        (!localStorage.getItem('theme') &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches)
+      ) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
