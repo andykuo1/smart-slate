@@ -13,7 +13,10 @@ export default function EditPage() {
   return (
     <PageLayout className="bg-white text-black dark:bg-gray-900 dark:text-white">
       <NavBar>
-        <Drawer darkMode={false}>
+        <Drawer
+          darkMode={false}
+          className="bottom-20"
+          containerClassName="bottom-20">
           <Toolbar />
           <DocumentLayout documentId={documentId}>
             <DocumentTitle className="pt-20" documentId={documentId} />

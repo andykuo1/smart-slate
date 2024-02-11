@@ -22,12 +22,21 @@ import SettingsDocumentNavButton from './SettingsDocumentNavButton';
 /**
  * @param {object} props
  * @param {boolean} [props.darkMode]
+ * @param {string} [props.className]
+ * @param {string} [props.containerClassName]
  * @param {import('react').ReactNode} props.children
  */
-export default function Drawer({ darkMode, children }) {
+export default function Drawer({
+  className,
+  containerClassName,
+  darkMode,
+  children,
+}) {
   return (
     <DrawerLayout
       darkMode={darkMode}
+      className={className}
+      containerClassName={containerClassName}
       toolbar={<DrawerToolbar />}
       content={<DrawerContent />}>
       {children}

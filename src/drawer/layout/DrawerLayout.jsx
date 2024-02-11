@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
 
 import { useUserStore } from '@/stores/user';
 
@@ -9,19 +8,26 @@ import DrawerToolbarLayout from './DrawerToolbarLayout';
 /**
  *
  * @param {object} props
+ * @param {string} [props.className]
+ * @param {string} [props.containerClassName]
  * @param {import('react').ReactNode} props.toolbar
  * @param {import('react').ReactNode} props.content
  * @param {import('react').ReactNode} props.children
  * @param {boolean} [props.darkMode]
  */
-export default function DrawerLayout({ toolbar, content, children, darkMode }) {
+export default function DrawerLayout({
+  className,
+  containerClassName,
+  toolbar,
+  content,
+  children,
+  darkMode,
+}) {
   const drawerRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const toolbarRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const drawerOpen = useUserStore((ctx) => ctx.drawer.open);
   const setDrawerActiveTab = useUserStore((ctx) => ctx.setDrawerActiveTab);
   const toggleDrawer = useUserStore((ctx) => ctx.toggleDrawer);
-  const location = useLocation();
-  const hasNavBar = location.pathname.includes('/edit');
 
   function onClick() {
     toggleDrawer();
@@ -49,7 +55,7 @@ export default function DrawerLayout({ toolbar, content, children, darkMode }) {
   return (
     <>
       <DrawerToolbarLayout
-        className={hasNavBar ? 'bottom-20' : ''}
+        className={className}
         containerRef={toolbarRef}
         open={drawerOpen}
         toolbar={toolbar}>
@@ -68,7 +74,7 @@ export default function DrawerLayout({ toolbar, content, children, darkMode }) {
           ' ' +
           (drawerOpen ? 'translate-x-0' : 'translate-x-[100%]') +
           ' ' +
-          (hasNavBar ? 'bottom-20' : '')
+          containerClassName
         }>
         {content}
       </div>

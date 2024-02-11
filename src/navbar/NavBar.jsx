@@ -27,8 +27,8 @@ export default function Navbar({ className, children }) {
       items={[
         <NavTuneButton />,
         <NavEditButton />,
-        <NavRecordButton />,
         <NavPreviewButton />,
+        <NavRecordButton />,
       ]}>
       {children}
     </NavBarLayout>
@@ -125,8 +125,8 @@ function NavPreviewButton() {
   }
   return (
     <NavBarButton
-      title="Visualize"
-      abbr="Vis"
+      title="Pre-vis"
+      abbr="Pre"
       Icon={SubscriptionsIcon}
       active={location.pathname.includes('/pre')}
       onClick={onClick}

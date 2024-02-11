@@ -12,7 +12,10 @@ export default function PreviewPage() {
   return (
     <PageLayout className="bg-white text-black dark:bg-gray-900 dark:text-white">
       <NavBar>
-        <Drawer darkMode={false}>
+        <Drawer
+          className="bottom-20"
+          containerClassName="bottom-20"
+          darkMode={false}>
           <Toolbar />
           <ShotListInDocumentOrder
             className="my-20"
