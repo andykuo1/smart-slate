@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import ArrowBackIcon from '@material-symbols/svg-400/rounded/arrow_back.svg';
+import ArrowForwardIcon from '@material-symbols/svg-400/rounded/arrow_forward.svg';
 import DoorOpenIcon from '@material-symbols/svg-400/rounded/door_open.svg';
 import HomeIcon from '@material-symbols/svg-400/rounded/home.svg';
 import ReceiptLongIcon from '@material-symbols/svg-400/rounded/receipt_long.svg';
@@ -70,6 +70,7 @@ function DrawerContent() {
       navigate('/edit');
       setUserCursor(documentId, '', '', '');
     }
+    toggleDrawer(false);
   }
 
   return (
@@ -78,8 +79,8 @@ function DrawerContent() {
         <div className="flex-1">
           <FieldButton
             className="mr-auto"
-            Icon={ArrowBackIcon}
-            onClick={onBackClick}
+            Icon={isBackToHome ? DoorOpenIcon : HomeIcon}
+            onClick={onHomeClick}
           />
         </div>
         <div className="flex flex-col items-center">
@@ -92,8 +93,8 @@ function DrawerContent() {
         <div className="flex-1">
           <FieldButton
             className="ml-auto"
-            Icon={isBackToHome ? DoorOpenIcon : HomeIcon}
-            onClick={onHomeClick}
+            Icon={ArrowForwardIcon}
+            onClick={onBackClick}
           />
         </div>
       </div>

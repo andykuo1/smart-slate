@@ -38,7 +38,7 @@ export default function FieldButtonAndMenu({
         onClick={onClick}>
         {children}
       </FieldButtonAndMenuDisclosure>
-      <Popover className={PopoverStyle.popover}>
+      <Popover className={PopoverStyle.popover} modal={true}>
         <PopoverArrow className={PopoverStyle.arrow} />
         <FieldButtonAndMenuContent title={title} items={items} />
       </Popover>
