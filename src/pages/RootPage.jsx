@@ -25,7 +25,7 @@ export default function RootPage() {
         <ScannerButton />
       </div>
       <ProjectSelector className="mb-auto mt-2" />
-      <DarkModeToggle className="absolute left-0 top-0" />
+      <DarkModeToggle className="absolute left-2 top-2" />
       <MadeWithLove />
       {/* <ProfilePopover /> */}
     </PageLayout>

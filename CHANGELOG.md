@@ -15,9 +15,12 @@
 - Add navbar back :D
 - Add show take button for drawer
 - Add text-only and shot-only scene modes
+- Add toolbar
+- Add preview page
+- Add dark mode
 
 - Remove shot details button
-- Remove scene and shot focus screens
+- Remove scene and shot focus views
 
 - Fix scene renumbering not skipping last index
 
