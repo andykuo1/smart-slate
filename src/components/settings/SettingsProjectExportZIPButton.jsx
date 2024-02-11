@@ -11,7 +11,7 @@ import { getIDBKeyFromTakeId } from '@/stores/document/value';
 import { useCurrentDocumentId } from '@/stores/user';
 import { downloadURLImpl } from '@/utils/Downloader';
 
-import SettingsFieldButton from './SettingsFieldButton';
+import FieldButton from '../../fields/FieldButton';
 
 export default function SettingsProjectExportZIPButton() {
   const [disabled, setDisabled] = useState(false);
@@ -71,12 +71,9 @@ export default function SettingsProjectExportZIPButton() {
   );
 
   return (
-    <SettingsFieldButton
-      Icon={DownloadIcon}
-      onClick={handleClick}
-      disabled={disabled}>
+    <FieldButton Icon={DownloadIcon} onClick={handleClick} disabled={disabled}>
       Export all as .zip
-    </SettingsFieldButton>
+    </FieldButton>
   );
 }
 

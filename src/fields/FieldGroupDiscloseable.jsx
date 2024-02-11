@@ -15,7 +15,7 @@ import { useScrollIntoView } from '@/libs/UseScrollIntoView';
  * @param {boolean} [props.defaultOpen]
  * @param {import('react').ReactNode} props.children
  */
-export default function SettingsFieldGroupDiscloseable({
+export default function FieldGroupDiscloseable({
   title,
   defaultOpen,
   children,

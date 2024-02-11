@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import UploadIcon from '@material-symbols/svg-400/rounded/upload.svg';
 
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import FieldButton from '@/fields/FieldButton';
 import { useMultiFileInput } from '@/libs/UseMultiFileInput';
 import { useTakeExporter } from '@/serdes/UseTakeExporter';
 
@@ -33,9 +33,9 @@ export default function SettingsShotTakesImportButton({
   const [render, click] = useMultiFileInput('video/*', onFile);
 
   return (
-    <SettingsFieldButton className="w-auto" Icon={UploadIcon} onClick={click}>
+    <FieldButton className="w-auto" Icon={UploadIcon} onClick={click}>
       Import take
       {render()}
-    </SettingsFieldButton>
+    </FieldButton>
   );
 }

@@ -14,7 +14,7 @@ import MarkdownArea from '@/buttons/MarkdownArea';
 import DialogStyle from '@/styles/Dialog.module.css';
 import Codecs from '@/values/Codecs';
 
-import SettingsFieldButton from './SettingsFieldButton';
+import FieldButton from '../../fields/FieldButton';
 
 export default function NerdInfoMenuItem() {
   const [open, setOpen] = useState(false);
@@ -35,9 +35,9 @@ export default function NerdInfoMenuItem() {
 
   return (
     <>
-      <SettingsFieldButton Icon={DeviceInfoIcon} onClick={() => setOpen(true)}>
+      <FieldButton Icon={DeviceInfoIcon} onClick={() => setOpen(true)}>
         Show nerd info
-      </SettingsFieldButton>
+      </FieldButton>
       <Dialog
         className={DialogStyle.dialog}
         open={open}

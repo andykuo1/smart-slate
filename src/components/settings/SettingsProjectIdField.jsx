@@ -11,14 +11,13 @@ import { useRef, useState } from 'react';
 import LockIcon from '@material-symbols/svg-400/rounded/lock-fill.svg';
 import LockOpenIcon from '@material-symbols/svg-400/rounded/lock_open.svg';
 
+import FieldInput from '@/fields/FieldInput';
 import { useResolveDocumentProjectId } from '@/serdes/UseResolveDocumentProjectId';
 import { getDocumentById } from '@/stores/document';
 import { getDocumentSettingsById } from '@/stores/document/get';
 import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentDocumentId } from '@/stores/user';
 import PopoverStyle from '@/styles/Popover.module.css';
-
-import SettingsFieldInput from './SettingsFieldInput';
 
 export default function SettingsProjectIdField() {
   const inputRef = useRef(/** @type {HTMLInputElement|null} */ (null));
@@ -76,7 +75,7 @@ export default function SettingsProjectIdField() {
 
   return (
     <PopoverProvider>
-      <SettingsFieldInput
+      <FieldInput
         title="Project ID:"
         id="project-id"
         placeholder={projectId}
@@ -109,7 +108,7 @@ export default function SettingsProjectIdField() {
             humans).
           </p>
         </Popover>
-      </SettingsFieldInput>
+      </FieldInput>
     </PopoverProvider>
   );
 }

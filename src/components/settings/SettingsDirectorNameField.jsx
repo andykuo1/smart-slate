@@ -1,8 +1,7 @@
+import FieldInput from '@/fields/FieldInput';
 import { getDocumentSettingsById } from '@/stores/document/get';
 import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentDocumentId } from '@/stores/user';
-
-import SettingsFieldInput from './SettingsFieldInput';
 
 /**
  * @param {object} props
@@ -26,7 +25,7 @@ export default function ClapperDirectorNameField({ className }) {
   }
 
   return (
-    <SettingsFieldInput
+    <FieldInput
       className={className}
       title="Director Name:"
       id="director-name"

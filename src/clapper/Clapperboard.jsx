@@ -4,13 +4,13 @@ import AddIcon from '@material-symbols/svg-400/rounded/add.svg';
 import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg';
 import ThumbUpIcon from '@material-symbols/svg-400/rounded/thumb_up.svg';
 
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
 import ShotThumbnail from '@/components/shots/ShotThumbnail';
 import {
   formatSceneNumber,
   formatShotNumber,
   formatTakeNumber,
 } from '@/components/takes/TakeNameFormat';
+import FieldButton from '@/fields/FieldButton';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useShotHash } from '@/serdes/UseResolveShotHash';
 import { useShotNumber } from '@/serdes/UseResolveShotNumber';
@@ -246,15 +246,15 @@ function ClapperControlFields({
     <div className="flex w-full items-center">
       <ClapperVerticalLabel>CTRL</ClapperVerticalLabel>
       <div className="flex flex-1 flex-col items-start gap-2 p-2">
-        <SettingsFieldButton
+        <FieldButton
           className="w-full text-left"
           Icon={AddIcon}
           title="New take"
           onClick={onNextClick}
           disabled={!takeId}>
           <span className="ml-2">New take</span>
-        </SettingsFieldButton>
-        <SettingsFieldButton
+        </FieldButton>
+        <FieldButton
           className={
             'w-[50%] text-left outline-none' +
             ' ' +
@@ -265,7 +265,7 @@ function ClapperControlFields({
           onClick={onPrintClick}
           disabled={!takeId}>
           <span className="ml-2">PRINT</span>
-        </SettingsFieldButton>
+        </FieldButton>
       </div>
     </div>
   );

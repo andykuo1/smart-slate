@@ -2,7 +2,7 @@ import { useCallback, useRef } from 'react';
 
 import AddPhotoAlternativeIcon from '@material-symbols/svg-400/rounded/add_photo_alternate.svg';
 
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import FieldButton from '@/fields/FieldButton';
 import { useDocumentStore } from '@/stores/document/use';
 import {
   MAX_THUMBNAIL_HEIGHT,
@@ -48,7 +48,7 @@ export default function SettingsShotReferenceImageField({
   );
   return (
     <>
-      <SettingsFieldButton
+      <FieldButton
         className="w-auto"
         Icon={AddPhotoAlternativeIcon}
         onClick={() => inputCaptureRef.current?.click()}

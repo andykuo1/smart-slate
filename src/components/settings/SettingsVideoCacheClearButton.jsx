@@ -7,7 +7,7 @@ import { clearVideoCache } from '@/recorder/cache/VideoCache';
 import { useCurrentDocumentId } from '@/stores/user';
 import { formatBytes } from '@/utils/StringFormat';
 
-import SettingsFieldButton from './SettingsFieldButton';
+import FieldButton from '../../fields/FieldButton';
 
 export default function SettingsVideoCacheClearButton() {
   const documentId = useCurrentDocumentId();
@@ -21,12 +21,12 @@ export default function SettingsVideoCacheClearButton() {
   );
 
   return (
-    <SettingsFieldButton Icon={DeleteIcon} onClick={handleClick}>
+    <FieldButton Icon={DeleteIcon} onClick={handleClick}>
       <div className="flex flex-1 flex-col px-2">
         <span>Clear video cache</span>
         <VideoCacheUsageProgress />
       </div>
-    </SettingsFieldButton>
+    </FieldButton>
   );
 }
 

@@ -8,7 +8,7 @@ import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentDocumentId } from '@/stores/user';
 import { downloadText } from '@/utils/Downloader';
 
-import SettingsFieldButton from './SettingsFieldButton';
+import FieldButton from '../../fields/FieldButton';
 
 export default function SettingsProjectExportJSONButton() {
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
@@ -31,8 +31,8 @@ export default function SettingsProjectExportJSONButton() {
   );
 
   return (
-    <SettingsFieldButton Icon={DownloadIcon} onClick={handleClick}>
+    <FieldButton Icon={DownloadIcon} onClick={handleClick}>
       Export project file
-    </SettingsFieldButton>
+    </FieldButton>
   );
 }

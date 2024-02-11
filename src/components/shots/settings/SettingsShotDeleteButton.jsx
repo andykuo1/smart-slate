@@ -1,6 +1,6 @@
 import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
 
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import FieldButton from '@/fields/FieldButton';
 import { isShotEmpty } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
@@ -33,12 +33,12 @@ export default function SettingsShotDeleteButton({
   }
 
   return (
-    <SettingsFieldButton
+    <FieldButton
       className="w-auto"
       Icon={DeleteIcon}
       onClick={onClick}
       disabled={!emptyShot}>
       Delete shot
-    </SettingsFieldButton>
+    </FieldButton>
   );
 }

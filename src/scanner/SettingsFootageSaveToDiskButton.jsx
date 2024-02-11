@@ -1,6 +1,6 @@
 import SaveIcon from '@material-symbols/svg-400/rounded/save.svg';
 
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import FieldButton from '@/fields/FieldButton';
 
 import {
   createScannerChangeEvent,
@@ -32,7 +32,7 @@ export default function SettingsFootageSaveToDiskButton({
     console.log(`[TakeScanner] Renamed videos.`);
   }
   return (
-    <SettingsFieldButton Icon={SaveIcon} onClick={onClick} disabled={disabled}>
+    <FieldButton Icon={SaveIcon} onClick={onClick} disabled={disabled}>
       Rename files on disk
       {
         <span className="mx-auto mt-4 block w-[80%]">
@@ -40,7 +40,7 @@ export default function SettingsFootageSaveToDiskButton({
           Otherwise, download the CSV file below and use a batch rename tool.
         </span>
       }
-    </SettingsFieldButton>
+    </FieldButton>
   );
 }
 

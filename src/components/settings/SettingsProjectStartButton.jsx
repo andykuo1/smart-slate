@@ -6,7 +6,7 @@ import ArrowForwardIcon from '@material-symbols/svg-400/rounded/arrow_forward.sv
 import { useResolveDocumentProjectId } from '@/serdes/UseResolveDocumentProjectId';
 import { useCurrentDocumentId } from '@/stores/user';
 
-import SettingsFieldButton from './SettingsFieldButton';
+import FieldButton from '../../fields/FieldButton';
 
 export default function SettingsProjectStartButton() {
   const navigate = useNavigate();
@@ -23,11 +23,8 @@ export default function SettingsProjectStartButton() {
   );
 
   return (
-    <SettingsFieldButton
-      inverted={true}
-      Icon={ArrowForwardIcon}
-      onClick={onStart}>
+    <FieldButton inverted={true} Icon={ArrowForwardIcon} onClick={onStart}>
       Start!
-    </SettingsFieldButton>
+    </FieldButton>
   );
 }

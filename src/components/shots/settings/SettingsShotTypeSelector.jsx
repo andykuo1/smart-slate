@@ -1,4 +1,4 @@
-import SettingsFieldSelect from '@/components/settings/SettingsFieldSelect';
+import FieldSelect from '@/fields/FieldSelect';
 
 import { useShotTypeChange } from '../UseShotType';
 
@@ -19,7 +19,7 @@ export default function SettingsShotTypeSelector({
 
   const selectId = 'shotType-' + shotId;
   return (
-    <SettingsFieldSelect
+    <FieldSelect
       className={'flex flex-row' + ' ' + className}
       title=""
       id={selectId}
@@ -33,6 +33,6 @@ export default function SettingsShotTypeSelector({
           {shotType}
         </option>
       ))}
-    </SettingsFieldSelect>
+    </FieldSelect>
   );
 }

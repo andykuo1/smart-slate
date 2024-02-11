@@ -1,6 +1,6 @@
 import FolderOpenIcon from '@material-symbols/svg-400/rounded/folder_open.svg';
 
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import FieldButton from '@/fields/FieldButton';
 
 import { openDirectory } from './DirectoryPicker';
 import {
@@ -82,12 +82,9 @@ export default function SettingsFootageDirectoryButton({
   }
 
   return (
-    <SettingsFieldButton
-      Icon={FolderOpenIcon}
-      onClick={onClick}
-      disabled={disabled}>
+    <FieldButton Icon={FolderOpenIcon} onClick={onClick} disabled={disabled}>
       Scan directory
-    </SettingsFieldButton>
+    </FieldButton>
   );
 }
 

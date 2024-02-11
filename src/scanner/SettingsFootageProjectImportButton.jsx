@@ -1,7 +1,7 @@
 import PlaylistAddIcon from '@material-symbols/svg-400/rounded/playlist_add.svg';
 import PlaylistAddCheckIcon from '@material-symbols/svg-400/rounded/playlist_add_check.svg';
 
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import FieldButton from '@/fields/FieldButton';
 import {
   findBlockWithShotId,
   findSceneWithBlockId,
@@ -211,18 +211,15 @@ export default function SettingsFootageSaveToDiskButton({
 
   return (
     <>
-      <SettingsFieldButton
+      <FieldButton
         Icon={PlaylistAddCheckIcon}
         onClick={onImportVerified}
         disabled={!documentId || disabled}>
         Import verified into project
-      </SettingsFieldButton>
-      <SettingsFieldButton
-        Icon={PlaylistAddIcon}
-        onClick={onImportAll}
-        disabled={true}>
+      </FieldButton>
+      <FieldButton Icon={PlaylistAddIcon} onClick={onImportAll} disabled={true}>
         Import ALL into project
-      </SettingsFieldButton>
+      </FieldButton>
     </>
   );
 }

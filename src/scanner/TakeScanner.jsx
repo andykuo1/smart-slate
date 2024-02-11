@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@material-symbols/svg-400/rounded/arrow_back.svg';
 
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import FieldButton from '@/fields/FieldButton';
 import { useCurrentDocumentId } from '@/stores/user';
 
 import SettingsFootageAnalyzeButton from './SettingsFootageAnalyzeButton';
@@ -53,9 +53,9 @@ export default function TakeScanner({ className, onChange }) {
         ' ' +
         className
       }>
-      <SettingsFieldButton Icon={ArrowBackIcon} onClick={onBackClick}>
+      <FieldButton Icon={ArrowBackIcon} onClick={onBackClick}>
         Back
-      </SettingsFieldButton>
+      </FieldButton>
       <SettingsFootageDirectoryButton
         outputRef={outputRef}
         onChange={onScannerChange}

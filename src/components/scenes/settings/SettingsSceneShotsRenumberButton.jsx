@@ -2,7 +2,7 @@ import { usePopoverContext } from '@ariakit/react';
 
 import OneTwoThreeIcon from '@material-symbols/svg-400/rounded/format_list_numbered.svg';
 
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import FieldButton from '@/fields/FieldButton';
 import { useDocumentStore } from '@/stores/document/use';
 
 /**
@@ -21,7 +21,7 @@ export default function SettingsSceneShotsRenumberButton({
     store?.hide();
   }
   return (
-    <SettingsFieldButton
+    <FieldButton
       className="w-auto"
       Icon={OneTwoThreeIcon}
       title="Re-number shots"

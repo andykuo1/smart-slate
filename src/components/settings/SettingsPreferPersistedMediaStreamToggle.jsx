@@ -1,6 +1,5 @@
+import FieldToggle from '@/fields/FieldToggle';
 import { useSettingsStore } from '@/stores/settings';
-
-import SettingsFieldToggle from './SettingsFieldToggle';
 
 export default function SettingsPreferNativeRecorderToggle() {
   const enabled = useSettingsStore(
@@ -11,8 +10,8 @@ export default function SettingsPreferNativeRecorderToggle() {
   );
 
   return (
-    <SettingsFieldToggle value={enabled} onClick={() => setEnabled(!enabled)}>
+    <FieldToggle value={enabled} onClick={() => setEnabled(!enabled)}>
       Force always-on stream
-    </SettingsFieldToggle>
+    </FieldToggle>
   );
 }

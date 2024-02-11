@@ -1,7 +1,7 @@
 import AddBoxIcon from '@material-symbols/svg-400/rounded/add_box.svg';
 import EditDocumentIcon from '@material-symbols/svg-400/rounded/edit_note.svg';
 
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import FieldButton from '@/fields/FieldButton';
 import { createShot } from '@/stores/document/DocumentStore';
 import { useDocumentStore } from '@/stores/document/use';
 
@@ -31,12 +31,12 @@ export default function BlockContentToolbar({
 
   return (
     <div className="absolute right-0 top-0 z-10 flex flex-col rounded p-1 group-hover:bg-white group-hover:bg-opacity-60">
-      <SettingsFieldButton
+      <FieldButton
         className="p-0 opacity-0 group-hover:opacity-100"
         Icon={EditDocumentIcon}
         onClick={onEditClick}
       />
-      <SettingsFieldButton
+      <FieldButton
         className="p-0 opacity-0 group-hover:opacity-100"
         Icon={AddBoxIcon}
         onClick={onClick}

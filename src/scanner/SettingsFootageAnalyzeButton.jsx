@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import PlagiarismIcon from '@material-symbols/svg-400/rounded/plagiarism.svg';
 
 import { setVideoSrcBlob } from '@/app/VideoBlobSourceHelper';
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import FieldButton from '@/fields/FieldButton';
 import { captureVideoSnapshot } from '@/recorder/snapshot/VideoSnapshot';
 import {
   tryDecodeQRCodeKeyV0,
@@ -106,12 +106,9 @@ export default function SettingsFootageAnalyzeButton({
 
   return (
     <>
-      <SettingsFieldButton
-        Icon={PlagiarismIcon}
-        onClick={onClick}
-        disabled={disabled}>
+      <FieldButton Icon={PlagiarismIcon} onClick={onClick} disabled={disabled}>
         Analyze files
-      </SettingsFieldButton>
+      </FieldButton>
       <video
         ref={videoRef}
         className="w-[50%]"

@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import EditSquareIcon from '@material-symbols/svg-400/rounded/edit_square.svg';
 import MovieIcon from '@material-symbols/svg-400/rounded/movie.svg';
 
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import FieldButton from '@/fields/FieldButton';
 import { useFullscreen } from '@/libs/fullscreen';
 import { useSettingsStore } from '@/stores/settings';
 import { useSetUserCursor, useUserStore } from '@/stores/user';
@@ -63,7 +63,7 @@ export default function SettingsSceneOpenClapperButton({
   );
 
   return (
-    <SettingsFieldButton
+    <FieldButton
       className="w-auto"
       inverted={inverted}
       Icon={Icon}

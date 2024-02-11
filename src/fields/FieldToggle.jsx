@@ -1,7 +1,7 @@
 import ToggleOff from '@material-symbols/svg-400/rounded/toggle_off.svg';
 import ToggleOn from '@material-symbols/svg-400/rounded/toggle_on-fill.svg';
 
-import SettingsFieldButton from './SettingsFieldButton';
+import FieldButton from './FieldButton';
 
 /**
  * @param {object} props
@@ -11,7 +11,7 @@ import SettingsFieldButton from './SettingsFieldButton';
  * @param {import('react').MouseEventHandler<HTMLButtonElement>} [props.onClick]
  * @param {boolean} [props.disabled]
  */
-export default function SettingsFieldToggle({
+export default function FieldToggle({
   className,
   children,
   value,
@@ -19,12 +19,12 @@ export default function SettingsFieldToggle({
   disabled = !onClick,
 }) {
   return (
-    <SettingsFieldButton
+    <FieldButton
       className={'w-full' + ' ' + className}
       onClick={onClick}
       Icon={value ? ToggleOn : ToggleOff}
       disabled={disabled}>
       {children}
-    </SettingsFieldButton>
+    </FieldButton>
   );
 }

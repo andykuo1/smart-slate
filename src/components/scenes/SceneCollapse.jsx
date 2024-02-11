@@ -4,11 +4,11 @@ import SubjectIcon from '@material-symbols/svg-400/rounded/subject.svg';
 import VerticalSplitIcon from '@material-symbols/svg-400/rounded/vertical_split.svg';
 import ViewDayIcon from '@material-symbols/svg-400/rounded/view_day.svg';
 
-import FieldButtonAndMenu from '@/components/FieldButtonAndMenu';
+import FieldButtonAndMenu from '@/fields/FieldButtonAndMenu';
 import { useScrollIntoView } from '@/libs/UseScrollIntoView';
 import { useUserStore } from '@/stores/user';
 
-import SettingsFieldButton from '../settings/SettingsFieldButton';
+import FieldButton from '../../fields/FieldButton';
 
 /**
  * @param {object} props
@@ -46,7 +46,7 @@ export default function SceneCollapse({ containerRef }) {
         )
       }
       items={SCREEPLAY_VIEWS.map((mode) => (
-        <SettingsFieldButton
+        <FieldButton
           className="h-8 w-full text-right outline-none"
           title={mode}
           Icon={getScreenplayViewIcon(mode)}
@@ -54,7 +54,7 @@ export default function SceneCollapse({ containerRef }) {
           <span className="ml-4 text-xs">
             {getScreenplayViewLocaleString(mode)}
           </span>
-        </SettingsFieldButton>
+        </FieldButton>
       ))}
     />
   );

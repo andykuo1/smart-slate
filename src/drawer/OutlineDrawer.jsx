@@ -7,12 +7,10 @@ import InfoFillIcon from '@material-symbols/svg-400/rounded/info-fill.svg';
 import InfoIcon from '@material-symbols/svg-400/rounded/info.svg';
 import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg';
 
-import FieldButtonAndMenu from '@/components/FieldButtonAndMenu';
 import BoxDrawingCharacter from '@/components/documents/BoxDrawingCharacter';
 import DocumentDivider from '@/components/documents/DocumentDivider';
 import { scrollSceneFocusIntoView } from '@/components/scenes/SceneFocus';
 import SettingsSceneOpenClapperButton from '@/components/scenes/settings/SettingsSceneOpenClapperButton';
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
 import { getShotTypeColor } from '@/components/shots/ShotColors';
 import {
   getShotFocusIdForDrawer,
@@ -23,6 +21,8 @@ import {
   formatSceneShotNumber,
   formatTakeNumber,
 } from '@/components/takes/TakeNameFormat';
+import FieldButton from '@/fields/FieldButton';
+import FieldButtonAndMenu from '@/fields/FieldButtonAndMenu';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useShotNumber } from '@/serdes/UseResolveShotNumber';
 import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
@@ -71,7 +71,7 @@ export default function OutlineDrawer() {
           A quick overview of the whole story
         </p>
         <div className="absolute right-4 top-4">
-          <SettingsFieldButton
+          <FieldButton
             Icon={!drawerShowDetails ? InfoIcon : InfoFillIcon}
             onClick={onInfoClick}
           />
@@ -205,12 +205,12 @@ function AddShotButton({ documentId, sceneId }) {
       items={SHOT_TYPES.map(
         (shotType) =>
           shotType && (
-            <SettingsFieldButton
+            <FieldButton
               className="outline-none"
               title={shotType}
               onClick={() => addNewShot(shotType)}>
               {shotType}
-            </SettingsFieldButton>
+            </FieldButton>
           ),
       )}
     />
@@ -347,7 +347,7 @@ function IndexShot({
           {description || choosePlaceholderRandomly(shotId)}
         </p>
         <div className={'ml-auto' + ' ' + (!isActive && 'hidden')}>
-          <SettingsFieldButton
+          <FieldButton
             inverted={isActive}
             Icon={HistoryIcon}
             onClick={onShowTakesClick}

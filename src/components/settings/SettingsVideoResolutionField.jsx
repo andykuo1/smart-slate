@@ -1,10 +1,10 @@
-import SettingsFieldSelect from './SettingsFieldSelect';
+import FieldSelect from '@/fields/FieldSelect';
 
 export default function SettingsVideoResolutionField() {
   return (
-    <SettingsFieldSelect title="Video Resolution:" id="video-resolution">
+    <FieldSelect title="Video Resolution:" id="video-resolution">
       <option value="4K">4K</option>
       <option value="HD">HD</option>
-    </SettingsFieldSelect>
+    </FieldSelect>
   );
 }

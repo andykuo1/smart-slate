@@ -1,6 +1,6 @@
 import GridViewIcon from '@material-symbols/svg-400/rounded/grid_view.svg';
 
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import FieldButton from '@/fields/FieldButton';
 
 /**
  * @param {object} props
@@ -10,7 +10,7 @@ import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
  */
 export default function DrawerButton({ className, inverted, onClick }) {
   return (
-    <SettingsFieldButton
+    <FieldButton
       className={
         'pointer-events-auto z-10 rounded-full p-2 shadow-md' +
         ' ' +

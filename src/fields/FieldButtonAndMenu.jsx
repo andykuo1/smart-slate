@@ -6,9 +6,8 @@ import {
   usePopoverContext,
 } from '@ariakit/react';
 
+import FieldButton from '@/fields/FieldButton';
 import PopoverStyle from '@/styles/Popover.module.css';
-
-import SettingsFieldButton from './settings/SettingsFieldButton';
 
 /**
  * @param {object} props
@@ -61,7 +60,7 @@ function FieldButtonAndMenuDisclosure({
   const store = usePopoverContext();
   return (
     <PopoverDisclosure toggleOnClick={false}>
-      <SettingsFieldButton
+      <FieldButton
         inverted={inverted}
         Icon={Icon}
         title={title}
@@ -72,7 +71,7 @@ function FieldButtonAndMenuDisclosure({
           e.stopPropagation();
         }}>
         {children}
-      </SettingsFieldButton>
+      </FieldButton>
     </PopoverDisclosure>
   );
 }

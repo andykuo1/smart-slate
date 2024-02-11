@@ -1,9 +1,8 @@
+import FieldSelect from '@/fields/FieldSelect';
 import { useGoogleStatus } from '@/libs/googleapi/auth/UseGoogleStatus';
 import { getDocumentById, getDocumentSettingsById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentDocumentId } from '@/stores/user';
-
-import SettingsFieldSelect from './SettingsFieldSelect';
 
 export default function SettingsAutoSaveToField() {
   const documentId = useCurrentDocumentId();
@@ -24,7 +23,7 @@ export default function SettingsAutoSaveToField() {
     setDocumentSettingsAutoSaveTo(documentId, value);
   }
   return (
-    <SettingsFieldSelect
+    <FieldSelect
       title="Auto-save to:"
       id="save-to"
       value={autoSaveTo}
@@ -37,6 +36,6 @@ export default function SettingsAutoSaveToField() {
         disabled={!googleStatus && lastExportedMillis <= 0}>
         Google Drive
       </option>
-    </SettingsFieldSelect>
+    </FieldSelect>
   );
 }

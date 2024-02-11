@@ -10,8 +10,6 @@ import SettingsDirectorNameField from '@/components/settings/SettingsDirectorNam
 import SettingsEnableGoogleDriveSyncToggle from '@/components/settings/SettingsEnableGoogleDriveSyncToggle';
 import SettingsEnableRecorderLiveAudioToggle from '@/components/settings/SettingsEnableRecorderLiveAudioToggle';
 import SettingsEnableRecorderReferenceToggle from '@/components/settings/SettingsEnableRecorderReferenceToggle';
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
-import SettingsFieldGroupDiscloseable from '@/components/settings/SettingsFieldGroupDiscloseable';
 import SettingsNerdInfoButton from '@/components/settings/SettingsNerdInfoButton';
 import SettingsPreferFullscreenRecorderToggle from '@/components/settings/SettingsPreferFullscreenRecorderToggle';
 import SettingsPreferNativeRecorderToggle from '@/components/settings/SettingsPreferNativeRecorderToggle';
@@ -25,6 +23,8 @@ import SettingsProjectNameField from '@/components/settings/SettingsProjectNameF
 import SettingsShareFilesButton from '@/components/settings/SettingsShareFilesButton';
 import SettingsVideoCacheClearButton from '@/components/settings/SettingsVideoCacheClearButton';
 import SettingsVideoResolutionField from '@/components/settings/SettingsVideoResolutionField';
+import FieldButton from '@/fields/FieldButton';
+import FieldGroupDiscloseable from '@/fields/FieldGroupDiscloseable';
 import GoogleConnectButton from '@/libs/googleapi/auth/GoogleConnectButton';
 import NavBar from '@/navbar/NavBar';
 
@@ -44,23 +44,21 @@ export default function SettingsPage() {
           </legend>
           <div className="flex flex-col gap-2">
             <SettingsProjectInstallField />
-            <SettingsFieldButton
-              Icon={QRCode2Icon}
-              onClick={() => navigate('/scan')}>
+            <FieldButton Icon={QRCode2Icon} onClick={() => navigate('/scan')}>
               Have QR codes?
-            </SettingsFieldButton>
+            </FieldButton>
             <br />
-            <SettingsFieldGroupDiscloseable title="Project Settings">
+            <FieldGroupDiscloseable title="Project Settings">
               <SettingsProjectNameField />
               <SettingsProjectIdField />
-            </SettingsFieldGroupDiscloseable>
+            </FieldGroupDiscloseable>
             <br />
-            <SettingsFieldGroupDiscloseable title="Credit Settings">
+            <FieldGroupDiscloseable title="Credit Settings">
               <SettingsDirectorNameField />
               <SettingsCameraNameField />
-            </SettingsFieldGroupDiscloseable>
+            </FieldGroupDiscloseable>
             <br />
-            <SettingsFieldGroupDiscloseable title="Data Settings">
+            <FieldGroupDiscloseable title="Data Settings">
               <GoogleConnectButton />
               <div className="h-0" />
               <SettingsAutoSaveToField />
@@ -70,9 +68,9 @@ export default function SettingsPage() {
               <SettingsShareFilesButton />
               <SettingsProjectExportZIPButton />
               <SettingsProjectExportJSONButton />
-            </SettingsFieldGroupDiscloseable>
+            </FieldGroupDiscloseable>
             <br />
-            <SettingsFieldGroupDiscloseable title="Rec & Slate Settings">
+            <FieldGroupDiscloseable title="Rec & Slate Settings">
               <SettingsAspectRatioField />
               <SettingsVideoResolutionField />
               <div className="h-0" />
@@ -84,12 +82,12 @@ export default function SettingsPage() {
               <SettingsEnableRecorderLiveAudioToggle />
               <div className="h-0" />
               <SettingsNerdInfoButton />
-            </SettingsFieldGroupDiscloseable>
+            </FieldGroupDiscloseable>
             <br />
-            <SettingsFieldGroupDiscloseable title="Dangerous Stuff">
+            <FieldGroupDiscloseable title="Dangerous Stuff">
               <SettingsVideoCacheClearButton />
               <SettingsProjectDeleteButton />
-            </SettingsFieldGroupDiscloseable>
+            </FieldGroupDiscloseable>
             <br />
           </div>
         </fieldset>

@@ -1,4 +1,4 @@
-import SettingsField from './SettingsField';
+import Field from '@/fields/Field';
 
 /**
  * @param {object} props
@@ -10,7 +10,7 @@ import SettingsField from './SettingsField';
  * @param {string} [props.value]
  * @param {import('react').ChangeEventHandler<HTMLSelectElement>} [props.onChange]
  */
-export default function SettingsFieldSelect({
+export default function FieldSelect({
   id,
   title,
   className,
@@ -20,11 +20,7 @@ export default function SettingsFieldSelect({
   onChange,
 }) {
   return (
-    <SettingsField
-      id={id}
-      title={title}
-      className={className}
-      required={required}>
+    <Field id={id} title={title} className={className} required={required}>
       <select
         id={id}
         className="m-1 flex-1 rounded bg-transparent outline outline-offset-2 disabled:opacity-30"
@@ -33,6 +29,6 @@ export default function SettingsFieldSelect({
         disabled={!onChange}>
         {children}
       </select>
-    </SettingsField>
+    </Field>
   );
 }

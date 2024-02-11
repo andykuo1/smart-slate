@@ -1,9 +1,8 @@
 import AddToDriveIcon from '@material-symbols/svg-400/rounded/add_to_drive.svg';
 
+import FieldToggle from '@/fields/FieldToggle';
 import { useGoogleStatus } from '@/libs/googleapi/auth/UseGoogleStatus';
 import { useSettingsStore } from '@/stores/settings';
-
-import SettingsFieldToggle from './SettingsFieldToggle';
 
 export default function SettingsEnableGoogleDriveSyncToggle() {
   const enabled = useSettingsStore((ctx) => ctx.user.enableDriveSync);
@@ -11,7 +10,7 @@ export default function SettingsEnableGoogleDriveSyncToggle() {
   const googleStatus = useGoogleStatus();
 
   return (
-    <SettingsFieldToggle
+    <FieldToggle
       className={'flex flex-row fill-current'}
       value={enabled}
       onClick={() => setEnabled(!enabled)}
@@ -19,6 +18,6 @@ export default function SettingsEnableGoogleDriveSyncToggle() {
       <span>Enable</span>
       <AddToDriveIcon className="mx-1 inline-block h-6 w-6 fill-current" />
       <span>video sync</span>
-    </SettingsFieldToggle>
+    </FieldToggle>
   );
 }

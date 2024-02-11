@@ -1,6 +1,5 @@
+import FieldToggle from '@/fields/FieldToggle';
 import { useSettingsStore } from '@/stores/settings';
-
-import SettingsFieldToggle from './SettingsFieldToggle';
 
 export default function SettingsEnableRecorderLiveAudioToggle() {
   const enabled = useSettingsStore((ctx) => ctx.user.preferMutedWhileRecording);
@@ -9,8 +8,8 @@ export default function SettingsEnableRecorderLiveAudioToggle() {
   );
 
   return (
-    <SettingsFieldToggle value={!enabled} onClick={() => setEnabled(!enabled)}>
+    <FieldToggle value={!enabled} onClick={() => setEnabled(!enabled)}>
       Play audio while live
-    </SettingsFieldToggle>
+    </FieldToggle>
   );
 }

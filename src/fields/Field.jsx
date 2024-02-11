@@ -6,13 +6,7 @@
  * @param {boolean} [props.required]
  * @param {import('react').ReactNode} [props.children]
  */
-export default function SettingsField({
-  id,
-  title,
-  className,
-  required,
-  children,
-}) {
+export default function Field({ id, title, className, required, children }) {
   return (
     <div className={'relative' + ' ' + (className || 'flex flex-col')}>
       <label htmlFor={id} className="flex-1" hidden={!title}>

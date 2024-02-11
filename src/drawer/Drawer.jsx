@@ -15,7 +15,7 @@ import {
   useUserStore,
 } from '@/stores/user';
 
-import SettingsFieldButton from '../components/settings/SettingsFieldButton';
+import FieldButton from '../fields/FieldButton';
 import OutlineDrawer from './OutlineDrawer';
 import SettingsDocumentNavButton from './SettingsDocumentNavButton';
 
@@ -67,7 +67,7 @@ function DrawerContent() {
     <nav className="w-full font-mono">
       <div className="sticky top-0 z-10 flex w-full bg-gray-200 p-2 shadow">
         <div className="flex-1">
-          <SettingsFieldButton
+          <FieldButton
             className="mr-auto"
             Icon={ArrowBackIcon}
             onClick={onBackClick}
@@ -81,7 +81,7 @@ function DrawerContent() {
           <DrawerNavBar />
         </div>
         <div className="flex-1">
-          <SettingsFieldButton
+          <FieldButton
             className="ml-auto"
             Icon={isBackToHome ? DoorOpenIcon : HomeIcon}
             onClick={onHomeClick}
@@ -110,16 +110,12 @@ function DrawerNavBar() {
   }
   return (
     <div className="mt-2 flex flex-row rounded outline">
-      <SettingsFieldButton
+      <FieldButton
         Icon={ReceiptLongIcon}
         onClick={onOutlineClick}
         disabled={true}
       />
-      <SettingsFieldButton
-        Icon={TuneIcon}
-        onClick={onTuneClick}
-        disabled={true}
-      />
+      <FieldButton Icon={TuneIcon} onClick={onTuneClick} disabled={true} />
     </div>
   );
 }

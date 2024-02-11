@@ -1,4 +1,4 @@
-import SettingsField from './SettingsField';
+import Field from '@/fields/Field';
 
 /**
  * @param {object} props
@@ -16,7 +16,7 @@ import SettingsField from './SettingsField';
  * @param {boolean} [props.autoFocus]
  * @param {'sentences'|'words'|'characters'|'on'|'off'|'none'} [props.autoCapitalize]
  */
-export default function SettingsFieldInput({
+export default function FieldInput({
   id,
   title,
   value,
@@ -32,11 +32,7 @@ export default function SettingsFieldInput({
   autoCapitalize,
 }) {
   return (
-    <SettingsField
-      id={id}
-      title={title}
-      className={className}
-      required={required}>
+    <Field id={id} title={title} className={className} required={required}>
       <input
         ref={inputRef}
         id={id}
@@ -57,6 +53,6 @@ export default function SettingsFieldInput({
         autoCapitalize={autoCapitalize}
       />
       {children}
-    </SettingsField>
+    </Field>
   );
 }

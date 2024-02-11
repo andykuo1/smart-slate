@@ -10,7 +10,7 @@ import { tryGetSharing } from '@/utils/BrowserFeatures';
 import { APP_TITLE } from '@/values/PackageJSON';
 import { MEDIA_BLOB_OPTIONS } from '@/values/RecorderValues';
 
-import SettingsFieldButton from './SettingsFieldButton';
+import FieldButton from '../../fields/FieldButton';
 
 export default function SettingsShareFilesButton() {
   const documentId = useCurrentDocumentId();
@@ -73,8 +73,8 @@ export default function SettingsShareFilesButton() {
   }, [disabled, setDisabled]);
 
   return (
-    <SettingsFieldButton Icon={ShareIcon} onClick={handleClick} disabled={true}>
+    <FieldButton Icon={ShareIcon} onClick={handleClick} disabled={true}>
       Share files
-    </SettingsFieldButton>
+    </FieldButton>
   );
 }

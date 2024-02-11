@@ -1,7 +1,7 @@
 import ShotTextIcon from '@material-symbols/svg-400/rounded/table_rows.svg';
 import ShotImageIcon from '@material-symbols/svg-400/rounded/window.svg';
 
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import FieldButton from '@/fields/FieldButton';
 import { useUserStore } from '@/stores/user';
 
 /**
@@ -27,7 +27,7 @@ export default function SettingsSceneShotsDetailButton({ className, onClick }) {
   }
 
   return (
-    <SettingsFieldButton
+    <FieldButton
       className={className}
       Icon={shotListMode === 'detail' ? ShotTextIcon : ShotImageIcon}
       title="Change shotlist view"

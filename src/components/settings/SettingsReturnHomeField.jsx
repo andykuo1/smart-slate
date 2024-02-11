@@ -6,7 +6,7 @@ import { getDocumentSettingsById } from '@/stores/document/get';
 import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentDocumentId, useSetUserCursor } from '@/stores/user';
 
-import SettingsFieldButton from './SettingsFieldButton';
+import FieldButton from '../../fields/FieldButton';
 
 export default function SettingsReturnHomeField() {
   const navigate = useNavigate();
@@ -27,12 +27,12 @@ export default function SettingsReturnHomeField() {
   }
 
   return (
-    <SettingsFieldButton
+    <FieldButton
       className="my-1 w-full bg-gray-300 outline-none"
       Icon={BackIcon}
       onClick={onClick}>
       Exit to home
-    </SettingsFieldButton>
+    </FieldButton>
   );
 }
 

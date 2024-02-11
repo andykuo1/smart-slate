@@ -4,13 +4,13 @@ import AddIcon from '@material-symbols/svg-400/rounded/add.svg';
 import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg';
 import ThumbUpIcon from '@material-symbols/svg-400/rounded/thumb_up.svg';
 
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
 import ShotThumbnail from '@/components/shots/ShotThumbnail';
 import {
   formatSceneNumber,
   formatShotNumber,
   formatTakeNumber,
 } from '@/components/takes/TakeNameFormat';
+import FieldButton from '@/fields/FieldButton';
 import { useInterval } from '@/libs/UseInterval';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useShotHash } from '@/serdes/UseResolveShotHash';
@@ -185,14 +185,14 @@ function ClapperControlFields({
   }
 
   return (
-    <SettingsFieldButton
+    <FieldButton
       className={'flex items-center gap-2 landscape:flex-col' + ' ' + className}
       Icon={AddIcon}
       title="New take"
       onClick={onNextClick}
       disabled={!takeId}>
       <div className="whitespace-nowrap landscape:vertical-rl">NEW TAKE</div>
-    </SettingsFieldButton>
+    </FieldButton>
   );
 }
 
@@ -213,7 +213,7 @@ function ClapperPrintButton({ className, documentId, takeId }) {
   }
 
   return (
-    <SettingsFieldButton
+    <FieldButton
       className={
         'relative mt-auto flex flex-col pb-[0.5em] text-[2em] outline-none' +
         ' ' +
@@ -231,7 +231,7 @@ function ClapperPrintButton({ className, documentId, takeId }) {
         }>
         PRINT
       </span>
-    </SettingsFieldButton>
+    </FieldButton>
   );
 }
 

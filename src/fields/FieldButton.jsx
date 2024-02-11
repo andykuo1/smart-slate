@@ -10,7 +10,7 @@
  * @param {import('react').ReactNode} [props.children]
  * @param {boolean} [props.disabled]
  */
-export default function SettingsFieldButton({
+export default function FieldButton({
   className,
   onClick,
   onContextMenu,

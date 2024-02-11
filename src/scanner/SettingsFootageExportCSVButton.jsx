@@ -1,6 +1,6 @@
 import DownloadIcon from '@material-symbols/svg-400/rounded/download.svg';
 
-import SettingsFieldButton from '@/components/settings/SettingsFieldButton';
+import FieldButton from '@/fields/FieldButton';
 import { toDateString } from '@/serdes/ExportNameFormat';
 import { downloadText } from '@/utils/Downloader';
 
@@ -37,11 +37,8 @@ export default function SettingsFootageExportCSVButton({
   }
 
   return (
-    <SettingsFieldButton
-      Icon={DownloadIcon}
-      onClick={onClick}
-      disabled={disabled}>
+    <FieldButton Icon={DownloadIcon} onClick={onClick} disabled={disabled}>
       Export list to .csv
-    </SettingsFieldButton>
+    </FieldButton>
   );
 }
