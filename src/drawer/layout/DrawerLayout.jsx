@@ -62,7 +62,7 @@ export default function DrawerLayout({ toolbar, content, children, darkMode }) {
           ' ' +
           'bg-gray-200 text-black shadow-xl' +
           ' ' +
-          'sm:w-[60vmin] w-[90vw] min-w-[50vw]' +
+          'w-[90vw] min-w-[50vw] sm:w-[60vmin]' +
           ' ' +
           'transition-transform' +
           ' ' +

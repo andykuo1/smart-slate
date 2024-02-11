@@ -110,7 +110,7 @@ export default function ClapperBoardV2() {
           sceneId={sceneId}
           shotId={shotId}
         />
-        <div className="sm:flex hidden flex-1 flex-col portrait:hidden landscape:flex">
+        <div className="hidden flex-1 flex-col sm:flex portrait:hidden landscape:flex">
           <ClapperAdditionalFields
             className="w-full"
             documentId={documentId}

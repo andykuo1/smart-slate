@@ -21,7 +21,7 @@ export function ShotBoard({ className, documentId, sceneId, blockId }) {
   return (
     <ul
       className={
-        'md:grid-cols-4 grid auto-cols-min auto-rows-min grid-cols-2' +
+        'grid auto-cols-min auto-rows-min grid-cols-2 md:grid-cols-4' +
         ' ' +
         className
       }>

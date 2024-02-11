@@ -114,7 +114,7 @@ export default function Clapperboard() {
           </li>
           <ClapperDirectorNameEntry documentId={documentId} />
           <ClapperCameraNameEntry documentId={documentId} />
-          <li className="sm:flex-row flex flex-1 flex-col-reverse gap-1">
+          <li className="flex flex-1 flex-col-reverse gap-1 sm:flex-row">
             {enableThumbnailWhileRecording && (
               <ShotThumbnail
                 className="text-base"

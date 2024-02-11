@@ -79,7 +79,7 @@ export function ShotEntry({
         }>
         {!collapsed && (
           <ShotNumber
-            className="sm:block hidden"
+            className="hidden sm:block"
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
@@ -128,7 +128,7 @@ export function ShotEntry({
               className={
                 'mx-2 h-full w-full flex-1 bg-transparent p-2 font-mono italic' +
                 ' ' +
-                (!showDescriptionWhenSmall ? 'sm:block hidden' : '')
+                (!showDescriptionWhenSmall ? 'hidden sm:block' : '')
               }
               documentId={documentId}
               shotId={shotId}
@@ -137,7 +137,7 @@ export function ShotEntry({
         </div>
         {!collapsed && (
           <ShotNumber
-            className="sm:block hidden"
+            className="hidden sm:block"
             documentId={documentId}
             sceneId={sceneId}
             shotId={shotId}
