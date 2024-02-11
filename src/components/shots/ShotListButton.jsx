@@ -8,6 +8,8 @@ import {
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import PopoverStyle from '@/styles/Popover.module.css';
 
+import SettingsSceneShotsRenumberButton from '../scenes/settings/SettingsSceneShotsRenumberButton';
+
 /**
  * @param {object} props
  * @param {string} [props.className]
@@ -40,6 +42,11 @@ export default function ShotListButton({
         </Popover>
       </PopoverProvider>
       <span className="flex-1" />
+      <SettingsSceneShotsRenumberButton
+        className="m-auto"
+        documentId={documentId}
+        sceneId={sceneId}
+      />
     </div>
   );
 }

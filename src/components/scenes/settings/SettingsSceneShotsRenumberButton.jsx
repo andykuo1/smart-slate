@@ -7,10 +7,12 @@ import { useDocumentStore } from '@/stores/document/use';
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  */
 export default function SettingsSceneShotsRenumberButton({
+  className,
   documentId,
   sceneId,
 }) {
@@ -22,7 +24,7 @@ export default function SettingsSceneShotsRenumberButton({
   }
   return (
     <FieldButton
-      className="w-auto"
+      className={className}
       Icon={OneTwoThreeIcon}
       title="Re-number shots"
       onClick={onClick}

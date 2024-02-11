@@ -2,7 +2,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import EditSquareIcon from '@material-symbols/svg-400/rounded/edit_square.svg';
 import MovieIcon from '@material-symbols/svg-400/rounded/movie.svg';
-import SubscriptionsIcon from '@material-symbols/svg-400/rounded/subscriptions.svg';
 import TuneIcon from '@material-symbols/svg-400/rounded/tune.svg';
 
 import { useFullscreen } from '@/libs/fullscreen';
@@ -24,12 +23,7 @@ export default function Navbar({ className, children }) {
   return (
     <NavBarLayout
       className={className}
-      items={[
-        <NavTuneButton />,
-        <NavEditButton />,
-        <NavPreviewButton />,
-        <NavRecordButton />,
-      ]}>
+      items={[<NavTuneButton />, <NavEditButton />, <NavRecordButton />]}>
       {children}
     </NavBarLayout>
   );
@@ -110,25 +104,6 @@ function NavTuneButton() {
       abbr="Proj"
       Icon={TuneIcon}
       active={location.pathname.includes('/settings')}
-      onClick={onClick}
-    />
-  );
-}
-
-function NavPreviewButton() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  function onClick() {
-    if (!location.pathname.includes('/pre')) {
-      navigate('/pre');
-    }
-  }
-  return (
-    <NavBarButton
-      title="Pre-vis"
-      abbr="Pre"
-      Icon={SubscriptionsIcon}
-      active={location.pathname.includes('/pre')}
       onClick={onClick}
     />
   );

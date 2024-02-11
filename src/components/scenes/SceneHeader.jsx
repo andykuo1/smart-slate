@@ -7,7 +7,6 @@ import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 
 import { getSceneFocusId } from './SceneFocus';
 import SceneNumber from './SceneNumber';
-import SceneStatus from './SceneStatus';
 
 /**
  * @param {object} props
@@ -70,7 +69,6 @@ export default function SceneHeader({ className, documentId, sceneId }) {
         <option value="INT. " />
         <option value="EXT. " />
       </datalist>
-      <SceneStatus documentId={documentId} sceneId={sceneId} />
       <SceneNumber sceneNumber={sceneNumber} onClick={onClick} />
     </div>
   );
