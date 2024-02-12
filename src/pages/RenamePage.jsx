@@ -49,12 +49,13 @@ export default function RenamePage() {
           </output>
           <FieldRenameFilesInput
             files={files}
-            mapping={(file) => mapping[file.name]}
+            mapping={(file) => mapping[basename(file.name)]}
           />
         </div>
         <ul className="flex flex-col overflow-y-auto p-2">
           {files.map((file) => {
             const fileBaseName = basename(file.name);
+            const fileExtName = extname(file.name);
             const mappedName = mapping[fileBaseName];
             return (
               <li
@@ -69,7 +70,7 @@ export default function RenamePage() {
                       : '')
                 }>
                 {file.name}
-                {mappedName ? ` => ${mappedName}` : ''}
+                {mappedName ? ` => ${mappedName}${fileExtName}` : ''}
               </li>
             );
           })}
@@ -80,17 +81,19 @@ export default function RenamePage() {
 }
 
 /**
+ * @template {import('@/scanner/DirectoryPicker').FileWithHandles} T
  * @param {object} props
- * @param {Array<import('@/scanner/DirectoryPicker').FileWithHandles>} props.files
- * @param {(file: import('@/scanner/DirectoryPicker').FileWithHandles) => string} props.mapping
+ * @param {Array<T>} props.files
+ * @param {(file: T) => string} props.mapping
+ * @param {(e: { value: T|undefined, done: boolean}) => void} [props.onChange]
  */
-function FieldRenameFilesInput({ files, mapping }) {
+function FieldRenameFilesInput({ files, mapping, onChange }) {
   const [progress, setProgress] = useState(-1);
 
   const onClick = useCallback(
     async function _onClick() {
       setProgress(0);
-      /** @type {Record<string, import('@/scanner/DirectoryPicker').FileWithHandles>} */
+      /** @type {Record<string, T>} */
       let result = {};
       for (let file of files) {
         let naming = mapping(file);
@@ -108,15 +111,20 @@ function FieldRenameFilesInput({ files, mapping }) {
       let deltaProgress = Math.ceil((1 / maxProgress) * 100);
       for (let [key, file] of Object.entries(result)) {
         let fileName = file.name;
+        let fileHandle = file.handle;
         let fileExtName = extname(fileName);
         let value = `${key}${fileExtName}`;
-        console.log(`[FieldRenameFilesInput] Moving ${fileName} => ${value}`);
-        // @ts-expect-error file.move() is supported on chrome (though not standard).
-        await file.move(value);
+        if (fileHandle) {
+          console.log(`[FieldRenameFilesInput] Moving ${fileName} => ${value}`);
+          // @ts-expect-error handle.move() is supported on chrome (though not standard).
+          await fileHandle.move(value);
+        }
         setProgress((prev) => Math.min(prev + deltaProgress, 100));
+        onChange?.({ value: file, done: false });
       }
       // NOTE: Complete it :)
       setProgress(100);
+      onChange?.({ value: undefined, done: true });
     },
     [files, mapping, setProgress],
   );
@@ -127,7 +135,7 @@ function FieldRenameFilesInput({ files, mapping }) {
       title="Rename selected files"
       Icon={SaveIcon}
       onClick={onClick}
-      disabled={progress < 0 || files.length <= 0}>
+      disabled={files.length <= 0}>
       <div className="flex flex-col gap-2">
         <div className="mt-2">Rename files on disk</div>
         <div className="mx-auto mb-4 block w-[80%] text-xs opacity-50">
@@ -205,7 +213,7 @@ function FieldOpenDirectoryInput({
   title = 'Open directory on local device',
   onChange,
   disabled,
-  children = 'Scan directory',
+  children = 'Open directory',
 }) {
   async function onClick() {
     const files = await openDirectory();
