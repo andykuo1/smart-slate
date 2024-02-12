@@ -33,7 +33,8 @@ export default function ShotListInBlockOrder({
       shotCount={shotIds.length}
       editable={editable}
       collapsed={collapsed}
-      hidden={hidden}>
+      hidden={hidden}
+      disableLazyLoading={true}>
       <ShotListShots
         documentId={documentId}
         sceneId={sceneId}

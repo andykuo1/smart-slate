@@ -1,8 +1,12 @@
+import { useEffect, useRef, useState } from 'react';
+
 import GridStyle from '@/components/shots/GridStyle.module.css';
 import ShotEntryDragged from '@/components/shots/ShotEntryDragged';
 import ShotEntryNew from '@/components/shots/ShotEntryNew';
+import { useIntersectionObserver } from '@/libs/UseIntersectionObserver';
 
 import ShotListHeader from './ShotListHeader';
+import ShotListPlaceholder from './ShotListPlaceholder';
 
 /**
  * @param {object} props
@@ -16,6 +20,7 @@ import ShotListHeader from './ShotListHeader';
  * @param {boolean} [props.hidden]
  * @param {boolean} [props.showNew]
  * @param {boolean} [props.showTakes]
+ * @param {boolean} [props.disableLazyLoading]
  * @param {import('react').ReactNode} props.children
  */
 export default function ShotListLayout({
@@ -28,8 +33,24 @@ export default function ShotListLayout({
   editable = true,
   collapsed = false,
   hidden = false,
+  disableLazyLoading = false,
   showNew,
 }) {
+  const containerRef = useRef(null);
+  const contentRef = useRef(/** @type {HTMLUListElement|null} */ (null));
+  const [height, setHeight] = useState(0);
+  const visible = useIntersectionObserver(containerRef, '0px');
+  useEffect(() => {
+    const content = contentRef.current;
+    if (!content) {
+      return;
+    }
+    if (visible) {
+      const bounding = content.getBoundingClientRect();
+      setHeight(bounding.height);
+    }
+  }, [visible]);
+
   const isNonEmptyShotList = shotCount > 0;
   if (!showNew && shotCount <= 0) {
     return null;
@@ -37,8 +58,10 @@ export default function ShotListLayout({
   if (typeof showNew === 'undefined' && isNonEmptyShotList) {
     showNew = editable;
   }
+
   return (
     <fieldset
+      ref={containerRef}
       className={
         'w-full' +
         ' ' +
@@ -54,20 +77,24 @@ export default function ShotListLayout({
           blockId={blockId}
         />
       </legend>
-      <ul>
-        <div className={collapsed ? GridStyle.grid : ''}>
-          {children}
-          {showNew && (
-            <ShotEntryNew
-              documentId={documentId}
-              sceneId={sceneId}
-              blockId={blockId}
-              collapsed={collapsed}
-            />
-          )}
-        </div>
-        <ShotEntryDragged documentId={documentId} sceneId={sceneId} />
-      </ul>
+      {visible || disableLazyLoading ? (
+        <ul ref={contentRef}>
+          <div className={collapsed ? GridStyle.grid : ''}>
+            {children}
+            {showNew && (
+              <ShotEntryNew
+                documentId={documentId}
+                sceneId={sceneId}
+                blockId={blockId}
+                collapsed={collapsed}
+              />
+            )}
+          </div>
+          <ShotEntryDragged documentId={documentId} sceneId={sceneId} />
+        </ul>
+      ) : (
+        <ShotListPlaceholder height={height} />
+      )}
     </fieldset>
   );
 }
