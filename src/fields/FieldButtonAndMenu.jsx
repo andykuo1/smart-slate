@@ -16,6 +16,7 @@ import PopoverStyle from '@/styles/Popover.module.css';
  * @param {string} props.title
  * @param {import('react').FC<any>} [props.Icon]
  * @param {import('react').MouseEventHandler<HTMLButtonElement>} props.onClick
+ * @param {boolean} [props.disabled]
  * @param {Array<import('react').ReactNode>} [props.items]
  * @param {import('react').ReactNode} [props.children]
  */
@@ -25,6 +26,7 @@ export default function FieldButtonAndMenu({
   title,
   Icon,
   onClick,
+  disabled,
   items = [],
   children,
 }) {
@@ -35,7 +37,8 @@ export default function FieldButtonAndMenu({
         inverted={inverted}
         Icon={Icon}
         title={title}
-        onClick={onClick}>
+        onClick={onClick}
+        disabled={disabled}>
         {children}
       </FieldButtonAndMenuDisclosure>
       <Popover className={PopoverStyle.popover} modal={true}>
@@ -53,6 +56,7 @@ export default function FieldButtonAndMenu({
  * @param {import('react').FC<any>} [props.Icon]
  * @param {string} [props.title]
  * @param {import('react').MouseEventHandler<HTMLButtonElement>} props.onClick
+ * @param {boolean} [props.disabled]
  * @param {import('react').ReactNode} [props.children]
  */
 function FieldButtonAndMenuDisclosure({
@@ -61,6 +65,7 @@ function FieldButtonAndMenuDisclosure({
   Icon,
   title,
   onClick,
+  disabled,
   children,
 }) {
   const store = usePopoverContext();
@@ -76,7 +81,8 @@ function FieldButtonAndMenuDisclosure({
           store?.show?.();
           e.preventDefault();
           e.stopPropagation();
-        }}>
+        }}
+        disabled={disabled}>
         {children}
       </FieldButton>
     </PopoverDisclosure>
