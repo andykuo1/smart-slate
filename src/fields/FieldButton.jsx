@@ -25,7 +25,7 @@ export default function FieldButton({
     <button
       style={{ lineHeight: '1em' }}
       className={
-        'flex select-none flex-row items-center rounded' +
+        'flex select-none flex-row items-center gap-2 overflow-hidden rounded' +
         ' ' +
         'disabled:opacity-30' +
         ' ' +

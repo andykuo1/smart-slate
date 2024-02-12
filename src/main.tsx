@@ -7,6 +7,7 @@ import ErrorPage from '@/pages/ErrorPage';
 import NewProjectPage from '@/pages/NewProjectPage';
 import PreviewPage from '@/pages/PreviewPage';
 import RecordPage from '@/pages/RecordPage';
+import RenamePage from '@/pages/RenamePage';
 import RootPage from '@/pages/RootPage';
 import ScanPage from '@/pages/ScanPage';
 import SettingsPage from '@/pages/SettingsPage';
@@ -63,6 +64,11 @@ const router = createBrowserRouter(
     {
       path: '/pre',
       element: <PreviewPage />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: '/rename',
+      element: <RenamePage />,
       errorElement: <ErrorPage />,
     },
   ],
