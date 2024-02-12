@@ -3,6 +3,7 @@ import DownloadIcon from '@material-symbols/svg-400/rounded/download.svg';
 import FieldButton from '@/fields/FieldButton';
 import { toDateString } from '@/serdes/ExportNameFormat';
 import { downloadText } from '@/utils/Downloader';
+import { basename } from '@/utils/PathHelper';
 
 import { isScannerFailure } from './ScannerResult';
 
@@ -28,7 +29,9 @@ export default function SettingsFootageExportCSVButton({
       if (isScannerFailure(result)) {
         continue;
       }
-      lines.push(`${key},${result.value}`);
+      let keyFileName = basename(key);
+      let baseFileName = basename(result.value);
+      lines.push(`${keyFileName},${baseFileName}`);
     }
     const result = lines.join('\n');
     const dateString = toDateString(new Date());
