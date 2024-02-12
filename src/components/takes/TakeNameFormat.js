@@ -45,6 +45,9 @@ export function formatProjectId(projectId) {
   result = result.toUpperCase();
   if (result.length > MAX_PROJECT_ID_LENGTH) {
     result = result.substring(0, MAX_PROJECT_ID_LENGTH);
+  } else if (result.length <= 0) {
+    // NOTE: Title was all invalid characters.
+    return 'UNTITLED';
   }
   return result;
 }

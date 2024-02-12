@@ -53,7 +53,7 @@ export default function FieldRenameFilesInput({
       setProgress(100);
       onChange?.({ value: undefined, done: true });
     },
-    [files, mapping, setProgress],
+    [files, mapping, setProgress, onChange],
   );
 
   return (
