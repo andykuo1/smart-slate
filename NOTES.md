@@ -277,4 +277,3 @@ Export list to csv
 - Integrate FFmpeg
 
 - Import by paste
-- Fixed width editor

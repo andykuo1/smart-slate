@@ -192,6 +192,7 @@ async function performScan(output, videoRef, onChange) {
           if (!result) {
             throw new Error('Cannot decode qr code.');
           }
+          o.takeInfo = result;
           let ext = extname(key);
           let fileNameParts = [
             result.projectId,

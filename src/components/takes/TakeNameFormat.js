@@ -223,7 +223,8 @@ export function charToNum(char) {
     if (code < 0 || code >= CHAR_CODE_RANGE) {
       continue;
     }
-    result += code * pow;
+    // NOTE: Offset by 1 since subtraction made 'A' = 0
+    result += (code + 1) * pow;
     pow *= CHAR_CODE_RANGE;
   }
   return result;
