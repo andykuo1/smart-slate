@@ -29,12 +29,12 @@ export default function BlockContentToolbar({
   setEditable,
 }) {
   return (
-    <div className="absolute -left-4 bottom-0 top-0 flex items-center">
+    <div className="absolute -right-0 bottom-0 top-0 flex items-center">
       <PopoverProvider>
         <PopoverDisclosure>
           <MenuIcon
             className={
-              'invisible h-10 w-8 rounded-xl fill-current group-hover:visible group-hover:bg-gray-100 dark:group-hover:bg-gray-800'
+              'invisible h-full w-10 rounded-full bg-gradient-to-r from-transparent to-50% fill-current group-hover:visible group-hover:to-gray-100 dark:group-hover:to-gray-800'
             }
           />
         </PopoverDisclosure>
