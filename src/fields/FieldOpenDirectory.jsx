@@ -12,10 +12,10 @@ import FieldButton from './FieldButton';
  * @param {import('react').ReactNode} [props.children]
  */
 export default function FieldOpenDirectoryInput({
-  title = 'Open directory on local device',
+  title = 'Select directory on local device',
   onChange,
   disabled,
-  children = 'Open directory',
+  children = 'Select directory',
 }) {
   async function onClick() {
     const files = await openDirectory();

@@ -18,7 +18,7 @@ export default function RenamePage() {
     /** @type {Array<import('@/scanner/DirectoryPicker').FileWithHandles>} */ ([]),
   );
   const [mapping, setMapping] = useState(
-    /** @type {Record<string, string>} */ ({}),
+    /** @type {Record<string, import('@/scanner/DirectoryPicker').FileWithHandles>} */ ({}),
   );
   const navigate = useNavigate();
 
@@ -27,6 +27,7 @@ export default function RenamePage() {
   }
 
   const hasAnyMapping = Object.keys(mapping).length > 0;
+  const hasAnyFiles = files.length > 0;
 
   return (
     <PageLayout className="bg-white text-black dark:bg-gray-900 dark:text-white">
@@ -41,50 +42,87 @@ export default function RenamePage() {
             Return home
           </FieldButton>
           <br />
-          <FieldOpenDirectory onChange={(files) => setFiles(files)} />
+          <FieldOpenDirectory
+            onChange={(files) => setFiles(files)}
+            disabled={hasAnyMapping}
+          />
           <FieldUploadFile
             title="Upload .csv file"
             accept=".csv"
             onChange={async (fileData) => {
               let textData = await fileData.text();
               let lines = textData.split('\n');
+              // Get names from CSV...
               /** @type {Record<string, string>} */
-              let result = {};
+              let jsonData = {};
               for (let line of lines) {
                 let [first, second] = line.split(',');
-                result[basename(first)] = basename(second);
+                jsonData[basename(first)] = basename(second);
+              }
+              // Compare against actual files...
+              /** @type {Record<string, import('@/scanner/DirectoryPicker').FileWithHandles>} */
+              let result = {};
+              for (let file of files) {
+                let fileName = basename(file.name);
+                let dataName = jsonData[fileName];
+                if (dataName && dataName.trim().length > 0) {
+                  result[dataName] = file;
+                }
+              }
+              let resultKeys = Object.keys(result);
+              let resultCount = resultKeys.length;
+              console.log(
+                `[FieldRenameFilesInput] Matched ${resultCount}/${files.length} file(s)...`,
+              );
+              if (resultCount <= 0) {
+                window.alert('No files matched.');
+                return;
               }
               setMapping(result);
-            }}>
+            }}
+            disabled={!hasAnyFiles}>
             Upload .csv
           </FieldUploadFile>
-          <output className={hasAnyMapping ? 'visible' : 'invisible'}>
-            Found {Object.keys(mapping).length} entries
+          <output
+            className={
+              'text-center' + ' ' + (hasAnyMapping ? 'visible' : 'invisible')
+            }>
+            Found {Object.keys(mapping).length} matched file(s)
           </output>
           <FieldRenameFilesInput
             files={files}
-            mapping={(file) => mapping[basename(file.name)]}
+            mapping={mapping}
+            disabled={!hasAnyMapping || !hasAnyFiles}
           />
+          <FieldButton
+            onClick={() => {
+              setFiles([]);
+              setMapping({});
+            }}
+            disabled={!hasAnyMapping || !hasAnyFiles}>
+            Reset
+          </FieldButton>
         </div>
         <ul className="flex w-[50vw] flex-col overflow-y-auto p-2">
           {files.map((file) => {
-            const fileBaseName = basename(file.name);
             const fileExtName = extname(file.name);
-            const mappedName = mapping[fileBaseName];
+            const mappedResult = Object.entries(mapping).find(
+              ([_, mappedFile]) => mappedFile === file,
+            );
             return (
               <li
                 key={file.webkitRelativePath}
                 className={
                   'flex flex-col gap-2 px-2 ' +
                   ' ' +
-                  (mappedName
-                    ? 'rounded bg-green-200 py-4'
+                  (mappedResult
+                    ? 'rounded bg-green-200 font-bold'
                     : hasAnyMapping
                       ? 'opacity-30'
                       : '')
                 }>
                 {file.name}
-                {mappedName ? ` => ${mappedName}${fileExtName}` : ''}
+                {mappedResult ? ` => ${mappedResult[0]}${fileExtName}` : ''}
               </li>
             );
           })}
@@ -98,36 +136,36 @@ export default function RenamePage() {
  * @template {import('@/scanner/DirectoryPicker').FileWithHandles} T
  * @param {object} props
  * @param {Array<T>} props.files
- * @param {(file: T) => string} props.mapping
+ * @param {Record<string, T>} props.mapping
  * @param {(e: { value: T|undefined, done: boolean}) => void} [props.onChange]
+ * @param {boolean} props.disabled
  */
-function FieldRenameFilesInput({ files, mapping, onChange }) {
+function FieldRenameFilesInput({
+  files,
+  mapping,
+  onChange,
+  disabled = !onChange || files.length <= 0,
+}) {
   const [progress, setProgress] = useState(-1);
 
   const onClick = useCallback(
     async function _onClick() {
       setProgress(0);
-      /** @type {Record<string, T>} */
-      let result = {};
-      for (let file of files) {
-        let naming = mapping(file);
-        if (typeof naming !== 'string' || naming.trim().length <= 0) {
-          continue;
-        }
-        result[naming] = file;
-      }
-      let resultKeys = Object.keys(result);
+      let resultKeys = Object.keys(mapping);
       console.log(
-        `[FieldRenameFilesInput] Renaming ${resultKeys.length}/${files.length} file(s)...`,
+        `[FieldRenameFilesInput] Renaming ${resultKeys.length} file(s)...`,
       );
       // NOTE: Offset by 1 so the LAST setProgress() can complete.
       let maxProgress = (resultKeys.length + 1) * 100;
       let deltaProgress = Math.ceil((1 / maxProgress) * 100);
-      for (let [key, file] of Object.entries(result)) {
+      for (let [unformattedValue, file] of Object.entries(mapping)) {
         let fileName = file.name;
         let fileHandle = file.handle;
         let fileExtName = extname(fileName);
-        let value = `${key}${fileExtName}`;
+        let hasUnformattedExt = unformattedValue.indexOf('.') >= 0;
+        let value = hasUnformattedExt
+          ? unformattedValue
+          : `${unformattedValue}${fileExtName}`;
         if (fileHandle) {
           console.log(`[FieldRenameFilesInput] Moving ${fileName} => ${value}`);
           // @ts-expect-error handle.move() is supported on chrome (though not standard).
@@ -149,7 +187,7 @@ function FieldRenameFilesInput({ files, mapping, onChange }) {
       title="Rename selected files"
       Icon={SaveIcon}
       onClick={onClick}
-      disabled={files.length <= 0}>
+      disabled={disabled}>
       <div className="flex flex-col gap-2">
         <div className="mt-2">Rename files on disk</div>
         <div className="mx-auto mb-4 block w-[80%] text-xs opacity-50">
