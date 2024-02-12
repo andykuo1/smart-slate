@@ -9,7 +9,8 @@
     "lint": "eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --host --port 8080",
     "format": "prettier --write --ignore-path .gitignore .",
-    "test": "npm run format && npm run lint && conc \"npm start\" \"npm run cy:run\"",
+    "test": "vitest",
+    "cy:test": "npm run format && npm run lint && conc \"npm start\" \"npm run cy:run\"",
     "cy:open": "cypress open",
     "cy:run": "cypress run --headed",
     "generate:pwa": "pwa-assets-generator"
@@ -63,6 +64,7 @@
     "vite": "^5.0.8",
     "vite-plugin-pwa": "^0.17.4",
     "vite-plugin-svgr": "^4.2.0",
-    "vite-tsconfig-paths": "^4.2.2"
+    "vite-tsconfig-paths": "^4.2.2",
+    "vitest": "^1.2.2"
   }
 }
