@@ -18,12 +18,14 @@
 - Add toolbar
 - Add dark mode
 - Add fixed width to screenplay text
+- Add lazy loading for scene-level shotlist
 
 - Remove shot details button
 - Remove scene and shot focus views
 
 - Fix screenplay margins to match
 - Fix scene renumbering not skipping last index
+- Fix scanner using index instead of take number
 
 # v0.1.15
 

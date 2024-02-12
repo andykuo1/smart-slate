@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import PlagiarismIcon from '@material-symbols/svg-400/rounded/plagiarism.svg';
 
 import { setVideoSrcBlob } from '@/app/VideoBlobSourceHelper';
+import { formatSceneShotNumber } from '@/components/takes/TakeNameFormat';
 import FieldButton from '@/fields/FieldButton';
 import { captureVideoSnapshot } from '@/recorder/snapshot/VideoSnapshot';
 import {
@@ -192,9 +193,24 @@ async function performScan(output, videoRef, onChange) {
             throw new Error('Cannot decode qr code.');
           }
           let ext = extname(key);
-          let fileName = `${result.projectId}_${result.shotHash}_T${String(
-            o.index,
-          ).padStart(2, '0')}_IMPORTED${ext}`;
+          let fileNameParts = [
+            result.projectId,
+            'sceneNumber' in result || 'shotNumber' in result
+              ? formatSceneShotNumber(
+                  // @ts-expect-error We are okay with NaN
+                  Number(result.sceneNumber),
+                  // @ts-expect-error We are okay with NaN
+                  Number(result.shotNumber),
+                  false,
+                )
+              : [],
+            'takeNumber' in result
+              ? `T${String(result.takeNumber).padStart(2, '0')}`
+              : [],
+            result.shotHash,
+            `IMPORTED${ext}`,
+          ].flat();
+          let fileName = fileNameParts.join('_');
           o.status = '[FOUND]';
           o.value = fileName;
         } catch {
