@@ -25,7 +25,7 @@ export default function FieldButton({
     <button
       style={{ lineHeight: '1em' }}
       className={
-        'flex select-none flex-row items-center gap-2 rounded' +
+        'flex select-none flex-row items-center rounded' +
         ' ' +
         'disabled:opacity-30' +
         ' ' +
@@ -47,7 +47,7 @@ export default function FieldButton({
       {typeof children === 'string' ? (
         <div className="flex-1 text-center">{children}</div>
       ) : (
-        <div className="flex flex-1 items-center">{children}</div>
+        children && <div className="flex flex-1 items-center">{children}</div>
       )}
     </button>
   );

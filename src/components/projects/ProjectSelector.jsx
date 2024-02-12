@@ -99,7 +99,7 @@ function ProjectSelectorOption({ className, documentId }) {
         ' ' +
         'mx-2 my-4 rounded-xl bg-gray-100 p-2 dark:bg-gray-800' +
         ' ' +
-        'hover:cursor-pointer hover:bg-white dark:hover:bg-gray-700' +
+        'hover:cursor-pointer hover:bg-white dark:hover:bg-gray-600' +
         ' ' +
         className
       }

@@ -49,7 +49,7 @@ export default function ShotListHeader({
       <span className="flex-1" />
       <div
         className={
-          'hidden flex-row gap-2 rounded-full bg-gray-300 px-4 text-gray-400' +
+          'hidden flex-row gap-2 rounded-full bg-gray-300 px-4 text-gray-400 dark:bg-gray-600 dark:text-gray-800' +
           ' ' +
           (sequenceMode ? 'lg:flex' : 'sm:flex')
         }>

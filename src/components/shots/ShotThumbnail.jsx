@@ -42,7 +42,7 @@ export default function ShotThumbnail({
       <ShotTakeCountAsCheck documentId={documentId} shotId={shotId} />
       <PopoverProvider>
         <ShotThumbnailImage
-          className={'flex-1 bg-gray-300 dark:bg-gray-700'}
+          className={'flex-1 bg-gray-300 dark:bg-gray-600'}
           documentId={documentId}
           sceneId={sceneId}
           shotId={shotId}

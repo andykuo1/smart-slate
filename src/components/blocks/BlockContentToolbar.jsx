@@ -34,7 +34,7 @@ export default function BlockContentToolbar({
         <PopoverDisclosure>
           <MenuIcon
             className={
-              'invisible h-10 w-8 rounded-xl fill-current group-hover:visible group-hover:bg-gray-100'
+              'invisible h-10 w-8 rounded-xl fill-current group-hover:visible group-hover:bg-gray-100 dark:group-hover:bg-gray-800'
             }
           />
         </PopoverDisclosure>
