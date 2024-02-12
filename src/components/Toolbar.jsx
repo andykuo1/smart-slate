@@ -9,13 +9,18 @@ import SearchIcon from '@material-symbols/svg-400/rounded/search.svg';
 import LogoIcon from '@/assets/logo.svg';
 import FieldButton from '@/fields/FieldButton';
 import { useProjectId } from '@/stores/document/use';
-import { useCurrentCursor, useCurrentDocumentId } from '@/stores/user';
+import {
+  useCurrentCursor,
+  useCurrentDocumentId,
+  useSetUserCursor,
+} from '@/stores/user';
 
 import SceneLayoutButton from './scenes/SceneLayoutButton';
 import SettingsSceneShotsDetailButton from './scenes/settings/SettingsSceneShotsDetailButton';
 
 export default function Toolbar() {
   const { documentId, sceneId } = useCurrentCursor();
+  const setUserCursor = useSetUserCursor();
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   return (
@@ -28,7 +33,10 @@ export default function Toolbar() {
       <div className={'flex' + ' ' + (!open ? 'hidden' : '')}>
         <title
           className="sticky left-0 z-10 mr-2 flex h-full cursor-pointer select-none items-center gap-2 bg-white pl-4 font-mono font-bold dark:bg-black"
-          onClick={() => navigate('/')}>
+          onClick={() => {
+            setUserCursor('', '', '', '');
+            navigate('/');
+          }}>
           <LogoIcon className="inline-block h-6 w-6" />
           EagleStudio
           <ToolbarDivider />

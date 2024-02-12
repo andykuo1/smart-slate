@@ -18,7 +18,7 @@ export default function SettingsReturnHomeField() {
   const deleteDocument = useDocumentStore((ctx) => ctx.deleteDocument);
 
   function onClick() {
-    setUserCursor('', '', '');
+    setUserCursor('', '', '', '');
     if (!projectId) {
       // Since no project id exists yet, just delete this project.
       deleteDocument(documentId);
@@ -47,7 +47,7 @@ function SettingsProjectBackButton() {
   const deleteDocument = useDocumentStore((ctx) => ctx.deleteDocument);
 
   function onClick() {
-    setUserCursor('', '', '');
+    setUserCursor('', '', '', '');
     if (!projectId) {
       // Since no project id exists yet, just delete this project.
       deleteDocument(documentId);
