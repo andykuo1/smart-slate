@@ -2,14 +2,12 @@ import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@material-symbols/svg-400/rounded/arrow_back.svg';
-import FolderOpenIcon from '@material-symbols/svg-400/rounded/folder_open.svg';
 import SaveIcon from '@material-symbols/svg-400/rounded/save.svg';
 import ServiceToolboxIcon from '@material-symbols/svg-400/rounded/service_toolbox.svg';
-import UploadIcon from '@material-symbols/svg-400/rounded/upload.svg';
 
 import FieldButton from '@/fields/FieldButton';
-import { useSingleFileInput } from '@/libs/UseSingleFileInput';
-import { openDirectory } from '@/scanner/DirectoryPicker';
+import FieldOpenDirectory from '@/fields/FieldOpenDirectory';
+import FieldUploadFile from '@/fields/FieldUploadFile';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 import { basename, extname } from '@/utils/PathHelper';
 
@@ -43,8 +41,8 @@ export default function RenamePage() {
             Return home
           </FieldButton>
           <br />
-          <FieldOpenDirectoryInput onChange={(files) => setFiles(files)} />
-          <FieldUploadFileInput
+          <FieldOpenDirectory onChange={(files) => setFiles(files)} />
+          <FieldUploadFile
             title="Upload .csv file"
             accept=".csv"
             onChange={async (fileData) => {
@@ -59,7 +57,7 @@ export default function RenamePage() {
               setMapping(result);
             }}>
             Upload .csv
-          </FieldUploadFileInput>
+          </FieldUploadFile>
           <output className={hasAnyMapping ? 'visible' : 'invisible'}>
             Found {Object.keys(mapping).length} entries
           </output>
@@ -68,7 +66,7 @@ export default function RenamePage() {
             mapping={(file) => mapping[basename(file.name)]}
           />
         </div>
-        <ul className="flex flex-col overflow-y-auto p-2">
+        <ul className="flex w-[50vw] flex-col overflow-y-auto p-2">
           {files.map((file) => {
             const fileBaseName = basename(file.name);
             const fileExtName = extname(file.name);
@@ -185,66 +183,6 @@ function FieldRenameFilesInput({ files, mapping, onChange }) {
           </>
         )}
       </div>
-    </FieldButton>
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} props.title
- * @param {string} props.accept
- * @param {import('@/libs/UseSingleFileInput').SingleFileInputChangeHandler} props.onChange
- * @param {import('react').ReactNode} [props.children]
- */
-function FieldUploadFileInput({
-  accept,
-  title = 'Upload file',
-  onChange,
-  children = 'Upload file',
-  ...buttonProps
-}) {
-  const [render, click] = useSingleFileInput(accept, onChange);
-  return (
-    <>
-      <FieldButton
-        title={title}
-        Icon={UploadIcon}
-        onClick={click}
-        {...buttonProps}>
-        {children}
-      </FieldButton>
-      {render()}
-    </>
-  );
-}
-
-/**
- * @param {object} props
- * @param {(files: Array<import('@/scanner/DirectoryPicker').FileWithHandles>) => void} props.onChange
- * @param {string} [props.title]
- * @param {boolean} [props.disabled]
- * @param {import('react').ReactNode} [props.children]
- */
-function FieldOpenDirectoryInput({
-  title = 'Open directory on local device',
-  onChange,
-  disabled,
-  children = 'Open directory',
-}) {
-  async function onClick() {
-    const files = await openDirectory();
-    if (!files) {
-      return;
-    }
-    onChange(files);
-  }
-  return (
-    <FieldButton
-      Icon={FolderOpenIcon}
-      title={title}
-      onClick={onClick}
-      disabled={disabled}>
-      {children}
     </FieldButton>
   );
 }
