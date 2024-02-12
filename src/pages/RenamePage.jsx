@@ -8,7 +8,7 @@ import FieldButton from '@/fields/FieldButton';
 import { useSingleFileInput } from '@/libs/UseSingleFileInput';
 import { openDirectory } from '@/scanner/DirectoryPicker';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
-import { basename } from '@/utils/PathHelper';
+import { basename, extname } from '@/utils/PathHelper';
 
 import PageLayout from './PageLayout';
 
@@ -107,9 +107,12 @@ function FieldRenameFilesInput({ files, mapping }) {
       let maxProgress = (resultKeys.length + 1) * 100;
       let deltaProgress = Math.ceil((1 / maxProgress) * 100);
       for (let [key, file] of Object.entries(result)) {
-        console.log(`[FieldRenameFilesInput] Moving ${file.name} => ${key}`);
+        let fileName = file.name;
+        let fileExtName = extname(fileName);
+        let value = `${key}${fileExtName}`;
+        console.log(`[FieldRenameFilesInput] Moving ${fileName} => ${value}`);
         // @ts-expect-error file.move() is supported on chrome (though not standard).
-        await fileHandle.move(fileName);
+        await file.move(value);
         setProgress((prev) => Math.min(prev + deltaProgress, 100));
       }
       // NOTE: Complete it :)
