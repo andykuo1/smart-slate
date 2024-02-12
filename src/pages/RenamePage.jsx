@@ -1,7 +1,10 @@
 import { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import ArrowBackIcon from '@material-symbols/svg-400/rounded/arrow_back.svg';
 import FolderOpenIcon from '@material-symbols/svg-400/rounded/folder_open.svg';
 import SaveIcon from '@material-symbols/svg-400/rounded/save.svg';
+import ServiceToolboxIcon from '@material-symbols/svg-400/rounded/service_toolbox.svg';
 import UploadIcon from '@material-symbols/svg-400/rounded/upload.svg';
 
 import FieldButton from '@/fields/FieldButton';
@@ -19,14 +22,27 @@ export default function RenamePage() {
   const [mapping, setMapping] = useState(
     /** @type {Record<string, string>} */ ({}),
   );
+  const navigate = useNavigate();
+
+  function onBackClick() {
+    navigate('/');
+  }
 
   const hasAnyMapping = Object.keys(mapping).length > 0;
 
   return (
     <PageLayout className="bg-white text-black dark:bg-gray-900 dark:text-white">
       <fieldset className="mx-auto flex h-full flex-1 flex-col gap-4 p-10 font-mono sm:flex-row">
-        <title>Batch Rename</title>
-        <div className="flex flex-col gap-2">
+        <legend className="flex items-center gap-4 py-4">
+          <ServiceToolboxIcon className="inline-block h-10 w-10 fill-current" />
+          <span className="font-bold">Batch Rename Tool</span>
+          (with CSV support :D)
+        </legend>
+        <div className="flex flex-col gap-2 overflow-y-auto p-2">
+          <FieldButton Icon={ArrowBackIcon} onClick={onBackClick}>
+            Return home
+          </FieldButton>
+          <br />
           <FieldOpenDirectoryInput onChange={(files) => setFiles(files)} />
           <FieldUploadFileInput
             title="Upload .csv file"

@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@material-symbols/svg-400/rounded/arrow_back.svg';
+import ServiceToolboxIcon from '@material-symbols/svg-400/rounded/service_toolbox.svg';
 
 import FieldButton from '@/fields/FieldButton';
 import { useCurrentDocumentId } from '@/stores/user';
@@ -80,6 +81,17 @@ export default function TakeScanner({ className, onChange }) {
         onChange={onScannerChange}
         disabled={status !== 'analyzed'}
       />
+      <FieldButton
+        className="outline-none"
+        title="Open batch rename tool"
+        Icon={ServiceToolboxIcon}
+        onClick={() => navigate('/rename')}>
+        <div>
+          Don't have a{' '}
+          <span className="whitespace-nowrap">batch rename tool</span>?{' '}
+          <div className="mt-2">We got you.</div>
+        </div>
+      </FieldButton>
     </div>
   );
 }
