@@ -29,5 +29,5 @@ export function extname(fileName) {
   if (index < 0) {
     return '';
   }
-  return fileName.substring(index).toLowerCase();
+  return fileName.substring(index);
 }
