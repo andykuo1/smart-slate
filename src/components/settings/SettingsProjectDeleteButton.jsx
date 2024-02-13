@@ -15,6 +15,7 @@ export default function SettingsProjectDeleteButton() {
 
   const handleClick = useCallback(
     function handleClick() {
+      // TODO: Have something else that doesn't stall the app :P
       if (window.confirm('Are you sure you want to delete this project?')) {
         setUserCursor('', '', '');
         trashDocument(documentId);

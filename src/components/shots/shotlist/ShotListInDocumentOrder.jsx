@@ -35,7 +35,8 @@ export default function ShotListInDocumentOrder({
       shotCount={shotCount}
       editable={editable}
       collapsed={collapsed}
-      hidden={hidden}>
+      hidden={hidden}
+      showNew={editable}>
       <PerSceneBlock documentId={documentId}>
         {(sceneId, blockId) => (
           <ShotListShots

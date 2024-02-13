@@ -55,17 +55,11 @@ export default function ShotListLayout({
   if (!showNew && shotCount <= 0) {
     return null;
   }
-  if (typeof showNew === 'undefined' && isNonEmptyShotList) {
-    showNew = editable;
-  }
-
   return (
     <fieldset
       ref={containerRef}
       className={
         'w-full bg-white dark:bg-gray-900' +
-        ' ' +
-        (isNonEmptyShotList ? '' : '') +
         ' ' +
         (hidden ? /* NOTE: Quick hideaway to not lag. */ 'hidden' : className)
       }>

@@ -13,6 +13,7 @@ import ShotListShots from './ShotListShots';
  * @param {boolean} [props.editable]
  * @param {boolean} [props.collapsed]
  * @param {boolean} [props.hidden]
+ * @param {boolean} [props.isLastBlock]
  */
 export default function ShotListInBlockOrder({
   className,
@@ -22,6 +23,7 @@ export default function ShotListInBlockOrder({
   editable = true,
   collapsed = false,
   hidden = false,
+  isLastBlock,
 }) {
   const shotIds = useShotIdsInBlockOrder(documentId, blockId);
   return (
@@ -34,6 +36,7 @@ export default function ShotListInBlockOrder({
       editable={editable}
       collapsed={collapsed}
       hidden={hidden}
+      showNew={editable && (shotIds.length > 0 || isLastBlock)}
       disableLazyLoading={true}>
       <ShotListShots
         documentId={documentId}

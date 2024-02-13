@@ -50,7 +50,7 @@ export default function BlockList({
 
   return (
     <div ref={containerRef} className={'flex flex-col' + ' ' + className}>
-      {blockIds.map((blockId) => (
+      {blockIds.map((blockId, index, array) => (
         <BlockEntry
           key={`block-${blockId}`}
           documentId={documentId}
@@ -64,6 +64,7 @@ export default function BlockList({
             editable={true}
             collapsed={isCollapsed}
             hidden={!showBlockLevelShotList}
+            isLastBlock={index >= array.length - 1}
           />
         </BlockEntry>
       ))}

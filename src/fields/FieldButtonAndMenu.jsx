@@ -77,7 +77,7 @@ function FieldButtonAndMenuDisclosure({
         Icon={Icon}
         title={title}
         onClick={(e) => {
-          store?.toggle();
+          store?.hide();
           onClick?.(e);
         }}
         onContextMenu={(e) => {
