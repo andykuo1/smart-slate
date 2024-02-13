@@ -1,7 +1,7 @@
 import {
   Popover,
+  PopoverAnchor,
   PopoverArrow,
-  PopoverDisclosure,
   PopoverProvider,
   usePopoverContext,
 } from '@ariakit/react';
@@ -70,13 +70,16 @@ function FieldButtonAndMenuDisclosure({
 }) {
   const store = usePopoverContext();
   return (
-    <PopoverDisclosure toggleOnClick={false}>
+    <PopoverAnchor>
       <FieldButton
         className={className}
         inverted={inverted}
         Icon={Icon}
         title={title}
-        onClick={onClick}
+        onClick={(e) => {
+          store?.toggle();
+          onClick?.(e);
+        }}
         onContextMenu={(e) => {
           store?.show?.();
           e.preventDefault();
@@ -85,7 +88,7 @@ function FieldButtonAndMenuDisclosure({
         disabled={disabled}>
         {children}
       </FieldButton>
-    </PopoverDisclosure>
+    </PopoverAnchor>
   );
 }
 

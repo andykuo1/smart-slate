@@ -63,7 +63,7 @@ export default function ShotListLayout({
     <fieldset
       ref={containerRef}
       className={
-        'w-full' +
+        'w-full bg-white dark:bg-gray-900' +
         ' ' +
         (isNonEmptyShotList ? '' : '') +
         ' ' +

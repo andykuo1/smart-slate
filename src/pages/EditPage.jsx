@@ -3,6 +3,7 @@ import { Fragment } from 'react';
 import Toolbar from '@/components/Toolbar';
 import DocumentLayout from '@/components/documents/DocumentLayout';
 import DocumentTitle from '@/components/documents/DocumentTitle';
+import SceneEntryNew from '@/components/scenes/SceneEntryNew';
 import { SceneEntry } from '@/components/scenes/SceneList';
 import ShotListInDocumentOrder from '@/components/shots/shotlist/ShotListInDocumentOrder';
 import ShotListInSceneOrder from '@/components/shots/shotlist/ShotListInSceneOrder';
@@ -55,6 +56,7 @@ function DocumentByScene({ documentId }) {
           </div>
         )}
       </PerScene>
+      <SceneEntryNew className="pb-20" documentId={documentId} />
     </div>
   );
 }
