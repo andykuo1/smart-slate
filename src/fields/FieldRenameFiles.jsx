@@ -72,13 +72,12 @@ export default function FieldRenameFilesInput({
         {files.length > 0 && (
           <>
             <div
+              style={{ width: `${Math.trunc(progress)}%` }}
               className={
                 'absolute bottom-0 left-0 right-0 h-2 outline' +
                 ' ' +
                 (progress > 0
-                  ? `w-[${String(
-                      Math.trunc(progress),
-                    )}%] bg-black group-hover:bg-gray-400`
+                  ? 'bg-black group-hover:bg-gray-400'
                   : progress === 0
                     ? BarberpoleStyle.barberpole
                     : 'invisible')
