@@ -158,7 +158,7 @@ function RenamerFileEntryList() {
     <>
       {hasFileKeys && (
         <tr className="opacity-30">
-          <th className="sticky left-0 bg-gradient-to-r from-white from-80% to-transparent" />
+          <th className="sticky left-0 bg-gradient-to-r from-white from-80% to-transparent dark:from-gray-900" />
           <td>--START OF LIST--</td>
           <td />
         </tr>
@@ -168,14 +168,14 @@ function RenamerFileEntryList() {
       ))}
       {hasFileKeys && (
         <tr className="opacity-30">
-          <th className="sticky left-0 bg-gradient-to-r from-white from-80% to-transparent" />
+          <th className="sticky left-0 bg-gradient-to-r from-white from-80% to-transparent dark:from-gray-900" />
           <td>--END OF LIST--</td>
           <td />
         </tr>
       )}
       {!hasFileKeys && (
         <tr className="opacity-30">
-          <th className="sticky left-0 bg-gradient-to-r from-white from-80% to-transparent" />
+          <th className="sticky left-0 bg-gradient-to-r from-white from-80% to-transparent dark:from-gray-900" />
           <td>--</td>
           <td>--</td>
         </tr>
@@ -197,7 +197,7 @@ function RenamerFileEntry({ index, fileKey }) {
       className={
         ' ' +
         (rename
-          ? 'bg-green-200 even:bg-green-300'
+          ? 'bg-lime-200 dark:bg-lime-800'
           : 'bg-white even:bg-gray-100 dark:bg-gray-900 dark:even:bg-gray-700')
       }>
       <th className="sticky left-0 whitespace-nowrap bg-gradient-to-r from-gray-100 from-80% to-transparent dark:from-gray-700">

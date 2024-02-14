@@ -80,7 +80,7 @@ export default function ScanPage() {
             <table className="table-auto p-1">
               <thead className="sticky top-0 z-10 bg-gray-100 dark:bg-gray-700">
                 <tr className="whitespace-nowrap text-left">
-                  <th className="sticky left-0 bg-gradient-to-r from-gray-100 from-80% to-transparent px-4 dark:bg-gray-700">
+                  <th className="sticky left-0 bg-gradient-to-r from-gray-100 from-80% to-transparent px-4 dark:from-gray-700">
                     ##
                   </th>
                   <th className="p-2">LOCAL FILE</th>
@@ -134,7 +134,7 @@ function ScannerFileEntryList() {
     <>
       {hasFileKeys && (
         <tr className="opacity-30">
-          <th className="sticky left-0 bg-gradient-to-r from-white from-80% to-transparent" />
+          <th className="sticky left-0 bg-gradient-to-r from-white from-80% to-transparent dark:from-gray-900" />
           <td>--START OF LIST--</td>
           <td />
           <td />
@@ -145,7 +145,7 @@ function ScannerFileEntryList() {
       ))}
       {hasFileKeys && (
         <tr className="opacity-30">
-          <th className="sticky left-0 bg-gradient-to-r from-white from-80% to-transparent" />
+          <th className="sticky left-0 bg-gradient-to-r from-white from-80% to-transparent dark:from-gray-900" />
           <td>--END OF LIST--</td>
           <td />
           <td />
@@ -153,7 +153,7 @@ function ScannerFileEntryList() {
       )}
       {!hasFileKeys && (
         <tr className="opacity-30">
-          <th className="sticky left-0 bg-gradient-to-r from-white from-80% to-transparent" />
+          <th className="sticky left-0 bg-gradient-to-r from-white from-80% to-transparent dark:from-gray-900" />
           <td>--</td>
           <td>--</td>
           <td>--</td>
@@ -182,9 +182,9 @@ function ScannerFileEntry({ index, fileKey }) {
         className={
           ' ' +
           (rename
-            ? 'bg-green-200'
+            ? 'bg-lime-200 dark:bg-lime-800'
             : isFailedRename
-              ? 'bg-red-200'
+              ? 'bg-red-200 dark:bg-red-900'
               : 'bg-white even:bg-gray-100 dark:bg-gray-900 dark:even:bg-gray-700')
         }>
         <th className="sticky left-0 whitespace-nowrap bg-gradient-to-r from-gray-100 from-80% to-transparent dark:from-gray-700">
