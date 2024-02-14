@@ -1,5 +1,7 @@
 # Upcoming
 
+# 0.1.16
+
 - Add shot and take list labels
 - Add good/take count check to shot thumbnail
 - Add new take for empty shot list on slate
