@@ -5,7 +5,7 @@ import ScannerButton from '@/buttons/ScannerButton';
 import ProjectSelector from '@/components/projects/ProjectSelector';
 import GoogleConnectButton from '@/libs/googleapi/auth/GoogleConnectButton';
 import AppTitle from '@/welcome/AppTitle';
-import DarkModeToggle from '@/welcome/DarkModeToggle';
+// import DarkModeToggle from '@/welcome/DarkModeToggle';
 import MadeWithLove from '@/welcome/MadeWithLove';
 
 // import ProfilePopover from '@/welcome/ProfilePopover';
@@ -25,7 +25,7 @@ export default function RootPage() {
         <ScannerButton />
       </div>
       <ProjectSelector className="mb-auto mt-2" />
-      <DarkModeToggle className="absolute left-2 top-2" />
+      {/* <DarkModeToggle className="absolute left-2 top-2" /> */}
       <MadeWithLove />
       {/* <ProfilePopover /> */}
     </PageLayout>
