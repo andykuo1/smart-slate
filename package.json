@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --host --port 8080",
-    "format": "prettier --write --ignore-path .gitignore .",
+    "format": "prettier --write --ignore-path .prettierignore .",
     "test": "vitest",
     "cy:start": "conc \"npm start\" \"npm run cy:run\"",
     "cy:test": "npm run format && npm run lint && conc \"npm start\" \"npm run cy:run\"",
