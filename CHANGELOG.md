@@ -19,6 +19,9 @@
 - Add dark mode
 - Add fixed width to screenplay text
 - Add lazy loading for scene-level shotlist
+- Add rename tool
+- Add file ui to qr code tool
+- Add FFmpeg transcoding to qr code scanner
 
 - Remove shot details button
 - Remove scene and shot focus views

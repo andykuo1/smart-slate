@@ -10,6 +10,7 @@
     "preview": "vite preview --host --port 8080",
     "format": "prettier --write --ignore-path .gitignore .",
     "test": "vitest",
+    "cy:start": "conc \"npm start\" \"npm run cy:run\"",
     "cy:test": "npm run format && npm run lint && conc \"npm start\" \"npm run cy:run\"",
     "cy:open": "cypress open",
     "cy:run": "cypress run --headed",
@@ -30,6 +31,7 @@
     "lexical": "^0.12.5",
     "qrcode": "^1.5.3",
     "react": "^18.2.0",
+    "react-confetti-explosion": "^2.1.2",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.0",
     "zustand": "^4.4.7"

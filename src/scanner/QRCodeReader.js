@@ -53,3 +53,25 @@ export async function scanVideoBlobForQRCodes(video, videoBlob) {
   }
   return results;
 }
+
+/**
+ * @param {HTMLVideoElement} video
+ * @param {Blob} videoBlob
+ */
+export async function tryScanVideoBlobForQRCode(video, videoBlob) {
+  const reader = new BrowserQRCodeReader();
+  const url = URL.createObjectURL(videoBlob);
+  try {
+    let result = await reader.decodeFromVideo(video, url);
+    return result;
+  } catch (err) {
+    if (err instanceof NotFoundException) {
+      // No qr code in this one.
+      return null;
+    } else {
+      throw err;
+    }
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}

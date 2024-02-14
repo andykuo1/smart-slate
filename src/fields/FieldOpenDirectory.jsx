@@ -18,10 +18,12 @@ export default function FieldOpenDirectoryInput({
   children = 'Select directory',
 }) {
   async function onClick() {
-    const files = await openDirectory();
+    let files = await openDirectory();
     if (!files) {
       return;
     }
+    // NOTE: Removes any hidden files (starting with '.')
+    files = files.filter((file) => !file.name.startsWith('.'));
     onChange(files);
   }
   return (

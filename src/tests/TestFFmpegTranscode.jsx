@@ -244,6 +244,22 @@ export default function TestFFmpegTranscode() {
               if (enableSnapshot) {
                 yield `...and downloading snapshot...`;
                 downloadURLImpl('at_' + i + '_' + outputName, blobUrl);
+              } else {
+                yield `...and computing snapshot...`;
+                let promise = new Promise((resolve, reject) => {
+                  let reader = new FileReader();
+                  reader.readAsDataURL(blob);
+                  reader.addEventListener('loadend', (e) => {
+                    resolve(e.target?.result);
+                  });
+                  reader.addEventListener('error', (e) => {
+                    reject(e);
+                  });
+                });
+                let dataURL = await promise;
+                yield `...as a data url (${
+                  dataURL.length
+                }): ${dataURL.substring(0, 100)}.`;
               }
 
               const qrCodeText = await scanImageURLForQRCode(blobUrl);

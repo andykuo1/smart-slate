@@ -10,50 +10,70 @@ import FieldButton from './FieldButton';
 /**
  * @template {import('@/scanner/DirectoryPicker').FileWithHandles} T
  * @param {object} props
- * @param {Array<T>} props.files
- * @param {Record<string, T>} props.mapping
+ * @param {Record<string, T>} props.files
+ * @param {Record<string, string>} props.renames
  * @param {(e: { value: T|undefined, done: boolean}) => void} [props.onChange]
- * @param {boolean} props.disabled
+ * @param {boolean} [props.disabled]
  */
 export default function FieldRenameFilesInput({
   files,
-  mapping,
+  renames,
   onChange,
-  disabled = !onChange || files.length <= 0,
+  disabled,
 }) {
   const [progress, setProgress] = useState(-1);
+  const hasFileKeys = Object.keys(files).length > 0;
+  const isReady = hasFileKeys && Object.keys(renames).length > 0;
+  const showProgressBar = hasFileKeys;
 
   const onClick = useCallback(
     async function _onClick() {
       setProgress(0);
-      let resultKeys = Object.keys(mapping);
+
+      const renameKeys = Object.keys(renames);
       console.log(
-        `[FieldRenameFilesInput] Renaming ${resultKeys.length} file(s)...`,
+        `[FieldRenameFilesInput] Renaming ${renameKeys.length} file(s)...`,
       );
+
       // NOTE: Offset by 1 so the LAST setProgress() can complete.
-      let maxProgress = (resultKeys.length + 1) * 100;
-      let deltaProgress = Math.ceil((1 / maxProgress) * 100);
-      for (let [unformattedValue, file] of Object.entries(mapping)) {
+      const maxProgress = (renameKeys.length + 1) * 100;
+      const deltaProgress = Math.ceil((1 / maxProgress) * 100);
+      for (let renameKey of renameKeys) {
+        let rename = renames[renameKey];
+        let file = files[renameKey];
+        if (!file) {
+          console.error(`[FieldRenameFilesInput] Missing file object!`);
+          setProgress((prev) => Math.min(prev + deltaProgress, 100));
+          continue;
+        }
+
         let fileName = file.name;
         let fileHandle = file.handle;
         let fileExtName = extname(fileName);
-        let hasUnformattedExt = unformattedValue.indexOf('.') >= 0;
-        let value = hasUnformattedExt
-          ? unformattedValue
-          : `${unformattedValue}${fileExtName}`;
-        if (fileHandle) {
-          console.log(`[FieldRenameFilesInput] Moving ${fileName} => ${value}`);
-          // @ts-expect-error handle.move() is supported on chrome (though not standard).
-          await fileHandle.move(value);
+
+        // NOTE: Preserve file ext if not yet on there.
+        if (rename.indexOf('.') < 0) {
+          rename = `${rename}${fileExtName}`;
         }
-        setProgress((prev) => Math.min(prev + deltaProgress, 100));
+
+        if (!fileHandle) {
+          console.error(`[FieldRenameFilesInput] Missing file handle!`);
+          setProgress((prev) => Math.min(prev + deltaProgress, 100));
+          continue;
+        }
+
+        console.log(`[FieldRenameFilesInput] Moving ${fileName} => ${rename}`);
+        // NOTE: handle.move() is supported on chrome (though not standard).
+        await /** @type {any} */ (fileHandle).move(rename);
+
         onChange?.({ value: file, done: false });
+        setProgress((prev) => Math.min(prev + deltaProgress, 100));
       }
       // NOTE: Complete it :)
-      setProgress(100);
       onChange?.({ value: undefined, done: true });
+      setProgress(100);
     },
-    [files, mapping, setProgress, onChange],
+    [files, renames, setProgress, onChange],
   );
 
   return (
@@ -62,14 +82,19 @@ export default function FieldRenameFilesInput({
       title="Rename selected files"
       Icon={SaveIcon}
       onClick={onClick}
-      disabled={disabled}>
-      <div className="flex flex-col gap-2">
-        <div className="mt-2">Rename files on disk</div>
-        <div className="mx-auto mb-4 block w-[80%] text-xs opacity-50">
-          NOTE: Only <b>Chrome</b> browsers are supported.
+      disabled={disabled || !isReady}>
+      <div className="mx-auto flex flex-col gap-2 py-2">
+        <div>Rename files on disk</div>
+        <div className="flex flex-col items-center gap-2 text-xs opacity-50">
           {/* SOURCE: https://caniuse.com/mdn-api_filesystemhandle_move */}
+          <div>
+            NOTE: Only <b>Chrome</b> browsers are supported.
+          </div>
+          <div className="w-[70%]">
+            Otherwise, download the CSV file and use a batch rename tool.
+          </div>
         </div>
-        {files.length > 0 && (
+        {showProgressBar && (
           <>
             <div
               style={{ width: `${Math.trunc(progress)}%` }}

@@ -11,9 +11,10 @@ export function zi<Store, Args extends Array<any>>(
     set(produce((draft) => applier(draft as Store, ...(args as Args))));
 }
 
-export function ziget<Store, Args extends Array<any>>(
+export function ziget<Store, ReturnType, Args extends Array<any>>(
   get: Get,
-  applier: (store: Store, ...args: Args) => void,
+  applier: (store: Store, ...args: Args) => ReturnType,
 ) {
-  return (...args: Args) => applier(get(), ...(args as Args));
+  return (...args: Args) =>
+    applier(get(), ...(args as Args)) as Readonly<ReturnType>;
 }
