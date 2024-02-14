@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import ArrowBackIcon from '@material-symbols/svg-400/rounded/arrow_back.svg';
 import DownloadIcon from '@material-symbols/svg-400/rounded/download.svg';
 import PlagiarismIcon from '@material-symbols/svg-400/rounded/plagiarism.svg';
 import PlaylistAddCheckIcon from '@material-symbols/svg-400/rounded/playlist_add_check.svg';
@@ -30,6 +29,7 @@ import {
 import { useToolboxStore } from '@/stores/toolbox/UseToolboxStore';
 import { useTranscoderFFmpeg } from '@/stores/toolbox/UseTranscoder';
 import { useCurrentDocumentId } from '@/stores/user';
+import ToolboxNavigateBackButton from '@/toolbox/ToolboxNavigateBackButton';
 import { downloadText } from '@/utils/Downloader';
 import { basename } from '@/utils/PathHelper';
 
@@ -40,7 +40,7 @@ import { ToolboxActionList } from './ToolboxLayout';
 
 export default function ScanPage() {
   return (
-    <PageLayout className="bg-white text-black">
+    <PageLayout className="bg-white text-black dark:bg-gray-900 dark:text-white">
       <fieldset className="relative m-4 flex flex-col overflow-hidden border-2 border-black px-4 pb-4 md:flex-row">
         <legend className="my-3 flex w-full items-center gap-4 p-3 shadow">
           <QRCodeScannerIcon className="inline-block h-10 w-10 fill-current" />
@@ -67,7 +67,7 @@ export default function ScanPage() {
                 <br />
               </>,
             ]}>
-            <ScannerNavigateBackButton />
+            <ToolboxNavigateBackButton />
           </ToolboxActionList>
         </div>
         <div className="flex flex-1 overflow-hidden md:w-1">
@@ -400,7 +400,8 @@ function ScannerSettingsCaptureSnapshotToggle() {
 
 function ScannerOutputCount() {
   let renameKeys = useScannerFileRenameKeys();
-  if (renameKeys.length <= 0) {
+  const hasAnyRenames = renameKeys.length > 0;
+  if (!hasAnyRenames) {
     return null;
   }
   return (
@@ -509,23 +510,6 @@ function ScannerToBatchRenameToolButton() {
         <span className="whitespace-nowrap font-bold">batch rename tool?</span>
         <div className="mt-2">We got you.</div>
       </div>
-    </FieldButton>
-  );
-}
-
-function ScannerNavigateBackButton() {
-  const documentId = useCurrentDocumentId();
-  const navigate = useNavigate();
-  function onClick() {
-    if (documentId) {
-      navigate('/edit');
-    } else {
-      navigate('/');
-    }
-  }
-  return (
-    <FieldButton Icon={ArrowBackIcon} onClick={onClick}>
-      Return home
     </FieldButton>
   );
 }

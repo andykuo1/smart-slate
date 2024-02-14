@@ -1,3 +1,4 @@
+import { createDispatchForRenamer } from './RenamerDispatch';
 import { createDispatchForScanner } from './ScannerDispatch';
 import { createDispatchForTranscoder } from './TranscoderDispatch';
 
@@ -13,5 +14,6 @@ export function createDispatch(set, get) {
     UNSAFE_getToolboxStore: get,
     ...createDispatchForScanner(set, get),
     ...createDispatchForTranscoder(set, get),
+    ...createDispatchForRenamer(set, get),
   };
 }

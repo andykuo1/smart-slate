@@ -7,6 +7,7 @@ import { FFmpegLogging } from '@/scanner/FFmpegTranscoder';
  * @typedef {ReturnType<createScannerStore>} ScannerStore
  * @typedef {ReturnType<createScannerAnalysisInfo>} ScannerAnalysisInfo
  * @typedef {ReturnType<createTranscoderStore>} TranscoderStore
+ * @typedef {ReturnType<createRenamerStore>} RenamerStore
  *
  * @typedef {string} FileKey
  */
@@ -15,6 +16,7 @@ export function createStore() {
   return {
     scanner: createScannerStore(),
     transcoder: createTranscoderStore(),
+    renamer: createRenamerStore(),
   };
 }
 
@@ -40,6 +42,15 @@ export function createTranscoderStore() {
     codecs: [],
     /** @type {FFmpegLogging|null} */
     logging: null,
+  };
+}
+
+export function createRenamerStore() {
+  return {
+    /** @type {Record<FileKey, import('@/scanner/DirectoryPicker').FileWithHandles>} */
+    files: {},
+    /** @type {Record<FileKey, string>} */
+    renames: {},
   };
 }
 

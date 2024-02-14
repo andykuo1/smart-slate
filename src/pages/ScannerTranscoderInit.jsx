@@ -64,6 +64,13 @@ export default function ScannerTranscoderInit() {
     })()
       .then(() => setStatus('ready'))
       .catch(() => setStatus('error'));
-  }, []);
+  }, [
+    currentFFmpeg,
+    setCodecs,
+    setCurrentFFmpeg,
+    setLogger,
+    setStatus,
+    status,
+  ]);
   return null;
 }
