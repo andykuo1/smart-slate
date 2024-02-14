@@ -31,7 +31,7 @@ export default function RenamePage() {
 
   return (
     <PageLayout className="bg-white text-black dark:bg-gray-900 dark:text-white">
-      <fieldset className="relative m-4 flex flex-col overflow-hidden border-2 border-black px-4 pb-4 md:flex-row">
+      <fieldset className="relative m-4 mx-auto flex w-[80%] flex-col overflow-hidden border-2 border-black px-4 pb-4 md:flex-row">
         <legend className="my-3 flex w-full items-center gap-4 p-3 shadow">
           <ServiceToolboxIcon className="inline-block h-10 w-10 fill-current" />
           <span className="text-xl font-bold">
@@ -40,7 +40,7 @@ export default function RenamePage() {
           </span>
         </legend>
 
-        <div className="flex-1 overflow-y-auto">
+        <div className="max-w-sm flex-1 overflow-y-auto">
           <ToolboxActionList
             items={[
               <FieldOpenDirectory
@@ -109,9 +109,9 @@ export default function RenamePage() {
         <div className="flex flex-1 overflow-hidden md:w-1">
           <div className="m-1 w-1 flex-1 overflow-auto">
             <table className="table-auto p-1">
-              <thead className="sticky top-0 z-10 bg-gray-100">
+              <thead className="sticky top-0 z-10 bg-gray-100 dark:bg-gray-700">
                 <tr className="whitespace-nowrap text-left">
-                  <th className="sticky left-0 bg-gradient-to-r from-gray-100 from-80% to-transparent px-4">
+                  <th className="sticky left-0 bg-gradient-to-r from-gray-100 from-80% to-transparent px-4 dark:from-gray-700">
                     ##
                   </th>
                   <th className="p-2">LOCAL FILE</th>
@@ -121,9 +121,9 @@ export default function RenamePage() {
               <tbody className="font-mono">
                 <RenamerFileEntryList />
               </tbody>
-              <tfoot className="sticky bottom-0 z-10 bg-gray-100">
+              <tfoot className="sticky bottom-0 z-10 bg-gray-100 dark:bg-gray-700">
                 <tr className="whitespace-nowrap text-left">
-                  <th className="sticky left-0 bg-gradient-to-r from-gray-100 from-80% to-transparent px-4">
+                  <th className="sticky left-0 bg-gradient-to-r from-gray-100 from-80% to-transparent px-4 dark:from-gray-700">
                     ##
                   </th>
                   <th className="p-2">LOCAL FILE</th>
@@ -198,9 +198,9 @@ function RenamerFileEntry({ index, fileKey }) {
         ' ' +
         (rename
           ? 'bg-green-200 even:bg-green-300'
-          : 'bg-white even:bg-gray-100')
+          : 'bg-white even:bg-gray-100 dark:bg-gray-900 dark:even:bg-gray-700')
       }>
-      <th className="sticky left-0 whitespace-nowrap bg-gradient-to-r from-gray-100 from-80% to-transparent">
+      <th className="sticky left-0 whitespace-nowrap bg-gradient-to-r from-gray-100 from-80% to-transparent dark:from-gray-700">
         {String(index).padStart(2, '0')}
       </th>
       <td className="whitespace-nowrap">{fileObject.name}</td>

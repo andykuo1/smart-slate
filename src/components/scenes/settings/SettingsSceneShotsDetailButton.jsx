@@ -22,7 +22,9 @@ export default function SettingsSceneShotsDetailButton({ className, onClick }) {
     if (shotListMode === 'hidden') {
       setShotListMode('detail');
     } else if (shotListMode === 'detail') {
-      setShotListMode('group');
+      // TODO: Uncomment when group is ready :)
+      // setShotListMode('group');
+      setShotListMode('hidden');
     } else {
       setShotListMode('hidden');
     }

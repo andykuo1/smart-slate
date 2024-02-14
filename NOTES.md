@@ -277,3 +277,8 @@ Export list to csv
 - Integrate FFmpeg
 
 - Import by paste
+
+---
+
+Add shotlist button at bottom of block with plus sign
+Add message to use proxies if not playable video file

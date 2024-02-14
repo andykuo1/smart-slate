@@ -1,3 +1,9 @@
+import {
+  Tooltip,
+  TooltipAnchor,
+  TooltipArrow,
+  TooltipProvider,
+} from '@ariakit/react';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -29,6 +35,7 @@ import {
 import { useToolboxStore } from '@/stores/toolbox/UseToolboxStore';
 import { useTranscoderFFmpeg } from '@/stores/toolbox/UseTranscoder';
 import { useCurrentDocumentId } from '@/stores/user';
+import PopoverStyle from '@/styles/Popover.module.css';
 import ToolboxNavigateBackButton from '@/toolbox/ToolboxNavigateBackButton';
 import { downloadText } from '@/utils/Downloader';
 import { basename } from '@/utils/PathHelper';
@@ -41,19 +48,17 @@ import { ToolboxActionList } from './ToolboxLayout';
 export default function ScanPage() {
   return (
     <PageLayout className="bg-white text-black dark:bg-gray-900 dark:text-white">
-      <fieldset className="relative m-4 flex flex-col overflow-hidden border-2 border-black px-4 pb-4 md:flex-row">
+      <fieldset className="relative m-4 mx-auto flex w-[80%] flex-col overflow-hidden border-2 border-black px-4 pb-4 md:flex-row">
         <legend className="my-3 flex w-full items-center gap-4 p-3 shadow">
           <QRCodeScannerIcon className="inline-block h-10 w-10 fill-current" />
           <span className="text-xl font-bold">QR Code Take Scanner Tool</span>
         </legend>
-        <div className="flex-1 overflow-y-auto">
+        <div className="max-w-sm flex-1 overflow-y-auto">
           <ToolboxActionList
             items={[
               <ScannerOpenDirectoryButton />,
               <>
                 <ScannerAnalyzeButton />
-                <ScannerSettingsEnableTranscoderToggle />
-                <ScannerSettingsCaptureSnapshotToggle />
                 <ScannerSettingsShowAnalysisToggle />
                 <ScannerResetButton />
                 <br />
@@ -73,9 +78,9 @@ export default function ScanPage() {
         <div className="flex flex-1 overflow-hidden md:w-1">
           <div className="m-1 w-1 flex-1 overflow-auto">
             <table className="table-auto p-1">
-              <thead className="sticky top-0 z-10 bg-gray-100">
+              <thead className="sticky top-0 z-10 bg-gray-100 dark:bg-gray-700">
                 <tr className="whitespace-nowrap text-left">
-                  <th className="sticky left-0 bg-gradient-to-r from-gray-100 from-80% to-transparent px-4">
+                  <th className="sticky left-0 bg-gradient-to-r from-gray-100 from-80% to-transparent px-4 dark:bg-gray-700">
                     ##
                   </th>
                   <th className="p-2">LOCAL FILE</th>
@@ -86,9 +91,9 @@ export default function ScanPage() {
               <tbody className="font-mono">
                 <ScannerFileEntryList />
               </tbody>
-              <tfoot className="sticky bottom-0 z-10 bg-gray-100">
+              <tfoot className="sticky bottom-0 z-10 bg-gray-100 dark:bg-gray-700">
                 <tr className="whitespace-nowrap text-left">
-                  <th className="sticky left-0 bg-gradient-to-r from-gray-100 from-80% to-transparent px-4">
+                  <th className="sticky left-0 bg-gradient-to-r from-gray-100 from-80% to-transparent px-4 dark:from-gray-700">
                     ##
                   </th>
                   <th className="p-2">LOCAL FILE</th>
@@ -170,29 +175,49 @@ function ScannerFileEntry({ index, fileKey }) {
   const showAnalysis = useToolboxStore(
     (ctx) => ctx.scanner.settings.showAnalysis,
   );
+  const isFailedRename = rename === '';
   return (
-    <tr
-      className={
-        ' ' +
-        (rename
-          ? 'bg-green-200 even:bg-green-300'
-          : 'bg-white even:bg-gray-100')
-      }>
-      <th className="sticky left-0 whitespace-nowrap bg-gradient-to-r from-gray-100 from-80% to-transparent">
-        {String(index).padStart(2, '0')}
-      </th>
-      <td className="whitespace-nowrap">{fileObject.name}</td>
-      <td className="whitespace-nowrap">{rename || '--'}</td>
-      <td className="max-w-[30%] overflow-x-auto">
-        <pre className={!showAnalysis && analysis ? 'opacity-30' : ''}>
-          {showAnalysis
-            ? jsonStringifyAndOmit(analysis, OMITTED_ANALYSIS_INFO_FIELDS)
-            : analysis
-              ? '<hidden>'
-              : '--'}
-        </pre>
-      </td>
-    </tr>
+    <TooltipProvider timeout={0} placement="right">
+      <tr
+        className={
+          ' ' +
+          (rename
+            ? 'bg-green-200'
+            : isFailedRename
+              ? 'bg-red-200'
+              : 'bg-white even:bg-gray-100 dark:bg-gray-900 dark:even:bg-gray-700')
+        }>
+        <th className="sticky left-0 whitespace-nowrap bg-gradient-to-r from-gray-100 from-80% to-transparent dark:from-gray-700">
+          {String(index).padStart(2, '0')}
+        </th>
+        <td className="whitespace-nowrap">{fileObject.name}</td>
+        <td
+          className={
+            'whitespace-nowrap' + ' ' + (isFailedRename ? 'italic' : '')
+          }>
+          <TooltipAnchor className="inline-block">
+            {isFailedRename ? '<failed>' : rename || '--'}
+          </TooltipAnchor>
+        </td>
+        <Tooltip
+          className={PopoverStyle.popover}
+          hidden={isFailedRename ? undefined : true}>
+          <TooltipArrow className={PopoverStyle.arrow} />
+          TIP: Try converting files into .mp4 or .mov and scanning those
+          instead.
+          <div className="mt-1">Like proxies ;)</div>
+        </Tooltip>
+        <td className="max-w-[30%] overflow-x-auto">
+          <pre className={!showAnalysis && analysis ? 'opacity-30' : ''}>
+            {showAnalysis
+              ? jsonStringifyAndOmit(analysis, OMITTED_ANALYSIS_INFO_FIELDS)
+              : analysis
+                ? '<hidden>'
+                : '--'}
+          </pre>
+        </td>
+      </tr>
+    </TooltipProvider>
   );
 }
 
@@ -278,6 +303,7 @@ function ScannerAnalyzeButton() {
       });
       if (!result) {
         console.log('[Scanner] Failed analysis ' + fileKey);
+        setScannerFileRenameValue(fileKey, '');
         continue;
       }
       setScannerFileAnalysis(fileKey, result);
@@ -290,6 +316,7 @@ function ScannerAnalyzeButton() {
       );
       if (!value) {
         console.log('[Scanner] Failed rename ' + fileKey);
+        setScannerFileRenameValue(fileKey, '');
         continue;
       }
       setScannerFileRenameValue(fileKey, value);
@@ -338,62 +365,6 @@ function ScannerSettingsShowAnalysisToggle() {
       onClick={onClick}
       disabled={!hasAnalysisKeys}>
       Show analysis info
-    </FieldToggle>
-  );
-}
-
-function ScannerSettingsEnableTranscoderToggle() {
-  const fileKeys = useScannerFileKeys();
-  const analysisKeys = useScannerFileAnalysisKeys();
-  const hasFileKeys = fileKeys.length > 0;
-  const hasAnalysisKeys = analysisKeys.length > 0;
-
-  const enableTranscoder = useToolboxStore(
-    (ctx) => ctx.scanner.settings.enableTranscoder,
-  );
-  const toggleScannerSettingsEnableTranscoder = useToolboxStore(
-    (ctx) => ctx.toggleScannerSettingsEnableTranscoder,
-  );
-
-  function onClick() {
-    toggleScannerSettingsEnableTranscoder();
-  }
-
-  return (
-    <FieldToggle
-      className="py-0 outline-none"
-      value={enableTranscoder}
-      onClick={onClick}
-      disabled={!hasFileKeys || hasAnalysisKeys}>
-      Use FFmpeg transcoder
-    </FieldToggle>
-  );
-}
-
-function ScannerSettingsCaptureSnapshotToggle() {
-  const fileKeys = useScannerFileKeys();
-  const analysisKeys = useScannerFileAnalysisKeys();
-  const hasFileKeys = fileKeys.length > 0;
-  const hasAnalysisKeys = analysisKeys.length > 0;
-
-  const captureSnapshot = useToolboxStore(
-    (ctx) => ctx.scanner.settings.captureSnapshot,
-  );
-  const toggleScannerSettingsCaptureSnapshot = useToolboxStore(
-    (ctx) => ctx.toggleScannerSettingsCaptureSnapshot,
-  );
-
-  function onClick() {
-    toggleScannerSettingsCaptureSnapshot();
-  }
-
-  return (
-    <FieldToggle
-      className="py-0 outline-none"
-      value={captureSnapshot}
-      onClick={onClick}
-      disabled={!hasFileKeys || hasAnalysisKeys}>
-      Capture take snapshots
     </FieldToggle>
   );
 }

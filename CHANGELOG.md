@@ -24,6 +24,8 @@
 - Add rename tool
 - Add file ui to qr code tool
 - Add FFmpeg transcoding to qr code scanner
+- Add return home button to settings
+- Add tooltips for failed footage scans
 
 - Remove shot details button
 - Remove scene and shot focus views

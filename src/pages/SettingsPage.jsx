@@ -20,6 +20,7 @@ import SettingsProjectExportZIPButton from '@/components/settings/SettingsProjec
 import SettingsProjectIdField from '@/components/settings/SettingsProjectIdField';
 import SettingsProjectInstallField from '@/components/settings/SettingsProjectInstallField';
 import SettingsProjectNameField from '@/components/settings/SettingsProjectNameField';
+import SettingsReturnHomeField from '@/components/settings/SettingsReturnHomeField';
 import SettingsShareFilesButton from '@/components/settings/SettingsShareFilesButton';
 import SettingsVideoCacheClearButton from '@/components/settings/SettingsVideoCacheClearButton';
 import SettingsVideoResolutionField from '@/components/settings/SettingsVideoResolutionField';
@@ -47,6 +48,7 @@ export default function SettingsPage() {
             <FieldButton Icon={QRCode2Icon} onClick={() => navigate('/scan')}>
               Have QR codes?
             </FieldButton>
+            <SettingsReturnHomeField />
             <br />
             <FieldGroupDiscloseable title="Project Settings">
               <SettingsProjectNameField />

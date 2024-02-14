@@ -15,7 +15,7 @@ import FieldButton from './FieldButton';
  * @param {(e: { value: T|undefined, done: boolean}) => void} [props.onChange]
  * @param {boolean} [props.disabled]
  */
-export default function FieldRenameFilesInput({
+export default function FieldRenameFiles({
   files,
   renames,
   onChange,
@@ -42,7 +42,12 @@ export default function FieldRenameFilesInput({
         let rename = renames[renameKey];
         let file = files[renameKey];
         if (!file) {
-          console.error(`[FieldRenameFilesInput] Missing file object!`);
+          console.error(`[FieldRenameFiles] Missing file object!`);
+          setProgress((prev) => Math.min(prev + deltaProgress, 100));
+          continue;
+        }
+        if (!rename) {
+          console.error(`[FieldRenameFiles] Missing rename value!`);
           setProgress((prev) => Math.min(prev + deltaProgress, 100));
           continue;
         }
