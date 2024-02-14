@@ -13,6 +13,7 @@ export function createDispatch(set) {
     setEnableDriveSync: zi(set, setEnableDriveSync),
     setPreferPersistedMediaStream: zi(set, setPreferPersistedMediaStream),
     setPreferFullscreenRecorder: zi(set, setPreferFullscreenRecorder),
+    setPreferDarkSlate: zi(set, setPreferDarkSlate),
   };
 }
 
@@ -20,7 +21,7 @@ export function createDispatch(set) {
  * @param {import('./SettingsStore').Store} store
  * @param {boolean} enabled
  */
-export function setPreferNativeRecorder(store, enabled) {
+function setPreferNativeRecorder(store, enabled) {
   let settings = store.user;
   settings.preferNativeRecorder = enabled;
 }
@@ -29,7 +30,7 @@ export function setPreferNativeRecorder(store, enabled) {
  * @param {import('./SettingsStore').Store} store
  * @param {boolean} enabled
  */
-export function setPreferMutedWhileRecording(store, enabled) {
+function setPreferMutedWhileRecording(store, enabled) {
   let settings = store.user;
   settings.preferMutedWhileRecording = enabled;
 }
@@ -38,7 +39,7 @@ export function setPreferMutedWhileRecording(store, enabled) {
  * @param {import('./SettingsStore').Store} store
  * @param {boolean} enabled
  */
-export function setEnableThumbnailWhileRecording(store, enabled) {
+function setEnableThumbnailWhileRecording(store, enabled) {
   let settings = store.user;
   settings.enableThumbnailWhileRecording = enabled;
 }
@@ -47,7 +48,7 @@ export function setEnableThumbnailWhileRecording(store, enabled) {
  * @param {import('./SettingsStore').Store} store
  * @param {boolean} enabled
  */
-export function setEnableDriveSync(store, enabled) {
+function setEnableDriveSync(store, enabled) {
   let settings = store.user;
   settings.enableDriveSync = enabled;
 }
@@ -56,7 +57,7 @@ export function setEnableDriveSync(store, enabled) {
  * @param {import('./SettingsStore').Store} store
  * @param {boolean} enabled
  */
-export function setPreferPersistedMediaStream(store, enabled) {
+function setPreferPersistedMediaStream(store, enabled) {
   let settings = store.user;
   settings.preferPersistedMediaStream = enabled;
 }
@@ -65,7 +66,16 @@ export function setPreferPersistedMediaStream(store, enabled) {
  * @param {import('./SettingsStore').Store} store
  * @param {boolean} enabled
  */
-export function setPreferFullscreenRecorder(store, enabled) {
+function setPreferFullscreenRecorder(store, enabled) {
   let settings = store.user;
   settings.preferFullscreenRecorder = enabled;
+}
+
+/**
+ * @param {import('./SettingsStore').Store} store
+ * @param {boolean} enabled
+ */
+function setPreferDarkSlate(store, enabled) {
+  let settings = store.user;
+  settings.preferDarkSlate = enabled;
 }

@@ -77,6 +77,7 @@ function createDocumentSettings() {
     autoSaveGDriveFileId: '',
     directorName: '',
     cameraName: '',
+    writerName: '',
   };
 }
 

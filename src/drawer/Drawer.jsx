@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import ArrowForwardIcon from '@material-symbols/svg-400/rounded/arrow_forward.svg';
 import DoorOpenIcon from '@material-symbols/svg-400/rounded/door_open.svg';
 import HomeIcon from '@material-symbols/svg-400/rounded/home.svg';
-import ReceiptLongIcon from '@material-symbols/svg-400/rounded/receipt_long.svg';
-import TuneIcon from '@material-symbols/svg-400/rounded/tune.svg';
+import PDFIcon from '@material-symbols/svg-400/rounded/picture_as_pdf.svg';
+import VideoIcon from '@material-symbols/svg-400/rounded/subscriptions.svg';
 
 import DocumentContentCount from '@/components/documents/DocumentContentCount';
 import DrawerLayout from '@/drawer/layout/DrawerLayout';
@@ -106,26 +106,16 @@ function DrawerContent() {
 }
 
 function DrawerNavBar() {
-  const drawerActiveTab = useUserStore((ctx) => ctx.drawer.activeTab);
-  const setDrawerActiveTab = useUserStore((ctx) => ctx.setDrawerActiveTab);
-  function onOutlineClick() {
-    if (drawerActiveTab !== 'outline') {
-      setDrawerActiveTab('outline');
-    }
-  }
-  function onTuneClick() {
-    if (drawerActiveTab !== 'settings') {
-      setDrawerActiveTab('settings');
-    }
+  const navigate = useNavigate();
+  const setViewerMode = useUserStore((ctx) => ctx.setViewerMode);
+  function onPDFViewClick() {
+    setViewerMode('pdf');
+    navigate('/view');
   }
   return (
     <div className="mt-2 flex flex-row rounded outline">
-      <FieldButton
-        Icon={ReceiptLongIcon}
-        onClick={onOutlineClick}
-        disabled={true}
-      />
-      <FieldButton Icon={TuneIcon} onClick={onTuneClick} disabled={true} />
+      <FieldButton Icon={VideoIcon} disabled={true} />
+      <FieldButton Icon={PDFIcon} onClick={onPDFViewClick} />
     </div>
   );
 }

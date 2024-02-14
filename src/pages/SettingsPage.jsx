@@ -5,12 +5,14 @@ import QRCode2Icon from '@material-symbols/svg-400/rounded/qr_code_2.svg';
 import SettingsAspectRatioField from '@/components/settings/SettingsAspectRatioField';
 import SettingsAutoSaveLastTimeField from '@/components/settings/SettingsAutoSaveLastTimeField';
 import SettingsAutoSaveToField from '@/components/settings/SettingsAutoSaveToField';
-import SettingsCameraNameField from '@/components/settings/SettingsCameraNameField';
-import SettingsDirectorNameField from '@/components/settings/SettingsDirectorNameField';
+import SettingsCreditCameraNameField from '@/components/settings/SettingsCameraNameField';
+import SettingsCreditWriterNameField from '@/components/settings/SettingsCreditWriterNameField';
+import SettingsCreditDirectorNameField from '@/components/settings/SettingsDirectorNameField';
 import SettingsEnableGoogleDriveSyncToggle from '@/components/settings/SettingsEnableGoogleDriveSyncToggle';
 import SettingsEnableRecorderLiveAudioToggle from '@/components/settings/SettingsEnableRecorderLiveAudioToggle';
 import SettingsEnableRecorderReferenceToggle from '@/components/settings/SettingsEnableRecorderReferenceToggle';
 import SettingsNerdInfoButton from '@/components/settings/SettingsNerdInfoButton';
+import SettingsPreferDarkSlateToggle from '@/components/settings/SettingsPreferDarkSlateToggle';
 import SettingsPreferFullscreenRecorderToggle from '@/components/settings/SettingsPreferFullscreenRecorderToggle';
 import SettingsPreferNativeRecorderToggle from '@/components/settings/SettingsPreferNativeRecorderToggle';
 import SettingsPreferPersistedMediaStreamToggle from '@/components/settings/SettingsPreferPersistedMediaStreamToggle';
@@ -56,8 +58,9 @@ export default function SettingsPage() {
             </FieldGroupDiscloseable>
             <br />
             <FieldGroupDiscloseable title="Credit Settings">
-              <SettingsDirectorNameField />
-              <SettingsCameraNameField />
+              <SettingsCreditDirectorNameField />
+              <SettingsCreditCameraNameField />
+              <SettingsCreditWriterNameField />
             </FieldGroupDiscloseable>
             <br />
             <FieldGroupDiscloseable title="Data Settings">
@@ -78,6 +81,7 @@ export default function SettingsPage() {
               <div className="h-0" />
               <SettingsEnableRecorderReferenceToggle />
               <div className="h-0" />
+              <SettingsPreferDarkSlateToggle />
               <SettingsPreferFullscreenRecorderToggle />
               <SettingsPreferNativeRecorderToggle />
               <SettingsPreferPersistedMediaStreamToggle />

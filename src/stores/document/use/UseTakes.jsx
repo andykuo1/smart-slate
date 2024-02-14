@@ -32,7 +32,7 @@ export function useBestTakeImageForShotThumbnail(
         bestRating = take.rating;
       }
     }
-    if (!bestTake) {
+    if (!bestTake || !bestTake.previewImage) {
       return shot.referenceImage;
     }
     return bestTake.previewImage;

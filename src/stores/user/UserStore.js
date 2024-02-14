@@ -9,6 +9,7 @@ export function createStore() {
   return {
     cursor: createCursor(),
     recorder: createRecorder(),
+    viewer: createViewerStore(),
     drawer: createDrawer(),
     /** @type {'inline'|'sequence'|'textonly'|'shotonly'} */
     editMode: 'sequence',
@@ -17,6 +18,15 @@ export function createStore() {
     /** @type {'recorder'|'clapper'} */
     recordMode: 'clapper',
     googleContext: createGoogleContext(),
+  };
+}
+
+/** @typedef {'pdf'|'video'} ViewerMode */
+
+export function createViewerStore() {
+  return {
+    /** @type {ViewerMode} */
+    mode: 'pdf',
   };
 }
 

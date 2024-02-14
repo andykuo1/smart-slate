@@ -3,6 +3,7 @@ import { useState } from 'react';
 import TestCRUDSync from '@/tests/TestCRUDSync';
 import TestFFmpegTranscode from '@/tests/TestFFmpegTranscode';
 import TestLexicalMarkdown from '@/tests/TestLexicalMarkdown';
+import TestPDFViewer from '@/tests/TestPDFViewer';
 import TestScreenplay from '@/tests/TestScreenplay';
 import TestSnapshot from '@/tests/TestSnapshot';
 import TestVideoConstraints from '@/tests/TestVideoConstraints';
@@ -37,6 +38,7 @@ export default function TestPage() {
           <option value="lexicalmarkdown">Lexical Markdown Test</option>
           <option value="crudsync">CRUD Sync Test</option>
           <option value="ffmpegtranscode">FFMPEG Transcode Test</option>
+          <option value="pdfviewer">PDF Viewer Test</option>
         </select>
       </div>
       {test === 'screenplay' && <TestScreenplay />}
@@ -45,6 +47,7 @@ export default function TestPage() {
       {test === 'lexicalmarkdown' && <TestLexicalMarkdown />}
       {test === 'crudsync' && <TestCRUDSync />}
       {test === 'ffmpegtranscode' && <TestFFmpegTranscode />}
+      {test === 'pdfviewer' && <TestPDFViewer />}
     </main>
   );
 }

@@ -281,4 +281,57 @@ Export list to csv
 ---
 
 Add shotlist button at bottom of block with plus sign
-Add message to use proxies if not playable video file
+
+---
+
+final draft
+
+import and show a title?
+
+clap later to sync
+
+add proxy
+
+H.264 MOV
+
+White background slate
+
+- Slate it in the classic way
+- Name DIR, DP, PROD
+
+Clap sound?
+
+viewfinder app for android
+
+- To look at app
+
+- Shareable as a pdf
+- CSV
+
+---
+
+Add slate black/white
+
+export storyboard in drawer.
+
+- export by scene
+
+multiple view of storyboard
+
+- landscape/portrait
+
+split by scene
+
+strips?
+
+scenewise storyboard
+
+- scene heading
+- LANDSCAPE
+
+- Shot Angle List
+
+Pre-vis for story is document only (no scene split)
+
+- project id and credits in the header/footer
+- and date of export

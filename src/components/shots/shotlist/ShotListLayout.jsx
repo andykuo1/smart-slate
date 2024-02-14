@@ -52,7 +52,7 @@ export default function ShotListLayout({
   }, [visible]);
 
   const isNonEmptyShotList = shotCount > 0;
-  if (!showNew && shotCount <= 0) {
+  if (!isNonEmptyShotList) {
     return null;
   }
   return (

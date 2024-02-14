@@ -54,6 +54,27 @@ export function findSceneWithBlockId(store, documentId, blockId) {
 /**
  * @param {import('@/stores/document/DocumentStore').Store} store
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ */
+export function findSceneWithShotId(store, documentId, shotId) {
+  if (!shotId) {
+    return null;
+  }
+  const document = getDocumentById(store, documentId);
+  for (let scene of Object.values(document?.scenes || {})) {
+    for (let blockId of scene.blockIds) {
+      let block = getBlockById(store, documentId, blockId);
+      if (block.shotIds.includes(shotId)) {
+        return scene;
+      }
+    }
+  }
+  return null;
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
  */
 export function isSceneEmpty(store, documentId, sceneId) {

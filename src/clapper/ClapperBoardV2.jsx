@@ -44,6 +44,7 @@ import ClapperQRCodeField from './ClapperQRCodeField';
 export default function ClapperBoardV2() {
   const { documentId, sceneId, shotId, takeId } =
     useNiceDefaultCursorResolver();
+  const preferDarkSlate = useSettingsStore((ctx) => ctx.user.preferDarkSlate);
 
   const [state, setState] = useState('');
   const rollName = useDocumentStore(
@@ -135,7 +136,12 @@ export default function ClapperBoardV2() {
           ' ' +
           'sm:flex-row portrait:flex-col landscape:flex-row'
         }>
-        <div className="min-h-[40vh] flex-1 overflow-hidden rounded-xl bg-white text-black dark:bg-black dark:text-white">
+        <div
+          className={
+            'min-h-[40vh] flex-1 overflow-hidden rounded-xl' +
+            ' ' +
+            (preferDarkSlate ? 'bg-black text-white' : 'bg-white text-black')
+          }>
           <ClapperQRCodeField
             documentId={documentId}
             sceneId={sceneId}

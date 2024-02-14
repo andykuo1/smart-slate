@@ -22,3 +22,12 @@ export function useSceneIds(documentId) {
     useShallow((ctx) => getSceneIdsInOrder(ctx, documentId)),
   );
 }
+
+/**
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ */
+export function useSceneIdsInDocumentOrder(documentId) {
+  return useDocumentStore(
+    useShallow((ctx) => getSceneIdsInOrder(ctx, documentId)),
+  );
+}

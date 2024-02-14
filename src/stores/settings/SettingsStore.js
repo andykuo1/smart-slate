@@ -17,5 +17,6 @@ export function createSettings() {
     enableDriveSync: false,
     preferPersistedMediaStream: false,
     preferFullscreenRecorder: true,
+    preferDarkSlate: false,
   };
 }

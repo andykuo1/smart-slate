@@ -1,9 +1,9 @@
 import { formatProjectId } from '@/components/takes/TakeNameFormat';
+import { zi } from '@/stores/ZustandImmerHelper';
 
-import { incrementDocumentRevisionNumber } from '.';
-import { zi } from '../../ZustandImmerHelper';
-import { getDocumentById } from '../get';
 import { getDocumentSettingsById } from '../get/GetDocumentSettings';
+import { getDocumentById } from '../get/GetDocuments';
+import { incrementDocumentRevisionNumber } from './DispatchDocuments';
 
 /**
  * @param {import('zustand').StoreApi<any>['setState']} set
@@ -24,6 +24,7 @@ export function createDispatchDocumentSettings(set, get) {
       setDocumentSettingsAutoSaveGDriveFileId,
     ),
     setDocumentSettingsAutoSaveTo: zi(set, setDocumentSettingsAutoSaveTo),
+    setDocumentSettingsWriterName: zi(set, setDocumentSettingsWriterName),
   };
 }
 
@@ -117,5 +118,16 @@ function setDocumentSettingsAutoSaveTo(store, documentId, dest) {
 function setDocumentSettingsAutoSaveGDriveFileId(store, documentId, fileId) {
   let settings = resolveDocumentSettingsById(store, documentId);
   settings.autoSaveGDriveFileId = fileId;
+  incrementDocumentRevisionNumber(getDocumentById(store, documentId));
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {string} name
+ */
+function setDocumentSettingsWriterName(store, documentId, name) {
+  let settings = resolveDocumentSettingsById(store, documentId);
+  settings.writerName = name;
   incrementDocumentRevisionNumber(getDocumentById(store, documentId));
 }

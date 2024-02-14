@@ -45,6 +45,29 @@ export function getShotIdsInSceneOrder(store, documentId, sceneId) {
  * @param {import('@/stores/document/DocumentStore').Store} store
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  */
+export function getShotIdsInDocumentOrder(store, documentId) {
+  /** @type {Array<import('@/stores/document/DocumentStore').ShotId>} */
+  let result = [];
+  let document = getDocumentById(store, documentId);
+  if (!document) {
+    return result;
+  }
+  for (let sceneId of document.sceneOrder) {
+    let scene = getSceneById(store, documentId, sceneId);
+    for (let blockId of scene.blockIds) {
+      let block = getBlockById(store, documentId, blockId);
+      if (block?.shotIds?.length > 0) {
+        result.push(...block.shotIds);
+      }
+    }
+  }
+  return result;
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ */
 export function getFirstEmptyShotInDocument(store, documentId) {
   let document = getDocumentById(store, documentId);
   let lastSceneId = '';
