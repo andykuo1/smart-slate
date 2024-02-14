@@ -1,5 +1,9 @@
 # Upcoming
 
+- Add PDF viewer (for scene or document)
+- Add custom shot types
+- Add writer name settings
+
 # 0.1.16
 
 - Add shot and take list labels
