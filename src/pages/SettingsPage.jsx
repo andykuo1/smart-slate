@@ -16,6 +16,7 @@ import SettingsPreferDarkSlateToggle from '@/components/settings/SettingsPreferD
 import SettingsPreferFullscreenRecorderToggle from '@/components/settings/SettingsPreferFullscreenRecorderToggle';
 import SettingsPreferNativeRecorderToggle from '@/components/settings/SettingsPreferNativeRecorderToggle';
 import SettingsPreferPersistedMediaStreamToggle from '@/components/settings/SettingsPreferPersistedMediaStreamToggle';
+import SettingsProfileShotTypesField from '@/components/settings/SettingsProfileShotTypesField';
 import SettingsProjectDeleteButton from '@/components/settings/SettingsProjectDeleteButton';
 import SettingsProjectExportJSONButton from '@/components/settings/SettingsProjectExportJSONButton';
 import SettingsProjectExportZIPButton from '@/components/settings/SettingsProjectExportZIPButton';
@@ -57,10 +58,11 @@ export default function SettingsPage() {
               <SettingsProjectIdField />
             </FieldGroupDiscloseable>
             <br />
-            <FieldGroupDiscloseable title="Credit Settings">
+            <FieldGroupDiscloseable title="Author Settings">
               <SettingsCreditDirectorNameField />
               <SettingsCreditCameraNameField />
               <SettingsCreditWriterNameField />
+              <SettingsProfileShotTypesField />
             </FieldGroupDiscloseable>
             <br />
             <FieldGroupDiscloseable title="Data Settings">
@@ -75,7 +77,7 @@ export default function SettingsPage() {
               <SettingsProjectExportJSONButton />
             </FieldGroupDiscloseable>
             <br />
-            <FieldGroupDiscloseable title="Rec & Slate Settings">
+            <FieldGroupDiscloseable title="Film Settings">
               <SettingsAspectRatioField />
               <SettingsVideoResolutionField />
               <div className="h-0" />

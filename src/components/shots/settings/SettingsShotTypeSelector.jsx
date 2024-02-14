@@ -1,4 +1,5 @@
 import FieldSelect from '@/fields/FieldSelect';
+import { useSettingsStore } from '@/stores/settings';
 
 import { useShotTypeChange } from '../UseShotType';
 
@@ -16,6 +17,9 @@ export default function SettingsShotTypeSelector({
   shotId,
 }) {
   const [shotType, onShotTypeChange] = useShotTypeChange(documentId, shotId);
+  const customShotTypes = useSettingsStore(
+    (ctx) => ctx?.user?.customShotTypes ?? [],
+  );
 
   const selectId = 'shotType-' + shotId;
   return (
@@ -26,6 +30,14 @@ export default function SettingsShotTypeSelector({
       value={shotType}
       onChange={onShotTypeChange}>
       {SHOT_TYPES.map((shotType) => (
+        <option
+          key={shotType}
+          title={shotType}
+          value={shotType === '--' ? '' : shotType}>
+          {shotType}
+        </option>
+      ))}
+      {customShotTypes.map((shotType) => (
         <option
           key={shotType}
           title={shotType}

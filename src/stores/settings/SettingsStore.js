@@ -18,5 +18,7 @@ export function createSettings() {
     preferPersistedMediaStream: false,
     preferFullscreenRecorder: true,
     preferDarkSlate: false,
+    /** @type {Array<string>} */
+    customShotTypes: [],
   };
 }

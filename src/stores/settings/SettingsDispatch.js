@@ -14,6 +14,7 @@ export function createDispatch(set) {
     setPreferPersistedMediaStream: zi(set, setPreferPersistedMediaStream),
     setPreferFullscreenRecorder: zi(set, setPreferFullscreenRecorder),
     setPreferDarkSlate: zi(set, setPreferDarkSlate),
+    setCustomShotTypes: zi(set, setCustomShotTypes),
   };
 }
 
@@ -78,4 +79,13 @@ function setPreferFullscreenRecorder(store, enabled) {
 function setPreferDarkSlate(store, enabled) {
   let settings = store.user;
   settings.preferDarkSlate = enabled;
+}
+
+/**
+ * @param {import('./SettingsStore').Store} store
+ * @param {Array<string>} value
+ */
+function setCustomShotTypes(store, value) {
+  let settings = store.user;
+  settings.customShotTypes = value;
 }
