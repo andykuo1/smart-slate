@@ -52,7 +52,8 @@ export default function ShotListLayout({
   }, [visible]);
 
   const isNonEmptyShotList = shotCount > 0;
-  if (!isNonEmptyShotList) {
+  // TODO: This is to make sure split view shows shotlist
+  if (!showNew && shotCount <= 0) {
     return null;
   }
   return (

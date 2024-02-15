@@ -335,3 +335,7 @@ Pre-vis for story is document only (no scene split)
 
 - project id and credits in the header/footer
 - and date of export
+
+---
+
+storyboard in split view is missing.
