@@ -6,9 +6,8 @@ import ViewDayIcon from '@material-symbols/svg-400/rounded/view_day.svg';
 
 import FieldButton from '@/fields/FieldButton';
 import FieldButtonAndMenu from '@/fields/FieldButtonAndMenu';
+import { scrollSceneFocusIntoView } from '@/scrollfocus/SceneFocus';
 import { useUserStore } from '@/stores/user';
-
-import { scrollSceneFocusIntoView } from './SceneFocus';
 
 /**
  * @param {object} props

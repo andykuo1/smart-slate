@@ -20,6 +20,7 @@ import ShotListPlaceholder from './ShotListPlaceholder';
  * @param {boolean} [props.hidden]
  * @param {boolean} [props.showNew]
  * @param {boolean} [props.showTakes]
+ * @param {boolean} [props.hideHeaderOnEmpty]
  * @param {boolean} [props.disableLazyLoading]
  * @param {import('react').ReactNode} props.children
  */
@@ -33,6 +34,7 @@ export default function ShotListLayout({
   editable = true,
   collapsed = false,
   hidden = false,
+  hideHeaderOnEmpty = true,
   disableLazyLoading = false,
   showNew,
 }) {
@@ -52,7 +54,7 @@ export default function ShotListLayout({
   }, [visible]);
 
   const isNonEmptyShotList = shotCount > 0;
-  if (!isNonEmptyShotList) {
+  if (hideHeaderOnEmpty && !isNonEmptyShotList) {
     return null;
   }
   return (
@@ -65,7 +67,6 @@ export default function ShotListLayout({
       }>
       <legend className="w-full">
         <ShotListHeader
-          className={' ' + (!isNonEmptyShotList && 'hidden')}
           documentId={documentId}
           sceneId={sceneId}
           blockId={blockId}

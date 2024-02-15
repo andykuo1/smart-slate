@@ -9,13 +9,8 @@ import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg
 
 import BoxDrawingCharacter from '@/components/documents/BoxDrawingCharacter';
 import DocumentDivider from '@/components/documents/DocumentDivider';
-import { scrollSceneFocusIntoView } from '@/components/scenes/SceneFocus';
 import SettingsSceneOpenClapperButton from '@/components/scenes/settings/SettingsSceneOpenClapperButton';
 import { getShotTypeColor } from '@/components/shots/ShotColors';
-import {
-  getShotFocusIdForDrawer,
-  scrollShotFocusIntoView,
-} from '@/components/shots/ShotFocus';
 import {
   formatSceneNumber,
   formatSceneShotNumber,
@@ -23,6 +18,11 @@ import {
 } from '@/components/takes/TakeNameFormat';
 import FieldButton from '@/fields/FieldButton';
 import FieldButtonAndMenu from '@/fields/FieldButtonAndMenu';
+import { scrollSceneFocusIntoView } from '@/scrollfocus/SceneFocus';
+import {
+  getShotFocusIdForDrawer,
+  scrollShotFocusIntoView,
+} from '@/scrollfocus/ShotFocus';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useShotNumber } from '@/serdes/UseResolveShotNumber';
 import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';

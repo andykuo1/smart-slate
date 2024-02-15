@@ -15,19 +15,12 @@ import ScenePlaceholder from './ScenePlaceholder';
  */
 export default function SceneList({ documentId }) {
   const sceneIds = useSceneIds(documentId);
-  // const activeSceneId = useUserStore((ctx) => ctx.cursor?.sceneId);
   return (
     <>
       <PerScene sceneIds={sceneIds}>
         {(sceneId) => <SceneEntry documentId={documentId} sceneId={sceneId} />}
       </PerScene>
       <SceneEntryNew className="pb-20" documentId={documentId} />
-      {/*activeSceneId && (
-        <SceneEntryFocused documentId={documentId}>
-          <SceneHeader documentId={documentId} sceneId={activeSceneId} />
-          <BlockList documentId={documentId} sceneId={activeSceneId} />
-        </SceneEntryFocused>
-      )*/}
     </>
   );
 }

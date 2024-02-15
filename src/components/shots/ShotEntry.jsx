@@ -1,13 +1,13 @@
 import { useRef } from 'react';
 
 import { useScrollIntoView } from '@/libs/UseScrollIntoView';
+import { getShotFocusId } from '@/scrollfocus/ShotFocus';
 import { getShotById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import { useDraggable, useIsDragging } from '@/stores/draggable';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 
-import { getShotFocusId } from './ShotFocus';
 import ShotMover from './ShotMover';
 import ShotNumber from './ShotNumber';
 import ShotThumbnail from './ShotThumbnail';

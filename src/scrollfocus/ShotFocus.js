@@ -1,4 +1,4 @@
-import { scrollSceneFocusIntoView } from '../scenes/SceneFocus';
+import { scrollSceneFocusIntoView } from '@/scrollfocus/SceneFocus';
 
 /**
  * @param {import('@/stores/document/DocumentStore').ShotId} shotId

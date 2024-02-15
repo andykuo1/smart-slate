@@ -33,7 +33,8 @@ export default function ShotListInSceneOrder({
       editable={editable}
       collapsed={collapsed}
       hidden={hidden}
-      showNew={editable}>
+      showNew={editable}
+      hideHeaderOnEmpty={false}>
       {blockIds.map((blockId) => (
         <ShotListShots
           key={`shotlist-${blockId}`}

@@ -1,11 +1,11 @@
 import { useRef } from 'react';
 
 import { useScrollIntoView } from '@/libs/UseScrollIntoView';
+import { getSceneFocusId } from '@/scrollfocus/SceneFocus';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useSceneHeading } from '@/stores/document';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 
-import { getSceneFocusId } from './SceneFocus';
 import SceneNumber from './SceneNumber';
 
 /**

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { getBlockFocusId } from '@/scrollfocus/BlockFocus';
 import { useBlockShotCount } from '@/stores/document/use';
 
 import BlockContent from './BlockContent';
@@ -41,6 +42,7 @@ export default function BlockEntry({
       content={
         mode !== 'childonly' && (
           <div
+            id={getBlockFocusId(blockId)}
             className={
               'group flex h-full w-full' +
               ' ' +
