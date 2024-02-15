@@ -3,6 +3,11 @@
 - Add PDF viewer (for scene or document)
 - Add custom shot types
 - Add writer name settings
+- Add dark mode toggle for slate
+- Add shot tray to block
+- Add no shot-editing while in text-only
+
+- Remove dark mode (for now)
 
 # 0.1.16
 
