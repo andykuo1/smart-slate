@@ -1,6 +1,7 @@
 import { getBlockById } from './GetBlocks';
 import { getDocumentById } from './GetDocuments';
 import { getSceneById } from './GetScenes';
+import { getTakeById } from './GetTakes';
 
 /**
  * @param {import('@/stores/document/DocumentStore').Store} store
@@ -196,4 +197,16 @@ export function findShotWithShotHash(store, documentId, shotHash) {
  */
 export function isShotEmpty(store, documentId, shotId) {
   return getShotById(store, documentId, shotId)?.takeIds?.length <= 0;
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ */
+export function isShotWithGoodTake(store, documentId, shotId) {
+  return getShotById(store, documentId, shotId).takeIds.reduceRight(
+    (prev, takeId) => prev || getTakeById(store, documentId, takeId).rating > 0,
+    false,
+  );
 }

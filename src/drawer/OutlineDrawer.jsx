@@ -29,8 +29,8 @@ import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
 import {
   getLastBlockIdInScene,
   getShotById,
-  getTakeById,
   getTakeExportDetailsById,
+  isShotWithGoodTake,
   useBlockIds,
   useSceneHeading,
   useShotDescription,
@@ -267,10 +267,7 @@ function IndexShot({
   const shotNumber = useShotNumber(documentId, sceneId, shotId);
   const shotType = useShotType(documentId, shotId);
   const shotHasGoodTake = useDocumentStore((ctx) =>
-    getShotById(ctx, documentId, shotId).takeIds.reduceRight(
-      (prev, takeId) => prev || getTakeById(ctx, documentId, takeId).rating > 0,
-      false,
-    ),
+    isShotWithGoodTake(ctx, documentId, shotId),
   );
   const shotHasTakes = useDocumentStore(
     (ctx) => getShotById(ctx, documentId, shotId).takeIds.length > 0,

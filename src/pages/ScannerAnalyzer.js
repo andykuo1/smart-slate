@@ -345,17 +345,16 @@ function deriveRenameValueFromDocumentAndShotHash(
   if (!document || !take || !shot || !block || !scene) {
     return '';
   }
-  // Set take id...
-  analysis.takeId = take.takeId;
-  // ...then compute rename.
-  let ext = extname(file.name);
-  let parts = [
-    document.settings.projectId,
-    formatSceneShotNumber(scene.sceneNumber, shot.shotNumber, false),
-    formatTakeNumber(take.takeNumber),
-    shot.shotHash,
-  ];
-  return `${parts.join('_')}${ext}`;
+  return deriveRenameValueFromDocumentSceneBlockShot(
+    store,
+    document,
+    scene,
+    block,
+    shot,
+    take,
+    file,
+    analysis,
+  );
 }
 
 /**
@@ -380,6 +379,38 @@ function deriveRenameValueFromDocumentAndTakeId(
   if (!document || !take || !shot || !block || !scene) {
     return '';
   }
+  return deriveRenameValueFromDocumentSceneBlockShot(
+    store,
+    document,
+    scene,
+    block,
+    shot,
+    take,
+    file,
+    analysis,
+  );
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').Document} document
+ * @param {import('@/stores/document/DocumentStore').Scene} scene
+ * @param {import('@/stores/document/DocumentStore').Block} block
+ * @param {import('@/stores/document/DocumentStore').Shot} shot
+ * @param {import('@/stores/document/DocumentStore').Take} take
+ * @param {import('@/scanner/DirectoryPicker').FileWithHandles} file
+ * @param {import('@/stores/toolbox').ScannerAnalysisInfo} analysis
+ */
+function deriveRenameValueFromDocumentSceneBlockShot(
+  store,
+  document,
+  scene,
+  block,
+  shot,
+  take,
+  file,
+  analysis,
+) {
   // Set take id...
   analysis.takeId = take.takeId;
   // ...then compute rename.
@@ -389,7 +420,9 @@ function deriveRenameValueFromDocumentAndTakeId(
     formatSceneShotNumber(scene.sceneNumber, shot.shotNumber, false),
     formatTakeNumber(take.takeNumber),
     shot.shotHash,
-  ];
+    shot.shotType,
+    take.rating > 0 ? 'PRINT' : '',
+  ].filter((s) => Number(s?.length) > 0);
   return `${parts.join('_')}${ext}`;
 }
 
