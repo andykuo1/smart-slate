@@ -43,7 +43,7 @@ export function SceneEntry({ className, documentId, sceneId, hidden = false }) {
   const containerRef = useRef(null);
   const contentRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const [height, setHeight] = useState(0);
-  const visible = useIntersectionObserver(containerRef, '0px');
+  const [visible, _] = useIntersectionObserver(containerRef, '0px');
   useEffect(() => {
     const content = contentRef.current;
     if (!content) {

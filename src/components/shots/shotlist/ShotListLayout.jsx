@@ -39,7 +39,7 @@ export default function ShotListLayout({
   const containerRef = useRef(null);
   const contentRef = useRef(/** @type {HTMLUListElement|null} */ (null));
   const [height, setHeight] = useState(0);
-  const visible = useIntersectionObserver(containerRef, '0px');
+  const [visible, setVisible] = useIntersectionObserver(containerRef, '0px');
   useEffect(() => {
     const content = contentRef.current;
     if (!content) {
@@ -52,8 +52,7 @@ export default function ShotListLayout({
   }, [visible]);
 
   const isNonEmptyShotList = shotCount > 0;
-  // TODO: This is to make sure split view shows shotlist
-  if (!showNew && shotCount <= 0) {
+  if (!isNonEmptyShotList) {
     return null;
   }
   return (
@@ -62,7 +61,7 @@ export default function ShotListLayout({
       className={
         'w-full bg-white dark:bg-gray-900' +
         ' ' +
-        (hidden ? /* NOTE: Quick hideaway to not lag. */ 'hidden' : className)
+        (hidden ? 'hidden' : className)
       }>
       <legend className="w-full">
         <ShotListHeader
@@ -88,7 +87,7 @@ export default function ShotListLayout({
           <ShotEntryDragged documentId={documentId} sceneId={sceneId} />
         </ul>
       ) : (
-        <ShotListPlaceholder height={height} />
+        <ShotListPlaceholder height={height} onClick={() => setVisible(true)} />
       )}
     </fieldset>
   );

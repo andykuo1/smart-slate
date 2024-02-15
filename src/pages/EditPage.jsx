@@ -47,7 +47,7 @@ function DocumentByScene({ documentId }) {
   const shotOnlyMode = useUserStore((ctx) => ctx.editMode === 'shotonly');
   const hidden = shotOnlyMode;
   return (
-    <div className={'flex-1' + ' ' + (hidden && 'hidden')}>
+    <div className={'flex-1' + ' ' + (hidden ? 'hidden' : '')}>
       <PerScene sceneIds={sceneIds}>
         {(sceneId) => (
           <div className="flex flex-row">
