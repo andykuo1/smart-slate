@@ -38,7 +38,15 @@ export default function ShotListHeader({
         blockId={blockId}
       />
       <div className="flex flex-1 items-center">
-        <div className="h-6 border-l-2" />
+        <div
+          className={
+            'h-6 border-l-2' +
+            ' ' +
+            'hidden' +
+            ' ' +
+            (sequenceMode ? 'lg:flex' : 'sm:flex')
+          }
+        />
         <SettingsSceneShotsRenumberButton
           className=""
           documentId={documentId}

@@ -29,7 +29,7 @@ export default function BlockContentToolbar({
   setEditable,
 }) {
   return (
-    <div className="absolute right-0 top-0 flex items-center">
+    <div className="absolute bottom-0 right-0 top-0 flex items-center">
       <PopoverProvider>
         <PopoverDisclosure>
           <MenuIcon
