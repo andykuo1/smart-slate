@@ -91,12 +91,6 @@ function BlockContentFountainJSON({
   setEditable,
   children,
 }) {
-  const content = useDocumentStore(
-    (ctx) => getBlockById(ctx, documentId, blockId)?.content,
-  );
-  const contentStyle = useDocumentStore(
-    (ctx) => getBlockById(ctx, documentId, blockId)?.contentStyle,
-  );
   if (editable) {
     return (
       <BlockContentFountainJSONInput
@@ -109,6 +103,42 @@ function BlockContentFountainJSON({
       </BlockContentFountainJSONInput>
     );
   }
+  return (
+    <BlockContentFountainReadonly
+      className={className}
+      documentId={documentId}
+      sceneId={sceneId}
+      blockId={blockId}>
+      {children}
+    </BlockContentFountainReadonly>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
+ * @param {import('react').ReactNode} [props.children]
+ */
+function BlockContentFountainReadonly({
+  className,
+  documentId,
+  sceneId,
+  blockId,
+  children,
+}) {
+  const content = useDocumentStore(
+    (ctx) => getBlockById(ctx, documentId, blockId)?.content,
+  );
+  const contentStyle = useDocumentStore(
+    (ctx) => getBlockById(ctx, documentId, blockId)?.contentStyle,
+  );
+  const isLastScene = useDocumentStore(
+    (ctx) =>
+      getSceneOrder(ctx, documentId, sceneId) >= getSceneCount(ctx, documentId),
+  );
   let contentClassName = [];
   switch (contentStyle) {
     case 'centered':
@@ -154,7 +184,9 @@ function BlockContentFountainJSON({
       }>
       {content || (
         <span className="opacity-30">
-          {'< '}What happened next?{' >'}
+          {isLastScene
+            ? '< Describe or paste your scenes here >'
+            : '< What happened? >'}
         </span>
       )}
       {children}
@@ -187,6 +219,10 @@ function BlockContentFountainJSONInput({
   );
   const inputRef = useRef(/** @type {HTMLTextAreaElement|null} */ (null));
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
+  const isLastScene = useDocumentStore(
+    (ctx) =>
+      getSceneOrder(ctx, documentId, sceneId) >= getSceneCount(ctx, documentId),
+  );
   const setBlockContent = useDocumentStore((ctx) => ctx.setBlockContent);
   const addBlock = useAddBlock();
   const addScene = useAddScene();
@@ -202,8 +238,6 @@ function BlockContentFountainJSONInput({
     setEditable?.(false);
 
     let store = UNSAFE_getStore();
-    let sceneCount = getSceneCount(store, documentId);
-    let isLastScene = getSceneOrder(store, documentId, sceneId) >= sceneCount;
     let { currentBlocks, newBlocks, newScenes } = parseTextToBlocks(
       state,
       isLastScene,
@@ -262,7 +296,11 @@ function BlockContentFountainJSONInput({
           'w-full resize-none bg-transparent font-mono' + ' ' + className
         }
         value={state}
-        placeholder="< What happened next? >"
+        placeholder={
+          isLastScene
+            ? '< Describe or paste your scenes here >'
+            : '< What happened? >'
+        }
         onChange={onChange}
         onBlur={onBlur}
       />
