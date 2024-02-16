@@ -126,6 +126,7 @@ export function getFirstEmptyShotInScene(store, documentId, sceneId) {
     shotId: lastShotId,
   };
 }
+
 /**
  * @param {import('@/stores/document/DocumentStore').Store} store
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId

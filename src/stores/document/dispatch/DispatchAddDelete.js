@@ -53,12 +53,17 @@ export function addScene(store, documentId, scene) {
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
  * @param {import('@/stores/document/DocumentStore').Block} block
+ * @param {number} [blockOrder]
  */
-export function addBlock(store, documentId, sceneId, block) {
+export function addBlock(store, documentId, sceneId, block, blockOrder = -1) {
   let document = store.documents[documentId];
   let scene = document.scenes[sceneId];
   document.blocks[block.blockId] = block;
-  scene.blockIds.push(block.blockId);
+  if (blockOrder >= 0) {
+    scene.blockIds.splice(blockOrder, 0, block.blockId);
+  } else {
+    scene.blockIds.push(block.blockId);
+  }
   if (!block.contentType) {
     block.contentType = 'fountain-json';
   }

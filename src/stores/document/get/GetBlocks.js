@@ -25,7 +25,7 @@ export function getBlockIdsInOrder(store, documentId, sceneId) {
  * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} blockId
  */
-export function getBlockIndex(store, documentId, sceneId, blockId) {
+export function getBlockOrder(store, documentId, sceneId, blockId) {
   const index = Number(
     getSceneById(store, documentId, sceneId)?.blockIds?.indexOf?.(blockId),
   );

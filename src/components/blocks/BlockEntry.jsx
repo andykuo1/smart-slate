@@ -55,6 +55,7 @@ export default function BlockEntry({
                 'mx-4 flex-1 pb-4' + ' ' + (blockEditable ? 'min-h-[20vh]' : '')
               }
               documentId={documentId}
+              sceneId={sceneId}
               blockId={blockId}
               editable={editable && blockEditable}
               setEditable={setBlockEditable}

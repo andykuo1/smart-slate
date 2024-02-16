@@ -7,14 +7,17 @@ import { uuid } from '@/utils/uuid';
  * @typedef {ReturnType<createBlock>} Block
  * @typedef {ReturnType<createShot>} Shot
  * @typedef {ReturnType<createTake>} Take
+ * @typedef {ReturnType<createShotList>} ShotList
  *
  * @typedef {string} DocumentId
  * @typedef {string} SceneId
  * @typedef {string} ShotId
  * @typedef {string} TakeId
  * @typedef {string} BlockId
+ * @typedef {string} ShotListId
  *
  * @typedef {'string'|'lexical'|'fountain-json'} BlockContentType
+ * @typedef {'action'|'dialogue'|'transition'|'centered'|'note'|'lyric'|''} BlockContentStyle
  * @typedef {string} ShotHash
  * @typedef {Partial<ReturnType<createDocumentSettings>>} DocumentSettings
  * @typedef {Partial<ReturnType<createTakeExportDetails>>} TakeExportDetails
@@ -102,13 +105,24 @@ export function createScene(sceneId = uuid()) {
 export function createBlock(blockId = uuid()) {
   return {
     blockId,
-    /** @type {'action'|'dialogue'|'transition'|'centered'|'note'|'lyric'|''} */
+    /** @type {BlockContentStyle} */
     contentStyle: '',
     /** @type {BlockContentType} */
     contentType: 'string',
     /** @type {string} */
     content: '',
     /** @type {Array<ShotId>} */
+    shotIds: [],
+  };
+}
+
+/**
+ * @param {ShotListId} shotListId
+ */
+export function createShotList(shotListId = uuid()) {
+  return {
+    shotListId,
+    shotListName: '',
     shotIds: [],
   };
 }

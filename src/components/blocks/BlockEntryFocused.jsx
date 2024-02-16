@@ -27,6 +27,7 @@ export default function BlockEntryFocused({ documentId }) {
       content={
         <BlockContent
           documentId={documentId}
+          sceneId={sceneId}
           blockId={blockId}
           editable={blockEditable}
           setEditable={setBlockEditable}

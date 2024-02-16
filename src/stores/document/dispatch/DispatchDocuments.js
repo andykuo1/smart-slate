@@ -95,12 +95,23 @@ function setSceneHeading(store, documentId, sceneId, heading) {
  * @param {import('@/stores/document/DocumentStore').BlockId} blockId
  * @param {import('@/stores/document/DocumentStore').BlockContentType} contentType
  * @param {string} content
+ * @param {import('@/stores/document/DocumentStore').BlockContentStyle} [contentStyle]
  */
-function setBlockContent(store, documentId, blockId, contentType, content) {
+function setBlockContent(
+  store,
+  documentId,
+  blockId,
+  contentType,
+  content,
+  contentStyle,
+) {
   let document = store.documents[documentId];
   let block = document.blocks[blockId];
   block.contentType = contentType;
   block.content = content;
+  if (typeof contentStyle !== 'undefined') {
+    block.contentStyle = contentStyle;
+  }
   incrementDocumentRevisionNumber(document);
 }
 

@@ -3,15 +3,24 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import { getBlockById } from '@/stores/document';
+import { parse } from '@/fountain/FountainParser';
+import { fountainToDocument } from '@/serdes/FountainToDocumentParser';
+import {
+  getBlockById,
+  getBlockOrder,
+  getSceneById,
+  useAddBlock,
+} from '@/stores/document';
+import { createBlock } from '@/stores/document/DocumentStore';
 import { useDocumentStore } from '@/stores/document/use';
 
 /**
  * @param {object} props
  * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  * @param {boolean} [props.editable]
  * @param {Function} [props.setEditable]
@@ -20,6 +29,7 @@ import { useDocumentStore } from '@/stores/document/use';
 export default function BlockContent({
   className,
   documentId,
+  sceneId,
   blockId,
   editable = true,
   setEditable,
@@ -54,6 +64,7 @@ export default function BlockContent({
       <BlockContentFountainJSON
         className={className}
         documentId={documentId}
+        sceneId={sceneId}
         blockId={blockId}
         editable={editable}
         setEditable={setEditable}>
@@ -74,6 +85,7 @@ export default function BlockContent({
  * @param {object} props
  * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  * @param {boolean} [props.editable]
  * @param {Function} [props.setEditable]
@@ -82,6 +94,7 @@ export default function BlockContent({
 function BlockContentFountainJSON({
   className,
   documentId,
+  sceneId,
   blockId,
   editable,
   setEditable,
@@ -98,8 +111,8 @@ function BlockContentFountainJSON({
       <BlockContentFountainJSONInput
         className={className}
         documentId={documentId}
+        sceneId={sceneId}
         blockId={blockId}
-        content={content}
         setEditable={setEditable}>
         {children}
       </BlockContentFountainJSONInput>
@@ -162,25 +175,74 @@ function BlockContentFountainJSON({
  * @param {object} props
  * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
- * @param {string} props.content
  * @param {Function} [props.setEditable]
  * @param {import('react').ReactNode} [props.children]
  */
 function BlockContentFountainJSONInput({
   className,
   documentId,
+  sceneId,
   blockId,
-  content,
   setEditable,
   children,
 }) {
+  const block = useDocumentStore((ctx) =>
+    getBlockById(ctx, documentId, blockId),
+  );
+  const [state, setState] = useState(
+    formatTextWithOverrides(block.content, block.contentStyle),
+  );
   const inputRef = useRef(/** @type {HTMLTextAreaElement|null} */ (null));
+  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const setBlockContent = useDocumentStore((ctx) => ctx.setBlockContent);
+  const addBlock = useAddBlock();
+  const deleteBlock = useDocumentStore((ctx) => ctx.deleteBlock);
   useEffect(() => {
     inputRef.current?.focus();
   });
-  // TOOD: This should grow with content :(
+
+  function onBlur() {
+    setEditable?.(false);
+    let blocks = parseTextToBlocks(state);
+
+    let store = UNSAFE_getStore();
+    let firstBlock = blocks.shift();
+    if (!firstBlock) {
+      // Delete this block if it's empty.
+      setBlockContent(documentId, blockId, 'fountain-json', '');
+
+      let block = getBlockById(store, documentId, blockId);
+      if (block.shotIds.length <= 0) {
+        deleteBlock(documentId, blockId);
+      }
+      return;
+    }
+
+    let blockOrder = getBlockOrder(store, documentId, sceneId, blockId);
+
+    setBlockContent(
+      documentId,
+      blockId,
+      'fountain-json',
+      firstBlock.content ?? '',
+      firstBlock.contentStyle,
+    );
+
+    if (blocks.length > 0) {
+      let currentIndex = blockOrder - 1;
+      for (let block of blocks) {
+        addBlock(documentId, sceneId, block, ++currentIndex);
+      }
+    }
+  }
+
+  /** @type {import('react').ChangeEventHandler<HTMLTextAreaElement>} */
+  function onChange(e) {
+    setState(e.target.value);
+  }
+
   return (
     <>
       <textarea
@@ -188,21 +250,73 @@ function BlockContentFountainJSONInput({
         className={
           'w-full resize-none bg-transparent font-mono' + ' ' + className
         }
-        value={content}
-        placeholder="< What happened? >"
-        onChange={(e) =>
-          setBlockContent(
-            documentId,
-            blockId,
-            'fountain-json',
-            /** @type {HTMLTextAreaElement} */ (e.target).value,
-          )
-        }
-        onBlur={(e) => setEditable?.(false)}
+        value={state}
+        placeholder="< What happened next? >"
+        onChange={onChange}
+        onBlur={onBlur}
       />
       {children}
     </>
   );
+}
+
+const FIRST_SCENE_HEADING = '__CURRENT_SCENE__';
+
+/**
+ * @param {string} text
+ * @param {import('@/stores/document/DocumentStore').BlockContentStyle} style
+ */
+function formatTextWithOverrides(text, style) {
+  switch (style) {
+    case 'centered':
+      return `>${text}<`;
+    case 'lyric':
+      return `~${text}`;
+    case 'note':
+      return `[[${text}]]`;
+    case 'transition':
+      if (text.endsWith(':')) {
+        return text;
+      }
+      return `>${text}`;
+    case 'dialogue':
+    case 'action':
+    default:
+      return text;
+  }
+}
+
+/**
+ * @param {string} text
+ * @returns {Array<import('@/stores/document/DocumentStore').Block>}
+ */
+function parseTextToBlocks(text) {
+  let preparedText = `.${FIRST_SCENE_HEADING}\n\n${text}`;
+  let parsed = parse(preparedText);
+  let tempDocument = fountainToDocument(parsed.tokens);
+  let tempDocumentId = tempDocument.documentId;
+  let tempStore = {
+    documents: { [tempDocumentId]: tempDocument },
+  };
+  let result = [];
+  // NOTE: We do not allow scenes while writing in blocks. So
+  //  scene tokens should be converted to just text.
+  //  ... we also do not allow shots.
+  for (let sceneId of tempDocument.sceneOrder) {
+    let scene = getSceneById(tempStore, tempDocumentId, sceneId);
+    if (scene.sceneHeading !== FIRST_SCENE_HEADING) {
+      // This is unexpected scene header. Make it a text block.
+      let block = createBlock();
+      block.content = `!${scene.sceneHeading}`;
+      block.contentType = 'fountain-json';
+      block.contentStyle = 'action';
+      result.push(block);
+    }
+    for (let blockId of scene.blockIds) {
+      result.push(tempDocument.blocks[blockId]);
+    }
+  }
+  return result;
 }
 
 // https://dio.la/article/lexical-state-updates
