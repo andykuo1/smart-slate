@@ -14,6 +14,8 @@ export function createDispatchAddDelete(set, get) {
     addShot: zi(set, addShot),
     addTake: zi(set, addTake),
 
+    putPotentiallyOrphanedBlocks: zi(set, putPotentiallyOrphanedBlocks),
+
     deleteDocument: zi(set, deleteDocument),
     deleteScene: zi(set, deleteScene),
     deleteBlock: zi(set, deleteBlock),
@@ -45,6 +47,19 @@ export function addScene(store, documentId, scene) {
   scene.sceneNumber = sceneNumber;
 
   document.sceneOrder.push(scene.sceneId);
+  incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {Array<import('@/stores/document/DocumentStore').Block>} blocks
+ */
+export function putPotentiallyOrphanedBlocks(store, documentId, blocks) {
+  let document = store.documents[documentId];
+  for (let block of blocks) {
+    document.blocks[block.blockId] = block;
+  }
   incrementDocumentRevisionNumber(document);
 }
 

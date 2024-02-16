@@ -21,6 +21,14 @@ export function getSceneIdsInOrder(store, documentId) {
 /**
  * @param {import('@/stores/document/DocumentStore').Store} store
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ */
+export function getSceneCount(store, documentId) {
+  return getDocumentById(store, documentId)?.sceneOrder?.length || 0;
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
  */
 export function getSceneOrder(store, documentId, sceneId) {

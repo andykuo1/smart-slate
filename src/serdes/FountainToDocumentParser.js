@@ -73,7 +73,11 @@ export function fountainToDocument(tokens) {
       case 'action':
         currentBlock = addBlock(currentScene);
         currentBlock.contentType = 'fountain-json';
-        currentBlock.content = token.text;
+        if (token.forced) {
+          currentBlock.content = `!${token.text}`;
+        } else {
+          currentBlock.content = token.text;
+        }
         if (token.style === 'centered') {
           currentBlock.contentStyle = 'centered';
         } else {
@@ -133,6 +137,16 @@ export function fountainToDocument(tokens) {
         break;
     }
   }
+
+  // NOTE: Verify that all scenes have at least one block.
+  for (let scene of Object.values(result.scenes)) {
+    if (scene.blockIds.length <= 0) {
+      let block = addBlock(scene);
+      block.contentType = 'fountain-json';
+      block.content = '';
+    }
+  }
+
   bakeFrontMatter();
   return result;
 }

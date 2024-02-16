@@ -6,6 +6,8 @@
 - Add dark mode toggle for slate
 - Add shot tray to block
 - Add no shot-editing while in text-only
+- Add splittable/deletable blocks by text
+- Add possible new scene if on last scene text
 
 - Remove dark mode (for now)
 

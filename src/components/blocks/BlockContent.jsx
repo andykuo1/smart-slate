@@ -1,8 +1,3 @@
-import { LexicalComposer } from '@lexical/react/LexicalComposer';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { ContentEditable } from '@lexical/react/LexicalContentEditable';
-import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
-import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
 import { useEffect, useRef, useState } from 'react';
 
 import { parse } from '@/fountain/FountainParser';
@@ -11,7 +6,10 @@ import {
   getBlockById,
   getBlockOrder,
   getSceneById,
+  getSceneCount,
+  getSceneOrder,
   useAddBlock,
+  useAddScene,
 } from '@/stores/document';
 import { createBlock } from '@/stores/document/DocumentStore';
 import { useDocumentStore } from '@/stores/document/use';
@@ -43,19 +41,12 @@ export default function BlockContent({
   );
   if (blockContentType === 'lexical') {
     return (
-      <BlockContentLexical
-        className={className}
-        documentId={documentId}
-        blockId={blockId}
-        blockContent={blockContent}
-        editable={editable}>
-        {children}
-      </BlockContentLexical>
+      <span className="italic">Sorry, this is an unsupported block type.</span>
     );
   } else if (blockContentType === 'string') {
     return (
       <pre className={className}>
-        {blockContent}
+        {blockContent || '...'}
         {children}
       </pre>
     );
@@ -74,7 +65,7 @@ export default function BlockContent({
   } else {
     return (
       <pre className={className}>
-        {blockContentType}:{blockContent}
+        {blockContentType}:{blockContent || '...'}
         {children}
       </pre>
     );
@@ -163,7 +154,7 @@ function BlockContentFountainJSON({
       }>
       {content || (
         <span className="opacity-30">
-          {'< '}What happened?{' >'}
+          {'< '}What happened next?{' >'}
         </span>
       )}
       {children}
@@ -198,6 +189,10 @@ function BlockContentFountainJSONInput({
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const setBlockContent = useDocumentStore((ctx) => ctx.setBlockContent);
   const addBlock = useAddBlock();
+  const addScene = useAddScene();
+  const putPotentiallyOrphanedBlocks = useDocumentStore(
+    (ctx) => ctx.putPotentiallyOrphanedBlocks,
+  );
   const deleteBlock = useDocumentStore((ctx) => ctx.deleteBlock);
   useEffect(() => {
     inputRef.current?.focus();
@@ -205,23 +200,27 @@ function BlockContentFountainJSONInput({
 
   function onBlur() {
     setEditable?.(false);
-    let blocks = parseTextToBlocks(state);
 
     let store = UNSAFE_getStore();
-    let firstBlock = blocks.shift();
+    let sceneCount = getSceneCount(store, documentId);
+    let isLastScene = getSceneOrder(store, documentId, sceneId) >= sceneCount;
+    let { currentBlocks, newBlocks, newScenes } = parseTextToBlocks(
+      state,
+      isLastScene,
+    );
+
+    // ... for the current block
+    let firstBlock = currentBlocks.shift();
     if (!firstBlock) {
       // Delete this block if it's empty.
       setBlockContent(documentId, blockId, 'fountain-json', '');
-
       let block = getBlockById(store, documentId, blockId);
       if (block.shotIds.length <= 0) {
         deleteBlock(documentId, blockId);
       }
       return;
     }
-
     let blockOrder = getBlockOrder(store, documentId, sceneId, blockId);
-
     setBlockContent(
       documentId,
       blockId,
@@ -230,11 +229,23 @@ function BlockContentFountainJSONInput({
       firstBlock.contentStyle,
     );
 
-    if (blocks.length > 0) {
+    // ... for any added current blocks
+    if (currentBlocks.length > 0) {
       let currentIndex = blockOrder - 1;
-      for (let block of blocks) {
+      for (let block of currentBlocks) {
         addBlock(documentId, sceneId, block, ++currentIndex);
       }
+    }
+
+    // ... for any new blocks
+    if (newBlocks.length > 0) {
+      // NOTE: We trust the parser results to NEVER orphan blocks.
+      putPotentiallyOrphanedBlocks(documentId, newBlocks);
+    }
+
+    // ... for any new scenes
+    for (let scene of newScenes) {
+      addScene(documentId, scene);
     }
   }
 
@@ -288,9 +299,9 @@ function formatTextWithOverrides(text, style) {
 
 /**
  * @param {string} text
- * @returns {Array<import('@/stores/document/DocumentStore').Block>}
+ * @param {boolean} allowScenes
  */
-function parseTextToBlocks(text) {
+function parseTextToBlocks(text, allowScenes) {
   let preparedText = `.${FIRST_SCENE_HEADING}\n\n${text}`;
   let parsed = parse(preparedText);
   let tempDocument = fountainToDocument(parsed.tokens);
@@ -298,98 +309,40 @@ function parseTextToBlocks(text) {
   let tempStore = {
     documents: { [tempDocumentId]: tempDocument },
   };
-  let result = [];
+  let currentBlocks = [];
+  let newBlocks = [];
+  let newScenes = [];
   // NOTE: We do not allow scenes while writing in blocks. So
   //  scene tokens should be converted to just text.
   //  ... we also do not allow shots.
   for (let sceneId of tempDocument.sceneOrder) {
     let scene = getSceneById(tempStore, tempDocumentId, sceneId);
-    if (scene.sceneHeading !== FIRST_SCENE_HEADING) {
-      // This is unexpected scene header. Make it a text block.
-      let block = createBlock();
-      block.content = `!${scene.sceneHeading}`;
-      block.contentType = 'fountain-json';
-      block.contentStyle = 'action';
-      result.push(block);
+    if (scene.sceneHeading === FIRST_SCENE_HEADING) {
+      for (let blockId of scene.blockIds) {
+        currentBlocks.push(tempDocument.blocks[blockId]);
+      }
+      continue;
     }
-    for (let blockId of scene.blockIds) {
-      result.push(tempDocument.blocks[blockId]);
+    if (allowScenes) {
+      // This is expected scene header. Make it a new scene and add its blocks.
+      // ...and add all content blocks to the result store.
+      for (let blockId of scene.blockIds) {
+        let block = getBlockById(tempStore, tempDocumentId, blockId);
+        newBlocks.push(block);
+      }
+      newScenes.push(scene);
+      continue;
     }
+    // This is unexpected scene header. Make it a text block.
+    let block = createBlock();
+    block.content = `!${scene.sceneHeading}`;
+    block.contentType = 'fountain-json';
+    block.contentStyle = 'action';
+    currentBlocks.push(block);
   }
-  return result;
-}
-
-// https://dio.la/article/lexical-state-updates
-
-/**
- * @param {object} props
- * @param {string} [props.className]
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
- * @param {string} props.blockContent
- * @param {boolean} [props.editable]
- * @param {import('react').ReactNode} [props.children]
- */
-function BlockContentLexical({
-  className,
-  documentId,
-  blockId,
-  blockContent,
-  editable = true,
-  children,
-}) {
-  const setBlockContent = useDocumentStore((ctx) => ctx.setBlockContent);
-
-  /** @type {import('@lexical/react/LexicalComposer').InitialConfigType} */
-  const initialConfig = {
-    namespace: 'blockContent',
-    editorState: blockContent || undefined,
-    editable: Boolean(editable),
-    /**
-     * @param {Error} error
-     */
-    onError(error) {
-      console.error(error);
-    },
+  return {
+    currentBlocks,
+    newBlocks,
+    newScenes,
   };
-
-  /**
-   * @param {import('lexical').EditorState} editorState
-   */
-  function onChange(editorState) {
-    const jsonString = JSON.stringify(editorState.toJSON());
-    setBlockContent(documentId, blockId, 'lexical', jsonString);
-  }
-
-  return (
-    <div className={'relative' + ' ' + className}>
-      <LexicalComposer initialConfig={initialConfig}>
-        <PlainTextPlugin
-          contentEditable={<ContentEditable className="p-2" />}
-          placeholder={
-            <div className="pointer-events-none absolute left-2 top-2 opacity-30">
-              {editable && 'What happens?...'}
-            </div>
-          }
-          ErrorBoundary={LexicalErrorBoundary}
-        />
-        <OnChangePlugin onChange={onChange} />
-      </LexicalComposer>
-      {children}
-    </div>
-  );
-}
-
-/**
- * @param {object} props
- * @param {(editorState: import('lexical').EditorState) => void} props.onChange
- */
-function OnChangePlugin({ onChange }) {
-  const [editor] = useLexicalComposerContext();
-  useEffect(() => {
-    return editor.registerUpdateListener(({ editorState }) => {
-      onChange(editorState);
-    });
-  }, [editor, onChange]);
-  return null;
 }
