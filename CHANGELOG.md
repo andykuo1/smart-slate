@@ -1,7 +1,7 @@
 # Upcoming
 
 - Add PDF viewer (for scene or document)
-- Add custom shot types
+- Add custom shot types in settings
 - Add writer name settings
 - Add dark mode toggle for slate
 - Add shot tray to block
@@ -10,6 +10,7 @@
 - Add possible new scene if on last scene text
 - Add auto-sync every 5 seconds for gdrive
 - Add import project button to create a NEW project
+- Add new release prompt
 
 - Remove dark mode (for now)
 

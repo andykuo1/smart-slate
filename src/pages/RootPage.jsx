@@ -1,5 +1,6 @@
 import ChangelogButton from '@/buttons/ChangelogButton';
 import ImportProjectButton from '@/buttons/ImportProjectButton';
+import NewReleasePrompt from '@/buttons/NewReleasePrompt';
 import ProjectNewButton from '@/buttons/ProjectNewButton';
 import ScannerButton from '@/buttons/ScannerButton';
 import ProjectSelector from '@/components/projects/ProjectSelector';
@@ -27,6 +28,7 @@ export default function RootPage() {
         <ImportProjectButton />
         <ChangelogButton />
         <ScannerButton />
+        <NewReleasePrompt />
       </div>
       <ProjectSelector className="mb-auto mt-2" />
       {/* <DarkModeToggle className="absolute left-2 top-2" /> */}
