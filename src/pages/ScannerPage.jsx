@@ -45,7 +45,7 @@ import { analyzeFile, deriveRenameValue } from './ScannerAnalyzer';
 import ScannerTranscoderInit from './ScannerTranscoderInit';
 import { ToolboxActionList } from './ToolboxLayout';
 
-export default function ScanPage() {
+export default function ScannerPage() {
   return (
     <PageLayout className="bg-white text-black dark:bg-gray-900 dark:text-white">
       <fieldset className="relative m-4 mx-auto flex w-[80%] flex-col overflow-hidden border-2 border-black px-4 pb-4 md:flex-row">

@@ -1,3 +1,9 @@
+import {
+  Select,
+  SelectItem,
+  SelectPopover,
+  SelectProvider,
+} from '@ariakit/react';
 import { useCallback, useEffect, useState } from 'react';
 
 import AddIcon from '@material-symbols/svg-400/rounded/add.svg';
@@ -13,10 +19,12 @@ import {
 import FieldButton from '@/fields/FieldButton';
 import { useInterval } from '@/libs/UseInterval';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
+import { useSceneShotNumber } from '@/serdes/UseResolveSceneShotNumber';
 import { useShotHash } from '@/serdes/UseResolveShotHash';
 import { useShotNumber } from '@/serdes/UseResolveShotNumber';
 import { useTakeNumber } from '@/serdes/UseResolveTakeNumber';
 import {
+  findSceneWithShotId,
   findShotWithTakeId,
   getDocumentIds,
   getDocumentSettingsById,
@@ -27,13 +35,19 @@ import {
   useShotType,
   useTakeRating,
 } from '@/stores/document';
-import { useDocumentStore } from '@/stores/document/use';
+import {
+  useDocumentStore,
+  useSceneIdsInDocumentOrder,
+  useShotIdsInSceneOrder,
+} from '@/stores/document/use';
 import { useSettingsStore } from '@/stores/settings';
 import {
   useCurrentCursor,
+  useCurrentSceneId,
   useSetUserCursor,
   useUserStore,
 } from '@/stores/user';
+import SelectStyle from '@/styles/Select.module.css';
 
 import ClapperCameraNameField from './ClapperCameraNameField';
 import ClapperDirectorNameField from './ClapperDirectorNameField';
@@ -464,27 +478,45 @@ function ClapperIdentifierFields({
   shotId,
   takeId,
 }) {
-  const toggleDrawer = useUserStore((ctx) => ctx.toggleDrawer);
-  function onClick() {
-    toggleDrawer();
+  const setUserCursor = useSetUserCursor();
+  const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
+
+  /**
+   * @param {import('@/stores/document/DocumentStore').ShotId} value
+   */
+  function setValue(value) {
+    let store = UNSAFE_getStore();
+    let scene = findSceneWithShotId(store, documentId, value);
+    if (!scene) {
+      return;
+    }
+    setUserCursor(documentId, scene.sceneId, value, '');
   }
+
   return (
     <fieldset
       className={
         'mx-auto flex flex-row gap-4 overflow-hidden font-mono text-[1em]' +
         ' ' +
         className
-      }
-      onClick={onClick}>
+      }>
       <div className="flex flex-1 flex-col items-center rounded-xl border-2 px-2">
-        <div className="flex flex-col items-end">
-          <ClapperSceneShotNumberField
-            documentId={documentId}
-            sceneId={sceneId}
-            shotId={shotId}
-          />
-          <ClapperShotHashField documentId={documentId} shotId={shotId} />
-        </div>
+        <SelectProvider value={shotId} setValue={setValue}>
+          <Select className="flex flex-col items-end">
+            <ClapperSceneShotNumberField
+              documentId={documentId}
+              sceneId={sceneId}
+              shotId={shotId}
+            />
+            <ClapperShotHashField documentId={documentId} shotId={shotId} />
+          </Select>
+          <SelectPopover
+            className={
+              '-mt-[4em] ml-[1em] text-[2em]' + ' ' + SelectStyle.popover
+            }>
+            <SceneShotListItems documentId={documentId} />
+          </SelectPopover>
+        </SelectProvider>
       </div>
       <ClapperTakeNumberField
         className="flex-1 rounded-xl border-2 px-2"
@@ -493,6 +525,71 @@ function ClapperIdentifierFields({
         takeId={takeId}
       />
     </fieldset>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ */
+function SceneShotListItems({ documentId }) {
+  const sceneIds = useSceneIdsInDocumentOrder(documentId);
+  return sceneIds.map((sceneId) => (
+    <SceneShotListItemsInnerScene
+      key={sceneId}
+      documentId={documentId}
+      sceneId={sceneId}
+    />
+  ));
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ */
+function SceneShotListItemsInnerScene({ documentId, sceneId }) {
+  const shotIds = useShotIdsInSceneOrder(documentId, sceneId);
+  const currentSceneId = useCurrentSceneId();
+  if (shotIds.length <= 0) {
+    return null;
+  }
+  return (
+    <div
+      className={
+        'my-2 rounded' + ' ' + (currentSceneId === sceneId && 'bg-blue-100')
+      }>
+      {shotIds.map((shotId) => (
+        <SceneShotListItemsInnerSceneShot
+          key={shotId}
+          documentId={documentId}
+          sceneId={sceneId}
+          shotId={shotId}
+        />
+      ))}
+    </div>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ */
+function SceneShotListItemsInnerSceneShot({ documentId, sceneId, shotId }) {
+  const sceneShotNumber = useSceneShotNumber(documentId, sceneId, shotId);
+  const { shotId: currentShotId } = useCurrentCursor();
+  return (
+    <SelectItem
+      className={
+        (shotId === currentShotId && 'bg-blue-300') +
+        ' ' +
+        SelectStyle.selectItem
+      }
+      value={shotId}>
+      {sceneShotNumber}
+    </SelectItem>
   );
 }
 
@@ -557,8 +654,15 @@ function ClapperSceneShotNumberField({ documentId, sceneId, shotId }) {
 function ClapperTakeNumberField({ className, documentId, shotId, takeId }) {
   const takeNumber = useTakeNumber(documentId, shotId, takeId);
   const takeOutputId = 'clapTakeNo-' + takeId;
+  const toggleDrawer = useUserStore((ctx) => ctx.toggleDrawer);
+
+  function onClick() {
+    toggleDrawer(true);
+  }
   return (
-    <div className={'flex flex-col items-center' + ' ' + className}>
+    <div
+      className={'flex flex-col items-center' + ' ' + className}
+      onClick={onClick}>
       <ClapperLabel htmlFor={takeOutputId}>TAKE</ClapperLabel>
       <output
         id={takeOutputId}

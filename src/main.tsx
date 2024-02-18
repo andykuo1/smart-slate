@@ -9,7 +9,7 @@ import PreviewPage from '@/pages/PreviewPage';
 import RecordPage from '@/pages/RecordPage';
 import RenamePage from '@/pages/RenamePage';
 import RootPage from '@/pages/RootPage';
-import ScanPage from '@/pages/ScanPage';
+import ScannerPage from '@/pages/ScannerPage';
 import SettingsPage from '@/pages/SettingsPage';
 import TestPage from '@/pages/TestPage';
 import ViewPage from '@/pages/ViewPage';
@@ -53,7 +53,7 @@ const router = createBrowserRouter(
     },
     {
       path: '/scan',
-      element: <ScanPage />,
+      element: <ScannerPage />,
       errorElement: <ErrorPage />,
     },
     {
