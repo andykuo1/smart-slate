@@ -43,7 +43,7 @@ export async function sync(
   getRemoteConfiguration,
   applyRemoteConfiguration,
 ) {
-  console.log(
+  console.debug(
     '[GoogleDriveSync] Connection established. Trying to sync to Google Drive...',
   );
 
@@ -54,7 +54,7 @@ export async function sync(
   const passivelyNextFiles = [];
   const activelyNextFiles = [];
 
-  console.log(
+  console.debug(
     '[GoogleDriveSync] Found configs: ',
     '\nlocal:',
     localConfig,
@@ -70,11 +70,11 @@ export async function sync(
     exports.length <= 0
   ) {
     // Nothing to update :)
-    console.log('[GoogleDriveAPI] No changes found.');
+    console.log('[GoogleDriveSync] No changes found.');
     return;
   } else {
     console.log(
-      '[GoogleDriveAPI] Found files: ',
+      '[GoogleDriveSync] Found files: ',
       '\nfor updates:',
       Object.keys(updates).join('\n') || '--',
       '\nfor imports:',
@@ -209,7 +209,7 @@ export async function sync(
   for (let file of imports) {
     if (file.lastDeletedMillis > 0) {
       // Actually a deleted file. Don't import it.
-      console.log(
+      console.debug(
         '[GoogleDriveSync] Skipping deleted remote file - ' +
           JSON.stringify(file),
       );
@@ -248,7 +248,7 @@ export async function sync(
   for (let file of exports) {
     if (file.lastDeletedMillis > 0) {
       // Actually a deleted file. Don't export it.
-      console.log(
+      console.debug(
         '[GoogleDriveSync] Skipping deleted local file - ' +
           JSON.stringify(file),
       );

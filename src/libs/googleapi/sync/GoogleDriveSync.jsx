@@ -44,13 +44,13 @@ export function useGoogleDriveSyncImpl() {
     async function _syncToGoogleDrive() {
       const token = UNSAFE_getUserStore()?.googleContext?.token;
       if (!token) {
-        console.log(
+        console.debug(
           '[GoogleDriveSync] Not connected to Google Drive. Skipping...',
         );
         setSyncStatus('offline');
         return;
       }
-      console.log('[GoogleDriveSync] Connected to Google Drive. Syncing...');
+      console.debug('[GoogleDriveSync] Connected to Google Drive. Syncing...');
       const googleDriveCRUD = new GoogleDriveCRUD(token);
 
       /**
