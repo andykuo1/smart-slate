@@ -23,6 +23,7 @@ function computeConfig(crud) {
   for (let key of Object.keys(crud.cache)) {
     let file = createSyncFile(key);
     file.fileId = key;
+    file.lastUpdatedMillis = crud.cache[key].time;
     result.files.push(file);
   }
   return result;

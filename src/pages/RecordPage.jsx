@@ -1,12 +1,18 @@
 import ClapperBoardV2 from '@/clapper/ClapperBoardV2';
 import Drawer from '@/drawer/Drawer';
+import { useGoogleDriveAutoSync } from '@/libs/googleapi/sync/UseGoogleDriveAutoSync';
 import RecorderBooth from '@/recorder/RecorderBooth';
 import { useSettingsStore } from '@/stores/settings';
-import { useUserStore } from '@/stores/user';
+import { useCurrentDocumentId, useUserStore } from '@/stores/user';
 
 import PageLayout from './PageLayout';
 
 export default function RecordPage() {
+  // This is within the project context, so get the current document id...
+  useCurrentDocumentId();
+  // ...and auto-sync on interval.
+  useGoogleDriveAutoSync();
+
   const recordMode = useUserStore((ctx) => ctx.recordMode);
   const isRecorderMode = recordMode === 'recorder';
   const preferDarkSlate = useSettingsStore((ctx) => ctx.user.preferDarkSlate);

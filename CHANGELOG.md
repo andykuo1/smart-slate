@@ -8,6 +8,8 @@
 - Add no shot-editing while in text-only
 - Add splittable/deletable blocks by text
 - Add possible new scene if on last scene text
+- Add auto-sync every 5 seconds for gdrive
+- Add import project button to create a NEW project
 
 - Remove dark mode (for now)
 

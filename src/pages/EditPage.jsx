@@ -9,6 +9,7 @@ import ShotListInDocumentOrder from '@/components/shots/shotlist/ShotListInDocum
 import ShotListInSceneOrder from '@/components/shots/shotlist/ShotListInSceneOrder';
 import Drawer from '@/drawer/Drawer';
 import { useMatchMedia } from '@/libs/UseMatchMedia';
+import { useGoogleDriveAutoSync } from '@/libs/googleapi/sync/UseGoogleDriveAutoSync';
 import NavBar from '@/navbar/NavBar';
 import { useSceneIds } from '@/stores/document/use';
 import { useCurrentDocumentId, useUserStore } from '@/stores/user';
@@ -16,7 +17,11 @@ import { useCurrentDocumentId, useUserStore } from '@/stores/user';
 import PageLayout from './PageLayout';
 
 export default function EditPage() {
+  // This is within the project context, so get the current document id...
   const documentId = useCurrentDocumentId();
+  // ...and auto-sync on interval.
+  useGoogleDriveAutoSync();
+
   return (
     <PageLayout className="bg-white text-black dark:bg-gray-900 dark:text-white">
       <NavBar>

@@ -30,11 +30,18 @@ import SettingsVideoResolutionField from '@/components/settings/SettingsVideoRes
 import FieldButton from '@/fields/FieldButton';
 import FieldGroupDiscloseable from '@/fields/FieldGroupDiscloseable';
 import GoogleConnectButton from '@/libs/googleapi/auth/GoogleConnectButton';
+import { useGoogleDriveAutoSync } from '@/libs/googleapi/sync/UseGoogleDriveAutoSync';
 import NavBar from '@/navbar/NavBar';
+import { useCurrentDocumentId } from '@/stores/user';
 
 import PageLayout from './PageLayout';
 
 export default function SettingsPage() {
+  // This is within the project context, so get the current document id...
+  useCurrentDocumentId();
+  // ...and auto-sync on interval.
+  useGoogleDriveAutoSync();
+
   const navigate = useNavigate();
   return (
     <PageLayout className="bg-white text-black dark:bg-slate-900 dark:text-white">

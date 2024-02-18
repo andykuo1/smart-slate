@@ -4,6 +4,7 @@ import ProjectNewButton from '@/buttons/ProjectNewButton';
 import ScannerButton from '@/buttons/ScannerButton';
 import ProjectSelector from '@/components/projects/ProjectSelector';
 import GoogleConnectButton from '@/libs/googleapi/auth/GoogleConnectButton';
+import { useGoogleDriveAutoSync } from '@/libs/googleapi/sync/UseGoogleDriveAutoSync';
 import AppTitle from '@/welcome/AppTitle';
 // import DarkModeToggle from '@/welcome/DarkModeToggle';
 import MadeWithLove from '@/welcome/MadeWithLove';
@@ -12,6 +13,9 @@ import MadeWithLove from '@/welcome/MadeWithLove';
 import PageLayout from './PageLayout';
 
 export default function RootPage() {
+  // ...auto-sync on interval for new projects.
+  useGoogleDriveAutoSync();
+
   return (
     <PageLayout className="items-center bg-white text-black dark:bg-slate-900 dark:text-white">
       <AppTitle className="mt-auto" />

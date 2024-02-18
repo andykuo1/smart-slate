@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 
 import { parse } from '@/fountain/FountainParser';
 import { useAddDocument } from '@/stores/document';
+import { uuid } from '@/utils/uuid';
 
 import { fountainToDocument } from './FountainToDocumentParser';
 
@@ -29,6 +30,8 @@ export function useProjectImport(documentId = undefined) {
         case 'project-json': {
           /** @type {import('@/stores/document/DocumentStore').Document} */
           let document = JSON.parse(data);
+          // Treat this as a new document.
+          document.documentId = uuid();
           // TODO: Maybe some versioning would be helpful here :P
           addDocument(document);
           break;

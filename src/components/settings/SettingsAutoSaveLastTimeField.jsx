@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 import SyncIcon from '@material-symbols/svg-400/rounded/sync.svg';
 
 import { useGoogleStatus } from '@/libs/googleapi/auth/UseGoogleStatus';
@@ -13,7 +11,6 @@ import { useCurrentDocumentId } from '@/stores/user';
  * @param {string} [props.className]
  */
 export default function SettingsAutoSaveLastTimeField({ className }) {
-  const [firstAutoSync, setFirstAutoSync] = useState(true);
   const documentId = useCurrentDocumentId();
   const lastExportedMillis = useDocumentStore(
     (ctx) => getDocumentById(ctx, documentId)?.lastExportedMillis,
@@ -26,16 +23,6 @@ export default function SettingsAutoSaveLastTimeField({ className }) {
     await syncToGoogleDrive();
   }
 
-  useEffect(() => {
-    if (disabled) {
-      return;
-    }
-    // Possibly try an auto-sync?
-    if (firstAutoSync) {
-      setFirstAutoSync(false);
-      syncToGoogleDrive();
-    }
-  }, [disabled, firstAutoSync, setFirstAutoSync, syncToGoogleDrive]);
   const date = new Date(lastExportedMillis);
   return (
     <output className={'block text-xs text-gray-600' + ' ' + className}>

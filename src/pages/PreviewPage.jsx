@@ -1,29 +1,21 @@
 import Toolbar from '@/components/Toolbar';
-import ShotListInDocumentOrder from '@/components/shots/shotlist/ShotListInDocumentOrder';
 import Drawer from '@/drawer/Drawer';
-import NavBar from '@/navbar/NavBar';
-import { useCurrentDocumentId, useUserStore } from '@/stores/user';
+import { useGoogleDriveAutoSync } from '@/libs/googleapi/sync/UseGoogleDriveAutoSync';
+import { useCurrentDocumentId } from '@/stores/user';
 
 import PageLayout from './PageLayout';
 
 export default function PreviewPage() {
-  const documentId = useCurrentDocumentId();
-  const shotListMode = useUserStore((ctx) => ctx.shotListMode === 'detail');
+  // This is within the project context, so get the current document id...
+  useCurrentDocumentId();
+  // ...and auto-sync on interval.
+  useGoogleDriveAutoSync();
+
   return (
-    <PageLayout className="bg-white text-black dark:bg-gray-900 dark:text-white">
-      <NavBar>
-        <Drawer
-          className="bottom-20"
-          containerClassName="bottom-20"
-          darkMode={false}>
-          <Toolbar />
-          <ShotListInDocumentOrder
-            className="my-20"
-            documentId={documentId}
-            collapsed={!shotListMode}
-          />
-        </Drawer>
-      </NavBar>
+    <PageLayout className="bg-white text-black">
+      <Drawer darkMode={false}>
+        <Toolbar />
+      </Drawer>
     </PageLayout>
   );
 }
