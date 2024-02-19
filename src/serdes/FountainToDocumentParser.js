@@ -73,7 +73,7 @@ export function fountainToDocument(tokens) {
       case 'action':
         currentBlock = addBlock(currentScene);
         currentBlock.contentType = 'fountain-json';
-        if (token.forced) {
+        if (token.forced && !token.style) {
           currentBlock.content = `!${token.text}`;
         } else {
           currentBlock.content = token.text;

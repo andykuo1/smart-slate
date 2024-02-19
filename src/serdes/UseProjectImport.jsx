@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 
+import { tokenize } from '@/fdx/FDXTokenizer';
 import { parse } from '@/fountain/FountainParser';
 import { useAddDocument } from '@/stores/document';
 import { uuid } from '@/utils/uuid';
@@ -18,6 +19,16 @@ export function useProjectImport(documentId = undefined) {
      */
     function _importProject(type, data) {
       switch (type) {
+        case 'fdx': {
+          const tokens = tokenize(data);
+          let document = fountainToDocument(tokens);
+          document.documentTitle = 'My FinalDraft Movie';
+          if (documentId) {
+            document.documentId = documentId;
+          }
+          addDocument(document);
+          return document.documentId;
+        }
         case 'fountain-text': {
           const { tokens } = parse(data);
           let document = fountainToDocument(tokens);

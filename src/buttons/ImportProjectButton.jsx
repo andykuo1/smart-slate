@@ -32,6 +32,9 @@ export default function ImportProjectButton({
           case '.json':
             await importProject('project-json', await file.text());
             break;
+          case '.fdx':
+            await importProject('fdx', await file.text());
+            break;
           default:
             throw new Error('Unsupported project file extension.');
         }

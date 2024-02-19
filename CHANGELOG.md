@@ -11,6 +11,7 @@
 - Add auto-sync every 5 seconds for gdrive
 - Add import project button to create a NEW project
 - Add new release prompt
+- Add FDX file import
 
 - Remove dark mode (for now)
 
