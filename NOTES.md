@@ -339,3 +339,19 @@ Pre-vis for story is document only (no scene split)
 ---
 
 storyboard in split view is missing.
+
+---
+
+renumbering scenes
+
+- partial writing scenes / shot lists
+- (reimport script)
+
+creating shotlists (days)
+
+- shot hashes generated when generating PDF shotlist
+- Fix pdf file name
+- Letter size for PDF
+- Remove gray background
+
+- FDX import

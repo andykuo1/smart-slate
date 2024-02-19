@@ -210,7 +210,7 @@ function PDFStoryboard({ title, headerPerPage, shotsPerPage, titlesPerShot }) {
         <Page
           key={`storyboard-page-${index}`}
           style={Styles.page}
-          size="A4"
+          size="LETTER"
           orientation="landscape">
           <HeaderView style={Styles.header}>
             <Text>{headerPerPage[index]}</Text>
