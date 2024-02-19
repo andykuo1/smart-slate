@@ -1,5 +1,7 @@
 # Upcoming
 
+# 0.1.17
+
 - Add PDF viewer (for scene or document)
 - Add custom shot types in settings
 - Add writer name settings
