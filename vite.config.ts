@@ -8,9 +8,11 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 import PackageJSON from './package.json';
 
+const PACKAGE_NAME = PackageJSON.name.split('/').at(-1);
+
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: `/${PackageJSON.name}/`,
+  base: `/${PACKAGE_NAME}/`,
   define: {
     __CONFIGTIME__: JSON.stringify(Date.now()),
   },

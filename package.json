@@ -1,5 +1,5 @@
 {
-  "name": "smart-slate",
+  "name": "@andykuo1/smart-slate",
   "private": true,
   "version": "0.1.16",
   "type": "module",
@@ -13,6 +13,9 @@
     "cy:start": "conc \"npm start\" \"cypress open\"",
     "cy:test": "npm run format && npm run lint && conc \"npm start\" \"cypress run --headed\"",
     "generate:pwa": "pwa-assets-generator"
+  },
+  "publishConfig": {
+    "@andykuo1:registry": "https://npm.pkg.github.com"
   },
   "dependencies": {
     "@ariakit/react": "^0.3.9",
