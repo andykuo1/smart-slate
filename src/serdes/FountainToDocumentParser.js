@@ -17,10 +17,15 @@ import { createLexicalStateFromText } from './LexicalParser';
 
 /**
  * @param {Array<import('@/fountain/FountainTokenizer').FountainToken>} tokens
+ * @param {object} [opts]
+ * @param {string} [opts.defaultDocumentTitle]
  */
-export function fountainToDocument(tokens) {
+export function fountainToDocument(tokens, opts = {}) {
   const documentParser = setupDocumentParser();
-  const frontMatterParser = setupFrontMatterParser(documentParser);
+  const frontMatterParser = setupFrontMatterParser(
+    documentParser,
+    opts?.defaultDocumentTitle || 'My Imported Movie',
+  );
   const { document: result, addScene, addBlock, addShot } = documentParser;
   const { addFrontMatterLine, bakeFrontMatter } = frontMatterParser;
 
@@ -153,8 +158,9 @@ export function fountainToDocument(tokens) {
 
 /**
  * @param {ReturnType<setupDocumentParser>} documentParser
+ * @param {string} defaultDocumentTitle
  */
-function setupFrontMatterParser(documentParser) {
+function setupFrontMatterParser(documentParser, defaultDocumentTitle) {
   // TODO: Title scenes (for now) will not be translated over. Let it die.
   // let titleScene = documentParser.addScene();
   let titleBlock = createBlock(); // documentParser.addBlock(titleScene);
@@ -184,7 +190,7 @@ function setupFrontMatterParser(documentParser) {
     }
     // Set document settings...
     let result = documentParser.document;
-    result.documentTitle = titleTitle || 'My Fountain Movie';
+    result.documentTitle = titleTitle || defaultDocumentTitle;
     result.settings.projectId = formatProjectId(result.documentTitle);
     result.revisionNumber = 1; // Reset to default.
   }

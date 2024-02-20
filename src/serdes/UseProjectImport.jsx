@@ -21,8 +21,9 @@ export function useProjectImport(documentId = undefined) {
       switch (type) {
         case 'fdx': {
           const tokens = tokenize(data);
-          let document = fountainToDocument(tokens);
-          document.documentTitle = 'My FinalDraft Movie';
+          const document = fountainToDocument(tokens, {
+            defaultDocumentTitle: 'My FinalDraft Movie',
+          });
           if (documentId) {
             document.documentId = documentId;
           }
@@ -31,7 +32,9 @@ export function useProjectImport(documentId = undefined) {
         }
         case 'fountain-text': {
           const { tokens } = parse(data);
-          let document = fountainToDocument(tokens);
+          let document = fountainToDocument(tokens, {
+            defaultDocumentTitle: 'My Fountain Movie',
+          });
           if (documentId) {
             document.documentId = documentId;
           }
