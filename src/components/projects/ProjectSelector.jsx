@@ -9,7 +9,6 @@ import { useActiveDocumentIds, useDocumentStore } from '@/stores/document/use';
 import { useSetUserCursor } from '@/stores/user';
 
 import ProjectListStatusButton from './ProjectListStatusButton';
-import ProjectOpenStatus from './ProjectOpenStatus';
 import ProjectSyncStatus from './ProjectSyncStatus';
 
 /**
@@ -79,6 +78,8 @@ function ProjectSelectorOption({ className, documentId }) {
   const googleStatus = useGoogleStatus();
   const setUserCursor = useSetUserCursor();
   const navigate = useNavigate();
+  const syncStatus = useProjectSyncStatus(documentId);
+  const isProjectIncluded = isProjectIncludedBySyncStatus(syncStatus);
 
   const onClick = useCallback(
     async function _onClick() {
@@ -119,13 +120,15 @@ function ProjectSelectorOption({ className, documentId }) {
         ' ' +
         'hover:cursor-pointer hover:bg-white dark:hover:bg-gray-600' +
         ' ' +
+        (!isProjectIncluded ? 'opacity-50 hover:opacity-100' : '') +
+        ' ' +
         className
       }
       title={`Open "${titleWithPlaceholder}" Project`}
       onClick={onClick}>
       <div className="flex h-full flex-col">
         <h3 className="text-gray-300 group-hover:font-bold group-hover:text-gray-600">
-          <ProjectOpenStatus documentId={documentId} />
+          {getProjectOpenActionTextBySyncStatus(syncStatus)}
         </h3>
         <ProjectSyncStatus
           className="absolute right-1 top-1 text-gray-600"
@@ -142,4 +145,93 @@ function ProjectSelectorOption({ className, documentId }) {
       </div>
     </li>
   );
+}
+
+/** @typedef {ReturnType<useProjectSyncStatus} ProjectSyncStatus */
+
+/**
+ * @param {ProjectSyncStatus} syncStatus
+ */
+function isProjectIncludedBySyncStatus(syncStatus) {
+  return (
+    syncStatus !== 'upload' &&
+    syncStatus !== 'offline' &&
+    syncStatus !== 'deleted' &&
+    syncStatus !== 'error' &&
+    syncStatus !== 'unknown'
+  );
+}
+
+/**
+ * @param {ProjectSyncStatus} syncStatus
+ */
+function getProjectOpenActionTextBySyncStatus(syncStatus) {
+  switch (syncStatus) {
+    case 'upload':
+      return 'Upload';
+    default:
+      return 'Open';
+  }
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ */
+function useProjectSyncStatus(documentId) {
+  const autoSaveTo = useDocumentStore(
+    (ctx) => getDocumentSettingsById(ctx, documentId)?.autoSaveTo,
+  );
+  const lastDeletedMillis = useDocumentStore(
+    (ctx) => getDocumentById(ctx, documentId)?.lastDeletedMillis,
+  );
+  const lastUpdatedMillis = useDocumentStore(
+    (ctx) => getDocumentById(ctx, documentId)?.lastUpdatedMillis,
+  );
+  const lastExportedMillis = useDocumentStore(
+    (ctx) => getDocumentById(ctx, documentId)?.lastExportedMillis,
+  );
+  const lastDataExportedMillis = useDocumentStore(
+    (ctx) => getDocumentById(ctx, documentId)?.lastDataExportedMillis,
+  );
+  const hasLocalChanges = lastUpdatedMillis > lastExportedMillis;
+  const googleStatus = useGoogleStatus();
+  if (lastDeletedMillis > 0) {
+    return 'deleted';
+  }
+  switch (autoSaveTo) {
+    case '':
+    case 'local':
+      if (lastExportedMillis > 0) {
+        // This was once exported, but sync has been turned off.
+        return 'localonly';
+      } else if (googleStatus) {
+        // Connected! And will sync if opened.
+        return 'upload';
+      }
+      return 'open';
+    case 'gdrive':
+      if (!googleStatus) {
+        // Not connected!
+        return 'offline';
+      }
+      if (lastDataExportedMillis < lastExportedMillis) {
+        // Data wasn't downloaded-- just metadata.
+        // ...and it won't until the user opens it.
+        return 'partial';
+      }
+      if (!hasLocalChanges) {
+        // No local changes. Should be synced :)
+        return 'online';
+      } else {
+        // There needs to be a sync soon!
+        return 'pending';
+      }
+    default:
+      // For any other kind of auto-save (since they are unknown at the moment).
+      if (hasLocalChanges) {
+        return 'error';
+      } else {
+        return 'unknown';
+      }
+  }
 }
