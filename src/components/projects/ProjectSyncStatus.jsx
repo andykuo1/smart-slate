@@ -7,6 +7,7 @@ import OfflineBoltIcon from '@material-symbols/svg-400/rounded/offline_bolt.svg'
 import SyncDisabledIcon from '@material-symbols/svg-400/rounded/sync_disabled.svg';
 import SyncProblemIcon from '@material-symbols/svg-400/rounded/sync_problem.svg';
 import UnknownDocumentIcon from '@material-symbols/svg-400/rounded/unknown_document.svg';
+import UploadIcon from '@material-symbols/svg-400/rounded/upload_file.svg';
 
 import { useGoogleStatus } from '@/libs/googleapi/auth/UseGoogleStatus';
 import { getDocumentById, getDocumentSettingsById } from '@/stores/document';
@@ -17,7 +18,7 @@ import { useDocumentStore } from '@/stores/document/use';
  * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  */
-export default function ProjectStatus({ className, documentId }) {
+export default function ProjectSyncStatus({ className, documentId }) {
   const autoSaveTo = useDocumentStore(
     (ctx) => getDocumentSettingsById(ctx, documentId)?.autoSaveTo,
   );
@@ -49,6 +50,9 @@ export default function ProjectStatus({ className, documentId }) {
       if (lastExportedMillis > 0) {
         // This was once exported, but sync has been turned off.
         return <SyncDisabledIcon className={iconClassName} />;
+      } else if (googleStatus) {
+        // Connected! And will sync if opened.
+        return <UploadIcon className={iconClassName} />;
       }
       return <FileOpenIcon className={iconClassName} />;
     case 'gdrive':

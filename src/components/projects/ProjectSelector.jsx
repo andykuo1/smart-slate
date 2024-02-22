@@ -2,12 +2,14 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import HorizontallyScrollableDiv from '@/libs/HorizontallyScrollableDiv';
+import { useGoogleStatus } from '@/libs/googleapi/auth/UseGoogleStatus';
 import { useGoogleDriveSync } from '@/libs/googleapi/sync/GoogleDriveSync';
 import { getDocumentById, getDocumentSettingsById } from '@/stores/document';
 import { useActiveDocumentIds, useDocumentStore } from '@/stores/document/use';
 import { useSetUserCursor } from '@/stores/user';
 
 import ProjectListStatusButton from './ProjectListStatusButton';
+import ProjectOpenStatus from './ProjectOpenStatus';
 import ProjectSyncStatus from './ProjectSyncStatus';
 
 /**
@@ -70,12 +72,20 @@ function ProjectSelectorOption({ className, documentId }) {
   const autoSaveTo = useDocumentStore(
     (ctx) => getDocumentSettingsById(ctx, documentId)?.autoSaveTo,
   );
+  const setDocumentSettingsAutoSaveTo = useDocumentStore(
+    (ctx) => ctx.setDocumentSettingsAutoSaveTo,
+  );
   const { syncToGoogleDrive } = useGoogleDriveSync();
+  const googleStatus = useGoogleStatus();
   const setUserCursor = useSetUserCursor();
   const navigate = useNavigate();
 
   const onClick = useCallback(
-    async function onClick() {
+    async function _onClick() {
+      if ((autoSaveTo === '' || autoSaveTo === 'local') && googleStatus) {
+        // Force upload this project if connected but not sync...
+        setDocumentSettingsAutoSaveTo(documentId, 'gdrive');
+      }
       if (autoSaveTo === 'gdrive') {
         // Import from GoogleDrive before opening...
         await syncToGoogleDrive();
@@ -83,7 +93,15 @@ function ProjectSelectorOption({ className, documentId }) {
       setUserCursor(documentId, '', '', '');
       navigate('/edit');
     },
-    [autoSaveTo, documentId, setUserCursor, navigate, syncToGoogleDrive],
+    [
+      googleStatus,
+      autoSaveTo,
+      documentId,
+      setUserCursor,
+      navigate,
+      syncToGoogleDrive,
+      setDocumentSettingsAutoSaveTo,
+    ],
   );
 
   const titleWithPlaceholder = title || 'Untitled';
@@ -95,7 +113,7 @@ function ProjectSelectorOption({ className, documentId }) {
   return (
     <li
       className={
-        'relative max-h-[30vmin] w-[8rem] min-w-[8rem] max-w-[8rem] overflow-hidden text-center' +
+        'group relative max-h-[30vmin] w-[8rem] min-w-[8rem] max-w-[8rem] overflow-hidden text-center' +
         ' ' +
         'mx-2 my-4 rounded-xl bg-gray-100 p-2 dark:bg-gray-800' +
         ' ' +
@@ -105,19 +123,23 @@ function ProjectSelectorOption({ className, documentId }) {
       }
       title={`Open "${titleWithPlaceholder}" Project`}
       onClick={onClick}>
-      <div className="flex flex-col">
-        <h3 className="text-gray-300">Open</h3>
-        <p className={lastDeletedMillis > 0 ? 'line-through' : ''}>
-          {titleWithPlaceholder}
-        </p>
-        <p className="text-gray-400">
-          {new Date(lastUpdatedMillis).toLocaleString()}
-        </p>
+      <div className="flex h-full flex-col">
+        <h3 className="text-gray-300 group-hover:font-bold group-hover:text-gray-600">
+          <ProjectOpenStatus documentId={documentId} />
+        </h3>
+        <ProjectSyncStatus
+          className="absolute right-1 top-1 text-gray-600"
+          documentId={documentId}
+        />
+        <div className="flex flex-1 flex-col overflow-y-auto">
+          <p className={lastDeletedMillis > 0 ? 'line-through' : ''}>
+            {titleWithPlaceholder}
+          </p>
+          <p className="text-gray-400">
+            {new Date(lastUpdatedMillis).toLocaleString()}
+          </p>
+        </div>
       </div>
-      <ProjectSyncStatus
-        className="absolute right-1 top-1 text-gray-600"
-        documentId={documentId}
-      />
     </li>
   );
 }

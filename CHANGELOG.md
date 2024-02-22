@@ -1,5 +1,7 @@
 # Upcoming
 
+- Add auto-sync when opening local project if already connected to GoogleDrive
+
 # 0.1.17
 
 - Add PDF viewer (for scene or document)
