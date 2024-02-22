@@ -147,7 +147,7 @@ function ProjectSelectorOption({ className, documentId }) {
   );
 }
 
-/** @typedef {ReturnType<useProjectSyncStatus} ProjectSyncStatus */
+/** @typedef {ReturnType<useProjectSyncStatus>} ProjectSyncStatus */
 
 /**
  * @param {ProjectSyncStatus} syncStatus
