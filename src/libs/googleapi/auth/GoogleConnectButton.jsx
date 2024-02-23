@@ -3,12 +3,12 @@ import {
   hasGrantedAllScopesGoogle,
   useGoogleLogin,
 } from '@react-oauth/google';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import AddToDriveIcon from '@material-symbols/svg-400/rounded/add_to_drive.svg';
 import LogoutIcon from '@material-symbols/svg-400/rounded/logout.svg';
 
-import { useInterval } from '@/libs/UseInterval';
+import AnimatedEllipsis from '@/libs/AnimatedEllipsis';
 import {
   GAPI_DRIVE_APPDATA_SCOPE,
   GAPI_DRIVE_FILE_SCOPE,
@@ -129,25 +129,4 @@ function GoogleConnectStatus({ status }) {
         </>
       );
   }
-}
-
-/**
- * @param {object} props
- * @param {import('react').ReactNode} props.children
- */
-function AnimatedEllipsis({ children }) {
-  const [ellipsis, setEllipsis] = useState('....');
-  const onInterval = useCallback(
-    function onInterval() {
-      setEllipsis((prev) => (prev.length >= 4 ? '.' : prev + '.'));
-    },
-    [setEllipsis],
-  );
-  useInterval(onInterval, 500);
-  return (
-    <pre className="inline-block">
-      {children}
-      {ellipsis.padEnd(4, ' ')}
-    </pre>
-  );
 }

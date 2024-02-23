@@ -1,12 +1,13 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import AnimatedEllipsis from '@/libs/AnimatedEllipsis';
 import HorizontallyScrollableDiv from '@/libs/HorizontallyScrollableDiv';
 import { useGoogleStatus } from '@/libs/googleapi/auth/UseGoogleStatus';
 import { useGoogleDriveSync } from '@/libs/googleapi/sync/GoogleDriveSync';
 import { getDocumentById, getDocumentSettingsById } from '@/stores/document';
 import { useActiveDocumentIds, useDocumentStore } from '@/stores/document/use';
-import { useSetUserCursor } from '@/stores/user';
+import { useCurrentDocumentId, useSetUserCursor } from '@/stores/user';
 
 import ProjectListStatusButton from './ProjectListStatusButton';
 import ProjectSyncStatus from './ProjectSyncStatus';
@@ -76,25 +77,41 @@ function ProjectSelectorOption({ className, documentId }) {
   );
   const { syncToGoogleDrive } = useGoogleDriveSync();
   const googleStatus = useGoogleStatus();
+  const currentDocumentId = useCurrentDocumentId();
   const setUserCursor = useSetUserCursor();
   const navigate = useNavigate();
   const syncStatus = useProjectSyncStatus(documentId);
   const isProjectIncluded = isProjectIncludedBySyncStatus(syncStatus);
+  const isProjectLoading = currentDocumentId === documentId;
+  const isAnyProjectLoading = Boolean(currentDocumentId);
 
   const onClick = useCallback(
-    async function _onClick() {
+    function _onClick() {
+      if (currentDocumentId) {
+        navigate('/edit');
+        return;
+      }
+
+      setUserCursor(documentId, '', '', '');
+
       if ((autoSaveTo === '' || autoSaveTo === 'local') && googleStatus) {
         // Force upload this project if connected but not sync...
         setDocumentSettingsAutoSaveTo(documentId, 'gdrive');
       }
+
       if (autoSaveTo === 'gdrive') {
         // Import from GoogleDrive before opening...
-        await syncToGoogleDrive();
+        syncToGoogleDrive().then(() => {
+          // ...then go there.
+          navigate('/edit');
+        });
+      } else {
+        // Or just go there now.
+        navigate('/edit');
       }
-      setUserCursor(documentId, '', '', '');
-      navigate('/edit');
     },
     [
+      currentDocumentId,
       googleStatus,
       autoSaveTo,
       documentId,
@@ -122,13 +139,24 @@ function ProjectSelectorOption({ className, documentId }) {
         ' ' +
         (!isProjectIncluded ? 'opacity-50 hover:opacity-100' : '') +
         ' ' +
+        (isAnyProjectLoading ? 'pointer-events-none opacity-50' : '') +
+        ' ' +
         className
       }
       title={`Open "${titleWithPlaceholder}" Project`}
       onClick={onClick}>
       <div className="flex h-full flex-col">
-        <h3 className="text-gray-300 group-hover:font-bold group-hover:text-gray-600">
-          {getProjectOpenActionTextBySyncStatus(syncStatus)}
+        <h3
+          className={
+            'text-gray-300 group-hover:font-bold group-hover:text-gray-600' +
+            ' ' +
+            (isProjectLoading ? 'font-bold text-gray-600' : '')
+          }>
+          {isProjectLoading ? (
+            <AnimatedEllipsis>Loading</AnimatedEllipsis>
+          ) : (
+            getProjectOpenActionTextBySyncStatus(syncStatus)
+          )}
         </h3>
         <ProjectSyncStatus
           className="absolute right-1 top-1 text-gray-600"
