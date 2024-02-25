@@ -279,9 +279,9 @@ function BlockOrShotList({ documentId, sceneId, blockId, inline }) {
             sceneId={sceneId}
           />
           {/* NOTE: Since sticky only works for relative parents, height 0 makes it act like an absolute element. */}
-          <div className="sticky bottom-10 z-20 h-0">
+          <div className="sticky bottom-10 z-20 hidden h-0 group-hover:block">
             <BlockPartContentToolbar
-              className="flex -translate-y-[50%] flex-row opacity-0 group-hover:opacity-100"
+              className="flex -translate-y-[50%] flex-row"
               documentId={documentId}
               sceneId={sceneId}
               blockId={blockId}
