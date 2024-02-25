@@ -35,9 +35,9 @@ function Block({ documentId, sceneId, blockId, children }) {
     <div className="group relative hover:bg-gray-100">
       <BlockContentReadOnly className="w-full pb-5" text={text} type={type} />
       {/* NOTE: Since sticky only works for relative parents, height 0 makes it act like an absolute element. */}
-      <div className="sticky top-20 z-20 h-0">
+      <div className="sticky top-20 z-20 hidden h-0 group-hover:block">
         <BlockPartContentToolbar
-          className="pointer-events-none flex -translate-y-[50%] flex-row opacity-0 group-hover:opacity-100"
+          className="pointer-events-none flex -translate-y-[50%] flex-row"
           documentId={documentId}
           sceneId={sceneId}
           blockId={blockId}
