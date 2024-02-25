@@ -1,4 +1,5 @@
 import NewIcon from '@material-symbols/svg-400/rounded/add.svg';
+// import NewPhotoIcon from '@material-symbols/svg-400/rounded/add_a_photo.svg';
 import FaceIcon from '@material-symbols/svg-400/rounded/face-fill.svg';
 import NaturePeopleIcon from '@material-symbols/svg-400/rounded/nature_people-fill.svg';
 import PersonIcon from '@material-symbols/svg-400/rounded/person-fill.svg';

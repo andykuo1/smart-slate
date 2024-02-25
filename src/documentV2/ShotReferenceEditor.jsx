@@ -20,6 +20,7 @@ import { LetterboxOutline, ShotReferenceImageWithLetterbox } from './ShotParts';
 
 // NOTE: A good-enough guess at the scaling-to-translation factor
 const REPOSITION_DELTA_MULT = 0.2;
+const REMARGIN_DELTA_MULT = 0.2;
 
 export default function ShotReferenceEditor() {
   const thumbnailRef = useRef(/** @type {HTMLDivElement|null} */ (null));
@@ -30,7 +31,7 @@ export default function ShotReferenceEditor() {
   const setShotReferenceOffset = useDocumentStore(
     (ctx) => ctx.setShotReferenceOffset,
   );
-  const { touch, mouse } = useInputOffsetHandler(documentId, shotId);
+  const { touch, mouse, wheel } = useInputOffsetHandler(documentId, shotId);
   const [blackBox, setBlackBox] = useState(false);
 
   const onToggle = useCallback(
@@ -57,7 +58,8 @@ export default function ShotReferenceEditor() {
         ref={thumbnailRef}
         className="relative my-2 cursor-crosshair select-none overflow-hidden rounded-xl"
         onTouchStart={touch}
-        onMouseDown={mouse}>
+        onMouseDown={mouse}
+        onWheel={wheel}>
         <ShotReferenceImageWithLetterbox
           className="pointer-events-none bg-gray-200 text-gray-400"
           documentId={documentId}
@@ -133,6 +135,23 @@ function useInputOffsetHandler(documentId, shotId) {
   const UNSAFE_getStore = useDocumentStore((ctx) => ctx.UNSAFE_getStore);
   const setShotReferenceOffset = useDocumentStore(
     (ctx) => ctx.setShotReferenceOffset,
+  );
+  const addShotReferenceOffset = useDocumentStore(
+    (ctx) => ctx.addShotReferenceOffset,
+  );
+
+  const onWheel = useCallback(
+    /** @type {import('react').WheelEventHandler<any>}*/
+    function _onWheel(e) {
+      addShotReferenceOffset(
+        documentId,
+        shotId,
+        0,
+        0,
+        -(e.deltaX * REMARGIN_DELTA_MULT + e.deltaY * REMARGIN_DELTA_MULT),
+      );
+    },
+    [documentId, shotId, addShotReferenceOffset],
   );
 
   const onMouseMove = useCallback(
@@ -262,5 +281,6 @@ function useInputOffsetHandler(documentId, shotId) {
   return {
     touch: onTouchStart,
     mouse: onMouseDown,
+    wheel: onWheel,
   };
 }

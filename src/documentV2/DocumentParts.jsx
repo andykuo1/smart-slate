@@ -1,3 +1,5 @@
+import SceneLayoutButton from '@/components/scenes/SceneLayoutButton';
+import SettingsSceneShotsDetailButton from '@/components/scenes/settings/SettingsSceneShotsDetailButton';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useSceneShotNumber } from '@/serdes/UseResolveSceneShotNumber';
 import {
@@ -15,7 +17,7 @@ import {
 import { useAsDraggableRoot } from '@/stores/draggableV3';
 import { useUserStore } from '@/stores/user';
 
-import BlockParts from './BlockParts';
+import BlockParts, { BlockPartContentToolbar } from './BlockParts';
 import ShotListParts, { DraggedShot } from './ShotListParts';
 
 /**
@@ -88,6 +90,7 @@ function DocumentScenes({ documentId, inline }) {
     <div className="grid grid-cols-1">
       {sceneIds.map((sceneId) => (
         <SceneParts
+          key={sceneId}
           documentId={documentId}
           sceneId={sceneId}
           inline={inline}
@@ -110,12 +113,20 @@ function SceneParts({ documentId, sceneId, inline, split }) {
   return (
     <>
       <DocumentPart
-        className="sticky top-0 z-10 bg-gradient-to-b from-white from-60% to-transparent"
+        className="sticky top-0 z-30 bg-gradient-to-b from-white from-60% to-transparent"
         slotLeft={<SceneNumber documentId={documentId} sceneId={sceneId} />}
         slotRight={<SceneNumber documentId={documentId} sceneId={sceneId} />}>
         <DocumentPartSceneHeader documentId={documentId} sceneId={sceneId} />
       </DocumentPart>
-      <DocumentPart>
+      <DocumentPart
+        className="mb-14"
+        slotRight={
+          <SceneLayoutButton
+            className="mx-auto"
+            documentId={documentId}
+            sceneId={sceneId}
+          />
+        }>
         <div className={'grid' + ' ' + (split ? 'grid-cols-2' : 'grid-cols-1')}>
           <div className="grid max-w-[6in] grid-cols-1">
             {blockIds.map((blockId) => (
@@ -198,21 +209,40 @@ function BlockOrShotList({ documentId, sceneId, blockId, inline }) {
   return (
     <>
       <BlockParts documentId={documentId} sceneId={sceneId} blockId={blockId}>
-        <figure className="my-5 py-2">
+        <figure className="relative">
           <ShotListPartShotListHeader
             documentId={documentId}
             sceneId={sceneId}
             blockId={blockId}
           />
           <ShotListParts
+            className="my-2 py-5"
             documentId={documentId}
             sceneId={sceneId}
             blockIds={[blockId]}
             grid={grid}
           />
+          <ShotListPartShotListToolbar />
+          {/* NOTE: Since sticky only works for relative parents, height 0 makes it act like an absolute element. */}
+          <div className="sticky bottom-10 z-20 h-0">
+            <BlockPartContentToolbar
+              className="flex -translate-y-[50%] flex-row opacity-0 group-hover:opacity-100"
+              documentId={documentId}
+              sceneId={sceneId}
+              blockId={blockId}
+            />
+          </div>
         </figure>
       </BlockParts>
     </>
+  );
+}
+
+function ShotListPartShotListToolbar() {
+  return (
+    <div className="absolute right-0 top-0 flex w-[4rem] translate-x-[100%] rotate-180 items-center px-2 py-1 font-bold italic text-gray-400 vertical-rl">
+      <SettingsSceneShotsDetailButton className="mx-auto" />
+    </div>
   );
 }
 
