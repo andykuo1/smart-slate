@@ -1,0 +1,311 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+import { SHOT_TYPE_NEW_SHOT } from '@/components/shots/options/ShotTypeIcon';
+import { isBlockInSameScene, useShotIds } from '@/stores/document';
+import { createShot } from '@/stores/document/DocumentStore';
+import { useDocumentStore } from '@/stores/document/use';
+import {
+  findDraggableElementById,
+  useAsDraggableCursor,
+  useAsDraggableElement,
+  useDraggableElementId,
+  useIsDragging,
+  useIsDraggingAny,
+  useIsDraggingOver,
+  useIsDraggingPotentially,
+  use_UNSAFE_getDraggableStore,
+} from '@/stores/draggableV3';
+import { useUserStore } from '@/stores/user';
+
+import { FadedBorder, Shot, ShotPartDetail, ShotThumbnail } from './ShotParts';
+
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {Array<import('@/stores/document/DocumentStore').BlockId>} props.blockIds
+ * @param {boolean} props.grid
+ */
+export default function ShotListParts({
+  className,
+  documentId,
+  sceneId,
+  blockIds,
+  grid,
+}) {
+  const lastBlockId = blockIds.at(-1);
+  return (
+    <ul
+      className={
+        'grid' +
+        ' ' +
+        (grid
+          ? 'grid-cols-[repeat(auto-fill,minmax(min(1.8in,100%),1fr))]'
+          : 'grid-cols-1') +
+        ' ' +
+        className
+      }>
+      {blockIds.map((blockId) => (
+        <ShotListItemsPerBlock
+          key={blockId}
+          documentId={documentId}
+          blockId={blockId}
+          grid={grid}
+        />
+      ))}
+      <NewShot
+        documentId={documentId}
+        sceneId={sceneId}
+        blockId={lastBlockId || ''}
+      />
+    </ul>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
+ * @param {boolean} props.grid
+ */
+function ShotListItemsPerBlock({ documentId, blockId, grid }) {
+  const shotIds = useShotIds(documentId, blockId);
+  return shotIds.map((shotId) => (
+    <DraggableShot
+      key={shotId}
+      documentId={documentId}
+      blockId={blockId}
+      shotId={shotId}
+      details={!grid}
+      direction={grid ? 'horizontal' : 'vertical'}
+    />
+  ));
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
+ */
+function NewShot({ documentId, sceneId, blockId }) {
+  const addShot = useDocumentStore((ctx) => ctx.addShot);
+
+  function onClick() {
+    let newShot = createShot();
+    addShot(documentId, sceneId, blockId, newShot);
+  }
+
+  return (
+    <li
+      className="mx-auto aspect-video w-[1.8in] opacity-30 hover:cursor-pointer hover:opacity-100"
+      onClick={onClick}>
+      <ShotThumbnail
+        className="bg-transparent text-gray-400"
+        outlineClassName="outline-dashed"
+        documentId=""
+        shotId=""
+        shotType={SHOT_TYPE_NEW_SHOT}
+      />
+    </li>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ * @param {boolean} props.details
+ * @param {'horizontal'|'vertical'} props.direction
+ */
+export function DraggableShot({
+  className,
+  documentId,
+  blockId,
+  shotId,
+  details,
+  direction,
+}) {
+  const elementRef = useRef(/** @type {HTMLLIElement|null} */ (null));
+  const handleRef = useRef(/** @type {HTMLDivElement|null} */ (null));
+  const UNSAFE_getDocumentStore = useDocumentStore(
+    (ctx) => ctx.UNSAFE_getStore,
+  );
+  const UNSAFE_getDraggableStore = use_UNSAFE_getDraggableStore();
+  const moveShot = useDocumentStore((ctx) => ctx.moveShot);
+  const onDraggableComplete = useCallback(
+    /** @type {import('@/stores/draggableV3/Store').DraggableCompleteCallback} */
+    function _onDraggableComplete(
+      containerId,
+      elementId,
+      overContainerId,
+      overElementId,
+      clientX,
+      clientY,
+    ) {
+      const thisElement = elementRef.current;
+      if (!thisElement) {
+        return;
+      }
+      const overElement = findDraggableElementById(overElementId);
+      if (!overElement) {
+        return;
+      }
+      const overRect = overElement.getBoundingClientRect();
+      // Figure out if it is BEFORE or AFTER insert order.
+      const before =
+        direction === 'vertical'
+          ? clientY <= overRect.y + overRect.height / 2
+          : clientX <= overRect.x + overRect.width / 2;
+      moveShot(
+        documentId,
+        containerId,
+        elementId,
+        overContainerId,
+        overElementId,
+        before,
+      );
+    },
+    [documentId, direction, elementRef, moveShot],
+  );
+
+  const onPutDown = useCallback(
+    /** @type {import('@/stores/draggableV3').DraggableElementPutDownCallback} */
+    function _onPutDown(containerId) {
+      const documentStore = UNSAFE_getDocumentStore();
+      const draggableStore = UNSAFE_getDraggableStore();
+      if (
+        !isBlockInSameScene(
+          documentStore,
+          documentId,
+          draggableStore.containerId,
+          containerId,
+        )
+      ) {
+        return false;
+      }
+      return true;
+    },
+    [UNSAFE_getDocumentStore, UNSAFE_getDraggableStore],
+  );
+
+  useAsDraggableElement(
+    elementRef,
+    handleRef,
+    blockId,
+    shotId,
+    '',
+    true,
+    onPutDown,
+    onDraggableComplete,
+  );
+  const draggingThis = useIsDragging(shotId);
+  const draggingOverThis = useIsDraggingOver(shotId);
+  const draggingPotentiallyThis = useIsDraggingPotentially(shotId);
+
+  const setShotEditorShotId = useUserStore((ctx) => ctx.setShotEditorShotId);
+
+  const onDoubleClick = useCallback(
+    function _onDoubleClick() {
+      setShotEditorShotId(shotId);
+    },
+    [shotId, setShotEditorShotId],
+  );
+
+  useEffect(() => {
+    const handle = handleRef.current;
+    if (!handle) {
+      return;
+    }
+    handle.addEventListener('dblclick', onDoubleClick);
+    return () => {
+      handle.addEventListener('dblclick', onDoubleClick);
+    };
+  }, [handleRef, onDoubleClick]);
+
+  return (
+    <Shot
+      className={
+        // NOTE: To disable default touch behavior
+        'touch-none' +
+        ' ' +
+        (draggingThis
+          ? 'pointer-events-none opacity-10'
+          : draggingPotentiallyThis
+            ? '-translate-y-1 shadow-xl'
+            : 'hover:brightness-110 hover:grayscale') +
+        ' ' +
+        (draggingOverThis ? 'outline-dashed outline-4 outline-gray-300' : '') +
+        ' ' +
+        'flex flex-col items-center' +
+        ' ' +
+        (details ? 'sm:flex-row' : '') +
+        ' ' +
+        className
+      }
+      handleClassName="cursor-pointer"
+      containerRef={elementRef}
+      handleRef={handleRef}
+      documentId={documentId}
+      shotId={shotId}
+      small={false}
+      slotThumbnail={<FadedBorder className="shadow-white" />}>
+      {details && (
+        <ShotPartDetail documentId={documentId} shotId={shotId} small={false} />
+      )}
+    </Shot>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ */
+export function DraggedShot({ documentId }) {
+  const [style, setStyle] = useState({});
+  const draggingAny = useIsDraggingAny();
+
+  const onDraggableCursor = useCallback(
+    /** @type {import('@/stores/draggableV3').DraggableCursorCallback} */
+    function _onDraggableCursor(
+      containerId,
+      elementId,
+      overContainerId,
+      overElementId,
+      clientX,
+      clientY,
+    ) {
+      setStyle({
+        top: `${clientY}px`,
+        left: `${clientX}px`,
+      });
+    },
+    [setStyle],
+  );
+  useAsDraggableCursor(onDraggableCursor);
+  const elementId = useDraggableElementId();
+
+  if (!draggingAny) {
+    return null;
+  }
+  return (
+    <div
+      style={style}
+      className="pointer-events-none absolute left-0 top-0 z-50 w-[1.5in] -translate-x-[50%] -translate-y-[50%] -rotate-12 font-mono">
+      <Shot
+        className="flex flex-col items-center bg-white shadow-xl"
+        documentId={documentId}
+        shotId={elementId}
+        small={true}>
+        <ShotPartDetail
+          documentId={documentId}
+          shotId={elementId}
+          small={true}
+        />
+      </Shot>
+    </div>
+  );
+}

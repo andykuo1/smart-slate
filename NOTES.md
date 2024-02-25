@@ -355,3 +355,31 @@ creating shotlists (days)
 - Remove gray background
 
 - FDX import
+
+# 2024-02-21 -----------------------------------------------------
+
+scene-wise export.
+
+scene-wise shots group.
+
+Flash and clap with a sound.
+
+- filming without the camera
+- so audio has a lag (may be a problem)
+
+change the sequence in the past
+
+- shotlist modifications while filming.
+- editing and rearrange on the slate.
+  artemis
+
+15 mm to ...
+5 types of lens
+
+---
+
+Shot variations (mood board per block? per shot?)
+
+Draw on the script.
+
+Easy Movie.

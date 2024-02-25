@@ -10,6 +10,7 @@ export function createStore() {
     cursor: createCursor(),
     recorder: createRecorder(),
     viewer: createViewerStore(),
+    editor: createEditorStore(),
     drawer: createDrawer(),
     /** @type {'inline'|'sequence'|'textonly'|'shotonly'} */
     editMode: 'sequence',
@@ -27,6 +28,14 @@ export function createViewerStore() {
   return {
     /** @type {ViewerMode} */
     mode: 'pdf',
+  };
+}
+
+export function createEditorStore() {
+  return {
+    shotEditor: {
+      shotId: '',
+    },
   };
 }
 

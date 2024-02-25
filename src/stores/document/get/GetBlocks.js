@@ -1,5 +1,5 @@
 import { getDocumentById } from './GetDocuments';
-import { getSceneById } from './GetScenes';
+import { findSceneWithBlockId, getSceneById } from './GetScenes';
 
 /**
  * @param {import('@/stores/document/DocumentStore').Store} store
@@ -159,4 +159,21 @@ export function isBlockEmpty(store, documentId, blockId) {
     return false;
   }
   return true;
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').BlockId} blockId
+ * @param {import('@/stores/document/DocumentStore').BlockId} otherBlockId
+ */
+export function isBlockInSameScene(store, documentId, blockId, otherBlockId) {
+  if (!blockId || !otherBlockId) {
+    return false;
+  }
+  const scene = findSceneWithBlockId(store, documentId, blockId);
+  if (!scene) {
+    return false;
+  }
+  return scene.blockIds.includes(otherBlockId);
 }
