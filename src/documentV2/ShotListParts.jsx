@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { SHOT_TYPE_NEW_SHOT } from '@/components/shots/options/ShotTypeIcon';
 import { isBlockInSameScene, useShotIds } from '@/stores/document';
-import { createShot } from '@/stores/document/DocumentStore';
 import { useDocumentStore } from '@/stores/document/use';
 import {
   findDraggableElementById,
@@ -18,6 +17,7 @@ import {
 import { useUserStore } from '@/stores/user';
 
 import { FadedBorder, Shot, ShotPartDetail, ShotThumbnail } from './ShotParts';
+import { useAddShot } from './UseAddShot';
 
 /**
  * @param {object} props
@@ -90,17 +90,11 @@ function ShotListItemsPerBlock({ documentId, blockId, grid }) {
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  */
 function NewShot({ documentId, sceneId, blockId }) {
-  const addShot = useDocumentStore((ctx) => ctx.addShot);
-
-  function onClick() {
-    let newShot = createShot();
-    addShot(documentId, sceneId, blockId, newShot);
-  }
-
+  const [render, click] = useAddShot(documentId, sceneId, blockId);
   return (
     <li
       className="mx-auto aspect-video w-[1.8in] opacity-30 hover:cursor-pointer hover:opacity-100"
-      onClick={onClick}>
+      onClick={click}>
       <ShotThumbnail
         className="bg-transparent text-gray-400"
         outlineClassName="outline-dashed"
@@ -108,6 +102,7 @@ function NewShot({ documentId, sceneId, blockId }) {
         shotId=""
         shotType={SHOT_TYPE_NEW_SHOT}
       />
+      {render()}
     </li>
   );
 }
@@ -252,7 +247,9 @@ export function DraggableShot({
       documentId={documentId}
       shotId={shotId}
       small={false}
-      slotThumbnail={<FadedBorder className="shadow-white" />}>
+      slotThumbnail={
+        <FadedBorder className="shadow-white group-hover:shadow-gray-100" />
+      }>
       {details && (
         <ShotPartDetail documentId={documentId} shotId={shotId} small={false} />
       )}

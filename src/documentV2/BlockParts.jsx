@@ -1,4 +1,4 @@
-import AddShotTray from '@/components/shots/AddShotTray';
+import ShotListAddButton from '@/components/shots/shotlist/ShotListAddButton';
 import { getBlockById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 
@@ -33,10 +33,11 @@ function Block({ documentId, sceneId, blockId, children }) {
   );
   return (
     <div className="group relative hover:bg-gray-100">
-      <div className="relative">
-        <BlockContentReadOnly className="w-full pb-5" text={text} type={type} />
-        <BlockPartToolbar
-          className="absolute bottom-0 left-0 right-0 z-20 flex translate-y-[50%] flex-row opacity-0 group-hover:opacity-100"
+      <BlockContentReadOnly className="w-full pb-5" text={text} type={type} />
+      {/* NOTE: Since sticky only works for relative parents, height 0 makes it act like an absolute element. */}
+      <div className="sticky top-20 z-20 h-0">
+        <BlockPartContentToolbar
+          className="flex -translate-y-[50%] flex-row opacity-0 group-hover:opacity-100"
           documentId={documentId}
           sceneId={sceneId}
           blockId={blockId}
@@ -54,18 +55,78 @@ function Block({ documentId, sceneId, blockId, children }) {
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  */
-function BlockPartToolbar({ className, documentId, sceneId, blockId }) {
+export function BlockPartContentToolbar({
+  className,
+  documentId,
+  sceneId,
+  blockId,
+}) {
   return (
     <div className={className}>
-      <button className="mr-auto rounded-full bg-white px-6 py-2 shadow-xl">
+      <button className="-ml-6 mr-auto rounded-full bg-white px-6 py-2 shadow-xl">
         EDIT
       </button>
-      <AddShotTray
-        className="flex gap-10 py-2 shadow-xl"
+      <BlockPartNewShotTray
+        className="-mr-6 flex gap-10 py-2 shadow-xl"
         documentId={documentId}
         sceneId={sceneId}
         blockId={blockId}
       />
+    </div>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {string} [props.className]
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
+ */
+function BlockPartNewShotTray({ className, documentId, sceneId, blockId }) {
+  return (
+    <div
+      className={
+        'flex-row rounded-full bg-white px-6 text-gray-400 dark:bg-gray-600 dark:text-gray-800' +
+        ' ' +
+        (className ?? 'flex')
+      }>
+      <div className="h-6 w-6 rounded hover:text-black dark:hover:text-white">
+        <ShotListAddButton
+          documentId={documentId}
+          sceneId={sceneId}
+          blockId={blockId}
+          shotType=""
+          title="New shot"
+        />
+      </div>
+      <div className="h-6 w-6 rounded hover:text-black dark:hover:text-white">
+        <ShotListAddButton
+          documentId={documentId}
+          sceneId={sceneId}
+          blockId={blockId}
+          shotType="WS"
+          title="New wide shot"
+        />
+      </div>
+      <div className="h-6 w-6 rounded hover:text-black dark:hover:text-white">
+        <ShotListAddButton
+          documentId={documentId}
+          sceneId={sceneId}
+          blockId={blockId}
+          shotType="MS"
+          title="New medium shot"
+        />
+      </div>
+      <div className="h-6 w-6 rounded hover:text-black dark:hover:text-white">
+        <ShotListAddButton
+          documentId={documentId}
+          sceneId={sceneId}
+          blockId={blockId}
+          shotType="CU"
+          title="New close-up shot"
+        />
+      </div>
     </div>
   );
 }

@@ -383,3 +383,5 @@ Shot variations (mood board per block? per shot?)
 Draw on the script.
 
 Easy Movie.
+
+// TODO: Add a fade out on edit tray for covered block below

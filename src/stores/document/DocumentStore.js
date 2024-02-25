@@ -214,6 +214,8 @@ export function cloneDocument(out, document) {
     out.documentId = document.documentId;
   if (typeof document.documentTitle !== 'undefined')
     out.documentTitle = document.documentTitle;
+  if (typeof document.documentVersion !== 'undefined')
+    out.documentVersion = document.documentVersion;
   if (typeof document.firstCreatedMillis !== 'undefined')
     out.firstCreatedMillis = document.firstCreatedMillis;
   if (typeof document.lastUpdatedMillis !== 'undefined')
@@ -228,16 +230,15 @@ export function cloneDocument(out, document) {
     out.revisionNumber = document.revisionNumber;
   if (typeof document.nextSceneNumber !== 'undefined')
     out.nextSceneNumber = document.nextSceneNumber;
-  if (typeof document.sceneOrder !== 'undefined')
-    out.sceneOrder = document.sceneOrder.slice();
-  if (typeof document.shotHashes !== 'undefined')
-    out.shotHashes = document.shotHashes.slice();
   if (typeof document.settings !== 'undefined')
     out.settings = {
       ...out.settings,
       ...document.settings,
     };
-
+  if (typeof document.sceneOrder !== 'undefined')
+    out.sceneOrder = document.sceneOrder.slice();
+  if (typeof document.shotHashes !== 'undefined')
+    out.shotHashes = document.shotHashes.slice();
   if (typeof document.scenes !== 'undefined') {
     let result = out.scenes ?? {};
     for (const key of Object.keys(document.scenes)) {
@@ -338,11 +339,17 @@ export function cloneBlock(out, block) {
  */
 export function cloneShot(out, shot) {
   if (typeof shot.shotId !== 'undefined') out.shotId = shot.shotId;
-  if (typeof shot.shotNumber !== 'undefined') out.shotNumber = shot.shotNumber;
   if (typeof shot.shotType !== 'undefined') out.shotType = shot.shotType;
   if (typeof shot.shotHash !== 'undefined') out.shotHash = shot.shotHash;
+  if (typeof shot.shotNumber !== 'undefined') out.shotNumber = shot.shotNumber;
   if (typeof shot.referenceImage !== 'undefined')
     out.referenceImage = shot.referenceImage;
+  if (typeof shot.referenceOffsetX !== 'undefined')
+    out.referenceOffsetX = shot.referenceOffsetX;
+  if (typeof shot.referenceOffsetY !== 'undefined')
+    out.referenceOffsetY = shot.referenceOffsetY;
+  if (typeof shot.referenceMargin !== 'undefined')
+    out.referenceMargin = shot.referenceMargin;
   if (typeof shot.description !== 'undefined')
     out.description = shot.description;
   if (typeof shot.takeIds !== 'undefined') out.takeIds = shot.takeIds.slice();
