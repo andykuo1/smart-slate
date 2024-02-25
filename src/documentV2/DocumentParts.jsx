@@ -129,8 +129,11 @@ function SceneParts({ documentId, sceneId, inline, split }) {
         <DocumentPartSceneHeader documentId={documentId} sceneId={sceneId} />
       </DocumentPart>
       <DocumentPart className="mb-14">
-        <div className={'grid' + ' ' + (split ? 'grid-cols-2' : 'grid-cols-1')}>
-          <div className="grid max-w-[6in] grid-cols-1">
+        <div className={'flex flex-row'}>
+          <div
+            className={
+              'grid max-w-[6in] grid-cols-1' + ' ' + (split ? 'w-[50vw]' : '')
+            }>
             {blockIds.map((blockId) => (
               <BlockOrShotList
                 key={blockId}
@@ -143,7 +146,7 @@ function SceneParts({ documentId, sceneId, inline, split }) {
           </div>
           <div
             className={
-              'relative grid grid-cols-1 overflow-y-auto' +
+              'relative grid min-w-[2in] flex-1 grid-cols-1 overflow-y-auto' +
               ' ' +
               (split ? '' : 'hidden')
             }>
