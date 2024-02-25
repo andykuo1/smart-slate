@@ -37,7 +37,7 @@ function Block({ documentId, sceneId, blockId, children }) {
       {/* NOTE: Since sticky only works for relative parents, height 0 makes it act like an absolute element. */}
       <div className="sticky top-20 z-20 h-0">
         <BlockPartContentToolbar
-          className="flex -translate-y-[50%] flex-row opacity-0 group-hover:opacity-100"
+          className="pointer-events-none flex -translate-y-[50%] flex-row opacity-0 group-hover:opacity-100"
           documentId={documentId}
           sceneId={sceneId}
           blockId={blockId}
@@ -63,11 +63,11 @@ export function BlockPartContentToolbar({
 }) {
   return (
     <div className={className}>
-      <button className="-ml-6 mr-auto rounded-full bg-white px-6 py-2 shadow-xl">
+      <button className="pointer-events-auto -ml-6 mr-auto rounded-full bg-white px-6 py-2 shadow-xl">
         EDIT
       </button>
       <BlockPartNewShotTray
-        className="-mr-6 flex gap-10 py-2 shadow-xl"
+        className="pointer-events-auto -mr-6 flex gap-2 py-2 shadow-xl sm:gap-10"
         documentId={documentId}
         sceneId={sceneId}
         blockId={blockId}

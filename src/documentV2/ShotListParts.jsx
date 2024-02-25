@@ -203,8 +203,8 @@ export function DraggableShot({
 
   const setShotEditorShotId = useUserStore((ctx) => ctx.setShotEditorShotId);
 
-  const onDoubleClick = useCallback(
-    function _onDoubleClick() {
+  const onClick = useCallback(
+    function _onClick() {
       setShotEditorShotId(shotId);
     },
     [shotId, setShotEditorShotId],
@@ -215,11 +215,11 @@ export function DraggableShot({
     if (!handle) {
       return;
     }
-    handle.addEventListener('dblclick', onDoubleClick);
+    handle.addEventListener('click', onClick);
     return () => {
-      handle.addEventListener('dblclick', onDoubleClick);
+      handle.addEventListener('click', onClick);
     };
-  }, [handleRef, onDoubleClick]);
+  }, [handleRef, onClick]);
 
   return (
     <Shot

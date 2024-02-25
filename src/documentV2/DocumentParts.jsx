@@ -1,5 +1,14 @@
-import SceneLayoutButton from '@/components/scenes/SceneLayoutButton';
+import CursorIcon from '@material-symbols/svg-400/rounded/arrow_selector_tool-fill.svg';
+import EditIcon from '@material-symbols/svg-400/rounded/format_ink_highlighter.svg';
+import ShotListIcon from '@material-symbols/svg-400/rounded/lists.svg';
+import PanIcon from '@material-symbols/svg-400/rounded/pan_tool.svg';
+import MoodBoardIcon from '@material-symbols/svg-400/rounded/photo_library.svg';
+import SplitViewIcon from '@material-symbols/svg-400/rounded/vertical_split.svg';
+import InlineViewIcon from '@material-symbols/svg-400/rounded/view_day.svg';
+
 import SettingsSceneShotsDetailButton from '@/components/scenes/settings/SettingsSceneShotsDetailButton';
+import SettingsSceneShotsRenumberButton from '@/components/scenes/settings/SettingsSceneShotsRenumberButton';
+import FieldButton from '@/fields/FieldButton';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useSceneShotNumber } from '@/serdes/UseResolveSceneShotNumber';
 import {
@@ -55,6 +64,7 @@ function Document({ className, documentId, inline, split }) {
         <DocumentScenes documentId={documentId} inline={inline} />
       </article>
       <DraggedShot documentId={documentId} />
+      <DocumentPartToolbar />
     </div>
   );
 }
@@ -118,15 +128,7 @@ function SceneParts({ documentId, sceneId, inline, split }) {
         slotRight={<SceneNumber documentId={documentId} sceneId={sceneId} />}>
         <DocumentPartSceneHeader documentId={documentId} sceneId={sceneId} />
       </DocumentPart>
-      <DocumentPart
-        className="mb-14"
-        slotRight={
-          <SceneLayoutButton
-            className="mx-auto"
-            documentId={documentId}
-            sceneId={sceneId}
-          />
-        }>
+      <DocumentPart className="mb-14">
         <div className={'grid' + ' ' + (split ? 'grid-cols-2' : 'grid-cols-1')}>
           <div className="grid max-w-[6in] grid-cols-1">
             {blockIds.map((blockId) => (
@@ -153,6 +155,40 @@ function SceneParts({ documentId, sceneId, inline, split }) {
         </div>
       </DocumentPart>
     </>
+  );
+}
+
+// TODO: Drag and drop into a trash can
+// TODO: select, highlight, then move to here button.
+
+function DocumentPartToolbar() {
+  const editMode = useUserStore((ctx) => ctx.editMode);
+  const setEditMode = useUserStore((ctx) => ctx.setEditMode);
+  return (
+    <div className="fixed bottom-0 left-0 top-0 z-30 flex flex-col items-center">
+      <div className="mx-1 my-auto flex flex-col items-center gap-5 rounded-full bg-white px-2 py-5 shadow-xl">
+        <FieldButton Icon={CursorIcon} className="mx-auto" onClick={() => {}} />
+        <FieldButton Icon={EditIcon} className="mx-auto" onClick={() => {}} />
+        <FieldButton Icon={PanIcon} className="mx-auto" onClick={() => {}} />
+        <FieldButton
+          Icon={editMode !== 'inline' ? SplitViewIcon : InlineViewIcon}
+          className="mx-auto"
+          onClick={() =>
+            setEditMode(editMode !== 'inline' ? 'inline' : 'sequence')
+          }
+        />
+        <FieldButton
+          Icon={MoodBoardIcon}
+          className="mx-auto"
+          onClick={() => setEditMode('sequence')}
+        />
+        <FieldButton
+          Icon={ShotListIcon}
+          className="mx-auto"
+          onClick={() => setEditMode('sequence')}
+        />
+      </div>
+    </div>
   );
 }
 
@@ -222,7 +258,10 @@ function BlockOrShotList({ documentId, sceneId, blockId, inline }) {
             blockIds={[blockId]}
             grid={grid}
           />
-          <ShotListPartShotListToolbar />
+          <ShotListPartShotListToolbar
+            documentId={documentId}
+            sceneId={sceneId}
+          />
           {/* NOTE: Since sticky only works for relative parents, height 0 makes it act like an absolute element. */}
           <div className="sticky bottom-10 z-20 h-0">
             <BlockPartContentToolbar
@@ -238,10 +277,20 @@ function BlockOrShotList({ documentId, sceneId, blockId, inline }) {
   );
 }
 
-function ShotListPartShotListToolbar() {
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ */
+function ShotListPartShotListToolbar({ documentId, sceneId }) {
   return (
-    <div className="absolute right-0 top-0 flex w-[4rem] translate-x-[100%] rotate-180 items-center px-2 py-1 font-bold italic text-gray-400 vertical-rl">
+    <div className="absolute right-0 top-0 flex w-[4rem] translate-x-[100%] flex-col items-center px-2 py-1 text-gray-400 opacity-0 group-hover:opacity-100">
       <SettingsSceneShotsDetailButton className="mx-auto" />
+      <SettingsSceneShotsRenumberButton
+        className="mx-auto"
+        documentId={documentId}
+        sceneId={sceneId}
+      />
     </div>
   );
 }
