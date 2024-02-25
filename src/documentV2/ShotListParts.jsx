@@ -14,7 +14,7 @@ import {
   useIsDraggingPotentially,
   use_UNSAFE_getDraggableStore,
 } from '@/stores/draggableV3';
-import { useUserStore } from '@/stores/user';
+import { useSetUserCursor, useUserStore } from '@/stores/user';
 
 import { FadedBorder, Shot, ShotPartDetail, ShotThumbnail } from './ShotParts';
 import { useAddShot } from './UseAddShot';
@@ -50,6 +50,7 @@ export default function ShotListParts({
         <ShotListItemsPerBlock
           key={blockId}
           documentId={documentId}
+          sceneId={sceneId}
           blockId={blockId}
           grid={grid}
         />
@@ -66,15 +67,17 @@ export default function ShotListParts({
 /**
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  * @param {boolean} props.grid
  */
-function ShotListItemsPerBlock({ documentId, blockId, grid }) {
+function ShotListItemsPerBlock({ documentId, sceneId, blockId, grid }) {
   const shotIds = useShotIds(documentId, blockId);
   return shotIds.map((shotId) => (
     <DraggableShot
       key={shotId}
       documentId={documentId}
+      sceneId={sceneId}
       blockId={blockId}
       shotId={shotId}
       details={!grid}
@@ -111,6 +114,7 @@ function NewShot({ documentId, sceneId, blockId }) {
  * @param {object} props
  * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {boolean} props.details
@@ -119,6 +123,7 @@ function NewShot({ documentId, sceneId, blockId }) {
 export function DraggableShot({
   className,
   documentId,
+  sceneId,
   blockId,
   shotId,
   details,
@@ -130,6 +135,10 @@ export function DraggableShot({
     (ctx) => ctx.UNSAFE_getStore,
   );
   const UNSAFE_getDraggableStore = use_UNSAFE_getDraggableStore();
+  const isCursorMoveType = useUserStore(
+    (ctx) => ctx.editor?.documentEditor?.cursorType === 'move',
+  );
+  const isActive = useUserStore((ctx) => ctx?.cursor?.shotId === shotId);
   const moveShot = useDocumentStore((ctx) => ctx.moveShot);
   const onDraggableComplete = useCallback(
     /** @type {import('@/stores/draggableV3/Store').DraggableCompleteCallback} */
@@ -193,21 +202,27 @@ export function DraggableShot({
     blockId,
     shotId,
     '',
-    true,
+    isCursorMoveType,
     onPutDown,
     onDraggableComplete,
   );
+
   const draggingThis = useIsDragging(shotId);
   const draggingOverThis = useIsDraggingOver(shotId);
   const draggingPotentiallyThis = useIsDraggingPotentially(shotId);
 
   const setShotEditorShotId = useUserStore((ctx) => ctx.setShotEditorShotId);
+  const setUserCursor = useSetUserCursor();
 
   const onClick = useCallback(
     function _onClick() {
-      setShotEditorShotId(shotId);
+      if (isActive) {
+        setShotEditorShotId(shotId);
+      } else {
+        setUserCursor(documentId, sceneId, shotId, '');
+      }
     },
-    [shotId, setShotEditorShotId],
+    [isActive, documentId, sceneId, shotId, setUserCursor, setShotEditorShotId],
   );
 
   useEffect(() => {
@@ -217,7 +232,7 @@ export function DraggableShot({
     }
     handle.addEventListener('click', onClick);
     return () => {
-      handle.addEventListener('click', onClick);
+      handle.removeEventListener('click', onClick);
     };
   }, [handleRef, onClick]);
 
@@ -237,18 +252,26 @@ export function DraggableShot({
         ' ' +
         'flex flex-col items-center' +
         ' ' +
+        (isActive ? 'bg-black' : '') +
+        ' ' +
         (details ? 'sm:flex-row' : '') +
         ' ' +
         className
       }
-      handleClassName="cursor-pointer"
+      handleClassName={isCursorMoveType ? 'cursor-grab' : 'select-none'}
       containerRef={elementRef}
       handleRef={handleRef}
       documentId={documentId}
       shotId={shotId}
       small={false}
       slotThumbnail={
-        <FadedBorder className="shadow-white group-hover:shadow-gray-100" />
+        <FadedBorder
+          className={
+            'shadow-white' +
+            ' ' +
+            (isActive ? 'shadow-black' : 'group-hover:shadow-gray-100')
+          }
+        />
       }>
       {details && (
         <ShotPartDetail documentId={documentId} shotId={shotId} small={false} />

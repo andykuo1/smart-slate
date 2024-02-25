@@ -164,12 +164,28 @@ function SceneParts({ documentId, sceneId, inline, split }) {
 function DocumentPartToolbar() {
   const editMode = useUserStore((ctx) => ctx.editMode);
   const setEditMode = useUserStore((ctx) => ctx.setEditMode);
+  const cursorType = useUserStore(
+    (ctx) => ctx?.editor?.documentEditor?.cursorType,
+  );
+  const toggleDocumentEditorCursorType = useUserStore(
+    (ctx) => ctx.toggleDocumentEditorCursorType,
+  );
   return (
     <div className="fixed bottom-0 left-0 top-0 z-30 flex flex-col items-center">
       <div className="mx-1 my-auto flex flex-col items-center gap-5 rounded-full bg-white px-2 py-5 shadow-xl">
-        <FieldButton Icon={CursorIcon} className="mx-auto" onClick={() => {}} />
+        <FieldButton
+          Icon={CursorIcon}
+          className="mx-auto"
+          inverted={cursorType === ''}
+          onClick={() => toggleDocumentEditorCursorType('')}
+        />
         <FieldButton Icon={EditIcon} className="mx-auto" onClick={() => {}} />
-        <FieldButton Icon={PanIcon} className="mx-auto" onClick={() => {}} />
+        <FieldButton
+          Icon={PanIcon}
+          className="mx-auto"
+          inverted={cursorType === 'move'}
+          onClick={() => toggleDocumentEditorCursorType('move')}
+        />
         <FieldButton
           Icon={editMode !== 'inline' ? SplitViewIcon : InlineViewIcon}
           className="mx-auto"

@@ -1,3 +1,5 @@
+import { createEditorStore } from './EditorStore';
+
 /**
  * @typedef {ReturnType<createStore>} Store
  * @typedef {ReturnType<createCursor>} Cursor
@@ -28,14 +30,6 @@ export function createViewerStore() {
   return {
     /** @type {ViewerMode} */
     mode: 'pdf',
-  };
-}
-
-export function createEditorStore() {
-  return {
-    shotEditor: {
-      shotId: '',
-    },
   };
 }
 
