@@ -8,11 +8,18 @@ import { useCallback, useRef, useState } from 'react';
 
 import CloseIcon from '@material-symbols/svg-400/rounded/close.svg';
 
+import SettingsShotDeleteButton from '@/components/shots/settings/SettingsShotDeleteButton';
+import SettingsShotReferenceImageField from '@/components/shots/settings/SettingsShotReferenceImageField';
+import SettingsShotTypeSelector from '@/components/shots/settings/SettingsShotTypeSelector';
 import FieldButton from '@/fields/FieldButton';
 import FieldToggle from '@/fields/FieldToggle';
 import { getShotById, useShotType } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
-import { useCurrentDocumentId, useUserStore } from '@/stores/user';
+import {
+  useCurrentDocumentId,
+  useCurrentSceneId,
+  useUserStore,
+} from '@/stores/user';
 import DialogStyle from '@/styles/Dialog.module.css';
 import { MAX_THUMBNAIL_HEIGHT } from '@/values/Resolutions';
 
@@ -25,6 +32,7 @@ const REMARGIN_DELTA_MULT = 0.2;
 export default function ShotReferenceEditor() {
   const thumbnailRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const documentId = useCurrentDocumentId();
+  const sceneId = useCurrentSceneId();
   const shotId = useUserStore((ctx) => ctx.editor.shotEditor.shotId);
   const shotType = useShotType(documentId, shotId);
   const setShotEditorShotId = useUserStore((ctx) => ctx.setShotEditorShotId);
@@ -78,9 +86,25 @@ export default function ShotReferenceEditor() {
             Reset
           </FieldButton>
           <FieldToggle onClick={onToggle} value={blackBox}>
-            Black Box
+            Trim Letterbox
           </FieldToggle>
         </div>
+        <div className="flex flex-row gap-4">
+          <SettingsShotTypeSelector
+            className="flex-1"
+            documentId={documentId}
+            shotId={shotId}
+          />
+          <SettingsShotReferenceImageField
+            documentId={documentId}
+            shotId={shotId}
+          />
+        </div>
+        <SettingsShotDeleteButton
+          documentId={documentId}
+          sceneId={sceneId}
+          shotId={shotId}
+        />
       </div>
     </Dialog>
   );

@@ -89,6 +89,14 @@ export function useAsDraggableElement(
       if (!e.isPrimary) {
         return;
       }
+      const target = /** @type {Element} */ (e.target);
+      if (!target) {
+        return;
+      }
+      // NOTE: https://stackoverflow.com/questions/71324712/pointer-events-vs-touch-and-mouse-events
+      if (target.hasPointerCapture(e.pointerId)) {
+        target.releasePointerCapture(e.pointerId);
+      }
       if (
         typeof pickUpCallback !== 'function' ||
         // NOTE: If return false, can early out.
