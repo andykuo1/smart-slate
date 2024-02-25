@@ -33,6 +33,14 @@ export function createViewerStore() {
   };
 }
 
+export function createEditorStore() {
+  return {
+    shotEditor: {
+      shotId: '',
+    },
+  };
+}
+
 export function createDrawer() {
   return {
     open: false,
