@@ -1,5 +1,9 @@
 export const MAX_THUMBNAIL_WIDTH = 256;
+export const MAX_THUMBNAIL_WIDTH_PX = `${MAX_THUMBNAIL_WIDTH}px`;
 export const MAX_THUMBNAIL_HEIGHT = 144;
+export const MAX_THUMBNAIL_HEIGHT_PX = `${MAX_THUMBNAIL_HEIGHT}px`;
+export const THUMBNAIL_WIDTH_PX = `${MAX_THUMBNAIL_WIDTH * 0.75}px`;
+export const THUMBNAIL_HEIGHT_PX = `${MAX_THUMBNAIL_HEIGHT * 0.75}px`;
 
 export const RATIO_16_BY_9 = 16 / 9;
 export const RATIO_4_BY_3 = 4 / 3;

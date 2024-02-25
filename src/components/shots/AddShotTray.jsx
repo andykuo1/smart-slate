@@ -17,11 +17,11 @@ export default function AddShotTray({
   return (
     <div
       className={
-        'flex-row gap-2 rounded-full bg-gray-300 px-4 text-gray-400 dark:bg-gray-600 dark:text-gray-800' +
+        'flex-row rounded-full bg-white px-6 text-gray-400 dark:bg-gray-600 dark:text-gray-800' +
         ' ' +
         (className ?? 'flex')
       }>
-      <div className="h-8 w-8 rounded hover:text-black dark:hover:text-white">
+      <div className="h-6 w-6 rounded hover:text-black dark:hover:text-white">
         <ShotListAddButton
           documentId={documentId}
           sceneId={sceneId}
@@ -30,7 +30,7 @@ export default function AddShotTray({
           title="New shot"
         />
       </div>
-      <div className="h-8 w-8 rounded hover:text-black dark:hover:text-white">
+      <div className="h-6 w-6 rounded hover:text-black dark:hover:text-white">
         <ShotListAddButton
           documentId={documentId}
           sceneId={sceneId}
@@ -39,7 +39,7 @@ export default function AddShotTray({
           title="New wide shot"
         />
       </div>
-      <div className="h-8 w-8 rounded hover:text-black dark:hover:text-white">
+      <div className="h-6 w-6 rounded hover:text-black dark:hover:text-white">
         <ShotListAddButton
           documentId={documentId}
           sceneId={sceneId}
@@ -48,7 +48,7 @@ export default function AddShotTray({
           title="New medium shot"
         />
       </div>
-      <div className="h-8 w-8 rounded hover:text-black dark:hover:text-white">
+      <div className="h-6 w-6 rounded hover:text-black dark:hover:text-white">
         <ShotListAddButton
           documentId={documentId}
           sceneId={sceneId}
@@ -57,7 +57,7 @@ export default function AddShotTray({
           title="New close-up shot"
         />
       </div>
-      <div className="h-8 w-8 rounded hover:text-black dark:hover:text-white">
+      <div className="h-6 w-6 rounded hover:text-black dark:hover:text-white">
         <ShotListAddWithReferenceButton
           documentId={documentId}
           sceneId={sceneId}

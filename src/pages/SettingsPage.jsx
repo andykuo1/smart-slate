@@ -27,11 +27,11 @@ import SettingsReturnHomeField from '@/components/settings/SettingsReturnHomeFie
 import SettingsShareFilesButton from '@/components/settings/SettingsShareFilesButton';
 import SettingsVideoCacheClearButton from '@/components/settings/SettingsVideoCacheClearButton';
 import SettingsVideoResolutionField from '@/components/settings/SettingsVideoResolutionField';
+import Drawer from '@/drawer/Drawer';
 import FieldButton from '@/fields/FieldButton';
 import FieldGroupDiscloseable from '@/fields/FieldGroupDiscloseable';
 import GoogleConnectButton from '@/libs/googleapi/auth/GoogleConnectButton';
 import { useGoogleDriveAutoSync } from '@/libs/googleapi/sync/UseGoogleDriveAutoSync';
-import NavBar from '@/navbar/NavBar';
 import { useCurrentDocumentId } from '@/stores/user';
 
 import PageLayout from './PageLayout';
@@ -45,8 +45,8 @@ export default function SettingsPage() {
   const navigate = useNavigate();
   return (
     <PageLayout className="bg-white text-black dark:bg-slate-900 dark:text-white">
-      <NavBar>
-        <fieldset className="mx-auto flex flex-col gap-2">
+      <Drawer>
+        <fieldset className="mx-auto flex w-full flex-col gap-2 overflow-y-auto px-10 sm:w-96">
           <legend className="py-4">
             <h3 className="text-xl">Configure your project</h3>
             <p className="text-xs opacity-30">
@@ -106,7 +106,7 @@ export default function SettingsPage() {
             <br />
           </div>
         </fieldset>
-      </NavBar>
+      </Drawer>
     </PageLayout>
   );
 }

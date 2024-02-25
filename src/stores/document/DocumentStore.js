@@ -143,6 +143,9 @@ export function createShot(shotId = uuid()) {
     shotNumber: 0,
     /** @type {string} */
     referenceImage: '',
+    referenceOffsetX: 0,
+    referenceOffsetY: 0,
+    referenceMargin: 0,
     description: '',
     /** @type {Array<TakeId>} */
     takeIds: [],

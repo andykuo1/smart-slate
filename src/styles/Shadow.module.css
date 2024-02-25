@@ -1,0 +1,63 @@
+.shadowInnerY {
+  --tw-shadow: inset 0 0 16px 0 rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: inset 0 0 16px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadowInner1rem {
+  --tw-shadow: inset 0 0 0.2rem 0.3rem rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: inset 0 0 0.2rem 0.3rem var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadowAll {
+  --tw-shadow: 0 5px 50px -12px rgb(0 0 0 / 0.25);
+  --tw-shadow-colored: 0 5px 50px -12px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadowAllXL {
+  --tw-shadow: 0 5px 25px -5px rgb(0 0 0 / 0.1), 0 8px 2px -6px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 5px 25px -5px var(--tw-shadow-color),
+    0 8px 2px -6px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadowRaised {
+  box-shadow:
+    rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+    rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+.shadowTextOutline {
+  color: #000;
+  text-shadow:
+    -1px -1px 4px #fff,
+    1px -1px 4px #fff,
+    -1px 1px 4px #fff,
+    1px 1px 4px #fff;
+}
+
+.shadowOutline {
+  box-shadow: 0 0 0 2px #fff;
+}
+
+.clipBox {
+  clip-path: polygon(
+    0% 0%,
+    0% 100%,
+    10% 100%,
+    10% 10%,
+    90% 10%,
+    90% 90%,
+    10% 90%,
+    10% 100%,
+    100% 100%,
+    100% 0%
+  );
+}

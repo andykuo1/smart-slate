@@ -1,4 +1,5 @@
 import { zi } from '../ZustandImmerHelper';
+import { createDispatchForEditor } from './EditorDispatch';
 import { createDispatchForViewer } from './ViewerDispatch';
 
 /** @typedef {ReturnType<createDispatch>} Dispatch */
@@ -25,6 +26,7 @@ export function createDispatch(set, get) {
     setDrawerActiveTab: zi(set, setDrawerActiveTab),
     setDrawerShowDetails: zi(set, setDrawerShowDetails),
     ...createDispatchForViewer(set, get),
+    ...createDispatchForEditor(set, get),
   };
 }
 

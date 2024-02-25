@@ -7,6 +7,7 @@ import {
   getOffsetBlockIdWithShotsInScene,
   getSceneById,
   getShotById,
+  isBlockInSameScene,
   isShotEmpty,
 } from '../get';
 import { incrementDocumentRevisionNumber } from './DispatchDocuments';
@@ -20,6 +21,9 @@ export function createDispatchShots(set, get) {
     setShotType: zi(set, setShotType),
     setShotDescription: zi(set, setShotDescription),
     setShotReferenceImage: zi(set, setShotReferenceImage),
+    setShotReferenceOffset: zi(set, setShotReferenceOffset),
+    addShotReferenceOffset: zi(set, addShotReferenceOffset),
+    setShotReferenceMargin: zi(set, setShotReferenceMargin),
     setShotNumber: zi(set, setShotNumber),
     updateShot: zi(set, updateShot),
     moveShot: zi(set, moveShot),
@@ -95,6 +99,67 @@ function setShotReferenceImage(store, documentId, shotId, referenceImageUrl) {
  * @param {import('@/stores/document/DocumentStore').Store} store
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ * @param {number} offsetX
+ * @param {number} offsetY
+ * @param {number} margin
+ */
+function setShotReferenceOffset(
+  store,
+  documentId,
+  shotId,
+  offsetX,
+  offsetY,
+  margin,
+) {
+  let document = store.documents[documentId];
+  let shot = document.shots[shotId];
+  shot.referenceOffsetX = offsetX;
+  shot.referenceOffsetY = offsetY;
+  shot.referenceMargin = margin;
+  incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ * @param {number} margin
+ */
+function setShotReferenceMargin(store, documentId, shotId, margin) {
+  let document = store.documents[documentId];
+  let shot = document.shots[shotId];
+  shot.referenceMargin = margin;
+  incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
+ * @param {number} offsetX
+ * @param {number} offsetY
+ * @param {number} margin
+ */
+function addShotReferenceOffset(
+  store,
+  documentId,
+  shotId,
+  offsetX,
+  offsetY,
+  margin,
+) {
+  let document = store.documents[documentId];
+  let shot = document.shots[shotId];
+  shot.referenceOffsetX += offsetX;
+  shot.referenceOffsetY += offsetY;
+  shot.referenceMargin += margin;
+  incrementDocumentRevisionNumber(document);
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').ShotId} shotId
  * @param {number} shotNumber
  */
 function setShotNumber(store, documentId, shotId, shotNumber) {
@@ -109,7 +174,8 @@ function setShotNumber(store, documentId, shotId, shotNumber) {
  * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
  * @param {import('@/stores/document/DocumentStore').BlockId} blockId
  * @param {import('@/stores/document/DocumentStore').ShotId} shotId
- * @param {import('@/stores/document/DocumentStore').ShotId} targetId
+ * @param {import('@/stores/document/DocumentStore').BlockId} targetBlockId
+ * @param {import('@/stores/document/DocumentStore').ShotId} targetShotId
  * @param {boolean} [before]
  */
 function moveShot(
@@ -117,27 +183,66 @@ function moveShot(
   documentId,
   blockId,
   shotId,
-  targetId,
+  targetBlockId,
+  targetShotId,
   before = false,
 ) {
-  const document = store.documents[documentId];
-  const block = document.blocks[blockId];
-  const shotIds = block.shotIds;
-  const shotIndex = shotIds.indexOf(shotId);
-  if (shotIndex < 0) {
+  if (
+    targetBlockId &&
+    !isBlockInSameScene(store, documentId, blockId, targetBlockId)
+  ) {
     return;
   }
-  if (shotIds.length <= 0) {
+  let block = getBlockById(store, documentId, blockId);
+  if (!block) {
     return;
   }
-  shotIds.splice(shotIndex, 1);
-  const targetIndex = shotIds.indexOf(targetId);
-  if (before) {
-    shotIds.splice(targetIndex, 0, shotId);
-  } else if (targetIndex + 1 < block.shotIds.length) {
-    shotIds.splice(targetIndex + 1, 0, shotId);
+  let targetBlock = getBlockById(store, documentId, targetBlockId);
+  // NOTE: Target block can be null, intentionally when adding to the end of a shotlist.
+
+  // Find it in the source block...
+  let blockShotIds = block.shotIds;
+  if (blockShotIds.length <= 0) {
+    return;
+  }
+  let blockShotIndex = blockShotIds.indexOf(shotId);
+  if (blockShotIndex < 0) {
+    return;
+  }
+  blockShotIds.splice(blockShotIndex, 1);
+
+  // ...and find it in destination block...
+  if (!targetBlock) {
+    targetBlock = block;
+  }
+  let targetShotIds = targetBlock.shotIds;
+  let targetShotIndex = targetShotId
+    ? targetShotIds.indexOf(targetShotId)
+    : targetShotIds.length;
+  if (targetShotIndex < 0) {
+    // ...failed, so add it back.
+    blockShotIds.splice(blockShotIndex, 0, shotId);
+    return;
+  }
+
+  if (blockId === targetBlockId) {
+    // NOTE: A small swap near start, but even though
+    //  it shouldn't-- actually swap it cause it's
+    //  probably intentional.
+    if (before && targetShotIndex === blockShotIndex) {
+      before = !before;
+    } else if (!before && targetShotIndex === blockShotIndex - 1) {
+      before = !before;
+    }
+  }
+
+  // ...then actually make the changes.
+  if (targetShotIndex >= targetShotIds.length) {
+    targetShotIds.push(shotId);
+  } else if (before) {
+    targetShotIds.splice(targetShotIndex, 0, shotId);
   } else {
-    shotIds.push(shotId);
+    targetShotIds.splice(targetShotIndex + 1, 0, shotId);
   }
 }
 

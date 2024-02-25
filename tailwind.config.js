@@ -10,6 +10,9 @@ export default {
         short: { raw: '(max-height: 400px)' },
         tall: { raw: '(min-height: 400px)' },
       },
+      fontFamily: {
+        mono: ['Courier Prime', 'Courier New', 'monospace'],
+      },
     },
   },
   plugins: [

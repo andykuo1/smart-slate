@@ -1,0 +1,13 @@
+.maskZigZag {
+  --mask: conic-gradient(
+        from 135deg at top,
+        #0000,
+        #000 1deg 89deg,
+        #0000 90deg
+      )
+      top/4.00rem 51% repeat-x,
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg)
+      calc(50% + 2rem) 100%/4rem 51% repeat-x;
+  -webkit-mask: var(--mask);
+  mask: var(--mask);
+}

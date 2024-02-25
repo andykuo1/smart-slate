@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import EditSquareIcon from '@material-symbols/svg-400/rounded/edit_square.svg';
 import MovieIcon from '@material-symbols/svg-400/rounded/movie.svg';
+import SettingsIcon from '@material-symbols/svg-400/rounded/tune.svg';
 
 import FieldButton from '@/fields/FieldButton';
 import { useFullscreen } from '@/libs/fullscreen';
@@ -43,6 +44,12 @@ export default function SettingsDocumentNavButton({ className }) {
     }
   }
 
+  function onSettingsClick() {
+    if (!location.pathname.includes('/settings')) {
+      navigate('/settings');
+    }
+  }
+
   return (
     <>
       <FieldButton
@@ -50,6 +57,11 @@ export default function SettingsDocumentNavButton({ className }) {
         Icon={!location.pathname.includes('/edit') ? EditSquareIcon : MovieIcon}
         onClick={onNavClick}
         disabled={!projectId}
+      />
+      <FieldButton
+        className={'rounded-full bg-white p-2 shadow-md' + ' ' + className}
+        Icon={SettingsIcon}
+        onClick={onSettingsClick}
       />
     </>
   );
