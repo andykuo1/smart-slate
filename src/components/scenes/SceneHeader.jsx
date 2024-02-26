@@ -57,7 +57,7 @@ export default function SceneHeader({ className, documentId, sceneId }) {
       }>
       <SceneNumber sceneNumber={sceneNumber} onClick={onClick} />
       <input
-        className="w-full flex-1 bg-transparent px-2 py-6 text-xl font-bold"
+        className="w-full flex-1 bg-transparent px-2 py-6 text-xl font-bold uppercase"
         type="text"
         list={dataListId}
         placeholder="INT/EXT. SCENE - DAY"

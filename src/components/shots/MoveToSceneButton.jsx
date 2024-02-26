@@ -76,7 +76,7 @@ function SceneSelectItem({ documentId, sceneId, disabled }) {
       value={sceneId}
       disabled={disabled}>
       <span className="mr-1">{formatSceneNumber(sceneNumber, false)}</span>
-      <span>{sceneHeading || 'SCENE'}</span>
+      <span className="uppercase">{sceneHeading || 'SCENE'}</span>
     </SelectItem>
   );
 }
