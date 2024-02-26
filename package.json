@@ -11,7 +11,8 @@
     "test": "vitest",
     "cy:start": "conc \"npm start\" \"cypress open\"",
     "cy:test": "npm run format && npm run lint && conc \"npm start\" \"cypress run --headed\"",
-    "generate:pwa": "pwa-assets-generator"
+    "generate:pwa": "pwa-assets-generator",
+    "test:bundle-size": "npx vite-bundle-visualizer"
   },
   "publishConfig": {
     "@andykuo1:registry": "https://npm.pkg.github.com"
@@ -66,6 +67,7 @@
     "tailwindcss": "^3.3.6",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
+    "vite-bundle-visualizer": "^1.0.1",
     "vite-plugin-pwa": "^0.17.4",
     "vite-plugin-svgr": "^4.2.0",
     "vite-tsconfig-paths": "^4.2.2",

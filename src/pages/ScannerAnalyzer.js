@@ -7,10 +7,6 @@ import {
 import { captureVideoSnapshot } from '@/recorder/snapshot/VideoSnapshot';
 import { getFFmpegVideoMetadata } from '@/scanner/FFmpegTranscoder';
 import {
-  scanImageURLForQRCode,
-  tryScanVideoBlobForQRCode,
-} from '@/scanner/QRCodeReader';
-import {
   tryDecodeQRCodeKeyV0,
   tryDecodeQRCodeKeyV1,
 } from '@/serdes/UseResolveTakeQRCodeKey';
@@ -101,6 +97,7 @@ async function tryVideoBlobPath(out, file, video, opts) {
   onProgress?.(out);
 
   // Step 3 - Scan for QR Code
+  const { tryScanVideoBlobForQRCode } = await import('@/scanner/QRCodeReader');
   let result = await tryScanVideoBlobForQRCode(video, file);
   if (!result) {
     console.log('[Scanner] No QR code found in video file. Skipping.');
@@ -182,6 +179,9 @@ async function tryTranscodingPath(out, file, ffmpeg, opts) {
       // Step 3 (repeated per frame) - Scan for QR code
       let blobUrl = URL.createObjectURL(blob);
       try {
+        const { scanImageURLForQRCode } = await import(
+          '@/scanner/QRCodeReader'
+        );
         let result = await scanImageURLForQRCode(blobUrl);
         if (result) {
           out.qrCode = result;

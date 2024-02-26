@@ -12,7 +12,7 @@ import {
   useIsDraggingAny,
   useIsDraggingOver,
   useIsDraggingPotentially,
-  use_UNSAFE_getDraggableStore,
+  useUNSAFE_getDraggableStore,
 } from '@/stores/draggableV3';
 import { useSetUserCursor, useUserStore } from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
@@ -135,7 +135,7 @@ export function DraggableShot({
   const UNSAFE_getDocumentStore = useDocumentStore(
     (ctx) => ctx.UNSAFE_getStore,
   );
-  const UNSAFE_getDraggableStore = use_UNSAFE_getDraggableStore();
+  const UNSAFE_getDraggableStore = useUNSAFE_getDraggableStore();
   const isCursorMoveType = useUserStore(
     (ctx) => ctx.editor?.documentEditor?.cursorType === 'move',
   );
@@ -194,7 +194,7 @@ export function DraggableShot({
       }
       return true;
     },
-    [UNSAFE_getDocumentStore, UNSAFE_getDraggableStore],
+    [documentId, UNSAFE_getDocumentStore, UNSAFE_getDraggableStore],
   );
 
   useAsDraggableElement(

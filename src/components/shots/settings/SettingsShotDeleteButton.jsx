@@ -38,7 +38,16 @@ export default function SettingsShotDeleteButton({
         onClick?.(e);
       }
     },
-    [emptyShot, userCursor, onClick, setUserCursor, deleteShot],
+    [
+      documentId,
+      sceneId,
+      shotId,
+      emptyShot,
+      userCursor,
+      onClick,
+      setUserCursor,
+      deleteShot,
+    ],
   );
 
   return (

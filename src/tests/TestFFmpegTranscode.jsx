@@ -3,8 +3,6 @@ import { useRef, useState } from 'react';
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { toBlobURL } from '@ffmpeg/util';
 
-import { scanImageURLForQRCode } from '@/scanner/QRCodeReader';
-
 /*
 // "@diffusion-studio/ffmpeg-js": "^0.2.3",
 import { FFmpeg } from '@diffusion-studio/ffmpeg-js';
@@ -262,6 +260,9 @@ export default function TestFFmpegTranscode() {
                 }): ${dataURL.substring(0, 100)}.`;
               }
 
+              const { scanImageURLForQRCode } = await import(
+                '@/scanner/QRCodeReader'
+              );
               const qrCodeText = await scanImageURLForQRCode(blobUrl);
               if (!qrCodeText) {
                 yield `...no qr code not found :( keep going...`;

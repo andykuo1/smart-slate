@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
+import AsyncTestPage from '@/pages/AsyncTestPage';
+import AsyncViewPage from '@/pages/AsyncViewPage';
 import EditPage from '@/pages/EditPage';
 import EditPageV2 from '@/pages/EditPageV2';
 import ErrorPage from '@/pages/ErrorPage';
@@ -12,8 +14,6 @@ import RenamePage from '@/pages/RenamePage';
 import RootPage from '@/pages/RootPage';
 import ScannerPage from '@/pages/ScannerPage';
 import SettingsPage from '@/pages/SettingsPage';
-import TestPage from '@/pages/TestPage';
-import ViewPage from '@/pages/ViewPage';
 import '@/progressive/ServiceWorkerInstall';
 
 import './index.css';
@@ -49,12 +49,20 @@ const router = createBrowserRouter(
     },
     {
       path: '/view',
-      element: <ViewPage />,
+      element: (
+        <Suspense>
+          <AsyncViewPage />
+        </Suspense>
+      ),
       errorElement: <ErrorPage />,
     },
     {
       path: '/test',
-      element: <TestPage />,
+      element: (
+        <Suspense>
+          <AsyncTestPage />
+        </Suspense>
+      ),
       errorElement: <ErrorPage />,
     },
     {
@@ -78,7 +86,7 @@ const router = createBrowserRouter(
       errorElement: <ErrorPage />,
     },
   ],
-  { basename: `/${PACKAGE_NAME}` },
+  { basename: `/${PACKAGE_NAME}/` },
 );
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

@@ -295,7 +295,7 @@ function useInputOffsetHandler(documentId, shotId) {
       document.addEventListener('mousemove', onMouseMove, true);
       document.addEventListener('mouseup', onMouseUp, true);
     },
-    [documentId, shotId, onTouchMove, onTouchEnd, UNSAFE_getStore],
+    [documentId, shotId, UNSAFE_getStore, onMouseMove, onMouseUp],
   );
 
   const onTouchStart = useCallback(
