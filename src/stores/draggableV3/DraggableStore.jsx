@@ -17,6 +17,6 @@ export function useDraggableDispatch() {
   return useDraggableStore((ctx) => ctx.dispatch);
 }
 
-export function use_UNSAFE_getDraggableStore() {
+export function useUNSAFE_getDraggableStore() {
   return useDraggableStore((ctx) => ctx.dispatch.UNSAFE_getStore);
 }

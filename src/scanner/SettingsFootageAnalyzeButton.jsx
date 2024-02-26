@@ -26,7 +26,6 @@ import {
   MAX_THUMBNAIL_WIDTH,
 } from '@/values/Resolutions';
 
-import { scanVideoBlobForQRCodes } from './QRCodeReader';
 import {
   attachTakeIdScanner,
   attachTakeInfoScanner,
@@ -173,6 +172,9 @@ async function performScan(output, videoRef, onChange) {
       /** @type {string[]} */
       let codes;
       try {
+        const { scanVideoBlobForQRCodes } = await import(
+          '@/scanner/QRCodeReader'
+        );
         codes = await scanVideoBlobForQRCodes(video, videoFile);
       } catch (e) {
         console.error('[TakeScanner] Failed scanning - ', e);

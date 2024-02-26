@@ -1,7 +1,7 @@
 import react from '@vitejs/plugin-react-swc';
 
 import basicSSL from '@vitejs/plugin-basic-ssl';
-import { defineConfig } from 'vite';
+import { defineConfig, splitVendorChunkPlugin } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import svgr from 'vite-plugin-svgr';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -25,7 +25,17 @@ export default defineConfig({
       'Cross-Origin-Embedder-Policy': 'require-corp',
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          // NOTE: Put any manual chunks here :)
+        },
+      },
+    },
+  },
   plugins: [
+    splitVendorChunkPlugin(),
     react(),
     svgr({
       include: '**/*.svg',

@@ -5,7 +5,7 @@ import { useAnimationFrame } from '@/libs/animationframe';
 import {
   useDraggableDispatch,
   useDraggableStore,
-  use_UNSAFE_getDraggableStore,
+  useUNSAFE_getDraggableStore,
 } from './DraggableStore';
 
 /**
@@ -22,7 +22,7 @@ import {
  * @param {DraggableCursorCallback} callback
  */
 export function useAsDraggableCursor(callback) {
-  const UNSAFE_getDraggableStore = use_UNSAFE_getDraggableStore();
+  const UNSAFE_getDraggableStore = useUNSAFE_getDraggableStore();
 
   const onAnimationFrame = useCallback(
     /** @type {FrameRequestCallback} */
@@ -226,8 +226,7 @@ export function getDraggableElementAttachmentFromElement(element) {
  * @param {import('react').RefObject<HTMLElement>} [rootRef]
  */
 export function useAsDraggableRoot(rootRef) {
-  const { updateDraggingOnMove, longStartOrStopDragging, stopDragging } =
-    useDraggableDispatch();
+  const { updateDraggingOnMove, stopDragging } = useDraggableDispatch();
 
   const onMouseMove = useCallback(
     /** @param {PointerEvent} e */
@@ -261,7 +260,7 @@ export function useAsDraggableRoot(rootRef) {
       // longStartOrStopDragging(containerId, elementId, e.clientX, e.clientY);
       stopDragging(e.clientX, e.clientY);
     },
-    [stopDragging, longStartOrStopDragging],
+    [stopDragging],
   );
 
   useEffect(() => {

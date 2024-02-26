@@ -6,6 +6,7 @@ import {
   Text,
   View,
 } from '@react-pdf/renderer';
+import { Suspense } from 'react';
 
 export default function TestPDFViewer() {
   return (
@@ -13,9 +14,11 @@ export default function TestPDFViewer() {
       <legend className="absolute -top-4 left-2 rounded border bg-white px-2 text-xl">
         TestPDFViewer
       </legend>
-      <PDFViewer className="h-full w-full">
-        <PDFDocument />
-      </PDFViewer>
+      <Suspense>
+        <PDFViewer className="h-full w-full">
+          <PDFDocument />
+        </PDFViewer>
+      </Suspense>
     </fieldset>
   );
 }
