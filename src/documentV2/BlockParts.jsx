@@ -1,6 +1,7 @@
 import ShotListAddButton from '@/components/shots/shotlist/ShotListAddButton';
 import { getBlockById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
+import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
 
 /**
  * @param {object} props
@@ -31,8 +32,17 @@ function Block({ documentId, sceneId, blockId, children }) {
   const type = useDocumentStore(
     (ctx) => getBlockById(ctx, documentId, blockId)?.contentStyle,
   );
+  const userCursor = useCurrentCursor();
+  const setUserCursor = useSetUserCursor();
+  function onClick() {
+    if (userCursor.blockId !== blockId) {
+      setUserCursor(documentId, sceneId, '', '', blockId);
+    } else {
+      setUserCursor(documentId, sceneId, '', '', '');
+    }
+  }
   return (
-    <div className="group relative hover:bg-gray-100">
+    <div className="group relative hover:bg-gray-100" onClick={onClick}>
       <BlockContentReadOnly className="w-full pb-5" text={text} type={type} />
       {/* NOTE: Since sticky only works for relative parents, height 0 makes it act like an absolute element. */}
       <div className="sticky top-20 z-20 hidden h-0 group-hover:block">

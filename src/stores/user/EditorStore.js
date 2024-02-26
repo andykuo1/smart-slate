@@ -6,6 +6,7 @@ export function createEditorStore() {
     documentEditor: {
       /** @type {DocumentEditorCursorType} */
       cursorType: '',
+      /** @type {DocumentEditorSplitView} */
       splitView: '',
     },
     shotEditor: {

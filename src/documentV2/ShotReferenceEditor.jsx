@@ -3,6 +3,7 @@ import {
   DialogDescription,
   DialogDismiss,
   DialogHeading,
+  useDialogContext,
 } from '@ariakit/react';
 import { useCallback, useRef, useState } from 'react';
 
@@ -100,13 +101,31 @@ export default function ShotReferenceEditor() {
             shotId={shotId}
           />
         </div>
-        <SettingsShotDeleteButton
+        <ShotDeleteButton
           documentId={documentId}
           sceneId={sceneId}
           shotId={shotId}
         />
       </div>
     </Dialog>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ */
+function ShotDeleteButton({ documentId, sceneId, shotId }) {
+  const ctx = useDialogContext();
+  return (
+    <SettingsShotDeleteButton
+      documentId={documentId}
+      sceneId={sceneId}
+      shotId={shotId}
+      onClick={() => ctx?.hide()}
+    />
   );
 }
 
@@ -123,6 +142,14 @@ function InputMarginHandler({ documentId, shotId }) {
     (ctx) => ctx.setShotReferenceMargin,
   );
 
+  const onChange = useCallback(
+    /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
+    function _onChange(e) {
+      setShotReferenceMargin(documentId, shotId, Number(e.target.value));
+    },
+    [documentId, shotId, setShotReferenceMargin],
+  );
+
   return (
     <div className="flex items-center gap-2">
       <label htmlFor="shot-editor-magnify">Magnify</label>
@@ -133,10 +160,8 @@ function InputMarginHandler({ documentId, shotId }) {
         id="shot-editor-magnify"
         min={-MAX_THUMBNAIL_HEIGHT * 0.25}
         max={MAX_THUMBNAIL_HEIGHT * 4}
-        value={margin}
-        onChange={(e) =>
-          setShotReferenceMargin(documentId, shotId, Number(e.target.value))
-        }
+        value={margin ?? 0}
+        onChange={onChange}
       />
       <datalist id="thumbnail-value-sizes">
         <option value={0} label="0" />

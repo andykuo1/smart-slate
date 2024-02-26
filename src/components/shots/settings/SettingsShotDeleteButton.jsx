@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
 
 import FieldButton from '@/fields/FieldButton';
@@ -10,11 +12,13 @@ import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
+ * @param {import('react').MouseEventHandler<HTMLButtonElement>} [props.onClick]
  */
 export default function SettingsShotDeleteButton({
   documentId,
   sceneId,
   shotId,
+  onClick,
 }) {
   const emptyShot = useDocumentStore((ctx) =>
     isShotEmpty(ctx, documentId, shotId),
@@ -23,20 +27,25 @@ export default function SettingsShotDeleteButton({
   const userCursor = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
 
-  function onClick() {
-    if (emptyShot) {
-      if (userCursor.shotId) {
-        setUserCursor(documentId, sceneId, '', '');
+  const handleClick = useCallback(
+    /** @type {import('react').MouseEventHandler<HTMLButtonElement>} */
+    function _handleClick(e) {
+      if (emptyShot) {
+        if (userCursor.shotId) {
+          setUserCursor(documentId, sceneId, '', '');
+        }
+        deleteShot(documentId, shotId);
+        onClick?.(e);
       }
-      deleteShot(documentId, shotId);
-    }
-  }
+    },
+    [emptyShot, userCursor, onClick, setUserCursor, deleteShot],
+  );
 
   return (
     <FieldButton
       className="w-auto"
       Icon={DeleteIcon}
-      onClick={onClick}
+      onClick={handleClick}
       disabled={!emptyShot}>
       Delete shot
     </FieldButton>
