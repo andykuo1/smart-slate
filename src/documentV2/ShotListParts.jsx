@@ -65,6 +65,8 @@ export default function ShotListParts({
   );
 }
 
+const NEW_ELEMENT_ID = '__NEW__';
+
 /**
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
@@ -95,8 +97,22 @@ function ShotListItemsPerBlock({ documentId, sceneId, blockId, grid }) {
  */
 function NewShot({ documentId, sceneId, blockId }) {
   const [render, click] = useAddShot(documentId, sceneId, blockId);
+  const elementRef = useRef(/** @type {HTMLLIElement|null} */ (null));
+  // NOTE: To be able to drag something to the end of the list.
+  useAsDraggableElement(
+    elementRef,
+    elementRef,
+    blockId,
+    // NOTE: Refer to the <DraggableShot/> for the other piece of this...
+    NEW_ELEMENT_ID,
+    '',
+    false,
+    true,
+  );
+
   return (
     <li
+      ref={elementRef}
       className="mx-auto aspect-video w-[1.8in] opacity-30 hover:cursor-pointer hover:opacity-100"
       onClick={click}>
       <ShotThumbnail
@@ -158,6 +174,11 @@ export function DraggableShot({
       const overElement = findDraggableElementById(overElementId);
       if (!overElement) {
         return;
+      }
+      // NOTE: Specifically for dragging over the NEW button...
+      if (overElementId === NEW_ELEMENT_ID) {
+        // ...have it output to the end.
+        overElementId = '';
       }
       const overRect = overElement.getBoundingClientRect();
       // Figure out if it is BEFORE or AFTER insert order.

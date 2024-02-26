@@ -2,6 +2,7 @@ import { useShallow } from 'zustand/react/shallow';
 
 import {
   getShotById,
+  getShotIdsInBlockOrder,
   getShotIdsInDocumentOrder,
   getShotIdsInSceneOrder,
 } from '../get/GetShots';
@@ -35,5 +36,15 @@ export function useShotIdsInSceneOrder(documentId, sceneId) {
 export function useShotIdsInDocumentOrder(documentId) {
   return useDocumentStore(
     useShallow((ctx) => getShotIdsInDocumentOrder(ctx, documentId)),
+  );
+}
+
+/**
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').BlockId} blockId
+ */
+export function useLastShotIdInBlock(documentId, blockId) {
+  return useDocumentStore((ctx) =>
+    getShotIdsInBlockOrder(ctx, documentId, blockId).at(-1),
   );
 }
