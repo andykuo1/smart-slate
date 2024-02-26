@@ -15,6 +15,7 @@ import {
   use_UNSAFE_getDraggableStore,
 } from '@/stores/draggableV3';
 import { useSetUserCursor, useUserStore } from '@/stores/user';
+import BarberpoleStyle from '@/styles/Barberpole.module.css';
 
 import { FadedBorder, Shot, ShotPartDetail, ShotThumbnail } from './ShotParts';
 import { useAddShot } from './UseAddShot';
@@ -242,6 +243,15 @@ export function DraggableShot({
         // NOTE: To disable default touch behavior
         'touch-none' +
         ' ' +
+        'flex flex-col items-center' +
+        ' ' +
+        (details ? 'sm:flex-row' : '') +
+        ' ' +
+        className
+      }
+      handleClassName={
+        'p-1 rounded-2xl' +
+        ' ' +
         (draggingThis
           ? 'pointer-events-none opacity-10'
           : draggingPotentiallyThis
@@ -250,15 +260,10 @@ export function DraggableShot({
         ' ' +
         (draggingOverThis ? 'outline-dashed outline-4 outline-gray-300' : '') +
         ' ' +
-        'flex flex-col items-center' +
+        (isActive ? 'bg-white' + ' ' + BarberpoleStyle.barberpole : '') +
         ' ' +
-        (isActive ? 'bg-black' : '') +
-        ' ' +
-        (details ? 'sm:flex-row' : '') +
-        ' ' +
-        className
+        (isCursorMoveType ? 'cursor-grab' : 'select-none')
       }
-      handleClassName={isCursorMoveType ? 'cursor-grab' : 'select-none'}
       containerRef={elementRef}
       handleRef={handleRef}
       documentId={documentId}
@@ -317,7 +322,11 @@ export function DraggedShot({ documentId }) {
       className="pointer-events-none absolute left-0 top-0 z-50 w-[1.5in] -translate-x-[50%] -translate-y-[50%] -rotate-12 font-mono">
       <Shot
         className="flex flex-col items-center"
-        handleClassName="shadow-xl"
+        handleClassName={
+          'shadow-xl rounded-2xl p-1 bg-white' +
+          ' ' +
+          BarberpoleStyle.barberpole
+        }
         documentId={documentId}
         shotId={elementId}
         small={true}
