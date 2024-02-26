@@ -58,7 +58,7 @@ function Document({ className, documentId, inline, split }) {
         className={
           'mx-auto py-[1in] font-mono' +
           ' ' +
-          (split ? 'w-full' : 'max-w-[calc(6in+6em)]')
+          (split ? 'w-full md:w-[80vw]' : 'max-w-[calc(6in+6em)]')
         }>
         <DocumentTitle documentId={documentId} />
         <DocumentScenes documentId={documentId} inline={inline} />
@@ -129,10 +129,12 @@ function SceneParts({ documentId, sceneId, inline, split }) {
         <DocumentPartSceneHeader documentId={documentId} sceneId={sceneId} />
       </DocumentPart>
       <DocumentPart className="mb-14">
-        <div className={'flex flex-row'}>
+        <div className="flex flex-row">
           <div
             className={
-              'grid max-w-[6in] grid-cols-1' + ' ' + (split ? 'w-[50vw]' : '')
+              'grid max-w-[6in] flex-1 grid-cols-1' +
+              ' ' +
+              (split ? 'w-[50vw]' : '')
             }>
             {blockIds.map((blockId) => (
               <BlockOrShotList
@@ -174,8 +176,8 @@ function DocumentPartToolbar() {
     (ctx) => ctx.toggleDocumentEditorCursorType,
   );
   return (
-    <div className="fixed bottom-0 left-0 top-0 z-30 flex flex-col items-center">
-      <div className="mx-1 my-auto flex flex-col items-center gap-5 rounded-full bg-white px-2 py-5 shadow-xl">
+    <div className="fixed bottom-0 left-0 right-0 z-30 flex flex-col items-center">
+      <div className="my-1 flex flex-row items-center gap-5 rounded-full bg-white px-5 py-2 shadow-xl">
         <FieldButton
           Icon={CursorIcon}
           className="mx-auto"
@@ -282,7 +284,7 @@ function BlockOrShotList({ documentId, sceneId, blockId, inline }) {
             sceneId={sceneId}
           />
           {/* NOTE: Since sticky only works for relative parents, height 0 makes it act like an absolute element. */}
-          <div className="sticky bottom-10 z-20 hidden h-0 group-hover:block">
+          <div className="sticky bottom-24 z-20 hidden h-0 group-hover:block">
             <BlockPartContentToolbar
               className="flex -translate-y-[50%] flex-row"
               documentId={documentId}

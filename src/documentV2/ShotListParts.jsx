@@ -316,16 +316,12 @@ export function DraggedShot({ documentId }) {
       style={style}
       className="pointer-events-none absolute left-0 top-0 z-50 w-[1.5in] -translate-x-[50%] -translate-y-[50%] -rotate-12 font-mono">
       <Shot
-        className="flex flex-col items-center bg-white shadow-xl"
+        className="flex flex-col items-center"
+        handleClassName="shadow-xl"
         documentId={documentId}
         shotId={elementId}
-        small={true}>
-        <ShotPartDetail
-          documentId={documentId}
-          shotId={elementId}
-          small={true}
-        />
-      </Shot>
+        small={true}
+      />
     </div>
   );
 }
