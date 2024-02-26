@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import EditPage from '@/pages/EditPage';
+import EditPageV2 from '@/pages/EditPageV2';
 import ErrorPage from '@/pages/ErrorPage';
 import NewProjectPage from '@/pages/NewProjectPage';
 import PreviewPage from '@/pages/PreviewPage';
@@ -39,6 +40,11 @@ const router = createBrowserRouter(
     {
       path: '/edit',
       element: <EditPage />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: '/edit2',
+      element: <EditPageV2 />,
       errorElement: <ErrorPage />,
     },
     {
