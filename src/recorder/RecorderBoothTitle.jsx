@@ -39,7 +39,9 @@ export default function RecorderBoothTitle({
   const isGood = prevTakeId ? prevTakeRating > 0 : false;
   return (
     <>
-      <span className="mx-2">{sceneHeading || 'INT/EXT. SCENE - DAY'}</span>
+      <span className="mx-2 uppercase">
+        {sceneHeading || 'INT/EXT. SCENE - DAY'}
+      </span>
       <span className="flex-1" />
       <span>Shot {sceneShotNumber}</span>
       <span className="mx-2 flex flex-row items-center">

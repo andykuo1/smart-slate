@@ -20,7 +20,7 @@ export function tokenize(text) {
           createToken(
             'heading',
             [...p.querySelectorAll('Text')]
-              .map((text) => text.textContent)
+              .map((text) => text?.textContent?.toUpperCase?.())
               .join(''),
             false,
           ),
@@ -52,6 +52,7 @@ export function tokenize(text) {
           createToken(
             'character',
             [...p.querySelectorAll('Text')]
+              // NOTE: Character names (i.e. McCORMICK) can have lowercases.
               .map((text) => text.textContent)
               .join(''),
             false,
@@ -85,7 +86,7 @@ export function tokenize(text) {
           createToken(
             'transition',
             [...p.querySelectorAll('Text')]
-              .map((text) => text.textContent)
+              .map((text) => text?.textContent?.toUpperCase?.())
               .join(''),
             false,
           ),

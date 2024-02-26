@@ -1,6 +1,7 @@
 # Upcoming
 
 - Add auto-sync when opening local project if already connected to GoogleDrive
+- Add forced uppercase for scene headings in FDX imports
 
 # 0.1.17
 

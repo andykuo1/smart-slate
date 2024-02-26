@@ -140,7 +140,9 @@ function IndexScene({ documentId, sceneId, isActive }) {
         </div>
         <div
           className={
-            'flex-1 font-bold' + ' ' + (!sceneHeading ? 'opacity-30' : '')
+            'flex-1 font-bold uppercase' +
+            ' ' +
+            (!sceneHeading ? 'opacity-30' : '')
           }>
           {sceneHeading || 'INT/EXT. SCENE - DAY'}
         </div>
