@@ -6,13 +6,13 @@
     "start": "vite --host --port 8080",
     "build": "tsc && vite build",
     "lint": "eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview --host --port 8080",
     "format": "prettier --write --ignore-path .prettierignore .",
     "test": "vitest",
-    "cy:start": "conc \"npm start\" \"cypress open\"",
+    "test:vite-preview": "vite preview --host --port 8080",
+    "test:bundle-size": "npx vite-bundle-visualizer",
+    "test:cypress-start": "conc \"npm start\" \"cypress open\"",
     "cy:test": "npm run format && npm run lint && conc \"npm start\" \"cypress run --headed\"",
-    "generate:pwa": "pwa-assets-generator",
-    "test:bundle-size": "npx vite-bundle-visualizer"
+    "generate:pwa": "pwa-assets-generator"
   },
   "publishConfig": {
     "@andykuo1:registry": "https://npm.pkg.github.com"

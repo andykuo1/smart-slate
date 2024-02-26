@@ -289,8 +289,9 @@ function BlockOrShotList({ documentId, sceneId, blockId, inline }) {
               className="flex -translate-y-[50%] flex-row"
               documentId={documentId}
               sceneId={sceneId}
-              blockId={blockId}
-            />
+              blockId={blockId}>
+              <div className="mr-auto" />
+            </BlockPartContentToolbar>
           </div>
         </figure>
       </BlockParts>

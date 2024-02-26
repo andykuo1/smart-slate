@@ -1,0 +1,13 @@
+.textArea {
+  --initialHeight: 0px;
+  animation: 0.3s ease 0s forwards expandMinHeight20vh;
+}
+
+@keyframes expandMinHeight20vh {
+  from {
+    min-height: calc(5vh + var(--initialHeight));
+  }
+  to {
+    min-height: max(20vh, calc(10vh + var(--initialHeight)));
+  }
+}

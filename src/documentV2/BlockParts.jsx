@@ -1,7 +1,12 @@
+import { useState } from 'react';
+
 import ShotListAddButton from '@/components/shots/shotlist/ShotListAddButton';
-import { getBlockById } from '@/stores/document';
+import BlockContentTextArea from '@/documentV2/BlockContentTextArea';
+import { getBlockById, getSceneCount, getSceneOrder } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
+
+import { useTextToBlockSerializer } from './UseTextToBlockSerializer';
 
 /**
  * @param {object} props
@@ -26,6 +31,7 @@ export default function BlockParts({ documentId, sceneId, blockId, children }) {
  * @param {import('react').ReactNode} [props.children]
  */
 function Block({ documentId, sceneId, blockId, children }) {
+  const [editing, setEditing] = useState(false);
   const text = useDocumentStore(
     (ctx) => getBlockById(ctx, documentId, blockId)?.content,
   );
@@ -34,24 +40,82 @@ function Block({ documentId, sceneId, blockId, children }) {
   );
   const userCursor = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
-  function onClick() {
+
+  const isActive = userCursor.blockId === blockId;
+  const isLastScene = useDocumentStore(
+    (ctx) =>
+      getSceneOrder(ctx, documentId, sceneId) >= getSceneCount(ctx, documentId),
+  );
+  const serializeTextToBlock = useTextToBlockSerializer();
+
+  function onEdit() {
     if (userCursor.blockId !== blockId) {
       setUserCursor(documentId, sceneId, '', '', blockId);
+    }
+    setEditing(true);
+  }
+
+  function onClick() {
+    if (userCursor.blockId === blockId) {
+      setEditing(true);
     } else {
-      setUserCursor(documentId, sceneId, '', '', '');
+      setUserCursor(documentId, sceneId, '', '', blockId);
     }
   }
+
+  /**
+   * @param {string} value
+   */
+  function onChange(value) {
+    setEditing(false);
+    serializeTextToBlock(documentId, sceneId, blockId, value, isLastScene);
+  }
+
+  // TODO: Add a text editable version for shot list
+  // TODO: Make the textarea LOOK like it's editing.
+  // TODO: Add shortcuts to textarea editing.
   return (
-    <div className="group relative hover:bg-gray-100" onClick={onClick}>
-      <BlockContentReadOnly className="w-full pb-5" text={text} type={type} />
+    <div
+      className={
+        'group relative hover:bg-gray-100' +
+        ' ' +
+        (isActive ? 'bg-gray-100' : '')
+      }>
+      <div className="" onClick={onClick}>
+        {editing ? (
+          <BlockContentTextArea
+            className={'w-full bg-transparent pb-5'}
+            text={text}
+            type={type}
+            placeholder={
+              isLastScene
+                ? '< Describe or paste your scenes here >'
+                : '< What happened? >'
+            }
+            onChange={onChange}
+          />
+        ) : (
+          <BlockContentReadOnly
+            className="w-full pb-5"
+            text={text}
+            type={type}
+          />
+        )}
+      </div>
       {/* NOTE: Since sticky only works for relative parents, height 0 makes it act like an absolute element. */}
-      <div className="sticky top-20 z-20 hidden h-0 group-hover:block">
+      <div
+        className={'sticky top-20 z-20 h-0' + ' ' + 'hidden group-hover:block'}>
         <BlockPartContentToolbar
           className="pointer-events-none flex -translate-y-[50%] flex-row"
           documentId={documentId}
           sceneId={sceneId}
-          blockId={blockId}
-        />
+          blockId={blockId}>
+          <button
+            className="pointer-events-auto -ml-6 mr-auto rounded-full bg-white px-6 py-2 shadow-xl"
+            onClick={onEdit}>
+            {editing ? 'CANCEL' : 'EDIT'}
+          </button>
+        </BlockPartContentToolbar>
       </div>
       {children}
     </div>
@@ -64,18 +128,18 @@ function Block({ documentId, sceneId, blockId, children }) {
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
+ * @param {import('react').ReactNode} props.children
  */
 export function BlockPartContentToolbar({
   className,
   documentId,
   sceneId,
   blockId,
+  children,
 }) {
   return (
     <div className={className}>
-      <button className="pointer-events-auto -ml-6 mr-auto rounded-full bg-white px-6 py-2 shadow-xl">
-        EDIT
-      </button>
+      {children}
       <BlockPartNewShotTray
         className="pointer-events-auto -mr-6 flex gap-2 py-2 shadow-xl sm:gap-10"
         documentId={documentId}
@@ -153,26 +217,36 @@ function BlockContentReadOnly({ className, text, type }) {
       return (
         <p className={className}>
           {text.split('\n').map((t, index) => (
-            <span key={t + '.' + index} className="block">
+            <span key={t + '.' + index} className="block whitespace-pre-wrap">
               {t}
             </span>
           ))}
         </p>
       );
     case 'centered':
-      return <p className={'text-center' + ' ' + className}>{text}</p>;
+      return (
+        <p className={'whitespace-pre-wrap text-center' + ' ' + className}>
+          {text}
+        </p>
+      );
     case 'dialogue': {
       const lines = text.split('\n');
       const character = lines[0];
       const spokenLines = lines.slice(1);
       return (
         <blockquote className={'pl-[15%] pr-[20%]' + ' ' + className}>
-          <header className="px-[30%] font-bold">{character}</header>
+          <header className="whitespace-pre-wrap px-[30%] font-bold">
+            {character}
+          </header>
           <p>
             {spokenLines.map((line, index) => (
               <span
                 key={line + '.' + index}
-                className={line.startsWith('(') ? 'block pl-[15%]' : ''}>
+                className={
+                  'whitespace-pre-wrap' +
+                  ' ' +
+                  (line.startsWith('(') ? 'block pl-[15%]' : '')
+                }>
                 {line}
               </span>
             ))}
@@ -183,15 +257,23 @@ function BlockContentReadOnly({ className, text, type }) {
     case 'lyric':
       return (
         <p className={className}>
-          <span className="italic">{text}</span>
+          <span className="whitespace-pre-wrap italic">{text}</span>
         </p>
       );
     case 'note':
-      return <p className={'opacity-30' + ' ' + className}>{text}</p>;
+      return (
+        <p className={'whitespace-pre-wrap opacity-30' + ' ' + className}>
+          {text}
+        </p>
+      );
     case 'transition':
-      return <p className={'text-right' + ' ' + className}>{text}</p>;
+      return (
+        <p className={'whitespace-pre-wrap text-right' + ' ' + className}>
+          {text}
+        </p>
+      );
     case '':
     default:
-      return <pre>{text}</pre>;
+      return <pre className="whitespace-pre-wrap">{text}</pre>;
   }
 }
