@@ -1,9 +1,9 @@
-import Toolbar from '@/components/Toolbar';
+import DocumentParts from '@/documentV2/DocumentParts';
+import ShotReferenceEditor from '@/documentV2/ShotReferenceEditor';
 import Drawer from '@/drawer/Drawer';
 import { useGoogleDriveAutoSync } from '@/libs/googleapi/sync/UseGoogleDriveAutoSync';
 import { useCurrentDocumentId } from '@/stores/user';
 
-import DocumentParts from './DocumentParts';
 import PageLayout from './PageLayout';
 
 export default function EditPage() {
@@ -15,8 +15,8 @@ export default function EditPage() {
   return (
     <PageLayout className="bg-white text-black dark:bg-gray-900 dark:text-white">
       <Drawer darkMode={false}>
-        <Toolbar />
         <DocumentParts documentId={documentId} />
+        <ShotReferenceEditor />
       </Drawer>
     </PageLayout>
   );
