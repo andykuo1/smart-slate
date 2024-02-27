@@ -40,8 +40,6 @@ function Block({ documentId, sceneId, blockId, children }) {
   );
   const userCursor = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
-
-  const isActive = userCursor.blockId === blockId;
   const isLastScene = useDocumentStore(
     (ctx) =>
       getSceneOrder(ctx, documentId, sceneId) >= getSceneCount(ctx, documentId),
@@ -75,12 +73,7 @@ function Block({ documentId, sceneId, blockId, children }) {
   // TODO: Make the textarea LOOK like it's editing.
   // TODO: Add shortcuts to textarea editing.
   return (
-    <div
-      className={
-        'group relative hover:bg-gray-100' +
-        ' ' +
-        (isActive ? 'bg-gray-100' : '')
-      }>
+    <div className={'group relative hover:bg-gray-100'}>
       <div className="" onClick={onClick}>
         {editing ? (
           <BlockContentTextArea

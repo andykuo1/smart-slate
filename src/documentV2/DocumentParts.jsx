@@ -8,6 +8,7 @@ import InlineViewIcon from '@material-symbols/svg-400/rounded/view_day.svg';
 
 import SettingsSceneShotsDetailButton from '@/components/scenes/settings/SettingsSceneShotsDetailButton';
 import SettingsSceneShotsRenumberButton from '@/components/scenes/settings/SettingsSceneShotsRenumberButton';
+import GoToSettingsButton from '@/drawer/GoToSettingsButton';
 import FieldButton from '@/fields/FieldButton';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useSceneShotNumber } from '@/serdes/UseResolveSceneShotNumber';
@@ -60,7 +61,11 @@ function Document({ className, documentId, inline, split }) {
           ' ' +
           (split ? 'w-full md:w-[80vw]' : 'max-w-[calc(6in+6em)]')
         }>
-        <DocumentTitle documentId={documentId} />
+        <DocumentPart slotLeft={<GoToSettingsButton className="mx-auto" />}>
+          <div className="hover:bg-gray-100">
+            <DocumentTitle documentId={documentId} />
+          </div>
+        </DocumentPart>
         <DocumentScenes documentId={documentId} inline={inline} />
       </article>
       <DraggedShot documentId={documentId} />
@@ -129,7 +134,8 @@ function SceneParts({ documentId, sceneId, inline, split }) {
         <DocumentPartSceneHeader documentId={documentId} sceneId={sceneId} />
       </DocumentPart>
       <DocumentPart className="mb-14">
-        <div className="flex flex-row">
+        {/* NOTE: min height at 1in so it can AT LEAST fit 1 shot. */}
+        <div className="flex min-h-[1in] flex-row">
           <div
             className={
               'grid max-w-[6in] flex-1 grid-cols-1' +
@@ -348,7 +354,8 @@ function DocumentTitle({ documentId }) {
   );
   return (
     <header className="mx-auto mb-[0.5in] flex max-w-[60%] flex-col gap-2 text-center">
-      <h2 className="underline">{documentTitle}</h2>
+      {/* NOTE: 2px offset for underline so it can overlap underscores. */}
+      <h2 className="text-xl underline underline-offset-2">{documentTitle}</h2>
       {writerName && (
         <>
           <div>written by</div>
