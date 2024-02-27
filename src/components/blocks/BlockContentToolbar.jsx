@@ -6,11 +6,13 @@ import {
   usePopoverContext,
 } from '@ariakit/react';
 
+import DeleteBlockIcon from '@material-symbols/svg-400/rounded/delete.svg';
 import EditBlockIcon from '@material-symbols/svg-400/rounded/edit_note.svg';
 import AddShotListIcon from '@material-symbols/svg-400/rounded/format_list_bulleted_add.svg';
 import MenuIcon from '@material-symbols/svg-400/rounded/more_vert.svg';
 
 import FieldButton from '@/fields/FieldButton';
+import { useShotIds } from '@/stores/document';
 import { createShot } from '@/stores/document/DocumentStore';
 import { useDocumentStore } from '@/stores/document/use';
 import PopoverStyle from '@/styles/Popover.module.css';
@@ -62,11 +64,17 @@ export default function BlockContentToolbar({
 function MenuContent({ documentId, sceneId, blockId, setEditable }) {
   const store = usePopoverContext();
   const addShot = useDocumentStore((ctx) => ctx.addShot);
+  const deleteBlock = useDocumentStore((ctx) => ctx.deleteBlock);
+  const shotIds = useShotIds(documentId, blockId);
 
   function onNewClick() {
     let shot = createShot();
     addShot(documentId, sceneId, blockId, shot);
     store?.hide();
+  }
+
+  function onDeleteClick() {
+    deleteBlock(documentId, blockId);
   }
 
   function onEditClick() {
@@ -84,6 +92,13 @@ function MenuContent({ documentId, sceneId, blockId, setEditable }) {
         Icon={AddShotListIcon}
         onClick={onNewClick}>
         New shotlist
+      </FieldButton>
+      <FieldButton
+        title="Delete block"
+        Icon={DeleteBlockIcon}
+        onClick={onDeleteClick}
+        disabled={shotIds.length > 0}>
+        Delete block
       </FieldButton>
     </>
   );
