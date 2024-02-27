@@ -1,4 +1,8 @@
 import { zi, ziget } from '../ZustandImmerHelper';
+import {
+  createBlockViewOptions,
+  createDocumentEditorOptions,
+} from './EditorStore';
 
 /**
  * @param {import('zustand').StoreApi<any>['setState']} set
@@ -9,6 +13,10 @@ export function createDispatchForEditor(set, get) {
     UNSAFE_getEditorStore: ziget(get, UNSAFE_getEditorStore),
     setShotEditorShotId: zi(set, setShotEditorShotId),
     toggleDocumentEditorCursorType: zi(set, toggleDocumentEditorCursorType),
+    setDocumentEditorBlockViewShotListType: zi(
+      set,
+      setDocumentEditorBlockViewShotListType,
+    ),
   };
 }
 
@@ -40,4 +48,38 @@ function toggleDocumentEditorCursorType(store, cursorType) {
     ...prev,
     cursorType: cursorType,
   };
+}
+
+/**
+ * @param {import('./UserStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').BlockId} blockId
+ * @param {import('./EditorStore').BlockViewShotListType} shotListType
+ */
+function setDocumentEditorBlockViewShotListType(store, blockId, shotListType) {
+  let prev = resolveBlockViewOption(store, blockId);
+  prev.shotListType = shotListType;
+}
+
+/**
+ * @param {import('./UserStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').BlockId} blockId
+ */
+function resolveBlockViewOption(store, blockId) {
+  let documentEditor = store.editor.documentEditor;
+  if (!documentEditor) {
+    documentEditor = createDocumentEditorOptions();
+    store.editor.documentEditor = documentEditor;
+  }
+  let blockViews = documentEditor.blockViews;
+  if (!blockViews) {
+    blockViews = {};
+    documentEditor.blockViews = blockViews;
+  }
+  /** @type {import('./EditorStore').BlockViewOptions} */
+  let blockViewOptions = blockViews[blockId];
+  if (!blockViewOptions) {
+    blockViewOptions = createBlockViewOptions();
+    blockViews[blockId] = blockViewOptions;
+  }
+  return blockViewOptions;
 }

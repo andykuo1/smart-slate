@@ -15,6 +15,7 @@ import {
   useUNSAFE_getDraggableStore,
 } from '@/stores/draggableV3';
 import { useSetUserCursor, useUserStore } from '@/stores/user';
+import { getDocumentEditorBlockViewOptions } from '@/stores/user/EditorAccessor';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 
 import { FadedBorder, Shot, ShotPartDetail, ShotThumbnail } from './ShotParts';
@@ -26,22 +27,24 @@ import { useAddShot } from './UseAddShot';
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {Array<import('@/stores/document/DocumentStore').BlockId>} props.blockIds
- * @param {boolean} props.grid
  */
 export default function ShotListParts({
   className,
   documentId,
   sceneId,
   blockIds,
-  grid,
 }) {
   const lastBlockId = blockIds.at(-1);
+  const shotListType = useUserStore(
+    (ctx) =>
+      getDocumentEditorBlockViewOptions(ctx, lastBlockId || '')?.shotListType,
+  );
   return (
     <ul
       className={
         'grid' +
         ' ' +
-        (grid
+        (shotListType === 'grid'
           ? 'grid-cols-[repeat(auto-fill,minmax(min(1.8in,100%),1fr))]'
           : 'grid-cols-1') +
         ' ' +
@@ -53,11 +56,11 @@ export default function ShotListParts({
           documentId={documentId}
           sceneId={sceneId}
           blockId={blockId}
-          grid={grid}
+          shotListType={shotListType}
         />
       ))}
       <NewShot
-        className={grid ? 'm-auto' : 'mr-auto'}
+        className={shotListType === 'grid' ? 'm-auto' : 'mr-auto'}
         documentId={documentId}
         sceneId={sceneId}
         blockId={lastBlockId || ''}
@@ -73,9 +76,9 @@ export const NEW_ELEMENT_ID = '__NEW__';
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
- * @param {boolean} props.grid
+ * @param {import('@/stores/user/EditorStore').BlockViewShotListType} props.shotListType
  */
-function ShotListItemsPerBlock({ documentId, sceneId, blockId, grid }) {
+function ShotListItemsPerBlock({ documentId, sceneId, blockId, shotListType }) {
   const shotIds = useShotIds(documentId, blockId);
   return shotIds.map((shotId) => (
     <DraggableShot
@@ -84,8 +87,9 @@ function ShotListItemsPerBlock({ documentId, sceneId, blockId, grid }) {
       sceneId={sceneId}
       blockId={blockId}
       shotId={shotId}
-      details={!grid}
-      direction={grid ? 'horizontal' : 'vertical'}
+      details={shotListType !== 'grid'}
+      direction={shotListType !== 'grid' ? 'vertical' : 'horizontal'}
+      border={'faded'}
     />
   ));
 }
@@ -144,6 +148,7 @@ function NewShot({ className, documentId, sceneId, blockId }) {
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
  * @param {boolean} props.details
  * @param {'horizontal'|'vertical'} props.direction
+ * @param {import('@/stores/user/EditorStore').BlockViewShotBorderType} props.border
  */
 export function DraggableShot({
   className,
@@ -153,6 +158,7 @@ export function DraggableShot({
   shotId,
   details,
   direction,
+  border,
 }) {
   const elementRef = useRef(/** @type {HTMLLIElement|null} */ (null));
   const handleRef = useRef(/** @type {HTMLDivElement|null} */ (null));
@@ -299,13 +305,15 @@ export function DraggableShot({
       shotId={shotId}
       small={false}
       slotThumbnail={
-        <FadedBorder
-          className={
-            'shadow-white' +
-            ' ' +
-            (isActive ? 'shadow-black' : 'group-hover:shadow-gray-100')
-          }
-        />
+        border === 'faded' && (
+          <FadedBorder
+            className={
+              'shadow-white' +
+              ' ' +
+              (isActive ? 'shadow-black' : 'group-hover:shadow-gray-100')
+            }
+          />
+        )
       }>
       {details && (
         <ShotPartDetail documentId={documentId} shotId={shotId} small={false} />

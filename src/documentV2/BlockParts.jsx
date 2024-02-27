@@ -37,12 +37,13 @@ export default function BlockParts({ documentId, sceneId, blockId, children }) {
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  * @param {import('react').ReactNode} [props.children]
  */
-function Block({ documentId, sceneId, blockId, children }) {
+function Block({ className, documentId, sceneId, blockId, children }) {
   const [editing, setEditing] = useState(false);
   const ref = useRef(/** @type {HTMLDivElement|null} */ (null));
   const text = useDocumentStore(
@@ -95,7 +96,9 @@ function Block({ documentId, sceneId, blockId, children }) {
   // TODO: Make the textarea LOOK like it's editing.
   // TODO: Add shortcuts to textarea editing.
   return (
-    <div ref={ref} className={'group relative hover:bg-gray-100'}>
+    <div
+      ref={ref}
+      className={'group relative hover:bg-gray-100' + ' ' + className}>
       <div className="" onClick={onClick}>
         {editing ? (
           <BlockContentTextArea

@@ -5,7 +5,6 @@ import MoodBoardIcon from '@material-symbols/svg-400/rounded/photo_library.svg';
 import SplitViewIcon from '@material-symbols/svg-400/rounded/vertical_split.svg';
 import InlineViewIcon from '@material-symbols/svg-400/rounded/view_day.svg';
 
-import SettingsSceneShotsDetailButton from '@/components/scenes/settings/SettingsSceneShotsDetailButton';
 import SettingsSceneShotsRenumberButton from '@/components/scenes/settings/SettingsSceneShotsRenumberButton';
 import GoToSettingsButton from '@/drawer/GoToSettingsButton';
 import FieldButton from '@/fields/FieldButton';
@@ -27,6 +26,7 @@ import { useAsDraggableRoot } from '@/stores/draggableV3';
 import { useUserStore } from '@/stores/user';
 
 import BlockParts, { BlockPartContentToolbar } from './BlockParts';
+import BlockViewShotListTypeToggle from './BlockViewShotListTypeToggle';
 import ShotListParts, { DraggedShot } from './ShotListParts';
 
 /**
@@ -80,16 +80,25 @@ function Document({ className, documentId, inline, split }) {
  */
 function SceneWiseDocumentPartShotList({ documentId, sceneId }) {
   const blockIds = useBlockIds(documentId, sceneId);
-  const grid = useUserStore((ctx) => ctx.shotListMode) === 'hidden';
+  const lastBlockId = blockIds.at(-1);
   return (
-    <figure className="absolute left-0 top-0 h-full w-full">
-      <ShotListParts
+    <>
+      <div className="relative h-full overflow-y-auto">
+        <figure className="absolute left-0 top-0 h-full w-full">
+          <ShotListParts
+            documentId={documentId}
+            sceneId={sceneId}
+            blockIds={blockIds}
+          />
+        </figure>
+      </div>
+      <ShotListPartShotListToolbar
+        className="absolute right-0 top-0 flex w-[4rem] translate-x-[100%] flex-col items-center px-2 py-1 text-gray-400"
         documentId={documentId}
         sceneId={sceneId}
-        blockIds={blockIds}
-        grid={grid}
+        blockId={lastBlockId || ''}
       />
-    </figure>
+    </>
   );
 }
 
@@ -153,7 +162,7 @@ function SceneParts({ documentId, sceneId, inline, split }) {
           </div>
           <div
             className={
-              'relative grid min-w-[2in] flex-1 grid-cols-1 overflow-y-auto' +
+              'relative grid min-w-[2in] flex-1 grid-cols-1' +
               ' ' +
               (split ? '' : 'hidden')
             }>
@@ -280,7 +289,6 @@ function ShotListPartShotListHeader({ documentId, sceneId, blockId }) {
  */
 function BlockOrShotList({ documentId, sceneId, blockId, inline }) {
   const blockShotCount = useBlockShotCount(documentId, blockId);
-  const grid = useUserStore((ctx) => ctx.shotListMode) === 'hidden';
   if (!inline || blockShotCount <= 0) {
     return (
       <BlockParts documentId={documentId} sceneId={sceneId} blockId={blockId} />
@@ -300,11 +308,12 @@ function BlockOrShotList({ documentId, sceneId, blockId, inline }) {
             documentId={documentId}
             sceneId={sceneId}
             blockIds={[blockId]}
-            grid={grid}
           />
           <ShotListPartShotListToolbar
+            className="absolute right-0 top-0 flex w-[4rem] translate-x-[100%] flex-col items-center px-2 py-1 text-gray-400 opacity-0 group-hover:opacity-100"
             documentId={documentId}
             sceneId={sceneId}
+            blockId={blockId}
           />
           {/* NOTE: Since sticky only works for relative parents, height 0 makes it act like an absolute element. */}
           <div className="sticky bottom-24 z-20 hidden h-0 group-hover:block">
@@ -324,13 +333,20 @@ function BlockOrShotList({ documentId, sceneId, blockId, inline }) {
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
+ * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  */
-function ShotListPartShotListToolbar({ documentId, sceneId }) {
+function ShotListPartShotListToolbar({
+  className,
+  documentId,
+  sceneId,
+  blockId,
+}) {
   return (
-    <div className="absolute right-0 top-0 flex w-[4rem] translate-x-[100%] flex-col items-center px-2 py-1 text-gray-400 opacity-0 group-hover:opacity-100">
-      <SettingsSceneShotsDetailButton className="mx-auto" />
+    <div className={className}>
+      <BlockViewShotListTypeToggle className="mx-auto" blockId={blockId} />
       <SettingsSceneShotsRenumberButton
         className="mx-auto"
         documentId={documentId}
