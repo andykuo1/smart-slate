@@ -160,7 +160,7 @@ function useBlockDataDrop(elementRef, documentId, sceneId, blockId) {
       }
       target.style.setProperty('background', 'slategray');
     },
-    [],
+    [elementRef],
   );
 
   const onDragLeave = useCallback(
@@ -173,7 +173,7 @@ function useBlockDataDrop(elementRef, documentId, sceneId, blockId) {
       }
       target.style.removeProperty('background');
     },
-    [],
+    [elementRef],
   );
 
   const onDragOver = useCallback(
@@ -186,7 +186,7 @@ function useBlockDataDrop(elementRef, documentId, sceneId, blockId) {
       }
       target.style.setProperty('background', 'slategray');
     },
-    [],
+    [elementRef],
   );
 
   const onDrop = useCallback(
@@ -235,7 +235,7 @@ function useBlockDataDrop(elementRef, documentId, sceneId, blockId) {
         console.log('[BLOCKDROP] Dropped data types:', e.dataTransfer.types);
       }
     },
-    [documentId, sceneId, blockId, addShot],
+    [elementRef, documentId, sceneId, blockId, addShot],
   );
 
   useEffect(() => {
@@ -253,7 +253,7 @@ function useBlockDataDrop(elementRef, documentId, sceneId, blockId) {
       element.removeEventListener('dragover', onDragOver);
       element.removeEventListener('drop', onDrop);
     };
-  }, [elementRef]);
+  }, [elementRef, onDragEnter, onDragLeave, onDragOver, onDrop]);
 }
 
 /**
