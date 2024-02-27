@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import {
   getShotTypeIcon,
   getShotTypeText,
@@ -9,6 +11,7 @@ import {
 } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import ShadowStyle from '@/styles/Shadow.module.css';
+import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 import { MAX_THUMBNAIL_HEIGHT } from '@/values/Resolutions';
 
 /**
@@ -68,7 +71,7 @@ export function ShotPartDetail({ documentId, shotId, small }) {
   return (
     <div
       className={
-        'flex-1 overflow-x-auto pt-2' +
+        'flex-1 overflow-hidden pt-2' +
         ' ' +
         (small ? 'max-h-[0.5in]' : 'sm:h-[0.9in]')
       }>
@@ -84,7 +87,24 @@ export function ShotPartDetail({ documentId, shotId, small }) {
  */
 export function ShotText({ documentId, shotId }) {
   const text = useShotDescription(documentId, shotId);
-  return <p className="italic">{text}</p>;
+  const setShotDescription = useDocumentStore((ctx) => ctx.setShotDescription);
+
+  const onChange = useCallback(
+    /** @type {import('react').ChangeEventHandler<HTMLTextAreaElement>} */
+    function _onChange(e) {
+      setShotDescription(documentId, shotId, e.target.value);
+    },
+    [documentId, shotId, setShotDescription],
+  );
+
+  return (
+    <textarea
+      className="h-full w-full resize-none overflow-hidden bg-transparent px-2 italic outline-none"
+      value={text}
+      placeholder={choosePlaceholderRandomly(shotId)}
+      onChange={onChange}
+    />
+  );
 }
 
 /**
