@@ -71,10 +71,12 @@ function Block({ documentId, sceneId, blockId, children }) {
 
   function onClick() {
     if (isCursorEditType) {
-      if (userCursor.blockId !== blockId) {
-        setUserCursor(documentId, sceneId, '', '', blockId);
-      }
       setEditing(true);
+    }
+    if (userCursor.blockId !== blockId) {
+      setUserCursor(documentId, sceneId, '', '', blockId);
+    } else {
+      setUserCursor(documentId, sceneId, '', '', '');
     }
   }
 
