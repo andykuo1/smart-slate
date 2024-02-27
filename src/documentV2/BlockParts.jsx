@@ -1,10 +1,16 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { blobToDataURI } from '@/components/shots/options/ShotThumbnailHelper';
 import ShotListAddButton from '@/components/shots/shotlist/ShotListAddButton';
 import BlockContentTextArea from '@/documentV2/BlockContentTextArea';
 import { getBlockById, getSceneCount, getSceneOrder } from '@/stores/document';
+import { createShot } from '@/stores/document/DocumentStore';
 import { useDocumentStore } from '@/stores/document/use';
 import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
+import {
+  MAX_THUMBNAIL_HEIGHT,
+  MAX_THUMBNAIL_WIDTH,
+} from '@/values/Resolutions';
 
 import { useTextToBlockSerializer } from './UseTextToBlockSerializer';
 
@@ -32,6 +38,7 @@ export default function BlockParts({ documentId, sceneId, blockId, children }) {
  */
 function Block({ documentId, sceneId, blockId, children }) {
   const [editing, setEditing] = useState(false);
+  const ref = useRef(/** @type {HTMLDivElement|null} */ (null));
   const text = useDocumentStore(
     (ctx) => getBlockById(ctx, documentId, blockId)?.content,
   );
@@ -69,11 +76,13 @@ function Block({ documentId, sceneId, blockId, children }) {
     serializeTextToBlock(documentId, sceneId, blockId, value, isLastScene);
   }
 
+  useBlockDataDrop(ref, documentId, sceneId, blockId);
+
   // TODO: Add a text editable version for shot list
   // TODO: Make the textarea LOOK like it's editing.
   // TODO: Add shortcuts to textarea editing.
   return (
-    <div className={'group relative hover:bg-gray-100'}>
+    <div ref={ref} className={'group relative hover:bg-gray-100'}>
       <div className="" onClick={onClick}>
         {editing ? (
           <BlockContentTextArea
@@ -113,6 +122,122 @@ function Block({ documentId, sceneId, blockId, children }) {
       {children}
     </div>
   );
+}
+
+/**
+ * @template {HTMLElement} T
+ * @param {import('react').RefObject<T>} elementRef
+ * @param {import('@/stores/document/DocumentStore').DocumentId} documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+ * @param {import('@/stores/document/DocumentStore').BlockId} blockId
+ */
+function useBlockDataDrop(elementRef, documentId, sceneId, blockId) {
+  const addShot = useDocumentStore((ctx) => ctx.addShot);
+
+  const onDragEnter = useCallback(
+    /** @param {DragEvent} e */
+    function _onDragEnter(e) {
+      e.preventDefault();
+      const target = elementRef.current;
+      if (!target) {
+        return;
+      }
+      target.style.setProperty('background', 'slategray');
+    },
+    [],
+  );
+
+  const onDragLeave = useCallback(
+    /** @param {DragEvent} e */
+    function _onDragLeave(e) {
+      e.preventDefault();
+      const target = elementRef.current;
+      if (!target) {
+        return;
+      }
+      target.style.removeProperty('background');
+    },
+    [],
+  );
+
+  const onDragOver = useCallback(
+    /** @param {DragEvent} e */
+    function _onDragOver(e) {
+      e.preventDefault();
+      const target = elementRef.current;
+      if (!target) {
+        return;
+      }
+      target.style.setProperty('background', 'slategray');
+    },
+    [],
+  );
+
+  const onDrop = useCallback(
+    /** @param {DragEvent} e */
+    function _onDrop(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      if (!e.dataTransfer) {
+        return;
+      }
+
+      const target = elementRef.current;
+      if (!target) {
+        return;
+      }
+      target.style.removeProperty('background');
+
+      if (e.dataTransfer.types.includes('Files')) {
+        const items = e.dataTransfer.items;
+        for (let item of items) {
+          if (item.kind === 'file') {
+            const file = item.getAsFile();
+            if (!file) {
+              continue;
+            }
+            if (!file.type.startsWith('image/')) {
+              console.log('[BLOCKDROP] Found unsupported file type', file.type);
+              continue;
+            }
+            const canvasElement = document.createElement('canvas');
+            blobToDataURI(file, MAX_THUMBNAIL_WIDTH, MAX_THUMBNAIL_HEIGHT, {
+              current: canvasElement,
+            }).then((result) => {
+              let shot = createShot();
+              shot.referenceImage = result;
+              addShot(documentId, sceneId, blockId, shot);
+            });
+          }
+        }
+      } else if (e.dataTransfer.types.includes('text/uri-list')) {
+        const dataURI = e.dataTransfer.getData('text/uri-list');
+        let shot = createShot();
+        shot.referenceImage = dataURI;
+        addShot(documentId, sceneId, blockId, shot);
+      } else {
+        console.log('[BLOCKDROP] Dropped data types:', e.dataTransfer.types);
+      }
+    },
+    [documentId, sceneId, blockId, addShot],
+  );
+
+  useEffect(() => {
+    const element = elementRef.current;
+    if (!element) {
+      return;
+    }
+    element.addEventListener('dragenter', onDragEnter);
+    element.addEventListener('dragleave', onDragLeave);
+    element.addEventListener('dragover', onDragOver);
+    element.addEventListener('drop', onDrop);
+    return () => {
+      element.removeEventListener('dragenter', onDragEnter);
+      element.removeEventListener('dragleave', onDragLeave);
+      element.removeEventListener('dragover', onDragOver);
+      element.removeEventListener('drop', onDrop);
+    };
+  }, [elementRef]);
 }
 
 /**
