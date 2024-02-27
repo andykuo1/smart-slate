@@ -130,12 +130,13 @@ const TOKEN_HANDLERS = [
   PageBreakToken,
   SectionToken,
   SynopsisToken,
+  // ...for continued dialogue content (should be before heading)
+  DialogueBlockToken,
   // ...for regular patterns
   HeadingToken,
   TransitionToken,
   CharacterToken,
   // ...for continued content
-  DialogueBlockToken,
   ActionBlockToken,
   // ...for anything else.
   ActionDefaultToken,

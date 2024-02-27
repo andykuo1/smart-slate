@@ -385,3 +385,7 @@ Draw on the script.
 Easy Movie.
 
 // TODO: Add a fade out on edit tray for covered block below
+
+# 2024-02-26 -----------------------------------------------------
+
+- Trim letter box per shot? existing images look weird.

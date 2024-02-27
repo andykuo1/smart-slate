@@ -169,7 +169,7 @@ function formatTextWithOverrides(text, style) {
     case 'note':
       return `[[${text}]]`;
     case 'transition':
-      if (text.endsWith(':')) {
+      if (text.endsWith('TO:')) {
         return text;
       }
       return `>${text}`;
