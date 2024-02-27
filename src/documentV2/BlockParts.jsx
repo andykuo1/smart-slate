@@ -353,7 +353,7 @@ function BlockContentReadOnly({ className, text, type }) {
       const spokenLines = lines.slice(1);
       return (
         <blockquote className={'pl-[15%] pr-[20%]' + ' ' + className}>
-          <header className="whitespace-pre-wrap px-[30%] font-bold">
+          <header className="whitespace-pre-wrap pl-[30%] font-bold">
             {character}
           </header>
           <p>
