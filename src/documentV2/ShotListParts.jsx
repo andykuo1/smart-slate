@@ -66,7 +66,7 @@ export default function ShotListParts({
   );
 }
 
-const NEW_ELEMENT_ID = '__NEW__';
+export const NEW_ELEMENT_ID = '__NEW__';
 
 /**
  * @param {object} props

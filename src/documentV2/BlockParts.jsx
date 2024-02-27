@@ -6,6 +6,7 @@ import BlockContentTextArea from '@/documentV2/BlockContentTextArea';
 import { getBlockById, getSceneCount, getSceneOrder } from '@/stores/document';
 import { createShot } from '@/stores/document/DocumentStore';
 import { useDocumentStore } from '@/stores/document/use';
+import { useAsDraggableElement } from '@/stores/draggableV3';
 import {
   useCurrentCursor,
   useSetUserCursor,
@@ -16,6 +17,7 @@ import {
   MAX_THUMBNAIL_WIDTH,
 } from '@/values/Resolutions';
 
+import { NEW_ELEMENT_ID } from './ShotListParts';
 import { useTextToBlockSerializer } from './UseTextToBlockSerializer';
 
 /**
@@ -85,6 +87,7 @@ function Block({ documentId, sceneId, blockId, children }) {
   }
 
   useBlockDataDrop(ref, documentId, sceneId, blockId);
+  useAsDraggableElement(ref, ref, blockId, NEW_ELEMENT_ID, '', false, true);
 
   // TODO: Add a text editable version for shot list
   // TODO: Make the textarea LOOK like it's editing.
