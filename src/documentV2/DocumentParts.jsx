@@ -1,7 +1,6 @@
 import CursorIcon from '@material-symbols/svg-400/rounded/arrow_selector_tool-fill.svg';
-import EditIcon from '@material-symbols/svg-400/rounded/format_ink_highlighter.svg';
+import EditIcon from '@material-symbols/svg-400/rounded/edit.svg';
 import ShotListIcon from '@material-symbols/svg-400/rounded/lists.svg';
-import PanIcon from '@material-symbols/svg-400/rounded/pan_tool.svg';
 import MoodBoardIcon from '@material-symbols/svg-400/rounded/photo_library.svg';
 import SplitViewIcon from '@material-symbols/svg-400/rounded/vertical_split.svg';
 import InlineViewIcon from '@material-symbols/svg-400/rounded/view_day.svg';
@@ -190,12 +189,11 @@ function DocumentPartToolbar() {
           inverted={cursorType === ''}
           onClick={() => toggleDocumentEditorCursorType('')}
         />
-        <FieldButton Icon={EditIcon} className="mx-auto" onClick={() => {}} />
         <FieldButton
-          Icon={PanIcon}
+          Icon={EditIcon}
           className="mx-auto"
-          inverted={cursorType === 'move'}
-          onClick={() => toggleDocumentEditorCursorType('move')}
+          inverted={cursorType === 'edit'}
+          onClick={() => toggleDocumentEditorCursorType('edit')}
         />
         <FieldButton
           Icon={editMode !== 'inline' ? SplitViewIcon : InlineViewIcon}
@@ -225,8 +223,27 @@ function DocumentPartToolbar() {
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  */
 function DocumentPartSceneHeader({ documentId, sceneId }) {
-  const [sceneHeading] = useSceneHeading(documentId, sceneId);
-  return <h3 className="py-5 font-bold">{sceneHeading}</h3>;
+  const isCursorEditType = useUserStore(
+    (ctx) => ctx.editor?.documentEditor?.cursorType === 'edit',
+  );
+  const [sceneHeading, setSceneHeading] = useSceneHeading(documentId, sceneId);
+  /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
+  function onChange(e) {
+    setSceneHeading(documentId, sceneId, e.target.value.toUpperCase());
+  }
+  return (
+    <h3 className="py-5 font-bold">
+      <input
+        className="w-full truncate bg-transparent uppercase outline-none"
+        type="text"
+        value={sceneHeading}
+        placeholder="INT/EXT. SCENE - DAY"
+        onChange={onChange}
+        autoCapitalize="character"
+        disabled={!isCursorEditType}
+      />
+    </h3>
+  );
 }
 
 /**
@@ -292,7 +309,7 @@ function BlockOrShotList({ documentId, sceneId, blockId, inline }) {
           {/* NOTE: Since sticky only works for relative parents, height 0 makes it act like an absolute element. */}
           <div className="sticky bottom-24 z-20 hidden h-0 group-hover:block">
             <BlockPartContentToolbar
-              className="flex -translate-y-[50%] flex-row"
+              className="pointer-events-none flex -translate-y-[50%] flex-row"
               documentId={documentId}
               sceneId={sceneId}
               blockId={blockId}>

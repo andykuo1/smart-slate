@@ -6,7 +6,11 @@ import BlockContentTextArea from '@/documentV2/BlockContentTextArea';
 import { getBlockById, getSceneCount, getSceneOrder } from '@/stores/document';
 import { createShot } from '@/stores/document/DocumentStore';
 import { useDocumentStore } from '@/stores/document/use';
-import { useCurrentCursor, useSetUserCursor } from '@/stores/user';
+import {
+  useCurrentCursor,
+  useSetUserCursor,
+  useUserStore,
+} from '@/stores/user';
 import {
   MAX_THUMBNAIL_HEIGHT,
   MAX_THUMBNAIL_WIDTH,
@@ -47,6 +51,9 @@ function Block({ documentId, sceneId, blockId, children }) {
   );
   const userCursor = useCurrentCursor();
   const setUserCursor = useSetUserCursor();
+  const isCursorEditType = useUserStore(
+    (ctx) => ctx.editor?.documentEditor?.cursorType === 'edit',
+  );
   const isLastScene = useDocumentStore(
     (ctx) =>
       getSceneOrder(ctx, documentId, sceneId) >= getSceneCount(ctx, documentId),
@@ -61,10 +68,11 @@ function Block({ documentId, sceneId, blockId, children }) {
   }
 
   function onClick() {
-    if (userCursor.blockId === blockId) {
+    if (isCursorEditType) {
+      if (userCursor.blockId !== blockId) {
+        setUserCursor(documentId, sceneId, '', '', blockId);
+      }
       setEditing(true);
-    } else {
-      setUserCursor(documentId, sceneId, '', '', blockId);
     }
   }
 

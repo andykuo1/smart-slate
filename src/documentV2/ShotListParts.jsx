@@ -160,8 +160,8 @@ export function DraggableShot({
     (ctx) => ctx.UNSAFE_getStore,
   );
   const UNSAFE_getDraggableStore = useUNSAFE_getDraggableStore();
-  const isCursorMoveType = useUserStore(
-    (ctx) => ctx.editor?.documentEditor?.cursorType === 'move',
+  const isCursorTypeMoveable = useUserStore(
+    (ctx) => ctx.editor?.documentEditor?.cursorType === 'edit',
   );
   const isActive = useUserStore((ctx) => ctx?.cursor?.shotId === shotId);
   const moveShot = useDocumentStore((ctx) => ctx.moveShot);
@@ -232,7 +232,7 @@ export function DraggableShot({
     blockId,
     shotId,
     '',
-    isCursorMoveType,
+    isCursorTypeMoveable,
     onPutDown,
     onDraggableComplete,
   );
@@ -291,7 +291,7 @@ export function DraggableShot({
         ' ' +
         (isActive ? 'bg-white' + ' ' + BarberpoleStyle.barberpole : '') +
         ' ' +
-        (isCursorMoveType ? 'cursor-grab' : 'select-none')
+        (isCursorTypeMoveable ? 'cursor-grab' : 'select-none')
       }
       containerRef={elementRef}
       handleRef={handleRef}

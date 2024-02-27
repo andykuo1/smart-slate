@@ -1,4 +1,4 @@
-/** @typedef {'move'|''} DocumentEditorCursorType */
+/** @typedef {'edit'|''} DocumentEditorCursorType */
 /** @typedef {'moodboard'|'shots'|''} DocumentEditorSplitView */
 
 export function createEditorStore() {
