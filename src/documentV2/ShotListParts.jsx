@@ -57,6 +57,7 @@ export default function ShotListParts({
         />
       ))}
       <NewShot
+        className={grid ? 'm-auto' : 'mr-auto'}
         documentId={documentId}
         sceneId={sceneId}
         blockId={lastBlockId || ''}
@@ -91,11 +92,12 @@ function ShotListItemsPerBlock({ documentId, sceneId, blockId, grid }) {
 
 /**
  * @param {object} props
+ * @param {string} [props.className]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  */
-function NewShot({ documentId, sceneId, blockId }) {
+function NewShot({ className, documentId, sceneId, blockId }) {
   const [render, click] = useAddShot(documentId, sceneId, blockId);
   const elementRef = useRef(/** @type {HTMLLIElement|null} */ (null));
   // NOTE: To be able to drag something to the end of the list.
@@ -113,7 +115,13 @@ function NewShot({ documentId, sceneId, blockId }) {
   return (
     <li
       ref={elementRef}
-      className="mx-auto aspect-video w-[1.8in] opacity-30 hover:cursor-pointer hover:opacity-100"
+      className={
+        'flex aspect-video w-[1.8in] flex-row' +
+        ' ' +
+        'opacity-30 hover:cursor-pointer hover:opacity-100' +
+        ' ' +
+        className
+      }
       onClick={click}>
       <ShotThumbnail
         className="bg-transparent text-gray-400"
