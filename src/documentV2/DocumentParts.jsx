@@ -58,7 +58,7 @@ function Document({ className, documentId, inline, split }) {
         className={
           'mx-auto py-[1in] font-mono' +
           ' ' +
-          (split ? 'w-full md:w-[80vw]' : 'max-w-[calc(6in+6em)]')
+          (split ? 'w-full md:w-[95vw]' : 'max-w-[calc(6in+6em)]')
         }>
         <DocumentPart slotLeft={<GoToSettingsButton className="mx-auto" />}>
           <div className="hover:bg-gray-100">
