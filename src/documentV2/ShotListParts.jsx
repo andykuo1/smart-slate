@@ -1,12 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { SHOT_TYPE_NEW_SHOT } from '@/components/shots/options/ShotTypeIcon';
-import { isBlockInSameScene, useShotIds } from '@/stores/document';
+import {
+  findSceneWithBlockId,
+  isBlockInSameScene,
+  useShotIds,
+} from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import {
   findDraggableElementById,
   useAsDraggableCursor,
   useAsDraggableElement,
+  useDraggableContainerId,
   useDraggableElementId,
   useIsDragging,
   useIsDraggingAny,
@@ -16,9 +20,10 @@ import {
 } from '@/stores/draggableV3';
 import { useSetUserCursor, useUserStore } from '@/stores/user';
 import { getDocumentEditorBlockViewOptions } from '@/stores/user/EditorAccessor';
-import BarberpoleStyle from '@/styles/Barberpole.module.css';
 
-import { FadedBorder, Shot, ShotPartDetail, ShotThumbnail } from './ShotParts';
+import ShotInBlockNew from '../documentV2/ShotInBlockNew';
+import ShotInLineNew from '../documentV2/ShotInLineNew';
+import { Shot } from './ShotParts';
 import { useAddShot } from './UseAddShot';
 
 /**
@@ -45,7 +50,7 @@ export default function ShotListParts({
         'grid' +
         ' ' +
         (shotListType === 'grid'
-          ? 'grid-cols-[repeat(auto-fill,minmax(min(1.8in,100%),1fr))]'
+          ? 'grid-cols-[repeat(auto-fill,minmax(min(2.5in,100%),1fr))]'
           : 'grid-cols-1') +
         ' ' +
         className
@@ -60,10 +65,11 @@ export default function ShotListParts({
         />
       ))}
       <NewShot
-        className={shotListType === 'grid' ? 'm-auto' : 'mr-auto'}
+        className={shotListType === 'grid' ? '' : 'mr-auto'}
         documentId={documentId}
         sceneId={sceneId}
         blockId={lastBlockId || ''}
+        type={shotListType === 'grid' ? 'block' : 'line'}
       />
     </ul>
   );
@@ -100,10 +106,11 @@ function ShotListItemsPerBlock({ documentId, sceneId, blockId, shotListType }) {
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
+ * @param {'cell'|'line'|'block'} props.type
  */
-function NewShot({ className, documentId, sceneId, blockId }) {
+function NewShot({ className, documentId, sceneId, blockId, type }) {
   const [render, click] = useAddShot(documentId, sceneId, blockId);
-  const elementRef = useRef(/** @type {HTMLLIElement|null} */ (null));
+  const elementRef = useRef(/** @type {HTMLFieldSetElement|null} */ (null));
   // NOTE: To be able to drag something to the end of the list.
   useAsDraggableElement(
     elementRef,
@@ -116,27 +123,36 @@ function NewShot({ className, documentId, sceneId, blockId }) {
     true,
   );
 
-  return (
-    <li
-      ref={elementRef}
-      className={
-        'flex aspect-video w-[1.8in] flex-row' +
-        ' ' +
-        'opacity-30 hover:cursor-pointer hover:opacity-100' +
-        ' ' +
-        className
-      }
-      onClick={click}>
-      <ShotThumbnail
-        className="bg-transparent text-gray-400"
-        outlineClassName="outline-dashed"
-        documentId=""
-        shotId=""
-        shotType={SHOT_TYPE_NEW_SHOT}
-      />
-      {render()}
-    </li>
-  );
+  if (type === 'cell') {
+    // TODO: Gotta add this.
+    return null;
+  } else if (type === 'block') {
+    return (
+      <ShotInBlockNew
+        containerRef={elementRef}
+        className={
+          'opacity-30 hover:cursor-pointer hover:opacity-100' + ' ' + className
+        }
+        onClick={click}>
+        {render()}
+      </ShotInBlockNew>
+    );
+  } else {
+    return (
+      <ShotInLineNew
+        containerRef={elementRef}
+        className={
+          'flex aspect-video w-[1.8in] flex-row' +
+          ' ' +
+          'opacity-30 hover:cursor-pointer hover:opacity-100' +
+          ' ' +
+          className
+        }
+        onClick={click}>
+        {render()}
+      </ShotInLineNew>
+    );
+  }
 }
 
 /**
@@ -276,17 +292,9 @@ export function DraggableShot({
     <Shot
       className={
         // NOTE: To disable default touch behavior
-        'touch-none' +
-        ' ' +
-        'flex flex-col items-center' +
-        ' ' +
-        (details ? 'sm:flex-row' : '') +
-        ' ' +
-        className
+        'touch-none' + ' ' + className
       }
       handleClassName={
-        'p-1 rounded-2xl' +
-        ' ' +
         (draggingThis
           ? 'pointer-events-none opacity-10'
           : draggingPotentiallyThis
@@ -295,30 +303,17 @@ export function DraggableShot({
         ' ' +
         (draggingOverThis ? 'outline-dashed outline-4 outline-gray-300' : '') +
         ' ' +
-        (isActive ? 'bg-white' + ' ' + BarberpoleStyle.barberpole : '') +
-        ' ' +
         (isCursorTypeMoveable ? 'cursor-grab' : 'select-none')
       }
       containerRef={elementRef}
       handleRef={handleRef}
       documentId={documentId}
+      sceneId={sceneId}
       shotId={shotId}
-      small={false}
-      slotThumbnail={
-        border === 'faded' && (
-          <FadedBorder
-            className={
-              'shadow-white' +
-              ' ' +
-              (isActive ? 'shadow-black' : 'group-hover:shadow-gray-100')
-            }
-          />
-        )
-      }>
-      {details && (
-        <ShotPartDetail documentId={documentId} shotId={shotId} small={false} />
-      )}
-    </Shot>
+      type={details ? 'line' : 'block'}
+      active={isActive}
+      editable={true}
+    />
   );
 }
 
@@ -349,6 +344,14 @@ export function DraggedShot({ documentId }) {
   );
   useAsDraggableCursor(onDraggableCursor);
   const elementId = useDraggableElementId();
+  const containerId = useDraggableContainerId();
+  const sceneId = useDocumentStore(
+    (ctx) => findSceneWithBlockId(ctx, documentId, containerId)?.sceneId,
+  );
+  const shotListType = useUserStore(
+    (ctx) =>
+      getDocumentEditorBlockViewOptions(ctx, containerId)?.shotListType || '',
+  );
 
   if (!draggingAny) {
     return null;
@@ -359,14 +362,13 @@ export function DraggedShot({ documentId }) {
       className="pointer-events-none absolute left-0 top-0 z-50 w-[1.5in] -translate-x-[50%] -translate-y-[50%] -rotate-12 font-mono">
       <Shot
         className="flex flex-col items-center"
-        handleClassName={
-          'shadow-xl rounded-2xl p-1 bg-white' +
-          ' ' +
-          BarberpoleStyle.barberpole
-        }
+        handleClassName="shadow-xl"
         documentId={documentId}
+        sceneId={sceneId || ''}
         shotId={elementId}
-        small={true}
+        type={shotListType === 'grid' ? 'block' : 'line'}
+        active={true}
+        editable={false}
       />
     </div>
   );

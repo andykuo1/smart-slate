@@ -197,7 +197,7 @@ export function findShotWithShotHash(store, documentId, shotHash) {
  * @param {import('@/stores/document/DocumentStore').ShotId} shotId
  */
 export function isShotEmpty(store, documentId, shotId) {
-  return getShotById(store, documentId, shotId)?.takeIds?.length <= 0;
+  return !(getShotById(store, documentId, shotId)?.takeIds?.length > 0);
 }
 
 /**

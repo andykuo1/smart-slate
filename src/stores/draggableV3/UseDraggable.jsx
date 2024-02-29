@@ -314,6 +314,10 @@ export function useDraggableElementId() {
   return useDraggableStore((ctx) => ctx.elementId);
 }
 
+export function useDraggableContainerId() {
+  return useDraggableStore((ctx) => ctx.containerId);
+}
+
 export function useDraggableOverElementId() {
   return useDraggableStore((ctx) => ctx.overElementId);
 }

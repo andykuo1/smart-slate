@@ -76,7 +76,7 @@ export default function ShotReferenceEditor() {
           shotType={shotType}
           letterbox={blackBox}
         />
-        <LetterboxOutline width="calc(100% - 25%)" shotType="" />
+        <LetterboxOutline width="calc(100% - 25%)" />
       </div>
       <div className="flex flex-col gap-4">
         <p className="text-center opacity-30">Drag image to re-position</p>

@@ -1,18 +1,12 @@
-import { useCallback } from 'react';
-
-import {
-  getShotTypeIcon,
-  getShotTypeText,
-} from '@/components/shots/options/ShotTypeIcon';
-import {
-  getShotById,
-  useShotDescription,
-  useShotType,
-} from '@/stores/document';
+import { getShotTypeIcon } from '@/components/shots/options/ShotTypeIcon';
+import { getShotById } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import ShadowStyle from '@/styles/Shadow.module.css';
-import { choosePlaceholderRandomly } from '@/values/PlaceholderText';
 import { MAX_THUMBNAIL_HEIGHT } from '@/values/Resolutions';
+
+import ShotInBlock from './ShotInBlock';
+import ShotInCell from './ShotInCell';
+import ShotInLine from './ShotInLine';
 
 /**
  * @param {object} props
@@ -21,10 +15,11 @@ import { MAX_THUMBNAIL_HEIGHT } from '@/values/Resolutions';
  * @param {import('react').MutableRefObject<HTMLDivElement|null>} [props.handleRef]
  * @param {string} [props.handleClassName]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
- * @param {boolean} props.small
- * @param {import('react').ReactNode} [props.slotThumbnail]
- * @param {import('react').ReactNode} [props.children]
+ * @param {'cell'|'line'|'block'} props.type
+ * @param {boolean} props.active
+ * @param {boolean} props.editable
  */
 export function Shot({
   className,
@@ -32,78 +27,46 @@ export function Shot({
   handleRef,
   handleClassName,
   documentId,
+  sceneId,
   shotId,
-  small,
-  slotThumbnail,
-  children,
+  type,
+  active,
+  editable,
 }) {
-  const shotType = useShotType(documentId, shotId);
   return (
-    <li
-      ref={containerRef}
-      className={className ?? 'flex flex-col items-center sm:flex-row'}>
-      <div
-        className={
-          'w-[1.8in]' + ' ' + (small ? 'scale-90' : '') + ' ' + handleClassName
-        }
-        ref={handleRef}>
-        <ShotThumbnail
-          className="bg-gray-200 text-gray-400"
+    <li ref={containerRef} className={className}>
+      {type === 'cell' ? (
+        <ShotInCell
+          handleRef={handleRef}
+          handleClassName={handleClassName}
           documentId={documentId}
+          sceneId={sceneId}
           shotId={shotId}
-          shotType={shotType}>
-          {slotThumbnail}
-        </ShotThumbnail>
-      </div>
-      {children}
+          active={active}
+          editable={editable}
+        />
+      ) : type === 'block' ? (
+        <ShotInBlock
+          handleRef={handleRef}
+          handleClassName={handleClassName}
+          documentId={documentId}
+          sceneId={sceneId}
+          shotId={shotId}
+          active={active}
+          editable={editable}
+        />
+      ) : (
+        <ShotInLine
+          handleRef={handleRef}
+          handleClassName={handleClassName}
+          documentId={documentId}
+          sceneId={sceneId}
+          shotId={shotId}
+          active={active}
+          editable={editable}
+        />
+      )}
     </li>
-  );
-}
-
-/**
- * @param {object} props
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
- * @param {boolean} props.small
- */
-export function ShotPartDetail({ documentId, shotId, small }) {
-  // NOTE: 0.9in is just a best guess.
-  return (
-    <div
-      className={
-        'flex-1 overflow-hidden pt-2' +
-        ' ' +
-        (small ? 'max-h-[0.5in]' : 'sm:h-[0.9in]')
-      }>
-      <ShotText documentId={documentId} shotId={shotId} />
-    </div>
-  );
-}
-
-/**
- * @param {object} props
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
- */
-export function ShotText({ documentId, shotId }) {
-  const text = useShotDescription(documentId, shotId);
-  const setShotDescription = useDocumentStore((ctx) => ctx.setShotDescription);
-
-  const onChange = useCallback(
-    /** @type {import('react').ChangeEventHandler<HTMLTextAreaElement>} */
-    function _onChange(e) {
-      setShotDescription(documentId, shotId, e.target.value);
-    },
-    [documentId, shotId, setShotDescription],
-  );
-
-  return (
-    <textarea
-      className="h-full w-full resize-none overflow-hidden bg-transparent px-2 italic outline-none"
-      value={text}
-      placeholder={choosePlaceholderRandomly(shotId)}
-      onChange={onChange}
-    />
   );
 }
 
@@ -113,7 +76,8 @@ export function ShotText({ documentId, shotId }) {
  * @param {string} [props.outlineClassName]
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
- * @param {string} [props.shotType]
+ * @param {boolean} [props.clipped]
+ * @param {import('react').ReactNode} [props.placeholder]
  * @param {import('react').ReactNode} [props.children]
  */
 export function ShotThumbnail({
@@ -121,28 +85,36 @@ export function ShotThumbnail({
   outlineClassName,
   documentId,
   shotId,
-  shotType,
+  placeholder,
+  clipped,
   children,
 }) {
   return (
     <div
       className={
-        'pointer-events-none relative aspect-video w-full overflow-hidden rounded-xl' +
+        'pointer-events-none relative aspect-video w-full overflow-hidden' +
         ' ' +
         className
       }>
       {/* Reference image */}
-      <ShotReferenceImage
-        documentId={documentId}
-        shotId={shotId}
-        shotType={shotType || ''}
-      />
+      <div
+        className="overflow-hidden bg-white"
+        style={
+          clipped
+            ? {
+                /** NOTE: Since the outline box is 100% - 25% WIDTH, then 12.5% is half that. */
+                clipPath: 'inset(12.5% 12.5% 12.5% 12.5%)',
+              }
+            : {}
+        }>
+        <ShotReferenceImage
+          documentId={documentId}
+          shotId={shotId}
+          placeholder={placeholder}
+        />
+      </div>
       {/* Outline */}
-      <LetterboxOutline
-        className={outlineClassName}
-        width="calc(100% - 25%)"
-        shotType={shotType || ''}
-      />
+      <LetterboxOutline className={outlineClassName} width="calc(100% - 25%)" />
       {children}
     </div>
   );
@@ -170,9 +142,9 @@ export function FadedBorder({ className }) {
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
- * @param {string} props.shotType
+ * @param {import('react').ReactNode} props.placeholder
  */
-export function ShotReferenceImage({ documentId, shotId, shotType }) {
+export function ShotReferenceImage({ documentId, shotId, placeholder }) {
   const src = useDocumentStore(
     (ctx) => getShotById(ctx, documentId, shotId)?.referenceImage,
   );
@@ -189,12 +161,11 @@ export function ShotReferenceImage({ documentId, shotId, shotType }) {
   const translate = `${Math.trunc(offsetX)}% ${Math.trunc(offsetY)}%`;
 
   if (!src) {
-    return <ShotReferenceImagePlaceholder shotType={shotType} />;
+    return placeholder;
   }
-
   return (
     <img
-      className="aspect-video h-full w-full"
+      className="aspect-video w-full"
       style={{
         // NOTE: AT LEAST don't crop anything by default, but also stretch as big as possible
         objectFit: 'contain',
@@ -210,7 +181,7 @@ export function ShotReferenceImage({ documentId, shotId, shotType }) {
  * @param {object} props
  * @param {string} props.shotType
  */
-function ShotReferenceImagePlaceholder({ shotType }) {
+export function ShotReferenceImagePlaceholder({ shotType }) {
   const Icon = getShotTypeIcon(shotType);
   return <Icon className="aspect-video h-full w-full fill-current py-[15%]" />;
 }
@@ -244,7 +215,7 @@ export function ShotReferenceImageWithLetterbox({
       <ShotReferenceImage
         documentId={documentId}
         shotId={shotId}
-        shotType={shotType}
+        placeholder={<ShotReferenceImagePlaceholder shotType={shotType} />}
       />
     </div>
   );
@@ -254,9 +225,8 @@ export function ShotReferenceImageWithLetterbox({
  * @param {object} props
  * @param {string} [props.className]
  * @param {string} props.width
- * @param {string} props.shotType
  */
-export function LetterboxOutline({ className, width, shotType }) {
+export function LetterboxOutline({ className, width }) {
   return (
     <div
       style={{
@@ -270,14 +240,7 @@ export function LetterboxOutline({ className, width, shotType }) {
         ShadowStyle.shadowOutline +
         ' ' +
         className
-      }>
-      {/* Shot type */}
-      <div
-        className={
-          'absolute right-1 top-0' + ' ' + ShadowStyle.shadowTextOutline
-        }>
-        {getShotTypeText(shotType)}
-      </div>
-    </div>
+      }
+    />
   );
 }
