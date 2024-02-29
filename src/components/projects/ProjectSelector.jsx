@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import AnimatedEllipsis from '@/libs/AnimatedEllipsis';
@@ -84,6 +84,13 @@ function ProjectSelectorOption({ className, documentId }) {
   const isProjectIncluded = isProjectIncludedBySyncStatus(syncStatus);
   const isProjectLoading = currentDocumentId === documentId;
   const isAnyProjectLoading = Boolean(currentDocumentId);
+
+  useEffect(() => {
+    if (currentDocumentId) {
+      console.log('[ProjectSelector] Reset current document.');
+      setUserCursor('', '', '', '');
+    }
+  }, []);
 
   const onClick = useCallback(
     function _onClick() {
