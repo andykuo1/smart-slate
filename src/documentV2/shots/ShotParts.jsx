@@ -11,7 +11,7 @@ import ShotInLine from './ShotInLine';
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
- * @param {'cell'|'line'|'block'} props.type
+ * @param {import('../ShotListParts').ShotViewVariant} props.type
  * @param {boolean} props.active
  * @param {boolean} props.editable
  */

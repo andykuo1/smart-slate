@@ -21,7 +21,7 @@ import { Shot } from './ShotParts';
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
  * @param {import('@/stores/document/DocumentStore').ShotId} props.shotId
- * @param {boolean} props.details
+ * @param {import('../ShotListParts').ShotViewVariant} props.type
  * @param {'horizontal'|'vertical'} props.direction
  */
 export default function ShotForDraggableShotList({
@@ -30,10 +30,9 @@ export default function ShotForDraggableShotList({
   sceneId,
   blockId,
   shotId,
-  details,
+  type,
   direction,
 }) {
-  const isActive = useUserStore((ctx) => ctx?.cursor?.shotId === shotId);
   const { elementRef, handleRef, handleClassName } = useShotDraggableHandler(
     documentId,
     sceneId,
@@ -44,6 +43,8 @@ export default function ShotForDraggableShotList({
 
   const setShotEditorShotId = useUserStore((ctx) => ctx.setShotEditorShotId);
   const setUserCursor = useSetUserCursor();
+
+  const isActive = useUserStore((ctx) => ctx?.cursor?.shotId === shotId);
 
   const onClick = useCallback(
     function _onClick() {
@@ -79,7 +80,7 @@ export default function ShotForDraggableShotList({
       documentId={documentId}
       sceneId={sceneId}
       shotId={shotId}
-      type={details ? 'line' : 'block'}
+      type={type}
       active={isActive}
       editable={true}
     />

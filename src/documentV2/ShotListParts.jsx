@@ -3,6 +3,13 @@ import { useRef } from 'react';
 import { useShotIds } from '@/stores/document';
 import { useAsDraggableElement } from '@/stores/draggableV3';
 
+import {
+  getDragDirectionByShotListType,
+  getNewShotClassNameByShotListType,
+  getShotMarginClassNameByShotListType,
+  getShotViewVariantByShotListType,
+  getULClassNameByShotListType,
+} from './ShotListType';
 import { useAddShot } from './UseAddShot';
 import ShotForDraggableShotList from './shots/ShotForDraggableShotList';
 import ShotInBlockNew from './shots/ShotInBlockNew';
@@ -53,61 +60,6 @@ export default function ShotListParts({
   );
 }
 
-/**
- * @param {import('@/stores/user/EditorStore').BlockViewShotListType} shotListType
- */
-function getULClassNameByShotListType(shotListType) {
-  switch (shotListType) {
-    case 'list':
-      return 'grid-cols-1';
-    case '':
-    case 'grid':
-    default:
-      return 'grid-cols-[repeat(auto-fill,minmax(min(2.5in,100%),1fr))]';
-  }
-}
-
-/**
- * @param {import('@/stores/user/EditorStore').BlockViewShotListType} shotListType
- */
-function getNewShotClassNameByShotListType(shotListType) {
-  switch (shotListType) {
-    case 'list':
-      return 'mr-auto';
-    case '':
-    case 'grid':
-    default:
-      return '';
-  }
-}
-
-/**
- * @param {import('@/stores/user/EditorStore').BlockViewShotListType} shotListType
- * @returns {ShotViewVariant}
- */
-export function getShotViewVariantByShotListType(shotListType) {
-  switch (shotListType) {
-    case 'list':
-      return 'line';
-    case '':
-    case 'grid':
-    default:
-      return 'block';
-  }
-}
-
-/**
- * @param {import('@/stores/user/EditorStore').BlockViewShotListType} shotListType
- */
-export function getDragDirectionByShotListType(shotListType) {
-  switch (shotListType) {
-    case 'list':
-      return 'vertical';
-    default:
-      return 'horizontal';
-  }
-}
-
 export const NEW_ELEMENT_ID = '__NEW__';
 
 /**
@@ -122,11 +74,12 @@ function ShotListItemsPerBlock({ documentId, sceneId, blockId, shotListType }) {
   return shotIds.map((shotId) => (
     <ShotForDraggableShotList
       key={shotId}
+      className={getShotMarginClassNameByShotListType(shotListType)}
       documentId={documentId}
       sceneId={sceneId}
       blockId={blockId}
       shotId={shotId}
-      details={shotListType === 'list'}
+      type={getShotViewVariantByShotListType(shotListType)}
       direction={getDragDirectionByShotListType(shotListType)}
     />
   ));

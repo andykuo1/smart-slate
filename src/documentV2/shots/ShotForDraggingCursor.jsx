@@ -11,7 +11,7 @@ import {
 import { useUserStore } from '@/stores/user';
 import { getDocumentEditorBlockViewOptions } from '@/stores/user/EditorAccessor';
 
-import { getShotViewVariantByShotListType } from '../ShotListParts';
+import { getShotViewVariantByShotListType } from '../ShotListType';
 import { Shot } from './ShotParts';
 
 /**
