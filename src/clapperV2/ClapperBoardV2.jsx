@@ -49,11 +49,11 @@ import {
 } from '@/stores/user';
 import SelectStyle from '@/styles/Select.module.css';
 
-import ClapperCameraNameField from './ClapperCameraNameField';
-import ClapperDirectorNameField from './ClapperDirectorNameField';
-import ClapperInput from './ClapperInput';
-import ClapperProductionTitleField from './ClapperProductionTitleField';
-import ClapperQRCodeField from './ClapperQRCodeField';
+import ClapperCameraNameField from '../clapper/ClapperCameraNameField';
+import ClapperDirectorNameField from '../clapper/ClapperDirectorNameField';
+import ClapperInput from '../clapper/ClapperInput';
+import ClapperProductionTitleField from '../clapper/ClapperProductionTitleField';
+import ClapperQRCodeField from '../clapper/ClapperQRCodeField';
 
 export default function ClapperBoardV2() {
   const { documentId, sceneId, shotId, takeId } =

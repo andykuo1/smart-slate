@@ -1,4 +1,4 @@
-import ClapperBoardV2 from '@/clapper/ClapperBoardV2';
+import ClapperBoardV2 from '@/clapperV2/ClapperBoardV2';
 import Drawer from '@/drawer/Drawer';
 import { useGoogleDriveAutoSync } from '@/libs/googleapi/sync/UseGoogleDriveAutoSync';
 import RecorderBooth from '@/recorder/RecorderBooth';
