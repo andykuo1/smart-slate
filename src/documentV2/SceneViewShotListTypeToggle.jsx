@@ -5,25 +5,25 @@ import ShotImageIcon from '@material-symbols/svg-400/rounded/window.svg';
 
 import FieldButton from '@/fields/FieldButton';
 import { useUserStore } from '@/stores/user';
-import { getDocumentEditorBlockViewOptions } from '@/stores/user/EditorAccessor';
+import { getDocumentEditorSceneViewOptions } from '@/stores/user/EditorAccessor';
 
 /**
  * @param {object} props
  * @param {string} [props.className]
- * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
+ * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {import('react').MouseEventHandler<HTMLButtonElement>} [props.onClick]
  */
-export default function BlockViewShotListTypeToggle({
+export default function SceneViewShotListTypeToggle({
   className,
-  blockId,
+  sceneId,
   onClick,
 }) {
   const shotListType = useUserStore(
     (ctx) =>
-      getDocumentEditorBlockViewOptions(ctx, blockId)?.shotListType || '',
+      getDocumentEditorSceneViewOptions(ctx, sceneId)?.shotListType || '',
   );
   const setShotListType = useUserStore(
-    (ctx) => ctx.setDocumentEditorBlockViewShotListType,
+    (ctx) => ctx.setDocumentEditorSceneViewShotListType,
   );
 
   /**
@@ -31,9 +31,9 @@ export default function BlockViewShotListTypeToggle({
    */
   function handleClick(e) {
     if (shotListType !== 'list') {
-      setShotListType(blockId, 'list');
+      setShotListType(sceneId, 'list');
     } else {
-      setShotListType(blockId, 'grid');
+      setShotListType(sceneId, 'grid');
     }
     onClick?.(e);
   }
@@ -53,9 +53,9 @@ export default function BlockViewShotListTypeToggle({
  */
 function getShotListTypeIcon(shotListType) {
   switch (shotListType) {
-    case '':
     case 'list':
       return ShotTextIcon;
+    case '':
     case 'grid':
       return ShotImageIcon;
     case 'group':

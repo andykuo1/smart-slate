@@ -6,7 +6,10 @@ import {
   ShotGroupPart,
   ShotTypePart,
 } from './ShotInBaseParts';
-import { ShotReferenceImagePlaceholder, ShotThumbnail } from './ShotParts';
+import {
+  ShotReferenceImagePlaceholder,
+  ShotThumbnail,
+} from './parts/ShotParts';
 
 /**
  * @param {object} props

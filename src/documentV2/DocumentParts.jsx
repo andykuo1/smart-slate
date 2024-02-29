@@ -24,10 +24,16 @@ import {
 } from '@/stores/document/use';
 import { useAsDraggableRoot } from '@/stores/draggableV3';
 import { useUserStore } from '@/stores/user';
+import {
+  getDocumentEditorBlockViewOptions,
+  getDocumentEditorSceneViewOptions,
+} from '@/stores/user/EditorAccessor';
 
 import BlockParts, { BlockPartContentToolbar } from './BlockParts';
 import BlockViewShotListTypeToggle from './BlockViewShotListTypeToggle';
-import ShotListParts, { DraggedShot } from './ShotListParts';
+import SceneViewShotListTypeToggle from './SceneViewShotListTypeToggle';
+import ShotListParts from './ShotListParts';
+import ShotForDraggingCursor from './shots/ShotForDraggingCursor';
 
 /**
  * @param {object} props
@@ -67,7 +73,7 @@ function Document({ className, documentId, inline, split }) {
         </DocumentPart>
         <DocumentScenes documentId={documentId} inline={inline} />
       </article>
-      <DraggedShot documentId={documentId} />
+      <ShotForDraggingCursor documentId={documentId} />
       <DocumentPartToolbar />
     </div>
   );
@@ -80,7 +86,9 @@ function Document({ className, documentId, inline, split }) {
  */
 function SceneWiseDocumentPartShotList({ documentId, sceneId }) {
   const blockIds = useBlockIds(documentId, sceneId);
-  const lastBlockId = blockIds.at(-1);
+  const shotListType = useUserStore(
+    (ctx) => getDocumentEditorSceneViewOptions(ctx, sceneId)?.shotListType,
+  );
   return (
     <>
       <div className="relative h-full overflow-y-auto">
@@ -89,15 +97,19 @@ function SceneWiseDocumentPartShotList({ documentId, sceneId }) {
             documentId={documentId}
             sceneId={sceneId}
             blockIds={blockIds}
+            shotListType={shotListType}
           />
         </figure>
       </div>
-      <ShotListPartShotListToolbar
-        className="absolute right-0 top-0 flex w-[4rem] translate-x-[100%] flex-col items-center px-2 py-1 text-gray-400"
-        documentId={documentId}
-        sceneId={sceneId}
-        blockId={lastBlockId || ''}
-      />
+      {/* ShotList Toolbar */}
+      <div className="absolute right-0 top-0 flex w-[4rem] translate-x-[100%] flex-col items-center px-2 py-1 text-gray-400">
+        <SceneViewShotListTypeToggle className="mx-auto" sceneId={sceneId} />
+        <SettingsSceneShotsRenumberButton
+          className="mx-auto"
+          documentId={documentId}
+          sceneId={sceneId}
+        />
+      </div>
     </>
   );
 }
@@ -289,6 +301,9 @@ function ShotListPartShotListHeader({ documentId, sceneId, blockId }) {
  */
 function BlockOrShotList({ documentId, sceneId, blockId, inline }) {
   const blockShotCount = useBlockShotCount(documentId, blockId);
+  const shotListType = useUserStore(
+    (ctx) => getDocumentEditorBlockViewOptions(ctx, blockId)?.shotListType,
+  );
   if (!inline || blockShotCount <= 0) {
     return (
       <BlockParts documentId={documentId} sceneId={sceneId} blockId={blockId} />
@@ -308,13 +323,20 @@ function BlockOrShotList({ documentId, sceneId, blockId, inline }) {
             documentId={documentId}
             sceneId={sceneId}
             blockIds={[blockId]}
+            shotListType={shotListType}
           />
-          <ShotListPartShotListToolbar
-            className="absolute right-0 top-0 flex w-[4rem] translate-x-[100%] flex-col items-center px-2 py-1 text-gray-400 opacity-0 group-hover:opacity-100"
-            documentId={documentId}
-            sceneId={sceneId}
-            blockId={blockId}
-          />
+          {/* ShotList Toolbar */}
+          <div className="absolute right-0 top-0 flex w-[4rem] translate-x-[100%] flex-col items-center px-2 py-1 text-gray-400 opacity-0 group-hover:opacity-100">
+            <BlockViewShotListTypeToggle
+              className="mx-auto"
+              blockId={blockId}
+            />
+            <SettingsSceneShotsRenumberButton
+              className="mx-auto"
+              documentId={documentId}
+              sceneId={sceneId}
+            />
+          </div>
           {/* NOTE: Since sticky only works for relative parents, height 0 makes it act like an absolute element. */}
           <div className="sticky bottom-24 z-20 hidden h-0 group-hover:block">
             <BlockPartContentToolbar
@@ -328,31 +350,6 @@ function BlockOrShotList({ documentId, sceneId, blockId, inline }) {
         </figure>
       </BlockParts>
     </>
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} [props.className]
- * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
- * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
- * @param {import('@/stores/document/DocumentStore').BlockId} props.blockId
- */
-function ShotListPartShotListToolbar({
-  className,
-  documentId,
-  sceneId,
-  blockId,
-}) {
-  return (
-    <div className={className}>
-      <BlockViewShotListTypeToggle className="mx-auto" blockId={blockId} />
-      <SettingsSceneShotsRenumberButton
-        className="mx-auto"
-        documentId={documentId}
-        sceneId={sceneId}
-      />
-    </div>
   );
 }
 

@@ -2,6 +2,7 @@ import { zi, ziget } from '../ZustandImmerHelper';
 import {
   createBlockViewOptions,
   createDocumentEditorOptions,
+  createSceneViewOptions,
 } from './EditorStore';
 
 /**
@@ -16,6 +17,10 @@ export function createDispatchForEditor(set, get) {
     setDocumentEditorBlockViewShotListType: zi(
       set,
       setDocumentEditorBlockViewShotListType,
+    ),
+    setDocumentEditorSceneViewShotListType: zi(
+      set,
+      setDocumentEditorSceneViewShotListType,
     ),
   };
 }
@@ -82,4 +87,38 @@ function resolveBlockViewOption(store, blockId) {
     blockViews[blockId] = blockViewOptions;
   }
   return blockViewOptions;
+}
+
+/**
+ * @param {import('./UserStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+ * @param {import('./EditorStore').BlockViewShotListType} shotListType
+ */
+function setDocumentEditorSceneViewShotListType(store, sceneId, shotListType) {
+  let prev = resolveSceneViewOption(store, sceneId);
+  prev.shotListType = shotListType;
+}
+
+/**
+ * @param {import('./UserStore').Store} store
+ * @param {import('@/stores/document/DocumentStore').SceneId} sceneId
+ */
+function resolveSceneViewOption(store, sceneId) {
+  let documentEditor = store.editor.documentEditor;
+  if (!documentEditor) {
+    documentEditor = createDocumentEditorOptions();
+    store.editor.documentEditor = documentEditor;
+  }
+  let sceneViews = documentEditor.sceneViews;
+  if (!sceneViews) {
+    sceneViews = {};
+    documentEditor.sceneViews = sceneViews;
+  }
+  /** @type {import('./EditorStore').SceneViewOptions} */
+  let sceneViewOptions = sceneViews[sceneId];
+  if (!sceneViewOptions) {
+    sceneViewOptions = createSceneViewOptions();
+    sceneViews[sceneId] = sceneViewOptions;
+  }
+  return sceneViewOptions;
 }

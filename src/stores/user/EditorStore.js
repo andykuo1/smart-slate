@@ -2,6 +2,8 @@
 /** @typedef {'grid'|'list'|'group'|''} BlockViewShotListType */
 /** @typedef {'faded'|'cutoff'|''} BlockViewShotBorderType */
 
+/** @typedef {ReturnType<createSceneViewOptions>} SceneViewOptions */
+
 /** @typedef {ReturnType<createDocumentEditorOptions>} DocumentEditorOptions */
 /** @typedef {'edit'|''} DocumentEditorCursorType */
 /** @typedef {'moodboard'|'shots'|''} DocumentEditorSplitView */
@@ -23,6 +25,8 @@ export function createDocumentEditorOptions() {
     splitView: '',
     /** @type {Record<import('@/stores/document/DocumentStore').BlockId, BlockViewOptions>} */
     blockViews: {},
+    /** @type {Record<import('@/stores/document/DocumentStore').SceneId, SceneViewOptions} */
+    sceneViews: {},
   };
 }
 
@@ -37,5 +41,12 @@ export function createShotEditorOptions() {
   return {
     /** @type {import('@/stores/document/DocumentStore').ShotId} */
     shotId: '',
+  };
+}
+
+export function createSceneViewOptions() {
+  return {
+    /** @type {BlockViewShotListType} */
+    shotListType: '',
   };
 }

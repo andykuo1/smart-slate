@@ -4,9 +4,9 @@ import { useDocumentStore } from '@/stores/document/use';
 import ShadowStyle from '@/styles/Shadow.module.css';
 import { MAX_THUMBNAIL_HEIGHT } from '@/values/Resolutions';
 
-import ShotInBlock from './ShotInBlock';
-import ShotInCell from './ShotInCell';
-import ShotInLine from './ShotInLine';
+import ShotInBlock from '../ShotInBlock';
+import ShotInCell from '../ShotInCell';
+import ShotInLine from '../ShotInLine';
 
 /**
  * @param {object} props

@@ -24,7 +24,10 @@ import {
 import DialogStyle from '@/styles/Dialog.module.css';
 import { MAX_THUMBNAIL_HEIGHT } from '@/values/Resolutions';
 
-import { LetterboxOutline, ShotReferenceImageWithLetterbox } from './ShotParts';
+import {
+  LetterboxOutline,
+  ShotReferenceImageWithLetterbox,
+} from './shots/parts/ShotParts';
 
 // NOTE: A good-enough guess at the scaling-to-translation factor
 const REPOSITION_DELTA_MULT = 0.2;
