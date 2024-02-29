@@ -1,5 +1,8 @@
+import { Tooltip, TooltipAnchor, TooltipProvider } from '@ariakit/react';
+
 import DragIndicatorIcon from '@material-symbols/svg-400/rounded/drag_indicator.svg';
 
+import { useShotType } from '@/stores/document';
 import { useUserStore } from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 
@@ -8,6 +11,7 @@ import {
   ShotGroupPart,
   ShotTypePart,
 } from './ShotInBaseParts';
+import { ShotReferenceImagePlaceholder, ShotThumbnail } from './ShotParts';
 import ShotTextArea from './ShotTextArea';
 
 /**
@@ -36,6 +40,7 @@ export default function ShotInLine({
   const isCursorTypeMoveable = useUserStore(
     (ctx) => ctx.editor?.documentEditor?.cursorType === 'edit',
   );
+  const shotType = useShotType(documentId, shotId);
   return (
     <fieldset
       className={
@@ -47,22 +52,33 @@ export default function ShotInLine({
       }>
       {/* NOTE: height-12 from 2 line-heights of text. */}
       {/* NOTE: width-9rem from max chars (noted below). */}
-      <legend
-        className={
-          'relative float-left grid w-[9rem] grid-cols-2 grid-rows-2 overflow-hidden whitespace-nowrap bg-white text-center'
-        }>
-        <SceneShotNumberPart
-          documentId={documentId}
-          sceneId={sceneId}
-          shotId={shotId}
-        />
-        <ShotTypePart documentId={documentId} shotId={shotId} />
-        <ShotGroupPart
-          className="col-span-2"
-          documentId={documentId}
-          shotId={shotId}
-        />
-      </legend>
+      <TooltipProvider showTimeout={0} placement="right">
+        <legend
+          className={
+            'relative float-left grid w-[9rem] grid-cols-2 grid-rows-2 overflow-hidden whitespace-nowrap bg-white text-center'
+          }>
+          <TooltipAnchor>
+            <SceneShotNumberPart
+              documentId={documentId}
+              sceneId={sceneId}
+              shotId={shotId}
+            />
+          </TooltipAnchor>
+          <ShotTypePart documentId={documentId} shotId={shotId} />
+          <ShotGroupPart
+            className="col-span-2"
+            documentId={documentId}
+            shotId={shotId}
+          />
+        </legend>
+        <Tooltip className="z-50 aspect-video w-[3in]">
+          <ShotThumbnail
+            documentId={documentId}
+            shotId={shotId}
+            placeholder={<ShotReferenceImagePlaceholder shotType={shotType} />}
+          />
+        </Tooltip>
+      </TooltipProvider>
       <div
         ref={handleRef}
         className={
