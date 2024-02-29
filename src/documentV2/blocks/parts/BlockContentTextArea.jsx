@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
+import { useFormattedTextState } from '../../UseTextToBlockSerializer';
 import BlockContentTextAreaStyle from './BlockContentTextArea.module.css';
-import { useFormattedTextState } from './UseTextToBlockSerializer';
 
 /**
  * @param {object} props

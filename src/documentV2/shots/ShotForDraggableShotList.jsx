@@ -12,7 +12,7 @@ import {
 import { useSetUserCursor, useUserStore } from '@/stores/user';
 
 import { NEW_ELEMENT_ID } from '../ShotListParts';
-import { Shot } from './parts/ShotParts';
+import { Shot } from './ShotParts';
 
 /**
  * @param {object} props

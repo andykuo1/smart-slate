@@ -11,11 +11,9 @@ import {
   ShotGroupPart,
   ShotTypePart,
 } from './ShotInBaseParts';
-import {
-  ShotReferenceImagePlaceholder,
-  ShotThumbnail,
-} from './parts/ShotParts';
+import ShotReferenceImagePlaceholder from './parts/ShotReferenceImagePlaceholder';
 import ShotTextArea from './parts/ShotTextArea';
+import ShotThumbnail from './parts/ShotThumbnail';
 
 /**
  * @param {object} props

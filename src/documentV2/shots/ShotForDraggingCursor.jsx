@@ -12,7 +12,7 @@ import { useUserStore } from '@/stores/user';
 import { getDocumentEditorBlockViewOptions } from '@/stores/user/EditorAccessor';
 
 import { getShotViewVariantByShotListType } from '../ShotListParts';
-import { Shot } from './parts/ShotParts';
+import { Shot } from './ShotParts';
 
 /**
  * @param {object} props

@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { blobToDataURI } from '@/components/shots/options/ShotThumbnailHelper';
 import ShotListAddButton from '@/components/shots/shotlist/ShotListAddButton';
-import BlockContentTextArea from '@/documentV2/BlockContentTextArea';
 import { getBlockById, getSceneCount, getSceneOrder } from '@/stores/document';
 import { createShot } from '@/stores/document/DocumentStore';
 import { useDocumentStore } from '@/stores/document/use';
@@ -17,8 +16,9 @@ import {
   MAX_THUMBNAIL_WIDTH,
 } from '@/values/Resolutions';
 
-import { NEW_ELEMENT_ID } from './ShotListParts';
-import { useTextToBlockSerializer } from './UseTextToBlockSerializer';
+import { NEW_ELEMENT_ID } from '../ShotListParts';
+import { useTextToBlockSerializer } from '../UseTextToBlockSerializer';
+import BlockContentTextArea from './parts/BlockContentTextArea';
 
 /**
  * @param {object} props

@@ -29,10 +29,10 @@ import {
   getDocumentEditorSceneViewOptions,
 } from '@/stores/user/EditorAccessor';
 
-import BlockParts, { BlockPartContentToolbar } from './BlockParts';
 import BlockViewShotListTypeToggle from './BlockViewShotListTypeToggle';
 import SceneViewShotListTypeToggle from './SceneViewShotListTypeToggle';
 import ShotListParts from './ShotListParts';
+import BlockParts, { BlockPartContentToolbar } from './blocks/BlockParts';
 import ShotForDraggingCursor from './shots/ShotForDraggingCursor';
 
 /**
