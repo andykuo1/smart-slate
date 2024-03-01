@@ -25,7 +25,7 @@ export function createDocumentEditorOptions() {
     splitView: '',
     /** @type {Record<import('@/stores/document/DocumentStore').BlockId, BlockViewOptions>} */
     blockViews: {},
-    /** @type {Record<import('@/stores/document/DocumentStore').SceneId, SceneViewOptions} */
+    /** @type {Record<import('@/stores/document/DocumentStore').SceneId, SceneViewOptions>} */
     sceneViews: {},
   };
 }
