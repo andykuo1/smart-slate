@@ -145,7 +145,7 @@ export function formatShotNumber(shotNumber) {
  * @param {boolean} [abbreviated]
  */
 export function formatTakeNumber(takeNumber, abbreviated = false) {
-  if (takeNumber <= 0) {
+  if (!Number.isFinite(takeNumber) || takeNumber <= 0) {
     return '--';
   }
   if (abbreviated) {
@@ -208,8 +208,8 @@ export function numToChar(num) {
   }
   let result = '';
   if (num > CHAR_CODE_RANGE) {
-    result = numToChar(Math.floor(num / CHAR_CODE_RANGE));
-    num = num % CHAR_CODE_RANGE;
+    result = numToChar(Math.floor((num - 1) / CHAR_CODE_RANGE));
+    num = ((num - 1) % CHAR_CODE_RANGE) + 1;
   }
   return result + String.fromCharCode(FIRST_CHAR_CODE + (num - 1));
 }

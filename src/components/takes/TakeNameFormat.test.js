@@ -78,6 +78,11 @@ test('formatShotNumber is correct', () => {
   expect(formatShotNumber(-1)).toBe('Z');
   expect(formatShotNumber(1)).toBe('A');
   expect(formatShotNumber(10)).toBe('J');
+  expect(formatShotNumber(26)).toBe('Z');
+  expect(formatShotNumber(27)).toBe('AA');
+  expect(formatShotNumber(51)).toBe('AY');
+  expect(formatShotNumber(52)).toBe('AZ');
+  expect(formatShotNumber(53)).toBe('BA');
   expect(formatShotNumber(99)).toBe('CU');
 });
 
