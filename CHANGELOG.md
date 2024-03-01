@@ -3,6 +3,8 @@
 - Add auto-sync when opening local project if already connected to GoogleDrive
 - Add forced uppercase for scene headings in FDX imports
 
+- Fix reset for project loading
+
 # 0.1.17
 
 - Add PDF viewer (for scene or document)

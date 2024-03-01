@@ -45,7 +45,7 @@ export default function DocumentParts({ documentId }) {
   const inline = editMode === 'inline';
   return (
     <div className="flex h-full w-full flex-col">
-      <Document documentId={documentId} inline={inline} split={!inline} />
+      <Document documentId={documentId} inline={true} split={!inline} />
     </div>
   );
 }
@@ -71,7 +71,7 @@ function Document({ className, documentId, inline, split }) {
             <DocumentTitle documentId={documentId} />
           </div>
         </DocumentPart>
-        <DocumentScenes documentId={documentId} inline={inline} />
+        <DocumentScenes documentId={documentId} inline={inline} split={split} />
       </article>
       <ShotForDraggingCursor documentId={documentId} />
       <DocumentPartToolbar />
@@ -118,8 +118,9 @@ function SceneWiseDocumentPartShotList({ documentId, sceneId }) {
  * @param {object} props
  * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
  * @param {boolean} props.inline
+ * @param {boolean} props.split
  */
-function DocumentScenes({ documentId, inline }) {
+function DocumentScenes({ documentId, inline, split }) {
   const sceneIds = useSceneIdsInDocumentOrder(documentId);
   return (
     <div className="grid grid-cols-1">
@@ -129,7 +130,7 @@ function DocumentScenes({ documentId, inline }) {
           documentId={documentId}
           sceneId={sceneId}
           inline={inline}
-          split={!inline}
+          split={split}
         />
       ))}
     </div>

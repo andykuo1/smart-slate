@@ -35,7 +35,7 @@ export const MAX_PROJECT_ID_LENGTH = 16;
  * @param {string} projectId
  */
 export function formatProjectId(projectId) {
-  let result = projectId?.trim();
+  let result = projectId?.trim?.();
   if (!result) {
     // NOTE: Title was empty.
     return 'UNTITLED';

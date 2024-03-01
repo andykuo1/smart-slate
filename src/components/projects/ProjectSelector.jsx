@@ -90,7 +90,8 @@ function ProjectSelectorOption({ className, documentId }) {
       console.log('[ProjectSelector] Reset current document.');
       setUserCursor('', '', '', '');
     }
-  }, []);
+    // NOTE: Purposefully, this should only run once!
+  }, [setUserCursor]);
 
   const onClick = useCallback(
     function _onClick() {

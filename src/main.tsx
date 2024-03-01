@@ -4,6 +4,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import AsyncTestPage from '@/pages/AsyncTestPage';
 import AsyncViewPage from '@/pages/AsyncViewPage';
+import ClapperPage from '@/pages/ClapperPage';
 import EditPage from '@/pages/EditPage';
 import EditPageV2 from '@/pages/EditPageV2';
 import ErrorPage from '@/pages/ErrorPage';
@@ -83,6 +84,11 @@ const router = createBrowserRouter(
     {
       path: '/rename',
       element: <RenamePage />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: '/clap',
+      element: <ClapperPage />,
       errorElement: <ErrorPage />,
     },
   ],
