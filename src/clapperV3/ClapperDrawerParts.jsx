@@ -1,4 +1,7 @@
+import { useNavigate } from 'react-router-dom';
+
 import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
+import HomeIcon from '@material-symbols/svg-400/rounded/home.svg';
 
 import {
   formatProjectId,
@@ -26,8 +29,17 @@ import {
 } from '@/stores/clapper/cursor';
 
 export default function ClapperDrawerParts() {
+  const navigate = useNavigate();
+  const focusClapper = useClapperCursorDispatch((ctx) => ctx.focusClapper);
+
+  function onHomeClick() {
+    navigate('/');
+    focusClapper('');
+  }
+
   return (
     <div className="flex flex-col gap-4 p-4">
+      <FieldButton className="mr-auto" Icon={HomeIcon} onClick={onHomeClick} />
       <ClapperSelector />
       <hr />
       <ClapperProjectIdInput />
