@@ -10,6 +10,7 @@ import FieldInput from '@/fields/FieldInput';
 import FieldSelect from '@/fields/FieldSelect';
 import {
   findClapBySceneShotTakeNumber,
+  getClapById,
   getClapperById,
   getShotHashById,
   useClapperDispatch,
@@ -177,11 +178,15 @@ function ShotHashListItem({ clapperId, shotHashId }) {
         nextTakeNumber - 1,
       )?.clapId,
   );
+  const timestampMillis = useClapperStore(
+    (ctx) => getClapById(ctx, clapperId, clapId || '')?.timestampMillis,
+  );
+  const dateString = new Date(timestampMillis).toLocaleString();
   return (
     <li
       className="select-none px-2 hover:bg-gray-300"
       onClick={() => focusClap(clapperId, clapId || '')}>
-      Shot {sceneShotNumber} - {}
+      Shot {sceneShotNumber} - {dateString}
     </li>
   );
 }
