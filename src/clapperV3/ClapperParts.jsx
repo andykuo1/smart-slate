@@ -14,28 +14,28 @@ import {
   getClapById,
   getClapperDetailsById,
   getSlateById,
-  useClapComments,
   useClapPrintRating,
   useClapQRCodeKey,
   useClapperDispatch,
   useClapperProductionTitle,
   useClapperStore,
 } from '@/stores/clapper';
-import { createClap } from '@/stores/clapper/Store';
 import {
   useClapperCursorClapId,
   useClapperCursorDispatch,
-  useClapperCursorRollName,
   useClapperCursorSceneNumber,
   useClapperCursorShotNumber,
+  useClapperCursorSlateId,
 } from '@/stores/clapper/cursor';
 import {
   useClapperSettingsBlackboard,
   useClapperSettingsStore,
 } from '@/stores/clapper/settings';
 
+import { useClapCapture } from './parts/ClapCaptureParts';
+import ClapCommentParts from './parts/ClapCommentParts';
 import ClapFinderParts from './parts/ClapFinderParts';
-import ClapperLabel from './parts/ClapperLabel';
+import ClapRollParts from './parts/ClapRollParts';
 
 /**
  * @param {object} props
@@ -44,9 +44,8 @@ import ClapperLabel from './parts/ClapperLabel';
 export default function ClapperParts({ clapperId }) {
   const blackboard = useClapperSettingsBlackboard();
 
-  const finalizeClap = useClapperDispatch((ctx) => ctx.finalizeClap);
-
   const clapId = useClapperCursorClapId();
+  const slateId = useClapperCursorSlateId();
 
   const cursorSceneNumber = useClapperCursorSceneNumber();
   const clapSceneNumber = useClapperStore(
@@ -59,16 +58,6 @@ export default function ClapperParts({ clapperId }) {
     (ctx) => getClapById(ctx, clapperId, clapId)?.shotNumber ?? 0,
   );
   const shotNumber = clapId ? clapShotNumber : cursorShotNumber;
-
-  const clapRollName = useClapperStore(
-    (ctx) => getClapById(ctx, clapperId, clapId)?.rollName ?? '',
-  );
-  const nextRollName = useClapperCursorRollName();
-  const rollName = clapId ? clapRollName : nextRollName;
-  const changeRollName = useClapperDispatch((ctx) => ctx.changeClapRollName);
-  const changeNextRollName = useClapperCursorDispatch(
-    (ctx) => ctx.changeRollName,
-  );
 
   const slate = useClapperStore((ctx) =>
     findSlateBySceneShotNumber(ctx, clapperId, sceneNumber, shotNumber),
@@ -84,11 +73,6 @@ export default function ClapperParts({ clapperId }) {
     (ctx) => ctx.toggleClapPrintRating,
   );
 
-  const comments = useClapComments(clapperId, clapId);
-  const changeClapComments = useClapperDispatch(
-    (ctx) => ctx.changeClapComments,
-  );
-
   const qrCodeKey = useClapQRCodeKey(clapperId, clapId);
   const focusClap = useClapperCursorDispatch((ctx) => ctx.focusClap);
 
@@ -101,28 +85,15 @@ export default function ClapperParts({ clapperId }) {
   );
 
   function onNewTakeClick() {
-    focusClap(clapperId, '');
+    focusClap(clapperId, slateId, '');
   }
 
+  const capture = useClapCapture();
   function onQRCodeClick() {
     if (clapId) {
-      // NOTE: Clap already exists, so qr code must also be generated!
       return;
     }
-    let clap = createClap();
-    finalizeClap(clapperId, sceneNumber, shotNumber, rollName, clap);
-    focusClap(clapperId, clap.clapId);
-  }
-
-  /**
-   * @param {string} value
-   */
-  function onRollNameChange(value) {
-    if (clapId) {
-      changeRollName(clapperId, clapId, value);
-    }
-    // Always change the buffered value.
-    changeNextRollName(value);
+    capture(clapperId, slateId);
   }
 
   const portraitStyle = 'portrait:flex portrait:flex-col';
@@ -158,8 +129,7 @@ export default function ClapperParts({ clapperId }) {
           clapperId={clapperId}
           slateId={slate?.slateId ?? ''}
           sceneNumber={sceneNumber}
-          shotNumber={shotNumber}
-          shotHash={slate?.string || '----'}
+          shotHash={slate?.shotHash || '----'}
           takeNumber={clapId ? takeNumber : nextTakeNumber}
           disabled={!clapperId}
         />
@@ -168,18 +138,11 @@ export default function ClapperParts({ clapperId }) {
           <fieldset className="mx-auto flex w-full flex-row gap-4 overflow-hidden rounded-xl border-2 px-4 font-mono">
             <ClapperDateField />
             <ul className="my-auto flex flex-1 flex-col items-center text-[1.5vmin]"></ul>
-            <ClapperRollField value={rollName} onChange={onRollNameChange} />
+            <ClapRollParts clapperId={clapperId} clapId={clapId} />
           </fieldset>
           <div className="flex w-full flex-1 flex-row gap-1 short:hidden">
             <div className="flex w-[calc(100%-4em)] flex-col">
-              <ClapperCommentField
-                className="flex-1"
-                value={comments}
-                onChange={(e) =>
-                  changeClapComments(clapperId, clapId, e.target.value)
-                }
-                disabled={!clapperId}
-              />
+              <ClapCommentParts clapperId={clapperId} clapId={clapId} />
               <ClapperCreditFields clapperId={clapperId} />
             </div>
             <ClapperPrintButton
@@ -253,12 +216,14 @@ function ClapperCreditFields({ clapperId }) {
  * @param {string} [props.className]
  * @param {string} [props.qrCodeKey]
  * @param {import('react').MouseEventHandler<HTMLButtonElement>} [props.onClick]
+ * @param {boolean} [props.disabled]
  */
-function ClapperQRCodeField({ className, qrCodeKey, onClick }) {
+function ClapperQRCodeField({ className, qrCodeKey, onClick, disabled }) {
   return (
     <button
       className={'flex h-full w-full items-center' + ' ' + className}
-      onClick={onClick}>
+      onClick={onClick}
+      disabled={disabled}>
       {qrCodeKey ? (
         <QRCodeView data={qrCodeKey} />
       ) : (
@@ -470,54 +435,4 @@ function useRealTimeDate() {
   // NOTE: Run once at the start.
   useEffect(onInterval, [onInterval]);
   return date;
-}
-
-/**
- * @param {object} props
- * @param {string} props.value
- * @param {(value: string) => void} props.onChange
- */
-function ClapperRollField({ value, onChange }) {
-  return (
-    <div className="flex flex-1 flex-col items-center">
-      <ClapperLabel className="text-[1em]">ROLL</ClapperLabel>
-      <ClapperInput
-        className="w-full translate-y-[25%] scale-y-150 rounded-xl bg-gray-900 text-center text-[2em] uppercase"
-        name="camera-roll"
-        value={value}
-        onChange={(e) => {
-          const value = /** @type {HTMLInputElement} */ (
-            e.target
-          ).value.toUpperCase();
-          onChange(value);
-        }}
-        onFocus={(e) => e.target.select()}
-        autoCapitalize="characters"
-      />
-    </div>
-  );
-}
-
-/**
- * @param {object} props
- * @param {string} props.className
- * @param {string} props.value
- * @param {boolean} props.disabled
- * @param {import('react').ChangeEventHandler<HTMLTextAreaElement>} props.onChange
- */
-function ClapperCommentField({ className, value, disabled, onChange }) {
-  return (
-    <textarea
-      style={{ lineHeight: '1em' }}
-      className={
-        'my-1 w-full resize-none rounded-xl bg-transparent p-2 font-mono text-[1.5em] placeholder:opacity-30' +
-        ' ' +
-        className
-      }
-      value={value}
-      onChange={onChange}
-      placeholder="Comments"
-      disabled={disabled}
-    />
-  );
 }

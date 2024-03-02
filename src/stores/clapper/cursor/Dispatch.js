@@ -11,6 +11,7 @@ export function createDispatch(set, get) {
     /** @type {() => Readonly<import('./Store').Store>} */
     UNSAFE_getStore: get,
     focusClapper: zi(set, focusClapper),
+    focusSlate: zi(set, focusSlate),
     focusClap: zi(set, focusClap),
     changeSceneNumber: zi(set, changeSceneNumber),
     changeShotNumber: zi(set, changeShotNumber),
@@ -30,10 +31,22 @@ function focusClapper(store, clapperId) {
 /**
  * @param {import('./Store').Store} store
  * @param {import('@/stores/clapper/Store').ClapperId} clapperId
+ * @param {import('@/stores/clapper/Store').SlateId} slateId
+ */
+function focusSlate(store, clapperId, slateId) {
+  store.clapperId = clapperId;
+  store.slateId = slateId;
+}
+
+/**
+ * @param {import('./Store').Store} store
+ * @param {import('@/stores/clapper/Store').ClapperId} clapperId
+ * @param {import('@/stores/clapper/Store').SlateId} slateId
  * @param {import('@/stores/clapper/Store').ClapId} clapId
  */
-function focusClap(store, clapperId, clapId) {
+function focusClap(store, clapperId, slateId, clapId) {
   store.clapperId = clapperId;
+  store.slateId = slateId;
   store.clapId = clapId;
 }
 

@@ -6,6 +6,7 @@ export function createStore() {
   return {
     cursorVersion: CURRENT_CLAPPER_CURSOR_VERSION,
     clapperId: '',
+    slateId: '',
     clapId: '',
     sceneNumber: 1,
     shotNumber: 1,

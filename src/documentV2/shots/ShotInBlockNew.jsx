@@ -16,7 +16,9 @@ export default function ShotInBlockNew({
   return (
     <fieldset
       className={
-        'relative flex w-[2.5in] flex-col overflow-hidden' + ' ' + className
+        'relative mx-auto flex w-[2.5in] flex-col overflow-hidden' +
+        ' ' +
+        className
       }
       onClick={onClick}>
       {/* NOTE: width-3in is closest to smallest supported screen at 320px (about 3.2in by CSS standard). */}

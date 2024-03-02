@@ -25,6 +25,16 @@ export function useClapIds(clapperId) {
 
 /**
  * @param {import('./Store').ClapperId} clapperId
+ * @param {import('./Store').SlateId} slateId
+ */
+export function useClapIdsInSlateOrder(clapperId, slateId) {
+  return useClapperStore(
+    useShallow((ctx) => getSlateById(ctx, clapperId, slateId)?.clapIds ?? []),
+  );
+}
+
+/**
+ * @param {import('./Store').ClapperId} clapperId
  */
 export function useSlateIds(clapperId) {
   return useClapperStore(
@@ -68,7 +78,7 @@ export function useClapperKnownShotHash(clapperId, sceneNumber, shotNumber) {
   return useClapperStore(
     (ctx) =>
       getClapperById(ctx, clapperId)?.slates[sceneNumber + '.' + shotNumber]
-        ?.string ?? '----',
+        ?.shotHash ?? '----',
   );
 }
 

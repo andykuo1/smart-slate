@@ -293,7 +293,7 @@ function ShotHashListItem({ clapperId, slateId }) {
     <li
       className="flex select-none items-center gap-2 px-2 hover:bg-gray-300"
       onClick={() => {
-        focusClap(clapperId, '');
+        focusClap(clapperId, slateId, '');
         changeSceneNumber(sceneNumber);
         changeShotNumber(shotNumber);
       }}>

@@ -3,10 +3,17 @@ import { Select, SelectPopover, SelectProvider } from '@ariakit/react';
 import { formatTakeNumber } from '@/components/takes/TakeNameFormat';
 import {
   findClapBySceneShotTakeNumber,
+  findSlateBySceneShotNumber,
   findSlateByShotHash,
+  getClapById,
+  useClapperStore,
   useUNSAFE_getClapperStore,
 } from '@/stores/clapper';
-import { useClapperCursorDispatch } from '@/stores/clapper/cursor';
+import {
+  useClapperCursorClapId,
+  useClapperCursorDispatch,
+  useClapperCursorShotNumber,
+} from '@/stores/clapper/cursor';
 import SelectStyle from '@/styles/Select.module.css';
 
 import ShotNumber from '../ShotNumber';
@@ -22,7 +29,6 @@ import TakeNumberList from './TakeNumberList';
  * @param {import('@/stores/clapper/Store').ClapperId} props.clapperId
  * @param {import('@/stores/clapper/Store').SlateId} props.slateId
  * @param {number} props.sceneNumber
- * @param {number} props.shotNumber
  * @param {string} props.shotHash
  * @param {number} props.takeNumber
  * @param {boolean} props.disabled
@@ -32,7 +38,6 @@ export default function ClapFinderParts({
   clapperId,
   slateId,
   sceneNumber,
-  shotNumber,
   shotHash,
   takeNumber,
   disabled,
@@ -46,21 +51,44 @@ export default function ClapFinderParts({
     (ctx) => ctx.changeShotNumber,
   );
 
+  const clapId = useClapperCursorClapId();
+  const clapShotNumber = useClapperStore(
+    (ctx) => getClapById(ctx, clapperId, clapId)?.shotNumber,
+  );
+  const cursorShotNumber = useClapperCursorShotNumber();
+
   /**
    * @param {number} sceneNumber
    */
   function onSceneNumberChange(sceneNumber) {
+    const store = UNSAFE_getClapperStore();
+    const slate = findSlateBySceneShotNumber(store, clapperId, sceneNumber, 1);
+    focusClap(clapperId, slate?.slateId ?? '', '');
     changeSceneNumber(sceneNumber);
     changeShotNumber(1);
-    focusClap(clapperId, '');
   }
 
   /**
    * @param {number} shotNumber
    */
   function onShotNumberChange(shotNumber) {
+    const store = UNSAFE_getClapperStore();
+    const slate = findSlateBySceneShotNumber(
+      store,
+      clapperId,
+      sceneNumber,
+      shotNumber,
+    );
+    const clap = findClapBySceneShotTakeNumber(
+      store,
+      clapperId,
+      sceneNumber,
+      shotNumber,
+      (slate?.nextTakeNumber ?? 1) - 1,
+    );
+    focusClap(clapperId, slate?.slateId ?? '', clap?.clapId ?? '');
+    changeSceneNumber(sceneNumber);
     changeShotNumber(shotNumber);
-    focusClap(clapperId, '');
   }
 
   /**
@@ -76,7 +104,7 @@ export default function ClapFinderParts({
       changeSceneNumber(1);
       changeShotNumber(1);
     }
-    focusClap(clapperId, '');
+    focusClap(clapperId, slate?.slateId ?? '', '');
   }
 
   /**
@@ -84,20 +112,24 @@ export default function ClapFinderParts({
    */
   function onTakeNumberChange(takeNumber) {
     const store = UNSAFE_getClapperStore();
+    const slate = findSlateBySceneShotNumber(
+      store,
+      clapperId,
+      sceneNumber,
+      cursorShotNumber,
+    );
     const clap = findClapBySceneShotTakeNumber(
       store,
       clapperId,
       sceneNumber,
-      shotNumber,
+      cursorShotNumber,
       takeNumber,
     );
-    if (clap) {
-      focusClap(clapperId, clap.clapId);
-    } else {
-      focusClap(clapperId, '');
-    }
+    focusClap(clapperId, slate?.slateId ?? '', clap?.clapId ?? '');
   }
 
+  const shotNumber =
+    clapId && clapShotNumber > 0 ? clapShotNumber : cursorShotNumber;
   return (
     <fieldset
       className={

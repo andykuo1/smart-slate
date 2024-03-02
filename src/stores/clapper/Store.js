@@ -61,7 +61,7 @@ export function createSlate(slateId = uuid()) {
     nextTakeNumber: 1,
     /** @type {Array<ClapId>} */
     clapIds: [],
-    string: '',
+    shotHash: '',
   };
 }
 
@@ -173,8 +173,8 @@ export function cloneSlate(out, slate) {
   if (typeof slate.nextTakeNumber !== 'undefined') {
     out.nextTakeNumber = slate.nextTakeNumber;
   }
-  if (typeof slate.string !== 'undefined') {
-    out.string = slate.string;
+  if (typeof slate.shotHash !== 'undefined') {
+    out.shotHash = slate.shotHash;
   }
   return /** @type {Slate} */ (out);
 }

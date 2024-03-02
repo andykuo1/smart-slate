@@ -4,6 +4,10 @@ export function useClapperCursorClapperId() {
   return useClapperCursorStore((ctx) => ctx.clapperId ?? '');
 }
 
+export function useClapperCursorSlateId() {
+  return useClapperCursorStore((ctx) => ctx.slateId ?? '');
+}
+
 export function useClapperCursorClapId() {
   return useClapperCursorStore((ctx) => ctx.clapId ?? '');
 }
