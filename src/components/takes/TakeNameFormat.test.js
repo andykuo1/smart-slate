@@ -84,6 +84,8 @@ test('formatShotNumber is correct', () => {
   expect(formatShotNumber(52)).toBe('AZ');
   expect(formatShotNumber(53)).toBe('BA');
   expect(formatShotNumber(99)).toBe('CU');
+  expect(formatShotNumber(702)).toBe('ZZ');
+  expect(formatShotNumber(703)).toBe('AAA');
 });
 
 test('formatTakeNumber is correct', () => {
@@ -98,4 +100,52 @@ test('formatTakeNumber is correct', () => {
   expect(formatTakeNumber(1, true)).toBe('1');
   expect(formatTakeNumber(10, true)).toBe('10');
   expect(formatTakeNumber(99, true)).toBe('99');
+});
+
+test('base-26 math is correct', () => {
+  // Understanding number bases :P
+  expect(9).toBe(9);
+  expect(1 + 9).toBe(10);
+  expect(10 * 10).toBe(100);
+  expect(9 * 100 + 9 * 10 + 9).toBe(999);
+
+  expect(formatShotNumber(26)).toBe('Z');
+  expect(formatShotNumber(1 + 26)).toBe('AA');
+  expect(formatShotNumber(27 * 27 - 26)).toBe('AAA');
+
+  expect(formatShotNumber(1 + 26 + 26)).toBe('BA');
+  expect(formatShotNumber(1 + 26 + 26 + 26)).toBe('CA');
+  expect(formatShotNumber(1 + 26 * 26)).toBe('ZA');
+  expect(formatShotNumber(26 + 26 * 26)).toBe('ZZ');
+  expect(formatShotNumber(26 + 26 * 26 + 26 * 26 * 26)).toBe('ZZZ');
+
+  expect(charToNum('A')).toBe(1);
+  expect(charToNum('AA')).toBe(1 + 26);
+  expect(charToNum('AAA')).toBe(1 + 26 + 26 * 26);
+
+  expect(charToNum('B')).toBe(2);
+  expect(charToNum('AB')).toBe(2 + 26);
+  expect(charToNum('BB')).toBe(2 * (1 + 26));
+  expect(charToNum('BBB')).toBe(2 * (1 + 26 + 26 * 26));
+
+  expect(charToNum('Z')).toBe(26);
+  expect(charToNum('ZZ')).toBe(26 * (1 + 26));
+  expect(charToNum('ZZZ')).toBe(26 * (1 + 26 + 26 * 26));
+  expect(charToNum('AAAA')).toBe(26 * (1 + 26 + 26 * 26) + 1);
+
+  expect(charToNum('ZZ') % charToNum('AAA')).toBe(702);
+  expect(numToChar(702)).toBe('ZZ');
+  expect(charToNum('ZZ') - Math.floor(charToNum('ZZ') / charToNum('AAA'))).toBe(
+    702,
+  );
+
+  expect(Math.floor(charToNum('ZZA') / charToNum('AAA'))).toBe(25);
+  expect(numToChar(25)).toBe('Y');
+  expect(charToNum('ZZA') - 25 * charToNum('AAA') - 1).toBe(677);
+  expect(numToChar(677)).toBe('ZA');
+
+  expect(Math.floor(charToNum('ABC') / charToNum('AAA'))).toBe(1);
+  expect(charToNum('ABC') - 1 * charToNum('AAA') - 1).toBe(27);
+  // TODO: BC != 27
+  expect('BC').toBe(numToChar(55));
 });

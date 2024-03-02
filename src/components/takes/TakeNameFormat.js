@@ -141,6 +141,13 @@ export function formatShotNumber(shotNumber) {
 }
 
 /**
+ * @param {number} shotNumber
+ */
+export function formatShotNumberString(shotNumber) {
+  return shotNumber > 0 ? numToChar(shotNumber) : '';
+}
+
+/**
  * @param {number} takeNumber
  * @param {boolean} [abbreviated]
  */
