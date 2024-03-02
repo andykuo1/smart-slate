@@ -12,7 +12,7 @@ import SelectStyle from '@/styles/Select.module.css';
 export default function ShotHashList({ clapperId, shotHash }) {
   const shotHashes = useClapperStore(
     useShallow((ctx) =>
-      Object.keys(getClapperById(ctx, clapperId)?.shotHashStrings ?? {}),
+      Object.keys(getClapperById(ctx, clapperId)?.shotHashes ?? {}),
     ),
   );
   let result = [];

@@ -1,3 +1,5 @@
+import ShotHash from '@/clapperV3/ShotHash';
+
 /**
  * @param {import('./Store').Store} store
  * @param {import('./Store').ClapperId} clapperId
@@ -56,10 +58,10 @@ export function findClapBySceneShotTakeNumber(
 /**
  * @param {import('./Store').Store} store
  * @param {import('./Store').ClapperId} clapperId
- * @param {import('./Store').ShotHashId} shotHashId
+ * @param {import('./Store').SlateId} slateId
  */
-export function getShotHashById(store, clapperId, shotHashId) {
-  return getClapperById(store, clapperId)?.shotHashes?.[shotHashId];
+export function getSlateById(store, clapperId, slateId) {
+  return getClapperById(store, clapperId)?.slates?.[slateId];
 }
 
 /**
@@ -68,7 +70,7 @@ export function getShotHashById(store, clapperId, shotHashId) {
  * @param {number} sceneNumber
  * @param {number} shotNumber
  */
-export function findShotHashBySceneShotNumber(
+export function findSlateBySceneShotNumber(
   store,
   clapperId,
   sceneNumber,
@@ -78,12 +80,9 @@ export function findShotHashBySceneShotNumber(
   if (!clapper) {
     return null;
   }
-  for (let shotHash of Object.values(clapper.shotHashes)) {
-    if (
-      shotHash.sceneNumber === sceneNumber &&
-      shotHash.shotNumber === shotNumber
-    ) {
-      return shotHash;
+  for (let slate of Object.values(clapper.slates)) {
+    if (slate.sceneNumber === sceneNumber && slate.shotNumber === shotNumber) {
+      return slate;
     }
   }
   return null;
@@ -94,18 +93,18 @@ export function findShotHashBySceneShotNumber(
  * @param {import('./Store').ClapperId} clapperId
  * @param {number} sceneNumber
  */
-export function findLastShotHashBySceneNumber(store, clapperId, sceneNumber) {
+export function findLastSlateBySceneNumber(store, clapperId, sceneNumber) {
   const clapper = getClapperById(store, clapperId);
   if (!clapper) {
     return null;
   }
   let result = null;
-  for (let shotHash of Object.values(clapper.shotHashes)) {
+  for (let slate of Object.values(clapper.slates)) {
     if (
-      shotHash.sceneNumber === sceneNumber &&
-      shotHash.shotNumber > (result?.shotNumber ?? Number.NEGATIVE_INFINITY)
+      slate.sceneNumber === sceneNumber &&
+      slate.shotNumber > (result?.shotNumber ?? Number.NEGATIVE_INFINITY)
     ) {
-      result = shotHash;
+      result = slate;
     }
   }
   return result;
@@ -114,41 +113,29 @@ export function findLastShotHashBySceneNumber(store, clapperId, sceneNumber) {
 /**
  * @param {import('./Store').Store} store
  * @param {import('./Store').ClapperId} clapperId
- * @param {string} shotHashString
+ * @param {string} shotHash
  */
-export function findShotHashByShotHashString(store, clapperId, shotHashString) {
+export function findSlateByShotHash(store, clapperId, shotHash) {
   const clapper = getClapperById(store, clapperId);
   if (!clapper) {
     return null;
   }
-  const shotHashId = clapper.shotHashStrings[shotHashString];
-  if (!shotHashId) {
+  const slateId = clapper.shotHashes[shotHash];
+  if (!slateId) {
     return null;
   }
-  return getShotHashById(store, clapperId, shotHashId);
+  return getSlateById(store, clapperId, slateId);
 }
 
-export const MAX_SHOT_HASH_STRING_RANGE = 9999;
-export const SHOT_HASH_STRING_PATTERN = /^\d\d\d\d$/;
+export const MAX_SHOT_HASH_RANGE = 9999;
+export const SHOT_HASH_PATTERN = /^\d\d\d\d$/;
 
 /**
  * @param {import('./Store').Store} store
  * @param {import('./Store').ClapperId} clapperId
  */
-export function findNextAvailableShotHashString(store, clapperId) {
+export function findNextAvailableShotHash(store, clapperId) {
   let clapper = getClapperById(store, clapperId);
-  let shotHashStrings = Object.keys(clapper.shotHashStrings);
-  if (shotHashStrings.length >= MAX_SHOT_HASH_STRING_RANGE) {
-    throw new Error('Out of available shot hashes.');
-  }
-  let hash = Math.floor(Math.random() * MAX_SHOT_HASH_STRING_RANGE) + 1;
-  let result = String(hash).padStart(4, '0');
-  while (shotHashStrings.includes(result)) {
-    hash = (hash + 1) % (MAX_SHOT_HASH_STRING_RANGE + 1);
-    if (hash <= 0) {
-      hash = 1;
-    }
-    result = String(hash).padStart(4, '0');
-  }
-  return result;
+  let shotHashes = Object.keys(clapper.shotHashes);
+  return ShotHash.generate(shotHashes);
 }

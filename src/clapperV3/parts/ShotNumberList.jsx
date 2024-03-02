@@ -1,10 +1,7 @@
 import { SelectItem } from '@ariakit/react';
 
 import { formatShotNumber } from '@/components/takes/TakeNameFormat';
-import {
-  findShotHashBySceneShotNumber,
-  useClapperStore,
-} from '@/stores/clapper';
+import { findSlateBySceneShotNumber, useClapperStore } from '@/stores/clapper';
 import SelectStyle from '@/styles/Select.module.css';
 
 /**
@@ -56,15 +53,15 @@ export default function ShotNumberList({ clapperId, sceneNumber, shotNumber }) {
  * @param {boolean} [props.active]
  */
 function ShotNumberListItem({ clapperId, sceneNumber, shotNumber, active }) {
-  const shotHash = useClapperStore((ctx) =>
-    findShotHashBySceneShotNumber(ctx, clapperId, sceneNumber, shotNumber),
+  const slate = useClapperStore((ctx) =>
+    findSlateBySceneShotNumber(ctx, clapperId, sceneNumber, shotNumber),
   );
   return (
     <SelectItem
       className={
         'whitespace-pre' +
         ' ' +
-        (shotHash ? 'text-black' : 'text-gray-300') +
+        (slate ? 'text-black' : 'text-gray-300') +
         ' ' +
         (active ? 'bg-blue-100' : '') +
         ' ' +

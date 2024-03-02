@@ -16,11 +16,11 @@ import FieldButton from '@/fields/FieldButton';
 import { useInterval } from '@/libs/UseInterval';
 import {
   findClapBySceneShotTakeNumber,
-  findShotHashBySceneShotNumber,
-  findShotHashByShotHashString,
+  findSlateBySceneShotNumber,
+  findSlateByShotHash,
   getClapById,
   getClapperDetailsById,
-  getShotHashById,
+  getSlateById,
   useClapComments,
   useClapPrintRating,
   useClapQRCodeKey,
@@ -88,8 +88,8 @@ export default function ClapperParts({ clapperId }) {
     (ctx) => ctx.changeRollName,
   );
 
-  const shotHash = useClapperStore((ctx) =>
-    findShotHashBySceneShotNumber(ctx, clapperId, sceneNumber, shotNumber),
+  const slate = useClapperStore((ctx) =>
+    findSlateBySceneShotNumber(ctx, clapperId, sceneNumber, shotNumber),
   );
 
   const productionTitle = useClapperProductionTitle(clapperId);
@@ -115,8 +115,7 @@ export default function ClapperParts({ clapperId }) {
   );
   const nextTakeNumber = useClapperStore(
     (ctx) =>
-      getShotHashById(ctx, clapperId, shotHash?.shotHashId ?? '')
-        ?.nextTakeNumber ?? 1,
+      getSlateById(ctx, clapperId, slate?.slateId ?? '')?.nextTakeNumber ?? 1,
   );
 
   /**
@@ -137,18 +136,14 @@ export default function ClapperParts({ clapperId }) {
   }
 
   /**
-   * @param {string} shotHashString
+   * @param {string} shotHash
    */
-  function onShotHashChange(shotHashString) {
+  function onShotHashChange(shotHash) {
     const store = UNSAFE_getClapperStore();
-    const shotHash = findShotHashByShotHashString(
-      store,
-      clapperId,
-      shotHashString,
-    );
-    if (shotHash) {
-      changeSceneNumber(shotHash.sceneNumber);
-      changeShotNumber(shotHash.shotNumber);
+    const slate = findSlateByShotHash(store, clapperId, shotHash);
+    if (slate) {
+      changeSceneNumber(slate.sceneNumber);
+      changeShotNumber(slate.shotNumber);
     } else {
       changeSceneNumber(1);
       changeShotNumber(1);
@@ -231,10 +226,10 @@ export default function ClapperParts({ clapperId }) {
         <ClapperIdentifierFields
           className="w-full"
           clapperId={clapperId}
-          shotHashId={shotHash?.shotHashId ?? ''}
+          slateId={slate?.slateId ?? ''}
           sceneNumber={sceneNumber}
           shotNumber={shotNumber}
-          shotHash={shotHash?.string || '----'}
+          shotHash={slate?.string || '----'}
           takeNumber={clapId ? takeNumber : nextTakeNumber}
           disabled={!clapperId}
           onSceneNumberChange={onSceneNumberChange}
@@ -605,7 +600,7 @@ function ClapperCommentField({ className, value, disabled, onChange }) {
  * @param {object} props
  * @param {string} [props.className]
  * @param {import('@/stores/clapper/Store').ClapperId} props.clapperId
- * @param {import('@/stores/clapper/Store').ShotHashId} props.shotHashId
+ * @param {import('@/stores/clapper/Store').SlateId} props.slateId
  * @param {number} props.sceneNumber
  * @param {number} props.shotNumber
  * @param {string} props.shotHash
@@ -619,7 +614,7 @@ function ClapperCommentField({ className, value, disabled, onChange }) {
 function ClapperIdentifierFields({
   className,
   clapperId,
-  shotHashId,
+  slateId,
   sceneNumber,
   shotNumber,
   shotHash,
@@ -657,10 +652,10 @@ function ClapperIdentifierFields({
       <ClapperTakeNumberField
         className="flex-1 rounded-xl border-2 px-2"
         clapperId={clapperId}
-        shotHashId={shotHashId}
+        slateId={slateId}
         takeNumber={takeNumber}
         onTakeNumberChange={onTakeNumberChange}
-        disabled={!shotHashId || disabled}
+        disabled={!slateId || disabled}
       />
     </fieldset>
   );
@@ -758,7 +753,7 @@ function ClapperSceneShotNumberField({
  * @param {object} props
  * @param {string} props.className
  * @param {import('@/stores/clapper/Store').ClapperId} props.clapperId
- * @param {import('@/stores/clapper/Store').ShotHashId} props.shotHashId
+ * @param {import('@/stores/clapper/Store').SlateId} props.slateId
  * @param {number} props.takeNumber
  * @param {(value: number) => void} props.onTakeNumberChange
  * @param {boolean} props.disabled
@@ -766,7 +761,7 @@ function ClapperSceneShotNumberField({
 function ClapperTakeNumberField({
   className,
   clapperId,
-  shotHashId,
+  slateId,
   takeNumber,
   onTakeNumberChange,
   disabled,
@@ -791,7 +786,7 @@ function ClapperTakeNumberField({
         className={'-mt-[4em] text-[2em]' + ' ' + SelectStyle.popover}>
         <TakeNumberList
           clapperId={clapperId}
-          shotHashId={shotHashId}
+          slateId={slateId}
           takeNumber={takeNumber}
         />
       </SelectPopover>

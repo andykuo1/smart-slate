@@ -27,3 +27,34 @@ export default function ShotHash(value) {
 ShotHash.NULL_VALUE = '----';
 ShotHash.MIN_VALUE = '0000';
 ShotHash.MAX_VALUE = '9999';
+
+const MAX_GENERATED_NUMBER = 9999;
+
+ShotHash.generate = function generate(exclude = []) {
+  if (exclude.length >= MAX_GENERATED_NUMBER) {
+    throw new Error('Out of available shot hashes - exclude list too long.');
+  }
+  let hash = Math.floor(Math.random() * MAX_GENERATED_NUMBER) + 1;
+  let result = ShotHash(hash);
+  let excluded = exclude.includes(result);
+  if (!excluded) {
+    return result;
+  }
+
+  for (let attempts = 1; attempts < MAX_GENERATED_NUMBER; ++attempts) {
+    // Find the next non-excluded shot hash...
+    hash += 1;
+    hash = hash % (MAX_GENERATED_NUMBER + 1);
+    if (hash <= 0) {
+      hash = 1;
+    }
+
+    result = ShotHash(hash);
+    excluded = exclude.includes(result);
+    if (!excluded) {
+      return result;
+    }
+  }
+
+  throw new Error('Out of available shot hashes - tried too many numbers.');
+};

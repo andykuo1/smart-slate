@@ -20,12 +20,12 @@ import {
   getClapById,
   getClapperById,
   getClapperDetailsById,
-  getShotHashById,
+  getSlateById,
   useClapperDispatch,
   useClapperIds,
   useClapperProductionTitle,
   useClapperStore,
-  useShotHashIdsInOrder,
+  useSlateIdsInClapperOrder,
 } from '@/stores/clapper';
 import { createClapper } from '@/stores/clapper/Store';
 import {
@@ -235,14 +235,14 @@ function NewClapperItem() {
 
 function ShotHashList() {
   const clapperId = useClapperCursorClapperId();
-  const shotHashIds = useShotHashIdsInOrder(clapperId);
+  const slateIds = useSlateIdsInClapperOrder(clapperId);
   return (
     <ul className="max-h-[50vh] overflow-y-auto">
-      {shotHashIds.map((shotHashId) => (
+      {slateIds.map((slateId) => (
         <ShotHashListItem
-          key={shotHashId}
+          key={slateId}
           clapperId={clapperId}
-          shotHashId={shotHashId}
+          slateId={slateId}
         />
       ))}
     </ul>
@@ -252,23 +252,29 @@ function ShotHashList() {
 /**
  * @param {object} props
  * @param {import('@/stores/clapper/Store').ClapperId} props.clapperId
- * @param {import('@/stores/clapper/Store').ShotHashId} props.shotHashId
+ * @param {import('@/stores/clapper/Store').SlateId} props.slateId
  */
-function ShotHashListItem({ clapperId, shotHashId }) {
+function ShotHashListItem({ clapperId, slateId }) {
   const sceneNumber = useClapperStore(
-    (ctx) => getShotHashById(ctx, clapperId, shotHashId)?.sceneNumber,
+    (ctx) => getSlateById(ctx, clapperId, slateId)?.sceneNumber,
   );
   const shotNumber = useClapperStore(
-    (ctx) => getShotHashById(ctx, clapperId, shotHashId)?.shotNumber,
+    (ctx) => getSlateById(ctx, clapperId, slateId)?.shotNumber,
   );
   const nextTakeNumber = useClapperStore(
-    (ctx) => getShotHashById(ctx, clapperId, shotHashId)?.nextTakeNumber,
+    (ctx) => getSlateById(ctx, clapperId, slateId)?.nextTakeNumber,
   );
   const clapCount = useClapperStore(
-    (ctx) => getShotHashById(ctx, clapperId, shotHashId)?.clapIds?.length ?? 0,
+    (ctx) => getSlateById(ctx, clapperId, slateId)?.clapIds?.length ?? 0,
   );
   const sceneShotNumber = formatSceneShotNumber(sceneNumber, shotNumber, true);
   const focusClap = useClapperCursorDispatch((ctx) => ctx.focusClap);
+  const changeSceneNumber = useClapperCursorDispatch(
+    (ctx) => ctx.changeSceneNumber,
+  );
+  const changeShotNumber = useClapperCursorDispatch(
+    (ctx) => ctx.changeShotNumber,
+  );
   const clapId = useClapperStore(
     (ctx) =>
       findClapBySceneShotTakeNumber(
@@ -286,8 +292,12 @@ function ShotHashListItem({ clapperId, shotHashId }) {
   return (
     <li
       className="flex select-none items-center gap-2 px-2 hover:bg-gray-300"
-      onClick={() => focusClap(clapperId, clapId || '')}>
-      <Printed clapperId={clapperId} shotHashId={shotHashId} />
+      onClick={() => {
+        focusClap(clapperId, '');
+        changeSceneNumber(sceneNumber);
+        changeShotNumber(shotNumber);
+      }}>
+      <Printed clapperId={clapperId} slateId={slateId} />
       Shot {sceneShotNumber} (👏 {clapCount}) - {dateString}
     </li>
   );
@@ -296,11 +306,11 @@ function ShotHashListItem({ clapperId, shotHashId }) {
 /**
  * @param {object} props
  * @param {import('@/stores/clapper/Store').ClapperId} props.clapperId
- * @param {import('@/stores/clapper/Store').ShotHashId} props.shotHashId
+ * @param {import('@/stores/clapper/Store').SlateId} props.slateId
  */
-function Printed({ clapperId, shotHashId }) {
+function Printed({ clapperId, slateId }) {
   const printed = useClapperStore((ctx) => {
-    let clapIds = getShotHashById(ctx, clapperId, shotHashId)?.clapIds ?? [];
+    let clapIds = getSlateById(ctx, clapperId, slateId)?.clapIds ?? [];
     for (let clapId of clapIds) {
       let clap = getClapById(ctx, clapperId, clapId);
       if (clap.printRating > 0) {

@@ -7,12 +7,12 @@ import { uuid } from '@/utils/uuid';
 
 import { zi } from '../ZustandImmerHelper';
 import {
-  findNextAvailableShotHashString,
-  findShotHashBySceneShotNumber,
+  findNextAvailableShotHash,
+  findSlateBySceneShotNumber,
   getClapById,
   getClapperById,
 } from './GetClapper';
-import { createClapperDetails, createShotHash } from './Store';
+import { createClapperDetails, createSlate } from './Store';
 
 /** @typedef {ReturnType<createDispatch>} Dispatch */
 
@@ -33,7 +33,7 @@ export function createDispatch(set, get) {
     changeClapQRCodeKey: zi(set, changeClapQRCodeKey),
     addClapper: zi(set, addClapper),
     addClap: zi(set, addClap),
-    addShotHash: zi(set, addShotHash),
+    addSlate: zi(set, addSlate),
     finalizeClap: zi(set, finalizeClap),
     deleteClapper: zi(set, deleteClapper),
   };
@@ -173,12 +173,12 @@ function addClap(store, clapperId, clap) {
 /**
  * @param {import('./Store').Store} store
  * @param {import('./Store').ClapperId} clapperId
- * @param {import('./Store').ShotHash} shotHash
+ * @param {import('./Store').Slate} slate
  */
-function addShotHash(store, clapperId, shotHash) {
+function addSlate(store, clapperId, slate) {
   let clapper = getClapperById(store, clapperId);
-  clapper.shotHashStrings[shotHash.string] = shotHash.shotHashId;
-  clapper.shotHashes[shotHash.shotHashId] = shotHash;
+  clapper.shotHashes[slate.string] = slate.slateId;
+  clapper.slates[slate.slateId] = slate;
 }
 
 /**
@@ -187,8 +187,8 @@ function addShotHash(store, clapperId, shotHash) {
  * @param {number} sceneNumber
  * @param {number} shotNumber
  */
-function resolveShotHash(store, clapperId, sceneNumber, shotNumber) {
-  let result = findShotHashBySceneShotNumber(
+function resolveSlate(store, clapperId, sceneNumber, shotNumber) {
+  let result = findSlateBySceneShotNumber(
     store,
     clapperId,
     sceneNumber,
@@ -197,12 +197,12 @@ function resolveShotHash(store, clapperId, sceneNumber, shotNumber) {
   if (result) {
     return result;
   }
-  result = createShotHash();
+  result = createSlate();
   result.sceneNumber = sceneNumber;
   result.shotNumber = shotNumber;
   result.nextTakeNumber = 1;
-  result.string = findNextAvailableShotHashString(store, clapperId);
-  addShotHash(store, clapperId, result);
+  result.string = findNextAvailableShotHash(store, clapperId);
+  addSlate(store, clapperId, result);
   return result;
 }
 
@@ -222,7 +222,7 @@ function finalizeClap(
   rollName,
   clap,
 ) {
-  const shotHash = resolveShotHash(store, clapperId, sceneNumber, shotNumber);
+  const shotHash = resolveSlate(store, clapperId, sceneNumber, shotNumber);
 
   let result = clap;
   result.rollName = rollName;

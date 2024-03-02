@@ -1,18 +1,18 @@
 import { SelectItem } from '@ariakit/react';
 
 import { formatTakeNumber } from '@/components/takes/TakeNameFormat';
-import { getShotHashById, useClapperStore } from '@/stores/clapper';
+import { getSlateById, useClapperStore } from '@/stores/clapper';
 import SelectStyle from '@/styles/Select.module.css';
 
 /**
  * @param {object} props
  * @param {import('@/stores/clapper/Store').ClapperId} props.clapperId
- * @param {import('@/stores/clapper/Store').ShotHashId} props.shotHashId
+ * @param {import('@/stores/clapper/Store').SlateId} props.slateId
  * @param {number} props.takeNumber
  */
-export default function TakeNumberList({ clapperId, shotHashId, takeNumber }) {
+export default function TakeNumberList({ clapperId, slateId, takeNumber }) {
   const nextTakeNumber = useClapperStore(
-    (ctx) => getShotHashById(ctx, clapperId, shotHashId)?.nextTakeNumber,
+    (ctx) => getSlateById(ctx, clapperId, slateId)?.nextTakeNumber,
   );
   let result = [];
   for (let i = 1; i < nextTakeNumber; ++i) {

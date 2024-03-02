@@ -5,11 +5,11 @@ import { uuid } from '@/utils/uuid';
 /** @typedef {ReturnType<createClapper>} Clapper */
 /** @typedef {ReturnType<createClap>} Clap */
 /** @typedef {ReturnType<createClapperDetails>} ClapperDetails */
-/** @typedef {ReturnType<createShotHash>} ShotHash */
+/** @typedef {ReturnType<createSlate>} Slate */
 
 /** @typedef {string} ClapperId */
 /** @typedef {string} ClapId */
-/** @typedef {string} ShotHashId */
+/** @typedef {string} SlateId */
 
 export const CURRENT_CLAPPER_VERSION = 1;
 
@@ -31,10 +31,10 @@ export function createClapper(clapperId = uuid()) {
     details: createClapperDetails(),
     /** @type {Record<ClapId, Clap>} */
     claps: {},
-    /** @type {Record<ShotHashId, ShotHash>} */
+    /** @type {Record<SlateId, Slate>} */
+    slates: {},
+    /** @type {Record<string, SlateId>} */
     shotHashes: {},
-    /** @type {Record<string, ShotHashId>} */
-    shotHashStrings: {},
   };
 }
 
@@ -53,9 +53,9 @@ export function createClap(clapId = uuid()) {
   };
 }
 
-export function createShotHash(shotHashId = uuid()) {
+export function createSlate(slateId = uuid()) {
   return {
-    shotHashId,
+    slateId,
     sceneNumber: 0,
     shotNumber: 0,
     nextTakeNumber: 1,
@@ -122,23 +122,23 @@ export function cloneClapper(out, clapper) {
       ...clapper.details,
     };
   }
-  if (typeof clapper.shotHashes !== 'undefined') {
-    let result = out.shotHashes ?? {};
-    for (const key of Object.keys(clapper.shotHashes)) {
-      let next = clapper.shotHashes[key];
-      let prev = out.shotHashes?.[key];
+  if (typeof clapper.slates !== 'undefined') {
+    let result = out.slates ?? {};
+    for (const key of Object.keys(clapper.slates)) {
+      let next = clapper.slates[key];
+      let prev = out.slates?.[key];
       if (!prev) {
-        prev = createShotHash(key);
+        prev = createSlate(key);
       }
-      let cloned = cloneShotHash(prev, next);
-      result[cloned.shotHashId] = cloned;
+      let cloned = cloneSlate(prev, next);
+      result[cloned.slateId] = cloned;
     }
-    out.shotHashes = result;
+    out.slates = result;
   }
-  if (typeof clapper.shotHashStrings !== 'undefined') {
-    out.shotHashStrings = {
-      ...(out.shotHashStrings ?? {}),
-      ...clapper.shotHashStrings,
+  if (typeof clapper.shotHashes !== 'undefined') {
+    out.shotHashes = {
+      ...(out.shotHashes ?? {}),
+      ...clapper.shotHashes,
     };
   }
   return /** @type {Clapper} */ (out);
@@ -154,27 +154,27 @@ export function cloneClap(out, clap) {
 }
 
 /**
- * @param {Partial<ShotHash>} out
- * @param {Partial<ShotHash>} shotHash
+ * @param {Partial<Slate>} out
+ * @param {Partial<Slate>} slate
  */
-export function cloneShotHash(out, shotHash) {
-  if (typeof shotHash.clapIds !== 'undefined') {
-    out.clapIds = (shotHash.clapIds ?? []).slice();
+export function cloneSlate(out, slate) {
+  if (typeof slate.clapIds !== 'undefined') {
+    out.clapIds = (slate.clapIds ?? []).slice();
   }
-  if (typeof shotHash.shotHashId !== 'undefined') {
-    out.shotHashId = shotHash.shotHashId;
+  if (typeof slate.slateId !== 'undefined') {
+    out.slateId = slate.slateId;
   }
-  if (typeof shotHash.sceneNumber !== 'undefined') {
-    out.sceneNumber = shotHash.sceneNumber;
+  if (typeof slate.sceneNumber !== 'undefined') {
+    out.sceneNumber = slate.sceneNumber;
   }
-  if (typeof shotHash.shotNumber !== 'undefined') {
-    out.shotNumber = shotHash.shotNumber;
+  if (typeof slate.shotNumber !== 'undefined') {
+    out.shotNumber = slate.shotNumber;
   }
-  if (typeof shotHash.nextTakeNumber !== 'undefined') {
-    out.nextTakeNumber = shotHash.nextTakeNumber;
+  if (typeof slate.nextTakeNumber !== 'undefined') {
+    out.nextTakeNumber = slate.nextTakeNumber;
   }
-  if (typeof shotHash.string !== 'undefined') {
-    out.string = shotHash.string;
+  if (typeof slate.string !== 'undefined') {
+    out.string = slate.string;
   }
-  return /** @type {ShotHash} */ (out);
+  return /** @type {Slate} */ (out);
 }

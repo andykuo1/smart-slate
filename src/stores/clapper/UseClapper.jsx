@@ -5,7 +5,7 @@ import {
   getClapById,
   getClapperById,
   getClapperDetailsById,
-  getShotHashById,
+  getSlateById,
 } from './GetClapper';
 
 export function useClapperIds() {
@@ -26,10 +26,10 @@ export function useClapIds(clapperId) {
 /**
  * @param {import('./Store').ClapperId} clapperId
  */
-export function useShotHashIds(clapperId) {
+export function useSlateIds(clapperId) {
   return useClapperStore(
     useShallow((ctx) =>
-      Object.keys(getClapperById(ctx, clapperId)?.shotHashes ?? {}),
+      Object.keys(getClapperById(ctx, clapperId)?.slates ?? {}),
     ),
   );
 }
@@ -37,15 +37,13 @@ export function useShotHashIds(clapperId) {
 /**
  * @param {import('./Store').ClapperId} clapperId
  */
-export function useShotHashIdsInOrder(clapperId) {
+export function useSlateIdsInClapperOrder(clapperId) {
   return useClapperStore(
     useShallow((ctx) => {
-      let result = Object.keys(
-        getClapperById(ctx, clapperId)?.shotHashes ?? {},
-      );
+      let result = Object.keys(getClapperById(ctx, clapperId)?.slates ?? {});
       result.sort((a, b) => {
-        let shotHashA = getShotHashById(ctx, clapperId, a);
-        let shotHashB = getShotHashById(ctx, clapperId, b);
+        let shotHashA = getSlateById(ctx, clapperId, a);
+        let shotHashB = getSlateById(ctx, clapperId, b);
         let dscene = shotHashA.sceneNumber - shotHashB.sceneNumber;
         let dshot = shotHashA.shotNumber - shotHashB.shotNumber;
         if (Math.sign(dscene) !== 0) {
@@ -69,7 +67,7 @@ export function useShotHashIdsInOrder(clapperId) {
 export function useClapperKnownShotHash(clapperId, sceneNumber, shotNumber) {
   return useClapperStore(
     (ctx) =>
-      getClapperById(ctx, clapperId)?.shotHashes[sceneNumber + '.' + shotNumber]
+      getClapperById(ctx, clapperId)?.slates[sceneNumber + '.' + shotNumber]
         ?.string ?? '----',
   );
 }
@@ -82,7 +80,7 @@ export function useClapperKnownShotHash(clapperId, sceneNumber, shotNumber) {
 export function useClapperNextTakeNumber(clapperId, sceneNumber, shotNumber) {
   return useClapperStore(
     (ctx) =>
-      getShotHashById(ctx, clapperId, sceneNumber + '.' + shotNumber)
+      getSlateById(ctx, clapperId, sceneNumber + '.' + shotNumber)
         ?.nextTakeNumber ?? 1,
   );
 }
