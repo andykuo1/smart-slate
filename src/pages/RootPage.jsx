@@ -1,4 +1,5 @@
 import ChangelogButton from '@/buttons/ChangelogButton';
+import ClapperButton from '@/buttons/ClapperButton';
 import ImportProjectButton from '@/buttons/ImportProjectButton';
 import NewReleasePrompt from '@/buttons/NewReleasePrompt';
 import ProjectNewButton from '@/buttons/ProjectNewButton';
@@ -28,6 +29,7 @@ export default function RootPage() {
         <ImportProjectButton />
         <ChangelogButton />
         <ScannerButton />
+        <ClapperButton />
         <NewReleasePrompt />
       </div>
       <ProjectSelector className="mb-auto mt-2" />
