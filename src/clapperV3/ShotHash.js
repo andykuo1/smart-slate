@@ -30,6 +30,9 @@ ShotHash.MAX_VALUE = '9999';
 
 const MAX_GENERATED_NUMBER = 9999;
 
+/**
+ * @param {Array<string>} exclude
+ */
 ShotHash.generate = function generate(exclude = []) {
   if (exclude.length >= MAX_GENERATED_NUMBER) {
     throw new Error('Out of available shot hashes - exclude list too long.');

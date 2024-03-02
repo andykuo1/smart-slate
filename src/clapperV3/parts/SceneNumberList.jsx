@@ -1,9 +1,6 @@
 import { SelectItem } from '@ariakit/react';
 
-import {
-  findLastShotHashBySceneNumber,
-  useClapperStore,
-} from '@/stores/clapper';
+import { findLastSlateBySceneNumber, useClapperStore } from '@/stores/clapper';
 import SelectStyle from '@/styles/Select.module.css';
 
 import SceneNumber from '../SceneNumber';
@@ -53,7 +50,7 @@ export default function SceneNumberList({ clapperId, sceneNumber }) {
  */
 function SceneNumberListItem({ clapperId, sceneNumber, active }) {
   const shotHash = useClapperStore((ctx) =>
-    findLastShotHashBySceneNumber(ctx, clapperId, sceneNumber),
+    findLastSlateBySceneNumber(ctx, clapperId, sceneNumber),
   );
   return (
     <SelectItem
