@@ -44,7 +44,7 @@ import {
   useClapperCursorSceneNumber,
   useClapperCursorShotNumber,
 } from '@/stores/clapper/cursor';
-import { useSettingsStore } from '@/stores/settings';
+import { useClapperSettingsBlackboard } from '@/stores/clapper/settings';
 import SelectStyle from '@/styles/Select.module.css';
 
 /**
@@ -52,7 +52,7 @@ import SelectStyle from '@/styles/Select.module.css';
  * @param {import('@/stores/clapper/Store').ClapperId} props.clapperId
  */
 export default function ClapperParts({ clapperId }) {
-  const preferDarkSlate = useSettingsStore((ctx) => ctx.user?.preferDarkSlate);
+  const blackboard = useClapperSettingsBlackboard();
 
   const UNSAFE_getClapperStore = useUNSAFE_getClapperStore();
   const finalizeClap = useClapperDispatch((ctx) => ctx.finalizeClap);
@@ -274,7 +274,7 @@ export default function ClapperParts({ clapperId }) {
           className={
             'min-h-[40vh] flex-1 overflow-hidden rounded-xl' +
             ' ' +
-            (preferDarkSlate ? 'bg-black text-white' : 'bg-white text-black')
+            (blackboard ? 'bg-black text-white' : 'bg-white text-black')
           }>
           <ClapperQRCodeField qrCodeKey={qrCodeKey} onClick={onQRCodeClick} />
         </div>

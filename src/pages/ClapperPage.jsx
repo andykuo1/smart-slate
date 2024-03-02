@@ -13,6 +13,7 @@ import {
   useClapperCursorClapperId,
   useClapperCursorDispatch,
 } from '@/stores/clapper/cursor';
+import { useClapperSettingsBlackboard } from '@/stores/clapper/settings';
 
 import PageLayout from './PageLayout';
 
@@ -21,6 +22,7 @@ export default function ClapperPage() {
   const clapperId = useClapperCursorClapperId();
   const focusClapper = useClapperCursorDispatch((ctx) => ctx.focusClapper);
   const addClapper = useClapperDispatch((ctx) => ctx.addClapper);
+  const blackboard = useClapperSettingsBlackboard();
 
   useEffect(() => {
     if (!clapperId) {
@@ -36,7 +38,12 @@ export default function ClapperPage() {
   }, [clapperId, addClapper, focusClapper, UNSAFE_getClapperStore]);
 
   return (
-    <PageLayout className={'overflow-hidden overscroll-none'}>
+    <PageLayout
+      className={
+        'overflow-hidden overscroll-none' +
+        ' ' +
+        (blackboard ? 'bg-black text-white' : 'bg-white text-black')
+      }>
       <DrawerLayout
         darkMode={true}
         className={''}

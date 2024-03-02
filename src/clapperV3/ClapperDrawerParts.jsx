@@ -14,6 +14,7 @@ import FieldButton from '@/fields/FieldButton';
 import FieldGroupDiscloseable from '@/fields/FieldGroupDiscloseable';
 import FieldInput from '@/fields/FieldInput';
 import FieldSelect from '@/fields/FieldSelect';
+import FieldToggle from '@/fields/FieldToggle';
 import {
   findClapBySceneShotTakeNumber,
   getClapById,
@@ -30,6 +31,10 @@ import {
   useClapperCursorClapperId,
   useClapperCursorDispatch,
 } from '@/stores/clapper/cursor';
+import {
+  useClapperSettingsBlackboard,
+  useClapperSettingsDispatch,
+} from '@/stores/clapper/settings';
 
 export default function ClapperDrawerParts() {
   const navigate = useNavigate();
@@ -47,10 +52,25 @@ export default function ClapperDrawerParts() {
       <hr />
       <ClapperProjectIdInput />
       <ShotHashList />
+      <FieldGroupDiscloseable title="Other Stuff">
+        <ClapperSettingsBlackboardToggle />
+      </FieldGroupDiscloseable>
       <FieldGroupDiscloseable title="Dangerous Stuff">
         <ClapperDeleteButton />
       </FieldGroupDiscloseable>
     </div>
+  );
+}
+
+function ClapperSettingsBlackboardToggle() {
+  const blackboard = useClapperSettingsBlackboard();
+  const toggleBlackboardSettings = useClapperSettingsDispatch(
+    (ctx) => ctx.toggleBlackboardSettings,
+  );
+  return (
+    <FieldToggle value={blackboard} onClick={() => toggleBlackboardSettings()}>
+      Toggle blackboard
+    </FieldToggle>
   );
 }
 
@@ -61,13 +81,13 @@ function ClapperDeleteButton() {
   return (
     <FieldButton
       Icon={DeleteIcon}
-      title="Delete Project"
+      title="Delete project"
       danger={true}
       onClick={() => {
         deleteClapper(clapperId);
         focusClapper('');
       }}>
-      Delete Clapper
+      Delete project
     </FieldButton>
   );
 }
