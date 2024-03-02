@@ -1,5 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 
+import CheckBoxFillIcon from '@material-symbols/svg-400/rounded/check_box-fill.svg';
+import CheckBoxIcon from '@material-symbols/svg-400/rounded/check_box.svg';
+import CheckBoxOutlineBlankIcon from '@material-symbols/svg-400/rounded/check_box_outline_blank.svg';
 import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
 import HomeIcon from '@material-symbols/svg-400/rounded/home.svg';
 
@@ -178,6 +181,9 @@ function ShotHashListItem({ clapperId, shotHashId }) {
   const nextTakeNumber = useClapperStore(
     (ctx) => getShotHashById(ctx, clapperId, shotHashId)?.nextTakeNumber,
   );
+  const clapCount = useClapperStore(
+    (ctx) => getShotHashById(ctx, clapperId, shotHashId)?.clapIds?.length ?? 0,
+  );
   const sceneShotNumber = formatSceneShotNumber(sceneNumber, shotNumber, true);
   const focusClap = useClapperCursorDispatch((ctx) => ctx.focusClap);
   const clapId = useClapperStore(
@@ -196,9 +202,39 @@ function ShotHashListItem({ clapperId, shotHashId }) {
   const dateString = new Date(timestampMillis).toLocaleString();
   return (
     <li
-      className="select-none px-2 hover:bg-gray-300"
+      className="flex select-none items-center gap-2 px-2 hover:bg-gray-300"
       onClick={() => focusClap(clapperId, clapId || '')}>
-      Shot {sceneShotNumber} - {dateString}
+      <Printed clapperId={clapperId} shotHashId={shotHashId} />
+      Shot {sceneShotNumber} (👏 {clapCount}) - {dateString}
     </li>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/clapper/Store').ClapperId} props.clapperId
+ * @param {import('@/stores/clapper/Store').ShotHashId} props.shotHashId
+ */
+function Printed({ clapperId, shotHashId }) {
+  const printed = useClapperStore((ctx) => {
+    let clapIds = getShotHashById(ctx, clapperId, shotHashId)?.clapIds ?? [];
+    for (let clapId of clapIds) {
+      let clap = getClapById(ctx, clapperId, clapId);
+      if (clap.printRating > 0) {
+        return 2;
+      }
+    }
+    return clapIds.length > 0 ? 1 : 0;
+  });
+  return (
+    <div className="-mx-1">
+      {printed === 2 ? (
+        <CheckBoxFillIcon className="h-4 w-4 fill-current" />
+      ) : printed === 1 ? (
+        <CheckBoxIcon className="h-4 w-4 fill-current" />
+      ) : (
+        <CheckBoxOutlineBlankIcon className="h-4 w-4 fill-current" />
+      )}
+    </div>
   );
 }

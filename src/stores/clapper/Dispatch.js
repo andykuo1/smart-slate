@@ -200,6 +200,9 @@ function finalizeClap(
   result.shotNumber = shotNumber;
   result.takeNumber = shotHash.nextTakeNumber;
   shotHash.nextTakeNumber += 1;
+  if (!shotHash.clapIds.includes(clap.clapId)) {
+    shotHash.clapIds.push(clap.clapId);
+  }
   result.timestampMillis = Date.now();
   result.takeId = uuid();
 
