@@ -21,8 +21,8 @@ export default function SceneNumberInput({
   return (
     <input
       id={id}
-      style={{ lineHeight: '1em' }}
-      className="inline w-[1.8em] overflow-hidden whitespace-pre bg-transparent text-[3em]"
+      style={{ lineHeight: '1em', letterSpacing: '-0.1em' }}
+      className="inline w-[1.56em] overflow-hidden whitespace-pre bg-transparent text-[3em]"
       pattern="[0-9]*"
       type="text"
       inputMode="numeric"
