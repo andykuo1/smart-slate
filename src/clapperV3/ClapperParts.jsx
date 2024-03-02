@@ -57,16 +57,24 @@ export default function ClapperParts({ clapperId }) {
   const finalizeClap = useClapperDispatch((ctx) => ctx.finalizeClap);
 
   const clapId = useClapperCursorClapId();
-  const sceneNumber = useClapperCursorSceneNumber();
+  const cursorSceneNumber = useClapperCursorSceneNumber();
+  const clapSceneNumber = useClapperStore(
+    (ctx) => getClapById(ctx, clapperId, clapId)?.sceneNumber ?? 0,
+  );
+  const sceneNumber = clapId ? clapSceneNumber : cursorSceneNumber;
   const changeSceneNumber = useClapperCursorDispatch(
     (ctx) => ctx.changeSceneNumber,
   );
-  const shotNumber = useClapperCursorShotNumber();
+  const cursorShotNumber = useClapperCursorShotNumber();
+  const clapShotNumber = useClapperStore(
+    (ctx) => getClapById(ctx, clapperId, clapId)?.shotNumber ?? 0,
+  );
+  const shotNumber = clapId ? clapShotNumber : cursorShotNumber;
   const changeShotNumber = useClapperCursorDispatch(
     (ctx) => ctx.changeShotNumber,
   );
 
-  const rollName = useClapperStore(
+  const clapRollName = useClapperStore(
     (ctx) => getClapById(ctx, clapperId, clapId)?.rollName ?? '',
   );
   const changeRollName = useClapperDispatch((ctx) => ctx.changeClapRollName);
@@ -74,6 +82,8 @@ export default function ClapperParts({ clapperId }) {
   const changeNextRollName = useClapperCursorDispatch(
     (ctx) => ctx.changeRollName,
   );
+  const rollName = clapId ? clapRollName : nextRollName;
+
   const shotHash = useClapperStore((ctx) =>
     findShotHashBySceneShotNumber(ctx, clapperId, sceneNumber, shotNumber),
   );
@@ -110,6 +120,7 @@ export default function ClapperParts({ clapperId }) {
    */
   function onSceneNumberChange(sceneNumber) {
     changeSceneNumber(sceneNumber);
+    changeShotNumber(1);
     focusClap(clapperId, '');
   }
 
@@ -135,9 +146,10 @@ export default function ClapperParts({ clapperId }) {
       changeSceneNumber(shotHash.sceneNumber);
       changeShotNumber(shotHash.shotNumber);
     } else {
-      changeSceneNumber(0);
-      changeShotNumber(0);
+      changeSceneNumber(1);
+      changeShotNumber(1);
     }
+    focusClap(clapperId, '');
   }
 
   /**
@@ -231,10 +243,7 @@ export default function ClapperParts({ clapperId }) {
           <fieldset className="mx-auto flex w-full flex-row gap-4 overflow-hidden rounded-xl border-2 px-4 font-mono">
             <ClapperDateField />
             <ul className="my-auto flex flex-1 flex-col items-center text-[1.5vmin]"></ul>
-            <ClapperRollField
-              value={clapId ? rollName : nextRollName}
-              onChange={onRollNameChange}
-            />
+            <ClapperRollField value={rollName} onChange={onRollNameChange} />
           </fieldset>
           <div className="flex w-full flex-1 flex-row gap-1 short:hidden">
             <ClapperCommentField

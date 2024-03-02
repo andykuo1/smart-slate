@@ -24,6 +24,10 @@ export function createClapper(clapperId = uuid()) {
   return {
     clapperId,
     clapperVersion: CURRENT_CLAPPER_VERSION,
+    firstCreatedMillis: 0,
+    lastUpdatedMillis: 0,
+    lastDeletedMillis: 0,
+    lastExportedMillis: 0,
     details: createClapperDetails(),
     /** @type {Record<ClapId, Clap>} */
     claps: {},

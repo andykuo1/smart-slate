@@ -8,12 +8,29 @@ import {
   getShotHashById,
 } from './GetClapper';
 
+export function useClapperIds() {
+  return useClapperStore(useShallow((ctx) => Object.keys(ctx.clappers ?? {})));
+}
+
 /**
  * @param {import('./Store').ClapperId} clapperId
  */
 export function useClapIds(clapperId) {
   return useClapperStore(
-    useShallow((ctx) => Object.keys(getClapperById(ctx, clapperId)?.claps)),
+    useShallow((ctx) =>
+      Object.keys(getClapperById(ctx, clapperId)?.claps ?? {}),
+    ),
+  );
+}
+
+/**
+ * @param {import('./Store').ClapperId} clapperId
+ */
+export function useShotHashIds(clapperId) {
+  return useClapperStore(
+    useShallow((ctx) =>
+      Object.keys(getClapperById(ctx, clapperId)?.shotHashes ?? {}),
+    ),
   );
 }
 

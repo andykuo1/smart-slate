@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 
+import ClapperDrawerParts from '@/clapperV3/ClapperDrawerParts';
 import ClapperParts from '@/clapperV3/ClapperParts';
-import Drawer from '@/drawer/Drawer';
+import DrawerLayout from '@/drawer/layout/DrawerLayout';
 import {
   getClapperById,
   useClapperDispatch,
@@ -20,6 +21,7 @@ export default function ClapperPage() {
   const clapperId = useClapperCursorClapperId();
   const focusClapper = useClapperCursorDispatch((ctx) => ctx.focusClapper);
   const addClapper = useClapperDispatch((ctx) => ctx.addClapper);
+
   useEffect(() => {
     if (!clapperId) {
       const store = UNSAFE_getClapperStore();
@@ -32,11 +34,17 @@ export default function ClapperPage() {
       focusClapper(clapper.clapperId);
     }
   }, [clapperId, addClapper, focusClapper, UNSAFE_getClapperStore]);
+
   return (
     <PageLayout className={'overflow-hidden overscroll-none'}>
-      <Drawer darkMode={true}>
+      <DrawerLayout
+        darkMode={true}
+        className={''}
+        containerClassName={''}
+        toolbar={<></>}
+        content={<ClapperDrawerParts />}>
         <ClapperParts clapperId={clapperId} />
-      </Drawer>
+      </DrawerLayout>
     </PageLayout>
   );
 }

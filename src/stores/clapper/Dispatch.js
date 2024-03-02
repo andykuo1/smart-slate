@@ -33,6 +33,7 @@ export function createDispatch(set, get) {
     addClap: zi(set, addClap),
     addShotHash: zi(set, addShotHash),
     finalizeClap: zi(set, finalizeClap),
+    deleteClapper: zi(set, deleteClapper),
   };
 }
 
@@ -122,6 +123,10 @@ function changeClapQRCodeKey(store, clapperId, clapId, value) {
  * @param {import('./Store').Clapper} clapper
  */
 function addClapper(store, clapper) {
+  clapper.firstCreatedMillis = Date.now();
+  clapper.lastUpdatedMillis = clapper.firstCreatedMillis;
+  clapper.lastDeletedMillis = 0;
+  clapper.lastExportedMillis = 0;
   store.clappers[clapper.clapperId] = clapper;
 }
 
@@ -213,4 +218,12 @@ function finalizeClap(
   if (!getClapById(store, clapperId, clap.clapId)) {
     addClap(store, clapperId, result);
   }
+}
+
+/**
+ * @param {import('./Store').Store} store
+ * @param {import('./Store').ClapperId} clapperId
+ */
+function deleteClapper(store, clapperId) {
+  delete store.clappers[clapperId];
 }
