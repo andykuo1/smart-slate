@@ -10,10 +10,8 @@ import FieldInput from '@/fields/FieldInput';
 import FieldSelect from '@/fields/FieldSelect';
 import {
   findClapBySceneShotTakeNumber,
-  getClapById,
   getClapperById,
   getShotHashById,
-  useClapIds,
   useClapperDispatch,
   useClapperIds,
   useClapperProductionTitle,
@@ -140,7 +138,7 @@ function ShotHashList() {
   const clapperId = useClapperCursorClapperId();
   const shotHashIds = useShotHashIds(clapperId);
   return (
-    <ul>
+    <ul className="max-h-[50vh] overflow-y-auto">
       {shotHashIds.map((shotHashId) => (
         <ShotHashListItem
           key={shotHashId}
@@ -183,49 +181,7 @@ function ShotHashListItem({ clapperId, shotHashId }) {
     <li
       className="select-none px-2 hover:bg-gray-300"
       onClick={() => focusClap(clapperId, clapId || '')}>
-      Shot {sceneShotNumber}
-    </li>
-  );
-}
-
-function ClapList() {
-  const clapperId = useClapperCursorClapperId();
-  const clapIds = useClapIds(clapperId);
-  return (
-    <ul>
-      {clapIds.map((clapId) => (
-        <ClapItem key={clapId} clapperId={clapperId} clapId={clapId} />
-      ))}
-    </ul>
-  );
-}
-
-/**
- * @param {object} props
- * @param {import('@/stores/clapper/Store').ClapperId} props.clapperId
- * @param {import('@/stores/clapper/Store').ClapId} props.clapId
- */
-function ClapItem({ clapperId, clapId }) {
-  const sceneNumber = useClapperStore(
-    (ctx) => getClapById(ctx, clapperId, clapId)?.sceneNumber,
-  );
-  const shotNumber = useClapperStore(
-    (ctx) => getClapById(ctx, clapperId, clapId)?.shotNumber,
-  );
-  const takeNumber = useClapperStore(
-    (ctx) => getClapById(ctx, clapperId, clapId)?.takeNumber,
-  );
-  const rollName = useClapperStore(
-    (ctx) => getClapById(ctx, clapperId, clapId)?.rollName,
-  );
-  const sceneShotNumber = formatSceneShotNumber(sceneNumber, shotNumber, true);
-  const focusClap = useClapperCursorDispatch((ctx) => ctx.focusClap);
-  return (
-    <li
-      className="select-none px-2 hover:bg-gray-300"
-      onClick={() => focusClap(clapperId, clapId)}>
-      Shot {sceneShotNumber} Take {takeNumber}
-      {rollName ? `[${rollName}]` : ''}
+      Shot {sceneShotNumber} - {}
     </li>
   );
 }
