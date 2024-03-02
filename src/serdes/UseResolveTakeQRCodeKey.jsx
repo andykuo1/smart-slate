@@ -9,7 +9,7 @@ import { useResolveShotHash } from './UseResolveShotHash';
 import { useResolveTakeNumber } from './UseResolveTakeNumber';
 
 export const QR_CODE_KEY_V1_DECODED_PATTERN =
-  /^(.+)_(\d+\w+)_(\d+)\.([\d-]+)\.(.+)$/;
+  /^(.+)_S*(\d+\w+)_(\d+)\.([\d-]+)\.(.+)$/;
 
 /**
  * @param {string} projectId
