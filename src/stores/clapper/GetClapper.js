@@ -92,6 +92,28 @@ export function findShotHashBySceneShotNumber(
 /**
  * @param {import('./Store').Store} store
  * @param {import('./Store').ClapperId} clapperId
+ * @param {number} sceneNumber
+ */
+export function findLastShotHashBySceneNumber(store, clapperId, sceneNumber) {
+  const clapper = getClapperById(store, clapperId);
+  if (!clapper) {
+    return null;
+  }
+  let result = null;
+  for (let shotHash of Object.values(clapper.shotHashes)) {
+    if (
+      shotHash.sceneNumber === sceneNumber &&
+      shotHash.shotNumber > (result?.shotNumber ?? Number.NEGATIVE_INFINITY)
+    ) {
+      result = shotHash;
+    }
+  }
+  return result;
+}
+
+/**
+ * @param {import('./Store').Store} store
+ * @param {import('./Store').ClapperId} clapperId
  * @param {string} shotHashString
  */
 export function findShotHashByShotHashString(store, clapperId, shotHashString) {

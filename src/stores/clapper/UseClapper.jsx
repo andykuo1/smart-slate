@@ -36,6 +36,33 @@ export function useShotHashIds(clapperId) {
 
 /**
  * @param {import('./Store').ClapperId} clapperId
+ */
+export function useShotHashIdsInOrder(clapperId) {
+  return useClapperStore(
+    useShallow((ctx) => {
+      let result = Object.keys(
+        getClapperById(ctx, clapperId)?.shotHashes ?? {},
+      );
+      result.sort((a, b) => {
+        let shotHashA = getShotHashById(ctx, clapperId, a);
+        let shotHashB = getShotHashById(ctx, clapperId, b);
+        let dscene = shotHashA.sceneNumber - shotHashB.sceneNumber;
+        let dshot = shotHashA.shotNumber - shotHashB.shotNumber;
+        if (Math.sign(dscene) !== 0) {
+          return dscene;
+        }
+        if (Math.sign(dshot) !== 0) {
+          return dshot;
+        }
+        return 0;
+      });
+      return result;
+    }),
+  );
+}
+
+/**
+ * @param {import('./Store').ClapperId} clapperId
  * @param {number} sceneNumber
  * @param {number} shotNumber
  */

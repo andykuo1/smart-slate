@@ -22,6 +22,7 @@ import FieldButton from '@/fields/FieldButton';
 import { useInterval } from '@/libs/UseInterval';
 import {
   findClapBySceneShotTakeNumber,
+  findLastShotHashBySceneNumber,
   findShotHashBySceneShotNumber,
   findShotHashByShotHashString,
   getClapById,
@@ -57,6 +58,7 @@ export default function ClapperParts({ clapperId }) {
   const finalizeClap = useClapperDispatch((ctx) => ctx.finalizeClap);
 
   const clapId = useClapperCursorClapId();
+
   const cursorSceneNumber = useClapperCursorSceneNumber();
   const clapSceneNumber = useClapperStore(
     (ctx) => getClapById(ctx, clapperId, clapId)?.sceneNumber ?? 0,
@@ -65,6 +67,7 @@ export default function ClapperParts({ clapperId }) {
   const changeSceneNumber = useClapperCursorDispatch(
     (ctx) => ctx.changeSceneNumber,
   );
+
   const cursorShotNumber = useClapperCursorShotNumber();
   const clapShotNumber = useClapperStore(
     (ctx) => getClapById(ctx, clapperId, clapId)?.shotNumber ?? 0,
@@ -77,12 +80,12 @@ export default function ClapperParts({ clapperId }) {
   const clapRollName = useClapperStore(
     (ctx) => getClapById(ctx, clapperId, clapId)?.rollName ?? '',
   );
-  const changeRollName = useClapperDispatch((ctx) => ctx.changeClapRollName);
   const nextRollName = useClapperCursorRollName();
+  const rollName = clapId ? clapRollName : nextRollName;
+  const changeRollName = useClapperDispatch((ctx) => ctx.changeClapRollName);
   const changeNextRollName = useClapperCursorDispatch(
     (ctx) => ctx.changeRollName,
   );
-  const rollName = clapId ? clapRollName : nextRollName;
 
   const shotHash = useClapperStore((ctx) =>
     findShotHashBySceneShotNumber(ctx, clapperId, sceneNumber, shotNumber),
@@ -592,6 +595,7 @@ function ClapperIdentifierFields({
       }>
       <div className="flex flex-1 flex-col items-center rounded-xl border-2 px-2">
         <ClapperSceneShotNumberField
+          clapperId={clapperId}
           sceneNumber={sceneNumber}
           shotNumber={shotNumber}
           onSceneNumberChange={onSceneNumberChange}
@@ -620,39 +624,36 @@ function ClapperIdentifierFields({
 
 /**
  * @param {object} props
+ * @param {import('@/stores/clapper/Store').ClapperId} props.clapperId
  * @param {number} props.sceneNumber
  */
-function SceneNumberList({ sceneNumber }) {
+function SceneNumberList({ clapperId, sceneNumber }) {
   let result = [];
   for (let i = 1; i < sceneNumber; ++i) {
     result.push(
-      <SelectItem
+      <SceneNumberListItem
         key={'scene.' + i}
-        className={'whitespace-pre' + ' ' + SelectStyle.selectItem}
-        value={String(i)}>
-        {formatSceneNumber(i, true).padStart(3, '0')}
-      </SelectItem>,
+        clapperId={clapperId}
+        sceneNumber={i}
+      />,
     );
   }
   result.push(
-    <SelectItem
+    <SceneNumberListItem
       key={'scene.' + sceneNumber}
-      className={'whitespace-pre bg-blue-100' + ' ' + SelectStyle.selectItem}
-      value={String(sceneNumber)}>
-      {formatSceneNumber(sceneNumber, true).padStart(3, '0')}
-    </SelectItem>,
+      clapperId={clapperId}
+      sceneNumber={sceneNumber}
+      active={true}
+    />,
   );
   let max = sceneNumber + 100;
   for (let i = sceneNumber + 1; i < max; ++i) {
     result.push(
-      <SelectItem
+      <SceneNumberListItem
         key={'scene.' + i}
-        className={
-          'whitespace-pre text-gray-300' + ' ' + SelectStyle.selectItem
-        }
-        value={String(i)}>
-        {formatSceneNumber(i, true).padStart(3, '0')}
-      </SelectItem>,
+        clapperId={clapperId}
+        sceneNumber={i}
+      />,
     );
   }
   return result;
@@ -660,42 +661,98 @@ function SceneNumberList({ sceneNumber }) {
 
 /**
  * @param {object} props
+ * @param {import('@/stores/clapper/Store').ClapperId} props.clapperId
+ * @param {number} props.sceneNumber
+ * @param {boolean} [props.active]
+ */
+function SceneNumberListItem({ clapperId, sceneNumber, active }) {
+  const shotHash = useClapperStore((ctx) =>
+    findLastShotHashBySceneNumber(ctx, clapperId, sceneNumber),
+  );
+  return (
+    <SelectItem
+      className={
+        'whitespace-pre' +
+        ' ' +
+        (shotHash ? 'text-black' : 'text-gray-300') +
+        ' ' +
+        (active ? 'bg-blue-100' : '') +
+        ' ' +
+        SelectStyle.selectItem
+      }
+      value={String(sceneNumber)}>
+      {formatSceneNumber(sceneNumber, true).padStart(3, '0')}
+    </SelectItem>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/clapper/Store').ClapperId} props.clapperId
+ * @param {number} props.sceneNumber
  * @param {number} props.shotNumber
  */
-function ShotNumberList({ shotNumber }) {
+function ShotNumberList({ clapperId, sceneNumber, shotNumber }) {
   let result = [];
   for (let i = 1; i < shotNumber; ++i) {
     result.push(
-      <SelectItem
+      <ShotNumberListItem
         key={'shot.' + i}
-        className={'whitespace-pre' + ' ' + SelectStyle.selectItem}
-        value={String(i)}>
-        {formatShotNumber(i).padEnd(2, ' ')}
-      </SelectItem>,
+        clapperId={clapperId}
+        sceneNumber={sceneNumber}
+        shotNumber={i}
+      />,
     );
   }
   result.push(
-    <SelectItem
+    <ShotNumberListItem
       key={'shot.' + shotNumber}
-      className={'whitespace-pre bg-blue-100' + ' ' + SelectStyle.selectItem}
-      value={String(shotNumber)}>
-      {formatShotNumber(shotNumber).padEnd(2, ' ')}
-    </SelectItem>,
+      clapperId={clapperId}
+      sceneNumber={sceneNumber}
+      shotNumber={shotNumber}
+      active={true}
+    />,
   );
   let max = shotNumber + 26;
   for (let i = shotNumber + 1; i < max; ++i) {
     result.push(
-      <SelectItem
+      <ShotNumberListItem
         key={'shot.' + i}
-        className={
-          'whitespace-pre text-gray-300' + ' ' + SelectStyle.selectItem
-        }
-        value={String(i)}>
-        {formatShotNumber(i).padEnd(2, ' ')}
-      </SelectItem>,
+        clapperId={clapperId}
+        sceneNumber={sceneNumber}
+        shotNumber={i}
+      />,
     );
   }
   return result;
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/clapper/Store').ClapperId} props.clapperId
+ * @param {number} props.sceneNumber
+ * @param {number} props.shotNumber
+ * @param {boolean} [props.active]
+ */
+function ShotNumberListItem({ clapperId, sceneNumber, shotNumber, active }) {
+  const shotHash = useClapperStore((ctx) =>
+    findShotHashBySceneShotNumber(ctx, clapperId, sceneNumber, shotNumber),
+  );
+  return (
+    <SelectItem
+      className={
+        'whitespace-pre' +
+        ' ' +
+        (shotHash ? 'text-black' : 'text-gray-300') +
+        ' ' +
+        (active ? 'bg-blue-100' : '') +
+        ' ' +
+        SelectStyle.selectItem
+      }
+      value={String(shotNumber)}>
+      {formatShotNumber(shotNumber).padEnd(2, ' ')}
+    </SelectItem>
+  );
 }
 
 /**
@@ -794,6 +851,7 @@ function ClapperShotHashField({
 
 /**
  * @param {object} props
+ * @param {import('@/stores/clapper/Store').ClapperId} props.clapperId
  * @param {number} props.sceneNumber
  * @param {number} props.shotNumber
  * @param {boolean} props.disabled
@@ -801,6 +859,7 @@ function ClapperShotHashField({
  * @param {(value: number) => void} props.onShotNumberChange
  */
 function ClapperSceneShotNumberField({
+  clapperId,
   sceneNumber,
   shotNumber,
   disabled,
@@ -825,7 +884,7 @@ function ClapperSceneShotNumberField({
         </Select>
         <SelectPopover
           className={'-mt-[4em] text-[2em]' + ' ' + SelectStyle.popover}>
-          <SceneNumberList sceneNumber={sceneNumber} />
+          <SceneNumberList clapperId={clapperId} sceneNumber={sceneNumber} />
         </SelectPopover>
       </SelectProvider>
       <SelectProvider
@@ -844,7 +903,11 @@ function ClapperSceneShotNumberField({
         </Select>
         <SelectPopover
           className={'-mt-[4em] text-[2em]' + ' ' + SelectStyle.popover}>
-          <ShotNumberList shotNumber={shotNumber} />
+          <ShotNumberList
+            clapperId={clapperId}
+            sceneNumber={sceneNumber}
+            shotNumber={shotNumber}
+          />
         </SelectPopover>
       </SelectProvider>
     </div>

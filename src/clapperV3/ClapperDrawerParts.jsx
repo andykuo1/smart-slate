@@ -17,7 +17,7 @@ import {
   useClapperIds,
   useClapperProductionTitle,
   useClapperStore,
-  useShotHashIds,
+  useShotHashIdsInOrder,
 } from '@/stores/clapper';
 import { createClapper } from '@/stores/clapper/Store';
 import {
@@ -137,7 +137,7 @@ function NewClapperItem() {
 
 function ShotHashList() {
   const clapperId = useClapperCursorClapperId();
-  const shotHashIds = useShotHashIds(clapperId);
+  const shotHashIds = useShotHashIdsInOrder(clapperId);
   return (
     <ul className="max-h-[50vh] overflow-y-auto">
       {shotHashIds.map((shotHashId) => (
