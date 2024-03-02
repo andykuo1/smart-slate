@@ -25,6 +25,8 @@ export function createDispatch(set, get) {
     /** @type {() => Readonly<import('./Store').Store>} */
     UNSAFE_getStore: get,
     changeProductionTitle: zi(set, changeProductionTitle),
+    changeDirectorName: zi(set, changeDirectorName),
+    changeCameraName: zi(set, changeCameraName),
     changeClapRollName: zi(set, changeClapRollName),
     toggleClapPrintRating: zi(set, toggleClapPrintRating),
     changeClapComments: zi(set, changeClapComments),
@@ -49,6 +51,34 @@ function changeProductionTitle(store, clapperId, value) {
   }
   let details = resolveClapperDetails(clapper);
   details.productionTitle = value;
+}
+
+/**
+ * @param {import('./Store').Store} store
+ * @param {import('./Store').ClapperId} clapperId
+ * @param {string} value
+ */
+function changeDirectorName(store, clapperId, value) {
+  let clapper = getClapperById(store, clapperId);
+  if (!clapper) {
+    return;
+  }
+  let details = resolveClapperDetails(clapper);
+  details.directorName = value;
+}
+
+/**
+ * @param {import('./Store').Store} store
+ * @param {import('./Store').ClapperId} clapperId
+ * @param {string} value
+ */
+function changeCameraName(store, clapperId, value) {
+  let clapper = getClapperById(store, clapperId);
+  if (!clapper) {
+    return;
+  }
+  let details = resolveClapperDetails(clapper);
+  details.cameraName = value;
 }
 
 /**

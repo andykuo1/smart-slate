@@ -12,6 +12,7 @@ import QRCode2AddIcon from '@material-symbols/svg-400/rounded/qr_code_2_add.svg'
 import ThumbUpFillIcon from '@material-symbols/svg-400/rounded/thumb_up-fill.svg';
 import ThumbUpIcon from '@material-symbols/svg-400/rounded/thumb_up.svg';
 
+import ClapperVerticalLabel from '@/clapper/ClapperVerticalLabel';
 import { useQRCodeCanvas } from '@/clapper/UseQRCodeCanvas';
 import {
   formatSceneNumber,
@@ -27,6 +28,7 @@ import {
   findShotHashByShotHashString,
   getClapById,
   getClapperById,
+  getClapperDetailsById,
   getShotHashById,
   useClapComments,
   useClapPrintRating,
@@ -44,7 +46,10 @@ import {
   useClapperCursorSceneNumber,
   useClapperCursorShotNumber,
 } from '@/stores/clapper/cursor';
-import { useClapperSettingsBlackboard } from '@/stores/clapper/settings';
+import {
+  useClapperSettingsBlackboard,
+  useClapperSettingsStore,
+} from '@/stores/clapper/settings';
 import SelectStyle from '@/styles/Select.module.css';
 
 /**
@@ -249,14 +254,19 @@ export default function ClapperParts({ clapperId }) {
             <ClapperRollField value={rollName} onChange={onRollNameChange} />
           </fieldset>
           <div className="flex w-full flex-1 flex-row gap-1 short:hidden">
-            <ClapperCommentField
-              value={comments}
-              onChange={(e) =>
-                changeClapComments(clapperId, clapId, e.target.value)
-              }
-              disabled={!clapperId}
-            />
+            <div className="flex w-[calc(100%-4em)] flex-col">
+              <ClapperCommentField
+                className="flex-1"
+                value={comments}
+                onChange={(e) =>
+                  changeClapComments(clapperId, clapId, e.target.value)
+                }
+                disabled={!clapperId}
+              />
+              <ClapperCreditFields clapperId={clapperId} />
+            </div>
             <ClapperPrintButton
+              className="flex-1"
               printed={printRating > 0}
               onClick={() => toggleClapPrintRating(clapperId, clapId)}
               disabled={!clapId}
@@ -284,6 +294,39 @@ export default function ClapperParts({ clapperId }) {
           disabled={!qrCodeKey}
         />
       </div>
+    </div>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/clapper/Store').ClapperId} props.clapperId
+ */
+function ClapperCreditFields({ clapperId }) {
+  const directorName = useClapperStore(
+    (ctx) => getClapperDetailsById(ctx, clapperId)?.directorName,
+  );
+  const cameraName = useClapperStore(
+    (ctx) => getClapperDetailsById(ctx, clapperId)?.cameraName,
+  );
+  const enableCrewNames = useClapperSettingsStore((ctx) => ctx.enableCrewNames);
+  if (!enableCrewNames) {
+    return null;
+  }
+  return (
+    <div className="flex flex-col overflow-hidden">
+      {directorName && (
+        <p className="flex items-center uppercase">
+          <ClapperVerticalLabel>DIR</ClapperVerticalLabel>
+          {directorName}
+        </p>
+      )}
+      {cameraName && (
+        <p className="flex items-center uppercase">
+          <ClapperVerticalLabel>CAM</ClapperVerticalLabel>
+          {cameraName}
+        </p>
+      )}
     </div>
   );
 }
@@ -540,15 +583,20 @@ function ClapperRollField({ value, onChange }) {
 
 /**
  * @param {object} props
+ * @param {string} props.className
  * @param {string} props.value
  * @param {boolean} props.disabled
  * @param {import('react').ChangeEventHandler<HTMLTextAreaElement>} props.onChange
  */
-function ClapperCommentField({ value, disabled, onChange }) {
+function ClapperCommentField({ className, value, disabled, onChange }) {
   return (
     <textarea
       style={{ lineHeight: '1em' }}
-      className="my-1 w-full resize-none rounded-xl bg-transparent p-2 font-mono text-[1.5em] placeholder:opacity-30"
+      className={
+        'my-1 w-full resize-none rounded-xl bg-transparent p-2 font-mono text-[1.5em] placeholder:opacity-30' +
+        ' ' +
+        className
+      }
       value={value}
       onChange={onChange}
       placeholder="Comments"

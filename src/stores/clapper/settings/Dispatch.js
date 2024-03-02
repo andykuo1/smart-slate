@@ -11,6 +11,7 @@ export function createDispatch(set, get) {
     /** @type {() => Readonly<import('./Store').Store>} */
     UNSAFE_getStore: get,
     toggleBlackboardSettings: zi(set, toggleBlackboardSettings),
+    toggleCrewNames: zi(set, toggleCrewNames),
   };
 }
 
@@ -20,4 +21,13 @@ export function createDispatch(set, get) {
  */
 function toggleBlackboardSettings(store, force) {
   store.blackboard = typeof force !== 'undefined' ? force : !store.blackboard;
+}
+
+/**
+ * @param {import('./Store').Store} store
+ * @param {boolean} [force]
+ */
+function toggleCrewNames(store, force) {
+  store.enableCrewNames =
+    typeof force !== 'undefined' ? force : !store.enableCrewNames;
 }

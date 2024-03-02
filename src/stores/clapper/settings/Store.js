@@ -6,6 +6,7 @@ export function createStore() {
   return {
     settingsVersion: CURRENT_CLAPPER_SETTINGS_VERSION,
     blackboard: false,
+    enableCrewNames: true,
   };
 }
 

@@ -19,6 +19,7 @@ import {
   findClapBySceneShotTakeNumber,
   getClapById,
   getClapperById,
+  getClapperDetailsById,
   getShotHashById,
   useClapperDispatch,
   useClapperIds,
@@ -34,6 +35,7 @@ import {
 import {
   useClapperSettingsBlackboard,
   useClapperSettingsDispatch,
+  useClapperSettingsStore,
 } from '@/stores/clapper/settings';
 
 export default function ClapperDrawerParts() {
@@ -55,10 +57,59 @@ export default function ClapperDrawerParts() {
       <FieldGroupDiscloseable title="Other Stuff">
         <ClapperSettingsBlackboardToggle />
       </FieldGroupDiscloseable>
+      <FieldGroupDiscloseable title="Crew Stuff">
+        <ClapperSettingsCrewNamesToggle />
+        <ClapperDirectorNameInput />
+        <ClapperCameraNameInput />
+      </FieldGroupDiscloseable>
       <FieldGroupDiscloseable title="Dangerous Stuff">
         <ClapperDeleteButton />
       </FieldGroupDiscloseable>
     </div>
+  );
+}
+
+function ClapperDirectorNameInput() {
+  const clapperId = useClapperCursorClapperId();
+  const directorName = useClapperStore(
+    (ctx) => getClapperDetailsById(ctx, clapperId)?.directorName,
+  );
+  const changeDirectorName = useClapperDispatch(
+    (ctx) => ctx.changeDirectorName,
+  );
+  return (
+    <FieldInput
+      id="clapperDirectorName"
+      title="Director Name"
+      className="flex flex-col uppercase"
+      value={directorName}
+      placeholder="BILL PRESTON ESQ."
+      onChange={(e) =>
+        changeDirectorName(clapperId, e.target.value.toUpperCase())
+      }
+      autoCapitalize="characters"
+    />
+  );
+}
+
+function ClapperCameraNameInput() {
+  const clapperId = useClapperCursorClapperId();
+  const cameraName = useClapperStore(
+    (ctx) => getClapperDetailsById(ctx, clapperId)?.cameraName,
+  );
+  const changeCameraName = useClapperDispatch((ctx) => ctx.changeCameraName);
+  return (
+    <FieldInput
+      id="clapperCameraName"
+      title="Camera Name"
+      className="flex flex-col uppercase"
+      value={cameraName}
+      placeholder="TED LOGAN"
+      onChange={(e) =>
+        changeCameraName(clapperId, e.target.value.toUpperCase())
+      }
+      autoCapitalize="characters"
+    />
   );
 }
 
@@ -70,6 +121,18 @@ function ClapperSettingsBlackboardToggle() {
   return (
     <FieldToggle value={blackboard} onClick={() => toggleBlackboardSettings()}>
       Toggle blackboard
+    </FieldToggle>
+  );
+}
+
+function ClapperSettingsCrewNamesToggle() {
+  const enableCrewNames = useClapperSettingsStore((ctx) => ctx.enableCrewNames);
+  const toggleCrewNames = useClapperSettingsDispatch(
+    (ctx) => ctx.toggleCrewNames,
+  );
+  return (
+    <FieldToggle value={enableCrewNames} onClick={() => toggleCrewNames()}>
+      Toggle crew names
     </FieldToggle>
   );
 }
