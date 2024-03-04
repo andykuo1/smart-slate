@@ -42,6 +42,16 @@ export default function ShotInLine({
     (ctx) => ctx.editor?.documentEditor?.cursorType === 'edit',
   );
   const shotType = useShotType(documentId, shotId);
+  const setShotEditorShotId = useUserStore((ctx) => ctx.setShotEditorShotId);
+  const cursorType = useUserStore(
+    (ctx) => ctx?.editor?.documentEditor?.cursorType,
+  );
+  function onClick() {
+    if (cursorType !== 'edit') {
+      setShotEditorShotId(shotId);
+    }
+  }
+
   return (
     <fieldset
       className={
@@ -57,7 +67,8 @@ export default function ShotInLine({
         <legend
           className={
             'relative float-left grid w-[9rem] grid-cols-2 grid-rows-2 overflow-hidden whitespace-nowrap bg-white text-center'
-          }>
+          }
+          onClick={onClick}>
           <TooltipAnchor>
             <SceneShotNumberPart
               documentId={documentId}
@@ -72,7 +83,7 @@ export default function ShotInLine({
             shotId={shotId}
           />
         </legend>
-        <Tooltip className="z-50 aspect-video w-[3in]">
+        <Tooltip className="pointer-events-none z-50 aspect-video w-[3in]">
           <ShotThumbnail
             documentId={documentId}
             shotId={shotId}

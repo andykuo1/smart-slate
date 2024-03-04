@@ -14,6 +14,7 @@ import SettingsShotReferenceImageField from '@/components/shots/settings/Setting
 import SettingsShotTypeSelector from '@/components/shots/settings/SettingsShotTypeSelector';
 import FieldButton from '@/fields/FieldButton';
 import FieldToggle from '@/fields/FieldToggle';
+import { useSceneShotNumber } from '@/serdes/UseResolveSceneShotNumber';
 import { getShotById, useShotType } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import {
@@ -37,6 +38,7 @@ export default function ShotReferenceEditor() {
   const sceneId = useCurrentSceneId();
   const shotId = useUserStore((ctx) => ctx.editor.shotEditor.shotId);
   const shotType = useShotType(documentId, shotId);
+  const sceneShotNumber = useSceneShotNumber(documentId, sceneId, shotId);
   const setShotEditorShotId = useUserStore((ctx) => ctx.setShotEditorShotId);
   const setShotReferenceOffset = useDocumentStore(
     (ctx) => ctx.setShotReferenceOffset,
@@ -60,7 +62,7 @@ export default function ShotReferenceEditor() {
       <DialogDismiss className="absolute right-4 top-4 text-left text-xl">
         <CloseIcon className="h-6 w-6 fill-current" />
       </DialogDismiss>
-      <DialogHeading className="">Shot Editor</DialogHeading>
+      <DialogHeading className="">Shot {sceneShotNumber} Editor</DialogHeading>
       <DialogDescription className="text-gray-400">
         Edit with finer control over shot details.
       </DialogDescription>

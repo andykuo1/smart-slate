@@ -1,4 +1,5 @@
 import { useShotType } from '@/stores/document';
+import { useUserStore } from '@/stores/user';
 import BarberpoleStyle from '@/styles/Barberpole.module.css';
 
 import {
@@ -34,6 +35,16 @@ export default function ShotInBlock({
   children,
 }) {
   const shotType = useShotType(documentId, shotId);
+  const setShotEditorShotId = useUserStore((ctx) => ctx.setShotEditorShotId);
+  const cursorType = useUserStore(
+    (ctx) => ctx?.editor?.documentEditor?.cursorType,
+  );
+  function onClick() {
+    if (cursorType !== 'edit') {
+      setShotEditorShotId(shotId);
+    }
+  }
+
   return (
     <fieldset
       className={
@@ -61,7 +72,8 @@ export default function ShotInBlock({
           (active ? 'bg-white' + ' ' + BarberpoleStyle.barberpole : '') +
           ' ' +
           handleClassName
-        }>
+        }
+        onClick={onClick}>
         <ShotThumbnail
           documentId={documentId}
           shotId={shotId}

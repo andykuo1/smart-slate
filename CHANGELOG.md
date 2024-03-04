@@ -3,6 +3,8 @@
 - Add auto-sync when opening local project if already connected to GoogleDrive
 - Add forced uppercase for scene headings in FDX imports
 - Add auto-download CSV for renamed files in scanner
+- Add non-edit click to open reference editor for shots
+- Add scene shot number in reference editor
 
 - Fix reset for project loading
 
