@@ -4,6 +4,7 @@ import CheckBoxFillIcon from '@material-symbols/svg-400/rounded/check_box-fill.s
 import CheckBoxIcon from '@material-symbols/svg-400/rounded/check_box.svg';
 import CheckBoxOutlineBlankIcon from '@material-symbols/svg-400/rounded/check_box_outline_blank.svg';
 import DeleteIcon from '@material-symbols/svg-400/rounded/delete.svg';
+import DownloadIcon from '@material-symbols/svg-400/rounded/download.svg';
 import HomeIcon from '@material-symbols/svg-400/rounded/home.svg';
 
 import {
@@ -15,6 +16,7 @@ import FieldGroupDiscloseable from '@/fields/FieldGroupDiscloseable';
 import FieldInput from '@/fields/FieldInput';
 import FieldSelect from '@/fields/FieldSelect';
 import FieldToggle from '@/fields/FieldToggle';
+import { toDateString } from '@/serdes/ExportNameFormat';
 import {
   findClapBySceneShotTakeNumber,
   getClapById,
@@ -26,6 +28,7 @@ import {
   useClapperProductionTitle,
   useClapperStore,
   useSlateIdsInClapperOrder,
+  useUNSAFE_getClapperStore,
 } from '@/stores/clapper';
 import { createClapper } from '@/stores/clapper/Store';
 import {
@@ -37,6 +40,7 @@ import {
   useClapperSettingsDispatch,
   useClapperSettingsStore,
 } from '@/stores/clapper/settings';
+import { downloadText } from '@/utils/Downloader';
 
 export default function ClapperDrawerParts() {
   const navigate = useNavigate();
@@ -57,6 +61,9 @@ export default function ClapperDrawerParts() {
       <FieldGroupDiscloseable title="Other Stuff">
         <ClapperSettingsBlackboardToggle />
       </FieldGroupDiscloseable>
+      <FieldGroupDiscloseable title="Data Stuff">
+        <ClapperExportCSVButton />
+      </FieldGroupDiscloseable>
       <FieldGroupDiscloseable title="Crew Stuff">
         <ClapperSettingsCrewNamesToggle />
         <ClapperDirectorNameInput />
@@ -66,6 +73,64 @@ export default function ClapperDrawerParts() {
         <ClapperDeleteButton />
       </FieldGroupDiscloseable>
     </div>
+  );
+}
+
+function ClapperExportCSVButton() {
+  const clapperId = useClapperCursorClapperId();
+  const UNSAFE_getClapperStore = useUNSAFE_getClapperStore();
+
+  function onClick() {
+    const store = UNSAFE_getClapperStore();
+    const clapper = getClapperById(store, clapperId);
+    const slateIds = Object.keys(clapper.slates);
+    /** @type {Array<string>} */
+    let lines = [];
+    lines.push(
+      ['SCENE', 'TAKE', 'ROLL', 'PRINT', 'DATE', 'TAKEID', 'COMMENTS'].join(
+        ',',
+      ),
+    );
+    for (let slateId of slateIds) {
+      const slate = getSlateById(store, clapperId, slateId);
+      const sceneShotNumber = formatSceneShotNumber(
+        slate.sceneNumber,
+        slate.shotNumber,
+        true,
+      );
+      for (let clapId of slate.clapIds) {
+        const clap = getClapById(store, clapperId, clapId);
+        lines.push(
+          [
+            sceneShotNumber,
+            clap.takeNumber,
+            clap.rollName,
+            clap.printRating > 0 ? 'PRINT' : '',
+            new Date(clap.timestampMillis).toLocaleString(),
+            clap.takeId,
+            clap.comments,
+          ].join(','),
+        );
+      }
+    }
+    let result = lines.join('\n');
+    let dateString = toDateString(new Date());
+    let fileName = [
+      clapper?.details?.productionTitle,
+      dateString,
+      'CLAPS.csv',
+    ].join('_');
+    downloadText(fileName, result);
+  }
+
+  return (
+    <FieldButton
+      Icon={DownloadIcon}
+      title="Export to .csv"
+      danger={true}
+      onClick={onClick}>
+      Export to .csv
+    </FieldButton>
   );
 }
 
