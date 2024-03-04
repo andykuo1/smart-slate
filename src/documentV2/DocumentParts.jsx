@@ -1,3 +1,4 @@
+import AddIcon from '@material-symbols/svg-400/rounded/add.svg';
 import CursorIcon from '@material-symbols/svg-400/rounded/arrow_selector_tool-fill.svg';
 import EditIcon from '@material-symbols/svg-400/rounded/edit.svg';
 import ShotListIcon from '@material-symbols/svg-400/rounded/lists.svg';
@@ -12,10 +13,13 @@ import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useSceneShotNumber } from '@/serdes/UseResolveSceneShotNumber';
 import {
   getDocumentSettingsById,
+  useAddBlock,
+  useAddScene,
   useBlockIds,
   useSceneHeading,
   useShotIds,
 } from '@/stores/document';
+import { createBlock, createScene } from '@/stores/document/DocumentStore';
 import {
   useBlockShotCount,
   useDocumentStore,
@@ -45,7 +49,7 @@ export default function DocumentParts({ documentId }) {
   const inline = editMode === 'inline';
   return (
     <div className="flex h-full w-full flex-col">
-      <Document documentId={documentId} inline={true} split={!inline} />
+      <Document documentId={documentId} inline={inline} split={!inline} />
     </div>
   );
 }
@@ -98,6 +102,7 @@ function SceneWiseDocumentPartShotList({ documentId, sceneId }) {
             sceneId={sceneId}
             blockIds={blockIds}
             shotListType={shotListType}
+            newable={true}
           />
         </figure>
       </div>
@@ -133,7 +138,40 @@ function DocumentScenes({ documentId, inline, split }) {
           split={split}
         />
       ))}
+      <ScenePartNew documentId={documentId} />
     </div>
+  );
+}
+
+/**
+ * @param {object} props
+ * @param {import('@/stores/document/DocumentStore').DocumentId} props.documentId
+ */
+function ScenePartNew({ documentId }) {
+  const addScene = useAddScene();
+  const addBlock = useAddBlock();
+  function onClick() {
+    let scene = createScene();
+    let block = createBlock();
+    // NOTE: This should be the default.
+    block.contentType = 'fountain-json';
+    addScene(documentId, scene);
+    addBlock(documentId, scene.sceneId, block);
+  }
+  return (
+    <button
+      className="z-30 select-none rounded-full opacity-30 outline-2 transition-transform hover:-translate-y-1 hover:cursor-pointer hover:opacity-60 hover:shadow-2xl active:translate-y-0 active:bg-gray-200 active:shadow-inner"
+      onClick={onClick}>
+      <DocumentPart
+        slotLeft={<SceneNumberNew />}
+        slotRight={<SceneNumberNew />}>
+        <h3
+          style={{ letterSpacing: 'min(4vw, 1.5em)' }}
+          className="w-full py-5 text-center text-2xl uppercase">
+          NEW SCENE
+        </h3>
+      </DocumentPart>
+    </button>
   );
 }
 
@@ -325,6 +363,7 @@ function BlockOrShotList({ documentId, sceneId, blockId, inline }) {
             sceneId={sceneId}
             blockIds={[blockId]}
             shotListType={shotListType}
+            newable={false}
           />
           {/* ShotList Toolbar */}
           <div className="absolute right-0 top-0 flex w-[4rem] translate-x-[100%] flex-col items-center px-2 py-1 text-gray-400 opacity-0 group-hover:opacity-100">
@@ -407,5 +446,13 @@ function SceneNumber({ documentId, sceneId }) {
   const text = sceneNumber <= 0 ? '---' : String(sceneNumber);
   return (
     <div className="h-full pt-5 text-center font-bold opacity-30">{text}</div>
+  );
+}
+
+function SceneNumberNew() {
+  return (
+    <div className="flex h-full text-center font-bold opacity-30">
+      <AddIcon className="m-auto h-6 w-6 fill-current" />
+    </div>
   );
 }

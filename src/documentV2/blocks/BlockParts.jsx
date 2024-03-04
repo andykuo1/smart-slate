@@ -96,9 +96,7 @@ function Block({ className, documentId, sceneId, blockId, children }) {
   // TODO: Make the textarea LOOK like it's editing.
   // TODO: Add shortcuts to textarea editing.
   return (
-    <div
-      ref={ref}
-      className={'group relative hover:bg-gray-100' + ' ' + className}>
+    <div ref={ref} className={'group relative' + ' ' + className}>
       <div className="" onClick={onClick}>
         {editing ? (
           <BlockContentTextArea

@@ -22,6 +22,7 @@ import ShotInLineNew from './shots/ShotInLineNew';
  * @param {import('@/stores/document/DocumentStore').SceneId} props.sceneId
  * @param {Array<import('@/stores/document/DocumentStore').BlockId>} props.blockIds
  * @param {import('@/stores/user/EditorStore').BlockViewShotListType} props.shotListType
+ * @param {boolean} props.newable
  */
 export default function ShotListParts({
   className,
@@ -29,6 +30,7 @@ export default function ShotListParts({
   sceneId,
   blockIds,
   shotListType,
+  newable,
 }) {
   const lastBlockId = blockIds.at(-1);
   return (
@@ -49,13 +51,15 @@ export default function ShotListParts({
           shotListType={shotListType}
         />
       ))}
-      <NewShot
-        className={getNewShotClassNameByShotListType(shotListType)}
-        documentId={documentId}
-        sceneId={sceneId}
-        blockId={lastBlockId || ''}
-        type={getShotViewVariantByShotListType(shotListType)}
-      />
+      {newable && (
+        <NewShot
+          className={getNewShotClassNameByShotListType(shotListType)}
+          documentId={documentId}
+          sceneId={sceneId}
+          blockId={lastBlockId || ''}
+          type={getShotViewVariantByShotListType(shotListType)}
+        />
+      )}
     </ul>
   );
 }
