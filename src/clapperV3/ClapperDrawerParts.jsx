@@ -100,13 +100,14 @@ function ClapperExportCSVButton() {
       );
       for (let clapId of slate.clapIds) {
         const clap = getClapById(store, clapperId, clapId);
+        const date = new Date(clap.timestampMillis);
         lines.push(
           [
             sceneShotNumber,
             clap.takeNumber,
             clap.rollName,
             clap.printRating > 0 ? 'PRINT' : '',
-            new Date(clap.timestampMillis).toLocaleString(),
+            date.toLocaleString().replace(/\,/g, ''),
             clap.takeId,
             clap.comments,
           ].join(','),
@@ -116,7 +117,7 @@ function ClapperExportCSVButton() {
     let result = lines.join('\n');
     let dateString = toDateString(new Date());
     let fileName = [
-      clapper?.details?.productionTitle,
+      clapper?.details?.productionTitle || 'MYMOVIE',
       dateString,
       'CLAPS.csv',
     ].join('_');
@@ -124,11 +125,7 @@ function ClapperExportCSVButton() {
   }
 
   return (
-    <FieldButton
-      Icon={DownloadIcon}
-      title="Export to .csv"
-      danger={true}
-      onClick={onClick}>
+    <FieldButton Icon={DownloadIcon} title="Export to .csv" onClick={onClick}>
       Export to .csv
     </FieldButton>
   );
