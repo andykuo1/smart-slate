@@ -1,6 +1,9 @@
 import SaveIcon from '@material-symbols/svg-400/rounded/save.svg';
 
 import FieldButton from '@/fields/FieldButton';
+import { toDateString } from '@/serdes/ExportNameFormat';
+import { downloadText } from '@/utils/Downloader';
+import { basename } from '@/utils/PathHelper';
 
 import {
   createScannerChangeEvent,
@@ -25,6 +28,22 @@ export default function SettingsFootageSaveToDiskButton({
     if (!output) {
       return;
     }
+
+    // Export to CSV first!
+    let lines = [];
+    for (let key of Object.keys(output)) {
+      let result = output[key];
+      if (isScannerFailure(result)) {
+        continue;
+      }
+      let keyFileName = basename(key);
+      let baseFileName = basename(result.value);
+      lines.push(`${keyFileName},${baseFileName}`);
+    }
+    const result = lines.join('\n');
+    const dateString = toDateString(new Date());
+    const fileName = 'EAGLESLATE_' + dateString + '_SCANNED_NAMES.csv';
+    downloadText(fileName, result);
 
     // Rename files
     await performRename(output, onChange);
