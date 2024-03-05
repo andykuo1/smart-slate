@@ -1,14 +1,7 @@
 import AddIcon from '@material-symbols/svg-400/rounded/add.svg';
-import CursorIcon from '@material-symbols/svg-400/rounded/arrow_selector_tool-fill.svg';
-import EditIcon from '@material-symbols/svg-400/rounded/edit.svg';
-import ShotListIcon from '@material-symbols/svg-400/rounded/lists.svg';
-import MoodBoardIcon from '@material-symbols/svg-400/rounded/photo_library.svg';
-import SplitViewIcon from '@material-symbols/svg-400/rounded/vertical_split.svg';
-import InlineViewIcon from '@material-symbols/svg-400/rounded/view_day.svg';
 
 import SettingsSceneShotsRenumberButton from '@/components/scenes/settings/SettingsSceneShotsRenumberButton';
 import GoToSettingsButton from '@/drawer/GoToSettingsButton';
-import FieldButton from '@/fields/FieldButton';
 import { useSceneNumber } from '@/serdes/UseResolveSceneNumber';
 import { useSceneShotNumber } from '@/serdes/UseResolveSceneShotNumber';
 import {
@@ -34,10 +27,14 @@ import {
 } from '@/stores/user/EditorAccessor';
 
 import BlockViewShotListTypeToggle from './BlockViewShotListTypeToggle';
+import DocumentToolbarParts from './DocumentToolbarParts';
 import SceneViewShotListTypeToggle from './SceneViewShotListTypeToggle';
 import ShotListParts from './ShotListParts';
 import BlockParts, { BlockPartContentToolbar } from './blocks/BlockParts';
 import ShotForDraggingCursor from './shots/ShotForDraggingCursor';
+
+// TODO: Drag and drop into a trash can
+// TODO: select, highlight, then move to here button.
 
 /**
  * @param {object} props
@@ -78,7 +75,7 @@ function Document({ className, documentId, inline, split }) {
         <DocumentScenes documentId={documentId} inline={inline} split={split} />
       </article>
       <ShotForDraggingCursor documentId={documentId} />
-      <DocumentPartToolbar />
+      <DocumentToolbarParts documentId={documentId} />
     </div>
   );
 }
@@ -225,55 +222,6 @@ function SceneParts({ documentId, sceneId, inline, split }) {
         </div>
       </DocumentPart>
     </>
-  );
-}
-
-// TODO: Drag and drop into a trash can
-// TODO: select, highlight, then move to here button.
-
-function DocumentPartToolbar() {
-  const editMode = useUserStore((ctx) => ctx.editMode);
-  const setEditMode = useUserStore((ctx) => ctx.setEditMode);
-  const cursorType = useUserStore(
-    (ctx) => ctx?.editor?.documentEditor?.cursorType,
-  );
-  const toggleDocumentEditorCursorType = useUserStore(
-    (ctx) => ctx.toggleDocumentEditorCursorType,
-  );
-  return (
-    <div className="fixed bottom-0 left-0 right-0 z-30 flex flex-col items-center">
-      <div className="my-1 flex flex-row items-center gap-5 rounded-full bg-white px-5 py-2 shadow-xl">
-        <FieldButton
-          Icon={CursorIcon}
-          className="mx-auto"
-          inverted={cursorType === ''}
-          onClick={() => toggleDocumentEditorCursorType('')}
-        />
-        <FieldButton
-          Icon={EditIcon}
-          className="mx-auto"
-          inverted={cursorType === 'edit'}
-          onClick={() => toggleDocumentEditorCursorType('edit')}
-        />
-        <FieldButton
-          Icon={editMode !== 'inline' ? SplitViewIcon : InlineViewIcon}
-          className="mx-auto"
-          onClick={() =>
-            setEditMode(editMode !== 'inline' ? 'inline' : 'sequence')
-          }
-        />
-        <FieldButton
-          Icon={MoodBoardIcon}
-          className="mx-auto"
-          onClick={() => setEditMode('sequence')}
-        />
-        <FieldButton
-          Icon={ShotListIcon}
-          className="mx-auto"
-          onClick={() => setEditMode('sequence')}
-        />
-      </div>
-    </div>
   );
 }
 

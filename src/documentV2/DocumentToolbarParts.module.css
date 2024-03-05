@@ -1,0 +1,75 @@
+.navbar {
+  max-height: calc(100vh - 8rem);
+}
+.navbarEnter {
+  animation: 0.15s ease forwards navbarEnter;
+  pointer-events: auto;
+}
+.navbarExit {
+  animation: 0.15s ease forwards navbarExit;
+  pointer-events: none;
+}
+
+@keyframes navbarEnter {
+  from {
+    opacity: 0;
+    width: 0;
+  }
+  to {
+    opacity: 1;
+    width: 12rem;
+  }
+}
+
+@keyframes navbarExit {
+  from {
+    opacity: 1;
+    width: 12rem;
+  }
+  to {
+    opacity: 0;
+    width: 0;
+  }
+}
+
+.toolbar {
+  max-width: 80vw;
+  max-height: calc(100vh - 4rem);
+  padding: 1.25rem;
+}
+
+.toolbarEnter {
+  animation: 0.3s ease forwards toolbarEnter;
+  pointer-events: auto;
+}
+.toolbarExit {
+  animation: 0.3s ease forwards toolbarExit;
+  pointer-events: none;
+}
+
+@keyframes toolbarEnter {
+  from {
+    width: 4in;
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    width: 8in;
+    height: 3in;
+    opacity: 1;
+  }
+}
+
+@keyframes toolbarExit {
+  from {
+    width: 8in;
+    height: 3in;
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    width: 4in;
+    height: 0;
+    padding: 0;
+  }
+}
