@@ -18,7 +18,6 @@ export default function ClapperButton() {
     <FancyButton
       title="Ready to clap?"
       label={<span className="hidden sm:block">Ready to clap?</span>}
-      className="absolute bottom-16 left-2"
       onClick={onClick}>
       <MovieIcon className="inline-block w-6 fill-current" />
     </FancyButton>
