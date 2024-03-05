@@ -8,6 +8,7 @@ import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import DownloadIcon from '@material-symbols/svg-400/rounded/download.svg';
+import MovieIcon from '@material-symbols/svg-400/rounded/movie.svg';
 import PlagiarismIcon from '@material-symbols/svg-400/rounded/plagiarism.svg';
 import PlaylistAddCheckIcon from '@material-symbols/svg-400/rounded/playlist_add_check.svg';
 import QRCodeScannerIcon from '@material-symbols/svg-400/rounded/qr_code_scanner.svg';
@@ -18,11 +19,13 @@ import FieldButton from '@/fields/FieldButton';
 import FieldOpenDirectoryInput from '@/fields/FieldOpenDirectory';
 import FieldRenameFilesInput from '@/fields/FieldRenameFiles';
 import FieldToggle from '@/fields/FieldToggle';
+import FieldUploadFile from '@/fields/FieldUploadFile';
 import { toDateString } from '@/serdes/ExportNameFormat';
 import { useSetTakePreviewImage } from '@/stores/document';
 import { useDocumentStore } from '@/stores/document/use';
 import {
   createScannerAnalysisInfo,
+  createScannerSlateInfo,
   useScannerFileAnalysis,
   useScannerFileAnalysisKeys,
   useScannerFileKeys,
@@ -41,7 +44,11 @@ import { downloadText } from '@/utils/Downloader';
 import { basename } from '@/utils/PathHelper';
 
 import PageLayout from './PageLayout';
-import { analyzeFile, deriveRenameValue } from './ScannerAnalyzer';
+import {
+  analyzeFile,
+  deriveRenameValue,
+  deriveRenameValueFromAnalysisAndSlatesOnly,
+} from './ScannerAnalyzer';
 import ScannerTranscoderInit from './ScannerTranscoderInit';
 import { ToolboxActionList } from './ToolboxLayout';
 
@@ -66,6 +73,7 @@ export default function ScannerPage() {
               <>
                 <ScannerOutputCount />
                 <ScannerImportTakesButton />
+                <ScannerImportFromClapperButton />
                 <ScannerRenameButton />
                 <ScannerExportCSVButton />
                 <ScannerToBatchRenameToolButton />
@@ -382,6 +390,60 @@ function ScannerOutputCount() {
   );
 }
 
+function ScannerImportFromClapperButton() {
+  const UNSAFE_getScannerStore = useToolboxStore(
+    (ctx) => ctx.UNSAFE_getScannerStore,
+  );
+  const setScannerFileSlate = useToolboxStore((ctx) => ctx.setScannerFileSlate);
+  const setScannerFileRenameValue = useToolboxStore(
+    (ctx) => ctx.setScannerFileRenameValue,
+  );
+  const analysisKeys = useScannerFileAnalysisKeys();
+  const hasAnalysisKeys = analysisKeys.length > 0;
+  /** @type {import('@/libs/UseSingleFileInput').SingleFileInputChangeHandler} */
+  async function onChange(file) {
+    const store = UNSAFE_getScannerStore();
+    const text = await file.text();
+    const lines = text.split('\n');
+    for (let analysisKey of analysisKeys) {
+      const analysis = store.analysis[analysisKey];
+      const { takeId } = analysis.decoded;
+      if (!takeId) {
+        continue;
+      }
+      for (let line of lines) {
+        if (!line.includes(takeId)) {
+          continue;
+        }
+        let slate = createScannerSlateInfo();
+        // This is it!
+        if (line.includes('PRINT')) {
+          slate.printRating = 1;
+        }
+        setScannerFileSlate(analysisKey, slate);
+        // Update rename!
+        let fileWithHandles = store.files[analysisKey];
+        let renameValue = deriveRenameValueFromAnalysisAndSlatesOnly(
+          fileWithHandles,
+          analysis,
+          slate,
+        );
+        setScannerFileRenameValue(analysisKey, renameValue);
+      }
+    }
+  }
+  return (
+    <FieldUploadFile
+      title="Use clapper data"
+      accept="*.csv"
+      Icon={MovieIcon}
+      onChange={onChange}
+      disabled={!hasAnalysisKeys}>
+      Use clapper data
+    </FieldUploadFile>
+  );
+}
+
 function ScannerImportTakesButton() {
   const UNSAFE_getScannerStore = useToolboxStore(
     (ctx) => ctx.UNSAFE_getScannerStore,
@@ -408,11 +470,11 @@ function ScannerImportTakesButton() {
   }
   return (
     <FieldButton
-      title="Import takes to current project"
+      title="Transfer snapshot to current project"
       Icon={PlaylistAddCheckIcon}
       onClick={onClick}
       disabled={!documentId || !hasAnalysisKeys}>
-      Import snapshots to project
+      Transfer snapshots to project
     </FieldButton>
   );
 }

@@ -9,6 +9,7 @@ export function createDispatchForScanner(set, get) {
     UNSAFE_getScannerStore: ziget(get, UNSAFE_getScannerStore),
     setScannerFileObject: zi(set, setScannerFileObject),
     setScannerFileAnalysis: zi(set, setScannerFileAnalysis),
+    setScannerFileSlate: zi(set, setScannerFileSlate),
     setScannerFileRenameValue: zi(set, setScannerFileRenameValue),
     clearScannerStore: zi(set, clearScannerStore),
     toggleScannerSettingsShowAnalysis: zi(
@@ -41,6 +42,7 @@ function clearScannerStore(store) {
   scanner.files = {};
   scanner.analysis = {};
   scanner.renames = {};
+  scanner.slates = {};
 }
 
 /**
@@ -59,6 +61,15 @@ function setScannerFileObject(store, fileKey, file) {
  */
 function setScannerFileAnalysis(store, fileKey, analysis) {
   store.scanner.analysis[fileKey] = analysis;
+}
+
+/**
+ * @param {import('./ToolboxStore').Store} store
+ * @param {import('./ToolboxStore').FileKey} fileKey
+ * @param {import('./ToolboxStore').ScannerSlateInfo} slate
+ */
+function setScannerFileSlate(store, fileKey, slate) {
+  store.scanner.slates[fileKey] = slate;
 }
 
 /**

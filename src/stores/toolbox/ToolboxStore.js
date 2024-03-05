@@ -6,6 +6,7 @@ import { FFmpegLogging } from '@/scanner/FFmpegTranscoder';
  * @typedef {ReturnType<createStore>} Store
  * @typedef {ReturnType<createScannerStore>} ScannerStore
  * @typedef {ReturnType<createScannerAnalysisInfo>} ScannerAnalysisInfo
+ * @typedef {ReturnType<createScannerSlateInfo>} ScannerSlateInfo
  * @typedef {ReturnType<createTranscoderStore>} TranscoderStore
  * @typedef {ReturnType<createRenamerStore>} RenamerStore
  *
@@ -26,6 +27,8 @@ export function createScannerStore() {
     files: {},
     /** @type {Record<FileKey, ScannerAnalysisInfo>} */
     analysis: {},
+    /** @type {Record<FileKey, ScannerSlateInfo>} */
+    slates: {},
     /** @type {Record<FileKey, string>} */
     renames: {},
     settings: createScannerSettings(),
@@ -70,5 +73,13 @@ export function createScannerSettings() {
     showAnalysis: false,
     captureSnapshot: true,
     enableTranscoder: true,
+  };
+}
+
+export function createScannerSlateInfo() {
+  return {
+    rollName: '',
+    printRating: 0,
+    comments: '',
   };
 }

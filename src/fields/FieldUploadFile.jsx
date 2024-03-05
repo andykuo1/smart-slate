@@ -8,6 +8,7 @@ import FieldButton from './FieldButton';
  * @param {object} props
  * @param {string} props.title
  * @param {string} props.accept
+ * @param {import('react').FC<any>} [props.Icon]
  * @param {import('@/libs/UseSingleFileInput').SingleFileInputChangeHandler} props.onChange
  * @param {boolean} props.disabled
  * @param {import('react').ReactNode} [props.children]
@@ -15,6 +16,7 @@ import FieldButton from './FieldButton';
 export default function FieldUploadFile({
   accept,
   title = 'Upload file',
+  Icon = UploadIcon,
   onChange,
   disabled = !onChange,
   children = 'Upload file',
@@ -24,7 +26,7 @@ export default function FieldUploadFile({
     <>
       <FieldButton
         title={title}
-        Icon={UploadIcon}
+        Icon={Icon}
         onClick={click}
         disabled={disabled}>
         {children}

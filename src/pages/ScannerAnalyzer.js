@@ -460,6 +460,51 @@ function deriveRenameValueFromAnalysisOnly(file, analysis) {
   }
 }
 
+/**
+ * @param {import('@/scanner/DirectoryPicker').FileWithHandles} file
+ * @param {import('@/stores/toolbox').ScannerAnalysisInfo} analysis
+ * @param {import('@/stores/toolbox').ScannerSlateInfo} slate
+ */
+export function deriveRenameValueFromAnalysisAndSlatesOnly(
+  file,
+  analysis,
+  slate,
+) {
+  /** @type {ReturnType<tryDecodeQRCodeKeyV1>|ReturnType<tryDecodeQRCodeKeyV0>} */
+  let decoded = analysis.decoded;
+  if (!decoded) {
+    return '';
+  }
+  if ('sceneNumber' in decoded) {
+    // V1
+    let ext = extname(file.name);
+    let d = /** @type {Exclude<ReturnType<tryDecodeQRCodeKeyV1>, null>} */ (
+      decoded
+    );
+    let parts = [
+      d.projectId,
+      formatSceneShotNumber(d.sceneNumber, d.shotNumber, false),
+      formatTakeNumber(d.takeNumber),
+      d.shotHash,
+      slate.printRating > 0 ? 'PRINT' : '',
+    ];
+    return `${parts.join('_')}${ext}`;
+  } else {
+    // V0
+    let ext = extname(file.name);
+    let d = /** @type {Exclude<ReturnType<tryDecodeQRCodeKeyV0>, null>} */ (
+      decoded
+    );
+    let parts = [
+      d.projectId,
+      formatTakeNumber(d.takeNumber),
+      d.shotHash,
+      slate.printRating > 0 ? 'PRINT' : '',
+    ];
+    return `${parts.join('_')}${ext}`;
+  }
+}
+
 const TRY_PLAY_VIDEO_TIMEOUT_MILLIS = 3_000;
 
 /**
