@@ -198,10 +198,10 @@ function ScannerFileEntry({ index, fileKey }) {
         <th className="sticky left-0 whitespace-nowrap bg-gradient-to-r from-gray-100 from-80% to-transparent dark:from-gray-700">
           {String(index).padStart(2, '0')}
         </th>
-        <td className="whitespace-nowrap">{fileObject.name}</td>
+        <td className="whitespace-nowrap px-2">{fileObject.name}</td>
         <td
           className={
-            'whitespace-nowrap' + ' ' + (isFailedRename ? 'italic' : '')
+            'whitespace-nowrap px-2' + ' ' + (isFailedRename ? 'italic' : '')
           }>
           <TooltipAnchor className="inline-block">
             {isFailedRename ? '<failed>' : rename || '--'}
@@ -215,7 +215,7 @@ function ScannerFileEntry({ index, fileKey }) {
           instead.
           <div className="mt-1">Like proxies ;)</div>
         </Tooltip>
-        <td className="max-w-[30%] overflow-x-auto">
+        <td className="max-w-[30%] overflow-x-auto px-2">
           <pre className={!showAnalysis && analysis ? 'opacity-30' : ''}>
             {showAnalysis
               ? jsonStringifyAndOmit(analysis, OMITTED_ANALYSIS_INFO_FIELDS)
