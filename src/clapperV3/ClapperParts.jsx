@@ -312,7 +312,7 @@ function ClapperProductionTitleField({ className, value, disabled, onChange }) {
       className={'uppercase' + ' ' + className}
       name="production-title"
       value={value}
-      placeholder="MOVIE"
+      placeholder="MYMOVIE"
       onChange={onChange}
       autoCapitalize="characters"
       disabled={disabled}

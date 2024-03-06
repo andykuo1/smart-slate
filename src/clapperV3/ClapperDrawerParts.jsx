@@ -116,11 +116,9 @@ function ClapperExportCSVButton() {
     }
     let result = lines.join('\n');
     let dateString = toDateString(new Date());
-    let fileName = [
-      clapper?.details?.productionTitle || 'MYMOVIE',
-      dateString,
-      'CLAPS.csv',
-    ].join('_');
+    let productionTitle = clapper?.details?.productionTitle || 'MYMOVIE';
+    let projectId = formatProjectId(productionTitle);
+    let fileName = [projectId, dateString, 'CLAPS.csv'].join('_');
     downloadText(fileName, result);
   }
 
@@ -234,7 +232,7 @@ function ClapperProjectIdInput() {
         changeProductionTitle(clapperId, e.target.value.toUpperCase())
       }
       onBlur={(e) =>
-        changeProductionTitle(clapperId, formatProjectId(productionTitle))
+        changeProductionTitle(clapperId, productionTitle.toUpperCase())
       }
       autoCapitalize="characters"
     />
