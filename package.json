@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@ariakit/react": "^0.3.9",
+    "@excalidraw/excalidraw": "^0.17.6",
     "@ffmpeg/ffmpeg": "^0.12.10",
     "@ffmpeg/util": "^0.12.1",
     "@lexical/react": "^0.12.5",

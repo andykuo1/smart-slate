@@ -15,6 +15,7 @@ export default defineConfig({
   base: `/${PACKAGE_NAME}/`,
   define: {
     __CONFIGTIME__: JSON.stringify(Date.now()),
+    'process.env': {},
   },
   optimizeDeps: {
     exclude: ['@ffmpeg/ffmpeg', '@ffmpeg/util'],

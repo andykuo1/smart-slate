@@ -7,6 +7,7 @@ import {
 } from '@ariakit/react';
 import { useCallback, useRef, useState } from 'react';
 
+import { Excalidraw, exportToCanvas } from '@excalidraw/excalidraw';
 import CloseIcon from '@material-symbols/svg-400/rounded/close.svg';
 
 import SettingsShotDeleteButton from '@/components/shots/settings/SettingsShotDeleteButton';
@@ -43,6 +44,9 @@ export default function ShotReferenceEditor() {
   const setShotReferenceOffset = useDocumentStore(
     (ctx) => ctx.setShotReferenceOffset,
   );
+  const setShotReferenceImage = useDocumentStore(
+    (s) => s.setShotReferenceImage,
+  );
   const { touch, mouse, wheel } = useInputOffsetHandler(documentId, shotId);
   const [blackBox, setBlackBox] = useState(false);
 
@@ -53,9 +57,19 @@ export default function ShotReferenceEditor() {
     [setBlackBox],
   );
 
+  const [drawMode, setDrawMode] = useState(false);
+  const [excalidrawApi, setExcalidrawApi] = useState(/** @type {any} */ (null));
+
   return (
     <Dialog
       className={DialogStyle.dialog}
+      style={
+        drawMode
+          ? {
+              width: '80%',
+            }
+          : {}
+      }
       open={Boolean(shotId)}
       onClose={() => setShotEditorShotId('')}
       modal={true}>
@@ -66,50 +80,95 @@ export default function ShotReferenceEditor() {
       <DialogDescription className="text-gray-400">
         Edit with finer control over shot details.
       </DialogDescription>
-      <div
-        ref={thumbnailRef}
-        className="relative my-2 cursor-crosshair select-none overflow-hidden rounded-xl"
-        onTouchStart={touch}
-        onMouseDown={mouse}
-        onWheel={wheel}>
-        <ShotReferenceImageWithLetterbox
-          className="pointer-events-none bg-gray-200 text-gray-400"
-          documentId={documentId}
-          shotId={shotId}
-          shotType={shotType}
-          letterbox={blackBox}
-        />
-        <LetterboxOutline width="calc(100% - 25%)" />
+      <div className="flex w-full gap-2 py-2">
+        <button
+          className="flex-1 outline"
+          onClick={async () => {
+            setDrawMode((prev) => !prev);
+            if (!drawMode) {
+              return;
+            }
+            if (!excalidrawApi) {
+              return;
+            }
+            const elements = excalidrawApi.getSceneElements();
+            if (!elements || elements.length <= 0) {
+              return;
+            }
+            const canvas = await exportToCanvas({
+              elements,
+              appState: {
+                exportWithDarkMode: false,
+              },
+              files: excalidrawApi.getFiles(),
+              getDimensions() {
+                return {
+                  width: 350,
+                  height: 350,
+                };
+              },
+            });
+            setShotReferenceImage(documentId, shotId, canvas.toDataURL());
+          }}>
+          {!drawMode ? 'Draw' : 'Return'}
+        </button>
+        {drawMode && <button className="flex-1 outline">Save Image</button>}
       </div>
-      <div className="flex flex-col gap-4">
-        <p className="text-center opacity-30">Drag image to re-position</p>
-        <InputMarginHandler documentId={documentId} shotId={shotId} />
-        <div className="flex flex-row gap-4">
-          <FieldButton
-            onClick={() => setShotReferenceOffset(documentId, shotId, 0, 0, 0)}>
-            Reset
-          </FieldButton>
-          <FieldToggle onClick={onToggle} value={blackBox}>
-            Trim Letterbox
-          </FieldToggle>
+      {drawMode && (
+        <div style={{ width: '100%', height: '80vh' }}>
+          <Excalidraw excalidrawAPI={(api) => setExcalidrawApi(api)} />
         </div>
-        <div className="flex flex-row gap-4">
-          <SettingsShotTypeSelector
-            className="flex-1"
-            documentId={documentId}
-            shotId={shotId}
-          />
-          <SettingsShotReferenceImageField
-            documentId={documentId}
-            shotId={shotId}
-          />
-        </div>
-        <ShotDeleteButton
-          documentId={documentId}
-          sceneId={sceneId}
-          shotId={shotId}
-        />
-      </div>
+      )}
+      {!drawMode && (
+        <>
+          <div
+            ref={thumbnailRef}
+            className="relative my-2 cursor-crosshair select-none overflow-hidden rounded-xl"
+            onTouchStart={touch}
+            onMouseDown={mouse}
+            onWheel={wheel}>
+            <ShotReferenceImageWithLetterbox
+              className="pointer-events-none bg-gray-200 text-gray-400"
+              documentId={documentId}
+              shotId={shotId}
+              shotType={shotType}
+              letterbox={blackBox}
+            />
+            <LetterboxOutline width="calc(100% - 25%)" />
+          </div>
+          <div className="flex flex-col gap-4">
+            <p className="text-center opacity-30">Drag image to re-position</p>
+            <InputMarginHandler documentId={documentId} shotId={shotId} />
+            <div className="flex flex-row gap-4">
+              <FieldButton
+                onClick={() =>
+                  setShotReferenceOffset(documentId, shotId, 0, 0, 0)
+                }>
+                Reset
+              </FieldButton>
+              <FieldToggle onClick={onToggle} value={blackBox}>
+                Trim Letterbox
+              </FieldToggle>
+            </div>
+            <div className="flex flex-row gap-4">
+              <SettingsShotTypeSelector
+                className="flex-1"
+                documentId={documentId}
+                shotId={shotId}
+              />
+              <SettingsShotReferenceImageField
+                documentId={documentId}
+                shotId={shotId}
+              />
+            </div>
+            <ShotDeleteButton
+              documentId={documentId}
+              sceneId={sceneId}
+              shotId={shotId}
+            />
+          </div>
+        </>
+      )}
     </Dialog>
   );
 }
